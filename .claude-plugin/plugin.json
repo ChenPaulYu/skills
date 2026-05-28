@@ -1,0 +1,21 @@
+{
+  "name": "skills",
+  "version": "0.1.0",
+  "description": "Personal Claude skills for code I want to live with — deep-module audit, codebase map, verbatim refactor, skill-style file headers. Built on Ousterhout's deep-module principles + discipline learned the hard way.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  },
+  "repository": "https://github.com/ChenPaulYu/skills",
+  "license": "MIT",
+  "keywords": [
+    "deep-modules",
+    "architecture",
+    "audit",
+    "codebase-map",
+    "refactor",
+    "progressive-disclosure",
+    "ousterhout",
+    "agent-skills"
+  ]
+}
