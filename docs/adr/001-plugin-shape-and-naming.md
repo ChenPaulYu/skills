@@ -1,6 +1,6 @@
 # ADR 001 — Plugin shape and naming
 
-**Status**: accepted
+**Status**: accepted (decision #2 partially superseded by [ADR-002](./002-rename-deep-module-prefix-to-nav.md))
 **Date**: 2026-05-28
 **Context**: Founding decisions when bootstrapping the `skills` plugin.
 
@@ -16,7 +16,9 @@ Following Matt Pocock's `mattpocock/skills` pattern + Anthropic's `anthropics/sk
 
 ### 2. Skills inside use a topic prefix when needed
 
-For the deep-module family: `deep-module-audit`, `deep-module-refactor`, `deep-module-map`, `deep-module-headers`. Future topics will get their own prefix (`spec-*`, `verbatim-*`, etc.).
+> ⚠ The specific choice of `deep-module-*` was [reversed by ADR-002](./002-rename-deep-module-prefix-to-nav.md) (now `nav-*`). The *principle* — use a topic prefix when needed — stands.
+
+For the nav family: `nav-audit`, `nav-refactor`, `nav-map`, `nav-headers`. Future topics will get their own prefix (`spec-*`, `verbatim-*`, etc.).
 
 **Why the prefix**: the plugin name `skills` doesn't carry topic context. The prefix tells you which family a skill belongs to. Same rationale as Matt Pocock's `improve-codebase-architecture` and `git-guardrails-claude-code` — topic prefix when needed, short verbs when the meaning is unambiguous.
 

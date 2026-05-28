@@ -1,5 +1,5 @@
 ---
-name: deep-module-audit
+name: nav-audit
 description: Audit a TypeScript/React codebase against deep-module / progressive-disclosure principles (Ousterhout's "A Philosophy of Software Design"). Use this skill whenever the user asks to "audit my codebase", "check if X is modular", "review the architecture", "is this a deep module?", "what's wrong with this codebase?", "any architectural smells?", "is this well-structured?", or any similar architectural-quality assessment — even when they don't say the word "audit" explicitly. Also fires when the user discusses modularity, progressive disclosure, layering, or whether their code is grounded vs guessed. Read-only — modifies no files.
 ---
 
@@ -134,7 +134,7 @@ Stack: TypeScript / React · <N> domains · <N> source files (~<N> LOC)
 2. …
 
 ### Notes
-- This audit is read-only. To act on findings: invoke `deep-module-refactor` (execute the moves), `deep-module-map` (regenerate the map with an embedded audit block), or `deep-module-headers` (fix files where rule ① / ⑪ failed).
+- This audit is read-only. To act on findings: invoke `nav-refactor` (execute the moves), `nav-map` (regenerate the map with an embedded audit block), or `nav-headers` (fix files where rule ① / ⑪ failed).
 - The audit covers shape, not bug correctness. Run tests for the latter.
 ```
 

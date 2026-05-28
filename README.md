@@ -7,10 +7,10 @@
 
 | Skill | What it does |
 |---|---|
-| [`deep-module-audit`](./skills/deep-module-audit/) | Honestly assess a codebase against the 11 deep-module rules. Read-only. |
-| `deep-module-refactor` | Execute a refactor with the rule ⑧ discipline: verbatim move + test gate after each step + browser-verified at the end. |
-| `deep-module-map` | Generate / update `docs/codebase-map/index.html` — an interactive, bilingual codebase map with anatomies, click-to-reveal graphs, screenshots, and an embedded grounding-audit block. |
-| `deep-module-headers` | Add or standardize skill-style JSDoc headers on load-bearing files, so an agent can `head -12` to retrieve a file's role without reading its body. |
+| [`nav-audit`](./skills/nav-audit/) | Honestly assess a codebase against the 11 deep-module rules. Read-only. |
+| `nav-refactor` | Execute a refactor with the rule ⑧ discipline: verbatim move + test gate after each step + browser-verified at the end. |
+| `nav-map` | Generate / update `docs/codebase-map/index.html` — an interactive, bilingual codebase map with anatomies, click-to-reveal graphs, screenshots, and an embedded grounding-audit block. |
+| `nav-headers` | Add or standardize skill-style JSDoc headers on load-bearing files, so an agent can `head -12` to retrieve a file's role without reading its body. |
 
 All four lean on the **same 11 rules** — see [`CLAUDE.md`](./CLAUDE.md) for the philosophy.
 

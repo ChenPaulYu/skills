@@ -27,11 +27,11 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 
 ## Conventions for skills inside this plugin
 
-- **Naming**: `deep-module-<verb>` for skills in the deep-module family. Other families later get their own prefix (`spec-*`, `refactor-*`, etc.).
+- **Naming**: `nav-<verb>` for skills in the deep-module family. Other families later get their own prefix (`spec-*`, `refactor-*`, etc.).
 - **Self-contained**: every `SKILL.md` includes the 11 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded.
 - **Frontmatter `description`**: written **broad** (matches multiple trigger phrasings) but **honest** about scope. No "pushy" cross-domain claims.
 - **Scope**: v1 skills are calibrated for **TypeScript / React** codebases. Other stacks are v2 — explicitly bail with a message rather than misfire.
-- **Read-only by default**: skills that modify files (`deep-module-headers`, `deep-module-refactor`) must show a diff first or only modify on explicit user confirmation.
+- **Read-only by default**: skills that modify files (`nav-headers`, `nav-refactor`) must show a diff first or only modify on explicit user confirmation.
 - **Each new skill**: write an ADR in `docs/adr/` explaining why it exists, what overlaps it has with siblings, and how the trigger description avoids stealing fire from them.
 
 ## Where things live

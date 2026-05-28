@@ -1,7 +1,7 @@
 {
   "name": "skills",
   "version": "0.1.0",
-  "description": "Personal Claude skills for code I want to live with — deep-module audit, codebase map, verbatim refactor, skill-style file headers. Built on Ousterhout's deep-module principles + discipline learned the hard way.",
+  "description": "Personal Claude skills for keeping code navigable as it grows — assess shape (nav-audit), reshape with discipline (nav-refactor), generate the navigation map (nav-map), and add skill-style file headers (nav-headers). Built on Ousterhout's deep-module principles + grounding discipline.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

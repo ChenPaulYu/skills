@@ -1,5 +1,5 @@
 ---
-name: deep-module-map
+name: nav-map
 description: Generate or update `docs/codebase-map/index.html` — an interactive, optionally-bilingual codebase map with anatomy graphs, click-to-reveal panels, embedded screenshots, and a grounding-audit block. Use this skill whenever the user asks to "generate a codebase map", "create the codebase map", "update the codebase map", "make this codebase navigable", "onboard me to this repo", "show me a map of the code", or after major restructuring when the existing map will have drifted. Also fires when the user references the codebase-map convention. Generates HTML files (writes to docs/codebase-map/).
 ---
 
@@ -161,10 +161,10 @@ At the top of `index.html`, in an HTML comment, record:
 - **No fake anatomies.** A domain with 2 files doesn't get an anatomy graph — that's structure-theatre. Use a Module-map row.
 - **Self-eval is honest.** If you struggled to describe something, say so in the audit block. Don't smooth it over.
 - **Stale audit block = lie.** Every regenerate updates the block (date + what changed).
-- **No new files beyond `docs/codebase-map/`.** This skill writes its own folder, not the rest of the repo. If headers need standardizing → that's `deep-module-headers`.
+- **No new files beyond `docs/codebase-map/`.** This skill writes its own folder, not the rest of the repo. If headers need standardizing → that's `nav-headers`.
 
 ## Companion skills
 
-- **`deep-module-audit`** — assess what's worth mapping; surface violations the map should call out
-- **`deep-module-refactor`** — execute the moves the map reveals as needed
-- **`deep-module-headers`** — add file-top headers so future regenerations can describe each file from `head -12` alone
+- **`nav-audit`** — assess what's worth mapping; surface violations the map should call out
+- **`nav-refactor`** — execute the moves the map reveals as needed
+- **`nav-headers`** — add file-top headers so future regenerations can describe each file from `head -12` alone

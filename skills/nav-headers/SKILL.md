@@ -1,5 +1,5 @@
 ---
-name: deep-module-headers
+name: nav-headers
 description: Add or standardize skill-style JSDoc headers on load-bearing TypeScript/React source files, so an agent can `head -12 <file>` to retrieve the file's role + key deps before reading the body. Use this skill whenever the user asks to "add file headers", "standardize file headers", "audit our docstrings", "make files self-describing", "add skill-style headers", or "make this codebase more progressive-disclosure". Also fires after creating multiple new load-bearing files (the user might want them headered uniformly). Shows a diff before applying; can also update CLAUDE.md with the convention if not present.
 ---
 
@@ -59,7 +59,7 @@ No exotic `@tag`s. JSDoc-standard `/** */` block. Lives at line 1, before import
 
 ### Step 1 — Identify load-bearing files
 
-If `deep-module-audit` has already run and surfaced a list: use it.
+If `nav-audit` has already run and surfaced a list: use it.
 If not: identify load-bearing as:
 - Every domain's "leader" file (largest / most-imported / name-matches-domain)
 - Every file ≥ 150 LOC
@@ -225,6 +225,6 @@ export function useAnnotations(...) {
 
 ## Companion skills
 
-- **`deep-module-audit`** — surfaces which files need headers (the ones where rule ① / ⑪ failed)
-- **`deep-module-map`** — once headers exist, the map can describe files from `head -12` alone
-- **`deep-module-refactor`** — when role/Reads change as part of a refactor, this skill re-applies the convention
+- **`nav-audit`** — surfaces which files need headers (the ones where rule ① / ⑪ failed)
+- **`nav-map`** — once headers exist, the map can describe files from `head -12` alone
+- **`nav-refactor`** — when role/Reads change as part of a refactor, this skill re-applies the convention
