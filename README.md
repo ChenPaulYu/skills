@@ -24,16 +24,25 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`. 
 
 ## Install
 
-**Local development** (this directory):
+In Claude Code:
 
 ```bash
-/plugin marketplace add /Users/bernie/Desktop/Github/01-project/skills
+/plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
 ```
 
-After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the local path in place.
+That's it — `/nav:audit`, `/nav:refactor`, `/nav:headers`, `/nav:map`, `/nav:doctor`, `/nav:plan` become available.
 
-**Once pushed to GitHub**: add `ChenPaulYu/skills` as a Claude Code marketplace, then `/plugin install nav@skills`.
+### Local development (Paul only)
+
+For iterating on this marketplace itself, use a local path instead of the GitHub handle:
+
+```bash
+/plugin marketplace add <absolute-path-to-this-repo>
+/plugin install nav@skills
+```
+
+After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the local path in place (no reinstall).
 
 ## Philosophy (the through-line)
 
