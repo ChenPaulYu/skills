@@ -1,3 +1,25 @@
+# OS
 .DS_Store
+Thumbs.db
+
+# JS (defensive — no build here yet)
 node_modules/
 *.log
+
+# Python (skill-creator evals can produce these)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Eval workspaces (skill-creator generates <skill-name>-workspace/ siblings)
+*-workspace/
+
+# Local secrets (any future eval scripts hitting Anthropic API etc.)
+.env
+.env.*
+!.env.example
+
+# Editor swap / backup
+*.swp
+*~
