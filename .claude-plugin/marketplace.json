@@ -1,0 +1,15 @@
+{
+  "name": "skills",
+  "owner": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  },
+  "plugins": [
+    {
+      "name": "skills",
+      "source": "./",
+      "description": "Personal Claude skills for keeping any codebase navigable as it grows — nav-audit (assess + feasibility), nav-refactor (verbatim move + test gates), nav-headers (file-top descriptions), nav-map (bilingual codebase HTML), nav-doctor (full health pass). Language-agnostic. Built on Ousterhout's deep-module principles.",
+      "version": "0.1.0"
+    }
+  ]
+}
