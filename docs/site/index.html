@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-28 (rev 2)
+  Last audit: 2026-05-28 (rev 3)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -19,7 +19,13 @@
     • 6 ADRs in docs/adr/ — 001..006 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 2)
+  ⚠ FIXED in this revision (rev 3)
+    1. Added Install section + sidebar link (reflects GitHub publication —
+       `/plugin marketplace add ChenPaulYu/skills` + `/plugin install
+       nav@skills`). New T-dict keys: nav_install, install_title,
+       install_lede, install_note. Added `pre.cmd` CSS for code block.
+
+  ⚠ FIXED in rev 2 (kept for history)
     1. Added /nav:plan as nav's 6th skill (ADR-006). Updated NAV_NODES
        (added 'plan' node + plan→audit edge), DOMAINS.nav.files
        (added /nav:plan row), ARCH_LAYERS skill chips (added 'plan'),
@@ -165,6 +171,9 @@
   /* hop link */
   a.hop{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:#0c7a59;background:#10b9811a;padding:5px 10px;border-radius:7px;text-decoration:none;transition:.15s}
   a.hop:hover{background:#10b98133}
+  /* install code block */
+  pre.cmd{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:13px;overflow-x:auto;margin:10px 0;color:#2a211c}
+  pre.cmd code{font-family:inherit;font-size:inherit;background:transparent}
 </style>
 </head>
 <body>
@@ -179,6 +188,7 @@
     </div>
     <div class="sub" data-t="sub">Paul's personal Claude marketplace</div>
     <a href="#tour" class="active" data-t="nav_tour">The 30-second tour</a>
+    <a href="#install" data-t="nav_install">Install</a>
     <a href="#arch" data-t="nav_arch">Architecture</a>
     <a href="#pluginsmap" data-t="nav_pluginsmap">Plugins map</a>
     <a href="#rules" data-t="nav_rules">Design rules</a>
@@ -199,6 +209,14 @@
       <div class="callout"><b data-t="tour_howread_label">How to read this:</b> <span data-t="tour_howread">scroll for a 30-second overview, or jump to any section from the left. Every domain graph is interactive — click a node for its details, drag to rearrange.</span></div>
       <div class="layers" id="layers"></div>
       <p class="small muted" data-t="tour_stack">Built on Ousterhout's deep-module principles. Self-contained skills (no shared imports). Language-agnostic (universal core + per-stack heuristics).</p>
+    </section>
+
+    <section id="install">
+      <h2 data-t="install_title">Install — two commands</h2>
+      <p class="lede" data-t="install_lede">Add the marketplace, install the <code>nav</code> plugin. All 6 skills become available as <code>/nav:&lt;verb&gt;</code>.</p>
+      <pre class="cmd"><code>/plugin marketplace add ChenPaulYu/skills
+/plugin install nav@skills</code></pre>
+      <p class="small muted" data-t="install_note">Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.</p>
     </section>
 
     <section id="arch">
@@ -260,6 +278,7 @@ const T = {
   en: {
     sub: "Paul's personal Claude marketplace",
     nav_tour: 'The 30-second tour',
+    nav_install: 'Install',
     nav_arch: 'Architecture',
     nav_pluginsmap: 'Plugins map',
     nav_rules: 'Design rules',
@@ -273,6 +292,9 @@ const T = {
     tour_howread_label: 'How to read this:',
     tour_howread: 'scroll for a 30-second overview, or jump to any section from the left. Every domain graph is interactive — click a node for its details, drag to rearrange.',
     tour_stack: "Built on Ousterhout's deep-module principles. Self-contained skills (no shared imports). Language-agnostic (universal core + per-stack heuristics).",
+    install_title: 'Install — two commands',
+    install_lede: 'Add the marketplace, install the <code>nav</code> plugin. All 6 skills become available as <code>/nav:&lt;verb&gt;</code>.',
+    install_note: 'Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.',
     arch_title: 'Architecture — three layers, one container',
     arch_lede: 'The marketplace registers via <code>.claude-plugin/marketplace.json</code> and lists which plugins live inside. Each plugin declares itself via <code>.claude-plugin/plugin.json</code> and exposes skills under <code>skills/&lt;verb&gt;/SKILL.md</code>. Slash commands surface as <code>/&lt;plugin&gt;:&lt;skill&gt;</code>.',
     pluginsmap_title: 'Plugins map — every plugin at a glance',
@@ -313,6 +335,7 @@ const T = {
   zh: {
     sub: 'Paul 的個人 Claude marketplace',
     nav_tour: '30 秒導覽',
+    nav_install: '安裝',
     nav_arch: '架構',
     nav_pluginsmap: 'Plugins 圖',
     nav_rules: '設計規則',
@@ -326,6 +349,9 @@ const T = {
     tour_howread_label: '如何閱讀:',
     tour_howread: '往下捲是 30 秒概覽,或從左側跳到任何章節。每張圖都可互動 —— 點 node 看細節,拖曳重排。',
     tour_stack: '基於 Ousterhout 的 deep-module 原則。自含 skill(SKILL.md 互不引用)。跨語言(通用核心 + per-stack 啟發)。',
+    install_title: '安裝 —— 兩條指令',
+    install_lede: '加入 marketplace、安裝 <code>nav</code> plugin。6 個 skill 都會以 <code>/nav:&lt;verb&gt;</code> 形式可用。',
+    install_note: '想在這個 marketplace 本身上迭代?用本機絕對路徑取代 GitHub handle —— 見 <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>。',
     arch_title: '架構 —— 三層、一個容器',
     arch_lede: 'Marketplace 透過 <code>.claude-plugin/marketplace.json</code> 註冊並列出旗下 plugins。每個 plugin 透過 <code>.claude-plugin/plugin.json</code> 宣告自己,並在 <code>skills/&lt;verb&gt;/SKILL.md</code> 暴露 skills。Slash command 形式為 <code>/&lt;plugin&gt;:&lt;skill&gt;</code>。',
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
