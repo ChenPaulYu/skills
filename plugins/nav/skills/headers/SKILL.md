@@ -1,5 +1,5 @@
 ---
-name: nav-headers
+name: headers
 description: Add or standardize skill-style file-top headers on load-bearing source files in any language, so an agent can `head -12 <file>` to retrieve the file's role + key deps before reading the body. The CONVENTION (title + 2-3 sentence body + Reads line) is universal; the SYNTAX flexes per language (JSDoc / Python docstring / Go doc comment / Rust doc comment / etc.). Use whenever the user asks to "add file headers", "standardize file headers", "audit our docstrings", "make files self-describing", "add skill-style headers", or "make this codebase more progressive-disclosure". Also fires after creating multiple new load-bearing files. Shows a diff before applying; can also update CLAUDE.md with the convention if not present.
 ---
 
@@ -69,7 +69,7 @@ No exotic `@tag`s. JSDoc-standard `/** */` block. Lives at line 1, before import
 
 ### Step 1 — Identify load-bearing files
 
-If `nav-audit` has already run and surfaced a list: use it.
+If `/nav:audit` has already run and surfaced a list: use it.
 If not: identify load-bearing as:
 - Every domain's "leader" file (largest / most-imported / name-matches-domain)
 - Every file ≥ 150 LOC
@@ -235,6 +235,6 @@ export function useAnnotations(...) {
 
 ## Companion skills
 
-- **`nav-audit`** — surfaces which files need headers (the ones where rule ① / ⑪ failed)
-- **`nav-map`** — once headers exist, the map can describe files from `head -12` alone
-- **`nav-refactor`** — when role/Reads change as part of a refactor, this skill re-applies the convention
+- **`/nav:audit`** — surfaces which files need headers (the ones where rule ① / ⑪ failed)
+- **`/nav:map`** — once headers exist, the map can describe files from `head -12` alone
+- **`/nav:refactor`** — when role/Reads change as part of a refactor, this skill re-applies the convention

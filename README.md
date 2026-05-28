@@ -1,42 +1,48 @@
 # skills
 
-> Personal Claude skills for code I want to live with.
-> Built on Ousterhout's deep-module principles + the discipline learned from refactoring the hard way.
+> Paul's personal Claude marketplace.
+> A growing collection of focused, single-purpose Claude plugins.
 
 ## What's in here
 
-| Skill | What it does |
+| Plugin | What it covers |
 |---|---|
-| [`nav-audit`](./skills/nav-audit/) | Honestly assess any codebase against the 11 deep-module rules. Two modes: unconditional health audit, or feasibility audit against a target spec. Read-only. |
-| [`nav-refactor`](./skills/nav-refactor/) | Execute a structural refactor with rule ⑧ discipline: verbatim move + test gate after each step + real-app pass at the end. |
-| [`nav-headers`](./skills/nav-headers/) | Add or standardize skill-style file-top headers on load-bearing files, so an agent can `head -12` to retrieve the role + key deps. Universal convention; per-language syntax (JSDoc / docstring / `//` / `///`). |
-| [`nav-map`](./skills/nav-map/) | Generate `docs/codebase-map/index.html` — an interactive, optionally-bilingual codebase map with anatomy graphs, draggable nodes, click-to-reveal panels, and a grounding-audit block. Visual form spec: `nav-map/references/visual-spec.md`. |
-| [`nav-doctor`](./skills/nav-doctor/) | Full health pass — orchestrates audit → plan → headers → map with user-review gates between every step. Hands off structural refactors to `nav-refactor` (does NOT auto-execute them). |
+| [`nav`](./plugins/nav/) | Keep any codebase navigable as it grows — audit shape, refactor with discipline, add file-top headers, render a bilingual codebase map, run the full health pass. Built on Ousterhout's deep-module principles. |
 
-All five share the **same 11 rules** — see [`CLAUDE.md`](./CLAUDE.md) for the philosophy.
+More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
-## Philosophy (the through-line)
+## Invocation
 
-Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without having to read every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
+Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`. For `nav`:
 
-When in doubt: rule ⑨. Ask.
-
-## Language support
-
-All five skills are **language-agnostic**. They have a universal core that runs on any codebase, plus stack-specific heuristics that activate when a known stack (TS/React, Python, Go, Rust, Swift, …) is detected. The 11 design principles transfer everywhere; only the thresholds + syntax flex per language.
-
-## Architecture notes
-
-Design decisions live as ADRs in [`docs/adr/`](./docs/adr/) — when this plugin grows, future-me (and other readers) need to know why it was shaped this way.
+- `/nav:audit` — assess codebase shape (or check it against a target spec)
+- `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
+- `/nav:headers` — add or standardize skill-style file-top headers
+- `/nav:map` — generate the bilingual `docs/codebase-map/index.html`
+- `/nav:doctor` — full health pass (audit → headers → map, with review gates)
 
 ## Install
 
-For local development (this directory):
+**Local development** (this directory):
+
 ```bash
-ln -s ~/Desktop/Github/01-project/skills ~/.claude/plugins/marketplaces/skills
+/plugin marketplace add /Users/bernie/Desktop/Github/01-project/skills
+/plugin install nav@skills
 ```
 
-For others (once pushed to GitHub): add `ChenPaulYu/skills` as a Claude Code marketplace.
+After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the local path in place.
+
+**Once pushed to GitHub**: add `ChenPaulYu/skills` as a Claude Code marketplace, then `/plugin install nav@skills`.
+
+## Philosophy (the through-line)
+
+Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without reading every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
+
+When in doubt: rule ⑨. Ask.
+
+## Architecture notes
+
+Marketplace-level decisions live as ADRs in [`docs/adr/`](./docs/adr/). Plugin-level conventions live in each plugin's own `CLAUDE.md` (e.g. [`plugins/nav/CLAUDE.md`](./plugins/nav/CLAUDE.md)).
 
 ## License
 

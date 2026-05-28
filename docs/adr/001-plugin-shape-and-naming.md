@@ -1,6 +1,6 @@
 # ADR 001 — Plugin shape and naming
 
-**Status**: accepted (decision #2 partially superseded by [ADR-002](./002-rename-deep-module-prefix-to-nav.md))
+**Status**: accepted — decisions #1 and #2 superseded by [ADR-005](./005-marketplace-plus-plugin-restructure.md); decision #2 was already partially superseded by [ADR-002](./002-rename-deep-module-prefix-to-nav.md). Decision #4 superseded by [ADR-004](./004-language-agnostic-scope.md). Decisions #3, #5, #6 stand.
 **Date**: 2026-05-28
 **Context**: Founding decisions when bootstrapping the `skills` plugin.
 

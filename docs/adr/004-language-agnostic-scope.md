@@ -1,6 +1,6 @@
 # ADR 004 — Language-agnostic scope (universal core + per-stack heuristics)
 
-**Status**: accepted
+**Status**: accepted — post [ADR-005](./005-marketplace-plus-plugin-restructure.md) the skills are called `audit` / `refactor` / `headers` / `map` / `doctor` (no `nav-` prefix). The language-agnostic decision below is unchanged.
 **Date**: 2026-05-28
 **Supersedes**: portion of [ADR-001](./001-plugin-shape-and-naming.md) (decision #4 — "Initial scope: TypeScript / React")
 **Context**: ADR-001 locked the initial skills to TS/React with a "v2 = other stacks" deferral. Then realized the 11 rules are inherently language-agnostic — only the mechanical checks are stack-specific. The TS/React lock-in was an implementation accident, not a design choice.

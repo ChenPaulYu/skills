@@ -1,6 +1,6 @@
 # ADR 003 — Five skills, not four or six
 
-**Status**: accepted
+**Status**: accepted — post [ADR-005](./005-marketplace-plus-plugin-restructure.md) the skills are called `audit` / `refactor` / `headers` / `map` / `doctor` (no `nav-` prefix; the namespace is now `nav:`). The substance below — why these 5, why not 4 or 6 — is unchanged.
 **Date**: 2026-05-28
 **Context**: After the initial 4 skills (audit / refactor / map / headers) were drafted, discussion surfaced two more candidates: `nav-fit` (feasibility against a target spec) and `nav-doctor` (full health-pass orchestrator). Spent a session debating what's truly fundamental vs what's a parameterization of something else.
 

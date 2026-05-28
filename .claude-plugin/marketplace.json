@@ -6,9 +6,9 @@
   },
   "plugins": [
     {
-      "name": "skills",
-      "source": "./",
-      "description": "Personal Claude skills for keeping any codebase navigable as it grows — nav-audit (assess + feasibility), nav-refactor (verbatim move + test gates), nav-headers (file-top descriptions), nav-map (bilingual codebase HTML), nav-doctor (full health pass). Language-agnostic. Built on Ousterhout's deep-module principles.",
+      "name": "nav",
+      "source": "./plugins/nav",
+      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility), refactor (verbatim move + test gates), headers (file-top descriptions), map (bilingual codebase HTML), doctor (full health pass). Language-agnostic. Built on Ousterhout's deep-module principles.",
       "version": "0.1.0"
     }
   ]

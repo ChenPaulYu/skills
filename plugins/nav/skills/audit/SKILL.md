@@ -1,5 +1,5 @@
 ---
-name: nav-audit
+name: audit
 description: Audit any codebase against deep-module / progressive-disclosure principles (Ousterhout's "A Philosophy of Software Design"). Language-agnostic core + stack-specific heuristics that activate per detected stack (TS/React, Python, Go, Rust, etc.). Two modes — (1) UNCONDITIONAL health audit when the user asks "audit my codebase", "check if X is modular", "review the architecture", "is this a deep module?", "what's wrong with this codebase?", "any architectural smells?", "is this well-structured?"; (2) FEASIBILITY audit when given a spec / plan / feature description and asked "can this codebase support feature X?", "is this code ready for Y?", "does our architecture fit this plan?", "what do I need to refactor before building X?", or "review this spec against our codebase". Also fires on any modularity / progressive disclosure / grounding-vs-guessed discussion. Read-only — modifies no files.
 ---
 
@@ -189,7 +189,7 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 2. …
 
 ### Notes
-- This audit is read-only. To act on findings: invoke `nav-refactor` (execute the moves), `nav-map` (regenerate the map with an embedded audit block), or `nav-headers` (fix files where rule ① / ⑪ failed).
+- This audit is read-only. To act on findings: invoke `/nav:refactor` (execute the moves), `/nav:map` (regenerate the map with an embedded audit block), or `/nav:headers` (fix files where rule ① / ⑪ failed).
 - The audit covers shape, not bug correctness. Run tests for the latter.
 ```
 

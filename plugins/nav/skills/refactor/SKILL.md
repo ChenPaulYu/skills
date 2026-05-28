@@ -1,5 +1,5 @@
 ---
-name: nav-refactor
+name: refactor
 description: Execute a structural refactor on any codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Use this skill whenever the user wants to "refactor X", "decompose this component", "extract a function/module/package", "split this file", "reorganize this folder", "break this up", or any structural change that should preserve behaviour. Also fires when the user mentions "verbatim refactor", "behaviour-preserving refactor", or refers to Ousterhout rule ⑧. The skill enforces the discipline; the agent does the moves.
 ---
 
@@ -152,6 +152,6 @@ Do NOT commit unless the user explicitly asks. Per the project's git discipline,
 
 ## Companion skills
 
-- **`nav-audit`** — find what to refactor.
-- **`nav-map`** — regenerate the codebase map after the refactor lands (the audit block records what changed).
-- **`nav-headers`** — update the headers of any file whose role/Reads changed (header drift = lie).
+- **`/nav:audit`** — find what to refactor.
+- **`/nav:map`** — regenerate the codebase map after the refactor lands (the audit block records what changed).
+- **`/nav:headers`** — update the headers of any file whose role/Reads changed (header drift = lie).
