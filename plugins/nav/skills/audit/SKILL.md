@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Audit any codebase against deep-module / progressive-disclosure principles (Ousterhout's "A Philosophy of Software Design"). Language-agnostic core + stack-specific heuristics that activate per detected stack (TS/React, Python, Go, Rust, etc.). Two modes — (1) UNCONDITIONAL health audit when the user asks "audit my codebase", "check if X is modular", "review the architecture", "is this a deep module?", "what's wrong with this codebase?", "any architectural smells?", "is this well-structured?"; (2) FEASIBILITY audit when given a spec / plan / feature description and asked "can this codebase support feature X?", "is this code ready for Y?", "does our architecture fit this plan?", "what do I need to refactor before building X?", or "review this spec against our codebase". Also fires on any modularity / progressive disclosure / grounding-vs-guessed discussion. Read-only — modifies no files.
+description: Audit any codebase against deep-module / progressive-disclosure principles (Ousterhout's "A Philosophy of Software Design"). Language-agnostic core + stack-specific heuristics that activate per detected stack (TS/React, Python, Go, Rust, etc.). Two modes — (1) UNCONDITIONAL health audit when the user asks "audit my codebase", "check if X is modular", "review the architecture", "is this a deep module?", "what's wrong with this codebase?", "any architectural smells?", "is this well-structured?"; (2) FEASIBILITY audit (read-only quick check) when given a spec / plan / feature description and asked "can this codebase support feature X?", "is this code ready for Y?", "does our architecture fit this plan?", or "review this spec against our codebase". Also fires on any modularity / progressive disclosure / grounding-vs-guessed discussion. Read-only — modifies no files. If the user wants the FULL workflow (clarify ambiguity + write a plan artifact), point them to /nav:plan instead.
 ---
 
 # Deep-module audit
@@ -38,7 +38,7 @@ Triggered when the user asks "is this code healthy?", "audit my codebase", "any 
 
 → Run all checks across all domains. Report by rule.
 
-### Mode 2: Feasibility audit (input: a spec / plan / feature description)
+### Mode 2: Feasibility audit (input: a spec / plan / feature description) — read-only quick check
 
 Triggered when the user gives a path to a spec / plan / feature description and asks "can my codebase carry this?". **Specific target in mind** — conditional health check.
 
@@ -47,6 +47,8 @@ Triggered when the user gives a path to a spec / plan / feature description and 
 → Output section "Gap analysis (vs `<spec path>`)" lists per affected domain: current shape · target needs · gap · suggested prep work (specific refactors to do before starting the build).
 
 The mechanical + heuristic checks below are identical in both modes — only the SCOPE (which files) and the REPORT FRAMING (general health vs gap-vs-target) differ.
+
+> **Want the full workflow?** Mode 2 stops at the gap-analysis report. If the user wants to also clarify the ambiguities the spec leaves open AND produce a durable plan artifact, redirect to `/nav:plan` — it inlines Mode 2's Stage 1 and then continues with dialog + plan-file output. (`/nav:plan` will reuse Mode 2's output if you just ran it in this session — see ADR-006.)
 
 ## The 11 rules (the audit IS these rules)
 
@@ -190,6 +192,7 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 
 ### Notes
 - This audit is read-only. To act on findings: invoke `/nav:refactor` (execute the moves), `/nav:map` (regenerate the map with an embedded audit block), or `/nav:headers` (fix files where rule ① / ⑪ failed).
+- For Mode 2 specifically: if you want clarify-and-plan after the gap analysis (not just stop), invoke `/nav:plan` — it reuses this audit's output if it ran in the same session.
 - The audit covers shape, not bug correctness. Run tests for the latter.
 ```
 

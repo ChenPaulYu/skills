@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-28
+  Last audit: 2026-05-28 (rev 2)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -12,15 +12,18 @@
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
     • One plugin: nav (plugins/nav/.claude-plugin/plugin.json name = "nav")
-    • Five skills under nav: audit, refactor, headers, map, doctor
+    • Six skills under nav: audit, refactor, headers, map, doctor, plan
       (folders + frontmatter name match in plugins/nav/skills/*/SKILL.md)
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 5 ADRs in docs/adr/ — 001..005 with cross-supersede links
+    • 6 ADRs in docs/adr/ — 001..006 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision
-    1. (first revision — nothing to fix yet)
+  ⚠ FIXED in this revision (rev 2)
+    1. Added /nav:plan as nav's 6th skill (ADR-006). Updated NAV_NODES
+       (added 'plan' node + plan→audit edge), DOMAINS.nav.files
+       (added /nav:plan row), ARCH_LAYERS skill chips (added 'plan'),
+       and nav-anatomy lede + callout to mention plan.
 
   ⚖ JUDGMENT (not mechanically verifiable — interpretation)
     • Layer assignment marketplace/plugin/skill is a categorisation, not a
@@ -235,12 +238,12 @@
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
         <span data-t="navanat_title">nav anatomy — assess, transform, describe, orchestrate</span>
       </h2>
-      <p class="lede" data-t="navanat_lede">Five skills, one verb each. <code>audit</code> is the source of truth (read-only); <code>doctor</code> orchestrates the light-fix pass (audit → headers → map); <code>refactor</code> stays standalone (heavy-touch, narrow scope per its own discipline). <code>headers</code> output feeds <code>map</code> input — that's why they're separate (ADR-003).</p>
+      <p class="lede" data-t="navanat_lede">Six skills, one verb each. <code>audit</code> is the source of truth (read-only). Two meta-skills inline it: <code>doctor</code> sequences light fixes (audit → headers → map); <code>plan</code> grounds a spec then clarifies + writes a plan artifact. <code>refactor</code> stays standalone (heavy-touch, narrow scope). <code>headers</code> output feeds <code>map</code> input — separate by design (ADR-003).</p>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
       </div>
-      <div class="callout" data-t="navanat_callout">The orchestrator (<code>doctor</code>) doesn't auto-refactor — refactors need narrow scope + their own session. Doctor recommends concrete <code>/nav:refactor</code> invocations in its final report; you run them when ready.</div>
+      <div class="callout" data-t="navanat_callout">Neither meta-skill auto-acts on what it surfaces. <code>doctor</code> recommends concrete <code>/nav:refactor</code> invocations; <code>plan</code> writes a plan artifact the user reads before executing. Both inline <code>audit</code>'s protocol but follow the "scan transcript first" preamble — if audit ran this session, they reuse its output instead of re-running grep (ADR-006).</div>
     </section>
 
     <section id="conv">
@@ -286,9 +289,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav anatomy — assess, transform, describe, orchestrate',
-    navanat_lede: "Five skills, one verb each. <code>audit</code> is the source of truth (read-only); <code>doctor</code> orchestrates the light-fix pass (audit → headers → map); <code>refactor</code> stays standalone (heavy-touch, narrow scope per its own discipline). <code>headers</code> output feeds <code>map</code> input — that's why they're separate (ADR-003).",
-    navanat_callout: "The orchestrator (<code>doctor</code>) doesn't auto-refactor — refactors need narrow scope + their own session. Doctor recommends concrete <code>/nav:refactor</code> invocations in its final report; you run them when ready.",
+    navanat_title: 'nav anatomy — assess, transform, describe, orchestrate, plan',
+    navanat_lede: "Six skills, one verb each. <code>audit</code> is the source of truth (read-only). Two meta-skills inline it: <code>doctor</code> sequences light fixes (audit → headers → map); <code>plan</code> grounds a spec then clarifies + writes a plan artifact. <code>refactor</code> stays standalone (heavy-touch, narrow scope). <code>headers</code> output feeds <code>map</code> input — separate by design (ADR-003).",
+    navanat_callout: "Neither meta-skill auto-acts on what it surfaces. <code>doctor</code> recommends concrete <code>/nav:refactor</code> invocations; <code>plan</code> writes a plan artifact the user reads before executing. Both inline <code>audit</code>'s protocol but follow the \"scan transcript first\" preamble — if audit ran this session, they reuse its output instead of re-running grep (ADR-006).",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
     // panel labels
@@ -339,9 +342,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav 解剖 —— 評估、轉換、描述、統籌',
-    navanat_lede: '五個 skill,各一動詞。<code>audit</code> 是真理之源(唯讀);<code>doctor</code> 統籌輕觸修復(audit → headers → map);<code>refactor</code> 維持獨立(重觸,須窄範圍依其自身紀律)。<code>headers</code> 的輸出餵 <code>map</code> 的輸入 —— 這就是它們分開的理由(ADR-003)。',
-    navanat_callout: '統籌者(<code>doctor</code>)不會自動重構 —— 重構需要窄範圍 + 自己的 session。Doctor 在最終報告中推薦具體的 <code>/nav:refactor</code> 呼叫;你準備好再執行。',
+    navanat_title: 'nav 解剖 —— 評估、轉換、描述、統籌、規劃',
+    navanat_lede: '六個 skill,各一動詞。<code>audit</code> 是真理之源(唯讀)。兩個 meta-skill 內嵌它:<code>doctor</code> 串接輕觸修復(audit → headers → map);<code>plan</code> 以 spec 為目標 ground 之後釐清 + 寫出 plan 檔。<code>refactor</code> 維持獨立(重觸,須窄範圍)。<code>headers</code> 的輸出餵 <code>map</code> 的輸入 —— 分開是設計(ADR-003)。',
+    navanat_callout: '兩個 meta-skill 都不會自動執行它發現的事。<code>doctor</code> 推薦具體的 <code>/nav:refactor</code> 呼叫;<code>plan</code> 寫出 plan 檔給 user 看過再執行。兩者都內嵌 <code>audit</code> 的 protocol,但遵守「先掃 transcript」的 preamble —— 同 session 跑過 audit 就 reuse,不重新 grep(ADR-006)。',
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
     role_label: '角色', wires_label: '指向', used_by_label: '被指向', view_anatomy: '前往解剖',
@@ -363,13 +366,13 @@ const T = {
 const LAYERS = [
   {cls:'ui', name:{en:'Marketplace', zh:'Marketplace'}, tag:{en:'the container — identity from GitHub username', zh:'容器 —— 身份來自 GitHub 帳號'}, doms:['skills']},
   {cls:'state', name:{en:'Plugin', zh:'Plugin'}, tag:{en:'a topical family of skills', zh:'一個主題家族的 skills'}, doms:['nav']},
-  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','headers','map','doctor']},
+  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','headers','map','doctor','plan']},
 ];
 
 const ARCH_LAYERS = [
   {cls:'ui', label:{en:'MARKETPLACE', zh:'MARKETPLACE'}, desc:{en:'<code>skills/</code> — the personal collection. <code>.claude-plugin/marketplace.json</code> lists which plugins live inside. Identity comes from the GitHub username (<code>ChenPaulYu/skills</code>), not the folder name.', zh:'<code>skills/</code> —— 個人收藏。<code>.claude-plugin/marketplace.json</code> 列出內含的 plugins。身份來自 GitHub 帳號(<code>ChenPaulYu/skills</code>),不是資料夾名。'}},
   {cls:'state', label:{en:'PLUGIN', zh:'PLUGIN'}, desc:{en:'<code>plugins/&lt;family&gt;/</code> — one topical family. <code>.claude-plugin/plugin.json</code> declares the plugin; <code>CLAUDE.md</code> holds its dev conventions; <code>skills/</code> holds the verbs.', zh:'<code>plugins/&lt;family&gt;/</code> —— 一個主題家族。<code>.claude-plugin/plugin.json</code> 宣告 plugin;<code>CLAUDE.md</code> 是開發約定;<code>skills/</code> 放動詞。'}},
-  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','headers','map','doctor']},
+  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','headers','map','doctor','plan']},
 ];
 
 const ARCH_CONN = [
@@ -395,13 +398,14 @@ const DOMAINS = {
   nav: {
     layer: 'state',
     path: 'plugins/nav/',
-    blurb: {en:'Keep any codebase navigable as it grows. 5 skills, one verb each. Language-agnostic. See <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。5 個 skill,各一動詞。跨語言。Plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
+    blurb: {en:'Keep any codebase navigable as it grows. 6 skills, one verb each. Language-agnostic. See <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。6 個 skill,各一動詞。跨語言。Plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
     files: [
-      ['/nav:audit', '', {en:'★ Assess codebase shape against the 11 rules — unconditional health, or feasibility against a target spec. Read-only.', zh:'★ 對照 11 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的可行性。唯讀。'}],
+      ['/nav:audit', '', {en:'★ Assess codebase shape against the 11 rules — unconditional health, or read-only quick-check against a target spec. Read-only.', zh:'★ 對照 11 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。'}],
       ['/nav:refactor', '', {en:'★ Structural refactor: verbatim move + test gate after every step + real-app pass at the end. Behaviour stays identical.', zh:'★ 結構重構:原文搬移 + 每步 test gate + 結尾真實 app pass。行為完全不變。'}],
       ['/nav:headers', '', {en:'Add or standardize skill-style file-top headers so an agent can <code>head -12</code> to retrieve role + key deps without reading the body.', zh:'加或標準化 skill 風格檔首 header,讓 agent <code>head -12</code> 即可取得角色與關鍵依賴,不必讀本文。'}],
       ['/nav:map', '', {en:'Generate <code>docs/codebase-map/index.html</code> — a bilingual interactive codebase map with anatomy graphs + audit block. This file uses the same form.', zh:'產生 <code>docs/codebase-map/index.html</code> —— 雙語互動 codebase 地圖,含 anatomy 圖與 audit block。本檔即同形式。'}],
       ['/nav:doctor', '', {en:'★ Full health pass — orchestrates audit → plan → headers + map with user-review gates between every step. Hands off refactors.', zh:'★ 完整健康檢查 —— 串接 audit → 計畫 → headers + map,步驟之間 user-review。重構交給 /nav:refactor。'}],
+      ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session.', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。'}],
     ],
   },
 };
@@ -412,15 +416,17 @@ const CB_NODES = [
 const CB_EDGES = [];
 
 const NAV_NODES = [
-  {id:'doctor', kind:'orchestrator', x:320, y:30, w:120, role:{en:'orchestrate', zh:'統籌'}, desc:{en:'Full health pass — sequences audit → headers → map with user-review gates. Hands off refactors (recommends but never executes).', zh:'完整健康檢查 —— 串接 audit → headers → map,步驟之間 user-review。重構交出(僅推薦,不執行)。'}},
-  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 11 deep-module rules. Two modes: unconditional health, or feasibility against a target spec.', zh:'唯讀審計,對照 11 條 deep-module 規則。兩模式:無條件健康,或對應 spec 的可行性。'}},
-  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass. Doctor recommends; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass。Doctor 推薦;你自行呼叫。'}},
+  {id:'doctor', kind:'orchestrator', x:180, y:30, w:120, role:{en:'orchestrate', zh:'統籌'}, desc:{en:'Full health pass — sequences audit → headers → map with user-review gates. Hands off refactors (recommends but never executes).', zh:'完整健康檢查 —— 串接 audit → headers → map,步驟之間 user-review。重構交出(僅推薦,不執行)。'}},
+  {id:'plan', kind:'orchestrator', x:460, y:30, w:120, role:{en:'ground + plan', zh:'底料 + 規劃'}, desc:{en:'Spec-grounded planning — inlines audit (Mode 2) on spec-touched domains, clarifies ambiguity via 3-5 questions, writes a plan artifact. Reuses prior audit output if it ran this session.', zh:'以 spec 為目標的規劃 —— 內嵌 audit Mode 2 在受影響 domains,以 3-5 問釐清不明,寫出 plan 檔。同 session 跑過 audit 會 reuse。'}},
+  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 11 deep-module rules. Two modes: unconditional health, or read-only quick-check against a spec.', zh:'唯讀審計,對照 11 條 deep-module 規則。兩模式:無條件健康,或對應 spec 的唯讀快檢。'}},
+  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass. Doctor and plan both recommend; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass。Doctor 與 plan 都會推薦;你自行呼叫。'}},
   {id:'headers', kind:'describe', x:300, y:240, w:130, role:{en:'describe (file)', zh:'描述(檔案)'}, desc:{en:'Add/standardize skill-style file headers — title + 2-3 sentence + Reads. Universal convention; per-language syntax.', zh:'加/標準化 skill 風格檔首 header —— 標題 + 2-3 句 + Reads。通用約定;syntax 隨語言。'}},
   {id:'map', kind:'describe', x:550, y:240, w:130, role:{en:'describe (project)', zh:'描述(專案)'}, desc:{en:'Bilingual interactive codebase HTML — draggable graphs, click-to-reveal panels, audit block. Output of this map uses the same form.', zh:'雙語互動 codebase HTML —— 可拖曳圖、點看面板、audit block。本檔即此形式的輸出。'}},
 ];
 
 const NAV_EDGES = [
   ['doctor', 'audit'],
+  ['plan', 'audit'],
   ['doctor', 'headers'],
   ['doctor', 'map'],
   ['headers', 'map'],

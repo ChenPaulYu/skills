@@ -15,11 +15,12 @@ More plugins land here over time. Each lives in its own folder under `plugins/`,
 
 Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`. For `nav`:
 
-- `/nav:audit` — assess codebase shape (or check it against a target spec)
+- `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 - `/nav:headers` — add or standardize skill-style file-top headers
 - `/nav:map` — generate the bilingual `docs/codebase-map/index.html`
 - `/nav:doctor` — full health pass (audit → headers → map, with review gates)
+- `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact
 
 ## Install
 
