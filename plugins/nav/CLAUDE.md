@@ -60,4 +60,8 @@ skills/<name>/references/    → bulky reference docs loaded on demand
 - Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
 - Changing the 11 rules: this affects every skill — update each `SKILL.md` in the same commit, write an ADR.
 - Stale `SKILL.md` is worse than missing `SKILL.md` — same rule as project-level "stale header = lie".
-- **Update the marketplace map** ([`../../docs/site/index.html`](../../docs/site/index.html)) whenever you add, rename, or remove a skill — update the relevant data array (`DOMAINS`, `NAV_NODES`, `NAV_EDGES`, `CONV`), bump the audit block date, and add a FIXED entry describing the change. Stale map = lie.
+- **Site-map update is gating, not optional.** Any change to a `SKILL.md`, a plugin manifest, or an ADR REQUIRES the same commit to update [`../../docs/site/index.html`](../../docs/site/index.html). Before committing, **always** run:
+  ```bash
+  git status docs/site/index.html
+  ```
+  If you changed a skill but the site shows unmodified → **STOP** — you missed it. Update the relevant data array (`DOMAINS`, `NAV_NODES`, `NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date, and add a FIXED entry naming what changed. Skip only for pure typo / internal refactor with zero surface impact. **Stale map lies silently to every future reader** — that's why this is a hard gate, not a soft reminder.
