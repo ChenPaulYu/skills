@@ -1,11 +1,11 @@
 ---
 name: nav-audit
-description: Audit a TypeScript/React codebase against deep-module / progressive-disclosure principles (Ousterhout's "A Philosophy of Software Design"). Use this skill whenever the user asks to "audit my codebase", "check if X is modular", "review the architecture", "is this a deep module?", "what's wrong with this codebase?", "any architectural smells?", "is this well-structured?", or any similar architectural-quality assessment — even when they don't say the word "audit" explicitly. Also fires when the user discusses modularity, progressive disclosure, layering, or whether their code is grounded vs guessed. Read-only — modifies no files.
+description: Audit any codebase against deep-module / progressive-disclosure principles (Ousterhout's "A Philosophy of Software Design"). Language-agnostic core + stack-specific heuristics that activate per detected stack (TS/React, Python, Go, Rust, etc.). Two modes — (1) UNCONDITIONAL health audit when the user asks "audit my codebase", "check if X is modular", "review the architecture", "is this a deep module?", "what's wrong with this codebase?", "any architectural smells?", "is this well-structured?"; (2) FEASIBILITY audit when given a spec / plan / feature description and asked "can this codebase support feature X?", "is this code ready for Y?", "does our architecture fit this plan?", "what do I need to refactor before building X?", or "review this spec against our codebase". Also fires on any modularity / progressive disclosure / grounding-vs-guessed discussion. Read-only — modifies no files.
 ---
 
 # Deep-module audit
 
-Honestly assess a TypeScript/React codebase against 11 deep-module principles, then report what's working, what's drifting, what's broken, and where the agent itself struggled to describe a module — that struggle is a first-class signal of failed abstraction.
+Honestly assess any codebase against 11 deep-module principles, then report what's working, what's drifting, what's broken, and where the agent itself struggled to describe a module — that struggle is a first-class signal of failed abstraction.
 
 ## Why this skill exists
 
@@ -13,12 +13,40 @@ Most "code review" focuses on bugs. This audit focuses on **shape** — does the
 
 ## Scope
 
-- **Supported**: TypeScript / React (incl. JSX/TSX, Next.js, Vite)
-- **v2 / not yet supported**: Python, Go, Rust, Swift, Vue, Svelte, vanilla JS
+**The 11 rules are language-agnostic.** This audit works on any codebase. It has a **universal core** of checks that applies everywhere, plus **stack-specific heuristics** that activate when a known stack is detected.
 
-If the codebase isn't primarily TS/React (detect via `package.json` + presence of `*.ts(x)` files), say so and stop:
+**Universal checks** (run on every codebase):
+- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · rule ⑪ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
 
-> "This skill is calibrated for TypeScript/React. Detected stack: `<X>`. The principles below apply universally, but the specific checks (component span, hook count, JSX render size) won't be accurate. Stopping. Re-invoke when v2 ships, or ask for a generic architectural review instead."
+**Stack-specific heuristics** (added when stack is detected):
+- **TS/React** (detect: `package.json` mentions `react`): `useState`/`useRef` counts, JSX render span, component prop counts
+- **Python** (detect: `pyproject.toml` / `setup.py` / `requirements.txt`): class-method counts, missing docstrings, circular imports
+- **Go** (detect: `go.mod`): exported-symbol counts per file, init() usage, package cycles
+- **Rust** (detect: `Cargo.toml`): trait/impl span, public API surface in `lib.rs`, `pub` visibility sprawl
+- **Other stacks**: still run universal checks; mention in the report that stack-specific calibration wasn't applied
+
+**Universal thresholds**:
+- File: > 500 LOC = giant; > 700 = severe
+- Function: > 100 LOC = suspect
+- Imports per file: > 20 = wide caller surface
+
+## Two modes — read first
+
+### Mode 1: Unconditional health audit (no input beyond cwd)
+
+Triggered when the user asks "is this code healthy?", "audit my codebase", "any smells?" etc. **No target in mind** — broad health check.
+
+→ Run all checks across all domains. Report by rule.
+
+### Mode 2: Feasibility audit (input: a spec / plan / feature description)
+
+Triggered when the user gives a path to a spec / plan / feature description and asks "can my codebase carry this?". **Specific target in mind** — conditional health check.
+
+→ Parse the target → identify the domains it touches → run the same checks but ONLY on those domains → frame findings as **gap analysis**: "to build feature X you need Y; current code has Z; here's the delta".
+
+→ Output section "Gap analysis (vs `<spec path>`)" lists per affected domain: current shape · target needs · gap · suggested prep work (specific refactors to do before starting the build).
+
+The mechanical + heuristic checks below are identical in both modes — only the SCOPE (which files) and the REPORT FRAMING (general health vs gap-vs-target) differ.
 
 ## The 11 rules (the audit IS these rules)
 
@@ -38,25 +66,32 @@ If the codebase isn't primarily TS/React (detect via `package.json` + presence o
 
 Work in order. Don't skip — each layer of evidence builds on the previous.
 
-### Step 1 — Detect stack and bound scope
+### Step 1 — Detect stack + bound scope
+
+Detect what's there; don't bail:
 
 ```bash
-test -f package.json && grep -E '"react"|"react-dom"' package.json
-find . -name '*.tsx' -not -path '*/node_modules/*' | head -3
+ls package.json pyproject.toml requirements.txt go.mod Cargo.toml Package.swift 2>/dev/null
+# package.json + react in deps → TS/React (add JSX/hook checks)
+# pyproject.toml or setup.py → Python (add class/docstring checks)
+# go.mod → Go (add package-cycle/init checks)
+# Cargo.toml → Rust (add trait-impl/visibility checks)
+# none of the above → run universal checks only; note in report
 ```
 
-If not TS/React → use the unsupported-stack message above and stop.
+Source extensions to scan: `.ts .tsx .js .jsx .py .go .rs .swift .java .kt .rb` (extend per project).
 
-Infer the source root (commonly `src/`, `app/`, `frontend/src/`). Treat it as the auditable surface; ignore `node_modules`, `dist`, `build`, generated files.
+Infer the source root (commonly `src/`, `app/`, `frontend/src/`, `lib/`, `pkg/`). Ignore `node_modules`, `dist`, `build`, `target`, `__pycache__`, `vendor`, `.venv`, generated files.
 
 ### Step 2 — Domain inventory
 
-Observe the folder shape; don't impose one. Typically one top-level folder per domain (e.g., `core/`, `app/`, `audio/`, `canvas/`, `crates/`, `shell/`).
+Observe the folder shape; don't impose one. Typically one top-level folder per domain.
 
 For each domain capture: file count, total LOC, the "leader" file(s) (the largest / the most-imported / the one whose name matches the domain).
 
 ```bash
-find src/<domain> -type f \( -name '*.ts' -o -name '*.tsx' \) -not -path '*/__tests__/*' \
+# adapt extensions to the detected stack
+find <source-root>/<domain> -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.py' -o -name '*.go' -o -name '*.rs' \) -not -path '*/__tests__/*' \
   | xargs wc -l | sort -rn | head -10
 ```
 
@@ -64,16 +99,32 @@ find src/<domain> -type f \( -name '*.ts' -o -name '*.tsx' \) -not -path '*/__te
 
 For each domain leader and every file > 100 LOC:
 
+**Universal checks (every stack):**
+
 | Check | Threshold | Rule |
 |---|---|---|
 | File LOC | > 500 = "giant"; > 700 = "severe giant" | ⑤ |
-| Largest inner function | > 100 LOC = suspect | ⑤ |
+| Largest function | > 100 LOC = suspect | ⑤ |
+| Imports per file | > 20 distinct imports = wide surface | ⑦ |
+| Dead modules | File with 0 inbound imports (excluding entry points + barrels) | ⑥ |
+| Barrels | Each subdirectory with ≥ 3 files: has an `index.<ext>` or equivalent re-export? | ⑩ |
+| Cross-domain edges | Map imports between top-level folders; flag layer violations | ⑦ |
+
+**TS/React specific (only if React detected):**
+
+| Check | Threshold | Rule |
+|---|---|---|
 | Component density | > 5 `useState` + > 5 `useRef` + > 30 inner functions = god component | ⑤ + ⑦ |
 | Render JSX size | > 300 lines inside the top `return (` of a component = giant render | ⑤ |
-| Imports per file | > 20 distinct imports = wide surface (caller pays the cost) | ⑦ |
-| Dead modules | File with 0 inbound imports (excluding entry points + barrels) | ⑥ |
-| Barrels | Each subdirectory with ≥ 3 files: has `index.ts`? | ⑩ |
-| Cross-domain edges | Map `import` between domains; flag layer violations (state → ui, etc.) | ⑦ |
+
+**Python specific (only if Python detected):**
+
+| Check | Threshold | Rule |
+|---|---|---|
+| Class methods | > 20 methods on one class = god class | ⑤ |
+| Missing module docstrings | Load-bearing module without `"""..."""` at top | ① |
+
+**Go / Rust / others**: apply your judgment using the universal checks + the language's idiomatic giants (e.g. Go: huge `init()` blocks, package-level cycles; Rust: trait impls > 500 LOC, `lib.rs` exporting everything flat).
 
 Use grep + find + a small dependency walk. Don't write fragile AST parsers; rough numbers are enough.
 
@@ -107,7 +158,11 @@ Output a markdown report **directly to chat** (no file artifact). Template:
 ```markdown
 ## Codebase audit — <ISO date>
 
-Stack: TypeScript / React · <N> domains · <N> source files (~<N> LOC)
+Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stack-specific checks: <applied | universal-only>
+
+### Gap analysis (mode 2 only — vs `<spec path>`)
+- **Domain `<name>`** — current shape: <one line>; target needs: <one line>; gap: <what's missing>; suggested prep: <specific refactor(s)>
+- …
 
 ### ✓ What's working (deep-module wins)
 - <domain or file> — <why it's a win, which rule it exemplifies>

@@ -7,18 +7,23 @@
 
 | Skill | What it does |
 |---|---|
-| [`nav-audit`](./skills/nav-audit/) | Honestly assess a codebase against the 11 deep-module rules. Read-only. |
-| `nav-refactor` | Execute a refactor with the rule ⑧ discipline: verbatim move + test gate after each step + browser-verified at the end. |
-| `nav-map` | Generate / update `docs/codebase-map/index.html` — an interactive, bilingual codebase map with anatomies, click-to-reveal graphs, screenshots, and an embedded grounding-audit block. |
-| `nav-headers` | Add or standardize skill-style JSDoc headers on load-bearing files, so an agent can `head -12` to retrieve a file's role without reading its body. |
+| [`nav-audit`](./skills/nav-audit/) | Honestly assess any codebase against the 11 deep-module rules. Two modes: unconditional health audit, or feasibility audit against a target spec. Read-only. |
+| [`nav-refactor`](./skills/nav-refactor/) | Execute a structural refactor with rule ⑧ discipline: verbatim move + test gate after each step + real-app pass at the end. |
+| [`nav-headers`](./skills/nav-headers/) | Add or standardize skill-style file-top headers on load-bearing files, so an agent can `head -12` to retrieve the role + key deps. Universal convention; per-language syntax (JSDoc / docstring / `//` / `///`). |
+| [`nav-map`](./skills/nav-map/) | Generate `docs/codebase-map/index.html` — an interactive, optionally-bilingual codebase map with anatomy graphs, draggable nodes, click-to-reveal panels, and a grounding-audit block. Visual form spec: `nav-map/references/visual-spec.md`. |
+| [`nav-doctor`](./skills/nav-doctor/) | Full health pass — orchestrates audit → plan → headers → map with user-review gates between every step. Hands off structural refactors to `nav-refactor` (does NOT auto-execute them). |
 
-All four lean on the **same 11 rules** — see [`CLAUDE.md`](./CLAUDE.md) for the philosophy.
+All five share the **same 11 rules** — see [`CLAUDE.md`](./CLAUDE.md) for the philosophy.
 
 ## Philosophy (the through-line)
 
 Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without having to read every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
 
 When in doubt: rule ⑨. Ask.
+
+## Language support
+
+All five skills are **language-agnostic**. They have a universal core that runs on any codebase, plus stack-specific heuristics that activate when a known stack (TS/React, Python, Go, Rust, Swift, …) is detected. The 11 design principles transfer everywhere; only the thresholds + syntax flex per language.
 
 ## Architecture notes
 

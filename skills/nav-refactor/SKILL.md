@@ -1,11 +1,11 @@
 ---
 name: nav-refactor
-description: Execute a structural refactor on a TypeScript/React codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, browser-verified at the end. Use this skill whenever the user wants to "refactor X", "decompose this component", "extract a hook", "extract a subsystem", "split this file", "reorganize this folder", "break this up", or any structural change that should preserve behaviour. Also fires when the user mentions "verbatim refactor", "behaviour-preserving refactor", or refers to Ousterhout rule ⑧. The skill enforces the discipline; the agent does the moves.
+description: Execute a structural refactor on any codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Use this skill whenever the user wants to "refactor X", "decompose this component", "extract a function/module/package", "split this file", "reorganize this folder", "break this up", or any structural change that should preserve behaviour. Also fires when the user mentions "verbatim refactor", "behaviour-preserving refactor", or refers to Ousterhout rule ⑧. The skill enforces the discipline; the agent does the moves.
 ---
 
 # Deep-module refactor
 
-Execute a structural refactor with the rule ⑧ discipline: **move existing code verbatim into its new home and re-wire it; never rewrite while moving.** Behaviour stays identical, proven by tests after each step and a real-app browser pass at the end.
+Execute a structural refactor with the rule ⑧ discipline: **move existing code verbatim into its new home and re-wire it; never rewrite while moving.** Behaviour stays identical, proven by tests after each step and a real-app pass at the end.
 
 ## Why this skill exists
 
@@ -17,8 +17,13 @@ Conflating these two is how a 4-hour refactor becomes a 4-day debugging session.
 
 ## Scope
 
-- **Supported**: TypeScript / React (incl. JSX/TSX, Next.js, Vite). Requires a working test suite + a way to run the app (`pnpm dev`, `npm start`, etc.).
-- **v2 / not yet supported**: Stacks without auto-typecheck. Refactors that require API changes (those are a different kind of work — use a regular code session).
+**Language-agnostic.** The discipline (verbatim move + test gate + real-app pass) applies to any stack as long as you can:
+1. Run the test suite (`pnpm test`, `pytest`, `go test`, `cargo test`, `swift test`, …).
+2. Optionally run the app for an integration pass (browser for UI; CLI invocation for tools; `curl` for services).
+
+Detect the stack at the start (look at `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` / `Package.swift` / etc.) so you know the right test + run commands. If there's no test suite at all, **flag this loudly** — refactor without verification is just guessing.
+
+**Out of scope**: refactors that change the contract (API signatures, public types). Those are a different kind of work and need a regular code session.
 
 If unclear what kind of refactor the user wants → rule ⑨, ask. "Is this a verbatim move, or does the contract change?"
 
@@ -40,17 +45,19 @@ If unclear what kind of refactor the user wants → rule ⑨, ask. "Is this a ve
 
 ### Step 1 — Establish green baseline
 
-Before touching anything:
+Before touching anything, run the stack's gate trio (typecheck + lint + tests). Examples:
 
-```bash
-pnpm typecheck   # or tsc --noEmit
-pnpm lint
-pnpm test --run
-```
+| Stack | Gate commands (typical) |
+|---|---|
+| TS/React | `pnpm typecheck && pnpm lint && pnpm test --run` |
+| Python | `mypy . && ruff check . && pytest` |
+| Go | `go build ./... && go vet ./... && go test ./...` |
+| Rust | `cargo check && cargo clippy && cargo test` |
+| Swift | `swift build && swift test` |
 
-All three must pass. If any fails, **stop**; baseline must be green or refactor success is unmeasurable.
+All must pass. If any fails, **stop**; baseline must be green or refactor success is unmeasurable.
 
-Also note: can you run the app? (`pnpm dev`, `npm run dev`, etc.) If not, refactor is text-only — limit scope accordingly.
+Also note: can you run the app? (`pnpm dev`, `python -m app`, `go run .`, `cargo run`…) If not, refactor is text-only — limit scope accordingly.
 
 ### Step 2 — Identify the moves (plan, don't act)
 
@@ -79,9 +86,10 @@ For a typical "extract a hook" refactor, the steps might be:
 
 ### Step 4 — Apply ONE step, then test-gate
 
-After every single step:
+After every single step, re-run the stack's gate trio (the one you established in Step 1):
 
 ```bash
+# whichever applies — e.g. for TS/React:
 pnpm typecheck && pnpm lint && pnpm test --run
 ```
 

@@ -1,11 +1,11 @@
 ---
 name: nav-headers
-description: Add or standardize skill-style JSDoc headers on load-bearing TypeScript/React source files, so an agent can `head -12 <file>` to retrieve the file's role + key deps before reading the body. Use this skill whenever the user asks to "add file headers", "standardize file headers", "audit our docstrings", "make files self-describing", "add skill-style headers", or "make this codebase more progressive-disclosure". Also fires after creating multiple new load-bearing files (the user might want them headered uniformly). Shows a diff before applying; can also update CLAUDE.md with the convention if not present.
+description: Add or standardize skill-style file-top headers on load-bearing source files in any language, so an agent can `head -12 <file>` to retrieve the file's role + key deps before reading the body. The CONVENTION (title + 2-3 sentence body + Reads line) is universal; the SYNTAX flexes per language (JSDoc / Python docstring / Go doc comment / Rust doc comment / etc.). Use whenever the user asks to "add file headers", "standardize file headers", "audit our docstrings", "make files self-describing", "add skill-style headers", or "make this codebase more progressive-disclosure". Also fires after creating multiple new load-bearing files. Shows a diff before applying; can also update CLAUDE.md with the convention if not present.
 ---
 
 # Deep-module headers
 
-Apply a uniform skill-style JSDoc header convention to load-bearing source files, so the first 8-12 lines of every important file answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code.
+Apply a uniform skill-style header convention to load-bearing source files in any language, so the first 8-12 lines of every important file answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code.
 
 ## Why this skill exists
 
@@ -15,10 +15,20 @@ The header pattern intentionally mirrors how Claude **skills** work — name + d
 
 ## Scope
 
-- **Supported**: TypeScript / React (`.ts` / `.tsx`).
-- **v2 / not yet supported**: other languages with different doc conventions.
+**Language-agnostic.** The CONVENTION (title + 2-3 sentence detail + `Reads:` line) applies to any language; the SYNTAX adapts to the language's doc-comment style. Detect the stack at the top and use the right syntax.
 
-If the codebase isn't TS/React → stop and explain.
+Syntax per language:
+
+| Language | Comment style | Position |
+|---|---|---|
+| TS / JS / Java / C# / Go (doc) | `/** ... */` JSDoc-style block | line 1, before imports |
+| Python | `"""..."""` module docstring | line 1, before imports |
+| Go | `// ...` line comments | line 1, before `package` |
+| Rust | `//! ...` (module-level doc) | line 1, before `use` |
+| Swift | `/// ...` (triple-slash doc) | line 1 |
+| Ruby | `# ...` block | line 1 |
+
+The **content shape** is identical across all of them — only the comment characters differ. Headers in different syntaxes should be grep-able with the same patterns (the first ~10 lines, looking for the title format `<name> — <role>`).
 
 ## The 11 rules (especially ① and ⑪)
 

@@ -1,6 +1,6 @@
 ---
 name: nav-map
-description: Generate or update `docs/codebase-map/index.html` — an interactive, optionally-bilingual codebase map with anatomy graphs, click-to-reveal panels, embedded screenshots, and a grounding-audit block. Use this skill whenever the user asks to "generate a codebase map", "create the codebase map", "update the codebase map", "make this codebase navigable", "onboard me to this repo", "show me a map of the code", or after major restructuring when the existing map will have drifted. Also fires when the user references the codebase-map convention. Generates HTML files (writes to docs/codebase-map/).
+description: Generate or update `docs/codebase-map/index.html` for any codebase — an interactive, **bilingual (EN + zh-Hant) by default** codebase map with anatomy graphs, click-to-reveal panels, draggable nodes, embedded screenshots, and a grounding-audit block at the top. Use this skill whenever the user asks to "generate a codebase map", "create the codebase map", "update the codebase map", "make this codebase navigable", "onboard me to this repo", "show me a map of the code", or after major restructuring when the existing map will have drifted. Also fires when the user references the codebase-map convention. The visual form spec lives in `references/visual-spec.md` — read it before rendering. Generates HTML files (writes to docs/codebase-map/).
 ---
 
 # Deep-module map
@@ -18,10 +18,9 @@ The map is also the **dogfood test** for rule ⑪ — if I struggle to describe 
 
 ## Scope
 
-- **Supported**: TypeScript / React. Outputs an HTML file that renders standalone (no build step).
-- **v2 / not yet supported**: other stacks (the rendering is generic, but the source-scanning heuristics — domain detection, anatomy candidates — are calibrated for TS/React conventions).
+**Language-agnostic.** The HTML renderer is generic; the source-scanning works on any stack. Domain detection (top-level folders), anatomy identification (rich subsystems), and cross-domain edges (imports) are all universal concepts — only the syntax of "imports" varies (`import ...` / `from ... import` / `use ...` / `package ...`).
 
-If the codebase isn't TS/React → say so + offer to produce a simpler text-only map instead, or stop.
+Outputs a single self-contained HTML file that renders standalone (no build step). Visual / interaction spec: see [`references/visual-spec.md`](./references/visual-spec.md). Read that before rendering — it's the source of truth for layout, colors, sidebar grouping, anatomy patterns, interactions (click panel, drag, lang toggle), and the audit block format.
 
 ## The 11 rules (the map IS rules ②/⑩/⑪ in action)
 
@@ -99,7 +98,9 @@ Produce `docs/codebase-map/index.html` as a **single self-contained file** with:
 - **Conventions** — load-bearing project rules (from CLAUDE.md or equivalent)
 - **Grounding audit block** — at the very top of the file as an HTML `<!-- -->` comment listing what was VERIFIED, what was FIXED in this revision, and what's JUDGMENT (not mechanically verifiable)
 
-Bilingual? Only if the user asks or the existing map is bilingual. Use a `T` dictionary + toggle button + `data-t` spans.
+**Bilingual is required (EN + zh-Hant by default).** Every translatable string lives in a `T` dictionary with `{en: ..., zh: ...}` shape; every static UI element uses `<span data-t="key">` or `data-t-placeholder` for inputs. The sidebar has an `EN | 中` toggle that flips the language + persists to `localStorage['codebase-map-lang']`. See `references/visual-spec.md` §13 for the implementation pattern.
+
+If the user explicitly requests a different language pair (e.g. EN + Japanese), use that — but **never ship monolingual** without explicit opt-out from the user. The bilingual scaffolding is cheap once it's there; removing it later is harder than adding it up front.
 
 Interactive features (built once into the generic renderer):
 - Click a node → side panel reveals role, "wires" (outbound edges), "used by" (inbound edges)
@@ -123,7 +124,7 @@ Open the generated map in `agent-browser` to confirm:
 - All graphs render (correct node + edge counts)
 - Click panels work
 - Drag works
-- (If bilingual) Toggle works
+- Language toggle works (EN ↔ zh-Hant) — `documentElement.lang` updates, `localStorage` persists, all `data-t` spans flip
 - Zero console errors
 
 ### Step 8 — Write the grounding audit block

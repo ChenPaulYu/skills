@@ -5,7 +5,9 @@
 
 ## What this plugin is
 
-A growing personal collection of Claude skills focused on **deep-module discipline** — auditing, refactoring, mapping, and documenting code so it stays navigable as it grows. Inspired by Ousterhout's *A Philosophy of Software Design*; calibrated against real refactors (e.g., decomposing a 1718-line component into a 16-file subsystem with a single barrel).
+A growing personal collection of Claude skills focused on **keeping code navigable** — auditing, refactoring, mapping, and documenting code so it stays navigable as it grows. Inspired by Ousterhout's *A Philosophy of Software Design*; calibrated against real refactors (e.g., decomposing a 1718-line component into a 16-file subsystem with a single barrel).
+
+**Language-agnostic by design.** The 11 rules transfer to any stack; specific checks have universal-core + per-stack heuristics.
 
 ## The 11 rules (the through-line of every skill)
 
@@ -27,11 +29,12 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 
 ## Conventions for skills inside this plugin
 
-- **Naming**: `nav-<verb>` for skills in the deep-module family. Other families later get their own prefix (`spec-*`, `refactor-*`, etc.).
-- **Self-contained**: every `SKILL.md` includes the 11 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded.
+- **Naming**: `nav-<verb>` for skills in the navigability family (see [ADR-002](./docs/adr/002-rename-deep-module-prefix-to-nav.md)). Other families later get their own prefix (`spec-*`, `craft-*`, etc.).
+- **Self-contained**: every `SKILL.md` includes the 11 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded. Bulky reference docs (e.g. `nav-map/references/visual-spec.md`) live in `references/` and are loaded only when actually rendering.
 - **Frontmatter `description`**: written **broad** (matches multiple trigger phrasings) but **honest** about scope. No "pushy" cross-domain claims.
-- **Scope**: v1 skills are calibrated for **TypeScript / React** codebases. Other stacks are v2 — explicitly bail with a message rather than misfire.
-- **Read-only by default**: skills that modify files (`nav-headers`, `nav-refactor`) must show a diff first or only modify on explicit user confirmation.
+- **Scope**: skills are **language-agnostic** with a universal core + per-stack heuristics (see [ADR-004](./docs/adr/004-language-agnostic-scope.md)). Don't bail on unknown stacks — degrade gracefully to universal checks + flag what was skipped.
+- **Read-only by default**: skills that modify files (`nav-headers`, `nav-refactor`, `nav-map`, `nav-doctor`) must show a diff first or only modify on explicit user confirmation.
+- **Skills don't invoke each other**. Meta-skills (`nav-doctor`) describe sequences for the agent to follow — they reference sibling protocols rather than re-implementing them. Atomic skills stay standalone-callable (see [ADR-003](./docs/adr/003-five-skills-not-four-or-six.md)).
 - **Each new skill**: write an ADR in `docs/adr/` explaining why it exists, what overlaps it has with siblings, and how the trigger description avoids stealing fire from them.
 
 ## Where things live
