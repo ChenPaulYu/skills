@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-28 (rev 3)
+  Last audit: 2026-05-28 (rev 4)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -16,10 +16,25 @@
       (folders + frontmatter name match in plugins/nav/skills/*/SKILL.md)
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 6 ADRs in docs/adr/ — 001..006 with cross-supersede / refine links
+    • 7 ADRs in docs/adr/ — 001..007 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 3)
+  ⚠ FIXED in this revision (rev 4)
+    1. Added "offer-next-action" pattern to the 3 meta-skills (ADR-007):
+       /nav:plan gets a new Stage 4, /nav:refactor a new Step 8,
+       /nav:doctor a new Step 7. Each ends with AskUserQuestion offering
+       sub-agent / in-session / save-only options. Sub-agent option
+       enforces clean-context "separate session" at the architecture level.
+       No new NAV_NODES / NAV_EDGES — pattern lives inside existing skills.
+    2. Retrofitted ALL markdown relative-path links to skills-root-relative
+       form (drop ./ and ../ prefixes; write paths as if `skills/` is the
+       root). 42 links across 13 files: README.md, plugins/nav/CLAUDE.md,
+       3 meta-skill SKILL.md + map/SKILL.md, all 7 ADRs + adr/README.md,
+       findings/README.md, observations/README.md. Convention now uniform
+       across the marketplace. No site HTML hrefs needed changes (none
+       used relative paths).
+
+  ⚠ FIXED in rev 3 (kept for history)
     1. Added Install section + sidebar link (reflects GitHub publication —
        `/plugin marketplace add ChenPaulYu/skills` + `/plugin install
        nav@skills`). New T-dict keys: nav_install, install_title,

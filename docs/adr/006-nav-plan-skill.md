@@ -2,7 +2,7 @@
 
 **Status**: accepted
 **Date**: 2026-05-28
-**Refines**: [ADR-003](./003-five-skills-not-four-or-six.md) #1 (the "fit folded into audit" judgment) and #5 (the 5-skills-is-the-minimum lesson)
+**Refines**: [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) #1 (the "fit folded into audit" judgment) and #5 (the 5-skills-is-the-minimum lesson)
 
 ## Context
 

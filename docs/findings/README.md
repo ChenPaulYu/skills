@@ -4,11 +4,11 @@ Build-side notes from editing this marketplace. The kind of mechanical knowledge
 
 ## Why this exists
 
-Sibling to [`observations/`](../observations/), but pointing inward instead of outward:
+Sibling to [`observations/`](docs/observations/), but pointing inward instead of outward:
 
 | Folder | Audience | Promotion target |
 |---|---|---|
-| [`observations/`](../observations/) | future users of the skills (including future-you) | `plugins/*/skills/*/SKILL.md` |
+| [`observations/`](docs/observations/) | future users of the skills (including future-you) | `plugins/*/skills/*/SKILL.md` |
 | `findings/` (this folder) | future-you (or anyone) editing this marketplace | marketplace `CLAUDE.md` addition · `docs/adr/` · plugin `CLAUDE.md` · convention note |
 
 ADRs record **decisions** ("we chose X over Y"). Findings record **mechanisms** ("here's how the thing actually behaves"). Different shape, different lifecycle.
@@ -21,7 +21,7 @@ Anything you learned the hard way while editing this marketplace. Examples:
 - Naming patterns that look fine in isolation but read badly once invoked
 - File-layout choices that affect distribution vs local-only tooling
 
-**Not for**: usage techniques (those are [`observations/`](../observations/)) or formal design decisions (those are [`docs/adr/`](../adr/)).
+**Not for**: usage techniques (those are [`observations/`](docs/observations/)) or formal design decisions (those are [`docs/adr/`](docs/adr/)).
 
 ## File shape
 
@@ -44,7 +44,7 @@ status: raw
   the one-line generalizable principle>
 ```
 
-Lean by design — same as [`observations/`](../observations/). Extra frontmatter fields earn their keep only after 5+ findings show they'd be useful.
+Lean by design — same as [`observations/`](docs/observations/). Extra frontmatter fields earn their keep only after 5+ findings show they'd be useful.
 
 ## Status lifecycle
 

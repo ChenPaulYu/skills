@@ -33,7 +33,7 @@ It's the full version of what `/nav:audit <spec>` (Mode 2) starts. Audit Mode 2 
 10. **Group + expose via one door** — subsystems exposed through a barrel/facade.
 11. **Agent-navigability is the audit** — struggle-to-describe IS the deep-module failure signal.
 
-## Three-stage protocol
+## Four-stage protocol
 
 ### Stage 1 — Ground (audit-equivalent on spec-touched domains)
 
@@ -129,13 +129,34 @@ End-to-end: <how someone confirms the whole plan landed correctly — e.g., spec
 
 Adjust sections per situation — Critical files is essential, Open questions only if Stage 2 had unanswered items, Out of scope only if there's real risk of scope creep.
 
-**Write the file, then summarize to chat**: location, line count, key open questions (if any), suggested next session (e.g., "execute step 1 with `/nav:refactor` against `<file>`").
+**Write the file, then summarize to chat**: location, line count, key open questions (if any), what step 1 entails. Then proceed to Stage 4.
+
+### Stage 4 — Offer next action (don't make the user type the next command)
+
+After Stage 3's file write + summary, present implementation options via `AskUserQuestion`. The user *picks*; you do not pre-decide. This step exists because suggesting "next session: run `/nav:refactor`" in chat text leaves the user to remember the command and type it; one click is friendlier. The discipline ("don't auto-execute") is preserved by the question itself — the user must affirmatively choose.
+
+**Default 3 options** (adjust labels per the plan's nature):
+
+| # | Option | What happens if picked |
+|---|---|---|
+| 1 | Launch sub-agent to execute step 1 *(Recommended)* | Invoke `Agent` with `subagent_type=general-purpose`. Pass: the plan file path, step 1's scope, the verification expectation from Stage 3's Verification table. If step 1 is structurally a refactor, instruct the sub-agent to follow `/nav:refactor`'s discipline (verbatim move + test gate). Sub-agent reports back when done. |
+| 2 | Execute step 1 in this session | Continue inline in the current session. The user sees each move; review gates remain manual. |
+| 3 | Save plan only — I'll come back later | Skill ends. The plan file is the artifact. |
+
+**Why the sub-agent is the recommended default**: it enforces clean context (= the "separate session" discipline at the architecture level, not just by convention) and frees the planning session's context for review work the user might still want to do.
+
+**Skip Stage 4 if**:
+- The plan has no executable step 1 yet (only open questions remain → user needs to answer first).
+- The user already said "just write the plan, don't ask what's next" earlier in this conversation.
+
+**One-shot, no nagging**: if the user picks "Save plan only", do not re-offer later in the same session. The discipline cuts both ways.
 
 ## Output
 
 - A markdown plan file at the agreed location.
-- A short chat summary: where the plan landed, headline open questions, suggested next action.
-- Do NOT execute the plan. That's a separate session — the user reads the plan first, then decides what to invoke (commonly `/nav:refactor` for structural moves, or just regular coding).
+- A short chat summary: where the plan landed, headline open questions, what step 1 entails.
+- An `AskUserQuestion` next-action offer (Stage 4) unless skipped per the conditions above.
+- The skill itself does NOT execute. Execution only happens if the user picks option 1 (delegated to sub-agent) or option 2 (continues inline by user choice). See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 
 ## Discipline (do not skip)
 
@@ -143,7 +164,7 @@ Adjust sections per situation — Critical files is essential, Open questions on
 - **Ask only high-signal clarifying questions.** A spec dump back at the user is noise; 3-5 surgical questions are signal. Stage 2 is rule ⑨ in workflow form.
 - **The plan is an artifact, not a chat.** A plan that lives only in the conversation is gone next session. Write the file.
 - **Confirm location before writing.** Repos have conventions; respect them. Ask once, then proceed.
-- **Don't execute.** Plan = blueprint. Execution = separate session(s). Conflating them breaks rule ⑨'s discipline and turns the plan into a runaway agent.
+- **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the sub-agent option provides the context separation. Rule ⑨ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 - **Honest about uncertainty.** If Stage 1 had to guess at a file's role, say so in the Context. If Stage 2 left a question open, list it. The plan's value is grounded honesty, not false confidence.
 
 ## Anti-patterns (refuse these)
@@ -152,7 +173,8 @@ Adjust sections per situation — Critical files is essential, Open questions on
 |---|---|
 | "I'll skip Stage 2 — I can guess what the user means" | Rule ⑨. Guess = drift between agent and user. Ask the 3 questions |
 | "I'll write the plan straight to disk without asking where" | Surprising. The user has a convention; respect it |
-| "I'll execute step 1 while I'm here, the plan is obvious" | Plan and execute are different verbs. Conflating loses review gates |
+| "I'll execute step 1 while I'm here, the plan is obvious" | Plan and execute are different verbs. Conflating loses review gates. The right move is Stage 4 — offer execution via `AskUserQuestion`; if the user picks it, then proceed |
+| "I'll skip Stage 4 — the next step is obvious, the user can just type the command" | Discoverability friction is real. One click > one typed command. Always offer (unless the explicit skip condition fires) |
 | "I'll fold open questions into 'TBD' inline" | Lies. Open questions go in a labeled section so they're not forgotten |
 | "I'll write a generic plan template without grounding" | Defeats the purpose. Stage 1's gap analysis MUST appear in Context |
 

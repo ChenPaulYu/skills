@@ -114,10 +114,30 @@ Summarize to chat:
 
 Do NOT commit unless user explicitly asks. If on the default git branch, suggest branching first.
 
+### Step 7 — Offer next action (don't make the user type the next command)
+
+After Step 6's report, present next-action options via `AskUserQuestion`. Doctor's "don't auto-refactor" discipline is preserved because the user must pick; the sub-agent option formalises the "separate session" rule at the architecture level (clean context, isolated execution).
+
+**Default options** (compose conditionally — only show what applies):
+
+| # | Option | When shown | What happens if picked |
+|---|---|---|---|
+| 1 | Launch sub-agent for the first `/nav:refactor` recommendation *(Recommended)* | Structural recommendations is non-empty | Invoke `Agent` with `subagent_type=general-purpose`. Pass: the specific refactor target (file + the recommended move from Step 6's report), instruction to follow `/nav:refactor`'s full protocol (verbatim moves + test gates + browser pass). Sub-agent reports back when done. |
+| 2 | Commit the headers + map changes on a new branch | Headers and/or map were modified this session | Branch off current HEAD if on default branch, stage the doctor's modifications, commit with a message summarising what was fixed. Confirm message before committing. |
+| 3 | Done — I'll handle from here | Always | Skill ends. |
+
+**Skip Step 7 if**:
+- The audit produced no actionable findings (no headers added, no map changes, no recommendations) — there's nothing meaningful to offer.
+- The user already said "skip the next-action prompt" earlier in this conversation.
+
+**One-shot, no nagging.** If the user picks "Done", do not re-offer.
+
+See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's rationale.
+
 ## Discipline (do not skip)
 
 - **Pause at every gate.** Doctor doesn't barrel through. Each step ends with "do you want me to proceed?"
-- **Don't auto-refactor.** Even if the audit found an obvious win, refactors get their own session via `/nav:refactor`. The doctor lays the groundwork (headers, map) so the next refactor session is set up to succeed.
+- **Don't auto-refactor.** Even if the audit found an obvious win, refactors get their own session via `/nav:refactor`. The doctor lays the groundwork (headers, map) so the next refactor session is set up to succeed. Step 7 makes the first refactor a one-click sub-agent invocation — clean context = effective separate session.
 - **Don't duplicate sibling skills' protocols.** When entering each step, defer to the sibling's discipline. If a step needs to change, change the sibling skill — not this orchestrator.
 - **Stay honest about what was fixed vs deferred.** Final report is a clean ledger of this session — not a victory lap. The deferred and recommended items must show up explicitly.
 - **Rule ⑨ applies.** Below 90% confidence on any plan item → ask the user before including/excluding it.

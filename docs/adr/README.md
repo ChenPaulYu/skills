@@ -1,6 +1,6 @@
 # ADRs — Architecture Decision Records
 
-Decisions that shape this marketplace. Sibling to [`observations/`](../observations/) (use-side patterns) and [`findings/`](../findings/) (build-side mechanisms).
+Decisions that shape this marketplace. Sibling to [`observations/`](docs/observations/) (use-side patterns) and [`findings/`](docs/findings/) (build-side mechanisms).
 
 ## When to write an ADR
 

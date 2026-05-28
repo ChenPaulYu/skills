@@ -7,11 +7,11 @@
 
 A focused collection of skills for **keeping code navigable** — auditing, refactoring, mapping, documenting, and planning against the code so it stays navigable as it grows. Inspired by Ousterhout's *A Philosophy of Software Design*; calibrated against real refactors (e.g., decomposing a 1718-line component into a 16-file subsystem with a single barrel).
 
-Six skills today: `audit` (assess) · `refactor` (transform) · `headers` (describe file) · `map` (describe project) · `doctor` (orchestrate health pass) · `plan` (ground + clarify + plan artifact, for spec-grounded work). See [ADR-003](../../docs/adr/003-five-skills-not-four-or-six.md) for the 5-skill consolidation logic and [ADR-006](../../docs/adr/006-nav-plan-skill.md) for why plan landed as the 6th.
+Six skills today: `audit` (assess) · `refactor` (transform) · `headers` (describe file) · `map` (describe project) · `doctor` (orchestrate health pass) · `plan` (ground + clarify + plan artifact, for spec-grounded work). See [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) for the 5-skill consolidation logic and [ADR-006](docs/adr/006-nav-plan-skill.md) for why plan landed as the 6th.
 
 **Language-agnostic by design.** The 11 rules transfer to any stack; specific checks have universal-core + per-stack heuristics.
 
-This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). The marketplace is the personal-collection container; this plugin is the navigability family. Future families (`spec`, `craft`, …) become sibling plugins under the same marketplace — they don't pile up inside this one. See [ADR-005](../../docs/adr/005-marketplace-plus-plugin-restructure.md).
+This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). The marketplace is the personal-collection container; this plugin is the navigability family. Future families (`spec`, `craft`, …) become sibling plugins under the same marketplace — they don't pile up inside this one. See [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md).
 
 ## The 11 rules (the through-line of every skill)
 
@@ -33,14 +33,15 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 
 ## Conventions for skills inside this plugin
 
-- **Naming**: skills use **bare verbs** — `audit`, `refactor`, `headers`, `map`, `doctor`, `plan`. The plugin namespace (`nav:`) provides the topic context, so no `nav-` prefix on the skill name itself. See [ADR-005](../../docs/adr/005-marketplace-plus-plugin-restructure.md).
+- **Naming**: skills use **bare verbs** — `audit`, `refactor`, `headers`, `map`, `doctor`, `plan`. The plugin namespace (`nav:`) provides the topic context, so no `nav-` prefix on the skill name itself. See [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md).
 - **Self-contained**: every `SKILL.md` includes the 11 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded. Bulky reference docs (e.g. `skills/map/references/visual-spec.md`) live in `references/` and are loaded only when actually rendering.
 - **Frontmatter `description`**: written **broad** (matches multiple trigger phrasings) but **honest** about scope. No "pushy" cross-domain claims.
 - **Cross-references between skills**: spell them as `/nav:audit`, `/nav:refactor`, etc. — the form the user actually types. Bare names like `audit` are ambiguous out of context.
-- **Scope**: skills are **language-agnostic** with a universal core + per-stack heuristics (see [ADR-004](../../docs/adr/004-language-agnostic-scope.md)). Don't bail on unknown stacks — degrade gracefully to universal checks + flag what was skipped.
+- **Scope**: skills are **language-agnostic** with a universal core + per-stack heuristics (see [ADR-004](docs/adr/004-language-agnostic-scope.md)). Don't bail on unknown stacks — degrade gracefully to universal checks + flag what was skipped.
 - **Read-only by default**: skills that modify files (`headers`, `refactor`, `map`, `doctor`, `plan`) must show a diff first or only modify on explicit user confirmation.
-- **Skills don't invoke each other**. Meta-skills (`doctor`, `plan`) describe sequences for the agent to follow — they reference sibling protocols rather than re-implementing them. Atomic skills stay standalone-callable (see [ADR-003](../../docs/adr/003-five-skills-not-four-or-six.md)).
-- **Reuse-via-transcript pattern**: when a meta-skill inlines another skill's protocol, Stage 1 should include a "scan recent turns; if `<other-skill>` already ran against the same input, reuse its output" preamble. Deterministic + zero coupling. Current users: `doctor` (audit + headers + map), `plan` (audit). See [ADR-006](../../docs/adr/006-nav-plan-skill.md).
+- **Skills don't invoke each other**. Meta-skills (`doctor`, `plan`) describe sequences for the agent to follow — they reference sibling protocols rather than re-implementing them. Atomic skills stay standalone-callable (see [ADR-003](docs/adr/003-five-skills-not-four-or-six.md)).
+- **Reuse-via-transcript pattern**: when a meta-skill inlines another skill's protocol, Stage 1 should include a "scan recent turns; if `<other-skill>` already ran against the same input, reuse its output" preamble. Deterministic + zero coupling. Current users: `doctor` (audit + headers + map), `plan` (audit). See [ADR-006](docs/adr/006-nav-plan-skill.md).
+- **Offer-next-action pattern**: meta-skills end with `AskUserQuestion` listing 2-4 concrete next actions (sub-agent · in-session · save/done). Sub-agent is the recommended default when a self-contained next step exists — it enforces clean context = "separate session" at the architecture level. Atomic skills don't get this pattern (no single obvious next step). Always include a "save / done" option so the user can opt out without typing; one-shot per invocation (no re-offering after decline). Current users: `plan` (Stage 4), `refactor` (Step 8), `doctor` (Step 7). See [`docs/adr/007-offer-next-action-pattern.md`](docs/adr/007-offer-next-action-pattern.md).
 - **Each new skill**: write an ADR in `docs/adr/` (marketplace-level) explaining why it exists, what overlaps it has with siblings, and how the trigger description avoids stealing fire from them.
 
 ## Where things live
@@ -60,7 +61,7 @@ skills/<name>/references/    → bulky reference docs loaded on demand
 - Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
 - Changing the 11 rules: this affects every skill — update each `SKILL.md` in the same commit, write an ADR.
 - Stale `SKILL.md` is worse than missing `SKILL.md` — same rule as project-level "stale header = lie".
-- **Site-map update is gating, not optional.** Any change to a `SKILL.md`, a plugin manifest, or an ADR REQUIRES the same commit to update [`../../docs/site/index.html`](../../docs/site/index.html). Before committing, **always** run:
+- **Site-map update is gating, not optional.** Any change to a `SKILL.md`, a plugin manifest, or an ADR REQUIRES the same commit to update [`docs/site/index.html`](docs/site/index.html). Before committing, **always** run:
   ```bash
   git status docs/site/index.html
   ```

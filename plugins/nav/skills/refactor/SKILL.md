@@ -124,6 +124,26 @@ Output a summary to chat:
 
 Do NOT commit unless the user explicitly asks. Per the project's git discipline, branch first if on the default branch.
 
+### Step 8 — Offer next action (don't make the user type the next command)
+
+After Step 7's report, present next-action options via `AskUserQuestion`. The discipline ("don't commit / don't improve in this session") is preserved by the question — the user picks; nothing happens unless they do.
+
+**Default 3 options** (drop or rephrase per situation):
+
+| # | Option | What happens if picked |
+|---|---|---|
+| 1 | Commit on a new branch and open a draft PR *(Recommended if on default branch)* | Branch off current HEAD, stage the refactor diff, commit with a message summarising the move (LOC delta + files changed), push, run `gh pr create --draft`. Confirm the commit message before committing. |
+| 2 | Launch sub-agent for a follow-up "improve" session on the extracted module | Invoke `Agent` with `subagent_type=general-purpose`. Pass: the newly extracted file path(s), the discipline that this is the *improve* phase (the verbatim move already landed and is verified), and any simplifications noticed during the move that were deliberately deferred. Sub-agent works in clean context — enforces the move/improve separation at the architecture level. |
+| 3 | Done — I'll handle from here | Skill ends. |
+
+**Skip Step 8 if**:
+- The refactor partially failed (some steps reverted; final state isn't green). Don't offer commit / improve — surface the failure honestly first and let the user decide.
+- The user already said "don't ask, just report" earlier in this conversation.
+
+**One-shot, no nagging.** If the user picks "Done", do not re-offer.
+
+See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's rationale.
+
 ## Anti-patterns (refuse these, even if tempting)
 
 | Temptation | Why to refuse |
@@ -141,7 +161,8 @@ Do NOT commit unless the user explicitly asks. Per the project's git discipline,
 - **Verbatim means verbatim.** Copy-paste, don't paraphrase. The text in the new file should be byte-for-byte the same as what was in the old file, except for the wiring lines (imports, returns).
 - **Browser pass at the end.** Tests prove unit behaviour, not integration. Pointer gestures, drag-drop, animations are rarely unit-tested.
 - **Rule ⑨ applies during the refactor.** If a step's correctness is below 90% confidence, **stop and clarify with the user** rather than improvising.
-- **Don't commit unless asked.** Show the diff; let the user decide when to land.
+- **Don't commit unless asked.** Show the diff; let the user decide when to land. (Step 8 makes "commit + open PR" a one-click option — that *is* asking.)
+- **DO offer next action (Step 8).** Suggesting the next command in chat text leaves discoverability friction on the table. Stage the option as an `AskUserQuestion`; one click > one typed command. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 
 ## When to stop and escalate to the user
 

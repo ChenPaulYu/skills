@@ -1,6 +1,6 @@
 # ADR 001 — Plugin shape and naming
 
-**Status**: accepted — #1, #2 superseded by [ADR-005](./005-marketplace-plus-plugin-restructure.md); #2 also partially by [ADR-002](./002-rename-deep-module-prefix-to-nav.md); #4 by [ADR-004](./004-language-agnostic-scope.md). #3, #5, #6 stand.
+**Status**: accepted — #1, #2 superseded by [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md); #2 also partially by [ADR-002](docs/adr/002-rename-deep-module-prefix-to-nav.md); #4 by [ADR-004](docs/adr/004-language-agnostic-scope.md). #3, #5, #6 stand.
 **Date**: 2026-05-28
 
 ## Context
@@ -17,7 +17,7 @@ Rejected: `deep-modules` (locks brand to one philosophy); `paul-dev` (let GitHub
 
 ### 2. Skills use a topic prefix when needed
 
-> ⚠ The choice of `deep-module-*` was reversed by [ADR-002](./002-rename-deep-module-prefix-to-nav.md) (→ `nav-*`); the prefix itself was later removed by [ADR-005](./005-marketplace-plus-plugin-restructure.md) (topic moved to plugin name). Principle of "topic context belongs *somewhere* in the slash command" stands.
+> ⚠ The choice of `deep-module-*` was reversed by [ADR-002](docs/adr/002-rename-deep-module-prefix-to-nav.md) (→ `nav-*`); the prefix itself was later removed by [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md) (topic moved to plugin name). Principle of "topic context belongs *somewhere* in the slash command" stands.
 
 Rejected: bare verbs (`audit`, `refactor`) — too generic when triggered out of context.
 
@@ -39,7 +39,7 @@ Frontmatter `description`: broad trigger phrasing, honest scope. No scope-creep 
 
 ### 6. Develop locally, install via symlink
 
-(Superseded by ADR-005 implicitly — local dev now uses `/plugin marketplace add <absolute-path>` directly; symlink unnecessary. See [`docs/findings/2026-05-28-plugin-discovery-needs-install.md`](../findings/2026-05-28-plugin-discovery-needs-install.md).)
+(Superseded by ADR-005 implicitly — local dev now uses `/plugin marketplace add <absolute-path>` directly; symlink unnecessary. See [`docs/findings/2026-05-28-plugin-discovery-needs-install.md`](docs/findings/2026-05-28-plugin-discovery-needs-install.md).)
 
 ## Consequences
 

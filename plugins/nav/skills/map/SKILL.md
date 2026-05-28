@@ -20,7 +20,7 @@ The map is also the **dogfood test** for rule ⑪ — if I struggle to describe 
 
 **Language-agnostic.** The HTML renderer is generic; the source-scanning works on any stack. Domain detection (top-level folders), anatomy identification (rich subsystems), and cross-domain edges (imports) are all universal concepts — only the syntax of "imports" varies (`import ...` / `from ... import` / `use ...` / `package ...`).
 
-Outputs a single self-contained HTML file that renders standalone (no build step). Visual / interaction spec: see [`references/visual-spec.md`](./references/visual-spec.md). Read that before rendering — it's the source of truth for layout, colors, sidebar grouping, anatomy patterns, interactions (click panel, drag, lang toggle), and the audit block format.
+Outputs a single self-contained HTML file that renders standalone (no build step). Visual / interaction spec: see [`plugins/nav/skills/map/references/visual-spec.md`](plugins/nav/skills/map/references/visual-spec.md). Read that before rendering — it's the source of truth for layout, colors, sidebar grouping, anatomy patterns, interactions (click panel, drag, lang toggle), and the audit block format.
 
 ## The 11 rules (the map IS rules ②/⑩/⑪ in action)
 

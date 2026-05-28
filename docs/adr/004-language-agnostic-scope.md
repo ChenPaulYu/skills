@@ -1,8 +1,8 @@
 # ADR 004 — Language-agnostic scope (universal core + per-stack heuristics)
 
-**Status**: accepted — post [ADR-005](./005-marketplace-plus-plugin-restructure.md) skills are bare verbs (`audit` / `refactor` / `headers` / `map` / `doctor`); scope unchanged.
+**Status**: accepted — post [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md) skills are bare verbs (`audit` / `refactor` / `headers` / `map` / `doctor`); scope unchanged.
 **Date**: 2026-05-28
-**Supersedes**: [ADR-001](./001-plugin-shape-and-naming.md) decision #4
+**Supersedes**: [ADR-001](docs/adr/001-plugin-shape-and-naming.md) decision #4
 
 ## Context
 

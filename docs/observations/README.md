@@ -10,7 +10,7 @@ Every `/nav:*` skill in this marketplace started as an observation — a pattern
 
 **Any coding-agent observation, across any plugin family.** Not just `nav`. When `spec`, `craft`, or future families arrive, their observations live here too. Use a clear slug + lean tagging in the body if you want to group.
 
-**Not for**: build-side pitfalls / mechanics encountered while editing this marketplace itself — those live in the sibling [`findings/`](../findings/). Audience differs: observations point outward (future users of the skills); findings point inward (future-you editing the repo).
+**Not for**: build-side pitfalls / mechanics encountered while editing this marketplace itself — those live in the sibling [`findings/`](docs/findings/). Audience differs: observations point outward (future users of the skills); findings point inward (future-you editing the repo).
 
 ## File shape
 

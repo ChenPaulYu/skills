@@ -1,8 +1,8 @@
 # ADR 002 — Rename `deep-module-*` prefix to `nav-*`
 
-**Status**: accepted — the `nav-` prefix on skill names was later removed by [ADR-005](./005-marketplace-plus-plugin-restructure.md) (intent moved into the plugin namespace `nav:`). Naming reasoning below — short, neutral, abbreviation-style topic markers — stands.
+**Status**: accepted — the `nav-` prefix on skill names was later removed by [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md) (intent moved into the plugin namespace `nav:`). Naming reasoning below — short, neutral, abbreviation-style topic markers — stands.
 **Date**: 2026-05-28
-**Supersedes**: portion of [ADR-001](./001-plugin-shape-and-naming.md) (decision #2)
+**Supersedes**: portion of [ADR-001](docs/adr/001-plugin-shape-and-naming.md) (decision #2)
 
 ## Context
 

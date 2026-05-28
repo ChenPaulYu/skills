@@ -3,13 +3,13 @@
 **Status**: accepted
 **Date**: 2026-05-28
 **Supersedes**:
-- [ADR-001](./001-plugin-shape-and-naming.md) #1 (single plugin `skills`)
-- [ADR-001](./001-plugin-shape-and-naming.md) #2 (skill-name topic prefix — principle stands, mechanism moves to plugin namespace)
-- [ADR-002](./002-rename-deep-module-prefix-to-nav.md) (the `nav-*` prefix itself; intent moves into `nav:` namespace)
+- [ADR-001](docs/adr/001-plugin-shape-and-naming.md) #1 (single plugin `skills`)
+- [ADR-001](docs/adr/001-plugin-shape-and-naming.md) #2 (skill-name topic prefix — principle stands, mechanism moves to plugin namespace)
+- [ADR-002](docs/adr/002-rename-deep-module-prefix-to-nav.md) (the `nav-*` prefix itself; intent moves into `nav:` namespace)
 
 ## Context
 
-After install, `/skills:nav-doctor` looked redundant — `skills:` + `nav-` were two namespaces doing the same job. Root cause: we treated Matt Pocock's `mattpocock/skills` as a single plugin literally named `skills`, then re-added the missing topic layer via `nav-*` prefixes. His actual shape is a **marketplace** containing multiple **topical plugins**. See [`docs/findings/2026-05-28-dont-pay-for-namespace-twice.md`](../findings/2026-05-28-dont-pay-for-namespace-twice.md).
+After install, `/skills:nav-doctor` looked redundant — `skills:` + `nav-` were two namespaces doing the same job. Root cause: we treated Matt Pocock's `mattpocock/skills` as a single plugin literally named `skills`, then re-added the missing topic layer via `nav-*` prefixes. His actual shape is a **marketplace** containing multiple **topical plugins**. See [`docs/findings/2026-05-28-dont-pay-for-namespace-twice.md`](docs/findings/2026-05-28-dont-pay-for-namespace-twice.md).
 
 ## Decision
 
@@ -57,7 +57,7 @@ Marketplace name `skills` stays — identity from GitHub username (ADR-001 #1 in
 - **Re-install**: `/plugin uninstall skills@skills` → `/plugin marketplace remove skills` → `/plugin marketplace add <path>` → `/plugin install nav@skills`.
 - **Older ADRs**: 001 #1+#2 superseded (noted in file); 002 preserved as historical (reasoning embedded in plugin name `nav`); 003 + 004 substance unchanged.
 
-## Future addition rule (refines [ADR-003](./003-five-skills-not-four-or-six.md))
+## Future addition rule (refines [ADR-003](docs/adr/003-five-skills-not-four-or-six.md))
 
 | Kind of addition | Where it lands |
 |---|---|
@@ -70,7 +70,7 @@ Marketplace name `skills` stays — identity from GitHub username (ADR-001 #1 in
 
 - 11 rules (load-bearing across every skill).
 - Self-contained SKILL.md discipline (ADR-001 #3).
-- Language-agnostic scope ([ADR-004](./004-language-agnostic-scope.md)).
+- Language-agnostic scope ([ADR-004](docs/adr/004-language-agnostic-scope.md)).
 - Read-only-by-default + show-diff-first for file-modifying skills.
 
 ## Notes

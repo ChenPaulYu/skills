@@ -1,6 +1,6 @@
 # ADR 003 — Five skills, not four or six
 
-**Status**: accepted — post [ADR-005](./005-marketplace-plus-plugin-restructure.md) skills are bare verbs (`audit` / `refactor` / `headers` / `map` / `doctor`); substance unchanged.
+**Status**: accepted — post [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md) skills are bare verbs (`audit` / `refactor` / `headers` / `map` / `doctor`); substance unchanged.
 **Date**: 2026-05-28
 
 ## Context
