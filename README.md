@@ -40,9 +40,22 @@ Deep modules — narrow interfaces over hidden complexity. Code you can navigate
 
 When in doubt: rule ⑨. Ask.
 
-## Architecture notes
+## Map
 
-Marketplace-level decisions live as ADRs in [`docs/adr/`](./docs/adr/). Plugin-level conventions live in each plugin's own `CLAUDE.md` (e.g. [`plugins/nav/CLAUDE.md`](./plugins/nav/CLAUDE.md)).
+[`docs/site/index.html`](./docs/site/index.html) is a self-contained bilingual interactive map of this marketplace — every plugin, every skill, the 11 rules, conventions, plus the nav-plugin anatomy graph. Open it directly in a browser.
+
+**Living document — stale = lie.** When you add / rename / remove a skill, plugin, or ADR, update the map + its audit block in the same commit. The audit block at the top of the HTML lists what was last verified; treat drift as a lie until corrected.
+
+## Docs layout
+
+| Folder | What |
+|---|---|
+| [`docs/adr/`](./docs/adr/) | Architecture Decision Records — decisions with alternatives weighed |
+| [`docs/findings/`](./docs/findings/) | Build-side mechanisms learned while editing this marketplace |
+| [`docs/observations/`](./docs/observations/) | Usage techniques observed while working with coding agents (→ future skills) |
+| [`docs/site/`](./docs/site/) | The interactive marketplace map (living document) |
+
+Plugin-level conventions live in each plugin's own `CLAUDE.md` (e.g. [`plugins/nav/CLAUDE.md`](./plugins/nav/CLAUDE.md)).
 
 ## License
 
