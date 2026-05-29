@@ -21,17 +21,14 @@ It's the full version of what `/nav:audit <spec>` (Mode 2) starts. Audit Mode 2 
 
 ## The 8 rules
 
-1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
-2. **Progressive disclosure** — an index/doc surfaces the interface; you drill in only as needed.
-3. **No hidden params** — functions deterministic; deps explicit, not ambient.
-4. **Future-ready foundation** — the base supports planned features before they ship.
-5. **No giants** — no single mega-module or mega-function.
-6. **No needless abstraction** — if it needn't be modular, don't modularise it.
-7. **Fit the framework** — idiomatic patterns; pass store/hook objects, not 20 loose props.
-8. **Rearrange, don't rewrite** — refactor = move code verbatim + rewire.
-9. **Below 90% confidence → ask** — *this skill is rule ⑦ as a workflow.* Stage 2 exists because spec ambiguity is the most common < 90% confidence trigger.
-10. **Group + expose via one door** — subsystems exposed through a barrel/facade.
-11. **Agent-navigability is the audit** — struggle-to-describe IS the deep-module failure signal.
+1. **Deep modules** — a simple interface hiding significant complexity; usable without reading the body.
+2. **Interface-first at every scale** — an index/facade surfaces the interface; you drill in only as needed.
+3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
+4. **Right grain — neither giant nor fragmented** — no mega-module/function; equally no needless abstraction.
+5. **Fit the framework** — idiomatic patterns; pass store/hook objects, not 20 loose props.
+6. **Rearrange, don't rewrite** — refactor = move code verbatim + rewire.
+7. **Below 90% confidence → ask** — *this skill is rule ⑦ as a workflow.* Stage 2 exists because spec ambiguity is the most common < 90% confidence trigger.
+8. **Agent-navigability is the audit** — struggle-to-describe IS the deep-module failure signal.
 
 ## Four-stage protocol
 

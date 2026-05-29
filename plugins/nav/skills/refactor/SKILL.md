@@ -29,17 +29,14 @@ If unclear what kind of refactor the user wants → rule ⑦, ask. "Is this a ve
 
 ## The 8 rules (full set — the discipline relies on them)
 
-1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
-2. **Progressive disclosure** — an index/doc surfaces the interface; you drill in only as needed.
-3. **No hidden params** — functions deterministic; deps explicit, not ambient.
-4. **Future-ready foundation** — the base supports planned features before they ship.
-5. **No giants** — no single mega-module or mega-function.
-6. **No needless abstraction** — if it needn't be modular, don't modularise it.
-7. **Fit the framework** — idiomatic patterns (React: custom hooks; pass store/hook objects, not 20 loose props).
-8. **Rearrange, don't rewrite** — *this skill is rule ⑥ in action.* Move verbatim + rewire; behaviour stays identical.
-9. **Below 90% confidence → ask.**
-10. **Group + expose via one door** — subsystems exposed via a barrel/facade.
-11. **Agent-navigability is the audit.**
+1. **Deep modules** — a simple interface hiding significant complexity; usable without reading the body.
+2. **Interface-first at every scale** — an index/facade surfaces the interface; you drill in only as needed.
+3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
+4. **Right grain — neither giant nor fragmented** — no mega-module/function; equally no needless abstraction.
+5. **Fit the framework** — idiomatic patterns (React: custom hooks; pass store/hook objects, not 20 loose props).
+6. **Rearrange, don't rewrite** — *this skill is rule ⑥ in action.* Move verbatim + rewire; behaviour stays identical.
+7. **Below 90% confidence → ask.**
+8. **Agent-navigability is the audit.**
 
 ## Refactor process
 
