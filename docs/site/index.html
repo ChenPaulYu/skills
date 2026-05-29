@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 5)
+  Last audit: 2026-05-29 (rev 6)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -19,7 +19,19 @@
     • 8 ADRs in docs/adr/ — 001..008 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 5)
+  ⚠ FIXED in this revision (rev 6)
+    1. De-projected all SKILL.md examples: removed past-project domain
+       nouns (TrackCard / CrateCard / useCrates / useAnnotations / fillPath
+       / svg.tsx) from headers, plan, refactor, audit — replaced with
+       generic neutral placeholders (UserList / useSelection / Editor.tsx)
+       so each skill reads standalone. Dropped relative-path prefixes from
+       example imports + Reads lines.
+    2. Codified two core principles in plugins/nav/CLAUDE.md: (a) stack-
+       neutral, standalone-legible examples (no project leaks); (b) skills-
+       root-relative paths (no ./ or ../ in doc links OR example code).
+       Added both as CONV rows here. No NAV_NODES / NAV_EDGES change.
+
+  ⚠ FIXED in rev 5 (kept for history)
     1. Bracketed the sub-agent hand-off with inject↔check (ADR-008):
        /nav:plan Stage 4, /nav:refactor Step 8, /nav:doctor Step 7 now
        inject the skill's in-session grounding (+ N+1 trigger) into the
@@ -489,6 +501,8 @@ const CONV = [
   {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill embeds the 11 rules verbatim. No shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 內嵌 11 規則。SKILL.md 之間不互引。ADR-001 #3。'}},
   {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-004.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-004。'}},
   {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (headers, map, refactor, doctor) shows the change before applying.', zh:'任何會改檔的 skill(headers、map、refactor、doctor)套用前先示差異。'}},
+  {label:{en:'Stack-neutral examples', zh:'範例 stack-中性'}, desc:{en:'Every SKILL.md example reads standalone — no past-project domain nouns. Use generic placeholders (UserList, useSelection). A skill that needs Project X context is leaky.', zh:'每個 SKILL.md 範例都能單看就懂 —— 不帶過去專案的領域詞。用通用 placeholder(UserList、useSelection)。需要 Project X 背景才看得懂的 skill 就是漏的。'}},
+  {label:{en:'Skills-root-relative paths', zh:'以 skills 為根的路徑'}, desc:{en:'All paths (doc links AND example code) written as if <code>skills/</code> is root. No <code>./</code> or <code>../</code> prefixes. Imports use alias (<code>@/core/user</code>) or bare names.', zh:'所有路徑(doc 連結與範例程式碼)都以 <code>skills/</code> 為根。不用 <code>./</code> 或 <code>../</code>。import 用 alias(<code>@/core/user</code>)或裸模組名。'}},
   {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-008.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-008。'}},
   {label:{en:'N+1 trigger', zh:'N+1 觸發'}, desc:{en:'First consumer of an inline util = inline OK; second consumer = extract a primitive (don\'t copy). Corollary of rules ⑥ + ⑩.', zh:'inline util 的第一個 consumer = inline OK;第二個 consumer = 抽 primitive(別複製)。規則 ⑥ + ⑩ 的推論。'}},
   {label:{en:'Stale = lie', zh:'過時 = 謊言'}, desc:{en:'When you add/rename/remove a skill, plugin, or ADR, update this map + its audit block in the same commit.', zh:'新增/改名/移除 skill、plugin、ADR 時,同 commit 更新此圖與 audit block。'}},

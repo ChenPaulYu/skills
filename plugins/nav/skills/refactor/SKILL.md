@@ -117,7 +117,7 @@ Zero console errors + behaviour identical to baseline = refactor done.
 ### Step 7 — Report
 
 Output a summary to chat:
-- Files changed (with LOC delta — e.g., `TrackCard.tsx: 1718 → 773 lines`)
+- Files changed (with LOC delta — e.g., `Editor.tsx: 1718 → 773 lines`)
 - Tests passed (90/90)
 - Browser-verified flows (list them)
 - Any deferred follow-ups (things you noticed but did NOT do — those are next-session work)

@@ -37,7 +37,7 @@ The **content shape** is identical across all of them — only the comment chara
 3. **No hidden params** — `Reads:` makes dependencies explicit.
 4. **Future-ready foundation.**
 5. **No giants.**
-6. **No needless abstraction** — *important corollary:* don't header tiny files. Name-says-it-all files (Button.tsx, RailNavItem.tsx, icons, barrels < 5 lines) DO NOT need a header. Forcing headers on them is rule-⑥ violation.
+6. **No needless abstraction** — *important corollary:* don't header tiny files. Name-says-it-all files (Button.tsx, Spinner.tsx, icons, barrels < 5 lines) DO NOT need a header. Forcing headers on them is rule-⑥ violation.
 7. **Fit the framework** — uses standard JSDoc, no exotic `@tag`s.
 8. **Rearrange, don't rewrite** — for files with existing top comments: **restructure into the convention; preserve the substance.** Don't paraphrase or shorten — move the existing content into the new shape.
 9. **Below 90% → ask.**
@@ -76,7 +76,7 @@ If not: identify load-bearing as:
 - Every barrel (`index.ts` re-exporting public API for a subsystem)
 - Every file the user explicitly named
 
-**Do NOT include**: tests, icons, name-says-it-all primitives (Button, Input, RailNavItem, tiny barrels), generated files.
+**Do NOT include**: tests, icons, name-says-it-all primitives (Button, Input, Divider, tiny barrels), generated files.
 
 ### Step 2 — For each file, classify state
 
@@ -153,9 +153,9 @@ Summary to chat:
 Before:
 ```ts
 import { useEffect, useState } from 'react';
-import { Card } from '../../core/crate';
+import { User } from '@/core/user';
 
-export function CardList({ cards }: Props) {
+export function UserList({ users }: Props) {
   // ...200 lines...
 }
 ```
@@ -163,19 +163,19 @@ export function CardList({ cards }: Props) {
 After:
 ```ts
 /**
- * CardList.tsx — paginated list view of cards (★ load-bearing for the home screen).
+ * UserList.tsx — paginated list view of users (★ load-bearing for the home screen).
  *
- * Fetches via useCrates, applies the current filter/sort from useCratesPageState,
- * renders a CrateCard per row. Pagination is URL-backed so back/forward preserves
+ * Fetches via useUsers, applies the current filter/sort from useUserListState,
+ * renders a UserRow per row. Pagination is URL-backed so back/forward preserves
  * page. Empty/loading/error states all handled inline.
  *
- * Reads: ../../core/crate · ../../app/useCrates · ./useCratesPageState · ./CrateCard
+ * Reads: core/user · app/useUsers · useUserListState · UserRow
  */
 
 import { useEffect, useState } from 'react';
-import { Card } from '../../core/crate';
+import { User } from '@/core/user';
 
-export function CardList({ cards }: Props) {
+export function UserList({ users }: Props) {
   // ...
 }
 ```
@@ -187,24 +187,24 @@ Before (existing doc, wrong shape):
 import { useRef } from 'react';
 
 /**
- * The TrackCard annotation model — the single source of truth for layers,
- * regions, anchors, notes. A store, not a deep module. Gesture hooks take this
+ * The editor selection model — the single source of truth for selected nodes,
+ * ranges, anchors, marks. A store, not a deep module. Action hooks take this
  * object so their interfaces stay narrow.
  */
-export function useAnnotations(...) {
+export function useSelection(...) {
 ```
 
 After:
 ```ts
 /**
- * useAnnotations.ts — the TrackCard annotation store (★ keystone).
+ * useSelection.ts — the editor selection store (★ keystone).
  *
- * Single source of truth for layers / regions / anchors / notes + selection.
- * A store, not a deep module — wide surface is intentional. Gesture hooks
- * (useLayerReorder, useRegionGestures) take this object so their own
+ * Single source of truth for selected nodes / ranges / anchors / marks + focus.
+ * A store, not a deep module — wide surface is intentional. Action hooks
+ * (useNodeReorder, useRangeSelect) take this object so their own
  * interfaces stay narrow.
  *
- * Reads: ../../../../../core/crate · ./uid
+ * Reads: core/editor · uid
  */
 
 import { useRef } from 'react';
@@ -212,7 +212,7 @@ import { useRef } from 'react';
 /**
  * (existing export-level doc preserved if useful, or merged into header above)
  */
-export function useAnnotations(...) {
+export function useSelection(...) {
 ```
 
 ## Anti-patterns (refuse these)

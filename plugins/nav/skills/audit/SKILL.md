@@ -172,7 +172,7 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 
 ### ⚠ Drift / partial (worth fixing soon)
 - **rule ⑤** — `path/to/file.tsx` is <LOC> LOC; top-level return alone is ~<N> lines.
-- **rule ⑦** — `useGraph.ts` exposes 10 hooks with 3 different mutation shapes; consider unifying.
+- **rule ⑦** — `useStore.ts` exposes 10 hooks with 3 different mutation shapes; consider unifying.
 - …
 
 ### ❌ Violations (high signal — fix or justify)
