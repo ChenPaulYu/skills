@@ -1,7 +1,7 @@
 {
   "name": "shape",
   "version": "0.0.1",
-  "description": "Give intent its form before building — converge on what to build via real, disposable instances (mockups), not descriptions. Sibling to nav (which keeps existing code navigable). Early: one skill (mockup); the family crystallizes as more skills prove out.",
+  "description": "Give intent its form before building — converge on what to build via real, disposable, interactive instances (mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav (which keeps existing code navigable). Early: one skill (mockup); the family crystallizes as more skills prove out.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

@@ -14,7 +14,7 @@
     {
       "name": "shape",
       "source": "./plugins/shape",
-      "description": "Give intent its form before building — converge on what to build via real, disposable instances (mockups), not descriptions. Sibling to nav. Early: one skill (mockup).",
+      "description": "Give intent its form before building — converge on what to build via real, disposable, interactive instances (mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav. Early: one skill (mockup).",
       "version": "0.0.1"
     }
   ]

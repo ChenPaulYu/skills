@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 8)
+  Last audit: 2026-05-29 (rev 9)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -21,7 +21,21 @@
     • 9 ADRs in docs/adr/ — 001..009 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 8)
+  ⚠ FIXED in this revision (rev 9)
+    1. shape:mockup matured — folded first-principles + round-2 into the
+       SKILL.md: ONE core (the unit of judgement is a real, disposable,
+       *interactive* artifact — never a description) + the non-negotiable
+       (output is always an interactive HTML); generate-a-divergent-set is
+       first-class; lock = retire-on-ship + stamp; storage = git-ignored
+       mockups/<date>-<topic>/; fires on the user's request (not autonomous);
+       anti-trigger refined to "can a render make it decidable?" not "is it
+       visual?". SCOPE BROADENED: not UI-only — backend / agent / data / flow
+       decisions render as interactive DIAGRAMS (same core, same skill).
+    2. Added a `shape` anatomy section (sidebar + #shape-anatomy + SHAPE_NODES,
+       one node `mockup`, degenerate by design) + a `decide` kind color;
+       scope-synced shape's blurbs on the master/Module map; nav node 5→6.
+
+  ⚠ FIXED in rev 8 (kept for history)
     1. Registered the `shape` plugin (sibling to nav) + its first skill
        `mockup` (render-to-decide): plugins/shape/.claude-plugin/plugin.json
        + a marketplace.json entry. shape's spine = converge a visual decision
@@ -253,6 +267,7 @@
     <a href="#map" data-t="nav_map">Skill list</a>
     <div class="subhead" data-t="nav_anat_subhead">PLUGIN ANATOMIES</div>
     <a href="#nav-anatomy" class="indent" data-t="nav_navanat">nav <span class="muted">· plugin</span></a>
+    <a href="#shape-anatomy" class="indent" data-t="nav_shapeanat">shape <span class="muted">· plugin</span></a>
     <a href="#conv" data-t="nav_conv">Conventions</a>
     <div class="meta">
       <div data-t="meta_about">Hand-curated · stale = lie. Re-audit when content drifts.</div>
@@ -322,6 +337,19 @@
       <div class="callout" data-t="navanat_callout">Neither meta-skill auto-acts on what it surfaces. <code>doctor</code> recommends concrete <code>/nav:refactor</code> invocations; <code>plan</code> writes a plan artifact the user reads before executing. Both inline <code>audit</code>'s protocol but follow the "scan transcript first" preamble — if audit ran this session, they reuse its output instead of re-running grep (ADR-006).</div>
     </section>
 
+    <section id="shape-anatomy">
+      <h2>
+        <span class="layer-chip ui" data-t="layer_plugin">plugin</span>
+        <span data-t="shape_anat_title">shape anatomy — render-to-decide (early: one skill)</span>
+      </h2>
+      <p class="lede" data-t="shape_anat_lede">One skill today: mockup — render-to-decide.</p>
+      <div class="graphwrap">
+        <svg class="graph" id="shapeGraph" viewBox="0 0 760 320"></svg>
+        <div class="panel" id="shapePanel"></div>
+      </div>
+      <div class="callout" data-t="shape_anat_callout">Sibling to nav; pre-build to nav's post-build.</div>
+    </section>
+
     <section id="conv">
       <h2 data-t="conv_title">Conventions — load-bearing rules for this marketplace</h2>
       <p class="lede" data-t="conv_lede">Decisions captured as ADRs; what they imply for daily editing.</p>
@@ -383,9 +411,18 @@ const T = {
     cb_default_click_label: 'tip',
     cb_default_click_text: 'Future families (spec, craft, ...) will appear here as new nodes.',
     nav_default_h3: 'nav plugin anatomy',
-    nav_default_role: 'Five skills + their orchestration. Click any node for its role + what it wires to.',
+    nav_default_role: 'Six skills + their orchestration. Click any node for its role + what it wires to.',
     nav_default_click_label: 'tip',
     nav_default_click_text: 'doctor sequences audit → headers → map. refactor stays standalone — doctor recommends it but never executes.',
+    nav_shapeanat: 'shape <span class="muted">· plugin</span>',
+    shape_anat_title: 'shape anatomy — render-to-decide (early: one skill)',
+    shape_anat_lede: "One skill today: <code>mockup</code> — converge a decision by a real, disposable, <em>interactive</em> artifact (a UI mockup, or an interactive diagram for backend / agent / data / flow), never a description. The anatomy grows as the family proves out.",
+    shape_anat_callout: "Sibling to <code>nav</code>: nav keeps existing code navigable (post-build); shape gives intent its form (pre-build). Spine: converge by a real interactive artifact, not a description. v0.0.1 — degenerate by design until a 2nd skill lands.",
+    shape_default_h3: 'shape plugin anatomy',
+    shape_default_role: 'One skill: mockup (render-to-decide). Click it for its role.',
+    shape_default_click_label: 'tip',
+    shape_default_click_text: 'Early — one node. A second skill (e.g. a grounded "grill me" clarifier) would join here as the family proves out.',
+    leg_decide: 'render-to-decide',
     // legend
     leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe',
     leg_plugin: 'plugin',
@@ -438,9 +475,18 @@ const T = {
     cb_default_click_label: '提示',
     cb_default_click_text: '未來家族(spec、craft...)會以新 node 出現於此。',
     nav_default_h3: 'nav plugin 解剖',
-    nav_default_role: '五個 skill + 其統籌。點任一 node 看角色與指向。',
+    nav_default_role: '六個 skill + 其統籌。點任一 node 看角色與指向。',
     nav_default_click_label: '提示',
     nav_default_click_text: 'doctor 串接 audit → headers → map。refactor 維持獨立 —— doctor 推薦但不執行。',
+    nav_shapeanat: 'shape <span class="muted">· plugin</span>',
+    shape_anat_title: 'shape 解剖 —— render 即決策(早期:一個 skill)',
+    shape_anat_lede: '今天一個 skill:<code>mockup</code> —— 用真實、可丟、<em>可互動</em>的 artifact(UI mockup,或後端/agent/資料/流程用的互動 diagram)收斂決策,不用描述。anatomy 隨家族成熟而長。',
+    shape_anat_callout: '<code>nav</code> 的姊妹:nav 讓既有 code 可導覽(post-build);shape 把意圖給形狀(pre-build)。Spine:用真實互動 artifact 收斂,不用描述。v0.0.1 —— 第 2 個 skill 出現前,故意是退化的。',
+    shape_default_h3: 'shape plugin 解剖',
+    shape_default_role: '一個 skill:mockup(render 即決策)。點它看角色。',
+    shape_default_click_label: '提示',
+    shape_default_click_text: '早期 —— 一個 node。家族成熟後第 2 個 skill(如 grounded 的「grill 我」釐清器)會加進來。',
+    leg_decide: 'render 即決策',
     leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述',
     leg_plugin: 'plugin',
   },
@@ -492,7 +538,7 @@ const DOMAINS = {
   shape: {
     layer: 'ui',
     path: 'plugins/shape/',
-    blurb: {en:'Give intent its form before building — converge on what to build via real, disposable, interactive mockups, not descriptions. Sibling to nav (post-build navigability). Early: 1 skill. No shape/CLAUDE.md or ADR yet (debt).', zh:'動工前把意圖給形狀 —— 用真實、可丟、可互動的 mockup 收斂「要建什麼」,不用描述。nav(post-build 可導覽性)的姊妹。早期:1 個 skill。尚無 shape/CLAUDE.md 或 ADR(debt)。'},
+    blurb: {en:'Give intent its form before building — converge on what to build via real, disposable, interactive artifacts (UI mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav (post-build navigability). Early: 1 skill. No shape/CLAUDE.md or ADR yet (debt).', zh:'動工前把意圖給形狀 —— 用真實、可丟、可互動的 artifact(UI mockup,或後端/agent/資料/流程的 diagram)收斂「要建什麼」,不用描述。nav(post-build 可導覽性)的姊妹。早期:1 個 skill。尚無 shape/CLAUDE.md 或 ADR(debt)。'},
     files: [
       ['/shape:mockup', '', {en:'Converge a visual / UI / interaction decision by generating + rendering real, disposable candidates at true size in real context — never a description. The one non-negotiable: the output is an interactive HTML. Draft (v0.0.1, not yet a full family).', zh:'用 generate + render 一組真實、可丟的候選(真尺寸、真脈絡)收斂視覺/UI/互動決策 —— 不用描述。唯一非妥協:output 是互動 HTML。Draft(v0.0.1,尚非完整家族)。'}],
     ],
@@ -501,7 +547,7 @@ const DOMAINS = {
 
 const CB_NODES = [
   {id:'nav', kind:'plugin', x:240, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
-  {id:'shape', kind:'plugin', x:470, y:150, w:120, role:{en:'intent → form', zh:'意圖 → 形狀'}, desc:{en:'Give intent its form before building (pre-build) — converge a visual decision by a real, disposable, interactive mockup, not a description. Early: 1 skill (mockup, v0.0.1).', zh:'動工前把意圖給形狀(pre-build)—— 用真實、可丟、可互動的 mockup 收斂視覺決策,不用描述。早期:1 個 skill(mockup, v0.0.1)。'}},
+  {id:'shape', kind:'plugin', x:470, y:150, w:120, link:'shape-anatomy', role:{en:'intent → form', zh:'意圖 → 形狀'}, desc:{en:'Give intent its form before building (pre-build) — converge a decision by a real, disposable, interactive artifact (a UI mockup, or a diagram for backend/agent/data/flow), not a description. Early: 1 skill (mockup, v0.0.1).', zh:'動工前把意圖給形狀(pre-build)—— 用真實、可丟、可互動的 artifact(UI mockup,或後端/agent/資料/流程的 diagram)收斂決策,不用描述。早期:1 個 skill(mockup, v0.0.1)。'}},
 ];
 const CB_EDGES = [];
 
@@ -521,6 +567,11 @@ const NAV_EDGES = [
   ['doctor', 'map'],
   ['headers', 'map'],
 ];
+
+const SHAPE_NODES = [
+  {id:'mockup', kind:'decide', x:310, y:140, w:140, role:{en:'render-to-decide', zh:'render 即決策'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram/chart for backend/agent/data/flow — never a description. The output is always an interactive HTML. v0.0.1, draft.', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程用的互動 diagram —— 不用描述。output 永遠是互動 HTML。v0.0.1,draft。'}},
+];
+const SHAPE_EDGES = [];
 
 const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},
@@ -550,6 +601,7 @@ const KIND_COLOR = {
   transform: '#6c8fb5',     // refactor — blue
   describe: '#b5894e',      // headers / map — caramel
   plugin: '#7a9e6e',        // top-level plugin node — green (state-layer color)
+  decide: '#a86b9e',        // shape:mockup — render-to-decide (violet)
 };
 
 function renderLayers(){
@@ -703,6 +755,8 @@ function render(){
     [['#7a9e6e','leg_plugin']]);
   renderAnatomy('#navGraph', '#navPanel', NAV_NODES, NAV_EDGES, 'nav_default',
     [['#2a211c','leg_orch'],['#7a9e6e','leg_assess'],['#6c8fb5','leg_transform'],['#b5894e','leg_describe']]);
+  renderAnatomy('#shapeGraph', '#shapePanel', SHAPE_NODES, SHAPE_EDGES, 'shape_default',
+    [['#a86b9e','leg_decide']]);
 }
 
 function setLang(L){
