@@ -62,6 +62,7 @@ skills/<name>/references/    → bulky reference docs loaded on demand
 ## When editing this plugin
 
 - New skill: scaffold `skills/<name>/SKILL.md`, write its frontmatter description carefully (it determines triggering accuracy), test invocations cover the main trigger phrasings, write an ADR.
+- **Before adding or changing any skill, check the two ★ core principles above**: (1) every example is stack-neutral + standalone-legible — no past-project domain nouns; (2) every path is skills-root-relative — no `./` or `../` in doc links or example code. These are the most common ways a skill silently leaks its origin project or its directory depth; verify both before committing.
 - Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
 - Changing the 11 rules: this affects every skill — update each `SKILL.md` in the same commit, write an ADR.
 - Stale `SKILL.md` is worse than missing `SKILL.md` — same rule as project-level "stale header = lie".
