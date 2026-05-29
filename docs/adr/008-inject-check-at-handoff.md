@@ -70,7 +70,7 @@ ADR-006 = "scan transcript first" (look backward: was upstream already run?). AD
 
 ## Out of scope (deferred)
 
-- **`/nav:integrate` as a standalone skill** — "audit this diff against the rest of the codebase." Deferred until the pattern recurs outside the meta-skill hand-off.
+- **`/nav:integrate` as a standalone skill** — "audit this diff against the rest of the codebase." Deferred until the pattern recurs outside the meta-skill hand-off. **And if it ever is promoted, prefer a third *diff-integration* mode of `/nav:audit` over a new skill** — the check (same-domain parallel impl = rule ⑥) is conceptually already audit's job, just pointed at a diff instead of the whole tree, structurally a near-sibling of audit's Mode 2 (feasibility). A new skill cuts against ADR-003's "resist proliferation" and would steal trigger fire from `/nav:audit` and the built-in `/code-review`. Revisit only when the pattern recurs **where neither gate (skill hand-off · operator CLAUDE.md) can reach** AND manual on-demand review is a real need (e.g. reviewing a teammate's diff) — note that a check you must *remember to invoke* is a weak fix for a *forgetting* problem, which is why the two automatic gates, not a manual skill, are the primary coverage.
 - **Enforcing the check when the parent dispatches a sub-agent *ad hoc*** (outside a nav skill). That belongs in the operator's own CLAUDE.md, not in a marketplace skill — out of scope for the plugin.
 - **Auto-running the integration check** without the parent reading the diff. The parent reading the diff *is* the discipline (mirrors ADR-007's "AskUserQuestion is the supervisor").
 
