@@ -51,7 +51,11 @@ This isn't `/nav:audit` being called — it's plan instructing the agent to appl
 
 A spec always has gaps the user knows but didn't write. Ask 3-5 targeted clarifying questions. Choose questions by **impact**:
 
-**High-signal question categories**:
+**First, route by medium — a question isn't always the right tool.** Some ambiguity is *verbal* (scope / contract / edge / ontology) and a question converges it. But ambiguity about **look or interaction** — colour, spacing, what overlaps what, gesture feel, whether an affordance should even exist — **can't be settled in prose; it has to be *seen*.** "What colour?" asked in text floats; three rendered candidates decide it in one glance. When the gap is visual/interaction, the clarification medium is a **mockup, not a question** → hand off to **`shape:mockup`** (it renders a divergent candidate set, the user points), then fold the picked design into the plan. This is the same boundary `shape:mockup` draws from its own side (render-decidable → mockup; pure ontology / definitional → verbal) — one line, two doors. The categories below are the *verbal* branch.
+
+> **Caveat — a mockup settles the look, not the behaviour.** A static interactive-HTML mockup converges layout/colour/affordance, but it cannot validate *real-engine behaviour* (audio playback smoothness, real-data decode, gesture physics) — that needs the running system. So when the feature has such behaviour, plan for a post-build smoke against the real thing; don't treat "mockup approved" as "behaviour verified."
+
+**High-signal question categories** (the verbal branch):
 - **Scope boundaries** — "does this include X, or is X out of scope?" (most common; specs underspecify edges)
 - **Contract changes** — "is it okay if the public API of Y changes, or must it stay backward-compatible?" (affects refactor strategy)
 - **Edge cases** — "what should happen when [edge condition the spec didn't mention]?"
@@ -187,3 +191,4 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 - **`/nav:audit`** — Mode 2 is the read-only quick check (gap analysis, stop). This skill (`plan`) is the full workflow. Run audit alone when you just want to know "can this be done"; run plan when you've decided to do it.
 - **`/nav:refactor`** — typical next step from a plan that includes structural moves. The plan's `Approach` section often lists `/nav:refactor` invocations.
 - **`/nav:doctor`** — different intent: doctor is unconditional health (no spec), plan is spec-grounded. They don't compose, but both are meta-skills that inline audit.
+- **`shape:mockup`** *(sibling family)* — the one cross-family edge: when Stage 2 hits visual/interaction ambiguity, the clarification is a render, not a question — hand off to `shape:mockup` and fold the picked design back into the plan. `nav` keeps existing code navigable; `shape` gives intent its form before building. They meet here.
