@@ -7,7 +7,7 @@
 1. **Single self-contained HTML file**. No external CDN, no build step. Works offline. All CSS + JS inline.
 2. **One asset folder**: `docs/codebase-map/img/` for screenshots. Relative paths only.
 3. **Lives at `docs/codebase-map/index.html`** (not at repo root or `docs/`).
-4. **HTML comment at line 2** (after `<!doctype html>`) carries the grounding-audit block — see §11.
+4. **HTML comment at line 2** (after `<!doctype html>`) carries the grounding-audit block — see 11.
 
 ## File layout
 
@@ -20,38 +20,38 @@ docs/codebase-map/
     └── ...
 ```
 
-## §1 — Document skeleton
+## 1 — Document skeleton
 
 ```html
 <!doctype html>
-<!-- [grounding-audit block, see §11] -->
+<!-- [grounding-audit block, see 11] -->
 <html lang="en">           <!-- changed to zh-Hant by lang toggle -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>...</title>
-  <style>[inline CSS — see §2-3]</style>
+  <style>[inline CSS — see 2-3]</style>
 </head>
 <body>
   <div class="layout">
-    <nav class="side">[sidebar — see §4]</nav>
+    <nav class="side">[sidebar — see 4]</nav>
     <main>
-      [tour]            <!-- §5 -->
-      [architecture]    <!-- §6 -->
-      [codebase-map]    <!-- §7 -->
-      [design-rules]    <!-- §8 -->
-      [module-map]      <!-- §9 -->
-      [anatomies-index] <!-- §10a -->
-      [anatomy × N]     <!-- §10b -->
+      [tour]            <!-- 5 -->
+      [architecture]    <!-- 6 -->
+      [codebase-map]    <!-- 7 -->
+      [design-rules]    <!-- 8 -->
+      [module-map]      <!-- 9 -->
+      [anatomies-index] <!-- 10a -->
+      [anatomy × N]     <!-- 10b -->
       [conventions]
     </main>
   </div>
-  <script>[inline JS — see §12-14]</script>
+  <script>[inline JS — see 12-14]</script>
 </body>
 </html>
 ```
 
-## §2 — Color palette (CSS custom properties)
+## 2 — Color palette (CSS custom properties)
 
 Warm taupe + caramel base + jewel accents. Use these unless the project has a strong existing palette.
 
@@ -76,7 +76,7 @@ Warm taupe + caramel base + jewel accents. Use these unless the project has a st
 
 The CJK fallbacks in `--sans` matter for bilingual support — without them zh characters fall back unstyled.
 
-## §3 — Layout grid
+## 3 — Layout grid
 
 ```css
 .layout{ display:grid; grid-template-columns:240px 1fr; max-width:1240px; margin:0 auto; }
@@ -90,7 +90,7 @@ section{ margin-bottom:60px; scroll-margin-top:24px; }
 }
 ```
 
-## §4 — Sidebar
+## 4 — Sidebar
 
 Structure:
 - **Brand row**: dot + project name + language toggle button group
@@ -120,12 +120,12 @@ Language toggle (top-right of sidebar):
 </div>
 ```
 - 2 pills, active one has `--ink` background + white text
-- Click → `setLang()` (see §13)
+- Click → `setLang()` (see 13)
 - Persisted to `localStorage['codebase-map-lang']`
 
 Scrollspy: as user scrolls main content, sidebar link for current section gets `.active` class.
 
-## §5 — Tour section
+## 5 — Tour section
 
 ```html
 <section id="tour">
@@ -133,14 +133,14 @@ Scrollspy: as user scrolls main content, sidebar link for current section gets `
   <p class="lede">[1-2 sentences: what is this project, written for a fresh reader]</p>
   <figure class="shot"><img src="img/hero-*.png"><figcaption>[caption]</figcaption></figure>
   <div class="callout"><b>How to read this:</b> [progressive-disclosure instructions]</div>
-  <div class="layers" id="layers"></div>   <!-- rendered from LAYERS data (§12) -->
+  <div class="layers" id="layers"></div>   <!-- rendered from LAYERS data (12) -->
   <p class="small muted">[stack note: e.g. "Frontend: React 19 · Vite 7 · ..."]</p>
 </section>
 ```
 
 The `.layers` block: 3 cards stacked, one per architectural layer (UI / state / foundation). Each has colored left border matching the layer, layer name + tag, and a row of domain chips. Click → scroll to module map + open the relevant domain.
 
-## §6 — Architecture diagram (CSS, not ASCII)
+## 6 — Architecture diagram (CSS, not ASCII)
 
 3 boxes stacked top-to-bottom, with connector rows between them showing what flows between layers.
 
@@ -162,7 +162,7 @@ The `.layers` block: 3 cards stacked, one per architectural layer (UI / state / 
 
 Data-driven from an `ARCH_LAYERS` array + `ARCH_CONN` (between-layer connectors). Order: UI on top, state in middle, foundation at bottom (mirrors visual hierarchy).
 
-## §7 — Codebase map (master graph)
+## 7 — Codebase map (master graph)
 
 Interactive SVG: one node per domain, colored by layer. Edges are real cross-domain imports. Click → side panel; nodes draggable.
 
@@ -182,7 +182,7 @@ Nodes data:
 ```js
 {
   id:'audio',                       // string id (matches grep target)
-  kind:'view',                      // for color (see KIND_COLOR §15)
+  kind:'view',                      // for color (see KIND_COLOR 15)
   x:20, y:18, w:110,                // SVG position
   link:'audio-anatomy',             // optional — adds "→ View anatomy" hop in panel
   role:{ en:'...', zh:'...' },      // bilingual
@@ -192,7 +192,7 @@ Nodes data:
 
 Layout: 3 rows (UI domains top, app middle, core bottom) — mirror the architecture diagram.
 
-## §8 — Design rules
+## 8 — Design rules
 
 ```html
 <section id="rules">
@@ -202,7 +202,7 @@ Layout: 3 rows (UI domains top, app middle, core bottom) — mirror the architec
 </section>
 ```
 
-The `.rules` block: 2-column grid (1-col on mobile) of rule cards. Each card has a numbered badge + bold name + 1-2 line description. Use the 11 deep-module rules unless the project has documented its own set.
+The `.rules` block: 2-column grid (1-col on mobile) of rule cards. Each card has a numbered badge + bold name + 1-2 line description. Use the 8 deep-module rules unless the project has documented its own set.
 
 ```css
 .rules{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
@@ -210,7 +210,7 @@ The `.rules` block: 2-column grid (1-col on mobile) of rule cards. Each card has
 .rule .n{ flex:0 0 26px; height:26px; border-radius:8px; background:#10b9811a; color:#0c7a59; font-weight:800; display:flex; align-items:center; justify-content:center; }
 ```
 
-## §9 — Module map (searchable accordion)
+## 9 — Module map (searchable accordion)
 
 Search box + collapsible domain panels:
 
@@ -222,7 +222,7 @@ Search box + collapsible domain panels:
     <input id="q" placeholder="Filter modules & files…">
     <span class="count" id="count"></span>
   </div>
-  <div id="domains"></div>     <!-- rendered from DOMAINS data §12 -->
+  <div id="domains"></div>     <!-- rendered from DOMAINS data 12 -->
 </section>
 ```
 
@@ -233,9 +233,9 @@ Each domain renders as `<details class="dom">` with:
 
 Search: filter rows + auto-open matching domains in real time. Update `.count` text.
 
-## §10 — Anatomies
+## 10 — Anatomies
 
-### §10a — Overview (entry cards)
+### 10a — Overview (entry cards)
 
 Before the per-anatomy sections, an overview grid of mini-cards (one per anatomy):
 
@@ -244,13 +244,13 @@ Before the per-anatomy sections, an overview grid of mini-cards (one per anatomy
   <h2>Anatomies — N worked examples</h2>
   <p class="lede">[explain: each structurally-rich domain gets its own anatomy]</p>
   <div class="anat-grid" id="anatGrid"></div>
-  <p class="small muted">Why these N? [explain curation; thin domains stay in module map; rule ⑥]</p>
+  <p class="small muted">Why these N? [explain curation; thin domains stay in module map; rule ④]</p>
 </section>
 ```
 
 Cards: 2-col grid, each with layer chip + name (mono) + 1-line blurb + "→" jump link. Colored left border per layer. Hover lift.
 
-### §10b — Per-anatomy section
+### 10b — Per-anatomy section
 
 ```html
 <section id="<domain>-anatomy">
@@ -276,7 +276,7 @@ Layer chip styling:
 .layer-chip.ui{ background:var(--ui); }
 ```
 
-## §11 — Grounding audit block
+## 11 — Grounding audit block
 
 At the top of the file (line 2, just after `<!doctype html>`):
 
@@ -308,7 +308,7 @@ At the top of the file (line 2, just after `<!doctype html>`):
 
 **Stale audit block = lie.** Every regenerate updates this — date + what changed.
 
-## §12 — Data-driven content (i18n-ready arrays)
+## 12 — Data-driven content (i18n-ready arrays)
 
 Inline `<script>` defines data arrays. All translatable strings are objects `{en:'...', zh:'...'}`. Helper `tt(obj) → obj[lang]` resolves at render.
 
@@ -322,7 +322,7 @@ Required arrays:
 - `CONV` — conventions list (label + desc)
 - `ARCH_LAYERS` + `ARCH_CONN` — for the architecture diagram
 
-## §13 — i18n implementation (REQUIRED — bilingual EN + zh-Hant by default)
+## 13 — i18n implementation (REQUIRED — bilingual EN + zh-Hant by default)
 
 **Bilingual is not optional.** Every map ships with EN + zh-Hant by default; the language toggle (`EN | 中`) lives at the top-right of the sidebar. Reasoning: if you skip i18n in v1, retrofitting it later costs much more than baking it in now (every static string has to be tracked down and converted).
 
@@ -356,7 +356,7 @@ function setLang(L){
 
 Any static text that should switch language uses `<span data-t="key">English fallback</span>`.
 
-## §14 — `renderAnatomy()` — shared graph renderer
+## 14 — `renderAnatomy()` — shared graph renderer
 
 ONE function renders every anatomy graph (codebase map + per-domain anatomies). Takes node + edge data + a panel selector + a default-state config.
 
@@ -415,7 +415,7 @@ When a node is clicked:
 {optional hop link: <a class="hop" href="#anatomy">→ View anatomy</a>}
 ```
 
-## §15 — Node kinds + colors
+## 15 — Node kinds + colors
 
 Use kind to drive color (allows rich visual semantics per anatomy):
 
@@ -429,7 +429,7 @@ Use kind to drive color (allows rich visual semantics per anatomy):
 
 Each anatomy passes its own `legendItems` array to `renderAnatomy()` so the legend matches what kinds are actually used in that graph.
 
-## §16 — Drag-hint UX
+## 16 — Drag-hint UX
 
 In the default panel state, include a small italic hint near the legend:
 
@@ -437,7 +437,7 @@ In the default panel state, include a small italic hint near the legend:
 
 This tells users the graph is interactive (without a noisy modal or tutorial).
 
-## §17 — Screenshots
+## 17 — Screenshots
 
 If a dev server can run (e.g., `pnpm dev`), use `agent-browser` to capture 1-3 screenshots and embed via `<figure class="shot"><img></figure>`. Else skip — the map works without them.
 
@@ -453,7 +453,7 @@ figure.shot img.tight{ max-width:380px; }  /* for close-ups */
 figure.shot figcaption{ font-size:12px; color:var(--muted); }
 ```
 
-## §18 — Final check before declaring done
+## 18 — Final check before declaring done
 
 Open in a real browser (via `agent-browser`) and verify:
 - All graphs render with correct node + edge counts

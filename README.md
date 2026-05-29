@@ -48,11 +48,11 @@ After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the
 
 Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without reading every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
 
-When in doubt: rule ⑨. Ask.
+When in doubt: rule ⑦. Ask.
 
 ## Map
 
-[`docs/site/index.html`](docs/site/index.html) is a self-contained bilingual interactive map of this marketplace — every plugin, every skill, the 11 rules, conventions, plus the nav-plugin anatomy graph. Open it directly in a browser.
+[`docs/site/index.html`](docs/site/index.html) is a self-contained bilingual interactive map of this marketplace — every plugin, every skill, the 8 rules, conventions, plus the nav-plugin anatomy graph. Open it directly in a browser.
 
 **Living document — stale = lie.** When you add / rename / remove a skill, plugin, or ADR, update the map + its audit block in the same commit. The audit block at the top of the HTML lists what was last verified; treat drift as a lie until corrected.
 

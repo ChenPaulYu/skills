@@ -30,19 +30,16 @@ Syntax per language:
 
 The **content shape** is identical across all of them — only the comment characters differ. Headers in different syntaxes should be grep-able with the same patterns (the first ~10 lines, looking for the title format `<name> — <role>`).
 
-## The 11 rules (especially ① and ⑪)
+## The 8 rules (especially ① and the navigability rule)
 
-1. **Good interfaces** — *this skill is rule ① applied at file level.* The header IS the file's interface to a reader who hasn't opened it yet.
-2. **Progressive disclosure** — the header is the index; the body is what you drill into if needed.
-3. **No hidden params** — `Reads:` makes dependencies explicit.
-4. **Future-ready foundation.**
-5. **No giants.**
-6. **No needless abstraction** — *important corollary:* don't header tiny files. Name-says-it-all files (Button.tsx, Spinner.tsx, icons, barrels < 5 lines) DO NOT need a header. Forcing headers on them is rule-⑥ violation.
-7. **Fit the framework** — uses standard JSDoc, no exotic `@tag`s.
-8. **Rearrange, don't rewrite** — for files with existing top comments: **restructure into the convention; preserve the substance.** Don't paraphrase or shorten — move the existing content into the new shape.
-9. **Below 90% → ask.**
-10. **Group + expose via one door.**
-11. **Agent-navigability is the audit** — *this skill closes the gap rule ⑪ surfaces.* If the audit found "agent had to guess at file X's purpose because the top revealed nothing" → fixing it is this skill's job.
+1. **Deep modules** — *this skill is rule ① applied at file level.* The header IS the file's interface to a reader who hasn't opened it yet.
+2. **Interface-first at every scale** — the header is the index; the body is what you drill into if needed.
+3. **Explicit dependencies** — `Reads:` makes dependencies explicit.
+4. **Right grain — neither giant nor fragmented** — *important corollary:* don't header tiny files. Name-says-it-all files (Button.tsx, Spinner.tsx, icons, barrels < 5 lines) DO NOT need a header. Forcing headers on them is a rule-④ violation.
+5. **Fit the framework** — uses standard JSDoc, no exotic `@tag`s.
+6. **Rearrange, don't rewrite** — for files with existing top comments: **restructure into the convention; preserve the substance.** Don't paraphrase or shorten — move the existing content into the new shape.
+7. **Below 90% → ask.**
+8. **Agent-navigability is the audit** — *this skill closes the gap this rule surfaces.* If the audit found "agent had to guess at file X's purpose because the top revealed nothing" → fixing it is this skill's job.
 
 ## The convention
 
@@ -61,7 +58,7 @@ Every load-bearing file's top 8-12 lines must match this template:
 **Three lines do the heavy lifting**:
 - **Line 1**: title = `<name> — <one-line role>`. Grep-able. If `★ load-bearing`, mark it.
 - **Paragraph 2**: 2-3 sentences. What + how + why this shape. NOT a list of every function it exports.
-- **Last line**: `Reads:` — the dependencies that matter. If you'd list > 6, the file imports too much (rule ⑦ smell — flag in audit instead).
+- **Last line**: `Reads:` — the dependencies that matter. If you'd list > 6, the file imports too much (rule ⑤ smell — flag in audit instead).
 
 No exotic `@tag`s. JSDoc-standard `/** */` block. Lives at line 1, before imports.
 
@@ -99,7 +96,7 @@ For each file getting a new/restructured header:
 2. Look at the file's imports → derive `Reads:` (the ≤ 6 load-bearing ones, not every transitive)
 3. Write the header following the template
 
-**Rule ⑧ applies**: if there's existing top comment substance, **preserve it** — restructure into the convention's shape, don't paraphrase or shorten.
+**Rule ⑥ applies**: if there's existing top comment substance, **preserve it** — restructure into the convention's shape, don't paraphrase or shorten.
 
 ### Step 4 — Show diff before applying
 
@@ -132,7 +129,7 @@ Check if the project's CLAUDE.md has a section about this header convention. If 
    * Reads: <key deps>
    */
   ```
-  Skip thin files (Button / icons / 2-line barrels) per rule ⑥. **Maintenance discipline**: header updates ride the same commit as changes to the file's role / main imports / load-bearing status. Stale header = lie.
+  Skip thin files (Button / icons / 2-line barrels) per rule ④. **Maintenance discipline**: header updates ride the same commit as changes to the file's role / main imports / load-bearing status. Stale header = lie.
 ```
 
 If the user accepts → write the edit.
@@ -219,11 +216,11 @@ export function useSelection(...) {
 
 | Temptation | Why to refuse |
 |---|---|
-| Header every file uniformly | Rule ⑥ — Button/icons/barrels don't need them. Forcing creates noise |
+| Header every file uniformly | Rule ④ — Button/icons/barrels don't need them. Forcing creates noise |
 | Auto-generate from imports (no description) | A useless title is worse than no title |
 | Use exotic `@tag` like `@param`, `@returns` at file level | Those are export-level conventions. File header is prose |
-| Paraphrase / shorten the existing rich comment | Rule ⑧ — restructure the shape, preserve the substance |
-| Add header without reading enough of the file | You'll guess. Guessed headers = lies (rule ⑨ violated) |
+| Paraphrase / shorten the existing rich comment | Rule ⑥ — restructure the shape, preserve the substance |
+| Add header without reading enough of the file | You'll guess. Guessed headers = lies (rule ⑦ violated) |
 
 ## Discipline (do not skip)
 
@@ -235,6 +232,6 @@ export function useSelection(...) {
 
 ## Companion skills
 
-- **`/nav:audit`** — surfaces which files need headers (the ones where rule ① / ⑪ failed)
+- **`/nav:audit`** — surfaces which files need headers (the ones where rule ① / ⑧ failed)
 - **`/nav:map`** — once headers exist, the map can describe files from `head -12` alone
 - **`/nav:refactor`** — when role/Reads change as part of a refactor, this skill re-applies the convention

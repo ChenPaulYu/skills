@@ -14,7 +14,7 @@ A new reader (human or agent) shouldn't have to read 80 files to understand a re
 2. The architecture (3 layers, domain-by-domain)
 3. Anatomies (per-subsystem deep dives, click-to-reveal)
 
-The map is also the **dogfood test** for rule ⑪ — if I struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header.
+The map is also the **dogfood test** for rule ⑧ — if I struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header.
 
 ## Scope
 
@@ -22,19 +22,16 @@ The map is also the **dogfood test** for rule ⑪ — if I struggle to describe 
 
 Outputs a single self-contained HTML file that renders standalone (no build step). Visual / interaction spec: see [`plugins/nav/skills/map/references/visual-spec.md`](plugins/nav/skills/map/references/visual-spec.md). Read that before rendering — it's the source of truth for layout, colors, sidebar grouping, anatomy patterns, interactions (click panel, drag, lang toggle), and the audit block format.
 
-## The 11 rules (the map IS rules ②/⑩/⑪ in action)
+## The 8 rules (the map IS the interface-first + navigability rules in action)
 
-1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
-2. **Progressive disclosure** — *this skill's whole reason for being.* The map is the index; you drill in only as needed.
-3. **No hidden params** — functions deterministic; deps explicit.
-4. **Future-ready foundation** — the base supports planned features.
-5. **No giants** — no single mega-module or mega-function.
-6. **No needless abstraction** — if it needn't be modular, don't modularise it. **Thin domains get a Module-map row, not an anatomy** (don't force structure where it doesn't exist).
-7. **Fit the framework.**
-8. **Rearrange, don't rewrite.**
-9. **Below 90% → ask.**
-10. **Group + expose via one door** — *the map IS this rule, applied to the codebase as a whole.*
-11. **Agent-navigability is the audit** — *running this skill IS the audit.* Track every place you struggle to write a one-line description; record it in the audit block.
+1. **Deep modules** — low-level modules expose an interface you can use without reading the body.
+2. **Interface-first at every scale** — *this skill's whole reason for being.* The map is the index — a module's interface, a subsystem's facade, the whole codebase's map applied as one door; you drill in only as needed.
+3. **Explicit dependencies** — functions deterministic; deps explicit.
+4. **Right grain — neither giant nor fragmented** — no mega-module/function; **and** no needless abstraction: thin domains get a Module-map row, not an anatomy (don't force structure where it doesn't exist).
+5. **Fit the framework.**
+6. **Rearrange, don't rewrite.**
+7. **Below 90% → ask.**
+8. **Agent-navigability is the audit** — *running this skill IS the audit.* Track every place you struggle to write a one-line description; record it in the audit block.
 
 ## Generation process
 
@@ -69,11 +66,11 @@ A domain earns an anatomy when it has **non-trivial internal structure** worth a
 - Implements a notable pattern (facade, store, hierarchical types), OR
 - Is the load-bearing core a new reader must understand
 
-Thin domains (1-2 files, or a flat list of similar primitives) do NOT get an anatomy — they get a Module-map row. **Per rule ⑥, don't force structure where there isn't any.**
+Thin domains (1-2 files, or a flat list of similar primitives) do NOT get an anatomy — they get a Module-map row. **Per rule ④, don't force structure where there isn't any.**
 
 For each anatomy: enumerate nodes (modules/types/hooks), edges (real relationships), and a one-paragraph callout (the design point worth teaching).
 
-### Step 4 — Self-eval (rule ⑪) — keep a struggle log
+### Step 4 — Self-eval (rule ⑧) — keep a struggle log
 
 While writing each domain/anatomy/file description, track honestly when you struggle:
 - Had to enumerate multiple responsibilities → flag it
@@ -90,7 +87,7 @@ Produce `docs/codebase-map/index.html` as a **single self-contained file** with:
 - **Sidebar nav** with grouped sub-headings (e.g., "ANATOMIES" subhead + indented items)
 - **Tour** — what the project is, one paragraph, plus a hero screenshot if one exists or can be captured
 - **Architecture** — 3-layer stacked diagram (foundation → state → ui) with cross-layer arrows + brief descriptions
-- **Design rules** — the 11 rules as cards (if the codebase has documented its own rules, use those; otherwise the deep-module set)
+- **Design rules** — the 8 rules as cards (if the codebase has documented its own rules, use those; otherwise the deep-module set)
 - **Module map** — searchable accordion of every domain + every file with one-line roles
 - **Codebase map (master)** — interactive SVG graph: one node per domain, click for details
 - **Anatomies** — one section per structurally-rich domain, each with: layer chip, lede, optional screenshot, interactive SVG graph, side panel with click-to-reveal, callouts
@@ -98,7 +95,7 @@ Produce `docs/codebase-map/index.html` as a **single self-contained file** with:
 - **Conventions** — load-bearing project rules (from CLAUDE.md or equivalent)
 - **Grounding audit block** — at the very top of the file as an HTML `<!-- -->` comment listing what was VERIFIED, what was FIXED in this revision, and what's JUDGMENT (not mechanically verifiable)
 
-**Bilingual is required (EN + zh-Hant by default).** Every translatable string lives in a `T` dictionary with `{en: ..., zh: ...}` shape; every static UI element uses `<span data-t="key">` or `data-t-placeholder` for inputs. The sidebar has an `EN | 中` toggle that flips the language + persists to `localStorage['codebase-map-lang']`. See `references/visual-spec.md` §13 for the implementation pattern.
+**Bilingual is required (EN + zh-Hant by default).** Every translatable string lives in a `T` dictionary with `{en: ..., zh: ...}` shape; every static UI element uses `<span data-t="key">` or `data-t-placeholder` for inputs. The sidebar has an `EN | 中` toggle that flips the language + persists to `localStorage['codebase-map-lang']`. See `references/visual-spec.md` 13 for the implementation pattern.
 
 If the user explicitly requests a different language pair (e.g. EN + Japanese), use that — but **never ship monolingual** without explicit opt-out from the user. The bilingual scaffolding is cheap once it's there; removing it later is harder than adding it up front.
 

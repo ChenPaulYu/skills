@@ -19,7 +19,7 @@ It's the full version of what `/nav:audit <spec>` (Mode 2) starts. Audit Mode 2 
 
 **Read-mostly.** Stages 1-2 read code + read conversation; only Stage 3 writes one file (the plan). Always confirm the output location before writing.
 
-## The 11 rules
+## The 8 rules
 
 1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
 2. **Progressive disclosure** — an index/doc surfaces the interface; you drill in only as needed.
@@ -29,7 +29,7 @@ It's the full version of what `/nav:audit <spec>` (Mode 2) starts. Audit Mode 2 
 6. **No needless abstraction** — if it needn't be modular, don't modularise it.
 7. **Fit the framework** — idiomatic patterns; pass store/hook objects, not 20 loose props.
 8. **Rearrange, don't rewrite** — refactor = move code verbatim + rewire.
-9. **Below 90% confidence → ask** — *this skill is rule ⑨ as a workflow.* Stage 2 exists because spec ambiguity is the most common < 90% confidence trigger.
+9. **Below 90% confidence → ask** — *this skill is rule ⑦ as a workflow.* Stage 2 exists because spec ambiguity is the most common < 90% confidence trigger.
 10. **Group + expose via one door** — subsystems exposed through a barrel/facade.
 11. **Agent-navigability is the audit** — struggle-to-describe IS the deep-module failure signal.
 
@@ -161,10 +161,10 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 ## Discipline (do not skip)
 
 - **Scan transcript first.** Stage 1 starts by checking whether audit just ran. Re-running grep when context already has the answer wastes the user's time and tokens.
-- **Ask only high-signal clarifying questions.** A spec dump back at the user is noise; 3-5 surgical questions are signal. Stage 2 is rule ⑨ in workflow form.
+- **Ask only high-signal clarifying questions.** A spec dump back at the user is noise; 3-5 surgical questions are signal. Stage 2 is rule ⑦ in workflow form.
 - **The plan is an artifact, not a chat.** A plan that lives only in the conversation is gone next session. Write the file.
 - **Confirm location before writing.** Repos have conventions; respect them. Ask once, then proceed.
-- **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the sub-agent option provides the context separation. Rule ⑨ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
+- **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the sub-agent option provides the context separation. Rule ⑦ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 - **Bracket the sub-agent hand-off: inject grounding in, check integration out.** A fresh sub-agent is tactical — it sees only its slice, so it won't grep the domain for an existing home and it reads project rules literally. Stage 1 already did the grounding the sub-agent lacks; inject it into the prompt, and run a deep-module integration pass on the returned diff before accepting "done". The feature is the sub-agent's job; clean integration is the parent's. See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 - **Honest about uncertainty.** If Stage 1 had to guess at a file's role, say so in the Context. If Stage 2 left a question open, list it. The plan's value is grounded honesty, not false confidence.
 
@@ -172,7 +172,7 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 
 | Temptation | Why to refuse |
 |---|---|
-| "I'll skip Stage 2 — I can guess what the user means" | Rule ⑨. Guess = drift between agent and user. Ask the 3 questions |
+| "I'll skip Stage 2 — I can guess what the user means" | Rule ⑦. Guess = drift between agent and user. Ask the 3 questions |
 | "I'll write the plan straight to disk without asking where" | Surprising. The user has a convention; respect it |
 | "I'll execute step 1 while I'm here, the plan is obvious" | Plan and execute are different verbs. Conflating loses review gates. The right move is Stage 4 — offer execution via `AskUserQuestion`; if the user picks it, then proceed |
 | "I'll skip Stage 4 — the next step is obvious, the user can just type the command" | Discoverability friction is real. One click > one typed command. Always offer (unless the explicit skip condition fires) |

@@ -9,32 +9,29 @@ A focused collection of skills for **keeping code navigable** — auditing, refa
 
 Six skills today: `audit` (assess) · `refactor` (transform) · `headers` (describe file) · `map` (describe project) · `doctor` (orchestrate health pass) · `plan` (ground + clarify + plan artifact, for spec-grounded work). See [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) for the 5-skill consolidation logic and [ADR-006](docs/adr/006-nav-plan-skill.md) for why plan landed as the 6th.
 
-**Language-agnostic by design.** The 11 rules transfer to any stack; specific checks have universal-core + per-stack heuristics.
+**Language-agnostic by design.** The 8 rules transfer to any stack; specific checks have universal-core + per-stack heuristics.
 
 This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). The marketplace is the personal-collection container; this plugin is the navigability family. Future families (`spec`, `craft`, …) become sibling plugins under the same marketplace — they don't pile up inside this one. See [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md).
 
-## The 11 rules (the through-line of every skill)
+## The 8 rules (the through-line of every skill)
 
-Every skill in this plugin assumes — and re-states inside its own `SKILL.md` — these eleven rules:
+Every skill in this plugin assumes — and re-states inside its own `SKILL.md` — these eight rules. They're one idea — **deep modules** — applied at every scale, plus the discipline to get there safely and the test to know you have. **Grouped: Shape ①–⑤ · Discipline ⑥–⑦ · Test ⑧.**
 
-1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
-2. **Progressive disclosure** — an index / doc surfaces the interface; you drill in only as needed.
-3. **No hidden params** — functions deterministic; deps explicit, not ambient.
-4. **Future-ready foundation** — the base supports planned features before they ship.
-5. **No giants** — no single mega-module or mega-function (a 700-line render counts).
-6. **No needless abstraction** — if it needn't be modular, don't modularise it. (⑤ ↔ ⑥ are a balance.)
-7. **Fit the framework** — idiomatic patterns (React: custom hooks; pass store/hook objects, not 20 loose props).
-8. **Rearrange, don't rewrite** — refactor = move code verbatim + rewire; behaviour stays identical.
-9. **Below 90% confidence → ask** — when unsure about scope, boundaries, intent: stop and clarify.
-10. **Group + expose via one door** — subsystems exposed through a barrel/facade (`index.ts`).
-11. **Agent-navigability is the audit** — when an agent regenerates a codebase map, struggle-to-describe IS the deep-module test. Failure cues: must enumerate, must footnote, must guess, must list > 6 imports.
+1. **Deep modules** — a simple interface hiding significant complexity; usable without reading the body. Maximize hidden complexity per unit of interface; prefer general-purpose foundations over premature special-casing.
+2. **Interface-first at every scale** — expose through one door, surfaced progressively: a module's interface, a subsystem's barrel/facade (`index.ts`), the whole codebase's index/map. Drill into bodies only as needed.
+3. **Explicit dependencies** — functions deterministic; deps explicit in the signature, not ambient/hidden.
+4. **Right grain — neither giant nor fragmented** — no mega-module or mega-function (a 700-line render counts); equally, no needless abstraction (don't modularise what needn't be). The giant↔fragment tension is the balance you manage.
+5. **Fit the framework** — idiomatic patterns (React: custom hooks; pass a store/hook object as one prop, not 20 loose props); don't fight the ecosystem.
+6. **Rearrange, don't rewrite** — refactor = verbatim move + rewire; behaviour stays identical; test-gate each step.
+7. **Below 90% confidence → ask** — when unsure about scope, boundaries, intent: stop and clarify.
+8. **Agent-navigability is the audit** — when an agent regenerates a codebase map, struggle-to-describe IS the deep-module test. Failure cues: must enumerate, must footnote, must guess, must list > 6 imports.
 
 These rules **also apply to this plugin's own code** — meta-discipline. If a skill grows past ~500 lines or starts enumerating many distinct responsibilities, split it.
 
 ## Conventions for skills inside this plugin
 
 - **Naming**: skills use **bare verbs** — `audit`, `refactor`, `headers`, `map`, `doctor`, `plan`. The plugin namespace (`nav:`) provides the topic context, so no `nav-` prefix on the skill name itself. See [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md).
-- **Self-contained**: every `SKILL.md` includes the 11 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded. Bulky reference docs (e.g. `skills/map/references/visual-spec.md`) live in `references/` and are loaded only when actually rendering.
+- **Self-contained**: every `SKILL.md` includes the 8 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded. Bulky reference docs (e.g. `skills/map/references/visual-spec.md`) live in `references/` and are loaded only when actually rendering.
 - **★ Stack-neutral, standalone-legible examples (core principle)**: every example in a `SKILL.md` must be understandable from that skill *alone* — never leak a past project's domain nouns (specific component names, hooks, filenames, app concepts like a particular product's "TrackCard" or "annotation store"). Use generic, neutral placeholders (`UserList`, `useSelection`, `core/user`, `Editor.tsx`) so a reader who has never seen the origin project still gets it. A skill that only makes sense if you know Project X is a leaky skill — fix the example, don't ship the leak.
 - **★ Skills-root-relative paths (core principle)**: all paths — doc cross-references **and** example code — are written as if `skills/` (the marketplace root) is the root. **No `./` or `../` prefixes.** Doc links: `docs/adr/008-inject-check-at-handoff.md`, never `../../docs/…`. Example imports: alias form (`@/core/user`) or bare module names; a `Reads:` header line lists dep names without path prefixes (`core/user · app/useUsers`), never `../../core/…`. Relative-path noise ties a skill to a directory depth it has no business assuming.
 - **Frontmatter `description`**: written **broad** (matches multiple trigger phrasings) but **honest** about scope. No "pushy" cross-domain claims.
@@ -45,7 +42,7 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 - **Reuse-via-transcript pattern**: when a meta-skill inlines another skill's protocol, Stage 1 should include a "scan recent turns; if `<other-skill>` already ran against the same input, reuse its output" preamble. Deterministic + zero coupling. Current users: `doctor` (audit + headers + map), `plan` (audit). See [ADR-006](docs/adr/006-nav-plan-skill.md).
 - **Offer-next-action pattern**: meta-skills end with `AskUserQuestion` listing 2-4 concrete next actions (sub-agent · in-session · save/done). Sub-agent is the recommended default when a self-contained next step exists — it enforces clean context = "separate session" at the architecture level. Atomic skills don't get this pattern (no single obvious next step). Always include a "save / done" option so the user can opt out without typing; one-shot per invocation (no re-offering after decline). Current users: `plan` (Stage 4), `refactor` (Step 8), `doctor` (Step 7). See [`docs/adr/007-offer-next-action-pattern.md`](docs/adr/007-offer-next-action-pattern.md).
 - **Inject↔check at the sub-agent hand-off**: when a meta-skill's offer-next-action launches a sub-agent, it brackets the dispatch — **inject (→)** the in-session grounding the fresh sub-agent can't re-derive (critical files + roles, existing impls/seams to reuse, the **N+1 trigger**), and **check (←)** the returned diff with a deep-module integration pass (same-domain parallel impl · seam/facade read at intent · header hygiene) *before* accepting "done". A sub-agent is tactical (sees only its slice, reads rules literally); the feature is its job, clean integration is the parent's. Current users: same three hand-offs as offer-next-action. See [`docs/adr/008-inject-check-at-handoff.md`](docs/adr/008-inject-check-at-handoff.md).
-- **N+1 trigger** (corollary of rules ⑥ + ⑩): first consumer of an inline util = inline is fine; **second consumer = extract a primitive** (don't copy-paste, don't shove a mode-flag into a facade). This is the operational trip-wire that turns "no needless abstraction" from a judgment call into a rule. Fires in the `refactor`/`plan`/`doctor` hand-offs above and in any integration check.
+- **N+1 trigger** (corollary of rules ④ + ②): first consumer of an inline util = inline is fine; **second consumer = extract a primitive** (don't copy-paste, don't shove a mode-flag into a facade). This is the operational trip-wire that turns "no needless abstraction" from a judgment call into a rule. Fires in the `refactor`/`plan`/`doctor` hand-offs above and in any integration check.
 - **Each new skill**: write an ADR in `docs/adr/` (marketplace-level) explaining why it exists, what overlaps it has with siblings, and how the trigger description avoids stealing fire from them.
 
 ## Where things live
@@ -64,7 +61,7 @@ skills/<name>/references/    → bulky reference docs loaded on demand
 - New skill: scaffold `skills/<name>/SKILL.md`, write its frontmatter description carefully (it determines triggering accuracy), test invocations cover the main trigger phrasings, write an ADR.
 - **Before adding or changing any skill, check the two ★ core principles above**: (1) every example is stack-neutral + standalone-legible — no past-project domain nouns; (2) every path is skills-root-relative — no `./` or `../` in doc links or example code. These are the most common ways a skill silently leaks its origin project or its directory depth; verify both before committing.
 - Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
-- Changing the 11 rules: this affects every skill — update each `SKILL.md` in the same commit, write an ADR.
+- Changing the 8 rules: this affects every skill — update each `SKILL.md` in the same commit, write an ADR.
 - Stale `SKILL.md` is worse than missing `SKILL.md` — same rule as project-level "stale header = lie".
 - **Site-map update is gating, not optional.** Any change to a `SKILL.md`, a plugin manifest, or an ADR REQUIRES the same commit to update [`docs/site/index.html`](docs/site/index.html). Before committing, **always** run:
   ```bash

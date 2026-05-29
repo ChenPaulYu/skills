@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 6)
+  Last audit: 2026-05-29 (rev 7)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -16,10 +16,20 @@
       (folders + frontmatter name match in plugins/nav/skills/*/SKILL.md)
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 8 ADRs in docs/adr/ — 001..008 with cross-supersede / refine links
+    • 9 ADRs in docs/adr/ — 001..009 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 6)
+  ⚠ FIXED in this revision (rev 7)
+    1. Consolidated the deep-module rules 11 → 8 (ADR-009): made "deep
+       modules" the explicit root, merged the interface-first trio (old
+       ②+⑩) and the grain balance (old ⑤+⑥), folded old ④ (future-ready)
+       into ①, grouped Shape ①–⑤ / Discipline ⑥–⑦ / Test ⑧. Rewrote the
+       RULES cards array + remapped every by-number reference across the
+       live surfaces (6 SKILL.md, CLAUDE.md, README, this map, visual-spec).
+       ADRs + the observation keep the 11-scheme as dated history; ADR-009
+       carries the old→new remap key. ADR count 8→9.
+
+  ⚠ FIXED in rev 6 (kept for history)
     1. De-projected all SKILL.md examples: removed past-project domain
        nouns (TrackCard / CrateCard / useCrates / useAnnotations / fillPath
        / svg.tsx) from headers, plan, refactor, audit — replaced with
@@ -443,17 +453,14 @@ const ARCH_CONN = [
 ];
 
 const RULES = [
-  {n:'①', name:{en:'Good interfaces', zh:'好介面'}, desc:{en:'Low-level modules expose an interface you can use without reading the body.', zh:'低層模組對外提供可用介面,不必讀內部實作。'}},
-  {n:'②', name:{en:'Progressive disclosure', zh:'漸進揭露'}, desc:{en:'An index/doc surfaces the interface; you drill in only as needed.', zh:'索引/文件先給介面,有需要再深入。'}},
-  {n:'③', name:{en:'No hidden params', zh:'無隱藏參數'}, desc:{en:'Functions deterministic; deps explicit, not ambient.', zh:'函式可決定;依賴明示,非環境變數。'}},
-  {n:'④', name:{en:'Future-ready foundation', zh:'前瞻基礎'}, desc:{en:'The base supports planned features before they ship.', zh:'基礎能承載未來規劃的功能。'}},
-  {n:'⑤', name:{en:'No giants', zh:'禁止巨物'}, desc:{en:'No single mega-module or mega-function (a 700-line render counts).', zh:'禁止單一巨型模組或函式(700 行 render 算)。'}},
-  {n:'⑥', name:{en:'No needless abstraction', zh:'無多餘抽象'}, desc:{en:"If it needn't be modular, don't modularise it. (⑤ ↔ ⑥ are a balance.)", zh:'不需模組化就別模組化(⑤ ↔ ⑥ 是平衡)。'}},
-  {n:'⑦', name:{en:'Fit the framework', zh:'順從框架'}, desc:{en:'Idiomatic patterns; pass store/hook objects, not 20 loose props.', zh:'用框架慣用模式;傳 store/hook 物件,不用 20 個鬆散 props。'}},
-  {n:'⑧', name:{en:"Rearrange, don't rewrite", zh:'重組勿重寫'}, desc:{en:'Refactor = move code verbatim + rewire; behaviour stays identical.', zh:'重構 = 原文搬移 + 重接線;行為完全不變。'}},
-  {n:'⑨', name:{en:'Below 90% → ask', zh:'信心低於 90% 就問'}, desc:{en:'When unsure about scope, boundaries, intent: stop and clarify.', zh:'不確定範圍、邊界、意圖時停下來問。'}},
-  {n:'⑩', name:{en:'Group + expose via one door', zh:'集中 + 一道門對外'}, desc:{en:'Subsystems exposed through a barrel/facade (index.ts).', zh:'子系統透過 barrel/facade(index.ts)對外。'}},
-  {n:'⑪', name:{en:'Agent-navigability is the audit', zh:'代理可導覽性即審計'}, desc:{en:'Struggle-to-describe IS the deep-module failure signal.', zh:'描述困難就是 deep-module 失敗訊號。'}},
+  {n:'①', name:{en:'Deep modules', zh:'深模組'}, desc:{en:'A simple interface hiding significant complexity; usable without reading the body. Prefer general-purpose foundations over premature special-casing.', zh:'簡單介面藏住大量複雜度;不讀內部即可使用。優先通用基礎,別過早特例化。'}},
+  {n:'②', name:{en:'Interface-first at every scale', zh:'各尺度皆介面優先'}, desc:{en:'One door, surfaced progressively: a module interface, a subsystem barrel/facade (index.ts), the whole-codebase index/map. Drill in only as needed.', zh:'一道門、漸進揭露:模組介面、子系統 barrel/facade(index.ts)、整個 codebase 的索引/地圖。有需要再深入。'}},
+  {n:'③', name:{en:'Explicit dependencies', zh:'依賴明示'}, desc:{en:'Functions deterministic; deps explicit in the signature, not ambient.', zh:'函式可決定;依賴寫在簽名,非環境變數。'}},
+  {n:'④', name:{en:'Right grain — neither giant nor fragmented', zh:'正確顆粒度 —— 不巨也不碎'}, desc:{en:'No mega-module or mega-function (a 700-line render counts); equally, no needless abstraction. The giant↔fragment tension is the balance.', zh:'無巨型模組或函式(700 行 render 算);同樣,也不過度抽象。巨物↔碎片之間就是要平衡的張力。'}},
+  {n:'⑤', name:{en:'Fit the framework', zh:'順從框架'}, desc:{en:"Idiomatic patterns; pass store/hook objects, not 20 loose props; don't fight the ecosystem.", zh:'用框架慣用模式;傳 store/hook 物件,不用 20 個鬆散 props;別跟生態系作對。'}},
+  {n:'⑥', name:{en:"Rearrange, don't rewrite", zh:'重組勿重寫'}, desc:{en:'Refactor = verbatim move + rewire; behaviour stays identical; test-gate each step.', zh:'重構 = 原文搬移 + 重接線;行為完全不變;每步 test gate。'}},
+  {n:'⑦', name:{en:'Below 90% → ask', zh:'信心低於 90% 就問'}, desc:{en:'When unsure about scope, boundaries, intent: stop and clarify.', zh:'不確定範圍、邊界、意圖時停下來問。'}},
+  {n:'⑧', name:{en:'Agent-navigability is the audit', zh:'代理可導覽性即審計'}, desc:{en:'Struggle-to-describe IS the deep-module failure signal.', zh:'描述困難就是 deep-module 失敗訊號。'}},
 ];
 
 const DOMAINS = {
@@ -462,7 +469,7 @@ const DOMAINS = {
     path: 'plugins/nav/',
     blurb: {en:'Keep any codebase navigable as it grows. 6 skills, one verb each. Language-agnostic. See <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。6 個 skill,各一動詞。跨語言。Plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
     files: [
-      ['/nav:audit', '', {en:'★ Assess codebase shape against the 11 rules — unconditional health, or read-only quick-check against a target spec. Read-only.', zh:'★ 對照 11 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。'}],
+      ['/nav:audit', '', {en:'★ Assess codebase shape against the 8 rules — unconditional health, or read-only quick-check against a target spec. Read-only.', zh:'★ 對照 8 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。'}],
       ['/nav:refactor', '', {en:'★ Structural refactor: verbatim move + test gate after every step + real-app pass at the end. Behaviour stays identical.', zh:'★ 結構重構:原文搬移 + 每步 test gate + 結尾真實 app pass。行為完全不變。'}],
       ['/nav:headers', '', {en:'Add or standardize skill-style file-top headers so an agent can <code>head -12</code> to retrieve role + key deps without reading the body.', zh:'加或標準化 skill 風格檔首 header,讓 agent <code>head -12</code> 即可取得角色與關鍵依賴,不必讀本文。'}],
       ['/nav:map', '', {en:'Generate <code>docs/codebase-map/index.html</code> — a bilingual interactive codebase map with anatomy graphs + audit block. This file uses the same form.', zh:'產生 <code>docs/codebase-map/index.html</code> —— 雙語互動 codebase 地圖,含 anatomy 圖與 audit block。本檔即同形式。'}],
@@ -480,7 +487,7 @@ const CB_EDGES = [];
 const NAV_NODES = [
   {id:'doctor', kind:'orchestrator', x:180, y:30, w:120, role:{en:'orchestrate', zh:'統籌'}, desc:{en:'Full health pass — sequences audit → headers → map with user-review gates. Hands off refactors (recommends but never executes).', zh:'完整健康檢查 —— 串接 audit → headers → map,步驟之間 user-review。重構交出(僅推薦,不執行)。'}},
   {id:'plan', kind:'orchestrator', x:460, y:30, w:120, role:{en:'ground + plan', zh:'底料 + 規劃'}, desc:{en:'Spec-grounded planning — inlines audit (Mode 2) on spec-touched domains, clarifies ambiguity via 3-5 questions, writes a plan artifact. Reuses prior audit output if it ran this session.', zh:'以 spec 為目標的規劃 —— 內嵌 audit Mode 2 在受影響 domains,以 3-5 問釐清不明,寫出 plan 檔。同 session 跑過 audit 會 reuse。'}},
-  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 11 deep-module rules. Two modes: unconditional health, or read-only quick-check against a spec.', zh:'唯讀審計,對照 11 條 deep-module 規則。兩模式:無條件健康,或對應 spec 的唯讀快檢。'}},
+  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Two modes: unconditional health, or read-only quick-check against a spec.', zh:'唯讀審計,對照 8 條 deep-module 規則。兩模式:無條件健康,或對應 spec 的唯讀快檢。'}},
   {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass. Doctor and plan both recommend; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass。Doctor 與 plan 都會推薦;你自行呼叫。'}},
   {id:'headers', kind:'describe', x:300, y:240, w:130, role:{en:'describe (file)', zh:'描述(檔案)'}, desc:{en:'Add/standardize skill-style file headers — title + 2-3 sentence + Reads. Universal convention; per-language syntax.', zh:'加/標準化 skill 風格檔首 header —— 標題 + 2-3 句 + Reads。通用約定;syntax 隨語言。'}},
   {id:'map', kind:'describe', x:550, y:240, w:130, role:{en:'describe (project)', zh:'描述(專案)'}, desc:{en:'Bilingual interactive codebase HTML — draggable graphs, click-to-reveal panels, audit block. Output of this map uses the same form.', zh:'雙語互動 codebase HTML —— 可拖曳圖、點看面板、audit block。本檔即此形式的輸出。'}},
@@ -498,13 +505,13 @@ const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},
   {label:{en:'Plugin name = topic', zh:'Plugin 名 = 主題'}, desc:{en:'<code>nav</code>, <code>spec</code>, <code>craft</code> — never generic. ADR-005.', zh:'<code>nav</code>、<code>spec</code>、<code>craft</code> —— 絕不取通用名。ADR-005。'}},
   {label:{en:'Skill name = bare verb', zh:'Skill 名 = 裸動詞'}, desc:{en:"Just <code>audit</code>, not <code>nav-audit</code>. Namespace lives in the plugin name; don't pay twice. ADR-005.", zh:'就 <code>audit</code>,不是 <code>nav-audit</code>。命名空間在 plugin 名;別付兩次。ADR-005。'}},
-  {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill embeds the 11 rules verbatim. No shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 內嵌 11 規則。SKILL.md 之間不互引。ADR-001 #3。'}},
+  {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill embeds the 8 rules verbatim. No shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 內嵌 8 規則。SKILL.md 之間不互引。ADR-001 #3。'}},
   {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-004.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-004。'}},
   {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (headers, map, refactor, doctor) shows the change before applying.', zh:'任何會改檔的 skill(headers、map、refactor、doctor)套用前先示差異。'}},
   {label:{en:'Stack-neutral examples', zh:'範例 stack-中性'}, desc:{en:'Every SKILL.md example reads standalone — no past-project domain nouns. Use generic placeholders (UserList, useSelection). A skill that needs Project X context is leaky.', zh:'每個 SKILL.md 範例都能單看就懂 —— 不帶過去專案的領域詞。用通用 placeholder(UserList、useSelection)。需要 Project X 背景才看得懂的 skill 就是漏的。'}},
   {label:{en:'Skills-root-relative paths', zh:'以 skills 為根的路徑'}, desc:{en:'All paths (doc links AND example code) written as if <code>skills/</code> is root. No <code>./</code> or <code>../</code> prefixes. Imports use alias (<code>@/core/user</code>) or bare names.', zh:'所有路徑(doc 連結與範例程式碼)都以 <code>skills/</code> 為根。不用 <code>./</code> 或 <code>../</code>。import 用 alias(<code>@/core/user</code>)或裸模組名。'}},
   {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-008.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-008。'}},
-  {label:{en:'N+1 trigger', zh:'N+1 觸發'}, desc:{en:'First consumer of an inline util = inline OK; second consumer = extract a primitive (don\'t copy). Corollary of rules ⑥ + ⑩.', zh:'inline util 的第一個 consumer = inline OK;第二個 consumer = 抽 primitive(別複製)。規則 ⑥ + ⑩ 的推論。'}},
+  {label:{en:'N+1 trigger', zh:'N+1 觸發'}, desc:{en:'First consumer of an inline util = inline OK; second consumer = extract a primitive (don\'t copy). Corollary of rules ④ + ②.', zh:'inline util 的第一個 consumer = inline OK;第二個 consumer = 抽 primitive(別複製)。規則 ④ + ② 的推論。'}},
   {label:{en:'Stale = lie', zh:'過時 = 謊言'}, desc:{en:'When you add/rename/remove a skill, plugin, or ADR, update this map + its audit block in the same commit.', zh:'新增/改名/移除 skill、plugin、ADR 時,同 commit 更新此圖與 audit block。'}},
 ];
 

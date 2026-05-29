@@ -1,11 +1,11 @@
 ---
 name: refactor
-description: Execute a structural refactor on any codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Use this skill whenever the user wants to "refactor X", "decompose this component", "extract a function/module/package", "split this file", "reorganize this folder", "break this up", or any structural change that should preserve behaviour. Also fires when the user mentions "verbatim refactor", "behaviour-preserving refactor", or refers to Ousterhout rule ⑧. The skill enforces the discipline; the agent does the moves.
+description: Execute a structural refactor on any codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Use this skill whenever the user wants to "refactor X", "decompose this component", "extract a function/module/package", "split this file", "reorganize this folder", "break this up", or any structural change that should preserve behaviour. Also fires when the user mentions "verbatim refactor", "behaviour-preserving refactor", or refers to Ousterhout rule ⑥. The skill enforces the discipline; the agent does the moves.
 ---
 
 # Deep-module refactor
 
-Execute a structural refactor with the rule ⑧ discipline: **move existing code verbatim into its new home and re-wire it; never rewrite while moving.** Behaviour stays identical, proven by tests after each step and a real-app pass at the end.
+Execute a structural refactor with the rule ⑥ discipline: **move existing code verbatim into its new home and re-wire it; never rewrite while moving.** Behaviour stays identical, proven by tests after each step and a real-app pass at the end.
 
 ## Why this skill exists
 
@@ -25,9 +25,9 @@ Detect the stack at the start (look at `package.json` / `pyproject.toml` / `go.m
 
 **Out of scope**: refactors that change the contract (API signatures, public types). Those are a different kind of work and need a regular code session.
 
-If unclear what kind of refactor the user wants → rule ⑨, ask. "Is this a verbatim move, or does the contract change?"
+If unclear what kind of refactor the user wants → rule ⑦, ask. "Is this a verbatim move, or does the contract change?"
 
-## The 11 rules (full set — the discipline relies on them)
+## The 8 rules (full set — the discipline relies on them)
 
 1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
 2. **Progressive disclosure** — an index/doc surfaces the interface; you drill in only as needed.
@@ -36,7 +36,7 @@ If unclear what kind of refactor the user wants → rule ⑨, ask. "Is this a ve
 5. **No giants** — no single mega-module or mega-function.
 6. **No needless abstraction** — if it needn't be modular, don't modularise it.
 7. **Fit the framework** — idiomatic patterns (React: custom hooks; pass store/hook objects, not 20 loose props).
-8. **Rearrange, don't rewrite** — *this skill is rule ⑧ in action.* Move verbatim + rewire; behaviour stays identical.
+8. **Rearrange, don't rewrite** — *this skill is rule ⑥ in action.* Move verbatim + rewire; behaviour stays identical.
 9. **Below 90% confidence → ask.**
 10. **Group + expose via one door** — subsystems exposed via a barrel/facade.
 11. **Agent-navigability is the audit.**
@@ -69,7 +69,7 @@ Then list:
 - What the interface between old and new looks like
 - What gets DELETED from the original
 
-If the answer to any of these is "I'll figure it out" → rule ⑨, ask the user to clarify the scope before starting.
+If the answer to any of these is "I'll figure it out" → rule ⑦, ask the user to clarify the scope before starting.
 
 ### Step 3 — Decompose into smallest behaviour-preserving steps
 
@@ -160,7 +160,7 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 - **Test gate after every step.** Even the trivial-looking ones.
 - **Verbatim means verbatim.** Copy-paste, don't paraphrase. The text in the new file should be byte-for-byte the same as what was in the old file, except for the wiring lines (imports, returns).
 - **Browser pass at the end.** Tests prove unit behaviour, not integration. Pointer gestures, drag-drop, animations are rarely unit-tested.
-- **Rule ⑨ applies during the refactor.** If a step's correctness is below 90% confidence, **stop and clarify with the user** rather than improvising.
+- **Rule ⑦ applies during the refactor.** If a step's correctness is below 90% confidence, **stop and clarify with the user** rather than improvising.
 - **Don't commit unless asked.** Show the diff; let the user decide when to land. (Step 8 makes "commit + open PR" a one-click option — that *is* asking.)
 - **DO offer next action (Step 8).** Suggesting the next command in chat text leaves discoverability friction on the table. Stage the option as an `AskUserQuestion`; one click > one typed command. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 - **Bracket the improve hand-off: inject the seam in, check integration out.** A fresh improve sub-agent doesn't know who consumes the extracted module — inject the seam so it doesn't add a parallel impl, and run a deep-module pass on its diff before accepting "done". See [ADR-008](docs/adr/008-inject-check-at-handoff.md).

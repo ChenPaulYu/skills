@@ -17,19 +17,16 @@ When you feel something's off but don't know exactly what, you don't want to rem
 
 **Language-agnostic.** Doctor inherits the universal core + stack-specific heuristics from `/nav:audit`, the syntax flex from `/nav:headers`, and the generic HTML rendering of `/nav:map`. Works on any stack as long as you can run tests for the verify steps.
 
-## The 11 rules (inherited from all sibling skills)
+## The 8 rules (inherited from all sibling skills)
 
-1. **Good interfaces** — low-level modules expose an interface you can use without reading the body.
-2. **Progressive disclosure** — an index/doc surfaces the interface; you drill in only as needed.
-3. **No hidden params** — functions deterministic; deps explicit, not ambient.
-4. **Future-ready foundation** — the base supports planned features before they ship.
-5. **No giants** — no single mega-module or mega-function.
-6. **No needless abstraction** — if it needn't be modular, don't modularise it.
-7. **Fit the framework** — idiomatic patterns; pass store/hook objects, not 20 loose props.
-8. **Rearrange, don't rewrite** — refactor = move + rewire; behaviour stays identical.
-9. **Below 90% confidence → ask.**
-10. **Group + expose via one door** — subsystems exposed via a barrel/facade.
-11. **Agent-navigability is the audit** — struggle-to-describe = deep-module failure signal.
+1. **Deep modules** — a simple interface hiding significant complexity; usable without reading the body.
+2. **Interface-first at every scale** — a module's interface, a subsystem's barrel/facade, the whole codebase's index/map; drill in only as needed.
+3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
+4. **Right grain — neither giant nor fragmented** — no mega-module/function (a 700-line render counts); equally no needless abstraction.
+5. **Fit the framework** — idiomatic patterns; pass store/hook objects, not 20 loose props.
+6. **Rearrange, don't rewrite** — refactor = move + rewire; behaviour stays identical.
+7. **Below 90% confidence → ask.**
+8. **Agent-navigability is the audit** — struggle-to-describe = deep-module failure signal.
 
 ## Orchestration process
 
@@ -45,7 +42,7 @@ Follow `/nav:audit`'s protocol fully:
 - Detect stack + bound scope
 - Domain inventory
 - Mechanical checks (universal + stack-specific)
-- Heuristic check (rule ⑪ self-eval — struggle log)
+- Heuristic check (rule ⑧ self-eval — struggle log)
 - Categorize + structured report
 
 Output the audit report to chat exactly as `/nav:audit` would.
@@ -58,7 +55,7 @@ Categorize the findings:
 
 | Bucket | What goes in | Action this session |
 |---|---|---|
-| **Light fixes** (this session) | files where rule ⑪ self-eval struggled; missing/stale headers | Run `/nav:headers` on these files |
+| **Light fixes** (this session) | files where rule ⑧ self-eval struggled; missing/stale headers | Run `/nav:headers` on these files |
 | **Map refresh** (this session) | always — the audit produced new info that the map should reflect | Re-run `/nav:map` at the end |
 | **Structural** (separate session) | giants, layer violations, dead modules, fake abstractions, suspect mega-functions | Recommend specific `/nav:refactor` moves; do NOT execute now |
 | **Defer** (note + skip) | low-priority observations | List in the final report so they're not lost |
@@ -141,13 +138,13 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 - **Bracket the refactor hand-off: inject the audit/map grounding in, check integration out.** Doctor just produced the richest grounding of any meta-skill (fresh audit + fresh map) — inject the relevant slice so the refactor sub-agent doesn't re-derive (and miss) it, and run a deep-module pass on the returned diff before accepting "done". See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 - **Don't duplicate sibling skills' protocols.** When entering each step, defer to the sibling's discipline. If a step needs to change, change the sibling skill — not this orchestrator.
 - **Stay honest about what was fixed vs deferred.** Final report is a clean ledger of this session — not a victory lap. The deferred and recommended items must show up explicitly.
-- **Rule ⑨ applies.** Below 90% confidence on any plan item → ask the user before including/excluding it.
+- **Rule ⑦ applies.** Below 90% confidence on any plan item → ask the user before including/excluding it.
 
 ## Anti-patterns (refuse these)
 
 | Temptation | Why to refuse |
 |---|---|
-| "I'll just run the refactor too while I'm here" | Refactors need narrow scope (rule ⑥) + their own discipline. Hand off, don't absorb |
+| "I'll just run the refactor too while I'm here" | Refactors need narrow scope (rule ④) + their own discipline. Hand off, don't absorb |
 | "Skip the user-review gates to save time" | Doctor's value IS the gating. Without gates it becomes "agent does whatever it thinks best" — opaque |
 | "Re-implement audit logic instead of calling the sibling's protocol" | Duplication — when audit changes, doctor goes stale. Defer to sibling protocols |
 | "Auto-commit each step" | Per project's git discipline — don't commit unless explicitly asked |

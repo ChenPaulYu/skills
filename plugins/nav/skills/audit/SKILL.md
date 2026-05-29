@@ -5,7 +5,7 @@ description: Audit any codebase against deep-module / progressive-disclosure pri
 
 # Deep-module audit
 
-Honestly assess any codebase against 11 deep-module principles, then report what's working, what's drifting, what's broken, and where the agent itself struggled to describe a module — that struggle is a first-class signal of failed abstraction.
+Honestly assess any codebase against 8 deep-module principles, then report what's working, what's drifting, what's broken, and where the agent itself struggled to describe a module — that struggle is a first-class signal of failed abstraction.
 
 ## Why this skill exists
 
@@ -13,10 +13,10 @@ Most "code review" focuses on bugs. This audit focuses on **shape** — does the
 
 ## Scope
 
-**The 11 rules are language-agnostic.** This audit works on any codebase. It has a **universal core** of checks that applies everywhere, plus **stack-specific heuristics** that activate when a known stack is detected.
+**The 8 rules are language-agnostic.** This audit works on any codebase. It has a **universal core** of checks that applies everywhere, plus **stack-specific heuristics** that activate when a known stack is detected.
 
 **Universal checks** (run on every codebase):
-- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · rule ⑪ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
+- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
 
 **Stack-specific heuristics** (added when stack is detected):
 - **TS/React** (detect: `package.json` mentions `react`): `useState`/`useRef` counts, JSX render span, component prop counts
@@ -50,19 +50,16 @@ The mechanical + heuristic checks below are identical in both modes — only the
 
 > **Want the full workflow?** Mode 2 stops at the gap-analysis report. If the user wants to also clarify the ambiguities the spec leaves open AND produce a durable plan artifact, redirect to `/nav:plan` — it inlines Mode 2's Stage 1 and then continues with dialog + plan-file output. (`/nav:plan` will reuse Mode 2's output if you just ran it in this session — see ADR-006.)
 
-## The 11 rules (the audit IS these rules)
+## The 8 rules (the audit IS these rules)
 
-1. **Good interfaces** — Low-level modules expose an interface you can use without reading the body.
-2. **Progressive disclosure** — An index/doc surfaces the interface; you drill in only as needed.
-3. **No hidden params** — Functions are deterministic; deps are explicit, not ambient.
-4. **Future-ready foundation** — The base supports planned features before they ship (e.g. banked v2 fields not wired yet but reserving shape).
-5. **No giants** — No single mega-module or mega-function. A 700-line render counts as a giant.
-6. **No needless abstraction** — If it needn't be modular, don't modularise it. **Rules ⑤ ↔ ⑥ are deliberate tension — you're balancing them.**
-7. **Fit the framework** — Idiomatic patterns (React: custom hooks; pass a store/hook object as one prop instead of 20 loose props).
-8. **Rearrange, don't rewrite** — Refactor = verbatim move + rewire. Behaviour stays identical.
-9. **Below 90% confidence → ask** — When unsure about scope/boundaries/intent, stop and clarify.
-10. **Group + expose via one door** — Subsystems expose their public API through a barrel/facade (`index.ts`).
-11. **Agent-navigability is the audit** — *This skill IS this rule in action.* When you (the agent) try to write a one-sentence description of each load-bearing file, the difficulty of that act is the deep-module test. Failure cues: must enumerate, must footnote, must guess, must list > 6 imports as "Reads:".
+1. **Deep modules** — A simple interface hiding significant complexity; usable without reading the body. Prefer general-purpose foundations over premature special-casing.
+2. **Interface-first at every scale** — One door, surfaced progressively: a module's interface, a subsystem's barrel/facade (`index.ts`), the whole codebase's index/map. Drill in only as needed.
+3. **Explicit dependencies** — Functions are deterministic; deps are explicit, not ambient.
+4. **Right grain — neither giant nor fragmented** — No single mega-module or mega-function (a 700-line render counts), **and** no needless abstraction (don't modularise what needn't be). **The giant↔fragment tension is the balance you're auditing.**
+5. **Fit the framework** — Idiomatic patterns (React: custom hooks; pass a store/hook object as one prop instead of 20 loose props).
+6. **Rearrange, don't rewrite** — Refactor = verbatim move + rewire. Behaviour stays identical.
+7. **Below 90% confidence → ask** — When unsure about scope/boundaries/intent, stop and clarify.
+8. **Agent-navigability is the audit** — *This skill IS this rule in action.* When you (the agent) try to write a one-sentence description of each load-bearing file, the difficulty of that act is the deep-module test. Failure cues: must enumerate, must footnote, must guess, must list > 6 imports as "Reads:".
 
 ## Audit process
 
@@ -105,32 +102,32 @@ For each domain leader and every file > 100 LOC:
 
 | Check | Threshold | Rule |
 |---|---|---|
-| File LOC | > 500 = "giant"; > 700 = "severe giant" | ⑤ |
-| Largest function | > 100 LOC = suspect | ⑤ |
-| Imports per file | > 20 distinct imports = wide surface | ⑦ |
-| Dead modules | File with 0 inbound imports (excluding entry points + barrels) | ⑥ |
-| Barrels | Each subdirectory with ≥ 3 files: has an `index.<ext>` or equivalent re-export? | ⑩ |
-| Cross-domain edges | Map imports between top-level folders; flag layer violations | ⑦ |
+| File LOC | > 500 = "giant"; > 700 = "severe giant" | ④ |
+| Largest function | > 100 LOC = suspect | ④ |
+| Imports per file | > 20 distinct imports = wide surface | ⑤ |
+| Dead modules | File with 0 inbound imports (excluding entry points + barrels) | ④ |
+| Barrels | Each subdirectory with ≥ 3 files: has an `index.<ext>` or equivalent re-export? | ② |
+| Cross-domain edges | Map imports between top-level folders; flag layer violations | ⑤ |
 
 **TS/React specific (only if React detected):**
 
 | Check | Threshold | Rule |
 |---|---|---|
-| Component density | > 5 `useState` + > 5 `useRef` + > 30 inner functions = god component | ⑤ + ⑦ |
-| Render JSX size | > 300 lines inside the top `return (` of a component = giant render | ⑤ |
+| Component density | > 5 `useState` + > 5 `useRef` + > 30 inner functions = god component | ④ + ⑤ |
+| Render JSX size | > 300 lines inside the top `return (` of a component = giant render | ④ |
 
 **Python specific (only if Python detected):**
 
 | Check | Threshold | Rule |
 |---|---|---|
-| Class methods | > 20 methods on one class = god class | ⑤ |
+| Class methods | > 20 methods on one class = god class | ④ |
 | Missing module docstrings | Load-bearing module without `"""..."""` at top | ① |
 
 **Go / Rust / others**: apply your judgment using the universal checks + the language's idiomatic giants (e.g. Go: huge `init()` blocks, package-level cycles; Rust: trait impls > 500 LOC, `lib.rs` exporting everything flat).
 
 Use grep + find + a small dependency walk. Don't write fragile AST parsers; rough numbers are enough.
 
-### Step 4 — Heuristic check (rule ⑪) — agent self-eval
+### Step 4 — Heuristic check (rule ⑧) — agent self-eval
 
 **This is the most important step. The skill exists for this.**
 
@@ -143,7 +140,7 @@ For every load-bearing file (= every domain leader + every file ≥ 150 LOC + ev
    - Had to enumerate multiple distinct responsibilities
    - Had to mention an "exception" or "footnote"
    - Had to **guess** because top-of-file didn't reveal purpose (rule ① broken)
-   - Had to list > 6 imports (dependency sprawl, rule ⑦)
+   - Had to list > 6 imports (dependency sprawl, rule ⑤)
    - Wrote > 3 sentences before feeling complete
 4. Each struggle → record it with the specific cue.
 
@@ -171,16 +168,16 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 - …
 
 ### ⚠ Drift / partial (worth fixing soon)
-- **rule ⑤** — `path/to/file.tsx` is <LOC> LOC; top-level return alone is ~<N> lines.
-- **rule ⑦** — `useStore.ts` exposes 10 hooks with 3 different mutation shapes; consider unifying.
+- **rule ④** — `path/to/file.tsx` is <LOC> LOC; top-level return alone is ~<N> lines.
+- **rule ⑤** — `useStore.ts` exposes 10 hooks with 3 different mutation shapes; consider unifying.
 - …
 
 ### ❌ Violations (high signal — fix or justify)
-- **rule ⑥** — `path/to/dead-module.tsx` is <LOC> LOC of dead code (0 inbound imports).
-- **rule ⑦** — `ToastProvider` makes the state layer import a ui primitive (Toast) — layer violation.
+- **rule ④** — `path/to/dead-module.tsx` is <LOC> LOC of dead code (0 inbound imports).
+- **rule ⑤** — `ToastProvider` makes the state layer import a ui primitive (Toast) — layer violation.
 - …
 
-### Self-eval (rule ⑪) — where I struggled to describe a file in one sentence
+### Self-eval (rule ⑧) — where I struggled to describe a file in one sentence
 - `<file>` — had to enumerate <N> distinct responsibilities.
 - `<file>` — top-of-file revealed no purpose; I had to read the body to guess.
 - …
@@ -191,7 +188,7 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 2. …
 
 ### Notes
-- This audit is read-only. To act on findings: invoke `/nav:refactor` (execute the moves), `/nav:map` (regenerate the map with an embedded audit block), or `/nav:headers` (fix files where rule ① / ⑪ failed).
+- This audit is read-only. To act on findings: invoke `/nav:refactor` (execute the moves), `/nav:map` (regenerate the map with an embedded audit block), or `/nav:headers` (fix files where rule ① / ⑧ failed).
 - For Mode 2 specifically: if you want clarify-and-plan after the gap analysis (not just stop), invoke `/nav:plan` — it reuses this audit's output if it ran in the same session.
 - The audit covers shape, not bug correctness. Run tests for the latter.
 ```
@@ -200,13 +197,13 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 
 - **Honesty over flattery.** If a finding is real, name it. If you can't tell, say "uncertain" rather than picking a side.
 - **Cite evidence.** Every finding gets a file path. No abstract claims.
-- **Distinguish fact from judgment.** Use ✓ / ⚠ / ❌ for graded items; "self-eval" header for rule ⑪ subjective struggle. Don't pretend judgment is fact.
+- **Distinguish fact from judgment.** Use ✓ / ⚠ / ❌ for graded items; "self-eval" header for rule ⑧ subjective struggle. Don't pretend judgment is fact.
 - **Don't write or modify files.** This is pure read + report. Point the user at sibling skills for action.
-- **Rule ⑨ applies to YOU running this audit.** If a finding is below 90% confidence, mark it `(uncertain)` rather than asserting it.
+- **Rule ⑦ applies to YOU running this audit.** If a finding is below 90% confidence, mark it `(uncertain)` rather than asserting it.
 
 ## Frequently misjudged
 
-- A **300-line component** is not automatically a giant — if it's a leaf view rendering a complex form, that may be the right shape (rule ⑥).
-- A **wide-surface store** (20-member object) is fine *if it's a store*; the wide surface lets gesture hooks take it as one prop and stay narrow (rule ⑦). Stores are a deliberate exception to rule ①.
-- A **single-renderer facade** (one impl behind an `index.ts`) is still valuable — the door is the value, not the count of implementations (rule ⑩).
+- A **300-line component** is not automatically a giant — if it's a leaf view rendering a complex form, that may be the right shape (rule ④).
+- A **wide-surface store** (20-member object) is fine *if it's a store*; the wide surface lets gesture hooks take it as one prop and stay narrow (rule ⑤). Stores are a deliberate exception to rule ①.
+- A **single-renderer facade** (one impl behind an `index.ts`) is still valuable — the door is the value, not the count of implementations (rule ②).
 - An **old module imported once** is not dead. "Dead" = zero inbound imports (excluding tests + entry point).
