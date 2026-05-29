@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-28 (rev 4)
+  Last audit: 2026-05-29 (rev 5)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -16,10 +16,19 @@
       (folders + frontmatter name match in plugins/nav/skills/*/SKILL.md)
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 7 ADRs in docs/adr/ — 001..007 with cross-supersede / refine links
+    • 8 ADRs in docs/adr/ — 001..008 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 4)
+  ⚠ FIXED in this revision (rev 5)
+    1. Bracketed the sub-agent hand-off with inject↔check (ADR-008):
+       /nav:plan Stage 4, /nav:refactor Step 8, /nav:doctor Step 7 now
+       inject the skill's in-session grounding (+ N+1 trigger) into the
+       sub-agent prompt and run a deep-module integration pass on the
+       returned diff before accepting "done". Added the "N+1 trigger" +
+       "inject↔check" conventions to plugins/nav/CLAUDE.md and a CONV row
+       here. No new NAV_NODES / NAV_EDGES — behaviour inside existing skills.
+
+  ⚠ FIXED in rev 4 (kept for history)
     1. Added "offer-next-action" pattern to the 3 meta-skills (ADR-007):
        /nav:plan gets a new Stage 4, /nav:refactor a new Step 8,
        /nav:doctor a new Step 7. Each ends with AskUserQuestion offering
@@ -480,6 +489,8 @@ const CONV = [
   {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill embeds the 11 rules verbatim. No shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 內嵌 11 規則。SKILL.md 之間不互引。ADR-001 #3。'}},
   {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-004.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-004。'}},
   {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (headers, map, refactor, doctor) shows the change before applying.', zh:'任何會改檔的 skill(headers、map、refactor、doctor)套用前先示差異。'}},
+  {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-008.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-008。'}},
+  {label:{en:'N+1 trigger', zh:'N+1 觸發'}, desc:{en:'First consumer of an inline util = inline OK; second consumer = extract a primitive (don\'t copy). Corollary of rules ⑥ + ⑩.', zh:'inline util 的第一個 consumer = inline OK;第二個 consumer = 抽 primitive(別複製)。規則 ⑥ + ⑩ 的推論。'}},
   {label:{en:'Stale = lie', zh:'過時 = 謊言'}, desc:{en:'When you add/rename/remove a skill, plugin, or ADR, update this map + its audit block in the same commit.', zh:'新增/改名/移除 skill、plugin、ADR 時,同 commit 更新此圖與 audit block。'}},
 ];
 

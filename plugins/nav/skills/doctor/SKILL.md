@@ -122,7 +122,7 @@ After Step 6's report, present next-action options via `AskUserQuestion`. Doctor
 
 | # | Option | When shown | What happens if picked |
 |---|---|---|---|
-| 1 | Launch sub-agent for the first `/nav:refactor` recommendation *(Recommended)* | Structural recommendations is non-empty | Invoke `Agent` with `subagent_type=general-purpose`. Pass: the specific refactor target (file + the recommended move from Step 6's report), instruction to follow `/nav:refactor`'s full protocol (verbatim moves + test gates + browser pass). Sub-agent reports back when done. |
+| 1 | Launch sub-agent for the first `/nav:refactor` recommendation *(Recommended)* | Structural recommendations is non-empty | Invoke `Agent` with `subagent_type=general-purpose`. **Inject (→)** the specific refactor target (file + the recommended move from Step 6's report), instruction to follow `/nav:refactor`'s full protocol (verbatim moves + test gates + browser pass), **and the grounding doctor already holds** — the relevant slice of the audit findings + the map it just built (domain roles, seams, existing impls), plus the **N+1 trigger** so the move doesn't spawn a parallel util. **Check (←)** when it reports back, before accepting "done": run a deep-module pass on the diff — same-domain parallel impl, bypassed barrel/facade, header hygiene. STOP if any fails. See [ADR-008](docs/adr/008-inject-check-at-handoff.md). |
 | 2 | Commit the headers + map changes on a new branch | Headers and/or map were modified this session | Branch off current HEAD if on default branch, stage the doctor's modifications, commit with a message summarising what was fixed. Confirm message before committing. |
 | 3 | Done — I'll handle from here | Always | Skill ends. |
 
@@ -138,6 +138,7 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 
 - **Pause at every gate.** Doctor doesn't barrel through. Each step ends with "do you want me to proceed?"
 - **Don't auto-refactor.** Even if the audit found an obvious win, refactors get their own session via `/nav:refactor`. The doctor lays the groundwork (headers, map) so the next refactor session is set up to succeed. Step 7 makes the first refactor a one-click sub-agent invocation — clean context = effective separate session.
+- **Bracket the refactor hand-off: inject the audit/map grounding in, check integration out.** Doctor just produced the richest grounding of any meta-skill (fresh audit + fresh map) — inject the relevant slice so the refactor sub-agent doesn't re-derive (and miss) it, and run a deep-module pass on the returned diff before accepting "done". See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 - **Don't duplicate sibling skills' protocols.** When entering each step, defer to the sibling's discipline. If a step needs to change, change the sibling skill — not this orchestrator.
 - **Stay honest about what was fixed vs deferred.** Final report is a clean ledger of this session — not a victory lap. The deferred and recommended items must show up explicitly.
 - **Rule ⑨ applies.** Below 90% confidence on any plan item → ask the user before including/excluding it.

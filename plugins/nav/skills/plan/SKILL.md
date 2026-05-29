@@ -139,7 +139,7 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 
 | # | Option | What happens if picked |
 |---|---|---|
-| 1 | Launch sub-agent to execute step 1 *(Recommended)* | Invoke `Agent` with `subagent_type=general-purpose`. Pass: the plan file path, step 1's scope, the verification expectation from Stage 3's Verification table. If step 1 is structurally a refactor, instruct the sub-agent to follow `/nav:refactor`'s discipline (verbatim move + test gate). Sub-agent reports back when done. |
+| 1 | Launch sub-agent to execute step 1 *(Recommended)* | Invoke `Agent` with `subagent_type=general-purpose`. **Inject (→)** what a fresh sub-agent can't re-derive: the plan file path, step 1's scope, the verification expectation from Stage 3's Verification table, **plus the grounding Stage 1 already produced** — the Critical files + their roles, any existing impl/seam the step should *reuse rather than re-add* ("`fillPath` already lives in `svg.tsx` — import it, don't rewrite it"), and the **N+1 trigger** (second consumer of an inline util = extract a primitive, don't copy). If step 1 is structurally a refactor, instruct the sub-agent to follow `/nav:refactor`'s discipline (verbatim move + test gate). **Check (←)** when it reports back, *before* accepting "done": read the diff and run the integration pass — same-domain grep for a parallel impl, seam/facade rules read at intent (not over-read into a wall), header hygiene (new load-bearing file has a header; changed role updated same-commit). STOP if any fails. See [ADR-008](docs/adr/008-inject-check-at-handoff.md). |
 | 2 | Execute step 1 in this session | Continue inline in the current session. The user sees each move; review gates remain manual. |
 | 3 | Save plan only — I'll come back later | Skill ends. The plan file is the artifact. |
 
@@ -165,6 +165,7 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 - **The plan is an artifact, not a chat.** A plan that lives only in the conversation is gone next session. Write the file.
 - **Confirm location before writing.** Repos have conventions; respect them. Ask once, then proceed.
 - **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the sub-agent option provides the context separation. Rule ⑨ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
+- **Bracket the sub-agent hand-off: inject grounding in, check integration out.** A fresh sub-agent is tactical — it sees only its slice, so it won't grep the domain for an existing home and it reads project rules literally. Stage 1 already did the grounding the sub-agent lacks; inject it into the prompt, and run a deep-module integration pass on the returned diff before accepting "done". The feature is the sub-agent's job; clean integration is the parent's. See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 - **Honest about uncertainty.** If Stage 1 had to guess at a file's role, say so in the Context. If Stage 2 left a question open, list it. The plan's value is grounded honesty, not false confidence.
 
 ## Anti-patterns (refuse these)

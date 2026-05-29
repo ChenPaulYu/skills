@@ -133,7 +133,7 @@ After Step 7's report, present next-action options via `AskUserQuestion`. The di
 | # | Option | What happens if picked |
 |---|---|---|
 | 1 | Commit on a new branch and open a draft PR *(Recommended if on default branch)* | Branch off current HEAD, stage the refactor diff, commit with a message summarising the move (LOC delta + files changed), push, run `gh pr create --draft`. Confirm the commit message before committing. |
-| 2 | Launch sub-agent for a follow-up "improve" session on the extracted module | Invoke `Agent` with `subagent_type=general-purpose`. Pass: the newly extracted file path(s), the discipline that this is the *improve* phase (the verbatim move already landed and is verified), and any simplifications noticed during the move that were deliberately deferred. Sub-agent works in clean context — enforces the move/improve separation at the architecture level. |
+| 2 | Launch sub-agent for a follow-up "improve" session on the extracted module | Invoke `Agent` with `subagent_type=general-purpose`. **Inject (→)** the newly extracted file path(s), the discipline that this is the *improve* phase (the verbatim move already landed and is verified), any simplifications noticed during the move that were deliberately deferred, **and the surrounding seam** — what the module exposes, who consumes it, and the **N+1 trigger** so the improve pass extracts a shared primitive instead of adding a parallel one. Sub-agent works in clean context — enforces the move/improve separation at the architecture level. **Check (←)** before accepting "done": read its diff for a parallel impl in the same domain, a bypassed barrel/facade, or a stale/missing header. STOP if any fails. See [ADR-008](docs/adr/008-inject-check-at-handoff.md). |
 | 3 | Done — I'll handle from here | Skill ends. |
 
 **Skip Step 8 if**:
@@ -163,6 +163,7 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 - **Rule ⑨ applies during the refactor.** If a step's correctness is below 90% confidence, **stop and clarify with the user** rather than improvising.
 - **Don't commit unless asked.** Show the diff; let the user decide when to land. (Step 8 makes "commit + open PR" a one-click option — that *is* asking.)
 - **DO offer next action (Step 8).** Suggesting the next command in chat text leaves discoverability friction on the table. Stage the option as an `AskUserQuestion`; one click > one typed command. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
+- **Bracket the improve hand-off: inject the seam in, check integration out.** A fresh improve sub-agent doesn't know who consumes the extracted module — inject the seam so it doesn't add a parallel impl, and run a deep-module pass on its diff before accepting "done". See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 
 ## When to stop and escalate to the user
 
