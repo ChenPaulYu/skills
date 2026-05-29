@@ -26,7 +26,7 @@ Grouped by verb (mirrors `nav`'s family shape):
 - **project** — render the current plan:
   - `align` — read `thoughts/` + real state → decide now/next/later *with the user* → write `plan.md` (agent) + regenerate `overview.html` (human). The pre-build mirror of `/nav:map`. *(built)*
 - **reconcile** — keep the archive honest:
-  - `reconcile` — judge which `thoughts/` docs have drifted (code/headers · self-declaration · date) → **amend** a stale *fact* in place, or **prune/consolidate** a wholly-stale doc, *with the user*, write-gated. Amend syncs only what built code shows; a *decision*-change is out of scope → it recommends `/shape:elicit` and says so (the active form of "no new decisions during render"). The pre-build mirror of `/nav:audit` + careful `/nav:refactor`. *(built; amend in ADR-014)*
+  - `reconcile` — judge which `thoughts/` **and `plans/`** docs have drifted (code/headers · self-declaration · date) → **amend** a stale *fact* in place, or **prune/consolidate** a wholly-stale doc, *with the user*, write-gated. Amend syncs only what built code shows; a *decision*-change is out of scope → it recommends `/shape:elicit` and says so (the active form of "no new decisions during render"). The pre-build mirror of `/nav:audit` + careful `/nav:refactor`. *(built; amend in ADR-014; maintains `plans/` per ADR-017)*
 - **build** — make it real:
   - `build` — drive the plan's In-progress column to done: per item, ground via `/nav:plan` → implement with `/nav:refactor` discipline + inject↔check → verify (browser screenshot vs the item's mockup; or test-gate) → move to Shipped → `/shape:align`. Autonomous but **confidence-gated** (stop below 90%). A meta-skill (orchestrates siblings, never re-implements/calls them). The cross-plugin orchestrator. *(built)*
 - **`blueprints/` = convention**, not a skill — the artifact container the verbs read/write. Layout + `plan.md` shape + `overview.html` contract + the two-renders pipeline live in [`skills/align/references/blueprints-spec.md`](plugins/shape/skills/align/references/blueprints-spec.md).
@@ -42,8 +42,8 @@ shape is the forward-motion half; `nav` is the maintenance half. The dependency 
 
 Record the seams; don't blur them:
 
-1. **`blueprints/` is the hand-off artifact to `/nav:plan`.** shape converges intent into blueprints; `nav:plan` grounds a thought/spec into a code-level implementation plan. `align` triages forward; `nav:plan` grounds one item down — adjacent verbs, not overlapping.
-2. **`reconcile` consumes `/nav:headers`.** `head -12` file headers make "is this implemented?" answerable cheaply — the strongest staleness signal.
+1. **`blueprints/` is the hand-off artifact to `/nav:plan` — both directions.** shape converges intent into blueprints; `nav:plan` grounds a thought/spec into a code-level implementation plan **and writes it back into `blueprints/plans/`** when the tree is present (soft `nav → shape` preference, ADR-017). `align` triages forward; `nav:plan` grounds one item down — adjacent verbs, not overlapping. The grounded plan stays co-located so the whole arc (decision → status → grounded-how) lives in one tree.
+2. **`reconcile` consumes `/nav:headers`, and maintains `plans/`.** `head -12` file headers make "is this implemented?" answerable cheaply — the strongest staleness signal. reconcile keeps **both `thoughts/` and `plans/`** current (a plan whose steps all shipped is stale like an implemented thought).
 3. **`build` is the concentrated seam.** It *controls* the loop (lives in shape, forward-motion) while *calling* nav's code-side protocols per item: `/nav:plan` (ground) → `/nav:refactor` discipline (implement) → `/nav:headers` (cheap grounding for inject), then writes back via `/shape:align`. Direction stays one-way: shape → nav.
 
 ## Conventions for skills inside this plugin

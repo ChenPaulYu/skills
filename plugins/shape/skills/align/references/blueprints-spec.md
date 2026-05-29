@@ -13,12 +13,16 @@ A description floats; a real artifact is decidable. blueprints is the standing v
 ```
 blueprints/
   thoughts/          ← committed. one .md per converged design decision (agent-facing, may be dense).
+  plans/             ← committed. one .md per grounded code-level plan from nav:plan (the build-side render of a thought).
   mockups/           ← git-ignored. disposable interactive HTML from shape:mockup.
   plan.md            ← committed. the lean status index (agent-facing).
   overview.html      ← committed. the human-facing projection of plan.md (click-to-reveal, bilingual).
 ```
 
+> **`plan.md` (singular) vs `plans/` (plural)** are different things, deliberately: `plan.md` is align's lean *status index* (now/next/later); `plans/` holds nav:plan's *grounded implementation plans* (one per item, Context · Approach · Critical files · Verification). Intent → status → grounded-how.
+
 - **`thoughts/`** — the design layer. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these — they read `overview.html`, whose detail panels distil the thoughts into plain language.
+- **`plans/`** — the grounding layer (owned by `nav:plan`). Each file = one item grounded into a code-level implementation plan, dated `YYYY-MM-DD-<slug>.md`. It's the build-side render of a thought; lives here so the whole arc (decision → status → grounded-how) stays in one tree. `shape:reconcile` keeps these current alongside `thoughts/` (a plan whose steps all shipped is stale, same as an implemented thought).
 - **`mockups/`** — disposable visual-decision scaffold (owned by `shape:mockup`). git-ignored: artifacts are decision-scaffold, not source. A committed thought may *reference* a mockup path as its visual record.
 - **`plan.md`** — what to do, grouped by status. The agent's index. Lean: only "what + which thought", no prose essays.
 - **`overview.html`** — the same plan, rendered for a human to scan and click. Generated from the template; reflects current reality.
@@ -94,5 +98,5 @@ The number of files is the weight knob. A tiny effort may have a single `thought
 
 blueprints is pre-build (intent side); `nav` is build / post-build (code side). They meet at two points — record both, don't blur them:
 
-1. **`blueprints/` is the hand-off artifact to `nav:plan`.** shape converges intent into blueprints; `nav:plan` consumes a thought/spec and grounds it into a code-level implementation plan. shape ends at "decided + recorded"; nav begins at "now build it against the code".
-2. **`shape:reconcile` consumes `nav:headers` output.** Deciding whether a thought is already implemented is far cheaper when load-bearing files carry `head -12` headers — that's exactly the signal reconcile reads to judge "shipped → stale".
+1. **`blueprints/` is the hand-off artifact to `nav:plan` — both directions.** *In:* `nav:plan` consumes a thought/spec and grounds it. *Out:* when a `blueprints/` tree is present, `nav:plan` writes its grounded plan **back into `blueprints/plans/`** (soft `nav → shape` preference, ADR-017), so the whole arc stays co-located. shape ends at "decided + recorded"; nav begins at "now build it against the code" — and the grounded plan lands back in the same tree.
+2. **`shape:reconcile` consumes `nav:headers` output, and maintains `plans/` too.** Deciding whether a thought *or a grounded plan* is already implemented is far cheaper when load-bearing files carry `head -12` headers — exactly the signal reconcile reads to judge "shipped → stale". reconcile walks `thoughts/` **and** `plans/`; a plan whose steps all shipped is retired/amended like an implemented thought.

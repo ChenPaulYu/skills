@@ -1,11 +1,11 @@
 ---
 name: reconcile
-description: Reconcile the design notes with reality — scan a blueprints/thoughts/ tree, judge which docs have drifted (already implemented, self-declared done, superseded, or carrying a stale fact), then reconcile them *with the user* — AMEND a doc's factual drift in place, or PRUNE / CONSOLIDATE a doc that's wholly stale. Fires when the user asks to "check for outdated thoughts / docs", "which design notes are stale", "clean up the blueprints", "are these docs still current", "fix the outdated info in these notes", "prune the old specs", "consolidate these notes", or after a batch of work ships and the design docs have drifted from the code. Also invokable as /shape:reconcile. AMEND only syncs evidence-backed facts (code moved past what the doc claims) — it never rewrites a *decision*; when the design itself changed, that's a new decision out of scope, so reconcile recommends /shape:elicit and says so rather than authoring it. The check is read-only; any amend/prune/merge is write-gated and confirmed per-file. Pairs with /nav:headers (reads file headers to tell what's implemented). Language- and framework-agnostic.
+description: Reconcile the design notes with reality — scan a blueprints/ tree (both thoughts/ AND plans/), judge which docs have drifted (already implemented, self-declared done, superseded, or carrying a stale fact), then reconcile them *with the user* — AMEND a doc's factual drift in place, or PRUNE / CONSOLIDATE a doc that's wholly stale. Maintains both layers: converged thoughts/ AND nav:plan's grounded plans/ (a plan whose steps all shipped is stale like an implemented thought). Fires when the user asks to "check for outdated thoughts / docs", "which design notes are stale", "clean up the blueprints", "tidy the plans", "are these docs still current", "fix the outdated info in these notes", "prune the old specs", "consolidate these notes", or after a batch of work ships and the design docs or plans have drifted from the code. Also invokable as /shape:reconcile. AMEND only syncs evidence-backed facts (code moved past what the doc claims) — it never rewrites a *decision*; when the design itself changed, that's a new decision out of scope, so reconcile recommends /shape:elicit and says so rather than authoring it. The check is read-only; any amend/prune/merge is write-gated and confirmed per-file. Pairs with /nav:headers (reads file headers to tell what's implemented). Language- and framework-agnostic.
 ---
 
 # Reconcile — make the notes match reality
 
-Design notes accrete; reality moves past them. `reconcile` walks `blueprints/thoughts/`, decides honestly which docs have drifted, and — *with the user* — **amends** a doc's stale facts in place, or **prunes / consolidates** a doc that's wholly stale, so the tree stays a true picture of what's still open. The **check is read-only**; **every write is gated** behind per-file confirmation, because overwriting or deleting someone's design record is irreversible.
+Design notes and plans accrete; reality moves past them. `reconcile` walks `blueprints/thoughts/` **and `blueprints/plans/`**, decides honestly which docs have drifted, and — *with the user* — **amends** a doc's stale facts in place, or **prunes / consolidates** a doc that's wholly stale, so the tree stays a true picture of what's still open. The **check is read-only**; **every write is gated** behind per-file confirmation, because overwriting or deleting someone's design record is irreversible.
 
 Staleness isn't binary. A doc can be 90% live design with one line reality overtook — killing the whole doc loses the live 90%, keeping it lets the stale line lie. **`amend`** is the action for that middle case: correct the drifted *fact*, leave the rest verbatim. The line it must not cross: amend syncs what's *true* (evidenced by built code); it never re-decides what's *decided* — see "The amend boundary" below.
 
@@ -35,7 +35,9 @@ Combine into a per-doc verdict: **current** · **current · N stale fact(s)** (�
 
 ### Step 1 — Inventory the tree
 
-Locate `blueprints/` (commonly `docs/blueprints/`). List `thoughts/*.md`. Detect the stack so the code-grep in Step 2 uses the right import/usage syntax.
+Locate `blueprints/` (commonly `docs/blueprints/`). List **both `thoughts/*.md` and `plans/*.md`** — reconcile maintains both layers. (`thoughts/` = converged decisions; `plans/` = `nav:plan`'s grounded code-plans.) Detect the stack so the code-grep in Step 2 uses the right import/usage syntax.
+
+> **Plans drift too — and check sharper.** A grounded plan in `plans/` carries explicit steps + a Verification table, so "is this done?" is unusually answerable: grep each step's Critical-files against the code. A plan whose steps all shipped is stale exactly like an implemented thought → retire (prune) or, if only *some* steps shipped, **amend** (mark which landed). Same verdicts, same gates, same fact-vs-decision boundary as for thoughts.
 
 ### Step 2 — Gather evidence (read-only)
 
@@ -96,7 +98,7 @@ reconcile's currency check **consumes `/nav:headers`**: load-bearing files carry
 ## Output
 
 - A per-doc currency report: verdict + evidence + proposed action (keep · amend · prune · consolidate).
-- (On confirmation) a reconciled `thoughts/` tree — stale facts amended in place, wholly-stale docs pruned/consolidated, all under the safety rules.
+- (On confirmation) a reconciled `thoughts/` **and `plans/`** tree — stale facts amended in place, wholly-stale docs/plans pruned/consolidated, all under the safety rules.
 - For any decision-change found: a recommendation to converge it in `/shape:elicit` (not rewritten here).
 - A pointer to run `/shape:align` to re-sync the renders.
 
@@ -104,5 +106,6 @@ reconcile's currency check **consumes `/nav:headers`**: load-bearing files carry
 
 - **`/shape:align`** — re-render `plan.md` + `overview.html` after the tree is trimmed.
 - **`/shape:elicit`** — where new `thoughts/` docs come from (the inputs reconcile audits).
+- **`/nav:plan`** — where `plans/` docs come from (the grounded code-plans reconcile also keeps current).
 - **`/nav:headers`** — add `head -12` file headers so reconcile can read implementation status cheaply.
 - **`/nav:audit`** — the code-side analog: assess code shape (reconcile assesses doc currency).

@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Turn a spec / feature description into a codebase-grounded plan. Three stages — (1) GROUND by auditing the spec-touched domains (reusing prior /nav:audit output if it ran earlier in this session); (2) CLARIFY ambiguity with the user via 3-5 targeted questions; (3) write a structured plan ARTIFACT (Context · Approach · Critical files · Verification). Use whenever the user has a spec, feature description, or change intent and asks "plan how to build X", "make a plan for this spec", "what's the approach for Y", "scope this feature against the codebase", or hands over a spec file. Read-mostly — only writes the final plan file, with the user's location consent. Companion to /nav:audit (Mode 2 is the read-only quick check; this skill is the full workflow).
+description: Turn a spec / feature description into a codebase-grounded plan. Three stages — (1) GROUND by auditing the spec-touched domains (reusing prior /nav:audit output if it ran earlier in this session); (2) CLARIFY ambiguity with the user via 3-5 targeted questions; (3) write a structured plan ARTIFACT (Context · Approach · Critical files · Verification). Use whenever the user has a spec, feature description, or change intent and asks "plan how to build X", "make a plan for this spec", "what's the approach for Y", "scope this feature against the codebase", or hands over a spec file. Read-mostly — only writes the final plan file, with the user's location consent (prefers a blueprints/plans/ home when a blueprints/ tree is present, else docs/plans/). Companion to /nav:audit (Mode 2 is the read-only quick check; this skill is the full workflow).
 ---
 
 # Plan
@@ -73,7 +73,11 @@ If you can answer everything from Stage 1 (rare), skip Stage 2 but say so in the
 
 ### Stage 3 — Plan (write the artifact)
 
-**Confirm output location first** — don't write blind. Default location: `docs/plans/<YYYY-MM-DD>-<short-slug>.md`. If the repo has an obvious existing convention (e.g. `docs/specs/`, `docs/superpowers/plans/`), prefer that; ask once if unclear.
+**Confirm output location first** — don't write blind.
+- **If the repo has a `blueprints/` tree** (the shape convention; commonly `docs/blueprints/`), default to **`blueprints/plans/<YYYY-MM-DD>-<short-slug>.md`** — co-locating the grounded plan with the intent it came from (`thoughts/` · `plan.md` · `overview.html`), so the whole arc (decision → status → grounded plan) lives in one tree. Create `blueprints/plans/` if absent.
+- **Otherwise**, default to `docs/plans/<YYYY-MM-DD>-<short-slug>.md`. If the repo has another obvious convention (e.g. `docs/specs/`), prefer that; ask once if unclear.
+
+This is a **soft** preference — `nav` never *requires* `blueprints/` (it runs fully standalone); it just prefers that home when the tree is present, per the soft `nav → shape` rule (ADR-012/017).
 
 **Plan template** (markdown):
 
@@ -166,7 +170,7 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 - **Scan transcript first.** Stage 1 starts by checking whether audit just ran. Re-running grep when context already has the answer wastes the user's time and tokens.
 - **Ask only high-signal clarifying questions.** A spec dump back at the user is noise; 3-5 surgical questions are signal. Stage 2 is rule ⑦ in workflow form.
 - **The plan is an artifact, not a chat.** A plan that lives only in the conversation is gone next session. Write the file.
-- **Confirm location before writing.** Repos have conventions; respect them. Ask once, then proceed.
+- **Confirm location before writing.** Repos have conventions; respect them. Prefer a `blueprints/plans/` home when a `blueprints/` tree is present (soft `nav → shape`; ADR-017), else `docs/plans/`. Ask once, then proceed.
 - **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the sub-agent option provides the context separation. Rule ⑦ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 - **Bracket the sub-agent hand-off: inject grounding in, check integration out.** A fresh sub-agent is tactical — it sees only its slice, so it won't grep the domain for an existing home and it reads project rules literally. Stage 1 already did the grounding the sub-agent lacks; inject it into the prompt, and run a deep-module integration pass on the returned diff before accepting "done". The feature is the sub-agent's job; clean integration is the parent's. See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 - **Honest about uncertainty.** If Stage 1 had to guess at a file's role, say so in the Context. If Stage 2 left a question open, list it. The plan's value is grounded honesty, not false confidence.
