@@ -43,7 +43,7 @@ status: raw
 
 1. **Sub-agent 天生是 tactical 的**:Phase 3 sub-agent 拿到的 brief 是「蓋 MomentPreview 元件」。它**沒有 codebase-wide 視角**去問「`fillPath` 這個 utility 是不是已經有家?」 —— 看到要畫 waveform → 寫 `fillPath` → 收工。**Rule #11(agent-navigability)在 sub-agent 層級失靈**,因為 sub-agent 只能看自己被指派的那塊檔案,不會主動 grep 同 domain 既有 impl。
 
-2. **沒有 primitive seam → inline 變最省力路徑**:`fillPath` 在 Phase 3 之前是 `audio/renderers/svg.tsx` 的**內部 function**(沒 export);audio domain 對外的 interface 只有 `<Waveform>` 這個 React component,但它綁了 WaveSurfer playback control + peaks bucket 數學。第二個 consumer(MomentPreview)想要「只要 pixels-from-peaks 的數學」,只能 (a) 把 thumbnail 概念 shove 進 `<Waveform>` facade(會違反 **rule #6 no needless abstraction**,因為要加 mode branching prop)、或 (b) copy 那 30 行(也違反 rule #6,DRY 方向)。**seam 還沒劃出來 → 形狀本身在推 copy-paste**。
+2. **沒有 primitive seam → inline 變最省力路徑**:`fillPath` 在 Phase 3 之前是 `audio/renderers/svg.tsx` 的**內部 function**(沒 export);audio domain 對外的 interface 只有 `<Waveform>` 這個 React component,但它綁了 WaveSurfer playback control + peaks bucket 數學。第二個 consumer MomentPreview 想要「只要 pixels-from-peaks 的數學」,只能 (a) 把 thumbnail 概念 shove 進 `<Waveform>` facade——加 mode branching prop,違反 **rule #6 no needless abstraction**——或 (b) copy 那 30 行,同樣違反 rule #6 的 DRY 方向。**seam 還沒劃出來 → 形狀本身在推 copy-paste**。
 
 3. **Facade 規則畫錯線了**:Crate 的 project-level CLAUDE.md 寫「app code 一律 import `Waveform` facade,不准直接 import WaveSurfer」。Sub-agent 字面執行 → 解讀成「audio domain 內部不可重用 → 那我自己畫」。但這條規則的**本意**是保護 playback 一致性(避免每個 consumer 自己接 WaveSurfer lifecycle),**不是**封死 pixel rendering 的 seam。**規則被 over-read**,從「保護 playback」變成「audio domain 不可重用」。
 

@@ -5,7 +5,7 @@ status: raw
 
 # `shape` —— 跟 `nav` 同級的未來 sibling plugin(charter / 保留名,尚未建)
 
-> 這是把今天一整串收斂(thought-mode · mockup-mode · pipeline · planning-with-files 比對 · Superpowers brainstorm 比對)收口的**家族 charter**。**plugin 尚未建** —— 這份只釘下「名字 + spine + 何時結晶 + 成員與狀態」。詳細各 skill 規格在被連結的 observation 裡。
+> 這是把今天一整串收斂——thought-mode · mockup-mode · pipeline · planning-with-files 比對 · Superpowers brainstorm 比對——收口的**家族 charter**。**plugin 尚未建** —— 這份只釘下「名字 + spine + 何時結晶 + 成員與狀態」。詳細各 skill 規格在被連結的 observation 裡。
 
 ## 名字:`shape`(跟 `nav` 同級)
 

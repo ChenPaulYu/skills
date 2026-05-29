@@ -25,7 +25,7 @@ Rejected: bare verbs (`audit`, `refactor`) — too generic when triggered out of
 
 Every skill embeds the 11 rules verbatim. No shared `_shared/` folder.
 
-**Why**: when Claude triggers a skill, only that `SKILL.md` is loaded. Reaching into siblings is unreliable. Cost = duplication (11 rules × N skills); benefit = robust standalone execution. Mitigated by "rules change → all SKILL.md update in same commit" (meta-rule in plugin CLAUDE.md, enforced by stale-header discipline).
+**Why**: when Claude triggers a skill, only that `SKILL.md` is loaded. Reaching into siblings is unreliable. Cost = duplication (11 rules × N skills); benefit = standalone execution that doesn't break. Mitigated by the "rules change → all SKILL.md update in same commit" meta-rule, enforced by stale-header discipline.
 
 ### 4. Initial scope: TypeScript / React
 

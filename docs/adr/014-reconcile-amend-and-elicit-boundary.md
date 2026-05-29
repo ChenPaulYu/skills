@@ -7,13 +7,13 @@
 
 ## Context
 
-`reconcile` shipped with three actions on a `thoughts/` doc treated as an atom: **keep** (still current), **prune** (wholly stale → delete), **consolidate** (superseded → merge into another). The user observed a real gap: staleness isn't binary. A doc can be 90% live design with **one line reality overtook** (e.g. "tags stored as a flat list" after the code moved to a typed entity). The atomic actions force a bad choice — keep the doc (the stale line keeps lying) or prune it (the live 90% is lost). The user asked whether reconcile should also *update* such docs, not only delete them.
+`reconcile` shipped with three actions on a `thoughts/` doc treated as an atom: **keep** (still current), **prune** (wholly stale → delete), **consolidate** (superseded → merge into another). The user observed a real gap: staleness isn't binary. A doc can be 90% live design with **one line reality overtook** (e.g. "tags stored as a flat list" after the code moved to a typed entity). The atomic actions force a bad choice: keep the doc and the stale line keeps lying, or prune it and lose the live 90%. The user asked whether reconcile should also *update* such docs, not only delete them.
 
 The risk: "update a doc" can quietly mean "rewrite a decision", which collides head-on with shape's invariant that **decisions are born in the converge verbs (`elicit` / `mockup`), never authored by the maintenance verbs (`align` / `reconcile`)**.
 
 ## Decision
 
-**1. Add a fourth action, `amend`** — correct a doc's stale *fact* in place (verbatim except the confirmed line), serving a new verdict **`current · N stale fact(s)`**. It inherits reconcile's write-gate (per-file confirm; show a one-line diff; check tracked/untracked first, because overwriting an untracked doc is as irreversible as deleting it).
+**1. Add a fourth action, `amend`** — correct a doc's stale *fact* in place (verbatim except the confirmed line), serving a new verdict **`current · N stale fact(s)`**. It inherits reconcile's write-gate: per-file confirm, show a one-line diff, check tracked/untracked first (overwriting an untracked doc is as irreversible as deleting it).
 
 **2. Draw a hard boundary — amend syncs facts, never re-decides** — with a one-question test:
 

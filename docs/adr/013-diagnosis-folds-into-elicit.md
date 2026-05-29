@@ -9,7 +9,7 @@
 
 The user wanted help when they hit an obvious logic flaw in an implementation — a skill to **root-cause it collaboratively** ("clarify what's wrong, together"), not an agent that silently rewrites the code. Initial framing considered a new skill (`diagnose` / `trace`), and a home question (nav, since the object is existing code, vs shape, since the stance is collaborative convergence).
 
-A real transcript (the "drag to derive didn't work" diagnosis — see `docs/observations/2026-05-29-how-diagnosis-converges.md`) settled it: the diagnostic rhythm is **identical** to the thought-mode rhythm that grounds `elicit` — react-not-author, the user pierces, drill to root, reframe, compress to one line, hand off. Same convergence engine; the only difference is the **object** (backward "why is X wrong" vs forward "what should X be").
+A real transcript settled it — the "drag to derive didn't work" diagnosis (see `docs/observations/2026-05-29-how-diagnosis-converges.md`). The diagnostic rhythm is **identical** to the thought-mode rhythm that grounds `elicit`: react-not-author, the user pierces, drill to root, reframe, compress to one line, hand off. Same convergence engine; the only difference is the **object** (backward "why is X wrong" vs forward "what should X be").
 
 ## Decision
 

@@ -32,7 +32,7 @@ kind: handoff
 - **(c) 多檔 + decision note** —— heavy、要持久比較記錄(罕見例外)。
 
 → (a)(b) 都收進 light default,**「generate 一組發散候選」升級成一等公民**;(c) 維持例外。
-→ 為什麼重要:**generate 是一半的價值,也是回饋上游的引擎** —— 候選生得夠廣時會包含「不做這個元件」的選項(`1:1` 用文字、不要 glyph),使用者看到「不做」長怎樣才改了 ontology。只渲染給定選項的 skill 會錯過這個。
+→ 為什麼重要:**generate 是一半的價值,也是回饋上游的引擎**。候選生得夠廣時會包含「不做這個元件」的選項——`1:1` 用文字、不要 glyph——使用者看到「不做」長怎樣才改了 ontology。只渲染給定選項的 skill 會錯過這個。
 
 ## Scaffolding TODO(若要做成可安裝的 plugin)
 

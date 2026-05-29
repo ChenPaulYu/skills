@@ -72,7 +72,7 @@ Copy [`references/overview-template.html`](plugins/shape/skills/align/references
 
 ### Step 6 — Verify + activate
 
-Open `overview.html` via shape's shared **browser-verify slot** (`plugins/shape/CLAUDE.md`; default `agent-browser`); confirm the lang toggle flips, cards expand, footer links resolve, zero console errors. **Hand over a clickable URL in the reply** (a `file://<absolute-path>` link by default; a throwaway `http://localhost:<port>` static server only if `file://` blocks something — rare for this self-contained file) so the user can open the board straight from chat. Tell them what changed and offer to adjust density/tone of the detail panels.
+Open `overview.html` via shape's shared **browser-verify slot** (`plugins/shape/CLAUDE.md`; default `agent-browser`); confirm the lang toggle flips, cards expand, footer links resolve, zero console errors. **Hand over a clickable URL in the reply** so the user can open the board straight from chat — a `file://<absolute-path>` link by default; a throwaway `http://localhost:<port>` static server only if `file://` blocks something (rare for this self-contained file). Tell them what changed and offer to adjust density/tone of the detail panels.
 
 ## The seam with `nav` — don't blur it
 

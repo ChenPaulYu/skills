@@ -17,7 +17,7 @@ The user asked for two things: (1) nav:plan should store its plan inside `bluepr
 
 **2. `plans/` is a committed blueprints layer, distinct from `plan.md`.** `plan.md` (singular) is align's lean *status index*; `plans/` (plural) holds nav:plan's *grounded implementation plans* (one per item: Context · Approach · Critical files · Verification). The tree now renders the full arc: `thoughts/` (decision) → `plan.md` (status) → `plans/` (grounded-how) → `overview.html` (human projection).
 
-**3. `reconcile` maintains `plans/` alongside `thoughts/`.** It inventories both; a grounded plan whose steps all shipped is stale exactly like an implemented thought → prune, or (if only some steps shipped) amend to mark which landed. Plans check *sharper* than thoughts: their explicit steps + Verification table grep cleanly against the code. Same verdicts, gates, and fact-vs-decision boundary as ADR-014.
+**3. `reconcile` maintains `plans/` alongside `thoughts/`.** It inventories both. A grounded plan whose steps all shipped is stale exactly like an implemented thought → prune; if only some steps shipped, amend to mark which landed. Plans check *sharper* than thoughts: their explicit steps + Verification table grep cleanly against the code. Same verdicts, gates, and fact-vs-decision boundary as ADR-014.
 
 ## Why
 

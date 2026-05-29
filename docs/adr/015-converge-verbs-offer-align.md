@@ -28,7 +28,7 @@ But the *offer* is already a first-class family pattern (ADR-007): finish → `A
 
 ## Why this fits ADR-007 (not a contradiction of its §6)
 
-ADR-007 §6 withholds the offer from *atomic* skills (`audit`, `headers`, `map`) because they end in N findings / a standalone artifact with **no single natural next-action**. `elicit` / `mockup` are different: each lands **exactly one thought** whose canonical downstream is **exactly one skill** (`align`). A single artifact + a single obvious next step = precisely the shape ADR-007's offer was built for. So this extends the pattern by its own logic rather than breaching the atomic-skill exclusion.
+ADR-007 §6 withholds the offer from *atomic* skills (`audit`, `headers`, `map`): they end in N findings or a standalone artifact, with **no single natural next-action**. `elicit` / `mockup` are different: each lands **exactly one thought** whose canonical downstream is **exactly one skill** (`align`). A single artifact + a single obvious next step = precisely the shape ADR-007's offer was built for. So this extends the pattern by its own logic rather than breaching the atomic-skill exclusion.
 
 ## Consequences
 

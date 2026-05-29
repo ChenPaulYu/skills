@@ -26,7 +26,7 @@ Why not a new `build` plugin: a one-skill plugin is premature crystallization (t
 
 ### `build` is a meta-skill — the cross-plugin orchestrator
 
-Per item in In-progress: **ground** (`/nav:plan`) → **summarize** (render an interactive diagram of the plan via the mockup protocol — a checkpoint, and the verify target when the item has no mockup) → **implement** (`/nav:refactor` discipline + inject↔check, sequential subagent-per-item) → **verify** (browser screenshot vs mockup; or test-gate for non-visual) → **land** (move to Shipped, `/shape:align`) → loop → exit when empty.
+Per item in In-progress: **ground** (`/nav:plan`) → **summarize** (render an interactive diagram of the plan via the mockup protocol) → **implement** (`/nav:refactor` discipline + inject↔check, sequential subagent-per-item) → **verify** (browser screenshot vs mockup; or test-gate for non-visual) → **land** (move to Shipped, `/shape:align`) → loop → exit when empty. The summarize step is a checkpoint, and the verify target when the item has no mockup.
 
 It orchestrates (reuse-via-transcript) and **never calls another skill directly** (skills-don't-call-skills). It is the most concentrated point of shape↔nav communication, and the direction stays one-way: **shape → nav** (nav must never reference shape).
 

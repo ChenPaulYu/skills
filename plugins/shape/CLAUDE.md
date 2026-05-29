@@ -6,7 +6,7 @@
 
 **Forward motion: give intent its form, all the way to running, verified code.** Sibling to `nav` — the two split the lifecycle cleanly: **shape pushes the work forward** (converge → plan → build), **nav keeps the result healthy** (audit → refactor → map). Domain = the loop **converge a decision → record it legibly → keep it current → build it real**.
 
-> Identity note (ADR-011): shape was originally scoped "pre-build". Adding `build` deliberately widened it to forward-motion-through-execution — the natural terminus of the spine (a real instance), not scope-creep. nav stays the maintenance half.
+> Identity note (ADR-011): shape was originally scoped "pre-build". Adding `build` deliberately widened it to forward-motion-through-execution — the natural terminus of the spine, a real instance, not scope-creep. nav stays the maintenance half.
 
 ## Spine (through-line)
 
@@ -14,7 +14,7 @@
 
 **Progressive disclosure runs through both renders.** Every artifact leads with its interface and drills in only as needed — the agent's render of that is markdown structure (a `head -12`-able header + TL;DR, sections that lead with their point), the human's is the click-to-reveal board. Same interface-first principle as `nav`'s file headers; two media.
 
-**Below 90% → ask (core principle, shared with `nav` rule ⑦).** When unsure about scope, boundaries, or intent, stop and ask — never guess. This is the spine of the whole family, not a per-skill add-on: `elicit` *is* this rule as a workflow (it converges by asking, not answering); `mockup` lets the user point; `align` decides *with* the user; `reconcile` gates every destructive step per-file. Any autonomous driver built on top runs **only while confidence holds** — the moment scope/boundary/intent drops below 90% it stops and asks rather than plowing ahead. The cost of pausing to clarify is far smaller than unwinding a wrong guess.
+**Below 90% → ask (core principle, shared with `nav` rule ⑦).** When unsure about scope, boundaries, or intent, stop and ask — never guess. This is the spine of the whole family, not a per-skill add-on: `elicit` *is* this rule as a workflow (it converges by asking, not answering); `mockup` lets the user point; `align` decides *with* the user; `reconcile` gates every destructive step per-file. Any autonomous driver built on top runs **only while confidence holds**. The moment scope/boundary/intent drops below 90%, it stops and asks rather than plowing ahead — the cost of pausing to clarify is far smaller than unwinding a wrong guess.
 
 ## Members
 

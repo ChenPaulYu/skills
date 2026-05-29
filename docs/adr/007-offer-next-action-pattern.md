@@ -25,7 +25,7 @@ Meanwhile, the `AskUserQuestion` tool + the `Agent` tool (with `subagent_type`) 
 
 1. **Meta-skills (`plan`, `refactor`, `doctor`) end with an `AskUserQuestion` step**, listing 2-4 concrete next actions. The "save / commit only — I'll handle from here" option is always present so the user can opt out without typing.
 
-2. **The sub-agent option is the default-recommended choice** when a self-contained next step exists (e.g., "execute step 1" / "run the first recommended `/nav:refactor`"). The sub-agent runs the next step with `Agent` + `subagent_type=general-purpose` (or a specialised type if installed) — clean context, reports back when done.
+2. **The sub-agent option is the default-recommended choice** when a self-contained next step exists (e.g., "execute step 1" / "run the first recommended `/nav:refactor`"). The sub-agent runs the next step with `Agent` + `subagent_type=general-purpose`, or a specialised type if installed. Clean context, reports back when done.
 
 3. **In-session execution stays as an option** for users who want to watch each move.
 

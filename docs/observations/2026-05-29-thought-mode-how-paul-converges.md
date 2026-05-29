@@ -36,7 +36,7 @@ AI 一旦 **灌內容 / 想解完 / 附和 / 給一牆 essay / 停在表面 fram
 
 ## What it could become — the `Thought-ground` skill
 
-若 thought 階要 skill 化,名字暫定 **`Thought-ground`**(thought + grounding),且 **這 6 個 move + 那句一行 = 它的 behavioral spec**,不是另寫一條 brainstorm SOP。它是 **on-demand 的 grill-me / 蘇格拉底式釐清**(你召喚才開、不常駐 —— on-demand 在這裡是 feature,不是冗餘:你不想每次對話都被拷問)。
+若 thought 階要 skill 化,名字暫定 **`Thought-ground`**(thought + grounding),且 **這 6 個 move + 那句一行 = 它的 behavioral spec**,不是另寫一條 brainstorm SOP。它是 **on-demand 的 grill-me / 蘇格拉底式釐清**:你召喚才開、不常駐。on-demand 在這裡是 feature 不是冗餘——你不想每次對話都被拷問。
 
 **唯一的核心機制 = weight-adaptive exit:你一 snap 到 principle 就收手。** Superpowers brainstorm 的原罪是「跑完問題清單才停 → 變重 → 你不用」;`Thought-ground` 必須「你撞到了就停」。問題一律 **grounded**(錨在 repo/kernel,不是抽象蘇格拉底 —— 這是它贏過 ChatGPT 的唯一理由)。
 

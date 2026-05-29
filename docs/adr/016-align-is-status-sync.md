@@ -13,7 +13,7 @@ This surfaced live: a real plan had Derive A sitting in In-progress marked "待�
 
 ## Decision
 
-**1. `align` verifies done-ness against the code — it does not trust the plan's own claims.** Step 2 grounds "actual state" via grep + `head -12` headers + `git log`. For every In-progress / Next item — *especially any marked 待驗 / TBD / not-sure-if-done* — align confirms it against the code and, if shipped, **moves it to ✅ Shipped** in the Step 3 triage. A `TBD: is X done?` surviving an align run is an **align failure**.
+**1. `align` verifies done-ness against the code — it does not trust the plan's own claims.** Step 2 grounds "actual state" via grep + `head -12` headers + `git log`. For every In-progress / Next item — *especially any marked 待驗 / TBD / not-sure-if-done* — align confirms it against the code. If shipped, it **moves it to ✅ Shipped** in the Step 3 triage. A `TBD: is X done?` surviving an align run is an **align failure**.
 
 **2. Draw the align↔reconcile boundary explicitly** (it pairs with ADR-014's reconcile boundaries):
 - **`align` = item-*status* reconciliation** — is this *plan item* done / in-progress / not-started? It moves items between columns. This is align's job.

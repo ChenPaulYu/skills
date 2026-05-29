@@ -10,7 +10,7 @@ Converge a conceptual question the way it actually converges: not by the AI writ
 
 ## Why this skill exists
 
-A clean conceptual decision rarely arrives by someone stating it. It arrives by **reacting** — pushing on a scaffold, refuting a fork, rewriting a line. Most AI conversation does the opposite: it dumps content, races to solve, and agrees — which *floats* and converges nothing. elicit inverts the roles: the AI proposes, the user refines/picks, and convergence is a volley. It exists to be the **summoned** version of that — a grill you call when you want to think something out, not a clarifier that interrogates every turn.
+A clean conceptual decision rarely arrives by someone stating it. It arrives by **reacting**: pushing on a scaffold, refuting a fork, rewriting a line. Most AI conversation does the opposite — it dumps content, races to solve, and agrees, which *floats* and converges nothing. elicit inverts the roles: the AI proposes, the user refines/picks, and convergence is a volley. It exists to be the **summoned** version of that — a grill you call when you want to think something out, not a clarifier that interrogates every turn.
 
 ## Core — the one non-negotiable
 

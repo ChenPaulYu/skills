@@ -54,7 +54,7 @@ Report per doc: verdict + the evidence behind it + a **proposed action** — kee
 Only on confirmation.
 
 **Amend (in-place fact-sync)** — the lightest write, but still an overwrite of a design record, so it inherits the gate:
-- **Verbatim except the confirmed line.** Change only the line(s) the diff showed; touch nothing else (same discipline as `/nav:refactor`'s verbatim move — don't "while I'm here" rewrite the surrounding prose).
+- **Verbatim except the confirmed line.** Change only the line(s) the diff showed; touch nothing else — same discipline as `/nav:refactor`'s verbatim move: don't "while I'm here" rewrite the surrounding prose.
 - **The `+` line states only what code shows** — a fact, not a rationale or a design call. If you can't phrase it without judging what the design *should* be, it's not an amend → hand to `/shape:elicit`.
 - **Check tracked/untracked first** — overwriting an untracked doc is as irreversible as deleting it (no git history to recover the old line).
 - Keep the doc's own status/date current if it carries one (an amended doc is freshly synced — say so).
