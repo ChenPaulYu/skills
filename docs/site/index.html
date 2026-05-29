@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 9)
+  Last audit: 2026-05-29 (rev 10)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -15,13 +15,23 @@
       plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, headers, map, doctor, plan
     • shape skills: mockup (render-to-decide). shape v0.0.1 — early, 1 skill;
-      family crystallizes as more prove out. No shape ADR / CLAUDE.md yet (debt)
+      domain = pre-build pipeline thought→spec→plan (shape/CLAUDE.md). No
+      shape ADR yet (debt); spec = convention, plan = reuse (not skills)
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
     • 9 ADRs in docs/adr/ — 001..009 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 9)
+  ⚠ FIXED in this revision (rev 10)
+    1. Added plugins/shape/CLAUDE.md — formalizes shape's identity: domain =
+       pre-build pipeline thought→spec→plan; through-line = "converge by a
+       real disposable instance, not a description"; members = skills
+       {thought-ground (unbuilt), mockup (built)}, with spec = convention and
+       plan = reuse (planning-with-files), NOT skills. Synced the site's now-
+       stale "no shape/CLAUDE.md" debt claims (callouts, VERIFIED, Module map).
+       Still deferred: a shape ADR (full crystallization).
+
+  ⚠ FIXED in rev 9 (kept for history)
     1. shape:mockup matured — folded first-principles + round-2 into the
        SKILL.md: ONE core (the unit of judgement is a real, disposable,
        *interactive* artifact — never a description) + the non-negotiable
@@ -417,7 +427,7 @@ const T = {
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape anatomy — render-to-decide (early: one skill)',
     shape_anat_lede: "One skill today: <code>mockup</code> — converge a decision by a real, disposable, <em>interactive</em> artifact (a UI mockup, or an interactive diagram for backend / agent / data / flow), never a description. The anatomy grows as the family proves out.",
-    shape_anat_callout: "Sibling to <code>nav</code>: nav keeps existing code navigable (post-build); shape gives intent its form (pre-build). Early — one skill (<code>mockup</code>), so the family's through-line isn't formalized yet (no shape/CLAUDE.md). <code>mockup</code>'s core: converge a decision by a real, disposable, interactive artifact — never a description.",
+    shape_anat_callout: "Sibling to <code>nav</code>: nav keeps existing code navigable (post-build); shape gives intent its form (pre-build). Domain = the pre-build pipeline thought → spec → plan (through-line in <code>shape/CLAUDE.md</code>). Early — one skill (<code>mockup</code>); its core: converge a decision by a real, disposable, interactive artifact — never a description.",
     shape_default_h3: 'shape plugin anatomy',
     shape_default_role: 'One skill: mockup (render-to-decide). Click it for its role.',
     shape_default_click_label: 'tip',
@@ -481,7 +491,7 @@ const T = {
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape 解剖 —— render 即決策(早期:一個 skill)',
     shape_anat_lede: '今天一個 skill:<code>mockup</code> —— 用真實、可丟、<em>可互動</em>的 artifact(UI mockup,或後端/agent/資料/流程用的互動 diagram)收斂決策,不用描述。anatomy 隨家族成熟而長。',
-    shape_anat_callout: '<code>nav</code> 的姊妹:nav 讓既有 code 可導覽(post-build);shape 把意圖給形狀(pre-build)。早期 —— 只有一個 skill(<code>mockup</code>),家族的 through-line 還沒正式確立(無 shape/CLAUDE.md)。<code>mockup</code> 的 core:用真實、可丟、可互動的 artifact 收斂決策 —— 不用描述。',
+    shape_anat_callout: '<code>nav</code> 的姊妹:nav 讓既有 code 可導覽(post-build);shape 把意圖給形狀(pre-build)。Domain = pre-build pipeline thought → spec → plan(through-line 在 <code>shape/CLAUDE.md</code>)。早期 —— 只有一個 skill(<code>mockup</code>);它的 core:用真實、可丟、可互動的 artifact 收斂決策 —— 不用描述。',
     shape_default_h3: 'shape plugin 解剖',
     shape_default_role: '一個 skill:mockup(render 即決策)。點它看角色。',
     shape_default_click_label: '提示',
@@ -538,7 +548,7 @@ const DOMAINS = {
   shape: {
     layer: 'ui',
     path: 'plugins/shape/',
-    blurb: {en:'Give intent its form before building — converge on what to build via real, disposable, interactive artifacts (UI mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav (post-build navigability). Early: 1 skill. No shape/CLAUDE.md or ADR yet (debt).', zh:'動工前把意圖給形狀 —— 用真實、可丟、可互動的 artifact(UI mockup,或後端/agent/資料/流程的 diagram)收斂「要建什麼」,不用描述。nav(post-build 可導覽性)的姊妹。早期:1 個 skill。尚無 shape/CLAUDE.md 或 ADR(debt)。'},
+    blurb: {en:'Give intent its form before building — converge on what to build via real, disposable, interactive artifacts (UI mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav (post-build navigability). Domain = pre-build pipeline thought→spec→plan (see shape/CLAUDE.md). Skills: mockup (built), thought-ground (pending); spec = convention, plan = reuse. No shape ADR yet (debt).', zh:'動工前把意圖給形狀 —— 用真實、可丟、可互動的 artifact(UI mockup,或後端/agent/資料/流程的 diagram)收斂「要建什麼」,不用描述。nav(post-build 可導覽性)的姊妹。Domain = pre-build pipeline thought→spec→plan(見 shape/CLAUDE.md)。Skills:mockup(已建)、thought-ground(待);spec = convention,plan = reuse。尚無 shape ADR(debt)。'},
     files: [
       ['/shape:mockup', '', {en:'Converge a visual / UI / interaction decision by generating + rendering real, disposable candidates at true size in real context — never a description. The one non-negotiable: the output is an interactive HTML. Draft (v0.0.1, not yet a full family).', zh:'用 generate + render 一組真實、可丟的候選(真尺寸、真脈絡)收斂視覺/UI/互動決策 —— 不用描述。唯一非妥協:output 是互動 HTML。Draft(v0.0.1,尚非完整家族)。'}],
     ],
