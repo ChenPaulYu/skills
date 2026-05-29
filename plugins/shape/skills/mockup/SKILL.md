@@ -11,7 +11,7 @@ Converge a decision by confronting the user with a **real, disposable, interacti
 
 You can't judge from a description. Prose, ASCII, an option list all *float* — they read fine and decide nothing. A real, interactive artifact rendered at the right grain is **decidable**: the user looks, clicks, flips, picks. This skill makes that artifact cheap enough to throw away, so the user judges the thing instead of a paragraph about it. Often the user has no options yet — just an open question — so **generating a divergent candidate set is half the value**, not a precondition.
 
-## Spine — one core, everything else derives
+## Core — everything else derives
 
 > **Core: the unit of judgement is a real, rendered, disposable, *interactive* artifact — never a description.**
 >
