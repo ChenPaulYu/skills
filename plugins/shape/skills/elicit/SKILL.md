@@ -67,11 +67,13 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 3. **Volley.** Each turn, in one short move: mirror the shift → drill one layer toward the principle → erect **one** named fork or refutable claim → invite the hit. One sharp thing. Apply friction; don't agree to advance.
 4. **Exit on snap.** The moment the user lands a principle / picks decisively / says "that's it" — **stop**. Do not continue the checklist. Weight-adaptive exit is the core.
 5. **Land the residue (small).** Compress to **one line** — the named principle + the forks decided — and write a `thoughts/<date>-<topic>.md` doc in the `blueprints/` tree, in the progressive-disclosure shape (title + one-line role + ≤3-line TL;DR + sections that lead with their point). Small residue, not a transcript.
+6. **Offer to align it in (don't auto-run).** A freshly-landed thought is `align`'s input. After writing it, *offer* — never auto-call — `/shape:align` to triage it into `plan.md` (now/next/later): an `AskUserQuestion` with a "just leave the thought, I'll align later" opt-out (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when a `blueprints/` board exists (or scaffolding one is wanted) and skip it during rapid-fire elicits — don't nag. `align` is collaborative ("decide *with* the user"), so the recommended option runs **in-session** (it needs this conversation's decision + context), not in a clean sub-agent. This is an offer, not a call — skills don't invoke each other.
 
 ## Output
 
 - A `blueprints/thoughts/<date>-<topic>.md` doc: the decided principle (or the confirmed root cause + fix-direction), progressively disclosed (an agent grasps it from `head -12`).
 - That doc is now input to `/shape:align` (triaged into the plan) and eventually `/nav:plan` (grounded into code). In diagnostic mode it also hands off to `/shape:mockup` (visual fix) and `/shape:build` or a sub-agent (the rebuild).
+- A guarded, one-shot **offer** to run `/shape:align` and triage the new thought in (Step 6) — never an auto-call.
 - Most of the volley itself is discarded — the residue is the one-line principle/cause, not the back-and-forth.
 
 ## Anti-patterns (refuse these)

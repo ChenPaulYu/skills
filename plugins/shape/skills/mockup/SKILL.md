@@ -93,6 +93,10 @@ A file written to disk is not yet a decidable artifact — the user has to *see*
 
 "Render + capture" uses shape's shared **browser-verify capability slot** (defined once in `plugins/shape/CLAUDE.md`, shared with `align` + `build`): a named default (`agent-browser`) + detect + fail-helpfully if missing + per-project override. Open the file / running system, locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a tool — name the capability.
 
+## After the pick — offer to align it in (don't auto-run)
+
+When the pick settles a decision worth tracking (not a throwaway look-and-feel tweak), record it and then *offer* — never auto-call — `/shape:align` to triage it into `plan.md`: an `AskUserQuestion` with a "just record the pick, I'll align later" opt-out (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when a `blueprints/` board exists (or scaffolding one is wanted), and don't re-offer / nag across a rapid series of mockups. `align` is collaborative, so the recommended option runs **in-session** (it needs this conversation's decision), not a clean sub-agent. An offer, not a call — skills don't invoke each other. (Skip entirely for a disposable visual tweak with nothing to track.)
+
 ## Anti-patterns (refuse these)
 
 | Temptation | Why to refuse |
@@ -114,3 +118,4 @@ A file written to disk is not yet a decidable artifact — the user has to *see*
 - A recorded pick; most artifacts then discarded.
 - A visual-lock only as a rare, stamped exception (structural-level).
 - (Escalation, rare) multiple files + a decision note.
+- (When the pick settles something trackable) a guarded, one-shot **offer** to run `/shape:align` and triage it in — never an auto-call.

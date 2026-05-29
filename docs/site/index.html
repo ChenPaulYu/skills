@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 16)
+  Last audit: 2026-05-29 (rev 17)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -23,10 +23,20 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 14 ADRs in docs/adr/ — 001..014 with cross-supersede / refine links
+    • 15 ADRs in docs/adr/ — 001..015 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 16)
+  ⚠ FIXED in this revision (rev 17)
+    1. shape:elicit + shape:mockup now OFFER /shape:align after landing a
+       thought (ADR-015, extends ADR-007 offer-next-action to shape's converge
+       verbs): an AskUserQuestion with a save-only opt-out — auto-OFFER, never
+       auto-CALL (skills don't invoke each other; align decides WITH the user).
+       Guarded + one-shot (board must exist; no nagging on rapid-fire); the
+       recommended option runs align in-session (needs this conversation's
+       context), not a clean sub-agent. NOT /nav:plan — wrong direction (align
+       is its upstream; post-build align is build's tail). ADR 14 → 15.
+
+  ⚠ FIXED in rev 16 (kept for history)
     1. shape:reconcile gained a 4th action, amend (ADR-014): correct a doc's
        stale FACT in place (verbatim except the confirmed line; serves a new
        "current · N stale fact(s)" verdict) instead of pruning a 90%-live doc
@@ -668,8 +678,8 @@ const NAV_EDGES = [
 ];
 
 const SHAPE_NODES = [
-  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-liner. The 6 moves (mirror → drill → named fork → friction → versions → short turns); core = weight-adaptive exit. One engine, two objects: a forward decision OR a backward root-cause (diagnostic mode — ground symptom vs real impl, forks = candidate causes, reframe local-bug → structural-cause; read-only, hands the fix to mockup/build). Lands a thoughts/ doc.', zh:'召喚式 grounded grill:AI 立結構、你 refine/挑,volley 收斂成一句。六個 move(mirror → 鑽 → 命名 fork → friction → 版本 → 短回合);core = weight-adaptive exit。一個引擎、兩種對象:forward decision 或 backward root-cause(diagnostic mode —— 症狀對真實作、fork = 候選病因、局部 bug reframe 成結構病因;read-only,修法交 mockup/build)。落成 thoughts/。'}},
-  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; activates it + hands over a URL. Lands in mockups/.', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。落在 mockups/。'}},
+  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-liner. The 6 moves (mirror → drill → named fork → friction → versions → short turns); core = weight-adaptive exit. One engine, two objects: a forward decision OR a backward root-cause (diagnostic mode — ground symptom vs real impl, forks = candidate causes, reframe local-bug → structural-cause; read-only, hands the fix to mockup/build). Lands a thoughts/ doc, then OFFERS /shape:align to triage it in (guarded, one-shot, in-session — never auto-call; ADR-015).', zh:'召喚式 grounded grill:AI 立結構、你 refine/挑,volley 收斂成一句。六個 move(mirror → 鑽 → 命名 fork → friction → 版本 → 短回合);core = weight-adaptive exit。一個引擎、兩種對象:forward decision 或 backward root-cause(diagnostic mode —— 症狀對真實作、fork = 候選病因、局部 bug reframe 成結構病因;read-only,修法交 mockup/build)。落成 thoughts/,接著 OFFER /shape:align 把它 triage 進去(guarded、一次性、in-session —— 不 auto-call;ADR-015)。'}},
+  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; activates it + hands over a URL. Lands in mockups/; when the pick settles something trackable, OFFERS /shape:align to triage it in (guarded, not auto; ADR-015).', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。落在 mockups/;當 pick 定下值得追蹤的決定,OFFER /shape:align 把它 triage 進去(guarded、非 auto;ADR-015)。'}},
   {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{en:'Read thoughts/ + the real state of the work → decide now/next/later WITH the user → write plan.md (agent) + regenerate overview.html (human, click-to-reveal). The pre-build mirror of /nav:map. Scaffolds blueprints/ on first run.', zh:'讀 thoughts/ + 工作現況 → 跟 user 一起定 now/next/later → 寫 plan.md(agent)+ 重生 overview.html(人,click-to-reveal)。/nav:map 的 pre-build 對應。首跑順手 scaffold blueprints/。'}},
   {id:'reconcile', kind:'reconcile', x:575, y:55, w:150, role:{en:'reconcile', zh:'對賬'}, desc:{en:'Judge which thoughts/ docs have drifted (code + /nav:headers · self-declaration · date) → amend a stale fact in place, or prune/consolidate a wholly-stale doc, WITH the user. Amend syncs only what built code shows; a decision-change is out of scope → recommends /shape:elicit. Check is read-only; every write is gated with hard safety rules (verify tracked/untracked, never mv-then-rm, diff before delete). ADR-014.', zh:'判斷哪些 thoughts/ 偏離(code + /nav:headers · 自述 · 日期)→ 跟 user 一起 amend 就地改過時事實,或 prune/合併整份過時的。amend 只同步 code 證明的事實;決定變了不在範圍 → 推薦 /shape:elicit。查是唯讀;每次寫都 gated,帶硬安全規則(查 tracked/untracked、絕不 mv 後接 rm、刪前 diff)。ADR-014。'}},
   {id:'blueprints', kind:'artifact', x:290, y:185, w:180, role:{en:'artifact convention', zh:'artifact 約定'}, desc:{en:'NOT a skill — the container the verbs read/write: thoughts/ (committed design) · plan.md (agent index) · overview.html (human projection) · mockups/ (git-ignored). One current state, two renders; deps point downstream only. Hand-off artifact to /nav:plan.', zh:'非 skill —— 各動詞讀寫的容器:thoughts/(已 commit 的設計)· plan.md(agent index)· overview.html(人的投影)· mockups/(git-ignored)。單一現況、兩種 render;依賴只往下游。也是交給 /nav:plan 的 hand-off artifact。'}},
