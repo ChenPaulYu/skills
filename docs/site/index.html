@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 14)
+  Last audit: 2026-05-29 (rev 15)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -22,10 +22,20 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 12 ADRs in docs/adr/ — 001..012 with cross-supersede / refine links
+    • 13 ADRs in docs/adr/ — 001..013 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 14)
+  ⚠ FIXED in this revision (rev 15)
+    1. Widened shape:elicit to cover diagnosis (ADR-013): one engine, two
+       objects — a forward decision ("what should X be") OR a backward
+       root-cause ("why is X wrong / where's the logic hole"). Added a
+       diagnostic-mode section (ground symptom vs real impl → forks = candidate
+       causes traced against code → drill local-bug into structural-cause →
+       hand fix to mockup/build; read-only). NO separate diagnose skill — it'd
+       be a parallel copy of elicit's convergence engine (N+1). Grounding:
+       docs/observations/2026-05-29-how-diagnosis-converges.md. ADR 12 → 13.
+
+  ⚠ FIXED in rev 14 (kept for history)
     1. nav:plan Stage 4 now offers a guarded "visual summary (→ /shape:mockup)"
        option (ADR-012) — an ask, never auto; shown only when the plan is
        visual/structural AND shape:mockup is available.
@@ -619,7 +629,7 @@ const DOMAINS = {
       ['/shape:align', '', {en:'Decide what to build next — read thoughts/ + the real state, decide now/next/later WITH the user, write a lean plan.md (agent) + regenerate a click-to-reveal overview.html (human). The pre-build mirror of /nav:map; scaffolds blueprints/ on first run.', zh:'決定接下來做什麼 —— 讀 thoughts/ + 現況,跟 user 一起定 now/next/later,寫精簡 plan.md(agent)+ 重生 click-to-reveal overview.html(人)。/nav:map 的 pre-build 對應;首跑 scaffold blueprints/。'}],
       ['/shape:reconcile', '', {en:'Reconcile the design notes with reality — judge which thoughts/ are stale (code + /nav:headers · self-declaration · date), prune/consolidate WITH the user. Check read-only; cleaning write-gated with hard safety rules.', zh:'讓設計筆記對齊現況 —— 判斷哪些 thoughts/ 過時(code + /nav:headers · 自述 · 日期),跟 user 一起 prune/合併。查唯讀;清 write-gated,帶硬安全規則。'}],
       ['/shape:build', '', {en:'Meta-skill: drive plan.md In-progress to done. Per item — ground via /nav:plan → summarize as a diagram → implement (/nav:refactor discipline + inject↔check, sequential) → verify (browser screenshot vs mockup, or test-gate) → Shipped → /shape:align. Autonomous but confidence-gated (stop below 90%). Visual verify uses the browser-verify slot (default agent-browser).', zh:'meta-skill:把 plan.md 的 In-progress 跑到清空。每 item —— /nav:plan ground → 用 diagram summarize → implement(/nav:refactor 紀律 + inject↔check,逐一)→ verify(browser 截圖對 mockup,或 test-gate)→ Shipped → /shape:align。自動但 confidence-gated(<90% 停)。視覺驗收用 browser-verify slot(預設 agent-browser)。'}],
-      ['/shape:elicit', '', {en:'Converge a conceptual / definitional decision by a summoned grounded grill — AI proposes refutable structure, you refine/pick, a volley lands a one-line principle as a thoughts/ doc. Core: weight-adaptive exit (stop on the snap, not a checklist). The verbal-converge sibling of mockup; boundary: render-decidable → mockup.', zh:'用召喚式的 grounded grill 收斂概念/定義決策 —— AI 立起可否定的結構,你 refine/挑,一場 volley 把一句原則落成 thoughts/。Core:weight-adaptive exit(撞到就收手,不是跑清單)。mockup 的口頭收斂姊妹;界線:render 能定的 → mockup。'}],
+      ['/shape:elicit', '', {en:'Converge a conceptual question by a summoned grounded grill — AI proposes refutable structure, you refine/pick, a volley lands a one-liner as a thoughts/ doc. One engine, two objects: a forward decision ("what should X be") OR a backward root-cause ("why is X wrong" — diagnostic mode: symptom vs real impl → candidate causes → reframe local→structural). Core: weight-adaptive exit. Sibling of mockup; render-decidable → mockup; broad smell-scan → /nav:audit.', zh:'用召喚式的 grounded grill 收斂概念問題 —— AI 立結構、你 refine/挑,一場 volley 把一句話落成 thoughts/。一個引擎、兩種對象:forward decision(X 該是什麼)或 backward root-cause(X 為什麼錯 —— diagnostic mode:症狀對真實作 → 候選病因 → 局部 reframe 成結構)。Core:weight-adaptive exit。mockup 的姊妹;render 能定的 → mockup;廣掃 smell → /nav:audit。'}],
     ],
   },
 };
@@ -648,7 +658,7 @@ const NAV_EDGES = [
 ];
 
 const SHAPE_NODES = [
-  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-line principle. The 6 moves (mirror → drill-to-principle → named fork → friction → versions → short turns); forks grounded in the real repo; core = weight-adaptive exit (stop on the snap). Lands a thoughts/ doc.', zh:'召喚式的 grounded grill:AI 立起可否定的結構,你 refine/挑,一場 volley 收斂成一句原則。六個 move(mirror → 鑽到原則 → 命名 fork → friction → 版本 → 短回合);fork 錨在真 repo;core = weight-adaptive exit(撞到就收手)。落成一份 thoughts/。'}},
+  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-liner. The 6 moves (mirror → drill → named fork → friction → versions → short turns); core = weight-adaptive exit. One engine, two objects: a forward decision OR a backward root-cause (diagnostic mode — ground symptom vs real impl, forks = candidate causes, reframe local-bug → structural-cause; read-only, hands the fix to mockup/build). Lands a thoughts/ doc.', zh:'召喚式 grounded grill:AI 立結構、你 refine/挑,volley 收斂成一句。六個 move(mirror → 鑽 → 命名 fork → friction → 版本 → 短回合);core = weight-adaptive exit。一個引擎、兩種對象:forward decision 或 backward root-cause(diagnostic mode —— 症狀對真實作、fork = 候選病因、局部 bug reframe 成結構病因;read-only,修法交 mockup/build)。落成 thoughts/。'}},
   {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; activates it + hands over a URL. Lands in mockups/.', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。落在 mockups/。'}},
   {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{en:'Read thoughts/ + the real state of the work → decide now/next/later WITH the user → write plan.md (agent) + regenerate overview.html (human, click-to-reveal). The pre-build mirror of /nav:map. Scaffolds blueprints/ on first run.', zh:'讀 thoughts/ + 工作現況 → 跟 user 一起定 now/next/later → 寫 plan.md(agent)+ 重生 overview.html(人,click-to-reveal)。/nav:map 的 pre-build 對應。首跑順手 scaffold blueprints/。'}},
   {id:'reconcile', kind:'reconcile', x:575, y:55, w:150, role:{en:'reconcile', zh:'對賬'}, desc:{en:'Judge which thoughts/ docs are stale (code + /nav:headers · self-declaration · date) → prune/consolidate WITH the user. Check is read-only; cleaning is write-gated with hard safety rules (verify tracked/untracked, never mv-then-rm, diff before delete).', zh:'判斷哪些 thoughts/ 過時(code + /nav:headers · 自述 · 日期)→ 跟 user 一起 prune/合併。查是唯讀;清是 write-gated,帶硬安全規則(查 tracked/untracked、絕不 mv 後接 rm、刪前 diff)。'}},

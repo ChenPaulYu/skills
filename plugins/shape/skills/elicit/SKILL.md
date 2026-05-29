@@ -1,12 +1,12 @@
 ---
 name: elicit
-description: Converge a conceptual / definitional / structural decision by drawing it out of the user — a grounded, summoned grill. You act as proposer (erect refutable structure the user hits), the user as refiner/picker; convergence is a volley that ends in a one-line principle landed as a thoughts/ doc. Fires when the user SUMMONS it — "help me think through X", "grill me on this", "I haven't decided X", "what should X be", "what IS a <concept>", "clarify this design", "I don't know what I want here", "let's converge on the shape of X". On-demand by design (being grilled every turn is bad). NOT for decisions a rendered artifact would settle better (look / layout / how entities relate visually) — that is /shape:mockup; and NOT for turning a decided spec into a code-level implementation plan — that is /nav:plan. Also invokable as /shape:elicit. Language- and framework-agnostic; grounds its forks in the real repo.
+description: Converge a conceptual question by drawing it out of the user — a grounded, summoned grill. One engine, two objects — a FORWARD decision ("what should X be") or a BACKWARD root-cause ("why is X wrong / where's the logic hole"). You act as proposer (erect refutable structure the user hits), the user as refiner/picker; convergence is a volley that ends in a one-line principle/cause landed as a thoughts/ doc. Fires when the user SUMMONS it — "help me think through X", "grill me on this", "I haven't decided X", "what should X be", "what IS a <concept>", "clarify this design", AND for diagnosis — "this has a logic hole", "help me figure out why X is broken", "let's clarify what's actually wrong here", "root-cause this with me". On-demand by design (being grilled every turn is bad). NOT for decisions a rendered artifact would settle better (look / layout / how entities relate visually) — that is /shape:mockup; NOT for a broad unconditional smell-scan — that is /nav:audit; NOT for turning a decided spec into a code-level implementation plan — that is /nav:plan. Also invokable as /shape:elicit. Language- and framework-agnostic; grounds its forks in the real repo.
 
 ---
 
 # Elicit — draw the decision out (grounded grill)
 
-Converge a conceptual decision the way it actually converges: not by the AI writing a clean answer, but by the AI **erecting the sharpest refutable structure it can, grounded in the real code, for the user to hit** — turn after short turn — until the user snaps to a principle. Then stop and land it in one line. The verbal-converge sibling of `/shape:mockup`.
+Converge a conceptual question the way it actually converges: not by the AI writing a clean answer, but by the AI **erecting the sharpest refutable structure it can, grounded in the real code, for the user to hit** — turn after short turn — until the user snaps to it. Then stop and land it in one line. **One engine, two objects:** a *forward* decision ("what should X be") or a *backward* root-cause ("why is X wrong"). The verbal-converge sibling of `/shape:mockup`.
 
 ## Why this skill exists
 
@@ -46,7 +46,19 @@ The forks must be **anchored in the real repo** — the actual modules, types, s
 - **No → elicit.** Pure conceptual / definitional / ontological / structural-semantic decisions — "what *is* this thing", "is this one entity or two", "what's the principle here". A render wouldn't clarify; a grounded fork would.
 - **Yes → `/shape:mockup`.** Look / layout / interaction / how entities visually relate. Don't grill verbally what three rendered candidates would settle in a glance.
 
-And **not** `/nav:plan`: elicit converges *what / why* (a decision); nav:plan grounds a decided spec into *how to build it against the code*. elicit lands a `thoughts/` doc; that doc is later input to nav:plan.
+And **not** `/nav:plan`: elicit converges *what / why* (a decision or a cause); nav:plan grounds a decided spec into *how to build it against the code*. elicit lands a `thoughts/` doc; that doc is later input to nav:plan.
+
+## Diagnostic mode — when the object is a flaw (backward root-cause)
+
+Same engine, object reversed: instead of converging *what X should be* (forward), converge *why X is wrong* (backward). A separate "diagnose" skill would just be a **parallel copy of this convergence engine** (the N+1 anti-pattern) — so diagnosis lives here. The 6 moves are unchanged; three specialize:
+
+- **Ground the symptom against what's ACTUALLY built — not the design doc's words.** The root cause is usually the **gap between the user's mental model and the real implementation**. *(Real case: the user reached for three handles to drag-derive; the cause was that all three were exactly the ones not built — a working-selection with no grip, an unbuilt derive, a deferred promote.)* Match the symptom to the code; find where expectation and reality diverge.
+- **The named forks are candidate causes, traced against the code.** Erect a few ("A: the guard is inverted · B: state updates out of order · C: the assumption about input X is false"), then narrow by **grounded elimination, not guesswork**. The user often supplies the piercing insight (*"drag conflicts with select"*) — you ground-confirm it (e.g. enumerate that drag is already overloaded: select / create / move / resize).
+- **Drill until the bug reframes from local to structural.** Not "the grip is misplaced" but "drag is a saturated dimension". The reframe **is** the diagnosis.
+
+Then it flows the same way: converge to a one-line cause + fix-direction; if the fix is visual/structural, hand to `/shape:mockup` (e.g. "right-click vs visible button"); hand the rebuild to `/shape:build` or a sub-agent (inject↔check). **Read-only — elicit finds the cause and converges the fix-direction; it does not edit the code in place.**
+
+*(Diagnosis vs `/nav:audit`: audit is a broad, unconditional smell-scan it runs* for *you; diagnostic-mode elicit is a* specific *flaw you point at and root-cause* with *it.)*
 
 ## Protocol — a volley loop, not fixed stages
 
@@ -58,9 +70,9 @@ And **not** `/nav:plan`: elicit converges *what / why* (a decision); nav:plan gr
 
 ## Output
 
-- A `blueprints/thoughts/<date>-<topic>.md` doc: the decided principle + forks, progressively disclosed (an agent grasps it from `head -12`).
-- That doc is now input to `/shape:align` (it gets triaged into the plan) and eventually `/nav:plan` (grounded into code).
-- Most of the volley itself is discarded — the residue is the one-line principle, not the back-and-forth.
+- A `blueprints/thoughts/<date>-<topic>.md` doc: the decided principle (or the confirmed root cause + fix-direction), progressively disclosed (an agent grasps it from `head -12`).
+- That doc is now input to `/shape:align` (triaged into the plan) and eventually `/nav:plan` (grounded into code). In diagnostic mode it also hands off to `/shape:mockup` (visual fix) and `/shape:build` or a sub-agent (the rebuild).
+- Most of the volley itself is discarded — the residue is the one-line principle/cause, not the back-and-forth.
 
 ## Anti-patterns (refuse these)
 
@@ -75,10 +87,14 @@ And **not** `/nav:plan`: elicit converges *what / why* (a decision); nav:plan gr
 | Auto-fire on any uncertainty | It's summoned. Grilling unbidden is the anti-feature. |
 | Grill a look / layout / visual-relation decision | A render would settle it better — hand to `/shape:mockup`. |
 | Keep a fat transcript as the residue | The residue is one line + the decided forks, landed as a lean thought. |
+| In diagnostic mode, edit the code to "just fix it" | elicit is read-only — it converges the cause + fix-direction; the rebuild hands off to `/shape:build` or a sub-agent. |
+| In diagnostic mode, guess the cause without tracing it against the code | Forks are *grounded* candidate causes narrowed by elimination, not hunches. |
 
 ## Companion skills
 
-- **`/shape:mockup`** — the render-converge sibling: for decisions a real interactive artifact makes decidable (look / layout / structure).
+- **`/shape:mockup`** — the render-converge sibling: for decisions a real interactive artifact makes decidable (look / layout / structure); in diagnostic mode, where a visual fix-direction gets settled.
 - **`/shape:align`** — triages the `thoughts/` docs elicit lands into the plan (now/next/later).
+- **`/shape:build`** — in diagnostic mode, takes the confirmed cause + fix-direction and drives the rebuild.
 - **`/shape:reconcile`** — retires those `thoughts/` docs once reality absorbs them.
-- **`/nav:headers`** · **`/nav:map`** — read these to ground the forks cheaply in the real code.
+- **`/nav:headers`** · **`/nav:map`** — read these to ground the forks (and trace the flaw) cheaply in the real code.
+- **`/nav:audit`** — the broad, unconditional smell-scan; diagnostic-mode elicit is the *targeted* root-cause of a specific flaw you point at.
