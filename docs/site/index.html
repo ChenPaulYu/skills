@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 19)
+  Last audit: 2026-05-29 (rev 20)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -23,10 +23,19 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 17 ADRs in docs/adr/ — 001..017 with cross-supersede / refine links
+    • 18 ADRs in docs/adr/ — 001..018 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 19)
+  ⚠ FIXED in this revision (rev 20)
+    1. Promotion gate clarified (ADR-018): the capture-before-crystallize
+       ladder's "≥2 contexts / don't pre-skill" is a PROXY for evidence
+       sufficiency, not a literal session count. A single dense session may
+       crystallize a skill/ADR when it carries the substitutes for recurrence
+       — grounded ∧ friction-tested ∧ principle-level (all three). Names the
+       marketplace's self-exemption + gives it a test so "fast" stays
+       disciplined. observations/README ladder updated. ADR 17 → 18.
+
+  ⚠ FIXED in rev 19 (kept for history)
     1. nav:plan now writes its grounded plan into blueprints/plans/ when a
        blueprints/ tree is present (soft nav→shape; else docs/plans/), so the
        whole arc (decision → status → grounded-how) co-locates in one tree
