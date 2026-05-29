@@ -60,6 +60,17 @@ MD source 寫得 concise、不 hedge、不繞 → 套 `writing-clearly-and-conci
 ### mockup 子工作流(階 3 —— 也可獨立 skill 化)
 13 個 session / 2 週,protocol 一致(日期資料夾 · N 個 standalone HTML options + 假資料紀律 · 截圖 · 對照 real-app · README 含 build-cost/out-of-scope · visual-lock),但只 5/13 有 README。**單獨看就已遠超 raw**,是這條 pipeline 裡最先可動的一塊。對位既有 `frontend-design`/Pencil/`ui-ux-pro-max`(它們生**一個** UI;這裡是**多 option→比→lock→記錄**的 loop)。
 
+## Priority —— 結論 (2026-05-29)
+
+走過完整討論後,Paul 判定:**所有候選裡,只有兩個值得做成 skill,其餘留藍圖 / CLAUDE.md / reuse。**
+
+1. **`Thought-ground`**(stage 1)—— on-demand 的 grounded grill-me;behavioral spec = [[2026-05-29-thought-mode-how-paul-converges]];核心機制 = weight-adaptive exit。**最該先做**:認知槓桿最高、現有工具(ChatGPT)最弱、且 spec 已寫好。
+2. **mockup loop**(stage 3)—— 機械、13×/2 週、net-new、不糾纏 pipeline。
+
+其餘(synthesis · spec=WHAT · plan/progress · 單一 source→投影 · 分層 convention)= **留藍圖,等痛到了再動**。收斂 stance 放 CLAUDE.md;progress reuse `planning-with-files`;寫作套 `writing-clearly`。
+
+**但兩個都先不建** —— 守 don't-pre-skill。這段只是把「該做哪兩個、什麼順序」釘下來。
+
 ## Open questions / trip-wires
 
 - 家族命名 + 「thought」命名待定。
