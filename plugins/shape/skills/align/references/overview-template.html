@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--
+  blueprints OVERVIEW — human-facing render of the current plan.
+  This is a TEMPLATE. shape:align copies it and fills the data arrays below.
+
+  Contract (do not break):
+   • ONE layer, grouped by STATUS: In progress · Next · Future  (+ a Shipped strip).
+   • Each card is CLICK-TO-REVEAL: title + one-liner always visible; a plain-language
+     detail expands on click. The human never needs to open the raw thoughts/*.md.
+   • Bilingual (EN + zh-Hant) via the T dict + a lang toggle. Never ship monolingual
+     without explicit user opt-out.
+   • Self-contained: inline CSS + JS, no build, no external assets.
+   • The detail text is PLAIN LANGUAGE distilled from thoughts/ — not the dense md itself.
+   • Footer links the thoughts/ docs (the agent-facing design notes).
+   • MATCH THE PROJECT'S VISUAL LANGUAGE — before shipping, swap the neutral tokens
+     below for the project's real palette/fonts if sibling artifacts (a codebase-map,
+     a design-token file, prior mockups) establish one. A foreign-looking board makes
+     the user judge the skin instead of the plan.
+-->
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>plan overview</title>
+<style>
+  /* NEUTRAL starter tokens — replace with the project's own if one exists. */
+  :root{
+    --bg:#f7f4ec; --panel:#fffdf8; --ink:#2a211c;
+    --muted:#8a7d6e; --faint:#a99c8a; --line:#e7e0d2; --line-soft:#efe9dd;
+    --accent-deep:#9a6b2e;
+    --prog:#c2790f; --next:#0c7a59; --pend:#8a8175;
+    --shadow:0 1px 2px rgba(42,33,28,.04),0 12px 30px -18px rgba(42,33,28,.28);
+    --mono:'SF Mono',ui-monospace,'JetBrains Mono',Menlo,monospace;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);background-image:radial-gradient(#d6d3d1 1px,transparent 1px);background-size:24px 24px;
+    color:var(--ink);font:14px/1.55 var(--sans);-webkit-font-smoothing:antialiased;padding:30px 30px 70px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:6px}
+  h1{font-size:20px;font-weight:650}
+  h1 .mono{font-family:var(--mono);color:var(--accent-deep);font-size:17px}
+  .sub{color:var(--muted);font-size:12.5px;margin-top:6px;max-width:820px}
+  .sub b{color:var(--ink)}
+  .lang{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:11.5px;padding:5px 12px;cursor:pointer}
+  .lang button.on{background:var(--ink);color:#fff;font-weight:700}
+
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px;align-items:start}
+  @media(max-width:880px){.board{grid-template-columns:1fr}}
+  .col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--accent)}
+  .col.prog{--accent:var(--prog)} .col.next{--accent:var(--next)} .col.pend{--accent:var(--pend)}
+  .col h2{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .col h2 .em{font-size:14px}
+  .col h2 .n{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .col .cnote{font-size:11.5px;color:var(--faint);margin:5px 0 13px}
+  .item{background:var(--bg);border:1px solid var(--line-soft);border-left:3px solid var(--accent);border-radius:9px;padding:10px 12px;margin-bottom:9px}
+  .item.has-d{cursor:pointer}
+  .item.has-d:hover{border-color:var(--accent)}
+  .thead{display:flex;align-items:flex-start;gap:8px}
+  .item .t{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+  .chev{color:var(--faint);font-size:11px;line-height:1.4;transition:transform .15s;user-select:none}
+  .item.open .chev{transform:rotate(180deg)}
+  .item .d{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .item .detail{display:none;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:12px;line-height:1.62;color:#3d342d}
+  .item.open .detail{display:block}
+  .item .detail b{color:var(--accent-deep);font-weight:600}
+  .item .detail .q{display:block;margin-top:6px;color:var(--prog);font-size:11.5px}
+  .item .blk{display:inline-block;font-size:10px;color:var(--prog);border:1px solid rgba(194,121,15,.4);border-radius:4px;padding:1px 6px;font-family:var(--mono);margin-top:7px}
+  .item a{color:var(--next);text-decoration:none;border-bottom:1px solid rgba(12,122,89,.3)}
+  .item a:hover{border-bottom-color:var(--next)}
+  .item .ref{font-size:10.5px;font-family:var(--mono);margin-top:7px}
+
+  .shipped{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--next)}
+  .shipped h2{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .pills{display:flex;flex-wrap:wrap;gap:7px}
+  .pill{font-size:11.5px;color:var(--muted);background:var(--bg);border:1px solid var(--line-soft);border-radius:20px;padding:4px 11px}
+
+  .foot{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:11.5px;color:var(--faint)}
+  .foot a{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 10px}
+  .foot a:hover{border-color:var(--accent-deep);color:var(--ink)}
+  .foot .lbl{color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1><span class="mono">project/</span> <span data-t="title"></span></h1>
+      <div class="sub" data-t="sub"></div>
+    </div>
+    <div class="lang">
+      <button id="lzh" class="on" onclick="setLang('zh')">繁中</button>
+      <button id="len" onclick="setLang('en')">EN</button>
+    </div>
+  </header>
+
+  <div class="board" id="board"></div>
+
+  <div class="shipped">
+    <h2>✅ <span data-t="shippedH"></span></h2>
+    <div class="pills" id="pills"></div>
+  </div>
+
+  <div class="foot">
+    <span class="lbl" data-t="footLbl"></span>
+    <!-- one <a> per thoughts/ doc -->
+    <a href="thoughts/EXAMPLE-thought-a.md">EXAMPLE-thought-a.md</a>
+    <a href="thoughts/EXAMPLE-thought-b.md">EXAMPLE-thought-b.md</a>
+  </div>
+</div>
+
+<script>
+let lang="zh";
+// ── Static strings ───────────────────────────────────────────────────────
+const T={
+  title:{zh:"plan overview — 一層、按狀態",en:"plan overview — one layer, by status"},
+  sub:{zh:"人類看的現況快照。每張卡 = 做什麼,<b>點一下展開白話細節</b> —— 不必開 md。footer 的 thoughts/ 連結 = 給 agent 的原始設計筆記。",
+       en:"Human-facing snapshot. Each card = what to do; <b>click to expand the plain-language detail</b> — no need to open the md. The thoughts/ links in the footer are the raw design notes (for the agent)."},
+  shippedH:{zh:"Shipped — 現況基線",en:"Shipped — current baseline"},
+  footLbl:{zh:"設計來源(thoughts/):",en:"design sources (thoughts/):"},
+};
+// ── The three status columns ─────────────────────────────────────────────
+// key/cls: prog|next|pend  ·  em: emoji  ·  h: heading  ·  note: column subtitle
+// items[]: {t:title, d:one-liner(可空), detail:白話展開(可空), blk:"blocked-by …"(可空),
+//           ref:{label,href}(可空, 指向 thoughts/ 章節或 mockup)}
+const COLS=[
+  {key:"prog",cls:"prog",em:"🚧",h:{zh:"In progress · 現在做",en:"In progress"},
+   note:{zh:"現在這批的收尾",en:"finishing the current batch"},items:[
+    {t:{zh:"範例任務 A",en:"Example task A"},d:{zh:"一句現況/待驗",en:"one-line status"},
+     detail:{zh:"白話一段:這是什麼、怎麼操作、為什麼這樣。<b>關鍵詞</b>用粗體。<span class='q'>待驗:不確定的點獨立一行(橘)。</span>",
+              en:"A plain paragraph: what it is, how it works, why this shape. <b>Key terms</b> in bold. <span class='q'>Verify: open questions on their own line (amber).</span>"}},
+   ]},
+  {key:"next",cls:"next",em:"▶",h:{zh:"Next · 接下來",en:"Next"},
+   note:{zh:"小 polish / 接著要碰的",en:"small polish / up next"},items:[
+    {t:{zh:"範例任務 B",en:"Example task B"},d:{zh:"一句說明",en:"one-liner"},
+     detail:{zh:"白話展開。",en:"Plain detail."}},
+   ]},
+  {key:"pend",cls:"pend",em:"⏸",h:{zh:"Future · 想做但 defer",en:"Future · deferred"},
+   note:{zh:"等真實需求再做",en:"build when real pull appears"},items:[
+    {t:{zh:"範例 deferred C",en:"Example deferred C"},d:{zh:"為什麼 defer 的一句",en:"why deferred, one line"},
+     blk:"BLOCKER-ID",ref:{label:"thought-b §X",href:"thoughts/EXAMPLE-thought-b.md"},
+     detail:{zh:"白話:它是什麼、為什麼現在不做。<span class='q'>卡關:擋住實作的開放問題。</span>",
+              en:"Plain: what it is, why not now. <span class='q'>Blockers: the open questions in the way.</span>"}},
+   ]},
+];
+// ── Shipped strip (no expand — just labels) ───────────────────────────────
+const SHIPPED={
+  zh:["範例已完成 1","範例已完成 2"],
+  en:["example shipped 1","example shipped 2"],
+};
+// ── Render (generic — usually no need to touch below) ─────────────────────
+const tr=o=>o[lang];
+function render(){
+  document.querySelectorAll("[data-t]").forEach(el=>el.innerHTML=T[el.dataset.t][lang]);
+  document.getElementById("board").innerHTML=COLS.map(c=>`
+    <div class="col ${c.cls}">
+      <h2><span class="em">${c.em}</span> ${tr(c.h)} <span class="n">${c.items.length}</span></h2>
+      <div class="cnote">${tr(c.note)}</div>
+      ${c.items.map(it=>`<div class="item ${it.detail?"has-d":""}">
+        <div class="thead"><div class="t">${tr(it.t)}</div>${it.detail?`<span class="chev">⌄</span>`:""}</div>
+        ${tr(it.d)?`<div class="d">${tr(it.d)}</div>`:""}
+        ${it.blk?`<span class="blk">blocked-by ${it.blk}</span>`:""}
+        ${it.ref?`<div class="ref">→ <a href="${it.ref.href}">${it.ref.label}</a></div>`:""}
+        ${it.detail?`<div class="detail">${tr(it.detail)}</div>`:""}
+      </div>`).join("")}
+    </div>`).join("");
+  document.getElementById("pills").innerHTML=SHIPPED[lang].map(s=>`<span class="pill">${s}</span>`).join("");
+}
+function setLang(l){lang=l;document.getElementById("lzh").classList.toggle("on",l==="zh");document.getElementById("len").classList.toggle("on",l==="en");document.documentElement.lang=l==="zh"?"zh-Hant":"en";render();}
+// click a card → expand its plain-language detail (links inside stay clickable)
+document.getElementById("board").addEventListener("click",e=>{
+  if(e.target.closest("a"))return;
+  const it=e.target.closest(".item.has-d");
+  if(it)it.classList.toggle("open");
+});
+render();
+</script>
+</body>
+</html>

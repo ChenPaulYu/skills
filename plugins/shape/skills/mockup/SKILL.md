@@ -70,18 +70,28 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
 
 - **Where:** a project-local, **git-ignored** `mockups/` directory by default — artifacts are disposable decision-scaffold, not source, so they stay out of version control. One **dated topic subfolder** per decision: `mockups/<date>-<topic>/`. (Exact location is a per-project setting; the default is a git-ignored `mockups/`.)
 - **Format:** a **single self-contained interactive HTML file** (the non-negotiable) — inline styles + script, deterministic data, no build, no external assets. Screenshots are transient supplements, never the deliverable.
+- **Progressive disclosure (agent-scannable):** open the file with a top `<!-- -->` comment stating **what it is · the candidates rendered · the pick (once decided)**, so an agent grasps the artifact from `head` without parsing the whole DOM. Interface-first applies to the throwaway too — a human points at the rendered thing; an agent reads the header. (Same rule as the blueprints overview template's top comment.)
 - **Only thing that leaves the throwaway zone:** a promoted visual-lock (rare) — committed or referenced from the project's CLAUDE.md, always stamped. Everything else is discarded.
 
 ## Grounded-replica discipline (what makes an artifact trustworthy)
 
 - Grounded in the **real thing**: UI → true size, real palette, real surrounding context; diagram → real states / entities / data shape / flow (not toy or abstract).
+- **Match the project's established visual language.** Before rendering, look for prior artifacts the user already reads — sibling mockups, a codebase-map / docs site, a design-token file — and reuse their palette, fonts, and conventions (e.g. a bilingual toggle, a dark/light theme). A mockup that looks foreign to its siblings reads as "not ours" and the user spends judgement on the skin instead of the decision. The *specific* tokens/conventions are per-project (see the per-project render slot below); the *rule* — conform to what's already there — is universal.
 - Deterministic data · no external assets · no build · single self-contained file.
 - A faithful, **disposable** replica — not the real components, not pixel-perfect, not production code. Cheap + throwaway, real enough to decide on.
 - Not grounded at the right grain → re-ground before asking for a decision.
 
-## The render step is per-project
+## Activate it — open + hand over a URL (don't just write the file)
 
-"Render + capture" uses whatever browser-automation the project has (open the file or running system, locate the target, screenshot / interact). Those mechanics and their quirks live **with the project**, not here. Keep the core environment-agnostic; the verify helper is a pluggable slot.
+A file written to disk is not yet a decidable artifact — the user has to *see* it. So after writing, **activate it and surface a clickable URL in the chat**, the way a good scaffold does:
+
+- **Open it** with the platform opener (`open <file>` on macOS, `xdg-open` on Linux, `start` on Windows) so it renders immediately.
+- **Hand over a URL in the reply** the user can click: a `file://<absolute-path>` link by default. If the artifact needs an HTTP origin (fetches, modules, anything `file://` blocks — rare for a self-contained mockup), start a throwaway static server (`python3 -m http.server` in the artifact's dir) and give the `http://localhost:<port>/<file>` URL instead, noting it's a temporary server.
+- Prefer a real origin over a screenshot: the whole point is that the user can hover / click / flip the live thing. A screenshot is a transient supplement, never the hand-off.
+
+## The render step is per-project — the browser-verify slot
+
+"Render + capture" uses shape's shared **browser-verify capability slot** (defined once in `plugins/shape/CLAUDE.md`, shared with `align` + `build`): a named default (`agent-browser`) + detect + fail-helpfully if missing + per-project override. Open the file / running system, locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a tool — name the capability.
 
 ## Anti-patterns (refuse these)
 

@@ -14,8 +14,8 @@
     {
       "name": "shape",
       "source": "./plugins/shape",
-      "description": "Give intent its form before building — converge on what to build via real, disposable, interactive instances (mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav. Early: one skill (mockup).",
-      "version": "0.0.1"
+      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
+      "version": "0.2.0"
     }
   ]
 }

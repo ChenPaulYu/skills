@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 10)
+  Last audit: 2026-05-29 (rev 13)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -11,25 +11,79 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Two plugins: nav (6 skills) + shape (1 skill, early) — see
+    • Two plugins: nav (6 skills) + shape (5 skills) — see
       plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, headers, map, doctor, plan
-    • shape skills: mockup (render-to-decide). shape v0.0.1 — early, 1 skill;
-      domain = pre-build pipeline thought→spec→plan (shape/CLAUDE.md). No
-      shape ADR yet (debt); spec = convention, plan = reuse (not skills)
+    • shape skills: mockup (render-to-decide), elicit (grounded grill → a
+      thought), align (decide next + render the plan), reconcile (prune stale
+      notes), build (drive In-progress to done; meta-skill). shape v0.2.0;
+      doctor (orchestrator) deferred. blueprints/ = artifact convention (not a
+      skill); identity = forward motion: intent → form → built+verified code
+      (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 9 ADRs in docs/adr/ — 001..009 with cross-supersede / refine links
+    • 11 ADRs in docs/adr/ — 001..011 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 10)
-    1. Added plugins/shape/CLAUDE.md — formalizes shape's identity: domain =
-       pre-build pipeline thought→spec→plan; through-line = "converge by a
-       real disposable instance, not a description"; members = skills
-       {thought-ground (unbuilt), mockup (built)}, with spec = convention and
-       plan = reuse (planning-with-files), NOT skills. Synced the site's now-
-       stale "no shape/CLAUDE.md" debt claims (callouts, VERIFIED, Module map).
-       Still deferred: a shape ADR (full crystallization).
+  ⚠ FIXED in this revision (rev 13)
+    1. Built shape:build (ADR-011) — a meta-skill that drives the plan's
+       In-progress column to done: per item ground via /nav:plan → summarize the
+       plan as an interactive diagram (mockup protocol) → implement (/nav:refactor
+       discipline + inject↔check, sequential) → verify (browser screenshot vs the
+       mockup; or test-gate) → move to Shipped → /shape:align. Autonomous but
+       confidence-gated (stop below 90%). The cross-plugin orchestrator.
+    2. shape identity widened "pre-build" → forward motion (intent → form →
+       built+verified code); nav = the maintenance half, stays shape-independent
+       (shape → nav, never reverse). Reframed across CLAUDE.md + this site.
+    3. Defined the browser-verify capability slot (shared by mockup/align/build,
+       N+1): named default agent-browser (vercel-labs/agent-browser) + detect +
+       fail-helpfully 3-way gate (install / test-only / skip) + per-project
+       override. Don't hardcode the tool; name the capability.
+    4. shape 4 → 5 skills; v0.1.0 → 0.2.0; ADR count 10 → 11. SHAPE_NODES 5 → 6
+       (+ build node, new build kind color).
+
+  ⚠ FIXED in rev 12 (kept for history)
+    1. Built shape:elicit (the converge-verbal sibling of mockup; ADR-010's
+       pending member). Behavioral spec from the thought-mode observation:
+       react-not-author (proposer vs refiner, a volley), the 6 moves (mirror →
+       drill-to-principle → named fork → friction → versions-to-one-line →
+       short turns), grounded forks (anchored in the repo, not abstract
+       Socratic), summoned-not-auto, and the core: weight-adaptive exit (stop
+       on the snap, not after a checklist). Boundary: render-decidable →
+       /shape:mockup; decided-spec → /nav:plan. Lands a thoughts/ doc.
+    2. shape 3 → 4 built skills; elicit pending → built across all surfaces
+       (SHAPE_NODES, Module map, master node, plugin.json + marketplace.json).
+       No new ADR — elicit's existence + boundary were already decided in
+       ADR-010; this is execution, and the behavioral spec lives in the
+       observation, not an architectural decision.
+
+  ⚠ FIXED in rev 11 (kept for history)
+    1. shape grew its blueprints workflow (ADR-010): two new skills —
+       align (project: decide now/next/later WITH user → plan.md + regenerate
+       overview.html; pre-build mirror of /nav:map) and reconcile (judge stale
+       thoughts via code/headers + self-declaration + date → prune/consolidate,
+       write-gated). blueprints/ defined as the artifact convention
+       (thoughts/ · plan.md · overview.html · mockups/; one state, two renders).
+    2. Naming settled: the project verb is "align" (not "plan" — would collide
+       with /nav:plan; not "roadmap" — implies a big up-front plan). The
+       converge-verbal skill renamed thought-ground → "elicit" (pending).
+    3. Two shape↔nav seams recorded: blueprints/ → /nav:plan (hand-off
+       artifact); reconcile ← /nav:headers (head -12 = staleness signal).
+    4. Progressive disclosure now required in every produced artifact (agent-
+       scannable head + TL;DR), and mockup/align now activate the artifact +
+       hand over a clickable URL in chat (Superpowers-style).
+    5. shape v0.0.1 → 0.1.0 (plugin.json + marketplace.json). The "no shape
+       ADR" debt is cleared (ADR-010). ADR count 9 → 10.
+    6. Synced site surfaces: shape anatomy (SHAPE_NODES 1 → 5 with a blueprints
+       hub + align/reconcile/elicit nodes; new project/reconcile/artifact kind
+       colors), Module map shape skills, master-graph shape node, callouts.
+
+  ⚠ FIXED in rev 10 (kept for history)
+    1. Added plugins/shape/CLAUDE.md — formalized shape's identity: through-line
+       = "converge by a real disposable instance, not a description"; members =
+       skills {thought-ground (unbuilt), mockup (built)}, spec = convention,
+       plan = reuse. (Superseded by rev 11 / ADR-010, which replaced the
+       thought→spec→plan framing with the verb-grouped family + blueprints.)
 
   ⚠ FIXED in rev 9 (kept for history)
     1. shape:mockup matured — folded first-principles + round-2 into the
@@ -316,7 +370,7 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Two plugins now — nav (navigability, post-build) and shape (intent → form, pre-build). They're siblings: no dependency between them, hence no edges.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape depends on nav one-way (shape → nav, never reverse) — the edge shows it.</span></div>
     </section>
 
     <section id="rules">
@@ -351,14 +405,14 @@
     <section id="shape-anatomy">
       <h2>
         <span class="layer-chip ui" data-t="layer_plugin">plugin</span>
-        <span data-t="shape_anat_title">shape anatomy — render-to-decide (early: one skill)</span>
+        <span data-t="shape_anat_title">shape anatomy — converge · project · reconcile · build</span>
       </h2>
-      <p class="lede" data-t="shape_anat_lede">One skill today: mockup — render-to-decide.</p>
+      <p class="lede" data-t="shape_anat_lede">Skills grouped by verb around a blueprints hub: converge (mockup, elicit) · project (align) · reconcile · build (drive In-progress to done).</p>
       <div class="graphwrap">
         <svg class="graph" id="shapeGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="shapePanel"></div>
       </div>
-      <div class="callout" data-t="shape_anat_callout">Sibling to nav; pre-build to nav's post-build.</div>
+      <div class="callout" data-t="shape_anat_callout">Forward-motion half (nav = maintenance half). Three seams, one-way (shape → nav): blueprints/ hands off to /nav:plan; reconcile reads /nav:headers; build orchestrates /nav:plan + /nav:refactor per item.</div>
     </section>
 
     <section id="conv">
@@ -397,7 +451,7 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description. Two plugins now — nav (navigability, post-build) and shape (intent → form, pre-build). They're siblings: no dependency between them, hence no edges.",
+    pluginsmap_howread: "click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape depends on nav one-way (shape → nav, never reverse) — the edge shows it.",
     rules_title: 'Design rules — the bar every skill clears',
     rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. Every <code>SKILL.md</code> embeds these verbatim; this is the canonical list.',
     map_title: 'Skill list — search & expand',
@@ -426,14 +480,14 @@ const T = {
     nav_default_click_label: 'tip',
     nav_default_click_text: 'doctor sequences audit → headers → map. refactor stays standalone — doctor recommends it but never executes.',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    shape_anat_title: 'shape anatomy — render-to-decide (early: one skill)',
-    shape_anat_lede: "One skill today: <code>mockup</code> — converge a decision by a real, disposable, <em>interactive</em> artifact (a UI mockup, or an interactive diagram for backend / agent / data / flow), never a description. The anatomy grows as the family proves out.",
-    shape_anat_callout: "Sibling to <code>nav</code>: nav keeps existing code navigable (post-build); shape gives intent its form (pre-build). Domain = the pre-build pipeline thought → spec → plan (through-line in <code>shape/CLAUDE.md</code>). Early — one skill (<code>mockup</code>); its core: converge a decision by a real, disposable, interactive artifact — never a description.",
+    shape_anat_title: 'shape anatomy — converge · project · reconcile · build',
+    shape_anat_lede: "Skills grouped by verb around a <code>blueprints/</code> hub. <b>converge</b>: <code>mockup</code> (render-to-decide) + <code>elicit</code> (a summoned grounded grill — drill to a principle, exit on the snap). <b>project</b>: <code>align</code> (decide now/next/later WITH the user → <code>plan.md</code> + regenerate <code>overview.html</code>; the mirror of <code>/nav:map</code>). <b>reconcile</b>: judge stale <code>thoughts/</code> → prune/consolidate, write-gated. <b>build</b>: drive the In-progress column to done — per item ground via <code>/nav:plan</code> → summarize → implement → verify (screenshot vs mockup) → ship; autonomous but confidence-gated.",
+    shape_anat_callout: "shape is the <b>forward-motion</b> half; <code>nav</code> is the maintenance half. Through-line: converge by a real disposable instance, never a description; its standing form is the blueprints board (one state, two renders — agent reads markdown, human reads the HTML projection), and its terminus is <code>build</code> (the running system, verified vs the mockup, is the third render). Three seams, one-way (<b>shape → nav</b>, never reverse): <code>blueprints/</code> → <code>/nav:plan</code>; <code>reconcile</code> ← <code>/nav:headers</code>; <code>build</code> orchestrates <code>/nav:plan</code> + <code>/nav:refactor</code>. See ADR-010/011.",
     shape_default_h3: 'shape plugin anatomy',
-    shape_default_role: 'One skill: mockup (render-to-decide). Click it for its role.',
+    shape_default_role: 'Verb-grouped skills around a blueprints hub: mockup, elicit (converge) · align (project) · reconcile · build (make it real). Click a node for its role.',
     shape_default_click_label: 'tip',
-    shape_default_click_text: 'Early — one node. A second skill (e.g. a grounded "grill me" clarifier) would join here as the family proves out.',
-    leg_decide: 'render-to-decide',
+    shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. doctor (orchestrator) is deferred until the family proves out.',
+    leg_decide: 'converge', leg_project: 'project', leg_reconcile: 'reconcile', leg_build: 'build', leg_artifact: 'blueprints (convention)',
     // legend
     leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe',
     leg_plugin: 'plugin',
@@ -463,7 +517,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述。現在兩個 plugin —— nav(可導覽性,post-build)與 shape(意圖 → 形狀,pre-build)。兩者是姊妹:彼此無依賴,故無連線。',
+    pluginsmap_howread: '點 node 看描述。兩個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)與 nav(可導覽性,維護那半)。shape 單向依賴 nav(shape → nav,絕不反向)—— 連線標出來了。',
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -490,14 +544,14 @@ const T = {
     nav_default_click_label: '提示',
     nav_default_click_text: 'doctor 串接 audit → headers → map。refactor 維持獨立 —— doctor 推薦但不執行。',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    shape_anat_title: 'shape 解剖 —— render 即決策(早期:一個 skill)',
-    shape_anat_lede: '今天一個 skill:<code>mockup</code> —— 用真實、可丟、<em>可互動</em>的 artifact(UI mockup,或後端/agent/資料/流程用的互動 diagram)收斂決策,不用描述。anatomy 隨家族成熟而長。',
-    shape_anat_callout: '<code>nav</code> 的姊妹:nav 讓既有 code 可導覽(post-build);shape 把意圖給形狀(pre-build)。Domain = pre-build pipeline thought → spec → plan(through-line 在 <code>shape/CLAUDE.md</code>)。早期 —— 只有一個 skill(<code>mockup</code>);它的 core:用真實、可丟、可互動的 artifact 收斂決策 —— 不用描述。',
+    shape_anat_title: 'shape 解剖 —— 收斂 · 投影 · 對賬 · build',
+    shape_anat_lede: '依動詞分組,圍著 <code>blueprints/</code> hub。<b>收斂</b>:<code>mockup</code>(render 即決策)+ <code>elicit</code>(召喚式 grounded grill —— 鑽到原則、撞到就收手)。<b>投影</b>:<code>align</code>(跟 user 一起定 now/next/later → <code>plan.md</code> + 重生 <code>overview.html</code>;<code>/nav:map</code> 的對應)。<b>對賬</b>:判斷哪些 <code>thoughts/</code> 過時 → prune/合併,write-gated。<b>build</b>:把 In-progress 跑到清空 —— 每 item /nav:plan ground → summarize → implement → verify(截圖對 mockup)→ ship;自動但 confidence-gated。',
+    shape_anat_callout: 'shape 是<b>往前推</b>那半;<code>nav</code> 是維護那半。Through-line:用真實、可丟的 instance 收斂,不用描述;常駐形式是 blueprints 看板(單一現況、兩種 render —— agent 讀 markdown,人讀 HTML 投影),終點是 <code>build</code>(跑起來、對 mockup 驗過的系統,是第三種 render)。三條縫、單向(<b>shape → nav</b>,絕不反向):<code>blueprints/</code> → <code>/nav:plan</code>;<code>reconcile</code> ← <code>/nav:headers</code>;<code>build</code> 編排 <code>/nav:plan</code> + <code>/nav:refactor</code>。見 ADR-010/011。',
     shape_default_h3: 'shape plugin 解剖',
-    shape_default_role: '一個 skill:mockup(render 即決策)。點它看角色。',
+    shape_default_role: '依動詞分組、圍著 blueprints hub:mockup、elicit(收斂)· align(投影)· reconcile · build(做出來)。點 node 看角色。',
     shape_default_click_label: '提示',
-    shape_default_click_text: '早期 —— 一個 node。家族成熟後第 2 個 skill(如 grounded 的「grill 我」釐清器)會加進來。',
-    leg_decide: 'render 即決策',
+    shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。doctor(orchestrator)等家族成熟再加。',
+    leg_decide: '收斂', leg_project: '投影', leg_reconcile: '對賬', leg_build: '做出來', leg_artifact: 'blueprints(約定)',
     leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述',
     leg_plugin: 'plugin',
   },
@@ -549,18 +603,22 @@ const DOMAINS = {
   shape: {
     layer: 'ui',
     path: 'plugins/shape/',
-    blurb: {en:'Give intent its form before building — converge on what to build via real, disposable, interactive artifacts (UI mockups, or diagrams for backend/agent/data/flow), not descriptions. Sibling to nav (post-build navigability). Domain = pre-build pipeline thought→spec→plan (see shape/CLAUDE.md). Skills: mockup (built), thought-ground (pending); spec = convention, plan = reuse. No shape ADR yet (debt).', zh:'動工前把意圖給形狀 —— 用真實、可丟、可互動的 artifact(UI mockup,或後端/agent/資料/流程的 diagram)收斂「要建什麼」,不用描述。nav(post-build 可導覽性)的姊妹。Domain = pre-build pipeline thought→spec→plan(見 shape/CLAUDE.md)。Skills:mockup(已建)、thought-ground(待);spec = convention,plan = reuse。尚無 shape ADR(debt)。'},
+    blurb: {en:'Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. nav is the maintenance half; shape depends on nav one-way (shape → nav). Skills by verb around a blueprints/ hub: converge (mockup, elicit) · project (align) · reconcile · build. blueprints/ = artifact convention (not a skill). v0.2.0; see shape/CLAUDE.md + ADR-010/011.', zh:'往前推:用真實、可丟的 instance 收斂(不用描述)、把決定記得清楚、保持現況、一路 build 成跑得起來且驗過的 code。nav 是維護那半;shape 單向依賴 nav(shape → nav)。依動詞分組、圍著 blueprints/ hub:收斂(mockup、elicit)· 投影(align)· 對賬(reconcile)· build。blueprints/ = artifact 約定(非 skill)。v0.2.0;見 shape/CLAUDE.md + ADR-010/011。'},
     files: [
-      ['/shape:mockup', '', {en:'Converge a visual / UI / interaction decision by generating + rendering real, disposable candidates at true size in real context — never a description. The one non-negotiable: the output is an interactive HTML. Draft (v0.0.1, not yet a full family).', zh:'用 generate + render 一組真實、可丟的候選(真尺寸、真脈絡)收斂視覺/UI/互動決策 —— 不用描述。唯一非妥協:output 是互動 HTML。Draft(v0.0.1,尚非完整家族)。'}],
+      ['/shape:mockup', '', {en:'Converge a visual / structural decision by generating + rendering real, disposable candidates — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; it activates the artifact + hands over a URL.', zh:'用 generate + render 一組真實、可丟的候選收斂視覺/結構決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。'}],
+      ['/shape:align', '', {en:'Decide what to build next — read thoughts/ + the real state, decide now/next/later WITH the user, write a lean plan.md (agent) + regenerate a click-to-reveal overview.html (human). The pre-build mirror of /nav:map; scaffolds blueprints/ on first run.', zh:'決定接下來做什麼 —— 讀 thoughts/ + 現況,跟 user 一起定 now/next/later,寫精簡 plan.md(agent)+ 重生 click-to-reveal overview.html(人)。/nav:map 的 pre-build 對應;首跑 scaffold blueprints/。'}],
+      ['/shape:reconcile', '', {en:'Reconcile the design notes with reality — judge which thoughts/ are stale (code + /nav:headers · self-declaration · date), prune/consolidate WITH the user. Check read-only; cleaning write-gated with hard safety rules.', zh:'讓設計筆記對齊現況 —— 判斷哪些 thoughts/ 過時(code + /nav:headers · 自述 · 日期),跟 user 一起 prune/合併。查唯讀;清 write-gated,帶硬安全規則。'}],
+      ['/shape:build', '', {en:'Meta-skill: drive plan.md In-progress to done. Per item — ground via /nav:plan → summarize as a diagram → implement (/nav:refactor discipline + inject↔check, sequential) → verify (browser screenshot vs mockup, or test-gate) → Shipped → /shape:align. Autonomous but confidence-gated (stop below 90%). Visual verify uses the browser-verify slot (default agent-browser).', zh:'meta-skill:把 plan.md 的 In-progress 跑到清空。每 item —— /nav:plan ground → 用 diagram summarize → implement(/nav:refactor 紀律 + inject↔check,逐一)→ verify(browser 截圖對 mockup,或 test-gate)→ Shipped → /shape:align。自動但 confidence-gated(<90% 停)。視覺驗收用 browser-verify slot(預設 agent-browser)。'}],
+      ['/shape:elicit', '', {en:'Converge a conceptual / definitional decision by a summoned grounded grill — AI proposes refutable structure, you refine/pick, a volley lands a one-line principle as a thoughts/ doc. Core: weight-adaptive exit (stop on the snap, not a checklist). The verbal-converge sibling of mockup; boundary: render-decidable → mockup.', zh:'用召喚式的 grounded grill 收斂概念/定義決策 —— AI 立起可否定的結構,你 refine/挑,一場 volley 把一句原則落成 thoughts/。Core:weight-adaptive exit(撞到就收手,不是跑清單)。mockup 的口頭收斂姊妹;界線:render 能定的 → mockup。'}],
     ],
   },
 };
 
 const CB_NODES = [
   {id:'nav', kind:'plugin', x:240, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
-  {id:'shape', kind:'plugin', x:470, y:150, w:120, link:'shape-anatomy', role:{en:'intent → form', zh:'意圖 → 形狀'}, desc:{en:'Give intent its form before building (pre-build) — converge a decision by a real, disposable, interactive artifact (a UI mockup, or a diagram for backend/agent/data/flow), not a description. Early: 1 skill (mockup, v0.0.1).', zh:'動工前把意圖給形狀(pre-build)—— 用真實、可丟、可互動的 artifact(UI mockup,或後端/agent/資料/流程的 diagram)收斂決策,不用描述。早期:1 個 skill(mockup, v0.0.1)。'}},
+  {id:'shape', kind:'plugin', x:470, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → plan (align) → build, keep honest (reconcile). 5 skills around a blueprints/ convention; doctor deferred. Depends on nav one-way (shape → nav). v0.2.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ 計畫(align)→ build,保持誠實(reconcile)。5 個 skill 圍著 blueprints/ 約定;doctor 待加。單向依賴 nav(shape → nav)。v0.2.0。'}},
 ];
-const CB_EDGES = [];
+const CB_EDGES = [['shape','nav']];
 
 const NAV_NODES = [
   {id:'doctor', kind:'orchestrator', x:180, y:30, w:120, role:{en:'orchestrate', zh:'統籌'}, desc:{en:'Full health pass — sequences audit → headers → map with user-review gates. Hands off refactors (recommends but never executes).', zh:'完整健康檢查 —— 串接 audit → headers → map,步驟之間 user-review。重構交出(僅推薦,不執行)。'}},
@@ -580,9 +638,20 @@ const NAV_EDGES = [
 ];
 
 const SHAPE_NODES = [
-  {id:'mockup', kind:'decide', x:310, y:140, w:140, role:{en:'render-to-decide', zh:'render 即決策'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram/chart for backend/agent/data/flow — never a description. The output is always an interactive HTML. v0.0.1, draft.', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程用的互動 diagram —— 不用描述。output 永遠是互動 HTML。v0.0.1,draft。'}},
+  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-line principle. The 6 moves (mirror → drill-to-principle → named fork → friction → versions → short turns); forks grounded in the real repo; core = weight-adaptive exit (stop on the snap). Lands a thoughts/ doc.', zh:'召喚式的 grounded grill:AI 立起可否定的結構,你 refine/挑,一場 volley 收斂成一句原則。六個 move(mirror → 鑽到原則 → 命名 fork → friction → 版本 → 短回合);fork 錨在真 repo;core = weight-adaptive exit(撞到就收手)。落成一份 thoughts/。'}},
+  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; activates it + hands over a URL. Lands in mockups/.', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。落在 mockups/。'}},
+  {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{en:'Read thoughts/ + the real state of the work → decide now/next/later WITH the user → write plan.md (agent) + regenerate overview.html (human, click-to-reveal). The pre-build mirror of /nav:map. Scaffolds blueprints/ on first run.', zh:'讀 thoughts/ + 工作現況 → 跟 user 一起定 now/next/later → 寫 plan.md(agent)+ 重生 overview.html(人,click-to-reveal)。/nav:map 的 pre-build 對應。首跑順手 scaffold blueprints/。'}},
+  {id:'reconcile', kind:'reconcile', x:575, y:55, w:150, role:{en:'reconcile', zh:'對賬'}, desc:{en:'Judge which thoughts/ docs are stale (code + /nav:headers · self-declaration · date) → prune/consolidate WITH the user. Check is read-only; cleaning is write-gated with hard safety rules (verify tracked/untracked, never mv-then-rm, diff before delete).', zh:'判斷哪些 thoughts/ 過時(code + /nav:headers · 自述 · 日期)→ 跟 user 一起 prune/合併。查是唯讀;清是 write-gated,帶硬安全規則(查 tracked/untracked、絕不 mv 後接 rm、刪前 diff)。'}},
+  {id:'blueprints', kind:'artifact', x:290, y:185, w:180, role:{en:'artifact convention', zh:'artifact 約定'}, desc:{en:'NOT a skill — the container the verbs read/write: thoughts/ (committed design) · plan.md (agent index) · overview.html (human projection) · mockups/ (git-ignored). One current state, two renders; deps point downstream only. Hand-off artifact to /nav:plan.', zh:'非 skill —— 各動詞讀寫的容器:thoughts/(已 commit 的設計)· plan.md(agent index)· overview.html(人的投影)· mockups/(git-ignored)。單一現況、兩種 render;依賴只往下游。也是交給 /nav:plan 的 hand-off artifact。'}},
+  {id:'build', kind:'build', x:300, y:270, w:160, role:{en:'make it real', zh:'做出來'}, desc:{en:'Meta-skill: drive plan.md In-progress to done. Per item — ground via /nav:plan → summarize as a diagram (mockup protocol) → implement (/nav:refactor discipline + inject↔check, sequential) → verify (browser screenshot vs mockup, or test-gate) → move to Shipped → /shape:align. Autonomous but confidence-gated (stop below 90%). The cross-plugin orchestrator (shape → nav).', zh:'meta-skill:把 plan.md 的 In-progress 跑到清空。每 item —— /nav:plan ground → 用 diagram summarize(mockup 協定)→ implement(/nav:refactor 紀律 + inject↔check,逐一)→ verify(browser 截圖對 mockup,或 test-gate)→ 移 Shipped → /shape:align。自動但 confidence-gated(<90% 停)。跨 plugin 的 orchestrator(shape → nav)。'}},
 ];
-const SHAPE_EDGES = [];
+const SHAPE_EDGES = [
+  ['elicit', 'blueprints'],
+  ['mockup', 'blueprints'],
+  ['align', 'blueprints'],
+  ['reconcile', 'blueprints'],
+  ['build', 'blueprints'],
+];
 
 const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},
@@ -612,7 +681,11 @@ const KIND_COLOR = {
   transform: '#6c8fb5',     // refactor — blue
   describe: '#b5894e',      // headers / map — caramel
   plugin: '#7a9e6e',        // top-level plugin node — green (state-layer color)
-  decide: '#a86b9e',        // shape:mockup — render-to-decide (violet)
+  decide: '#a86b9e',        // shape: mockup / elicit — converge (violet)
+  project: '#3f8fa3',       // shape: align — project the plan (teal)
+  reconcile: '#b5654e',     // shape: reconcile — prune stale (rust)
+  artifact: '#8a7d6e',      // shape: blueprints — the convention/container (taupe)
+  build: '#3f7d4a',         // shape: build — make it real (green)
 };
 
 function renderLayers(){
@@ -767,7 +840,7 @@ function render(){
   renderAnatomy('#navGraph', '#navPanel', NAV_NODES, NAV_EDGES, 'nav_default',
     [['#2a211c','leg_orch'],['#7a9e6e','leg_assess'],['#6c8fb5','leg_transform'],['#b5894e','leg_describe']]);
   renderAnatomy('#shapeGraph', '#shapePanel', SHAPE_NODES, SHAPE_EDGES, 'shape_default',
-    [['#a86b9e','leg_decide']]);
+    [['#a86b9e','leg_decide'],['#3f8fa3','leg_project'],['#b5654e','leg_reconcile'],['#3f7d4a','leg_build'],['#8a7d6e','leg_artifact']]);
 }
 
 function setLang(L){
