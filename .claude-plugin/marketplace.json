@@ -10,6 +10,12 @@
       "source": "./plugins/nav",
       "description": "Keep any codebase navigable as it grows — audit (assess + feasibility), refactor (verbatim move + test gates), headers (file-top descriptions), map (bilingual codebase HTML), doctor (full health pass). Language-agnostic. Built on Ousterhout's deep-module principles.",
       "version": "0.1.0"
+    },
+    {
+      "name": "shape",
+      "source": "./plugins/shape",
+      "description": "Give intent its form before building — converge on what to build via real, disposable instances (mockups), not descriptions. Sibling to nav. Early: one skill (mockup).",
+      "version": "0.0.1"
     }
   ]
 }

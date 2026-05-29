@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 7)
+  Last audit: 2026-05-29 (rev 8)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -11,15 +11,27 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • One plugin: nav (plugins/nav/.claude-plugin/plugin.json name = "nav")
-    • Six skills under nav: audit, refactor, headers, map, doctor, plan
-      (folders + frontmatter name match in plugins/nav/skills/*/SKILL.md)
+    • Two plugins: nav (6 skills) + shape (1 skill, early) — see
+      plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+    • nav skills: audit, refactor, headers, map, doctor, plan
+    • shape skills: mockup (render-to-decide). shape v0.0.1 — early, 1 skill;
+      family crystallizes as more prove out. No shape ADR / CLAUDE.md yet (debt)
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
     • 9 ADRs in docs/adr/ — 001..009 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 7)
+  ⚠ FIXED in this revision (rev 8)
+    1. Registered the `shape` plugin (sibling to nav) + its first skill
+       `mockup` (render-to-decide): plugins/shape/.claude-plugin/plugin.json
+       + a marketplace.json entry. shape's spine = converge a visual decision
+       by a real, disposable, *interactive HTML* — never a description.
+       v0.0.1, early (1 skill), not a full family yet. Now shown on the
+       master map + Module map. DEFERRED debt (per the harvest-not-seed
+       charter, until 2-3 proven skills): a shape ADR (why the family,
+       boundary vs nav) + shape/CLAUDE.md.
+
+  ⚠ FIXED in rev 7 (kept for history)
     1. Consolidated the deep-module rules 11 → 8 (ADR-009): made "deep
        modules" the explicit root, merged the interface-first trio (old
        ②+⑩) and the grain balance (old ⑤+⑥), folded old ④ (future-ready)
@@ -278,7 +290,7 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description + an anatomy hop. With only one plugin today, this view is degenerate by design — the form is ready for what's next.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Two plugins now — nav (navigability, post-build) and shape (intent → form, pre-build). They're siblings: no dependency between them, hence no edges.</span></div>
     </section>
 
     <section id="rules">
@@ -346,7 +358,7 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description + an anatomy hop. With only one plugin today, this view is degenerate by design — the form is ready for what's next.",
+    pluginsmap_howread: "click a node for its description. Two plugins now — nav (navigability, post-build) and shape (intent → form, pre-build). They're siblings: no dependency between them, hence no edges.",
     rules_title: 'Design rules — the bar every skill clears',
     rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. Every <code>SKILL.md</code> embeds these verbatim; this is the canonical list.',
     map_title: 'Skill list — search & expand',
@@ -403,7 +415,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述 + 跳到 anatomy。今天只有一個 plugin,此圖故意是退化的 —— 形式已就緒等待新成員。',
+    pluginsmap_howread: '點 node 看描述。現在兩個 plugin —— nav(可導覽性,post-build)與 shape(意圖 → 形狀,pre-build)。兩者是姊妹:彼此無依賴,故無連線。',
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -477,10 +489,19 @@ const DOMAINS = {
       ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session.', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。'}],
     ],
   },
+  shape: {
+    layer: 'ui',
+    path: 'plugins/shape/',
+    blurb: {en:'Give intent its form before building — converge on what to build via real, disposable, interactive mockups, not descriptions. Sibling to nav (post-build navigability). Early: 1 skill. No shape/CLAUDE.md or ADR yet (debt).', zh:'動工前把意圖給形狀 —— 用真實、可丟、可互動的 mockup 收斂「要建什麼」,不用描述。nav(post-build 可導覽性)的姊妹。早期:1 個 skill。尚無 shape/CLAUDE.md 或 ADR(debt)。'},
+    files: [
+      ['/shape:mockup', '', {en:'Converge a visual / UI / interaction decision by generating + rendering real, disposable candidates at true size in real context — never a description. The one non-negotiable: the output is an interactive HTML. Draft (v0.0.1, not yet a full family).', zh:'用 generate + render 一組真實、可丟的候選(真尺寸、真脈絡)收斂視覺/UI/互動決策 —— 不用描述。唯一非妥協:output 是互動 HTML。Draft(v0.0.1,尚非完整家族)。'}],
+    ],
+  },
 };
 
 const CB_NODES = [
-  {id:'nav', kind:'plugin', x:320, y:140, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep any codebase navigable as it grows. 5 skills, language-agnostic.', zh:'讓任何 codebase 長大後仍可導覽。5 個 skill,跨語言。'}},
+  {id:'nav', kind:'plugin', x:240, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
+  {id:'shape', kind:'plugin', x:470, y:150, w:120, role:{en:'intent → form', zh:'意圖 → 形狀'}, desc:{en:'Give intent its form before building (pre-build) — converge a visual decision by a real, disposable, interactive mockup, not a description. Early: 1 skill (mockup, v0.0.1).', zh:'動工前把意圖給形狀(pre-build)—— 用真實、可丟、可互動的 mockup 收斂視覺決策,不用描述。早期:1 個 skill(mockup, v0.0.1)。'}},
 ];
 const CB_EDGES = [];
 

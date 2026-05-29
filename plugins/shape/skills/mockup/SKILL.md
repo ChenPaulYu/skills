@@ -13,13 +13,21 @@ You can't judge a look-and-feel decision from a description. ASCII, an option li
 
 Often the user has no options yet — just an open question ("does this need an icon? what would it even look like?"). So **generating a divergent candidate set is half the value**, not a precondition.
 
-## Spine
+## Spine — one core, everything else derives
 
-> **Converge by real, disposable instances — never a description.**
+> **Core: the unit of judgement is a real, rendered, disposable instance at true size in real context — never a description.**
+>
+> **The one non-negotiable: the output is always an *interactive* HTML — you can hover / flip / click it. Never a static image, an ASCII sketch, an option list, or prose. Everything else in this skill flexes; this does not.**
 
-- **Mockup is a probe, not a pipeline stage.** It fires at any altitude and **feeds back upstream**: a rendered candidate often changes not just the visual but the *concept* — because a broad-enough set includes the "don't build this element at all" candidate, and seeing what "don't" looks like reframes the decision (rendering icon options reveals plain text wins; or that the element shouldn't exist).
-- **Render when in doubt.** You usually can't tell upfront whether a description would have sufficed — you find out by rendering. Bias toward rendering; the cost is one cheap throwaway file.
-- **Weight-adaptive + exit on the pick.** A genuinely trivial tweak → just make it. And you're done the moment the user points or reframes — never run a fixed multi-stage ceremony.
+One principle inherited from the family (the visual form of "reframe to the most fundamental layer"):
+
+> **Generate broad enough to include the "don't / nothing here" candidate — so seeing what "don't" looks like can reframe the question, not just answer it.**
+
+Everything else below **derives** from the core — when in doubt, trace back to it:
+
+- *Probe, not a stage* — the instance is the unit of judgement, so it fires wherever a visual judgement is needed and can **feed back upstream** (a rendered candidate can change the *concept*, not just the pixels).
+- *Render when in doubt* — descriptions float, so you can't tell upfront whether one would suffice; bias to rendering (cost = one throwaway file).
+- *Weight-adaptive + exit on the pick* — the instance is disposable and the *user* judges, so don't over-produce; stop the moment they point. A genuinely trivial tweak → just make it.
 
 ## When NOT to use it (anti-trigger)
 
@@ -35,6 +43,15 @@ A **conceptual / ontology / data-model** decision — "what *is* this thing", "h
 3. **Render + show.** Open at real size and capture what the user sees. (Render/screenshot mechanics = a **per-project verify helper**, see below.)
 4. **Let the user point — and watch for the reframe.** They look / flip / pick. Stay alert for the candidate revealing the *question was wrong* (the element shouldn't exist; text beats the icon; the surrounding form already encodes the meaning). Surface it; don't just answer the surface ask.
 5. **Residue + disposal.** Record the pick. **Most mockups are then discarded** — their job (converging the decision) is done. Promote to a visual-lock only per the rule below (rare).
+
+## Example (the whole move in one shot)
+
+A button could use an icon. The naive path: list options in prose ("a magnifying glass? a gear?") and ask the user to pick. The render-to-decide path:
+
+- Build **one interactive HTML** showing a **row of candidates at the real 20px size, in the real toolbar context** — several icons, **plus a plain-text-label candidate, plus a "no icon at all" candidate**.
+- The user opens it, hovers, compares at real size. The answer is often: **plain text wins, or the button needs nothing** — and the real decision turns out not to be "which icon" but "should this have an icon at all".
+
+One render carries the whole skill: **interactive HTML** · real size · real context · a generated row · the **"don't" candidate** · and the **reframe** (the surface question "which icon" was the wrong question).
 
 ## Escalate — heavy (rare exception)
 
@@ -75,6 +92,7 @@ Step 3's "render + capture" uses whatever browser-automation the project has (op
 
 ## Output
 
-- A rendered candidate space (a row of generated options and/or one candidate with toggles) in one cheap file (default); or multi-file + a decision note (rare escalation).
+- **Always: an interactive HTML file** — the one non-negotiable. A row of generated candidates and/or one candidate with live toggles, openable and interactive at real size in real context. Never a static image / ASCII / option list / prose.
 - A recorded pick; most mockups then discarded.
 - A visual-lock only as a rare, stamped exception (structural-level).
+- (Escalation, rare) multiple variant files + a decision note.
