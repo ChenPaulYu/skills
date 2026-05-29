@@ -50,7 +50,9 @@ Find `blueprints/` (commonly `docs/blueprints/`). **If absent, scaffold it on th
 
 Two inputs, both required — never plan in a vacuum:
 - **The decisions** — read `thoughts/*.md` (the WHAT). What has been decided?
-- **The actual state** — what is already built? Grep the codebase for the features the thoughts describe; lean on `head -12` file headers (`/nav:headers` output) to read implementation status cheaply. What's shipped vs still open?
+- **The actual state — verify against the code; don't trust the plan's own claims.** What's already built? Grep the codebase for the features the thoughts describe; lean on `head -12` file headers (`/nav:headers`) + `git log` to read implementation status cheaply.
+
+**Sync-confirm done-ness — align is a status *sync*, not a read-only re-render.** For every item the *current* `plan.md` lists as In progress / Next — **especially any marked "待驗 / TBD / not-sure-if-done / 待驗是否已做"** — go *confirm it against the code*, don't carry the unresolved claim forward. If grounding shows it shipped, **move it to ✅ Shipped** in the triage (Step 3). A plan that still says "TBD: is X done?" *after* an align run is an align failure — the whole point is that the board reflects verified present reality. (This is item-*status* reconciliation, which is align's job; pruning a stale *thought doc* is still `/shape:reconcile`'s — don't conflate the two.)
 
 ### Step 3 — Triage *with the user* into now / next / later
 
