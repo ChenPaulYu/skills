@@ -146,6 +146,8 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 
 **Why the sub-agent is the recommended default**: it enforces clean context (= the "separate session" discipline at the architecture level, not just by convention) and frees the planning session's context for review work the user might still want to do.
 
+**Optional extra option — visual summary of the plan (guarded):** when the plan carries visual / structural decisions **and** `shape:mockup` is available, add an option **"Render a visual summary (→ `/shape:mockup`)"** — an interactive diagram of the approach + affected files, a decidable glance before execution (and a reusable verify target later). This is the **same cross-family edge** Stage 2 already uses (the offer is an *ask*, never auto). **Guard it:** omit the option if `shape:mockup` isn't installed (a broken option is worse than none) or the plan is purely non-visual. It's a **soft nav→shape recommendation**, never a hard dependency — `nav:plan` works fully without shape. (See [ADR-012](docs/adr/012-nav-plan-offers-visual-summary.md).)
+
 **Skip Stage 4 if**:
 - The plan has no executable step 1 yet (only open questions remain → user needs to answer first).
 - The user already said "just write the plan, don't ask what's next" earlier in this conversation.

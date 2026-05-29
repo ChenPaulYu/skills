@@ -34,9 +34,13 @@ Grouped by verb (mirrors `nav`'s family shape):
 
 There is deliberately **no `init` skill** — scaffolding the `blueprints/` tree folds into `align`'s first run (ask location once, create idempotently). A skill for `mkdir -p` would be structure-theatre.
 
-## The seams with `nav` (shape depends on nav, never the reverse)
+## The seams with `nav` (hard deps one-way; soft recommendations either way)
 
-shape is the forward-motion half; `nav` is the maintenance half. nav stays **independent** (it must not reference shape); shape calls nav. Record the seams; don't blur them:
+shape is the forward-motion half; `nav` is the maintenance half. The dependency rule has two tiers:
+- **Hard deps (import / call / breaks-without-it) are one-way: shape → nav.** `nav` must run fully standalone — never *depend* on shape.
+- **Soft recommendations (a guarded *offer* / hand-off that degrades if absent) may go nav → shape.** These already exist and are fine: `/nav:plan` Stage 2 hands visual ambiguity to `/shape:mockup`, and Stage 4 *offers* a `/shape:mockup` summary (guarded — omitted if shape isn't installed). See ADR-012.
+
+Record the seams; don't blur them:
 
 1. **`blueprints/` is the hand-off artifact to `/nav:plan`.** shape converges intent into blueprints; `nav:plan` grounds a thought/spec into a code-level implementation plan. `align` triages forward; `nav:plan` grounds one item down — adjacent verbs, not overlapping.
 2. **`reconcile` consumes `/nav:headers`.** `head -12` file headers make "is this implemented?" answerable cheaply — the strongest staleness signal.

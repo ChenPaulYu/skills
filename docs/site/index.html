@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-05-29 (rev 13)
+  Last audit: 2026-05-29 (rev 14)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -22,10 +22,20 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 11 ADRs in docs/adr/ — 001..011 with cross-supersede / refine links
+    • 12 ADRs in docs/adr/ — 001..012 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 13)
+  ⚠ FIXED in this revision (rev 14)
+    1. nav:plan Stage 4 now offers a guarded "visual summary (→ /shape:mockup)"
+       option (ADR-012) — an ask, never auto; shown only when the plan is
+       visual/structural AND shape:mockup is available.
+    2. Refined the cross-plugin rule: HARD deps one-way (shape → nav, the master
+       edge); SOFT recommendations may go nav → shape (guarded offers that
+       degrade if absent — already existed via nav:plan Stage 2). Softened the
+       earlier "never reverse" overstatement across the how-to-read + shape
+       callout. ADR count 11 → 12.
+
+  ⚠ FIXED in rev 13 (kept for history)
     1. Built shape:build (ADR-011) — a meta-skill that drives the plan's
        In-progress column to done: per item ground via /nav:plan → summarize the
        plan as an interactive diagram (mockup protocol) → implement (/nav:refactor
@@ -370,7 +380,7 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape depends on nav one-way (shape → nav, never reverse) — the edge shows it.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup). See ADR-012.</span></div>
     </section>
 
     <section id="rules">
@@ -451,7 +461,7 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape depends on nav one-way (shape → nav, never reverse) — the edge shows it.",
+    pluginsmap_howread: "click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup). See ADR-012.",
     rules_title: 'Design rules — the bar every skill clears',
     rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. Every <code>SKILL.md</code> embeds these verbatim; this is the canonical list.',
     map_title: 'Skill list — search & expand',
@@ -482,7 +492,7 @@ const T = {
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape anatomy — converge · project · reconcile · build',
     shape_anat_lede: "Skills grouped by verb around a <code>blueprints/</code> hub. <b>converge</b>: <code>mockup</code> (render-to-decide) + <code>elicit</code> (a summoned grounded grill — drill to a principle, exit on the snap). <b>project</b>: <code>align</code> (decide now/next/later WITH the user → <code>plan.md</code> + regenerate <code>overview.html</code>; the mirror of <code>/nav:map</code>). <b>reconcile</b>: judge stale <code>thoughts/</code> → prune/consolidate, write-gated. <b>build</b>: drive the In-progress column to done — per item ground via <code>/nav:plan</code> → summarize → implement → verify (screenshot vs mockup) → ship; autonomous but confidence-gated.",
-    shape_anat_callout: "shape is the <b>forward-motion</b> half; <code>nav</code> is the maintenance half. Through-line: converge by a real disposable instance, never a description; its standing form is the blueprints board (one state, two renders — agent reads markdown, human reads the HTML projection), and its terminus is <code>build</code> (the running system, verified vs the mockup, is the third render). Three seams, one-way (<b>shape → nav</b>, never reverse): <code>blueprints/</code> → <code>/nav:plan</code>; <code>reconcile</code> ← <code>/nav:headers</code>; <code>build</code> orchestrates <code>/nav:plan</code> + <code>/nav:refactor</code>. See ADR-010/011.",
+    shape_anat_callout: "shape is the <b>forward-motion</b> half; <code>nav</code> is the maintenance half. Through-line: converge by a real disposable instance, never a description; its standing form is the blueprints board (one state, two renders — agent reads markdown, human reads the HTML projection), and its terminus is <code>build</code> (the running system, verified vs the mockup, is the third render). Three **hard** seams, one-way (<b>shape → nav</b>): <code>blueprints/</code> → <code>/nav:plan</code>; <code>reconcile</code> ← <code>/nav:headers</code>; <code>build</code> orchestrates <code>/nav:plan</code> + <code>/nav:refactor</code>. nav may **soft-recommend** shape back (guarded, e.g. nav:plan → shape:mockup). See ADR-010/011/012.",
     shape_default_h3: 'shape plugin anatomy',
     shape_default_role: 'Verb-grouped skills around a blueprints hub: mockup, elicit (converge) · align (project) · reconcile · build (make it real). Click a node for its role.',
     shape_default_click_label: 'tip',
@@ -517,7 +527,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述。兩個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)與 nav(可導覽性,維護那半)。shape 單向依賴 nav(shape → nav,絕不反向)—— 連線標出來了。',
+    pluginsmap_howread: '點 node 看描述。兩個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)與 nav(可導覽性,維護那半)。shape 硬依賴 nav(shape → nav —— 連線標出來了);nav 可軟推薦回 shape(guarded offer,如 nav:plan → shape:mockup)。見 ADR-012。',
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -546,7 +556,7 @@ const T = {
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape 解剖 —— 收斂 · 投影 · 對賬 · build',
     shape_anat_lede: '依動詞分組,圍著 <code>blueprints/</code> hub。<b>收斂</b>:<code>mockup</code>(render 即決策)+ <code>elicit</code>(召喚式 grounded grill —— 鑽到原則、撞到就收手)。<b>投影</b>:<code>align</code>(跟 user 一起定 now/next/later → <code>plan.md</code> + 重生 <code>overview.html</code>;<code>/nav:map</code> 的對應)。<b>對賬</b>:判斷哪些 <code>thoughts/</code> 過時 → prune/合併,write-gated。<b>build</b>:把 In-progress 跑到清空 —— 每 item /nav:plan ground → summarize → implement → verify(截圖對 mockup)→ ship;自動但 confidence-gated。',
-    shape_anat_callout: 'shape 是<b>往前推</b>那半;<code>nav</code> 是維護那半。Through-line:用真實、可丟的 instance 收斂,不用描述;常駐形式是 blueprints 看板(單一現況、兩種 render —— agent 讀 markdown,人讀 HTML 投影),終點是 <code>build</code>(跑起來、對 mockup 驗過的系統,是第三種 render)。三條縫、單向(<b>shape → nav</b>,絕不反向):<code>blueprints/</code> → <code>/nav:plan</code>;<code>reconcile</code> ← <code>/nav:headers</code>;<code>build</code> 編排 <code>/nav:plan</code> + <code>/nav:refactor</code>。見 ADR-010/011。',
+    shape_anat_callout: 'shape 是<b>往前推</b>那半;<code>nav</code> 是維護那半。Through-line:用真實、可丟的 instance 收斂,不用描述;常駐形式是 blueprints 看板(單一現況、兩種 render —— agent 讀 markdown,人讀 HTML 投影),終點是 <code>build</code>(跑起來、對 mockup 驗過的系統,是第三種 render)。三條**硬**縫、單向(<b>shape → nav</b>):<code>blueprints/</code> → <code>/nav:plan</code>;<code>reconcile</code> ← <code>/nav:headers</code>;<code>build</code> 編排 <code>/nav:plan</code> + <code>/nav:refactor</code>。nav 可**軟推薦**回 shape(guarded,如 nav:plan → shape:mockup)。見 ADR-010/011/012。',
     shape_default_h3: 'shape plugin 解剖',
     shape_default_role: '依動詞分組、圍著 blueprints hub:mockup、elicit(收斂)· align(投影)· reconcile · build(做出來)。點 node 看角色。',
     shape_default_click_label: '提示',
@@ -597,7 +607,7 @@ const DOMAINS = {
       ['/nav:headers', '', {en:'Add or standardize skill-style file-top headers so an agent can <code>head -12</code> to retrieve role + key deps without reading the body.', zh:'加或標準化 skill 風格檔首 header,讓 agent <code>head -12</code> 即可取得角色與關鍵依賴,不必讀本文。'}],
       ['/nav:map', '', {en:'Generate <code>docs/codebase-map/index.html</code> — a bilingual interactive codebase map with anatomy graphs + audit block. This file uses the same form.', zh:'產生 <code>docs/codebase-map/index.html</code> —— 雙語互動 codebase 地圖,含 anatomy 圖與 audit block。本檔即同形式。'}],
       ['/nav:doctor', '', {en:'★ Full health pass — orchestrates audit → plan → headers + map with user-review gates between every step. Hands off refactors.', zh:'★ 完整健康檢查 —— 串接 audit → 計畫 → headers + map,步驟之間 user-review。重構交給 /nav:refactor。'}],
-      ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session.', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。'}],
+      ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session. Stage 4 offers execution + a guarded /shape:mockup visual summary (ADR-012).', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。Stage 4 offer 執行 + 一個 guarded 的 /shape:mockup 視覺 summary(ADR-012)。'}],
     ],
   },
   shape: {
