@@ -95,12 +95,16 @@ reconcile's currency check **consumes the file headers `/nav:sync` maintains**: 
 - **Consolidate beats delete** when live design remains — merge, verify the merge, *then* remove.
 - **Don't regenerate the board here.** Re-syncing `plan.md`/`overview.html` is `/shape:align`. reconcile reconciles the notes; align renders.
 
+## Offer to re-sync the board (don't auto-run)
+
+After the tree is trimmed, the rendered board may now lag the cleaned `thoughts/`/`plans/`. *Offer* — never auto-call — `/shape:align` to re-sync `plan.md` + `overview.html`, via `AskUserQuestion` (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when something actually changed this run (a doc was amended/pruned/consolidated) and a `blueprints/` board exists; always include a "leave the renders, I'll re-sync later" opt-out; don't re-offer after the pick. `align` is collaborative → runs **in-session**. reconcile reconciles the notes; align renders — an offer, not a call (skills don't invoke each other).
+
 ## Output
 
 - A per-doc currency report: verdict + evidence + proposed action (keep · amend · prune · consolidate).
 - (On confirmation) a reconciled `thoughts/` **and `plans/`** tree — stale facts amended in place, wholly-stale docs/plans pruned/consolidated, all under the safety rules.
 - For any decision-change found: a recommendation to converge it in `/shape:elicit` (not rewritten here).
-- A pointer to run `/shape:align` to re-sync the renders.
+- A guarded, one-shot **offer** to run `/shape:align` to re-sync the renders — never an auto-call.
 
 ## Companion skills
 

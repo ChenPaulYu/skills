@@ -37,13 +37,15 @@ rehearse does **not** write its own renderer. It produces its findings *through*
 - **Holes render as visible breaks** — a dead-end scenario node marked `undefined`, a path that contradicts, and — distinctly — a *whole intent with no entry at all* (the direction-level hole). The two kinds must look different, because their kind IS the diagnosis.
 - **Iterate the mockup, not a doc.** You decide a missing behavior → re-render → until the flow has no breaks. Every output is a clearer mockup; the convergence is by render, the family spine.
 
-## After the walk — hand the holes off (don't fix in place)
+## After the walk — offer to route the holes (don't fix in place, don't auto-run)
 
-rehearse surfaces and renders; it does **not** redesign or implement. Route each hole by its layer:
+rehearse surfaces and renders; it does **not** redesign or implement. Once the mockup is up, *offer* — never auto-call — the next step **per the holes' layer**, via `AskUserQuestion` (offer-next-action, ADR-007/015). The routing is determined by the layer rehearse already tagged:
 
-- **Direction-level holes (missing intent)** → `/shape:elicit` (is the premise wrong?) and/or `/shape:mockup` (render the redesigned scope). A wrong direction is a *new decision*, out of rehearse's scope.
-- **Incomplete holes (dead-end scenario)** → `/nav:plan` to ground the missing path into a code-level plan, then `/shape:build`.
-- When a hole is genuinely ambiguous (is this scope-wrong or just unfinished?), that judgement is `/shape:elicit`'s diagnostic mode — rehearse's layer-tag is the first input.
+- **Direction-level holes (missing intent)** → offer `/shape:elicit` (is the premise wrong? — a *new decision*, out of rehearse's scope) and/or `/shape:mockup` (render the redesigned scope).
+- **Incomplete holes (dead-end scenario)** → offer `/nav:plan` to ground the missing path into a code-level plan (then `/shape:build`).
+- **An ambiguous hole** (scope-wrong or just unfinished?) → offer `/shape:elicit`'s diagnostic mode; rehearse's layer-tag is its first input.
+
+**Guarded + one-shot:** compose the options from the holes actually found (only show `/nav:plan` if there's an incomplete hole, only `/shape:elicit`/`/shape:mockup` if there's a direction/ambiguous one), always include a **"just leave the rendered holes, I'll route later"** opt-out, and don't re-offer after the user picks. These are offers, not calls — skills don't invoke each other.
 
 ## When it fires — and the two boundaries
 

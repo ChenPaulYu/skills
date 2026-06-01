@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-01 (rev 22)
+  Last audit: 2026-06-01 (rev 23)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -27,7 +27,19 @@
     • 20 ADRs in docs/adr/ — 001..020 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
 
-  ⚠ FIXED in this revision (rev 22)
+  ⚠ FIXED in this revision (rev 23)
+    1. Strengthened cross-skill hand-off offers (offer-next-action, ADR-007/015,
+       all guarded + one-shot + opt-out): rehearse now actively OFFERS to route
+       its holes by layer (direction → /shape:elicit or /shape:mockup ·
+       incomplete → /nav:plan); elicit now offers /shape:mockup when the decision
+       turns out render-decidable (not only /shape:align), and its diagnostic
+       mode offers /shape:rehearse to enumerate holes before judging;
+       reconcile's prose "point to /shape:align" upgraded to an active offer.
+       SHAPE_EDGES gain the hand-off edges; nav/CLAUDE.md offer-next-action
+       Current-users list now spans both plugins. (align → build deliberately
+       NOT added — user-scoped out.)
+
+  ⚠ FIXED in rev 22 (kept for history)
     1. shape: new skill `rehearse` (ADR-020) — walk a feature's usage
        (user intent → usage scenario → check against what's really built) and
        render the holes as a mockup (reuses /shape:mockup's render path). The
@@ -726,7 +738,7 @@ const NAV_EDGES = [
 ];
 
 const SHAPE_NODES = [
-  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-liner. The 6 moves (mirror → drill → named fork → friction → versions → short turns); core = weight-adaptive exit. One engine, two objects: a forward decision OR a backward root-cause (diagnostic mode — ground symptom vs real impl, forks = candidate causes, reframe local-bug → structural-cause; read-only, hands the fix to mockup/build). Lands a thoughts/ doc, then OFFERS /shape:align to triage it in (guarded, one-shot, in-session — never auto-call; ADR-015).', zh:'召喚式 grounded grill:AI 立結構、你 refine/挑,volley 收斂成一句。六個 move(mirror → 鑽 → 命名 fork → friction → 版本 → 短回合);core = weight-adaptive exit。一個引擎、兩種對象:forward decision 或 backward root-cause(diagnostic mode —— 症狀對真實作、fork = 候選病因、局部 bug reframe 成結構病因;read-only,修法交 mockup/build)。落成 thoughts/,接著 OFFER /shape:align 把它 triage 進去(guarded、一次性、in-session —— 不 auto-call;ADR-015)。'}},
+  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-liner. The 6 moves (mirror → drill → named fork → friction → versions → short turns); core = weight-adaptive exit. One engine, two objects: a forward decision OR a backward root-cause (diagnostic mode — ground symptom vs real impl, forks = candidate causes, reframe local-bug → structural-cause; read-only, hands the fix to mockup/build). Lands a thoughts/ doc, then OFFERS the next step (guarded, one-shot, never auto-call; ADR-015): /shape:mockup if the decision turned out render-decidable, else /shape:align to triage it in. Diagnostic mode offers /shape:rehearse to enumerate holes before judging.', zh:'召喚式 grounded grill:AI 立結構、你 refine/挑,volley 收斂成一句。六個 move(mirror → 鑽 → 命名 fork → friction → 版本 → 短回合);core = weight-adaptive exit。一個引擎、兩種對象:forward decision 或 backward root-cause(diagnostic mode —— 症狀對真實作、fork = 候選病因、局部 bug reframe 成結構病因;read-only,修法交 mockup/build)。落成 thoughts/,接著 OFFER 下一步(guarded、一次性、不 auto-call;ADR-015):決定其實是 render 能定的 → /shape:mockup,否則 → /shape:align triage 進去。diagnostic mode 會 offer /shape:rehearse 先把洞列出來再判。'}},
   {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; activates it + hands over a URL. Lands in mockups/; when the pick settles something trackable, OFFERS /shape:align to triage it in (guarded, not auto; ADR-015).', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。落在 mockups/;當 pick 定下值得追蹤的決定,OFFER /shape:align 把它 triage 進去(guarded、非 auto;ADR-015)。'}},
   {id:'rehearse', kind:'decide', x:200, y:130, w:130, role:{en:'converge (logic)', zh:'收斂(邏輯)'}, desc:{en:"Pressure-test a feature's LOGIC: walk user intent → usage scenario → check against what's really built, render the holes as a mockup (reuses mockup's render path). The hole's layer IS the diagnosis — a missing intent = direction-wrong (redesign), a dead-end scenario = incomplete (finish) — handed to /shape:elicit's diagnostic fork. Rejects the state×action grid (no floor); intent→scenario has a floor, keeping it light. mockup's logic-twin (mockup decides look/structure). ADR-020.", zh:"壓測一個 feature 的邏輯:沿 user intent → usage scenario 走、撞 built reality、把洞 render 成 mockup(reuse mockup 的 render)。洞落在哪一層就是診斷 —— 缺 intent = 方向錯(重想)、scenario dead-end = 沒做完(補完)—— 交給 /shape:elicit 的 diagnostic fork。砍掉 state×action 窮舉(沒底);intent→scenario 有底,保持輕。mockup 的邏輯雙胞胎(mockup 決定 look/structure)。ADR-020。"}},
   {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{en:'Read thoughts/ + VERIFY the real state against the code (a status sync, not a read-only re-render — confirm 待驗/TBD items, move shipped ones to Shipped) → decide now/next/later WITH the user → write plan.md (agent) + regenerate overview.html (human, click-to-reveal). The pre-build mirror of /nav:sync's map. Scaffolds blueprints/ on first run. Boundary: item-status sync = align; doc-currency (amend/prune) = reconcile (ADR-016).', zh:'讀 thoughts/ + 對 code 驗證現況(是狀態 sync、非唯讀 re-render —— 待驗/TBD 去確認,做完的移 Shipped)→ 跟 user 一起定 now/next/later → 寫 plan.md(agent)+ 重生 overview.html(人,click-to-reveal)。/nav:sync 的 map pre-build 對應。首跑順手 scaffold blueprints/。邊界:item-status sync = align;doc-currency(amend/prune)= reconcile(ADR-016)。'}},
@@ -741,6 +753,9 @@ const SHAPE_EDGES = [
   ['align', 'blueprints'],
   ['reconcile', 'blueprints'],
   ['build', 'blueprints'],
+  ['elicit', 'mockup'],
+  ['rehearse', 'elicit'],
+  ['reconcile', 'align'],
 ];
 
 const CONV = [
