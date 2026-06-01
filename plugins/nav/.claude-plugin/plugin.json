@@ -1,7 +1,7 @@
 {
   "name": "nav",
-  "version": "0.2.0",
-  "description": "Keep any codebase navigable as it grows — audit shape, refactor with discipline, sync the navigation layer (file-top headers + bilingual codebase map), run the full health pass. Language-agnostic. Built on Ousterhout's deep-module principles.",
+  "version": "0.3.0",
+  "description": "Keep any codebase navigable as it grows — audit shape, refactor with discipline, sync the navigation layer (file-top headers + bilingual codebase map), ground a spec into a plan. Language-agnostic. Built on Ousterhout's deep-module principles.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

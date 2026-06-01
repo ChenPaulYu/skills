@@ -14,7 +14,7 @@ Navigability has two scales — **per-file** (a header) and **per-repo** (a map)
 - **header-render** (Phase A) — file-level navigability. See `references/header-render.md`.
 - **map-render** (Phase B) — repo-level navigability. See `references/map-render.md` (+ `references/visual-spec.md`).
 
-The engine stays two pieces deliberately: `/nav:doctor` gates *between* them (review the header diff, then regenerate the map), and `/shape:reconcile` consumes only the header artifact. `sync` is the single front door; the two phases are how it grows (a future third renderer — deps graph, changelog — slots in under the same door).
+The engine stays two pieces deliberately: the header diff is gated *between* them (Phase A is reviewed before Phase B reads the new headers), and `/shape:reconcile` consumes only the header artifact (not the map). `sync` is the single front door; the two phases are how it grows (a future third renderer — deps graph, changelog — slots in under the same door).
 
 ## Scope
 
@@ -103,5 +103,4 @@ Do NOT commit unless the user asks. If on the default git branch, suggest branch
 
 - **`/nav:audit`** — read-only health check; its inventory is reused as `sync`'s grounding pass when it ran earlier in the session.
 - **`/nav:refactor`** — execute any structural move the grounding pass surfaces (separate session).
-- **`/nav:doctor`** — the full health pass; runs the audit, then drives `sync`'s two phases with a review gate between them, and tees up refactors.
 - **`/shape:reconcile`** — consumes the header artifact `sync` maintains (`head -12` = the cheapest "is this implemented?" signal).

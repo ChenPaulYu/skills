@@ -7,7 +7,7 @@
 
 | Plugin | What it covers |
 |---|---|
-| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, add file-top headers, render a bilingual codebase map, ground a spec into a plan, run the full health pass. Built on Ousterhout's deep-module principles. |
+| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync the navigation layer (file-top headers + bilingual codebase map), ground a spec into a plan. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
 
 The two split the lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). shape depends on nav one-way (`shape → nav`); each still installs and runs alone.
@@ -23,7 +23,6 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 - `/nav:sync` — re-sync the navigation layer to the code: file-top headers + the bilingual `docs/codebase-map/index.html`, one grounding pass, two phases
-- `/nav:doctor` — full health pass (audit → sync, with review gates)
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):

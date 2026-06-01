@@ -31,7 +31,7 @@ Grouped by verb (mirrors `nav`'s family shape):
 - **build** — make it real:
   - `build` — drive the plan's In-progress column to done: per item, ground via `/nav:plan` → implement with `/nav:refactor` discipline + inject↔check → verify (browser screenshot vs the item's mockup; or test-gate) → move to Shipped → `/shape:align`. Autonomous but **confidence-gated** (stop below 90%). A meta-skill (orchestrates siblings, never re-implements/calls them). The cross-plugin orchestrator. *(built)*
 - **`blueprints/` = convention**, not a skill — the artifact container the verbs read/write. Layout + `plan.md` shape + `overview.html` contract + the two-renders pipeline live in [`skills/align/references/blueprints-spec.md`](plugins/shape/skills/align/references/blueprints-spec.md).
-- **`doctor` = deferred** — an orchestrator (elicit → align → reconcile) crystallizes once ≥3 skills are proven, like `/nav:doctor` landed last.
+- **`doctor` = deferred** — an orchestrator (elicit → align → reconcile) only crystallizes once there's genuinely enough to orchestrate. nav's own `doctor` was later **retired** (ADR-021) for being too thin a sequence (`audit → sync`, 2 steps) — a caution that an orchestrator with little to orchestrate is redundant ceremony, not a convenience. Don't build shape's until the sequence earns it.
 
 There is deliberately **no `init` skill** — scaffolding the `blueprints/` tree folds into `align`'s first run (ask location once, create idempotently). A skill for `mkdir -p` would be structure-theatre.
 
@@ -73,4 +73,4 @@ Three skills need to *see* the running thing — `mockup` (render the artifact),
 
 ## Status
 
-Five skills built (`mockup`, `elicit`, `align`, `reconcile`, `build`); `doctor` (orchestrator) deferred until the family proves out. `elicit`'s behavioral spec comes from `docs/observations/2026-05-29-thought-mode-how-paul-converges.md`; `build` + the browser-verify slot land in ADR-011. History: `docs/observations/2026-05-29-shape-plugin.md`.
+Six skills built (`mockup`, `elicit`, `rehearse`, `align`, `reconcile`, `build`); `doctor` (orchestrator) deferred until the family proves out. `elicit`'s behavioral spec comes from `docs/observations/2026-05-29-thought-mode-how-paul-converges.md`; `build` + the browser-verify slot land in ADR-011. History: `docs/observations/2026-05-29-shape-plugin.md`.

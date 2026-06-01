@@ -1,6 +1,6 @@
 # Engine — map-render (repo-level navigability)
 
-> Phase B of `/nav:sync`. Produce a self-contained, interactive codebase map at `docs/codebase-map/index.html` — the "one door" to navigate a codebase top-down. Each domain gets a one-line description; structurally-rich domains get their own anatomy (a click-to-reveal SVG graph). Every claim is grounded against source; a visible audit block records what was verified vs guessed. (Also driven directly by `/nav:doctor` step 5, after the header gate.)
+> Phase B of `/nav:sync`. Produce a self-contained, interactive codebase map at `docs/codebase-map/index.html` — the "one door" to navigate a codebase top-down. Each domain gets a one-line description; structurally-rich domains get their own anatomy (a click-to-reveal SVG graph). Every claim is grounded against source; a visible audit block records what was verified vs guessed.
 
 ## What this phase produces
 

@@ -1,6 +1,6 @@
 # Engine — header-render (file-level navigability)
 
-> Phase A of `/nav:sync`. Apply a uniform skill-style header to load-bearing source files in any language, so the first 8-12 lines answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code. (Also driven directly by `/nav:doctor` step 4, with a gate before the map phase.)
+> Phase A of `/nav:sync`. Apply a uniform skill-style header to load-bearing source files in any language, so the first 8-12 lines answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code.
 
 ## What this phase produces
 

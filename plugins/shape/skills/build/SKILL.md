@@ -11,7 +11,7 @@ The forward-motion terminus of shape: take the plan's **In-progress** items and 
 
 A blueprint that never gets built is just a description — and shape's whole spine is "converge by a real instance, not a description." `build` is where the convergence becomes **the most real instance there is: the running system**, checked against the mockup that captured the intent. It exists so the loop closes: elicit/mockup decide → align plans → **build makes it real** → nav keeps it navigable.
 
-It is a **meta-skill**, like `/nav:doctor`: it sequences other skills' protocols rather than re-implementing them.
+It is a **meta-skill**, like `/nav:plan`: it sequences other skills' protocols rather than re-implementing them.
 
 ## The shape spine (restated — this skill is self-contained)
 
