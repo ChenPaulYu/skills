@@ -1,7 +1,7 @@
 {
   "name": "shape",
-  "version": "0.2.0",
-  "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav (which keeps existing code navigable). Skills: mockup (render-to-decide), elicit (grounded grill → a thought), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. blueprints/ is the artifact convention.",
+  "version": "0.3.0",
+  "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav (which keeps existing code navigable). Skills: mockup (render-to-decide), elicit (grounded grill → a thought), rehearse (walk a feature's usage, render its logic holes), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. blueprints/ is the artifact convention.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"
@@ -11,6 +11,7 @@
   "keywords": [
     "mockup",
     "render-to-decide",
+    "rehearse",
     "blueprints",
     "plan",
     "build",

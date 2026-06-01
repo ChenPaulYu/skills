@@ -1,0 +1,95 @@
+---
+name: rehearse
+description: Pressure-test a feature's LOGIC by walking how it actually gets used — enumerate the user intents, unfold each into usage scenarios, check every path against what's really built, and render the holes as an interactive mockup. Fires when the user wants to "walk through" / "rehearse" / "pressure-test" / "stress-test" a feature, asks "does this feature make sense", "did we think this through", "what usage are we missing", "this feels off after building", "find the logic holes", "is the direction wrong or just unfinished", or after roughing out a feature whose scenarios were never fully thought through. The output is ALWAYS an interactive mockup (the render reuses /shape:mockup); the layer a hole sits at tells you direction-wrong vs incomplete, which it hands to /shape:elicit. Sibling of mockup (mockup decides look/structure; rehearse walks logic-coverage). Language- and framework-agnostic.
+---
+
+# Rehearse — walk the usage, render where the logic breaks
+
+Take a feature you conceived (or roughed out) and **rehearse how it actually gets used** — act out every intent and scenario before it goes live, so the places the design has no coherent answer show up as breaks you can see. Like a rehearsal surfaces the holes in a script before opening night, rehearse surfaces a feature's logic holes before (or just after) shipping. The output is always a **rendered mockup**, not a list — so the holes are decidable at a glance, not described in prose.
+
+## Why this skill exists
+
+When you conceive a feature you rarely think through every way it gets used; you build it, then on contact with reality it's riddled with cases that don't add up — and you can't tell whether the **direction is wrong** (kill / redesign) or it's just **not finished** (a path left undefined). The cheapest way to surface those holes is to *walk the usage* — but walking it in prose floats (same reason `/shape:mockup` exists: a description decides nothing). So rehearse walks the intents and scenarios and **renders** the result: the holes become visible breaks in a flow you can point at.
+
+## Core — everything else derives
+
+> **Core: rehearse the feature's usage top-down — `user intent → usage scenario → check against what's really built` — and render the holes as an interactive mockup. The output is never a prose list; it's a rendered flow whose breaks ARE the findings.**
+
+Two things derive directly and carry the whole skill:
+
+- **The walk is human-purpose-first, not machine-exhaustive.** You enumerate *what users are trying to do* (intent) and *the paths they take* (scenario) — NOT every `state × action` cell. The state-grid is a QA test matrix: it has no natural floor and explodes; the intent→scenario walk stops when each real intent's paths are walked. That floor is what keeps rehearse light instead of a combinatorial sweep.
+- **The layer a hole sits at IS the diagnosis.** A missing *intent* (a whole thing users will want to do that the feature has no story for) is a **direction** signal — scope/premise gap, → redesign. A dead-end *scenario* under a supported intent is **incomplete** — the concept's fine, a path was left undefined, → finish it. rehearse pre-sorts every hole by the layer it surfaced at; `/shape:elicit` (diagnostic) judges the ambiguous ones and routes them.
+
+## The walk — the distinct front (rehearse's own half)
+
+This is what rehearse adds; the render half is reused from `/shape:mockup`.
+
+1. **Enumerate user intents (top layer).** What is someone *trying to achieve* with this feature? List the goals, not the screens — "keep a private copy", "find it again later", "undo without losing context". Include the intents the feature implies but you never designed for.
+2. **Unfold each intent into usage scenarios.** The concrete paths to reach that goal: entry points, the order of steps, who/when, the odd inputs. One intent fans into several scenarios.
+3. **Check every scenario against what's REALLY built — don't reason in imagination.** Walk to the code / run the feature: does the current design have a *coherent answer* for this path, or does it dead-end / contradict / leave behavior undefined? An assumption about how the system behaves is verified against reality, not assumed (a belief about the system is often false — confirm it before treating a hole as real or absent).
+4. **Classify each hole by its layer** — missing intent (direction) vs dead-end scenario (incomplete) — so the render can show them distinctly and the hand-off is pre-sorted.
+
+## The render — reuse mockup, don't re-implement it
+
+rehearse does **not** write its own renderer. It produces its findings *through* `/shape:mockup`'s render path — same interactive single-file HTML, same `mockups/` home, same activate-and-hand-over-a-URL, same browser-verify slot. What rehearse renders is a **usage flow**, not a look-and-feel candidate:
+
+- **Intents are entry points, scenarios are paths** through an interactive flow/graph.
+- **Holes render as visible breaks** — a dead-end scenario node marked `undefined`, a path that contradicts, and — distinctly — a *whole intent with no entry at all* (the direction-level hole). The two kinds must look different, because their kind IS the diagnosis.
+- **Iterate the mockup, not a doc.** You decide a missing behavior → re-render → until the flow has no breaks. Every output is a clearer mockup; the convergence is by render, the family spine.
+
+## After the walk — hand the holes off (don't fix in place)
+
+rehearse surfaces and renders; it does **not** redesign or implement. Route each hole by its layer:
+
+- **Direction-level holes (missing intent)** → `/shape:elicit` (is the premise wrong?) and/or `/shape:mockup` (render the redesigned scope). A wrong direction is a *new decision*, out of rehearse's scope.
+- **Incomplete holes (dead-end scenario)** → `/nav:plan` to ground the missing path into a code-level plan, then `/shape:build`.
+- When a hole is genuinely ambiguous (is this scope-wrong or just unfinished?), that judgement is `/shape:elicit`'s diagnostic mode — rehearse's layer-tag is the first input.
+
+## When it fires — and the two boundaries
+
+**Summoned on a "walk / pressure-test / does this make sense" request** — not auto-fired because a feature got mentioned. Two neighbors to stay clear of:
+
+- **vs `/shape:mockup`** — they share the render engine, so the line is the *question*: mockup converges **look / structure** ("what should this look like, how do these entities relate"); rehearse converges **logic-coverage** ("walk every intent→scenario, where does the design have no answer"). mockup generates candidates to *decide*; rehearse walks usage to *find holes*. They pair: mockup the flow, then rehearse walks it. When the question is "which option looks right", that's mockup, not rehearse.
+- **vs `/shape:elicit`** — elicit drills **one** thing verbally to a principle (residue: one line); rehearse enumerates **many** scenarios and renders them (residue: a mockup). A feature-coverage walk is not a grill. But the *judgement* of an ambiguous hole (direction vs incomplete) hands back to elicit's diagnostic mode.
+
+## Storage & format
+
+Reuses `/shape:mockup`'s contract: a single self-contained interactive HTML in the project-local, git-ignored `mockups/` tree, one dated topic subfolder (`mockups/<date>-<feature>-rehearsal/`). Top `<!-- -->` comment states **what feature was rehearsed · the intents/scenarios walked · the holes found (by layer) · what's been closed**, so an agent grasps it from `head`. The render uses shape's shared **browser-verify slot** (named default `agent-browser`; detect + fail-helpfully + per-project override — defined once in `plugins/shape/CLAUDE.md`).
+
+## Example — the move (stack-neutral)
+
+A feature lets users **archive** items to declutter. You roughed it out; it feels off. Rehearse it:
+
+- **Intents:** declutter now · find an archived item again later · restore one.
+- **Scenarios (unfolded + checked against the build):** archive an item that other items still reference → *the references now point at something hidden — undefined* (dead-end scenario → **incomplete**). · find an archived item → *there's no surface that lists archived items at all* (a whole intent with no entry → **direction**: the feature was scoped as one-way). · restore into a parent that was since deleted → *undefined* (**incomplete**).
+- **Render:** a flow where "declutter" and "restore" have paths with red `undefined` dead-ends, and "find again" sits as an **intent node with no entry** — visibly a different kind of hole.
+- **Hand-off:** "find again has no entry" → `/shape:elicit` ("is archive meant to be one-way? then this isn't a hole — it's the design"); the two `undefined` paths → `/nav:plan` to finish.
+
+The render makes "this feels off" into "these three usage paths have no coherent answer, and one of them is a direction question, not a missing case."
+
+## Anti-patterns (refuse these)
+
+| Temptation | Why to refuse |
+|---|---|
+| Enumerate every `state × action` cell | That's a QA matrix — machine-exhaustive, no floor, explodes. Walk human intents → scenarios; they have a floor. |
+| Reason about how the feature behaves from memory / the design doc | A belief about the system is often false. Check the real build (grep / run) before treating a hole as real or absent. |
+| Output a prose list of holes | The output is a rendered mockup — holes as visible breaks. A list floats; a flow is decidable. |
+| Re-implement a renderer | rehearse reuses `/shape:mockup`'s render path. Don't fork it. |
+| Redesign or implement the fix in place | rehearse surfaces + routes; the redesign is `/shape:elicit`/`/shape:mockup`, the finish is `/nav:plan` + `/shape:build`. |
+| Treat a missing-intent hole the same as a dead-end path | Their layer IS the diagnosis (direction vs incomplete). Render and route them differently. |
+| Fire on a passing mention of a feature | Summoned on a "walk / pressure-test it" request, like its mockup sibling. |
+| Keep walking after the flow is coherent | Exit when no breaks remain (or the user has what they need). |
+
+## Output
+
+- **Always: an interactive mockup** (via `/shape:mockup`'s render path) — the feature's usage flow with the holes rendered as visible breaks, intent-level and scenario-level holes distinct. Lands in `mockups/`, activated with a URL.
+- A pre-sorted set of holes tagged by layer (direction vs incomplete), each routed: direction → `/shape:elicit`/`/shape:mockup`; incomplete → `/nav:plan` + `/shape:build`.
+- (When the rehearsal settles something trackable — e.g. "archive is deliberately one-way") a guarded, one-shot **offer** to run `/shape:align` and triage it in — never an auto-call (ADR-007/015).
+
+## Companion skills
+
+- **`/shape:mockup`** — rehearse reuses its render path; mockup decides look/structure, rehearse walks logic-coverage. The two pair (mockup the flow, then rehearse it).
+- **`/shape:elicit`** — judges an ambiguous hole (direction-wrong vs incomplete) in diagnostic mode; rehearse's layer-tag is its first input.
+- **`/nav:plan`** — grounds an incomplete-hole (a missing path) into a code-level plan to finish.
+- **`/shape:build`** — implements the finished paths once planned.
+- **`/shape:align`** — triages a trackable rehearsal finding into `plan.md`.

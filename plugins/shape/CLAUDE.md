@@ -23,6 +23,7 @@ Grouped by verb (mirrors `nav`'s family shape):
 - **converge** — turn an open question into a decision:
   - `mockup` — render-to-decide: a real interactive HTML (UI mockup, or diagram for backend/agent/data/flow). *(built)*
   - `elicit` — draw the decision out by a grounded fork (react-not-author, drill-to-principle, compress-to-one-line; weight-adaptive exit — stop on the snap; summoned, not auto) → a `thoughts/` doc. *(built)*
+  - `rehearse` — pressure-test a feature's *logic*: walk `user intent → usage scenario → check against what's really built`, render the holes as a mockup (reuses `mockup`'s render path). The hole's layer = direction-wrong (missing intent) vs incomplete (dead-end scenario), handed to `elicit`. mockup's logic-twin (mockup decides look/structure; rehearse walks logic-coverage). *(built; ADR-020)*
 - **project** — render the current plan:
   - `align` — read `thoughts/` + real state → decide now/next/later *with the user* → write `plan.md` (agent) + regenerate `overview.html` (human). The pre-build mirror of `/nav:sync`'s codebase map. *(built)*
 - **reconcile** — keep the archive honest:
