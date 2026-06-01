@@ -45,7 +45,7 @@ build does **not** hardcode a browser tool — it uses shape's shared **browser-
 ## The three seams (build is the cross-plugin orchestrator)
 
 - **← reads shape:** `plan.md` (the work-list) + `mockups/` (the verification target).
-- **↓ calls nav:** `/nav:plan` (ground each item) · `/nav:refactor` discipline (implement) · `/nav:headers` (cheap grounding for the inject step).
+- **↓ calls nav:** `/nav:plan` (ground each item) · `/nav:refactor` discipline (implement) · `/nav:sync` (cheap header grounding for the inject step).
 - **→ writes shape:** `/shape:align` (re-render the board after each item).
 
 This is the most concentrated point of shape↔nav communication — build *controls* the loop (it lives in shape, forward-motion) while *calling* nav's code-side protocols.
@@ -84,4 +84,4 @@ This is the most concentrated point of shape↔nav communication — build *cont
 - **`/shape:mockup`** — produces the `mockups/` artifacts build verifies against.
 - **`/nav:plan`** — grounds each item into a code-level plan (build's step 1).
 - **`/nav:refactor`** — the implementation discipline build applies (verbatim move + test gates).
-- **`/nav:headers`** — cheap grounding for the inject step.
+- **`/nav:sync`** — cheap header grounding for the inject step.

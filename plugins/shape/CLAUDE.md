@@ -24,7 +24,7 @@ Grouped by verb (mirrors `nav`'s family shape):
   - `mockup` — render-to-decide: a real interactive HTML (UI mockup, or diagram for backend/agent/data/flow). *(built)*
   - `elicit` — draw the decision out by a grounded fork (react-not-author, drill-to-principle, compress-to-one-line; weight-adaptive exit — stop on the snap; summoned, not auto) → a `thoughts/` doc. *(built)*
 - **project** — render the current plan:
-  - `align` — read `thoughts/` + real state → decide now/next/later *with the user* → write `plan.md` (agent) + regenerate `overview.html` (human). The pre-build mirror of `/nav:map`. *(built)*
+  - `align` — read `thoughts/` + real state → decide now/next/later *with the user* → write `plan.md` (agent) + regenerate `overview.html` (human). The pre-build mirror of `/nav:sync`'s codebase map. *(built)*
 - **reconcile** — keep the archive honest:
   - `reconcile` — judge which `thoughts/` **and `plans/`** docs have drifted (code/headers · self-declaration · date) → **amend** a stale *fact* in place, or **prune/consolidate** a wholly-stale doc, *with the user*, write-gated. Amend syncs only what built code shows; a *decision*-change is out of scope → it recommends `/shape:elicit` and says so (the active form of "no new decisions during render"). The pre-build mirror of `/nav:audit` + careful `/nav:refactor`. *(built; amend in ADR-014; maintains `plans/` per ADR-017)*
 - **build** — make it real:
@@ -43,8 +43,8 @@ shape is the forward-motion half; `nav` is the maintenance half. The dependency 
 Record the seams; don't blur them:
 
 1. **`blueprints/` is the hand-off artifact to `/nav:plan` — both directions.** shape converges intent into blueprints; `nav:plan` grounds a thought/spec into a code-level implementation plan **and writes it back into `blueprints/plans/`** when the tree is present (soft `nav → shape` preference, ADR-017). `align` triages forward; `nav:plan` grounds one item down — adjacent verbs, not overlapping. The grounded plan stays co-located so the whole arc (decision → status → grounded-how) lives in one tree.
-2. **`reconcile` consumes `/nav:headers`, and maintains `plans/`.** `head -12` file headers make "is this implemented?" answerable cheaply — the strongest staleness signal. reconcile keeps **both `thoughts/` and `plans/`** current (a plan whose steps all shipped is stale like an implemented thought).
-3. **`build` is the concentrated seam.** It *controls* the loop (lives in shape, forward-motion) while *calling* nav's code-side protocols per item: `/nav:plan` (ground) → `/nav:refactor` discipline (implement) → `/nav:headers` (cheap grounding for inject), then writes back via `/shape:align`. Direction stays one-way: shape → nav.
+2. **`reconcile` consumes the file headers `/nav:sync` maintains, and maintains `plans/`.** `head -12` file headers make "is this implemented?" answerable cheaply — the strongest staleness signal. reconcile keeps **both `thoughts/` and `plans/`** current (a plan whose steps all shipped is stale like an implemented thought).
+3. **`build` is the concentrated seam.** It *controls* the loop (lives in shape, forward-motion) while *calling* nav's code-side protocols per item: `/nav:plan` (ground) → `/nav:refactor` discipline (implement) → `/nav:sync` (cheap header grounding for inject), then writes back via `/shape:align`. Direction stays one-way: shape → nav.
 
 ## Conventions for skills inside this plugin
 

@@ -22,9 +22,8 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
-- `/nav:headers` — add or standardize skill-style file-top headers
-- `/nav:map` — generate the bilingual `docs/codebase-map/index.html`
-- `/nav:doctor` — full health pass (audit → headers → map, with review gates)
+- `/nav:sync` — re-sync the navigation layer to the code: file-top headers + the bilingual `docs/codebase-map/index.html`, one grounding pass, two phases
+- `/nav:doctor` — full health pass (audit → sync, with review gates)
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):

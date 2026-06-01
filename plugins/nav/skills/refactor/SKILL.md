@@ -172,5 +172,4 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 ## Companion skills
 
 - **`/nav:audit`** — find what to refactor.
-- **`/nav:map`** — regenerate the codebase map after the refactor lands (the audit block records what changed).
-- **`/nav:headers`** — update the headers of any file whose role/Reads changed (header drift = lie).
+- **`/nav:sync`** — after the refactor lands, refresh the headers of any file whose role/Reads changed (header drift = lie) and regenerate the codebase map (the audit block records what changed) — both off one grounding pass.

@@ -1,37 +1,21 @@
----
-name: map
-description: Generate or update `docs/codebase-map/index.html` for any codebase — an interactive, **bilingual (EN + zh-Hant) by default** codebase map with anatomy graphs, click-to-reveal panels, draggable nodes, embedded screenshots, and a grounding-audit block at the top. Use this skill whenever the user asks to "generate a codebase map", "create the codebase map", "update the codebase map", "make this codebase navigable", "onboard me to this repo", "show me a map of the code", or after major restructuring when the existing map will have drifted. Also fires when the user references the codebase-map convention. The visual form spec lives in `references/visual-spec.md` — read it before rendering. Generates HTML files (writes to docs/codebase-map/).
----
+# Engine — map-render (repo-level navigability)
 
-# Deep-module map
+> Phase B of `/nav:sync`. Produce a self-contained, interactive codebase map at `docs/codebase-map/index.html` — the "one door" to navigate a codebase top-down. Each domain gets a one-line description; structurally-rich domains get their own anatomy (a click-to-reveal SVG graph). Every claim is grounded against source; a visible audit block records what was verified vs guessed. (Also driven directly by `/nav:doctor` step 5, after the header gate.)
 
-Produce a self-contained, interactive codebase map at `docs/codebase-map/index.html` — the "one door" to navigate a codebase top-down. Each domain gets a one-line description; structurally-rich domains get their own anatomy (a click-to-reveal SVG graph). Every claim is grounded against source; a visible audit block records what was verified vs guessed.
-
-## Why this skill exists
+## What this phase produces
 
 A new reader (human or agent) shouldn't have to read 80 files to understand a repo. The map is the **progressive disclosure entry point** — three layers deep:
 1. The tour (what is this?)
 2. The architecture (3 layers, domain-by-domain)
 3. Anatomies (per-subsystem deep dives, click-to-reveal)
 
-The map is also the **dogfood test** for rule ⑧ — if I struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header.
+This phase is also the **dogfood test** for rule ⑧ — if you struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header. Because `/nav:sync` runs header-render first, the map phase can read each file's freshly-written `head -12` header instead of re-deriving its role.
 
 ## Scope
 
 **Language-agnostic.** The HTML renderer is generic; the source-scanning works on any stack. Domain detection (top-level folders), anatomy identification (rich subsystems), and cross-domain edges (imports) are all universal concepts — only the syntax of "imports" varies (`import ...` / `from ... import` / `use ...` / `package ...`).
 
-Outputs a single self-contained HTML file that renders standalone (no build step). Visual / interaction spec: see [`plugins/nav/skills/map/references/visual-spec.md`](plugins/nav/skills/map/references/visual-spec.md). Read that before rendering — it's the source of truth for layout, colors, sidebar grouping, anatomy patterns, interactions (click panel, drag, lang toggle), and the audit block format.
-
-## The 8 rules (the map IS the interface-first + navigability rules in action)
-
-1. **Deep modules** — low-level modules expose an interface you can use without reading the body.
-2. **Interface-first at every scale** — *this skill's whole reason for being.* The map is the index — a module's interface, a subsystem's facade, the whole codebase's map applied as one door; you drill in only as needed.
-3. **Explicit dependencies** — functions deterministic; deps explicit.
-4. **Right grain — neither giant nor fragmented** — no mega-module/function; **and** no needless abstraction: thin domains get a Module-map row, not an anatomy (don't force structure where it doesn't exist).
-5. **Fit the framework.**
-6. **Rearrange, don't rewrite.**
-7. **Below 90% → ask.**
-8. **Agent-navigability is the audit** — *running this skill IS the audit.* Track every place you struggle to write a one-line description; record it in the audit block.
+Outputs a single self-contained HTML file that renders standalone (no build step). Visual / interaction spec: see [`plugins/nav/skills/sync/references/visual-spec.md`](plugins/nav/skills/sync/references/visual-spec.md). Read that before rendering — it's the source of truth for layout, colors, sidebar grouping, anatomy patterns, interactions (click panel, drag, lang toggle), and the audit block format.
 
 ## Generation process
 
@@ -75,7 +59,7 @@ For each anatomy: enumerate nodes (modules/types/hooks), edges (real relationshi
 While writing each domain/anatomy/file description, track honestly when you struggle:
 - Had to enumerate multiple responsibilities → flag it
 - Had to footnote an exception → flag it
-- Had to **guess** because top-of-file didn't reveal purpose → flag it (rule ① broken)
+- Had to **guess** because top-of-file didn't reveal purpose → flag it (rule ① broken — this file needs a header in the header-render phase)
 - Had to write > 3 sentences before feeling complete → flag it
 
 The flagged files go into the audit block's "self-eval" section. **Honesty matters more than coverage.**
@@ -159,10 +143,4 @@ At the top of `index.html`, in an HTML comment, record:
 - **No fake anatomies.** A domain with 2 files doesn't get an anatomy graph — that's structure-theatre. Use a Module-map row.
 - **Self-eval is honest.** If you struggled to describe something, say so in the audit block. Don't smooth it over.
 - **Stale audit block = lie.** Every regenerate updates the block (date + what changed).
-- **No new files beyond `docs/codebase-map/`.** This skill writes its own folder, not the rest of the repo. If headers need standardizing → that's `/nav:headers`.
-
-## Companion skills
-
-- **`/nav:audit`** — assess what's worth mapping; surface violations the map should call out
-- **`/nav:refactor`** — execute the moves the map reveals as needed
-- **`/nav:headers`** — add file-top headers so future regenerations can describe each file from `head -12` alone
+- **No new files beyond `docs/codebase-map/`.** This phase writes its own folder, not the rest of the repo. Files that lack a `head -12` header are fixed by the header-render phase, not here.

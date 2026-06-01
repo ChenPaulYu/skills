@@ -1,6 +1,6 @@
 # ADR 003 — Five skills, not four or six
 
-**Status**: accepted — post [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md) skills are bare verbs (`audit` / `refactor` / `headers` / `map` / `doctor`); substance unchanged.
+**Status**: accepted — post [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md) skills are bare verbs (`audit` / `refactor` / `headers` / `map` / `doctor`); substance unchanged. **Amended by [ADR-019](docs/adr/019-sync-collapses-headers-and-map.md)**: `headers` + `map` (the two "describe" verbs below) later collapsed into a single `sync` door — still five skills, now `audit` / `refactor` / `sync` / `doctor` / `plan`. The reasoning below is preserved as the original record; read ADR-019 for why the two describe-verbs merged.
 **Date**: 2026-05-28
 
 ## Context

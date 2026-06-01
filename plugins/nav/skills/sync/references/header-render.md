@@ -1,17 +1,10 @@
----
-name: headers
-description: Add or standardize skill-style file-top headers on load-bearing source files in any language, so an agent can `head -12 <file>` to retrieve the file's role + key deps before reading the body. The CONVENTION (title + 2-3 sentence body + Reads line) is universal; the SYNTAX flexes per language (JSDoc / Python docstring / Go doc comment / Rust doc comment / etc.). Use whenever the user asks to "add file headers", "standardize file headers", "audit our docstrings", "make files self-describing", "add skill-style headers", or "make this codebase more progressive-disclosure". Also fires after creating multiple new load-bearing files. Shows a diff before applying; can also update CLAUDE.md with the convention if not present.
----
+# Engine — header-render (file-level navigability)
 
-# Deep-module headers
+> Phase A of `/nav:sync`. Apply a uniform skill-style header to load-bearing source files in any language, so the first 8-12 lines answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code. (Also driven directly by `/nav:doctor` step 4, with a gate before the map phase.)
 
-Apply a uniform skill-style header convention to load-bearing source files in any language, so the first 8-12 lines of every important file answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code.
+## What this phase produces
 
-## Why this skill exists
-
-Most codebases have inconsistent file documentation — some files have rich doc comments, others have nothing, and the formats vary wildly. An agent (or new human reader) can't `head -12` to get a grounded summary; they have to read whole files to understand their purpose. The fix: a uniform convention, applied to every file that earns it.
-
-The header pattern intentionally mirrors how Claude **skills** work — name + description as the "progressive disclosure first level." Files become greppable by purpose.
+Most codebases have inconsistent file documentation — some files have rich doc comments, others have nothing, formats vary. An agent (or new human reader) can't `head -12` to get a grounded summary; they have to read whole files to understand their purpose. The fix: a uniform convention, applied to every file that earns it. The pattern intentionally mirrors how Claude **skills** work — name + description as the "progressive disclosure first level." Files become greppable by purpose.
 
 ## Scope
 
@@ -29,17 +22,6 @@ Syntax per language:
 | Ruby | `# ...` block | line 1 |
 
 The **content shape** is identical across all of them — only the comment characters differ. Headers in different syntaxes should be grep-able with the same patterns (the first ~10 lines, looking for the title format `<name> — <role>`).
-
-## The 8 rules (especially ① and the navigability rule)
-
-1. **Deep modules** — *this skill is rule ① applied at file level.* The header IS the file's interface to a reader who hasn't opened it yet.
-2. **Interface-first at every scale** — the header is the index; the body is what you drill into if needed.
-3. **Explicit dependencies** — `Reads:` makes dependencies explicit.
-4. **Right grain — neither giant nor fragmented** — *important corollary:* don't header tiny files. Name-says-it-all files (Button.tsx, Spinner.tsx, icons, barrels < 5 lines) DO NOT need a header. Forcing headers on them is a rule-④ violation.
-5. **Fit the framework** — uses standard JSDoc, no exotic `@tag`s.
-6. **Rearrange, don't rewrite** — for files with existing top comments: **restructure into the convention; preserve the substance.** Don't paraphrase or shorten — move the existing content into the new shape.
-7. **Below 90% → ask.**
-8. **Agent-navigability is the audit** — *this skill closes the gap this rule surfaces.* If the audit found "agent had to guess at file X's purpose because the top revealed nothing" → fixing it is this skill's job.
 
 ## The convention
 
@@ -66,7 +48,7 @@ No exotic `@tag`s. JSDoc-standard `/** */` block. Lives at line 1, before import
 
 ### Step 1 — Identify load-bearing files
 
-If `/nav:audit` has already run and surfaced a list: use it.
+If the audit (or `/nav:sync`'s grounding pass) already surfaced a list: use it.
 If not: identify load-bearing as:
 - Every domain's "leader" file (largest / most-imported / name-matches-domain)
 - Every file ≥ 150 LOC
@@ -100,7 +82,7 @@ For each file getting a new/restructured header:
 
 ### Step 4 — Show diff before applying
 
-Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent.
+Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent. **This is the gate** — when `/nav:sync` runs both phases, the header diff is reviewed before the map phase reads the new headers.
 
 ### Step 5 — Apply
 
@@ -133,15 +115,6 @@ Check if the project's CLAUDE.md has a section about this header convention. If 
 ```
 
 If the user accepts → write the edit.
-
-### Step 7 — Report
-
-Summary to chat:
-- Files headered: N (with breakdown by state: added new / restructured / skipped already-good)
-- Files explicitly skipped (with reasons): list the thin files you didn't touch
-- CLAUDE.md updated? (yes/no)
-- Diff stats: `+N insertions, -M deletions`
-- How to verify: `head -12 src/<file>` shows the new header
 
 ## Examples
 
@@ -224,14 +197,8 @@ export function useSelection(...) {
 
 ## Discipline (do not skip)
 
-- **Show diff first.** Headers are not refactors; the user reviews before applying.
+- **Show diff first.** Headers are not refactors; the user reviews before applying. This diff is the gate between the two `/nav:sync` phases.
 - **Skip thin files explicitly + list them.** Don't pretend they don't exist; document the deliberate omission.
 - **Preserve substance.** When restructuring existing doc comments, move the content into the convention's shape — never paraphrase.
 - **Test gate after applying.** Headers shouldn't break anything; if they do, revert + fix.
 - **Update CLAUDE.md.** Otherwise the convention is invisible to future agents/humans.
-
-## Companion skills
-
-- **`/nav:audit`** — surfaces which files need headers (the ones where rule ① / ⑧ failed)
-- **`/nav:map`** — once headers exist, the map can describe files from `head -12` alone
-- **`/nav:refactor`** — when role/Reads change as part of a refactor, this skill re-applies the convention

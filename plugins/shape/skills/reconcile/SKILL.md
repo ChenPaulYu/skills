@@ -1,6 +1,6 @@
 ---
 name: reconcile
-description: Reconcile the design notes with reality — scan a blueprints/ tree (both thoughts/ AND plans/), judge which docs have drifted (already implemented, self-declared done, superseded, or carrying a stale fact), then reconcile them *with the user* — AMEND a doc's factual drift in place, or PRUNE / CONSOLIDATE a doc that's wholly stale. Maintains both layers: converged thoughts/ AND nav:plan's grounded plans/ (a plan whose steps all shipped is stale like an implemented thought). Fires when the user asks to "check for outdated thoughts / docs", "which design notes are stale", "clean up the blueprints", "tidy the plans", "are these docs still current", "fix the outdated info in these notes", "prune the old specs", "consolidate these notes", or after a batch of work ships and the design docs or plans have drifted from the code. Also invokable as /shape:reconcile. AMEND only syncs evidence-backed facts (code moved past what the doc claims) — it never rewrites a *decision*; when the design itself changed, that's a new decision out of scope, so reconcile recommends /shape:elicit and says so rather than authoring it. The check is read-only; any amend/prune/merge is write-gated and confirmed per-file. Pairs with /nav:headers (reads file headers to tell what's implemented). Language- and framework-agnostic.
+description: Reconcile the design notes with reality — scan a blueprints/ tree (both thoughts/ AND plans/), judge which docs have drifted (already implemented, self-declared done, superseded, or carrying a stale fact), then reconcile them *with the user* — AMEND a doc's factual drift in place, or PRUNE / CONSOLIDATE a doc that's wholly stale. Maintains both layers: converged thoughts/ AND nav:plan's grounded plans/ (a plan whose steps all shipped is stale like an implemented thought). Fires when the user asks to "check for outdated thoughts / docs", "which design notes are stale", "clean up the blueprints", "tidy the plans", "are these docs still current", "fix the outdated info in these notes", "prune the old specs", "consolidate these notes", or after a batch of work ships and the design docs or plans have drifted from the code. Also invokable as /shape:reconcile. AMEND only syncs evidence-backed facts (code moved past what the doc claims) — it never rewrites a *decision*; when the design itself changed, that's a new decision out of scope, so reconcile recommends /shape:elicit and says so rather than authoring it. The check is read-only; any amend/prune/merge is write-gated and confirmed per-file. Pairs with /nav:sync (reads the file headers it maintains to tell what's implemented). Language- and framework-agnostic.
 ---
 
 # Reconcile — make the notes match reality
@@ -25,7 +25,7 @@ It is the pre-build mirror of `/nav:audit` + the careful side of `/nav:refactor`
 
 For each `thoughts/*.md`, gather evidence from three angles. None alone is decisive — present them and let the user judge:
 
-1. **Code (strongest).** Is the thing it describes already built? Grep the codebase for the feature; **lean on `head -12` file headers (`/nav:headers` output)** to read implementation status cheaply. Implemented → likely "done / can retire".
+1. **Code (strongest).** Is the thing it describes already built? Grep the codebase for the feature; **lean on `head -12` file headers (`/nav:sync` output)** to read implementation status cheaply. Implemented → likely "done / can retire".
 2. **Self-declaration.** Does the doc's own top say it's shipped / completed / superseded? A status line at the head is a strong author signal.
 3. **Date.** Older docs are likelier stale — a *prior*, not a verdict. A two-year-old note may still be the live design; a yesterday one may already be done.
 
@@ -84,7 +84,7 @@ Why the wall: decisions are born in `elicit` / `mockup` (shape's converge verbs)
 
 ## The seam with `nav`
 
-reconcile's currency check **consumes `/nav:headers`**: load-bearing files carrying a `head -12` header make "is this implemented?" answerable without reading bodies — exactly the strongest staleness signal. If the codebase lacks headers, suggest `/nav:headers` first; reconcile still works on grep alone, just less cheaply.
+reconcile's currency check **consumes the file headers `/nav:sync` maintains**: load-bearing files carrying a `head -12` header make "is this implemented?" answerable without reading bodies — exactly the strongest staleness signal. If the codebase lacks headers, suggest `/nav:sync` first; reconcile still works on grep alone, just less cheaply.
 
 ## Discipline (do not skip)
 
@@ -107,5 +107,5 @@ reconcile's currency check **consumes `/nav:headers`**: load-bearing files carry
 - **`/shape:align`** — re-render `plan.md` + `overview.html` after the tree is trimmed.
 - **`/shape:elicit`** — where new `thoughts/` docs come from (the inputs reconcile audits).
 - **`/nav:plan`** — where `plans/` docs come from (the grounded code-plans reconcile also keeps current).
-- **`/nav:headers`** — add `head -12` file headers so reconcile can read implementation status cheaply.
+- **`/nav:sync`** — adds `head -12` file headers (Phase A) so reconcile can read implementation status cheaply.
 - **`/nav:audit`** — the code-side analog: assess code shape (reconcile assesses doc currency).

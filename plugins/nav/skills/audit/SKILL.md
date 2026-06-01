@@ -188,7 +188,7 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 2. …
 
 ### Notes
-- This audit is read-only. To act on findings: invoke `/nav:refactor` (execute the moves), `/nav:map` (regenerate the map with an embedded audit block), or `/nav:headers` (fix files where rule ① / ⑧ failed).
+- This audit is read-only. To act on findings: invoke `/nav:refactor` (execute the moves), or `/nav:sync` (fix file headers where rule ① / ⑧ failed, then regenerate the map with an embedded audit block — both phases off one grounding pass).
 - For Mode 2 specifically: if you want clarify-and-plan after the gap analysis (not just stop), invoke `/nav:plan` — it reuses this audit's output if it ran in the same session.
 - The audit covers shape, not bug correctness. Run tests for the latter.
 ```

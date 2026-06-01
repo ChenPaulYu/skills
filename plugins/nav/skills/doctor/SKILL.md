@@ -1,11 +1,11 @@
 ---
 name: doctor
-description: Full codebase health pass — diagnose what's wrong, propose a categorized plan, then execute the low-risk fixes (file headers + map regeneration) with user-review gates between every step. Tees up structural refactors as separate sessions (does NOT auto-execute them; recommends /nav:refactor for those). Use whenever the user says "my codebase feels unhealthy", "audit and fix", "tune up this repo", "do a full sweep", "run the doctor on my code", "give my code a checkup", "do the works", or any "I sense something's off, give me the full pass" phrasing. Language-agnostic; orchestrates /nav:audit → review → /nav:headers → /nav:map.
+description: Full codebase health pass — diagnose what's wrong, propose a categorized plan, then execute the low-risk fixes (file headers + map regeneration) with user-review gates between every step. Tees up structural refactors as separate sessions (does NOT auto-execute them; recommends /nav:refactor for those). Use whenever the user says "my codebase feels unhealthy", "audit and fix", "tune up this repo", "do a full sweep", "run the doctor on my code", "give my code a checkup", "do the works", or any "I sense something's off, give me the full pass" phrasing. Language-agnostic; orchestrates /nav:audit → review → /nav:sync (header-render gate, then map-render).
 ---
 
 # Deep-module doctor
 
-Comprehensive health pass for any codebase: run the audit, propose a categorized plan, execute the safe fixes (headers + map regeneration), and tee up structural refactors for separate sessions. Convenience layer over `/nav:audit` + `/nav:headers` + `/nav:map` — same outputs, one trigger, user-review gates between steps.
+Comprehensive health pass for any codebase: run the audit, propose a categorized plan, execute the safe fixes (headers + map regeneration via `/nav:sync`), and tee up structural refactors for separate sessions. Convenience layer over `/nav:audit` + `/nav:sync` — same outputs, one trigger, user-review gates between steps.
 
 ## Why this skill exists
 
@@ -15,7 +15,7 @@ When you feel something's off but don't know exactly what, you don't want to rem
 
 ## Scope
 
-**Language-agnostic.** Doctor inherits the universal core + stack-specific heuristics from `/nav:audit`, the syntax flex from `/nav:headers`, and the generic HTML rendering of `/nav:map`. Works on any stack as long as you can run tests for the verify steps.
+**Language-agnostic.** Doctor inherits the universal core + stack-specific heuristics from `/nav:audit`, and the header-render (syntax flex) + map-render (generic HTML) phases from `/nav:sync`. Works on any stack as long as you can run tests for the verify steps.
 
 ## The 8 rules (inherited from all sibling skills)
 
@@ -55,8 +55,8 @@ Categorize the findings:
 
 | Bucket | What goes in | Action this session |
 |---|---|---|
-| **Light fixes** (this session) | files where rule ⑧ self-eval struggled; missing/stale headers | Run `/nav:headers` on these files |
-| **Map refresh** (this session) | always — the audit produced new info that the map should reflect | Re-run `/nav:map` at the end |
+| **Light fixes** (this session) | files where rule ⑧ self-eval struggled; missing/stale headers | Run `/nav:sync` Phase A (header-render) on these files |
+| **Map refresh** (this session) | always — the audit produced new info that the map should reflect | Run `/nav:sync` Phase B (map-render) at the end |
 | **Structural** (separate session) | giants, layer violations, dead modules, fake abstractions, suspect mega-functions | Recommend specific `/nav:refactor` moves; do NOT execute now |
 | **Defer** (note + skip) | low-priority observations | List in the final report so they're not lost |
 
@@ -66,7 +66,7 @@ Show the bucketed plan to user.
 
 ### Step 4 — Execute light fixes (headers)
 
-Following `/nav:headers`'s protocol:
+Following `/nav:sync`'s Phase A (header-render, `skills/sync/references/header-render.md`):
 - Identify the load-bearing files from the audit's struggle list
 - For each, compose the header (per the convention + language syntax)
 - Show diff
@@ -77,7 +77,7 @@ After all headers applied: re-run the stack's test gate. Headers are comments �
 
 ### Step 5 — Regenerate map
 
-Following `/nav:map`'s protocol (and its `references/visual-spec.md`):
+Following `/nav:sync`'s Phase B (map-render, `skills/sync/references/map-render.md` + its `references/visual-spec.md`):
 - Re-scan the codebase (headers now exist where they didn't before — map can read them via `head -12`)
 - Re-render the HTML
 - Embed an updated **grounding-audit block** at the top recording:
@@ -152,6 +152,5 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 ## Companion skills
 
 - `/nav:audit` — invoked as step 2 of doctor; can also be run standalone for read-only health check
-- `/nav:headers` — invoked as step 4 of doctor; can also be run standalone
-- `/nav:map` — invoked as step 5 of doctor; can also be run standalone
+- `/nav:sync` — its two phases are invoked as steps 4–5 of doctor (header-render gate, then map-render); can also be run standalone as the single navigation-sync door
 - `/nav:refactor` — **not invoked by doctor**; recommended by doctor's final report for structural moves; user runs separately
