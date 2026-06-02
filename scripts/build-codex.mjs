@@ -24,7 +24,7 @@ const OUT_DIR = join(ROOT, ".agents", "skills");
 const AGENTS_MD = join(ROOT, "AGENTS.md");
 
 const PLUGINS = ["nav", "shape"];
-const VERBS = "audit|plan|refactor|sync|align|build|elicit|mockup|reconcile|rehearse";
+const VERBS = "audit|plan|refactor|sync|do|align|build|elicit|mockup|reconcile|rehearse";
 // `/nav:audit`, `nav:audit`, `/shape:mockup` → `nav-audit` / `shape-mockup`. Requires a real
 // verb after the colon, so bare-namespace prose ("the `nav:` namespace") is left untouched.
 const NS = new RegExp(`/?\\b(nav|shape):(${VERBS})\\b`, "g");

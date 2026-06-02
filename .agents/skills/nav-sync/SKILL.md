@@ -25,7 +25,7 @@ This skill **writes**: file-top headers across the repo (Phase A) and `docs/code
 
 ## The 8 rules (the through-line of every nav skill)
 
-1. **Deep modules** — a simple interface hiding significant complexity; usable without reading the body. *sync is this rule applied to navigation: the header is a file's interface, the map is the repo's.*
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision so it never surfaces in the interface; red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). *sync is this rule applied to navigation: the header is a file's interface, the map is the repo's.*
 2. **Interface-first at every scale** — *this skill's whole reason for being.* One door, surfaced progressively: a module's interface (header), a subsystem's barrel/facade, the whole codebase's index/map. Drill into bodies only as needed.
 3. **Explicit dependencies** — functions deterministic; deps explicit. The header's `Reads:` line makes a file's dependencies explicit.
 4. **Right grain — neither giant nor fragmented** — don't header thin files (Button / icons / tiny barrels); don't draw fake anatomies for 2-file domains. Don't force structure where there isn't any.

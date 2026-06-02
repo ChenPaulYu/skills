@@ -17,7 +17,7 @@ Most "code review" focuses on bugs. This audit focuses on **shape** — does the
 **The 8 rules are language-agnostic.** This audit works on any codebase. It has a **universal core** of checks that applies everywhere, plus **stack-specific heuristics** that activate when a known stack is detected.
 
 **Universal checks** (run on every codebase):
-- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
+- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · information leakage / temporal decomposition (same design decision in ≥2 modules; boundaries by execution order) · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
 
 **Stack-specific heuristics** (added when stack is detected):
 - **TS/React** (detect: `package.json` mentions `react`): `useState`/`useRef` counts, JSX render span, component prop counts
@@ -53,7 +53,7 @@ The mechanical + heuristic checks below are identical in both modes — only the
 
 ## The 8 rules (the audit IS these rules)
 
-1. **Deep modules** — A simple interface hiding significant complexity; usable without reading the body. Prefer general-purpose foundations over premature special-casing.
+1. **Deep modules through information hiding** — A simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding** (Parnas): encapsulate each design decision — data structures, algorithms, formats, assumptions — inside one module so it never surfaces in the interface. Red flag — **information leakage** (the same knowledge baked into ≥2 modules, so one change touches them all), often caused by **temporal decomposition** (module boundaries following execution order — read/modify/write — instead of knowledge). Prefer general-purpose foundations over premature special-casing.
 2. **Interface-first at every scale** — One door, surfaced progressively: a module's interface, a subsystem's barrel/facade (`index.ts`), the whole codebase's index/map. Drill in only as needed.
 3. **Explicit dependencies** — Functions are deterministic; deps are explicit, not ambient.
 4. **Right grain — neither giant nor fragmented** — No single mega-module or mega-function (a 700-line render counts), **and** no needless abstraction (don't modularise what needn't be). **The giant↔fragment tension is the balance you're auditing.**
@@ -109,6 +109,8 @@ For each domain leader and every file > 100 LOC:
 | Dead modules | File with 0 inbound imports (excluding entry points + barrels) | ④ |
 | Barrels | Each subdirectory with ≥ 3 files: has an `index.<ext>` or equivalent re-export? | ② |
 | Cross-domain edges | Map imports between top-level folders; flag layer violations | ⑤ |
+| Information leakage | Same design decision (a file format, protocol, magic constant, schema) encoded in ≥2 modules with no single owner — a change forces edits in all of them | ① |
+| Temporal decomposition | Modules/classes split by execution order (e.g. `read`/`modify`/`write` over a shared format) rather than by knowledge — a common cause of the leakage above | ① |
 
 **TS/React specific (only if React detected):**
 

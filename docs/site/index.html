@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-02 (rev 25)
+  Last audit: 2026-06-02 (rev 26)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -11,9 +11,9 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Two plugins: nav (4 skills) + shape (6 skills) — see
+    • Two plugins: nav (5 skills) + shape (6 skills) — see
       plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
-    • nav skills: audit, refactor, sync, plan
+    • nav skills: audit, refactor, sync, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), rehearse (walk a feature's usage → render its logic holes as a
       mockup; mockup's logic-twin, ADR-020), align (decide next + render the
@@ -24,13 +24,38 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 22 ADRs in docs/adr/ — 001..022 with cross-supersede / refine links
+    • 24 ADRs in docs/adr/ — 001..024 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (10 flat skills, nav-* / shape-*) +
       root AGENTS.md, generated from plugins/ by scripts/build-codex.mjs
       (ADR-022) — committed, do-not-hand-edit
 
-  ⚠ FIXED in this revision (rev 25)
+  ⚠ FIXED in this revision (rev 26)
+    1. nav: new skill `do` (ADR-023) — nav's execution verb, the only nav
+       skill that writes a behaviour-CHANGING change directly. The inject↔check
+       sub-agent discipline (ADR-008) promoted to a standalone, plan-less door:
+       continuous deep-module/header/N+1/LOC awareness (乙) + a thin enforced
+       bracket (甲 — inject head -12 + reuse-grep → execute → check header · N+1 ·
+       unconditional verify gate). refactor's behaviour-changing twin (refactor
+       preserves behaviour; do changes it). It is an N+1 extraction of the
+       discipline that lived inline in plan Stage 4 / refactor Step 8 — both now
+       reference do + an unconditional verify gate (the symmetry patch). nav 4 →
+       5 skills; v0.3.0 → 0.4.0. NAV_NODES + do node (execute kind/color) +
+       plan→do / refactor→do edges; nav anatomy lede/title/counts four → five.
+       (The install/blurb/master-node "5 skills" strings, stale-low since the
+       rev-24 doctor retirement left them at 5 when nav was 4, are now correct.)
+    2. Rule ① deepened to "Deep modules through information hiding" (ADR-024) —
+       names the technique (information hiding, Parnas: encapsulate each design
+       decision so it never surfaces in the interface) + the red flags
+       (information leakage; temporal decomposition). Folded into ①, NOT a 9th
+       rule (faithful to Ousterhout — info hiding is the means to deep modules;
+       and anti-proliferation, no renumber cascade). Still 8 rules. RULES card ①
+       name + bilingual desc updated; audit gains two universal-check rows
+       (leakage · temporal decomposition); rule ① restated across CLAUDE.md + all
+       5 skills.
+    3. ADR count 22 → 24; nav 4 → 5 skills in VERIFIED.
+
+  ⚠ FIXED in rev 25 (kept for history)
     1. Codex compatibility (ADR-022) — Codex uses the same Agent Skills
        format, so plugins/ stays the single source of truth and
        scripts/build-codex.mjs emits a flat, unnamespaced mirror into
@@ -469,7 +494,7 @@
     <a href="#conv" data-t="nav_conv">Conventions</a>
     <div class="meta">
       <div data-t="meta_about">Hand-curated · stale = lie. Re-audit when content drifts.</div>
-      <div class="updated">Updated 2026-06-01</div>
+      <div class="updated">Updated 2026-06-02</div>
     </div>
   </nav>
 
@@ -525,14 +550,14 @@
     <section id="nav-anatomy">
       <h2>
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
-        <span data-t="navanat_title">nav anatomy — assess, transform, describe, plan</span>
+        <span data-t="navanat_title">nav anatomy — assess, transform, describe, plan, execute</span>
       </h2>
-      <div class="lede" data-t="navanat_lede">Four skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class="anat-list"><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Standalone</b> · <code>refactor</code> — verbatim move + test-gate (heavy-touch, narrow scope).</li><li><b>The door</b> · <code>sync</code> — one grounding pass → header-render (gated) → map-render. The former <code>headers</code> + <code>map</code> (ADR-019).</li><li><b>Meta</b> · <code>plan</code> — the lone orchestrator: grounds a spec → clarifies → writes a plan artifact you review before executing.</li></ul></div>
+      <div class="lede" data-t="navanat_lede">Five skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class="anat-list"><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Move</b> · <code>refactor</code> — verbatim move + test-gate, behaviour-preserving (heavy-touch, narrow scope).</li><li><b>Add</b> · <code>do</code> — execute a small behaviour-<i>changing</i> change, disciplined, no artifact; refactor's twin. The inject↔check sub-agent bracket promoted to a standalone verb (ADR-023).</li><li><b>The door</b> · <code>sync</code> — one grounding pass → header-render (gated) → map-render. The former <code>headers</code> + <code>map</code> (ADR-019).</li><li><b>Meta</b> · <code>plan</code> — the lone orchestrator: grounds a spec → clarifies → writes a plan artifact you review before executing.</li></ul></div>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
       </div>
-      <div class="callout" data-t="navanat_callout">The meta-skill (<code>plan</code>) doesn't auto-act on what it surfaces — it writes a plan artifact the user reads before executing. It inlines <code>audit</code>'s protocol but follows the "scan transcript first" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated) or <code>/nav:refactor</code>.</div>
+      <div class="callout" data-t="navanat_callout">The meta-skill (<code>plan</code>) doesn't auto-act on what it surfaces — it writes a plan artifact the user reads before executing. It inlines <code>audit</code>'s protocol but follows the "scan transcript first" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated) or <code>/nav:refactor</code>. For a small, already-decided behaviour change, <code>/nav:do</code> executes it directly — same deep-module/header discipline, no plan artifact.</div>
     </section>
 
     <section id="shape-anatomy">
@@ -595,9 +620,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav anatomy — assess, transform, describe, plan',
-    navanat_lede: "Four skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class='anat-list'><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Standalone</b> · <code>refactor</code> — verbatim move + test-gate (heavy-touch, narrow scope).</li><li><b>The door</b> · <code>sync</code> — one grounding pass → header-render (gated) → map-render. The former <code>headers</code> + <code>map</code> (ADR-019).</li><li><b>Meta</b> · <code>plan</code> — the lone orchestrator: grounds a spec → clarifies → writes a plan artifact you review before executing.</li></ul>",
-    navanat_callout: "The meta-skill (<code>plan</code>) doesn't auto-act on what it surfaces — it writes a plan artifact the user reads before executing. It inlines <code>audit</code>'s protocol but follows the \"scan transcript first\" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated) or <code>/nav:refactor</code>.",
+    navanat_title: 'nav anatomy — assess, transform, describe, plan, execute',
+    navanat_lede: "Five skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class='anat-list'><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Move</b> · <code>refactor</code> — verbatim move + test-gate, behaviour-preserving (heavy-touch, narrow scope).</li><li><b>Add</b> · <code>do</code> — execute a small behaviour-<i>changing</i> change, disciplined, no artifact; refactor's twin. The inject↔check sub-agent bracket promoted to a standalone verb (ADR-023).</li><li><b>The door</b> · <code>sync</code> — one grounding pass → header-render (gated) → map-render. The former <code>headers</code> + <code>map</code> (ADR-019).</li><li><b>Meta</b> · <code>plan</code> — the lone orchestrator: grounds a spec → clarifies → writes a plan artifact you review before executing.</li></ul>",
+    navanat_callout: "The meta-skill (<code>plan</code>) doesn't auto-act on what it surfaces — it writes a plan artifact the user reads before executing. It inlines <code>audit</code>'s protocol but follows the \"scan transcript first\" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated) or <code>/nav:refactor</code>. For a small, already-decided behaviour change, <code>/nav:do</code> executes it directly — same deep-module/header discipline, no plan artifact.",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
     // panel labels
@@ -609,9 +634,9 @@ const T = {
     cb_default_click_label: 'tip',
     cb_default_click_text: 'Future families (spec, craft, ...) will appear here as new nodes.',
     nav_default_h3: 'nav plugin anatomy',
-    nav_default_role: 'Four skills — plan the orchestrator. Click any node for its role + what it wires to.',
+    nav_default_role: 'Five skills — plan the orchestrator. Click any node for its role + what it wires to.',
     nav_default_click_label: 'tip',
-    nav_default_click_text: 'audit is the read-only source of truth; plan inlines it to ground a spec into a plan artifact. sync refreshes headers + map (self-gated); refactor stays standalone. Click any node for its role.',
+    nav_default_click_text: 'audit is the read-only source of truth; plan inlines it to ground a spec into a plan artifact. sync refreshes headers + map (self-gated); refactor stays standalone. do executes a small behaviour-changing change directly, no plan (refactor twin). Click any node for its role.',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape anatomy — converge · project · reconcile · build',
     shape_anat_lede: "Skills grouped by verb around a <code>blueprints/</code> hub.<ul class='anat-list'><li><b>converge</b> · <code>mockup</code> (render-to-decide) · <code>elicit</code> (grounded grill → a principle) · <code>rehearse</code> (walk a feature's usage → render its logic holes; mockup's logic-twin, ADR-020).</li><li><b>project</b> · <code>align</code> — decide now/next/later WITH the user → <code>plan.md</code> + regenerate <code>overview.html</code> (the mirror of <code>/nav:sync</code>'s map).</li><li><b>reconcile</b> · amend a stale fact in place, or prune/consolidate a wholly-stale doc; write-gated. A decision-change → <code>/shape:elicit</code>.</li><li><b>build</b> · drive In-progress to done — per item: ground via <code>/nav:plan</code> → implement → verify (screenshot vs mockup) → ship; autonomous but confidence-gated.</li></ul>",
@@ -622,7 +647,7 @@ const T = {
     shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. doctor (orchestrator) is deferred until the family proves out.',
     leg_decide: 'converge', leg_project: 'project', leg_reconcile: 'reconcile', leg_build: 'build', leg_artifact: 'blueprints (convention)',
     // legend
-    leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe',
+    leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe', leg_execute: 'execute',
     leg_plugin: 'plugin',
   },
   zh: {
@@ -661,9 +686,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃',
-    navanat_lede: '四個 skill,各一動詞 —— <code>audit</code> 是唯讀的真理之源,<code>plan</code>(與 <code>sync</code> 的 grounding pass)內嵌它。<ul class="anat-list"><li><b>真理之源</b> · <code>audit</code> —— 對照 8 規則評估(唯讀)。</li><li><b>獨立</b> · <code>refactor</code> —— 原文搬移 + test-gate(重觸、須窄範圍)。</li><li><b>那道門</b> · <code>sync</code> —— 一趟 grounding pass → header-render(gated)→ map-render。前身是 <code>headers</code> + <code>map</code>(ADR-019)。</li><li><b>Meta</b> · <code>plan</code> —— 唯一的 orchestrator:以 spec 為底 ground → 釐清 → 寫出 plan 檔給你看過再執行。</li></ul>',
-    navanat_callout: '唯一的 meta-skill(<code>plan</code>)不會自動執行它發現的事 —— 它寫出 plan 檔給 user 看過再執行。它內嵌 <code>audit</code> 的 protocol,但遵守「先掃 transcript」的 preamble —— 同 session 跑過 audit 就 reuse,不重新 grep(ADR-006)。<code>audit</code> 本身唯讀;要動手就跑 <code>/nav:sync</code>(gated)或 <code>/nav:refactor</code>。',
+    navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃、執行',
+    navanat_lede: '五個 skill,各一動詞 —— <code>audit</code> 是唯讀的真理之源,<code>plan</code>(與 <code>sync</code> 的 grounding pass)內嵌它。<ul class="anat-list"><li><b>真理之源</b> · <code>audit</code> —— 對照 8 規則評估(唯讀)。</li><li><b>搬移</b> · <code>refactor</code> —— 原文搬移 + test-gate,行為不變(重觸、須窄範圍)。</li><li><b>新增</b> · <code>do</code> —— 直接執行一個小的、會改變行為的變更,有紀律、不留 artifact;refactor 的雙生。把 inject↔check 的 sub-agent bracket 獨立成動詞(ADR-023)。</li><li><b>那道門</b> · <code>sync</code> —— 一趟 grounding pass → header-render(gated)→ map-render。前身是 <code>headers</code> + <code>map</code>(ADR-019)。</li><li><b>Meta</b> · <code>plan</code> —— 唯一的 orchestrator:以 spec 為底 ground → 釐清 → 寫出 plan 檔給你看過再執行。</li></ul>',
+    navanat_callout: '唯一的 meta-skill(<code>plan</code>)不會自動執行它發現的事 —— 它寫出 plan 檔給 user 看過再執行。它內嵌 <code>audit</code> 的 protocol,但遵守「先掃 transcript」的 preamble —— 同 session 跑過 audit 就 reuse,不重新 grep(ADR-006)。<code>audit</code> 本身唯讀;要動手就跑 <code>/nav:sync</code>(gated)或 <code>/nav:refactor</code>。針對小的、已決定的行為變更,<code>/nav:do</code> 直接執行 —— 同樣的 deep-module/header 紀律,不寫 plan 檔。',
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
     role_label: '角色', wires_label: '指向', used_by_label: '被指向', view_anatomy: '前往解剖',
@@ -673,9 +698,9 @@ const T = {
     cb_default_click_label: '提示',
     cb_default_click_text: '未來家族(spec、craft...)會以新 node 出現於此。',
     nav_default_h3: 'nav plugin 解剖',
-    nav_default_role: '四個 skill —— plan 是 orchestrator。點任一 node 看角色與指向。',
+    nav_default_role: '五個 skill —— plan 是 orchestrator。點任一 node 看角色與指向。',
     nav_default_click_label: '提示',
-    nav_default_click_text: 'audit 是唯讀的真理之源;plan 內嵌它、把 spec ground 成 plan 檔。sync 刷新 headers + map(自帶 gate);refactor 維持獨立。點任一 node 看角色。',
+    nav_default_click_text: 'audit 是唯讀的真理之源;plan 內嵌它、把 spec ground 成 plan 檔。sync 刷新 headers + map(自帶 gate);refactor 維持獨立。do 直接執行一個小的、會改變行為的變更,不寫 plan(refactor 雙生)。點任一 node 看角色。',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape 解剖 —— 收斂 · 投影 · 對賬 · build',
     shape_anat_lede: '依動詞分組,圍著 <code>blueprints/</code> hub。<ul class="anat-list"><li><b>收斂</b> · <code>mockup</code>(render 即決策)· <code>elicit</code>(grounded grill → 一條原則)· <code>rehearse</code>(沿 feature 使用走 → render 邏輯洞;mockup 的邏輯雙胞胎,ADR-020)。</li><li><b>投影</b> · <code>align</code> —— 跟 user 定 now/next/later → <code>plan.md</code> + 重生 <code>overview.html</code>(<code>/nav:sync</code> 的 map 對應)。</li><li><b>對賬</b> · <code>reconcile</code> —— 就地 amend 過時事實,或 prune/合併整份過時的;write-gated。決定變了 → <code>/shape:elicit</code>。</li><li><b>build</b> —— 把 In-progress 跑到清空:每 item /nav:plan ground → implement → verify(截圖對 mockup)→ ship;自動但 confidence-gated。</li></ul>',
@@ -685,7 +710,7 @@ const T = {
     shape_default_click_label: '提示',
     shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。doctor(orchestrator)等家族成熟再加。',
     leg_decide: '收斂', leg_project: '投影', leg_reconcile: '對賬', leg_build: '做出來', leg_artifact: 'blueprints(約定)',
-    leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述',
+    leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述', leg_execute: '執行',
     leg_plugin: 'plugin',
   },
 };
@@ -694,13 +719,13 @@ const T = {
 const LAYERS = [
   {cls:'ui', name:{en:'Marketplace', zh:'Marketplace'}, tag:{en:'the container — identity from GitHub username', zh:'容器 —— 身份來自 GitHub 帳號'}, doms:['skills']},
   {cls:'state', name:{en:'Plugin', zh:'Plugin'}, tag:{en:'a topical family of skills', zh:'一個主題家族的 skills'}, doms:['nav']},
-  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','plan']},
+  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','plan','do']},
 ];
 
 const ARCH_LAYERS = [
   {cls:'ui', label:{en:'MARKETPLACE', zh:'MARKETPLACE'}, desc:{en:'<code>skills/</code> — the personal collection. <code>.claude-plugin/marketplace.json</code> lists which plugins live inside. Identity comes from the GitHub username (<code>ChenPaulYu/skills</code>), not the folder name.', zh:'<code>skills/</code> —— 個人收藏。<code>.claude-plugin/marketplace.json</code> 列出內含的 plugins。身份來自 GitHub 帳號(<code>ChenPaulYu/skills</code>),不是資料夾名。'}},
   {cls:'state', label:{en:'PLUGIN', zh:'PLUGIN'}, desc:{en:'<code>plugins/&lt;family&gt;/</code> — one topical family. <code>.claude-plugin/plugin.json</code> declares the plugin; <code>CLAUDE.md</code> holds its dev conventions; <code>skills/</code> holds the verbs.', zh:'<code>plugins/&lt;family&gt;/</code> —— 一個主題家族。<code>.claude-plugin/plugin.json</code> 宣告 plugin;<code>CLAUDE.md</code> 是開發約定;<code>skills/</code> 放動詞。'}},
-  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','sync','plan']},
+  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','sync','plan','do']},
 ];
 
 const ARCH_CONN = [
@@ -709,7 +734,7 @@ const ARCH_CONN = [
 ];
 
 const RULES = [
-  {n:'①', name:{en:'Deep modules', zh:'深模組'}, desc:{en:'A simple interface hiding significant complexity; usable without reading the body. Prefer general-purpose foundations over premature special-casing.', zh:'簡單介面藏住大量複雜度;不讀內部即可使用。優先通用基礎,別過早特例化。'}},
+  {n:'①', name:{en:'Deep modules via information hiding', zh:'深模組(資訊隱藏)'}, desc:{en:'A simple interface hiding significant complexity, usable without reading the body. The technique is information hiding: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag: information leakage (same knowledge in ≥2 modules), often from temporal decomposition (boundaries by execution order, not knowledge).', zh:'簡單介面藏住大量複雜度,不讀內部即可使用。手段是資訊隱藏:把每個設計決策(資料結構、格式、假設)封進單一 module,不讓它出現在介面。紅旗:資訊洩漏(同一知識散在 ≥2 個 module),常由時序分解(邊界順執行順序而非知識切)造成。'}},
   {n:'②', name:{en:'Interface-first at every scale', zh:'各尺度皆介面優先'}, desc:{en:'One door, surfaced progressively: a module interface, a subsystem barrel/facade (index.ts), the whole-codebase index/map. Drill in only as needed.', zh:'一道門、漸進揭露:模組介面、子系統 barrel/facade(index.ts)、整個 codebase 的索引/地圖。有需要再深入。'}},
   {n:'③', name:{en:'Explicit dependencies', zh:'依賴明示'}, desc:{en:'Functions deterministic; deps explicit in the signature, not ambient.', zh:'函式可決定;依賴寫在簽名,非環境變數。'}},
   {n:'④', name:{en:'Right grain — neither giant nor fragmented', zh:'正確顆粒度 —— 不巨也不碎'}, desc:{en:'No mega-module or mega-function (a 700-line render counts); equally, no needless abstraction. The giant↔fragment tension is the balance.', zh:'無巨型模組或函式(700 行 render 算);同樣,也不過度抽象。巨物↔碎片之間就是要平衡的張力。'}},
@@ -729,6 +754,7 @@ const DOMAINS = {
       ['/nav:refactor', '', {en:'★ Structural refactor: verbatim move + test gate after every step + real-app pass at the end. Behaviour stays identical.', zh:'★ 結構重構:原文搬移 + 每步 test gate + 結尾真實 app pass。行為完全不變。'}],
       ['/nav:sync', '', {en:'Re-sync the navigation layer to the code in one grounding pass → Phase A file-top headers (any language, <code>head -12</code> = role + key deps), gated, then Phase B the bilingual <code>docs/codebase-map/index.html</code> (anatomy graphs + audit block). The former <code>headers</code> + <code>map</code> skills, one door (ADR-019).', zh:'一趟 grounding pass 把導覽層同步到 code → Phase A 檔首 header(任何語言,<code>head -12</code> 即角色 + 關鍵依賴),gated,再 Phase B 雙語 <code>docs/codebase-map/index.html</code>(anatomy 圖 + audit block)。前身是 <code>headers</code> + <code>map</code> 兩個 skill,合成一道門(ADR-019)。'}],
       ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session. Stage 4 offers execution + a guarded /shape:mockup visual summary (ADR-012). Writes into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/), so the grounded plan co-locates with the intent — ADR-017.', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。Stage 4 offer 執行 + 一個 guarded 的 /shape:mockup 視覺 summary(ADR-012)。有 blueprints/ 樹時寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/),讓 grounded plan 跟 intent 同處 —— ADR-017。'}],
+      ['/nav:do', '', {en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md artifact. Deep-module/header/N+1 awareness throughout + a thin bracket: inject (head -12 + reuse-grep) → execute → check (header · N+1 · unconditional verify gate). The inject↔check sub-agent discipline (ADR-008) as a standalone verb; refactor twin (refactor preserves behaviour, do changes it) — ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不留 plan.md。全程 deep-module/header/N+1 awareness + 一道薄 bracket:inject(head -12 + reuse-grep)→ execute → check(header · N+1 · 無條件 verify gate)。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞;refactor 雙生(refactor 保行為,do 改行為)—— ADR-023。'}],
     ],
   },
   shape: {
@@ -757,11 +783,14 @@ const NAV_NODES = [
   {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Two modes: unconditional health, or read-only quick-check against a spec.', zh:'唯讀審計,對照 8 條 deep-module 規則。兩模式:無條件健康,或對應 spec 的唯讀快檢。'}},
   {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass. Doctor and plan both recommend; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass。Doctor 與 plan 都會推薦;你自行呼叫。'}},
   {id:'sync', kind:'describe', x:425, y:240, w:140, role:{en:'describe (file + project)', zh:'描述(檔案 + 專案)'}, desc:{en:'One door, one grounding pass, two render phases: Phase A file-top headers (per-language syntax; head -12 = role + Reads), gated, then Phase B the bilingual codebase HTML (draggable graphs, click-to-reveal, audit block — this file uses the same form). The former headers + map skills (ADR-019).', zh:'一道門、一趟 grounding pass、兩個 render phase:Phase A 檔首 header(syntax 隨語言;head -12 即角色 + Reads),gated,再 Phase B 雙語 codebase HTML(可拖曳圖、點看面板、audit block —— 本檔即此形式)。前身是 headers + map 兩個 skill(ADR-019)。'}},
+  {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md. The inject↔check sub-agent discipline (ADR-008) promoted to a standalone verb: continuous deep-module/header/N+1/LOC awareness + a thin bracket (inject: head -12 + grep for a reusable impl → execute → check: header · N+1 · unconditional verify gate). The behaviour-changing twin of refactor (refactor preserves behaviour; do changes it). ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不寫 plan.md。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞:全程 deep-module/header/N+1/LOC awareness + 一道薄 bracket(inject:head -12 + grep 既有可重用實作 → execute → check:header · N+1 · 無條件 verify gate)。refactor 的行為改變雙生(refactor 保行為,do 改行為)。ADR-023。'}},
 ];
 
 const NAV_EDGES = [
   ['plan', 'audit'],
   ['sync', 'audit'],
+  ['plan', 'do'],
+  ['refactor', 'do'],
 ];
 
 const SHAPE_NODES = [
@@ -818,6 +847,7 @@ const KIND_COLOR = {
   reconcile: '#b5654e',     // shape: reconcile — amend/prune stale (rust)
   artifact: '#8a7d6e',      // shape: blueprints — the convention/container (taupe)
   build: '#3f7d4a',         // shape: build — make it real (green)
+  execute: '#cf7d2e',       // do — execute a behaviour-changing change (amber)
 };
 
 function renderLayers(){
@@ -970,7 +1000,7 @@ function render(){
   renderAnatomy('#cbGraph', '#cbPanel', CB_NODES, CB_EDGES, 'cb_default',
     [['#7a9e6e','leg_plugin']]);
   renderAnatomy('#navGraph', '#navPanel', NAV_NODES, NAV_EDGES, 'nav_default',
-    [['#2a211c','leg_orch'],['#7a9e6e','leg_assess'],['#6c8fb5','leg_transform'],['#b5894e','leg_describe']]);
+    [['#2a211c','leg_orch'],['#7a9e6e','leg_assess'],['#6c8fb5','leg_transform'],['#b5894e','leg_describe'],['#cf7d2e','leg_execute']]);
   renderAnatomy('#shapeGraph', '#shapePanel', SHAPE_NODES, SHAPE_EDGES, 'shape_default',
     [['#a86b9e','leg_decide'],['#3f8fa3','leg_project'],['#b5654e','leg_reconcile'],['#3f7d4a','leg_build'],['#8a7d6e','leg_artifact']]);
 }

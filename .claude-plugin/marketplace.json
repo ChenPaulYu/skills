@@ -8,8 +8,8 @@
     {
       "name": "nav",
       "source": "./plugins/nav",
-      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility), refactor (verbatim move + test gates), sync (navigation layer: file-top headers + bilingual codebase HTML, one grounding pass), plan (spec → grounded plan). Language-agnostic. Built on Ousterhout's deep-module principles.",
-      "version": "0.3.0"
+      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility), refactor (verbatim move + test gates), sync (navigation layer: file-top headers + bilingual codebase HTML, one grounding pass), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
+      "version": "0.4.0"
     },
     {
       "name": "shape",

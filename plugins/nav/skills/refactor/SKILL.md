@@ -29,7 +29,7 @@ If unclear what kind of refactor the user wants → rule ⑦, ask. "Is this a ve
 
 ## The 8 rules (full set — the discipline relies on them)
 
-1. **Deep modules** — a simple interface hiding significant complexity; usable without reading the body.
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge).
 2. **Interface-first at every scale** — an index/facade surfaces the interface; you drill in only as needed.
 3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
 4. **Right grain — neither giant nor fragmented** — no mega-module/function; equally no needless abstraction.
@@ -130,7 +130,7 @@ After Step 7's report, present next-action options via `AskUserQuestion`. The di
 | # | Option | What happens if picked |
 |---|---|---|
 | 1 | Commit on a new branch and open a draft PR *(Recommended if on default branch)* | Branch off current HEAD, stage the refactor diff, commit with a message summarising the move (LOC delta + files changed), push, run `gh pr create --draft`. Confirm the commit message before committing. |
-| 2 | Launch sub-agent for a follow-up "improve" session on the extracted module | Invoke `Agent` with `subagent_type=general-purpose`. **Inject (→)** four things: the newly extracted file path(s); the discipline that this is the *improve* phase (the verbatim move already landed and is verified); any simplifications noticed during the move that were deliberately deferred; **and the surrounding seam** — what the module exposes, who consumes it, and the **N+1 trigger** so the improve pass extracts a shared primitive instead of adding a parallel one. Sub-agent works in clean context — enforces the move/improve separation at the architecture level. **Check (←)** before accepting "done": read its diff for a parallel impl in the same domain, a bypassed barrel/facade, or a stale/missing header. STOP if any fails. See [ADR-008](docs/adr/008-inject-check-at-handoff.md). |
+| 2 | Launch sub-agent for a follow-up "improve" session on the extracted module | Invoke `Agent` with `subagent_type=general-purpose`. **Inject (→)** four things: the newly extracted file path(s); the discipline that this is the *improve* phase (the verbatim move already landed and is verified); any simplifications noticed during the move that were deliberately deferred; **and the surrounding seam** — what the module exposes, who consumes it, and the **N+1 trigger** so the improve pass extracts a shared primitive instead of adding a parallel one. Sub-agent works in clean context — enforces the move/improve separation at the architecture level. **Check (←)** before accepting "done": read its diff for a parallel impl in the same domain, a bypassed barrel/facade, or a stale/missing header, **and run a verify gate** — tests green + the changed behaviour exercised (an improve pass changes code, so it follows `/nav:do`'s check, not just refactor's identical-tests gate). STOP if any fails. See [ADR-008](docs/adr/008-inject-check-at-handoff.md). |
 | 3 | Done — I'll handle from here | Skill ends. |
 
 **Skip Step 8 if**:
@@ -171,5 +171,6 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 
 ## Companion skills
 
+- **`/nav:do`** — the behaviour-*changing* twin: when the work adds/changes behaviour rather than preserving it (this skill is moves only).
 - **`/nav:audit`** — find what to refactor.
 - **`/nav:sync`** — after the refactor lands, refresh the headers of any file whose role/Reads changed (header drift = lie) and regenerate the codebase map (the audit block records what changed) — both off one grounding pass.

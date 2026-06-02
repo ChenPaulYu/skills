@@ -24,6 +24,7 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 - `/nav:sync` — re-sync the navigation layer to the code: file-top headers + the bilingual `docs/codebase-map/index.html`, one grounding pass, two phases
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
+- `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact) — the execution verb, refactor's behaviour-changing twin
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
