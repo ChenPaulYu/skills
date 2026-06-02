@@ -58,6 +58,16 @@ For iterating on this marketplace itself, use a local path instead of the GitHub
 
 After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the local path in place (no reinstall).
 
+## Codex compatibility
+
+Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. A repo-root [`AGENTS.md`](AGENTS.md) is synthesised from the two plugin `CLAUDE.md` files.
+
+```bash
+node scripts/build-codex.mjs   # re-run after editing any SKILL.md
+```
+
+Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill and regenerate.
+
 ## Philosophy (the through-line)
 
 Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without reading every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
