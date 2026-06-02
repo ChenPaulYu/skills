@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-01 (rev 24)
+  Last audit: 2026-06-02 (rev 25)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -24,10 +24,26 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 21 ADRs in docs/adr/ — 001..021 with cross-supersede / refine links
+    • 22 ADRs in docs/adr/ — 001..022 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
+    • Codex mirror: .agents/skills/ (10 flat skills, nav-* / shape-*) +
+      root AGENTS.md, generated from plugins/ by scripts/build-codex.mjs
+      (ADR-022) — committed, do-not-hand-edit
 
-  ⚠ FIXED in this revision (rev 24)
+  ⚠ FIXED in this revision (rev 25)
+    1. Codex compatibility (ADR-022) — Codex uses the same Agent Skills
+       format, so plugins/ stays the single source of truth and
+       scripts/build-codex.mjs emits a flat, unnamespaced mirror into
+       .agents/skills/ (nav:audit → nav-audit; no plugin namespace in Codex)
+       plus a synthesised root AGENTS.md (from the two plugin CLAUDE.md). The
+       generator flattens the namespace, rewrites cross-skill + CLAUDE.md→
+       AGENTS.md references, and re-roots bundled reference paths. A
+       distribution layer, not a structural change: no skill / plugin / rule
+       added or renamed, so the interactive body (nodes/edges/anatomies) is
+       unchanged — only this audit block is bumped. README gains a Codex
+       section.
+
+  ⚠ FIXED in rev 24 (kept for history)
     1. Retired nav:doctor (ADR-021) — after the headers+map→sync merge it
        orchestrated only audit → sync (2 steps, sync self-gates), too thin to
        earn a skill (shape defers its own doctor until ≥3 steps; nav was under
