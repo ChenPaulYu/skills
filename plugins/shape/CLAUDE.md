@@ -70,6 +70,7 @@ Three skills need to *see* the running thing — `mockup` (render the artifact),
 - **If missing, fail helpfully — never silently skip.** Surface a 3-way confidence-gate choice: **(a) install** [recommended] — `npm install -g agent-browser` (or `brew`/`cargo install agent-browser`) then `agent-browser install`; or as a skill `npx skills add vercel-labs/agent-browser`. **(b)** proceed without visual verify this run (flag items to eyeball). **(c)** skip verify for this item. Report what was skipped (no silent caps).
 - **Per-project override:** a project may bind a different helper (Playwright, puppeteer) in its own CLAUDE.md; the agent reads that. Absent an override, the default is agent-browser.
 - **Skills don't call skills:** name the capability + describe the contract; the executing agent invokes the tool (CLI shell-out, or triggers the agent-browser skill in its own turn).
+- **Known traps (React + Vite):** controlled-input setting (native-setter + `input` dispatch, else `onChange` never fires) and HMR console-artifact discrimination (a lone "error occurred in `<X>`" bracketed by `[vite] hot updated` is an edit-time ghost, not a bug) — both documented in [`references/browser-verify-gotchas.md`](plugins/shape/references/browser-verify-gotchas.md). Read before trusting a screenshot or console scan on a React+Vite app.
 
 ## Status
 
