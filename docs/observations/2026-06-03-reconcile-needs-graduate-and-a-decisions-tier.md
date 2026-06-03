@@ -1,9 +1,11 @@
 ---
 date: 2026-06-03
-status: maturing
+status: promoted
 ---
 
 # reconcile can't retire a shipped doc that still holds rationale → thoughts/ grows monotonically; it needs a `graduate` action + a durable `decisions/` tier
+
+> **Promoted 2026-06-03** → [ADR-026](docs/adr/026-reconcile-graduate-and-decisions-tier.md) · `plugins/shape/skills/reconcile/SKILL.md` (the `graduate` action) · `plugins/shape/skills/align/references/blueprints-spec.md` (the `decisions/` tier). Kept as history (cleared ADR-018's dense-session gate in one session).
 
 ## What happened (concrete)
 
