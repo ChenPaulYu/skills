@@ -95,9 +95,14 @@ A file written to disk is not yet a decidable artifact — the user has to *see*
 
 "Render + capture" uses shape's shared **browser-verify capability slot** (defined once in `plugins/shape/CLAUDE.md`, shared with `align` + `build`): a named default (`agent-browser`) + detect + fail-helpfully if missing + per-project override. Open the file / running system, locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a tool — name the capability.
 
-## After the pick — offer to align it in (don't auto-run)
+## After the pick — offer the next step: track it · build it (don't auto-run)
 
-When the pick settles a decision worth tracking (not a throwaway look-and-feel tweak), record it and then *offer* — never auto-call — `/shape:align` to triage it into `plan.md`: an `AskUserQuestion` with a "just record the pick, I'll align later" opt-out (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when a `blueprints/` board exists (or scaffolding one is wanted), and don't re-offer / nag across a rapid series of mockups. `align` is collaborative, so the recommended option runs **in-session** (it needs this conversation's decision), not a clean sub-agent. An offer, not a call — skills don't invoke each other. (Skip entirely for a disposable visual tweak with nothing to track.)
+A pick has two natural next steps, and the offer should name **both** (ADR-028) — an `AskUserQuestion` with a "just record the pick, I'll continue later" opt-out (offer-next-action, ADR-007/015):
+
+- **Track it → `/shape:align`** — triage the decision into `plan.md` (now/next/later). `align` is collaborative, so it runs **in-session** (it needs this conversation's decision), not a clean sub-agent. Offer this branch only when a `blueprints/` board exists (or scaffolding one is wanted).
+- **Build it now** — when the pick is a concrete, decided, *behaviour-changing* build, route by scope: small · holdable-in-head → **`/nav:do`** (its check bracket — inject↔execute↔verify — is the point; don't flow into the build on ambient discipline and skip it); bigger / ambiguous / wants a written plan → **`/nav:plan`**; driving multiple `plan.md` items → **`/shape:build`**. This is the seam "make it functional" flows through — name the verb so the agent routes to its check instead of winging the build.
+
+**Guarded + one-shot:** don't re-offer / nag across a rapid series of mockups; show only the branch(es) that apply (a disposable visual tweak with nothing to track *and* nothing to build → skip the offer entirely). An offer, **never a call** — skills don't invoke each other.
 
 ## Anti-patterns (refuse these)
 
@@ -120,4 +125,4 @@ When the pick settles a decision worth tracking (not a throwaway look-and-feel t
 - A recorded pick; most artifacts then discarded.
 - A visual-lock only as a rare, stamped exception (structural-level).
 - (Escalation, rare) multiple files + a decision note.
-- (When the pick settles something trackable) a guarded, one-shot **offer** to run `/shape:align` and triage it in — never an auto-call.
+- (When the pick settles something actionable) a guarded, one-shot **offer** of the next step — **track it** (`/shape:align`) and/or **build it** (`/nav:do` small · `/nav:plan` bigger · `/shape:build` multi-item, ADR-028) — never an auto-call.

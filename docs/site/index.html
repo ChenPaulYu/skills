@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-03 (rev 28)
+  Last audit: 2026-06-03 (rev 29)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -28,7 +28,7 @@
       dependency). feedback as candidate skill (ADR-027).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 27 ADRs in docs/adr/ — 001..027 with cross-supersede / refine links
+    • 28 ADRs in docs/adr/ — 001..028 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (10 flat skills, nav-* / shape-*) +
       root AGENTS.md, generated from plugins/ by scripts/build-codex.mjs
@@ -36,7 +36,22 @@
       (Note: research skills not yet in Codex mirror — run build-codex.mjs
        to update after this revision)
 
-  ⚠ FIXED in this revision (rev 28)
+  ⚠ FIXED in this revision (rev 29)
+    1. shape's converge verbs now offer the EXECUTION route after a pick, not
+       only /shape:align (ADR-028). mockup (+ elicit, lighter) offer build-it-now
+       routed by scope — /nav:do (small) · /nav:plan (bigger) · /shape:build
+       (multi-item) — beside the existing track-it (/shape:align) branch; and
+       /nav:do's trigger description now catches the post-converge "make it
+       functional / now build it / wire it up for real" handoff. Closes the
+       converge→execute seam so a just-decided small build routes through do's
+       check bracket (inject↔execute↔verify) instead of flowing past it on the
+       always-on CLAUDE.md discipline (awareness without the enforced check).
+       Origin: observation 2026-06-03-ambient-discipline-suppresses-firing-the-
+       verb (crystallized on first sighting at user request). Edits: ADR-028;
+       mockup + elicit SKILL.md offer steps; nav:do description; nav/CLAUDE.md
+       offer-next-action registry. ADR count 27 → 28. Extends ADR-007/015.
+
+  ⚠ FIXED in rev 28 (kept for history)
     1. New plugin: research (ADR-027) — argument anatomy for reading external
        sources. Two skills: dissect (single or batch Gap/Claim/Mechanism/Evidence
        dissection; one note per document) + map (claim-framed landscape synthesis
@@ -46,7 +61,7 @@
        + research entry; sidebar link + #research-anatomy section; i18n strings;
        ADR count 26 → 27; audit block date 2026-06-02 → 2026-06-03.
 
-  ⚠ FIXED in this revision (rev 27)
+  ⚠ FIXED in rev 27 (kept for history)
     1. refactor now syncs per-file headers INLINE, in the same change (ADR-025) —
        previously it deferred ALL header work to a later /nav:sync (a window of
        lying headers between the refactor landing and a sync the user might never
