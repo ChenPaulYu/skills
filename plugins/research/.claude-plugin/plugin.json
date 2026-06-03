@@ -1,0 +1,19 @@
+{
+  "name": "research",
+  "version": "0.2.0",
+  "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, or map a full landscape across sources framed by your claim. Works on academic papers, technical writeups, competitor analyses, design proposals.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  },
+  "repository": "https://github.com/ChenPaulYu/skills",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "literature-review",
+    "argument-anatomy",
+    "gap-analysis",
+    "dissect",
+    "agent-skills"
+  ]
+}

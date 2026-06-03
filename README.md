@@ -9,8 +9,9 @@
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync the navigation layer (file-top headers + bilingual codebase map), ground a spec into a plan. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
+| [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton: Gap / Claim / Mechanism / Evidence / Conclusion. Makes cross-document comparison possible; locates where your own claim sits relative to prior art. |
 
-The two split the lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). shape depends on nav one-way (`shape → nav`); each still installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** is independent — it reads the external world to inform the work, with no dependency on either. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -35,6 +36,10 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/shape:reconcile` — keep the blueprints honest — amend stale facts, prune/consolidate stale `thoughts/` + `plans/`
 - `/shape:build` — drive the plan's In-progress column to done, autonomously but confidence-gated (stop below 90%)
 
+**`research` — read with intent:**
+
+- `/research:dissect` — dissect any argument-carrying document into Gap / Claim / Mechanism / Evidence / Conclusion; optional "Implications for your claim" section; output saved to `notes/`
+
 ## Install
 
 In Claude Code:
@@ -43,9 +48,10 @@ In Claude Code:
 /plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
 /plugin install shape@skills
+/plugin install research@skills
 ```
 
-That's it — the `/nav:*` and `/shape:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half.)
+That's it — the `/nav:*`, `/shape:*`, and `/research:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research` is independent — install alone or with the others.)
 
 ### Local development (Paul only)
 
