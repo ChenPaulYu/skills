@@ -1,10 +1,11 @@
-# ADR 026 — `reconcile:graduate` + a `decisions/` tier: the exit ramp for shipped docs that still hold rationale
+# ADR 026 — `reconcile:graduate` + a `decisions.md` tier: the exit ramp for shipped docs that still hold rationale
 
 **Status**: accepted
 **Date**: 2026-06-03
 **Builds on**: [ADR-010](docs/adr/010-shape-blueprints-workflow.md) (the blueprints tree + reconcile), [ADR-014](docs/adr/014-reconcile-amend-and-elicit-boundary.md) (amend syncs facts, never re-decides)
 **Mirrors**: [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) / [ADR-013](docs/adr/013-diagnosis-folds-into-elicit.md) (resist skill proliferation — fold into the verb whose mandate fits)
 **Origin**: [`docs/observations/2026-06-03-reconcile-needs-graduate-and-a-decisions-tier.md`](docs/observations/2026-06-03-reconcile-needs-graduate-and-a-decisions-tier.md) (a real Crate doc-hygiene session, friction-tested through four reframes)
+**Refined 2026-06-03** by dogfooding the whole flow on Crate (graduated 6 thoughts → 5 sections). The deltas, folded into the Decision below: the tier is **one curated `decisions.md` file, not a `decisions/` folder** (graduate *merges* into a feature-section, consolidating related decisions — not 1:1 files); each section is **lean + 3-part** (the call · how it shows up in the system · what was rejected/deferred — plain, high-level, never a sub-rule dump); the **human view is a `🧭 Decisions` layer inside the one `overview.html`** (single-column, projected by align — *not* a separate `decisions.html`); and the **eligibility guard** is "is the *call* settled?" — a *deferred* branch is fine (it's the "deferred" arm), only *genuinely-unsettled* design blocks graduation.
 
 ## Context
 
@@ -18,32 +19,32 @@ The unlocking reframe: **a thought is a mix of three lifecycles**, and bloat is 
 
 ## Decision
 
-**1. The blueprints convention gains a 4th committed dir: `decisions/`.** The project-level analog of this repo's `docs/adr/`. Durable, addressable-per-decision, holds *why this shape* + *what was rejected and why*. It is **not** a feature-doc tier — "how it works now" stays in nav's `codebase-map`; `decisions/` is only the *why*.
+**1. The blueprints convention gains `decisions.md` — ONE curated, lean file (not a folder).** The project-level analog of this repo's `docs/adr/`. Feature-sections (`## <topic>`), each **3-part and lean**: the call · how it shows up in the system · what was rejected/deferred — addressed by anchor. It is **not** a feature-doc tier — "how it works now" stays in nav's `codebase-map`; `decisions.md` is only the *why*. (A single file because the access pattern is topic-keyed and the tier stays clean/merged — naming follows the lifecycle: living-per-topic → feature-section, an immutable append-log → date+number.)
 
-**2. reconcile gains a `graduate` action.** When evidence shows *shipped + holds durable residue + no active design left*: distill the residue into a `decisions/` record → **prune** the emptied thought. This is reconcile's missing exit ramp — "retire **with** a forwarding address" instead of "retire to trash". It **folds into reconcile, not a new skill** (ADR-003/013), and respects the ADR-014 amend boundary: graduate *relocates* an existing decision's record, it never authors a new one (faithful distillation, same evidence-driven character as amend).
+**2. reconcile gains a `graduate` action.** When evidence shows *shipped + holds durable residue + no active design left*: distill the residue into a `decisions.md` record → **prune** the emptied thought. This is reconcile's missing exit ramp — "retire **with** a forwarding address" instead of "retire to trash". It **folds into reconcile, not a new skill** (ADR-003/013), and respects the ADR-014 amend boundary: graduate *relocates* an existing decision's record, it never authors a new one (faithful distillation, same evidence-driven character as amend).
 
-**3. `decisions/` stays clean: fold-forward + prune, not a keep-with-status graveyard.** When a later decision reverses an old one, **fold the tombstone forward** into the successor (`Supersedes: X — because Z`); if X is abandoned with no successor, write a standalone live `Rejected: X — because Z` decision. Then **prune the old file**. Every `decisions/` entry is thus *currently operative*; the anti-re-litigation guard lives in a *live* decision, not a corpse; **git is the deep archive** for the full original argument. This reuses reconcile's existing **consolidate** (merge → verify → remove) — no new "mark-superseded" mode.
+**3. `decisions.md` stays clean: fold-forward + prune, not a keep-with-status graveyard.** When a later decision reverses an old one, **fold the tombstone forward** into the successor (`Supersedes: X — because Z`); if X is abandoned with no successor, write a standalone live `Rejected: X — because Z` decision. Then **drop the stale section**. Every `decisions.md` section is thus *currently operative*; the anti-re-litigation guard lives in a *live* decision, not a corpse; **git is the deep archive** for the full original argument. This reuses reconcile's existing **consolidate** (merge → verify → remove) — no new "mark-superseded" mode.
 
-**4. reconcile runs a two-tier currency sweep.** `thoughts/` predicate = "implemented yet?" (→ graduate / prune / amend). `decisions/` predicate = "**still operative, or superseded?**" (→ consolidate-forward + prune). The sweep also adds a genuinely new dimension: **"do any two live decisions contradict each other?"** — separately-converged decisions can quietly conflict, which per-doc currency won't catch. Detection is push-primary (a reversing decision authored in `elicit` declares `Supersedes: X` at birth) + pull-safety-net (reconcile's sweep catches what elicit missed).
+**4. reconcile runs a two-tier currency sweep.** `thoughts/` predicate = "implemented yet?" (→ graduate / prune / amend). `decisions.md` predicate = "**still operative, or superseded?**" (→ consolidate-forward + prune). The sweep also adds a genuinely new dimension: **"do any two live decisions contradict each other?"** — separately-converged decisions can quietly conflict, which per-doc currency won't catch. Detection is push-primary (a reversing decision authored in `elicit` declares `Supersedes: X` at birth) + pull-safety-net (reconcile's sweep catches what elicit missed).
 
-**5. No "confirm-consensus" skill.** Consensus is a *property*, not a verb: converge verbs (elicit/mockup) produce it, reconcile maintains it. It lives at three already-owned time-points — birth (elicit: converging *with the user* IS consensus), graduation (the graduate write-gate + ADR-018's evidence test), over-time (reconcile's decisions/ sweep). A consensus skill = structure-theatre that double-counts. (If shape ever serves a *multi-person* team needing formal sign-off, a `ratify` verb could earn its place; for solo it's YAGNI.)
+**5. No "confirm-consensus" skill.** Consensus is a *property*, not a verb: converge verbs (elicit/mockup) produce it, reconcile maintains it. It lives at three already-owned time-points — birth (elicit: converging *with the user* IS consensus), graduation (the graduate write-gate + ADR-018's evidence test), over-time (reconcile's `decisions.md` sweep). A consensus skill = structure-theatre that double-counts. (If shape ever serves a *multi-person* team needing formal sign-off, a `ratify` verb could earn its place; for solo it's YAGNI.)
 
 **Naming**: the action is **`graduate`**, not `promote` — "promotion" is already ADR-018's observation→skill/ADR ladder.
 
 ## Why
 
 - **Routes by lifecycle, not by relabel.** Naive "thought → feature doc" just moves the bloat (50 thoughts → 50 feature docs) and sheds rejected-alternatives. Sending each part of a shipped thought to the artifact whose lifecycle matches (status→plan, how→map, why→decisions) is what actually shrinks the hot working set.
-- **Clean beats graveyard — and is the smaller change.** Fold-forward+prune keeps `decisions/` all-live, reuses `consolidate`, and needs no new "mark-superseded" mode. It matches the consuming project's own ontology (Crate's *citation not corpus* / *live reference not copy*): distilled essence forwards, dead corpus dropped, git holds history.
-- **Deliberate divergence from our own `docs/adr/`.** This repo keeps superseded ADRs with a `Status` flag (low-volume *meta-history*, cheap and valuable to keep). A project's `decisions/` is operational and wants to stay clean. Different contexts, different rule — named so it stays a choice, not an accident.
-- **The gap was an exit ramp, not a broken verb.** reconcile already meant "retire once absorbed"; it just lacked a destination. Adding `decisions/` completes the loop without a new skill.
+- **Clean beats graveyard — and is the smaller change.** Fold-forward+prune keeps `decisions.md` all-live, reuses `consolidate`, and needs no new "mark-superseded" mode. It matches the consuming project's own ontology (Crate's *citation not corpus* / *live reference not copy*): distilled essence forwards, dead corpus dropped, git holds history.
+- **Deliberate divergence from our own `docs/adr/`.** This repo keeps superseded ADRs with a `Status` flag (low-volume *meta-history*, cheap and valuable to keep). A project's `decisions.md` is operational and wants to stay clean. Different contexts, different rule — named so it stays a choice, not an accident.
+- **The gap was an exit ramp, not a broken verb.** reconcile already meant "retire once absorbed"; it just lacked a destination. Adding `decisions.md` completes the loop without a new skill.
 
 ## Consequences
 
-- `plugins/shape/skills/align/references/blueprints-spec.md`: add `decisions/` to the Layout + the layers table (now four), and note it's the *why* tier (how-it-works stays in nav's `codebase-map`).
+- `plugins/shape/skills/align/references/blueprints-spec.md`: add `decisions.md` to the Layout + the layers table (now four), and note it's the *why* tier (how-it-works stays in nav's `codebase-map`).
 - `plugins/shape/skills/reconcile/SKILL.md`: add the `graduate` verdict + action, the two-tier currency sweep (incl. cross-decision contradiction), and the fold-forward+prune supersession discipline. Frontmatter description + triggers updated.
 - `docs/site/index.html`: ADR count 25 → 26.
 - Roster unchanged: **no new skill** (graduate folds into reconcile; no consensus skill) — ADR-003 stands, not amended.
-- Seam preserved: `decisions/` holds *why*; nav's `codebase-map` holds *how* — the two must not both claim "current truth" (drift risk).
+- Seam preserved: `decisions.md` holds *why*; nav's `codebase-map` holds *how* — the two must not both claim "current truth" (drift risk).
 
 ## Notes
 

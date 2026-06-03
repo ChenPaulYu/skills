@@ -33,9 +33,10 @@ See [`references/blueprints-spec.md`](plugins/shape/skills/align/references/blue
 ```
 blueprints/
   thoughts/      ← committed design decisions (agent-facing; align reads, rarely writes)
+  decisions.md   ← committed durable *why* (reconcile owns; align reads to project the 🧭 layer)
   mockups/       ← git-ignored disposable HTML (owned by /shape:mockup)
   plan.md        ← align writes: lean status index (agent-facing)
-  overview.html  ← align writes: human-facing projection (click-to-reveal, bilingual)
+  overview.html  ← align writes: human projection of plan.md (status) + decisions.md (why)
 ```
 
 ## Protocol
@@ -49,7 +50,7 @@ Find `blueprints/` (commonly `docs/blueprints/`). **If absent, scaffold it on th
 ### Step 2 — Ground in current reality
 
 Two inputs, both required — never plan in a vacuum:
-- **The decisions** — read `thoughts/*.md` (the WHAT). What has been decided?
+- **The decisions** — read `thoughts/*.md` (in-flight) **and `decisions.md`** (the durable why, for the 🧭 layer). What has been decided?
 - **The actual state — verify against the code; don't trust the plan's own claims.** What's already built? Grep the codebase for the features the thoughts describe; lean on `head -12` file headers (`/nav:sync`) + `git log` to read implementation status cheaply.
 
 **Sync-confirm done-ness — align is a status *sync*, not a read-only re-render.** For every item the *current* `plan.md` lists as In progress / Next — **especially any marked "待驗 / TBD / not-sure-if-done / 待驗是否已做"** — go *confirm it against the code*, don't carry the unresolved claim forward. If grounding shows it shipped, **move it to ✅ Shipped** in the triage (Step 3). A plan that still says "TBD: is X done?" *after* an align run is an align failure — the whole point is that the board reflects verified present reality. (This is item-*status* reconciliation, which is align's job; pruning a stale *thought doc* is still `/shape:reconcile`'s — don't conflate the two.)
@@ -64,9 +65,11 @@ Lean, one layer, grouped by status. Each entry = **what to do + which thought to
 
 ### Step 5 — Regenerate `overview.html` (the human projection)
 
-Copy [`references/overview-template.html`](plugins/shape/skills/align/references/overview-template.html) and fill its data arrays from `plan.md`:
-- One layer, three status columns + a Shipped strip.
+Copy [`references/overview-template.html`](plugins/shape/skills/align/references/overview-template.html) and fill its data arrays from `plan.md` **and `decisions.md`**:
+- One layer, three status columns + a Shipped strip (status, from `plan.md`).
 - Each card **click-to-reveal**: title + one-liner visible; a **plain-language** detail (distilled from the thought, *not* the raw md) expands on click — so the human never needs to open `thoughts/*.md`.
+- **A `🧭 Decisions` layer** projected from `decisions.md` — one card per feature-section, **single-column** (expanding one must not stretch a row-mate), click-to-reveal; the detail = the call · how it shows up · what was rejected (plain language). align *renders* this layer but **never edits `decisions.md`** (that's reconcile's — a decision surfacing here is out of scope, → `/shape:elicit`).
+- **Shipped shows the most recent ~5** + a `… +N earlier — see plan.md / git log` pill; the board is a highlight, not the changelog.
 - **Bilingual** (EN + zh-Hant); never monolingual without opt-out.
 - **Match the project's visual language** if a sibling artifact establishes one (codebase-map, design tokens, prior mockups); the template tokens are only a start.
 
@@ -81,7 +84,7 @@ align is **pre-build** (intent side). It ends at "decided + recorded in blueprin
 ## Discipline (do not skip)
 
 - **Decide with the user, don't author priorities silently.** Surface the split; let them move things.
-- **Two renders, one state.** `overview.html` always derives from `plan.md`; never let them tell different stories. Both reflect *current* reality — a stale board is a lie (same rule as a stale codebase map).
+- **Two renders, one state.** `overview.html` always derives from `plan.md` (status) + `decisions.md` (why); never let them tell different stories. The *why* is a layer **inside** the one overview, not a separate `decisions.html`. Both reflect *current* reality — a stale board is a lie (same rule as a stale codebase map).
 - **Plain language in the detail panels.** The human-facing detail is distilled, not the dense thought pasted in.
 - **Don't clean here.** Stale/implemented thoughts get *flagged*; pruning is `/shape:reconcile` (write-gated).
 - **Write-gated.** Show what you'll write (or a diff for an existing tree) before committing files.

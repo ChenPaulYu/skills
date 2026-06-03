@@ -1,6 +1,6 @@
 ---
 name: reconcile
-description: Reconcile the design notes with reality — scan a blueprints/ tree (both thoughts/ AND plans/), judge which docs have drifted (already implemented, self-declared done, superseded, or carrying a stale fact), then reconcile them *with the user* — AMEND a doc's factual drift in place, PRUNE / CONSOLIDATE a doc that's wholly stale, or GRADUATE a shipped doc that still holds durable rationale (why-this-shape + rejected alternatives) into a clean blueprints/decisions/ tier then prune the emptied thought (so thoughts/ doesn't grow monotonically). Maintains all layers: converged thoughts/ · durable decisions/ · nav:plan's grounded plans/ (a plan whose steps all shipped is stale like an implemented thought). Fires when the user asks to "check for outdated thoughts / docs", "which design notes are stale", "clean up the blueprints", "tidy the plans", "are these docs still current", "fix the outdated info in these notes", "prune the old specs", "consolidate these notes", "graduate this shipped doc / move its rationale to decisions", or after a batch of work ships and the design docs or plans have drifted from the code. Also invokable as /shape:reconcile. AMEND only syncs evidence-backed facts (code moved past what the doc claims) — it never rewrites a *decision*; when the design itself changed, that's a new decision out of scope, so reconcile recommends /shape:elicit and says so rather than authoring it. The check is read-only; any amend/prune/merge is write-gated and confirmed per-file. Pairs with /nav:sync (reads the file headers it maintains to tell what's implemented). Language- and framework-agnostic.
+description: Reconcile the design notes with reality — scan a blueprints/ tree (both thoughts/ AND plans/), judge which docs have drifted (already implemented, self-declared done, superseded, or carrying a stale fact), then reconcile them *with the user* — AMEND a doc's factual drift in place, PRUNE / CONSOLIDATE a doc that's wholly stale, or GRADUATE a shipped doc that still holds durable rationale into a lean section of a single curated blueprints/decisions.md (the call · how it shows up in the system · what was rejected) then prune the emptied thought (so thoughts/ doesn't grow monotonically). Maintains all layers: converged thoughts/ · durable decisions.md · nav:plan's grounded plans/ (a plan whose steps all shipped is stale like an implemented thought). Fires when the user asks to "check for outdated thoughts / docs", "which design notes are stale", "clean up the blueprints", "tidy the plans", "are these docs still current", "fix the outdated info in these notes", "prune the old specs", "consolidate these notes", "graduate this shipped doc / move its rationale to decisions", or after a batch of work ships and the design docs or plans have drifted from the code. Also invokable as /shape:reconcile. AMEND only syncs evidence-backed facts (code moved past what the doc claims) — it never rewrites a *decision*; when the design itself changed, that's a new decision out of scope, so reconcile recommends /shape:elicit and says so rather than authoring it. The check is read-only; any amend/prune/merge is write-gated and confirmed per-file. Pairs with /nav:sync (reads the file headers it maintains to tell what's implemented). Language- and framework-agnostic.
 ---
 
 # Reconcile — make the notes match reality
@@ -67,10 +67,11 @@ Only on confirmation.
 - **One step at a time, re-checked** — don't batch destructive ops behind a single confirmation.
 - Prefer **consolidate (merge then verify then remove)** over raw delete when the doc still holds live design worth keeping.
 
-**Graduate (shipped → `decisions/`)** — a structural write; same safety rules as consolidate (it *is* consolidate, pointed at `decisions/`), plus:
-- **Distil only the durable residue** — *why this shape* + *rejected alternatives*, faithfully (the original's claims, not a fresh judgment). Skip the status and the how-it-works (status is `plan.md`'s, how-it-works is nav's `codebase-map`'s).
-- **Confirm the residue landed in `decisions/` before pruning the thought** (`diff` the salvaged content) — same "merge proven before delete" rule as consolidate.
-- **Keep `decisions/` clean**: if this graduation reverses an existing decision, fold the tombstone forward (`Supersedes: X — because Z`) or write a live `Rejected: X`, then prune the old `decisions/` file — never leave a status-flagged corpse.
+**Graduate (shipped → a section of `decisions.md`)** — a structural write; same safety rules as consolidate (it *is* consolidate, pointed at a section), plus:
+- **Distil to the 3-part section format** — the call · how it shows up in the system · what was rejected/deferred. Lean, high-level, plain — not a sub-rule dump. Skip status + how-it-works (status is `plan.md`'s, how-it-works is nav's `codebase-map`'s). **Merge into an existing section** when the decision belongs with one already there (consolidate, don't fragment).
+- **Confirm the section landed in `decisions.md` before pruning the thought** (`diff` the salvaged content) — same "merge proven before delete" rule as consolidate.
+- **Keep `decisions.md` clean**: if this graduation reverses an existing decision, fold the tombstone forward (`Supersedes: X — because Z`) or write a live `Rejected: X`, then drop the stale section — never leave a status-flagged corpse.
+- **Repoint inbound links + the human view**: any `thoughts/`/`plan.md`/`overview.html` link to the pruned thought → repoint to `decisions.md` (anchor); the overview's `🧭 Decisions` layer is re-rendered by `/shape:align`.
 
 ### Step 5 — Re-sync the renders
 
@@ -91,23 +92,34 @@ Why the wall: decisions are born in `elicit` / `mockup` (shape's converge verbs)
 
 The gap `graduate` closes: a thought that is **fully shipped** but still carries durable *rationale* — the *why this shape* and especially the **rejected alternatives** ("we tried X, reversed it because Z"). Prune would lose that; consolidate has no in-flight thought to merge into (it's decision-*history*, not active design). Without `graduate`, reconcile's only move is amend-and-keep → `thoughts/` grows monotonically. `graduate` is the exit ramp: **retire the thought *with a forwarding address*** instead of to the trash.
 
-**The destination is `blueprints/decisions/`** — the durable *why* tier (see `blueprints-spec.md`). Distil the residue into a `decisions/` record, then **prune the emptied thought**. What graduates is only the *why* + rejected-alternatives; the *how-it-works* needs no copy here — it lives in nav's `codebase-map` (don't duplicate it, or the two drift).
+**The destination is `blueprints/decisions.md`** — ONE curated, lean file, not a folder (see `blueprints-spec.md`). graduate **merges** the residue into the right **feature-section** (`## <topic>`) — related decisions consolidate into one section, so it stays curated, not 1:1 fragments — then **prunes the emptied thought**. What graduates is only the *why*; the *how-it-works* gets no copy here (it lives in nav's `codebase-map` — duplicate it and the two drift).
 
-**Graduate respects the amend boundary.** It *relocates* an already-made decision's record; it never authors a new one. Distil faithfully (the original's claims, not a fresh judgment) — same evidence-driven character as amend. If distilling would require *deciding* what the design should now be, stop → `/shape:elicit`.
+**Distil to the section format — lean, high-level, three parts:**
+1. **The call** — the high-level decision in a sentence (not the sub-rules).
+2. **How it shows up in the system** — its concrete manifestation (what you see/do because of it), *not* implementation detail.
+3. **What was rejected / deferred** — the alternatives + why (the part code can't tell you); a deferred branch (a v2 ideal, a parked feature) belongs here, as the decision's *deferred* arm.
 
-**`decisions/` stays clean — fold-forward + prune, never a keep-with-status graveyard.** A `decisions/` entry is always *currently operative*. When a later decision reverses one:
-- **has a successor** → fold the tombstone forward into it (`Supersedes: X — because Z`), then **prune X**;
-- **abandoned, no successor** → write a standalone live `Rejected: X — because Z`, then **prune X**.
-Either way the anti-re-litigation guard lives in a *live* decision, and **git is the deep archive** for the full original argument. This is reconcile's existing **consolidate** (merge → verify → remove) pointed at `decisions/` — no separate "mark-superseded" mode. (This deliberately diverges from *this repo's own* `docs/adr/`, which keeps superseded ADRs with a `Status` flag — meta-history is low-volume and worth keeping; a project's `decisions/` is operational and wants to stay clean.)
+Plain language, sufficient-not-detailed — **not** a transcript of every sub-rule (that reads as cryptic notes, not a decision). Drop status, palette, commit hashes, picker-layout — those are git's / code's.
+
+**Graduate respects the amend boundary.** It *relocates* an already-made decision's record; it never authors a new one. Distil faithfully (the original's claims, not a fresh judgment). If distilling would require *deciding* what the design should now be, stop → `/shape:elicit`.
+
+**The eligibility guard — graduate only a *settled* high-level decision.** A doc graduates when its core call is shipped + settled; a **deferred branch is fine** (it becomes the "rejected / deferred" part — Lens-is-v2, moment-tag-later). What blocks graduation is **genuinely-unsettled** design still being decided (type set not locked, a direction not yet shaped) — that stays in `thoughts/`. (Don't over-apply the guard: "has future content" ≠ "live design" when the future is *parked*, not *in-flight*.)
+
+**`decisions.md` stays clean — fold-forward + prune, never a keep-with-status graveyard.** Every section is *currently operative*. When a later decision reverses one:
+- **has a successor** → fold the tombstone forward into it (`Supersedes: X — because Z`), then **drop the stale section**;
+- **abandoned, no successor** → write a standalone live `Rejected: X — because Z`, then **drop the stale section**.
+Either way the anti-re-litigation guard lives in a *live* section, and **git is the deep archive** for the full original. This is reconcile's existing **consolidate** (merge → verify → remove) pointed at a section — no separate "mark-superseded" mode. (Deliberately diverges from *this repo's own* `docs/adr/`, which keeps superseded ADRs with a `Status` flag — meta-history is low-volume and worth keeping; a project's `decisions.md` is operational and wants to stay clean. Naming follows the choice: living-per-topic → feature-section name; an immutable append-log → date+number.)
 
 **Two-tier currency sweep.** reconcile now walks both tiers with different predicates:
 
 | tier | predicate | action |
 |---|---|---|
-| `thoughts/` | "implemented yet?" | graduate / prune / amend / keep |
-| `decisions/` | "**still operative, or superseded?**" + "**do any two live decisions contradict?**" | consolidate-forward + prune (never delete the *guard*, only the stale file) |
+| `thoughts/` | "implemented + settled yet?" | graduate / prune / amend / keep |
+| `decisions.md` | "**still operative, or superseded?**" + "**do any two live sections contradict?**" | fold-forward + drop the stale section (never delete the *guard*) |
 
-The cross-decision-contradiction check is genuinely new: two decisions converged in separate `elicit` sessions can quietly conflict, which per-doc currency won't catch. Detection is **push-primary** (a reversing decision authored in `elicit` declares `Supersedes: X` at birth) + **pull-safety-net** (this sweep catches what elicit missed). Marking a superseded decision is fact-sync (the reversal already happened in elicit) — inside the amend boundary, not re-deciding.
+The cross-decision-contradiction check is genuinely new: two decisions converged in separate `elicit` sessions can quietly conflict, which per-doc currency won't catch — and a single curated file makes it visible (all sections in one place). Detection is **push-primary** (a reversing decision authored in `elicit` declares `Supersedes: X` at birth) + **pull-safety-net** (this sweep catches what elicit missed). Marking a superseded section is fact-sync (the reversal already happened in elicit) — inside the amend boundary, not re-deciding.
+
+The **human view of `decisions.md` is a `🧭 Decisions` layer inside `overview.html`** (single-column, click-to-reveal), rendered by `/shape:align` — there is no separate `decisions.html`. reconcile maintains `decisions.md`; align projects it.
 
 **Not a consensus skill.** "Confirming consensus" is a *property*, not a verb — produced by the converge verbs, maintained by this sweep; a dedicated skill would double-count (ADR-026).
 
@@ -122,7 +134,7 @@ reconcile's currency check **consumes the file headers `/nav:sync` maintains**: 
 - **Untracked = irreversible.** Verify tracked/untracked before any amend, move, or delete; overwriting an untracked doc has no recovery path; never trust an unverified `mv` then `rm`.
 - **Evidence over tidiness.** Cite the signal (code ref / self-declaration / date) behind every verdict. Mark `uncertain` rather than over-claiming.
 - **Consolidate beats delete** when live design remains — merge, verify the merge, *then* remove.
-- **Graduate, don't hoard.** A shipped doc that still holds *why / rejected-alternatives* isn't "keep forever" — distil the residue into `decisions/`, then prune the thought (ADR-026). Graduate relocates a decision's record, never authors one (amend boundary). Keep `decisions/` clean: reversed decisions fold forward + prune, never a status-flagged graveyard; git is the archive.
+- **Graduate, don't hoard.** A shipped doc that still holds *why / rejected-alternatives* isn't "keep forever" — distil it into a lean section of `decisions.md` (the call · how it shows up · what was rejected), then prune the thought (ADR-026). Graduate only a *settled* call (a deferred branch is fine; genuinely-unsettled design stays in `thoughts/`). Relocates a decision's record, never authors one (amend boundary). Keep `decisions.md` clean: reversed decisions fold forward + drop the stale section, never a status-flagged graveyard; git is the archive.
 - **Don't regenerate the board here.** Re-syncing `plan.md`/`overview.html` is `/shape:align`. reconcile reconciles the notes; align renders.
 
 ## Offer to re-sync the board (don't auto-run)
@@ -132,7 +144,7 @@ After the tree is trimmed, the rendered board may now lag the cleaned `thoughts/
 ## Output
 
 - A per-doc currency report: verdict + evidence + proposed action (keep · amend · prune · consolidate · graduate).
-- (On confirmation) a reconciled `thoughts/` **and `plans/`** tree — stale facts amended in place, wholly-stale docs/plans pruned/consolidated, shipped-but-rationale docs graduated into `decisions/`, all under the safety rules.
+- (On confirmation) a reconciled `thoughts/` **and `plans/`** tree — stale facts amended in place, wholly-stale docs/plans pruned/consolidated, shipped-but-rationale docs graduated into `decisions.md` sections, all under the safety rules.
 - For any decision-change found: a recommendation to converge it in `/shape:elicit` (not rewritten here).
 - A guarded, one-shot **offer** to run `/shape:align` to re-sync the renders — never an auto-call.
 
