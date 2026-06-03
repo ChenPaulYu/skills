@@ -12,7 +12,8 @@ A description floats; a real artifact is decidable. blueprints is the standing v
 
 ```
 blueprints/
-  thoughts/          ← committed. one .md per converged design decision (agent-facing, may be dense).
+  thoughts/          ← committed. one .md per converged design decision (agent-facing, may be dense). the HOT working set — only in-flight design.
+  decisions/         ← committed. durable *why* residue graduated from a shipped thought (rejected alternatives + why-this-shape). the project-level analog of docs/adr/.
   plans/             ← committed. one .md per grounded code-level plan from nav:plan (the build-side render of a thought).
   mockups/           ← git-ignored. disposable interactive HTML from shape:mockup.
   plan.md            ← committed. the lean status index (agent-facing).
@@ -21,7 +22,8 @@ blueprints/
 
 > **`plan.md` (singular) vs `plans/` (plural)** are different things, deliberately: `plan.md` is align's lean *status index* (now/next/later); `plans/` holds nav:plan's *grounded implementation plans* (one per item, Context · Approach · Critical files · Verification). Intent → status → grounded-how.
 
-- **`thoughts/`** — the design layer. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these — they read `overview.html`, whose detail panels distil the thoughts into plain language.
+- **`thoughts/`** — the design layer. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these — they read `overview.html`, whose detail panels distil the thoughts into plain language. This is the **hot working set**: it should hold only *in-flight* design — a thought that ships is `graduate`d (its *why* residue → `decisions/`) or pruned, so the set doesn't grow monotonically. (ADR-026)
+- **`decisions/`** — the durable *why* layer (owned by `shape:reconcile`'s `graduate` action). Each file = the decision residue distilled from a shipped thought: *why this shape* + *what was rejected and why*, the part not recoverable from code. **Stays clean**: every entry is *currently operative* — a reversed decision is folded forward into its successor (`Supersedes: X — because Z`) or recorded as a live `Rejected: X — because Z`, then the old file is pruned (git is the deep archive). It is **not** a how-it-works/feature tier — that lives in nav's `codebase-map`; `decisions/` carries only the *why*, so the two never both claim "current truth". (ADR-026)
 - **`plans/`** — the grounding layer (owned by `nav:plan`). Each file = one item grounded into a code-level implementation plan, dated `YYYY-MM-DD-<slug>.md`. It's the build-side render of a thought; lives here so the whole arc (decision → status → grounded-how) stays in one tree. `shape:reconcile` keeps these current alongside `thoughts/` (a plan whose steps all shipped is stale, same as an implemented thought).
 - **`mockups/`** — disposable visual-decision scaffold (owned by `shape:mockup`). git-ignored: artifacts are decision-scaffold, not source. A committed thought may *reference* a mockup path as its visual record.
 - **`plan.md`** — what to do, grouped by status. The agent's index. Lean: only "what + which thought", no prose essays.
@@ -48,7 +50,8 @@ Rules: `head -12` yields the gist (title + TL;DR + first sections). Each `##` st
 
 | layer | artifact | audience | answers |
 |---|---|---|---|
-| WHAT (decisions) | `thoughts/*.md` | agent | what was decided, and why |
+| WHAT (in-flight design) | `thoughts/*.md` | agent | what's being decided now, and why |
+| WHY (durable residue) | `decisions/*.md` | agent | why a shipped thing is shaped this way · what was rejected (graduated from thoughts/) |
 | HOW/NOW (status) | `plan.md` | agent | what we're doing now / next / later |
 | STATE (projection) | `overview.html` | human | the same, scannable + click-to-reveal |
 
