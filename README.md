@@ -71,9 +71,12 @@ Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `descrip
 
 ```bash
 node scripts/build-codex.mjs   # re-run after editing any SKILL.md
+node scripts/validate-codex-skills.mjs
 ```
 
-Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill and regenerate.
+The validator checks both sides of the contract: Claude Code source skills under `plugins/` must have valid YAML frontmatter, and the Codex mirror under `.agents/skills/` must be regenerated, YAML-safe, and within Codex's metadata limit.
+
+Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill, regenerate, and validate.
 
 ## Philosophy (the through-line)
 

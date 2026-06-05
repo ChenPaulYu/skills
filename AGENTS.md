@@ -11,6 +11,19 @@ Each `SKILL.md` is self-contained (it restates the rules it needs), so the conve
 shared backstop — load-bearing when editing the skills themselves, and the referent for any skill that
 points at "AGENTS.md".
 
+## Codex compatibility gate
+
+Claude Code plugins under `plugins/` are the source of truth. After editing any plugin `SKILL.md`,
+`CLAUDE.md`, bundled skill resource, or plugin roster, run:
+
+```bash
+node scripts/build-codex.mjs
+node scripts/validate-codex-skills.mjs
+```
+
+The validator checks that the Codex mirror is regenerated, that generated `description` values are
+YAML-safe and within Codex's metadata limit, and that every plugin skill has a flat Codex counterpart.
+
 ---
 
 # nav — plugin conventions

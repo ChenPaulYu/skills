@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: Execute a structural refactor on any codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Use this skill whenever the user wants to "refactor X", "decompose this component", "extract a function/module/package", "split this file", "reorganize this folder", "break this up", or any structural change that should preserve behaviour. Also fires when the user mentions "verbatim refactor", "behaviour-preserving refactor", or refers to Ousterhout rule ⑥. The skill enforces the discipline; the agent does the moves.
+description: "Execute a structural refactor on any codebase with strict discipline — verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Use this skill whenever the user wants to \"refactor X\", \"decompose this component\", \"extract a function/module/package\", \"split this file\", \"reorganize this folder\", \"break this up\", or any structural change that should preserve behaviour. Also fires when the user mentions \"verbatim refactor\", \"behaviour-preserving refactor\", or refers to Ousterhout rule ⑥. The skill enforces the discipline; the agent does the moves."
 ---
 
 # Deep-module refactor

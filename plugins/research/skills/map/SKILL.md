@@ -1,6 +1,6 @@
 ---
 name: map
-description: Build a claim-framed landscape across multiple papers or documents — what has already been argued and proven, what gap remains, and which papers are highest priority for related work. Requires your own claim (1-2 sentences) as the lens. Output is one synthesized landscape note, not N individual skeletons. Use when you have a set of sources and want to know where your claim sits in the prior art. Also fires on "map the literature", "what's already been done on X", "where does my claim fit", "build a related work landscape", "survey these papers against my claim", "what prior art covers my claim", "find the gap in these papers". For individual paper dissection (one skeleton per document), use /research:dissect instead.
+description: "Build a claim-framed landscape across multiple papers or documents — what has already been argued and proven, what gap remains, and which papers are highest priority for related work. Requires your own claim (1-2 sentences) as the lens. Output is one synthesized landscape note, not N individual skeletons. Use when you have a set of sources and want to know where your claim sits in the prior art. Also fires on \"map the literature\", \"what's already been done on X\", \"where does my claim fit\", \"build a related work landscape\", \"survey these papers against my claim\", \"what prior art covers my claim\", \"find the gap in these papers\". For individual paper dissection (one skeleton per document), use /research:dissect instead."
 ---
 
 # research:map

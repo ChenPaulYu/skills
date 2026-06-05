@@ -22,7 +22,7 @@ So making this marketplace Codex-compatible is a **mechanical mirror**, not a re
 1. **Flattens the namespace** — `plugins/nav/skills/audit/` → `.agents/skills/nav-audit/`, bumping the frontmatter `name` to `nav-audit`. The `<plugin>-<skill>` form preserves the topic grouping the namespace used to carry, with no collisions.
 2. **Rewrites cross-references** — `/nav:sync` / `nav:sync` → `nav-sync` (requires a real verb after the colon, so bare-namespace prose like "the `nav:` namespace" is untouched); `plugins/*/CLAUDE.md` and generic `CLAUDE.md` → `AGENTS.md`.
 3. **Re-roots bundled paths** — full skills-root reference links (`plugins/shape/skills/align/references/…`) → relative `references/…`, so they travel with the flattened skill dir.
-4. **Normalises Codex metadata** — generated descriptions are YAML-safe quoted strings and are trimmed below Codex's 1024-character metadata limit; Claude plugin source descriptions remain unchanged.
+4. **Normalises Codex metadata** — generated descriptions are YAML-safe quoted strings and are trimmed below Codex's 1024-character metadata limit. Claude plugin source frontmatter is also kept YAML-safe, but not trimmed.
 5. **Synthesises `AGENTS.md`** at the repo root from all plugin `CLAUDE.md` files (same rewrites, agents profile) — the home for the shared rules the skills reference (the 8 rules, shape's browser-verify slot).
 
 Generated output (`.agents/skills/`, `AGENTS.md`) carries a do-not-hand-edit banner and is **committed** so the mirror is shareable and versioned. Re-run after any `SKILL.md` edit: `node scripts/build-codex.mjs`.
