@@ -54,7 +54,7 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 - **Read-only by default**: skills that modify files (`sync`, `refactor`, `plan`) must show a diff first or only modify on explicit user confirmation.
 - **Skills don't invoke each other**. The meta-skill (`plan`) describes a sequence for the agent to follow — it references sibling protocols rather than re-implementing them. Atomic skills stay standalone-callable (see [ADR-003](docs/adr/003-five-skills-not-four-or-six.md)).
 - **Reuse-via-transcript pattern**: when a skill inlines another skill's protocol, Stage 1 should include a "scan recent turns; if `<other-skill>` already ran against the same input, reuse its output" preamble. Deterministic + zero coupling. Current users: `sync` (audit, as its grounding pass), `plan` (audit). See [ADR-006](docs/adr/006-nav-plan-skill.md).
-- **Offer-next-action pattern**: meta-skills end with `AskUserQuestion` listing 2-4 concrete next actions (sub-agent · in-session · save/done). Sub-agent is the recommended default when a self-contained next step exists — it enforces clean context = "separate session" at the architecture level. Atomic skills don't get this pattern (no single obvious next step). Always include a "save / done" option so the user can opt out without typing; one-shot per invocation (no re-offering after decline). Current users: **nav** — `plan` (Stage 4), `refactor` (Step 8); **shape** — `elicit` (offers `shape-mockup` when the decision is render-decidable, else `shape-align`), `mockup` (offers `shape-align`), `rehearse` (routes the holes by layer → `shape-elicit` / `shape-mockup` / `nav-plan`), `reconcile` (offers `shape-align` to re-sync the board). See [`docs/adr/007-offer-next-action-pattern.md`](docs/adr/007-offer-next-action-pattern.md).
+- **Offer-next-action pattern**: meta-skills end with `AskUserQuestion` listing 2-4 concrete next actions (sub-agent · in-session · save/done). Sub-agent is the recommended default when a self-contained next step exists — it enforces clean context = "separate session" at the architecture level. Atomic skills don't get this pattern (no single obvious next step). Always include a "save / done" option so the user can opt out without typing; one-shot per invocation (no re-offering after decline). Current users: **nav** — `plan` (Stage 4), `refactor` (Step 8); **shape** — `elicit` (offers `shape-mockup` when render-decidable, `shape-align` to track, or the execution route `nav-do`·`nav-plan` when the thought is a concrete build), `mockup` (offers `shape-align` to track + the execution route — `nav-do` small · `nav-plan` bigger · `shape-build` multi-item — ADR-028, so a just-converged pick routes to the build verb's check instead of flowing past it on ambient discipline), `rehearse` (routes the holes by layer → `shape-elicit` / `shape-mockup` / `nav-plan`), `reconcile` (offers `shape-align` to re-sync the board). See [`docs/adr/007-offer-next-action-pattern.md`](docs/adr/007-offer-next-action-pattern.md).
 - **Inject↔check at the sub-agent hand-off**: when a meta-skill's offer-next-action launches a sub-agent, it brackets the dispatch. **Inject (→)** the in-session grounding the fresh sub-agent can't re-derive — critical files + roles, existing impls/seams to reuse, the **N+1 trigger**. **Check (←)** the returned diff with a deep-module integration pass — same-domain parallel impl · seam/facade read at intent · header hygiene — *before* accepting "done". A sub-agent is tactical (sees only its slice, reads rules literally); the feature is its job, clean integration is the parent's. Current users: the nav offer-next-action hand-offs (`plan`, `refactor`), and **`do`** — which *is* this inject↔check bracket promoted to a standalone, directly-invocable verb (ADR-023); `plan` Stage 4 / `refactor` Step 8 now reference `do`'s discipline when they dispatch a sub-agent to execute. See [`docs/adr/008-inject-check-at-handoff.md`](docs/adr/008-inject-check-at-handoff.md).
 - **N+1 trigger** (corollary of rules ④ + ②): first consumer of an inline util = inline is fine; **second consumer = extract a primitive** (don't copy-paste, don't shove a mode-flag into a facade). This is the operational trip-wire that turns "no needless abstraction" from a judgment call into a rule. Fires in the `refactor`/`plan` hand-offs above and in any integration check.
 - **Each new skill**: write an ADR in `docs/adr/` (marketplace-level) explaining why it exists, what overlaps it has with siblings, and how the trigger description avoids stealing fire from them.
@@ -82,6 +82,68 @@ skills/<name>/references/    → bulky reference docs loaded on demand
   git status docs/site/index.html
   ```
   If you changed a skill but the site shows unmodified → **STOP** — you missed it. Update the relevant data array (`DOMAINS`, `NAV_NODES`, `NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date, and add a FIXED entry naming what changed. Skip only for pure typo / internal refactor with zero surface impact. **Stale map lies silently to every future reader** — that's why this is a hard gate, not a soft reminder.
+
+
+---
+
+# research — plugin conventions
+> Context for any agent (or human) editing **this plugin itself**.
+> For executing one of the skills, read its `SKILL.md` — each is self-contained.
+
+## What this plugin is
+
+A collection of skills for **reading external sources with intent** — understanding what arguments claim, what evidence they produce, and what remains open. The through-line is **argument anatomy**: every document making a claim can be dissected into Gap / Claim / Mechanism / Evidence / Conclusion, and every dissection can be compared against your own claim to locate prior art and open ground.
+
+Two skills today: `dissect` (single or batch argument anatomy — one note per document) and `map` (claim-framed landscape synthesis across N sources). Candidate skill pending: `feedback` (extract design implications from competitor empirical results). See `docs/adr/027-research-plugin.md` for the family charter and promotion criteria.
+
+**Domain-agnostic by design.** The Gap→Claim→Mechanism→Evidence framework applies to academic papers, technical blog posts, competitor analyses, RFCs, and design proposals. The `dissect` skill's output is always the same skeleton — making cross-document comparison possible regardless of source type.
+
+This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). It is **independent** — no dependency on `nav` or `shape`. Future skills that involve file-writing conventions may introduce soft cross-plugin recommendations (one-way, guarded, same pattern as nav → shape).
+
+## The research through-line
+
+The unit of analysis is the **argument**, not the document.
+
+Any well-formed argument can be decomposed into:
+1. **Gap** — what is missing or broken in the world? Why is it a problem?
+2. **Claim** — what does this work propose to fix it?
+3. **Mechanism** — how does it technically work?
+4. **Evidence** — what experiments / results support the claim?
+5. **Conclusion** — what does the author want the reader to believe?
+
+This decomposition serves two uses simultaneously:
+- **Understanding**: what does this work actually argue?
+- **Positioning**: what does this work leave open? Where does my claim live relative to theirs?
+
+The second use is what makes literature review productive. You are not cataloguing papers — you are mapping what has been argued and proven so you can locate what hasn't been.
+
+## Conventions for skills inside this plugin
+
+- **Naming**: skills use **bare verbs** — `dissect`, `map`, `feedback`. The plugin namespace (`research:`) provides topic context; no `research-` prefix on the skill name.
+- **Self-contained**: every `SKILL.md` includes the through-line and argument anatomy framework verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded.
+- **★ Stack-neutral, standalone-legible examples**: every example must be understandable without knowing the origin project. Use generic document titles and claims, never real paper titles or project-specific nouns, unless the skill itself is about a specific well-known paper as a worked example.
+- **★ Skills-root-relative paths**: all paths — doc cross-references and example code — are written as if `skills/` is root. No `./` or `../` prefixes.
+- **Read-only by default**: `dissect` surfaces a dissection note and asks where to save it. It never writes without explicit user confirmation.
+- **Output format is the artifact**: a dissection note is a structured markdown file comparable across documents. The format is fixed so multiple notes can be laid side by side.
+- **Claim injection is optional but recommended**: if the user's own claim is available, inject it so the skill can produce an "Implications for [your claim]" section. Without it, the skill still produces the structural skeleton; the implications section is blank.
+
+## Where things live
+
+```
+.claude-plugin/plugin.json   → manifest (name=research, version, repo)
+CLAUDE.md                    → ← you are here (developer-facing)
+skills/<name>/SKILL.md       → individual skills, each self-contained
+../../README.md              → marketplace-level overview
+../../docs/adr/              → ADRs (marketplace-level — shared across plugins)
+```
+
+## When editing this plugin
+
+- New skill: scaffold `skills/<name>/SKILL.md`, write the frontmatter description carefully (it determines triggering accuracy), write an ADR.
+- Before adding or changing any skill, check the two ★ core principles above: (1) standalone-legible examples; (2) skills-root-relative paths.
+- Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
+- Stale `SKILL.md` is worse than missing `SKILL.md`.
+- **Site-map update is gating**: any change to a `SKILL.md`, a plugin manifest, or an ADR requires updating `docs/site/index.html` in the same commit. Run `git status docs/site/index.html` before committing.
 
 
 ---
@@ -157,6 +219,7 @@ Three skills need to *see* the running thing — `mockup` (render the artifact),
 - **If missing, fail helpfully — never silently skip.** Surface a 3-way confidence-gate choice: **(a) install** [recommended] — `npm install -g agent-browser` (or `brew`/`cargo install agent-browser`) then `agent-browser install`; or as a skill `npx skills add vercel-labs/agent-browser`. **(b)** proceed without visual verify this run (flag items to eyeball). **(c)** skip verify for this item. Report what was skipped (no silent caps).
 - **Per-project override:** a project may bind a different helper (Playwright, puppeteer) in its own CLAUDE.md; the agent reads that. Absent an override, the default is agent-browser.
 - **Skills don't call skills:** name the capability + describe the contract; the executing agent invokes the tool (CLI shell-out, or triggers the agent-browser skill in its own turn).
+- **Known traps (React + Vite):** controlled-input setting (native-setter + `input` dispatch, else `onChange` never fires) and HMR console-artifact discrimination (a lone "error occurred in `<X>`" bracketed by `[vite] hot updated` is an edit-time ghost, not a bug) — both documented in [`references/browser-verify-gotchas.md`](plugins/shape/references/browser-verify-gotchas.md). Read before trusting a screenshot or console scan on a React+Vite app.
 
 ## Status
 

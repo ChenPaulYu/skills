@@ -71,8 +71,12 @@
   .item a:hover{border-bottom-color:var(--next)}
   .item .ref{font-size:10.5px;font-family:var(--mono);margin-top:7px}
 
-  .shipped{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--next)}
-  .shipped h2{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .shipped,.decisions{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--next)}
+  .shipped h2,.decisions h2{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .decisions{--accent:var(--accent-deep);border-top-color:var(--accent-deep)}
+  /* single column → expanding one card never stretches a row-mate (grid would) */
+  #decisions{display:flex;flex-direction:column;gap:10px}
+  #decisions .item{margin-bottom:0}
   .pills{display:flex;flex-wrap:wrap;gap:7px}
   .pill{font-size:11.5px;color:var(--muted);background:var(--bg);border:1px solid var(--line-soft);border-radius:20px;padding:4px 11px}
 
@@ -97,6 +101,13 @@
 
   <div class="board" id="board"></div>
 
+  <!-- 🧭 Decisions — durable WHY, projected from decisions.md (reconcile owns the md; align renders this) -->
+  <div class="decisions">
+    <h2>🧭 <span data-t="decisionsH"></span></h2>
+    <div class="cnote" data-t="decisionsNote" style="font-size:11.5px;color:var(--faint);margin:-4px 0 13px"></div>
+    <div id="decisions"></div>
+  </div>
+
   <div class="shipped">
     <h2>✅ <span data-t="shippedH"></span></h2>
     <div class="pills" id="pills"></div>
@@ -118,7 +129,10 @@ const T={
   sub:{zh:"人類看的現況快照。每張卡 = 做什麼,<b>點一下展開白話細節</b> —— 不必開 md。footer 的 thoughts/ 連結 = 給 agent 的原始設計筆記。",
        en:"Human-facing snapshot. Each card = what to do; <b>click to expand the plain-language detail</b> — no need to open the md. The thoughts/ links in the footer are the raw design notes (for the agent)."},
   shippedH:{zh:"Shipped — 現況基線",en:"Shipped — current baseline"},
-  footLbl:{zh:"設計來源(thoughts/):",en:"design sources (thoughts/):"},
+  decisionsH:{zh:"Decisions — 為什麼這個形狀",en:"Decisions — why it's shaped this way"},
+  decisionsNote:{zh:"每張卡 = <b>高層決定了什麼 · 它在系統裡怎麼呈現 · 否決了什麼</b>。<b>點一下展開</b>。實作細節在 code,這裡只談決定。投影自 <code>decisions.md</code>。",
+                 en:"Each card = <b>the high-level call · how it shows up in the system · what was rejected</b>. <b>Click to expand</b>. Implementation lives in code; this is about the decision. Projected from <code>decisions.md</code>."},
+  footLbl:{zh:"設計來源(thoughts/ · decisions.md):",en:"design sources (thoughts/ · decisions.md):"},
 };
 // ── The three status columns ─────────────────────────────────────────────
 // key/cls: prog|next|pend  ·  em: emoji  ·  h: heading  ·  note: column subtitle
@@ -144,10 +158,19 @@ const COLS=[
               en:"Plain: what it is, why not now. <span class='q'>Blockers: the open questions in the way.</span>"}},
    ]},
 ];
-// ── Shipped strip (no expand — just labels) ───────────────────────────────
+// ── 🧭 Decisions (projected from decisions.md — one card per feature-section) ─
+// Each: t:title · d:one-liner(the call) · detail: the call · how it shows up · what was rejected.
+// PLAIN language, high-level — never a sub-rule dump. Use <br> + "·" bullets; <span class='q'> for rejected.
+const DECISIONS=[
+  {t:{zh:"範例決策 — 形狀的一句話",en:"Example decision — the call in a line"},
+   d:{zh:"高層決定了什麼(一句)",en:"the high-level call (one line)"},
+   detail:{zh:"<b>決定</b>:這個系統選了什麼形狀(一句白話)。<br><br><b>在系統裡怎麼呈現</b><br>· 因為這個決定,使用者在產品裡看到/做到什麼。<br>· 第二個具體呈現。<span class='q'><b>否決</b>:試過 X(→ 為什麼改)· 暫緩 Y(等真實需求)。</span>",
+            en:"<b>The call</b>: the shape this system chose (one plain line).<br><br><b>How it shows up in the system</b><br>· What the user sees/does in the product because of this.<br>· A second concrete manifestation.<span class='q'><b>Rejected</b>: tried X (→ why changed) · deferred Y (until real pull).</span>"}},
+];
+// ── Shipped strip (no expand — most recent ~5 + a "+N earlier" pill) ───────────
 const SHIPPED={
-  zh:["範例已完成 1","範例已完成 2"],
-  en:["example shipped 1","example shipped 2"],
+  zh:["範例已完成 1","範例已完成 2","… +N earlier — 見 plan.md / git log"],
+  en:["example shipped 1","example shipped 2","… +N earlier — see plan.md / git log"],
 };
 // ── Render (generic — usually no need to touch below) ─────────────────────
 const tr=o=>o[lang];
@@ -166,14 +189,19 @@ function render(){
       </div>`).join("")}
     </div>`).join("");
   document.getElementById("pills").innerHTML=SHIPPED[lang].map(s=>`<span class="pill">${s}</span>`).join("");
+  document.getElementById("decisions").innerHTML=DECISIONS.map(it=>`<div class="item ${it.detail?"has-d":""}">
+    <div class="thead"><div class="t">${tr(it.t)}</div>${it.detail?`<span class="chev">⌄</span>`:""}</div>
+    ${tr(it.d)?`<div class="d">${tr(it.d)}</div>`:""}
+    ${it.detail?`<div class="detail">${tr(it.detail)}</div>`:""}
+  </div>`).join("");
 }
 function setLang(l){lang=l;document.getElementById("lzh").classList.toggle("on",l==="zh");document.getElementById("len").classList.toggle("on",l==="en");document.documentElement.lang=l==="zh"?"zh-Hant":"en";render();}
 // click a card → expand its plain-language detail (links inside stay clickable)
-document.getElementById("board").addEventListener("click",e=>{
+["board","decisions"].forEach(id=>document.getElementById(id).addEventListener("click",e=>{
   if(e.target.closest("a"))return;
   const it=e.target.closest(".item.has-d");
   if(it)it.classList.toggle("open");
-});
+}));
 render();
 </script>
 </body>

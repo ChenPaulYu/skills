@@ -67,7 +67,7 @@ After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the
 
 ## Codex compatibility
 
-Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. A repo-root [`AGENTS.md`](AGENTS.md) is synthesised from the two plugin `CLAUDE.md` files.
+Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. Codex metadata is normalised during generation so descriptions are YAML-safe and within Codex's length limit. A repo-root [`AGENTS.md`](AGENTS.md) is synthesised from all plugin `CLAUDE.md` files.
 
 ```bash
 node scripts/build-codex.mjs   # re-run after editing any SKILL.md

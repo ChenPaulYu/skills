@@ -31,11 +31,11 @@
       <plugin>:<skill> namespace convention
     • 28 ADRs in docs/adr/ — 001..028 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (10 flat skills, nav-* / shape-*) +
-      root AGENTS.md, generated from plugins/ by scripts/build-codex.mjs
-      (ADR-022) — committed, do-not-hand-edit
-      (Note: research skills not yet in Codex mirror — run build-codex.mjs
-       to update after this revision)
+    • Codex mirror: .agents/skills/ (13 flat skills: nav-* / research-* /
+      shape-*) + root AGENTS.md, generated from plugins/ by
+      scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
+      Codex metadata is normalised during generation so descriptions are
+      YAML-safe and within Codex's length limit.
 
   ⚠ FIXED in this revision (rev 30)
     1. research:dissect now dispatches a sub-agent per document to read it in
@@ -116,9 +116,10 @@
        format, so plugins/ stays the single source of truth and
        scripts/build-codex.mjs emits a flat, unnamespaced mirror into
        .agents/skills/ (nav:audit → nav-audit; no plugin namespace in Codex)
-       plus a synthesised root AGENTS.md (from the two plugin CLAUDE.md). The
+       plus a synthesised root AGENTS.md (from plugin CLAUDE.md files). The
        generator flattens the namespace, rewrites cross-skill + CLAUDE.md→
-       AGENTS.md references, and re-roots bundled reference paths. A
+       AGENTS.md references, re-roots bundled reference paths, and normalises
+       Codex metadata. A
        distribution layer, not a structural change: no skill / plugin / rule
        added or renamed, so the interactive body (nodes/edges/anatomies) is
        unchanged — only this audit block is bumped. README gains a Codex

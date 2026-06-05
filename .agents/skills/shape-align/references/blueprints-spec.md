@@ -12,7 +12,8 @@ A description floats; a real artifact is decidable. blueprints is the standing v
 
 ```
 blueprints/
-  thoughts/          ← committed. one .md per converged design decision (agent-facing, may be dense).
+  thoughts/          ← committed. one .md per converged design decision (agent-facing, may be dense). the HOT working set — only in-flight design.
+  decisions.md       ← committed. ONE curated, lean file of durable *why* — feature-sections, each: the call · how it shows up in the system · what was rejected. graduated from shipped thoughts.
   plans/             ← committed. one .md per grounded code-level plan from nav-plan (the build-side render of a thought).
   mockups/           ← git-ignored. disposable interactive HTML from shape-mockup.
   plan.md            ← committed. the lean status index (agent-facing).
@@ -21,7 +22,8 @@ blueprints/
 
 > **`plan.md` (singular) vs `plans/` (plural)** are different things, deliberately: `plan.md` is align's lean *status index* (now/next/later); `plans/` holds nav-plan's *grounded implementation plans* (one per item, Context · Approach · Critical files · Verification). Intent → status → grounded-how.
 
-- **`thoughts/`** — the design layer. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these — they read `overview.html`, whose detail panels distil the thoughts into plain language.
+- **`thoughts/`** — the design layer. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these — they read `overview.html`, whose detail panels distil the thoughts into plain language. This is the **hot working set**: it should hold only *in-flight* design — a thought that ships is `graduate`d (its *why* residue → `decisions.md`) or pruned, so the set doesn't grow monotonically. (ADR-026)
+- **`decisions.md`** — the durable *why* layer (owned by `shape-reconcile`'s `graduate` action). **One curated file, not a folder** — feature-sections (`## <topic>`), each kept lean: **the call** (the high-level decision) · **how it shows up in the system** (its concrete manifestation — *not* implementation; that's nav's `codebase-map`) · **what was rejected / deferred** (the alternatives + why, the part code can't tell you). High-level, plain language — **not** a transcript of every sub-rule. graduate **merges** a shipped thought's residue into the right section (related decisions consolidate into one section), so it stays curated, not 1:1 fragments. **Stays clean**: every section is *currently operative* — a reversed decision folds forward into its successor (`Supersedes: X — because Z`) or a live `Rejected: X`, then the stale section is dropped (git archives the original thought). Addressed by anchor (`decisions.md#<topic>`). The **human view is a layer inside `overview.html`** (align projects it there — single-column, click-to-reveal), **not** a separate html. (ADR-026)
 - **`plans/`** — the grounding layer (owned by `nav-plan`). Each file = one item grounded into a code-level implementation plan, dated `YYYY-MM-DD-<slug>.md`. It's the build-side render of a thought; lives here so the whole arc (decision → status → grounded-how) stays in one tree. `shape-reconcile` keeps these current alongside `thoughts/` (a plan whose steps all shipped is stale, same as an implemented thought).
 - **`mockups/`** — disposable visual-decision scaffold (owned by `shape-mockup`). git-ignored: artifacts are decision-scaffold, not source. A committed thought may *reference* a mockup path as its visual record.
 - **`plan.md`** — what to do, grouped by status. The agent's index. Lean: only "what + which thought", no prose essays.
@@ -48,11 +50,12 @@ Rules: `head -12` yields the gist (title + TL;DR + first sections). Each `##` st
 
 | layer | artifact | audience | answers |
 |---|---|---|---|
-| WHAT (decisions) | `thoughts/*.md` | agent | what was decided, and why |
+| WHAT (in-flight design) | `thoughts/*.md` | agent | what's being decided now, and why |
+| WHY (durable residue) | `decisions.md` | agent | why a shipped thing is shaped this way · what was rejected (graduated from thoughts/) |
 | HOW/NOW (status) | `plan.md` | agent | what we're doing now / next / later |
-| STATE (projection) | `overview.html` | human | the same, scannable + click-to-reveal |
+| STATE (projection) | `overview.html` | human | the same, scannable — projects **both** `plan.md` (status) **and** `decisions.md` (why), click-to-reveal |
 
-Dependencies point **downstream only**: `overview.html` derives from `plan.md`, which references `thoughts/`. Never the reverse. Regenerating `overview.html` must never become a place where new decisions are born — those belong in a thought.
+Dependencies point **downstream only**: `overview.html` derives from `plan.md` + `decisions.md` (status layer + decisions layer); each references `thoughts/`. Never the reverse. Regenerating `overview.html` must never become a place where new decisions are born — those belong in a thought. (One human surface: the *why* is a layer **inside** `overview.html`, not a separate `decisions.html`.)
 
 ## `plan.md` shape
 
@@ -85,6 +88,8 @@ Generate by copying [`overview-template.html`](overview-template.html) and filli
 
 - **One layer, grouped by status**: In progress · Next · Future, plus a Shipped strip. No nested IA.
 - **Click-to-reveal**: each card shows title + one-liner; a **plain-language** detail expands on click. The human must not need to open a raw `thoughts/*.md`. Distil the thought into the detail panel.
+- **A `🧭 Decisions` layer** (projected from `decisions.md`): one card per decision-section, **single-column** (so expanding one never stretches a row-mate), click-to-reveal. The expanded detail = **the call · how it shows up in the system · what was rejected** (plain language, high-level — never a sub-rule dump). Reuses the same card/expand mechanics as the status board.
+- **Shipped shows only the most recent ~5** + a trailing `… +N earlier — see plan.md / git log` pill — the board is a scannable highlight, not the full changelog (that's `plan.md` + git).
 - **Bilingual** (EN + zh-Hant) via the `T` dict + toggle. Never ship monolingual without explicit opt-out.
 - **Self-contained**: inline CSS+JS, no build, no external assets.
 - **Match the project's visual language**: if a sibling artifact (a codebase-map, a design-token file, prior mockups) sets a palette/font, reuse it. The neutral template tokens are only a starting point.
