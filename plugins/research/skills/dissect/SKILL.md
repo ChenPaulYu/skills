@@ -1,6 +1,6 @@
 ---
 name: dissect
-description: "Dissect one or more papers, articles, or any argument-carrying documents into a structural skeleton — Gap (what problem?), Claim (proposed fix), Mechanism (how it works), Evidence (proof + benchmarks explained in plain language), Conclusion (what the reader should believe). Accepts a single document or a list — one dissection note per document. Works on academic papers, technical blog posts, competitor analyses, design proposals, RFCs. Use when you want to understand what a document *argues* and whether its evidence holds. Also fires on \"break down this paper\", \"what does this paper claim?\", \"read this for me\", \"analyze this paper\", \"dissect these papers\", \"read all these for me\", \"help me understand these papers\". For a synthesized landscape view across multiple papers (already done / gap / priority order), use /research:map instead."
+description: "Dissect one or more papers, articles, or any argument-carrying documents into a structural skeleton — Gap (what problem?), Claim (proposed fix), Mechanism (how it works), Evidence (proof + benchmarks explained in plain language), Conclusion (what the reader should believe). Accepts a single document or a list — one dissection note per document. Works on academic papers, technical blog posts, competitor analyses, design proposals, RFCs. Use when you want to understand what a document *argues* and whether its evidence holds. Also fires on \"break down this paper\", \"what does this paper claim?\", \"read this for me\", \"analyze this paper\", \"dissect these papers\", \"read all these for me\", \"help me understand these papers\". To see how multiple papers relate (lineage / clusters / contradictions / contested ground), or to position your own claim across them, use /research:untangle instead."
 ---
 
 # research:dissect
@@ -130,7 +130,7 @@ Include in the check (←): if a claim was provided and this section is missing 
 ...
 ```
 
-> **Tip**: if you want a synthesized landscape view across all these documents — what's already proven, what gap remains, which papers are highest priority for related work — run `/research:map` with the same document set and your claim.
+> **Tip**: to see how these documents *relate* — which build on which, which cluster, which contradict, where the field is contested — run `/research:untangle` on the same set (optionally with your own claim, for a positioning view + related-work priority).
 
 ## Output format
 
