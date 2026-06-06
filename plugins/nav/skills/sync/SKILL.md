@@ -1,90 +1,72 @@
 ---
 name: sync
-description: "Re-sync a codebase's navigation layer to its current state so both agents and humans can navigate it after a change — runs ONE grounding pass, then refreshes file-top headers (per-file navigability) and the bilingual codebase map (repo-level navigability) together. Use whenever the user asks to \"sync the codebase\", \"re-sync the nav docs / map after a code change\", \"update / regenerate the codebase map\", \"refresh / add / standardize file headers\", \"add skill-style headers\", \"make this codebase navigable\", \"make files self-describing\", \"onboard me to this repo\", \"show me a map of the code\", or after restructuring when headers + map have drifted. Two phases (header-render · map-render) share the grounding pass; the header diff is shown/gated before the map phase reads the new headers. Writes file-top headers (any language) + docs/codebase-map/index.html."
+description: "Re-sync a codebase's file-top headers to its current state so an agent (or human) can grasp any file from its first ~12 lines — the per-file navigability layer. Runs one grounding pass, then composes/restructures each load-bearing file's header (title + 2-3 sentence detail + Reads: line) and shows the diff before applying. Use whenever the user asks to \"sync the headers\", \"refresh / add / standardize file headers\", \"add skill-style headers\", \"make files self-describing\", \"make this file navigable\", or after restructuring when headers have drifted from the code. Writes file-top headers (any language). For the repo-level bilingual codebase map, see the sibling skill /nav:map (run sync first — the map reads these headers)."
 ---
 
-# Deep-module sync
+# Header sync — file-top navigability
 
-Keep a codebase's **navigation layer** in step with its code. One grounding pass over the source, then two renderers fall out of it: **file-top headers** (so `head -12` answers "what is this file?") and the **bilingual codebase map** (so one HTML answers "what is this repo?"). After `/nav:sync`, both an agent and a human can navigate the code without reading 80 files.
+Keep a codebase's **file-top headers** in step with its code, so `head -12` answers "what is this file?" without reading the body. This is the **per-file** half of the navigation layer; its sibling `/nav:map` renders the **per-repo** half (the bilingual codebase map) and consumes the headers this skill maintains.
 
 ## Why this skill exists
 
-Navigability has two scales — **per-file** (a header) and **per-repo** (a map) — and they are the same job at different zoom levels. They also share the expensive part: a grounded read of each load-bearing file's role + dependencies, verified against source, not guessed. Splitting that into two doors meant doing the read twice and remembering two commands; worse, regenerating the map is *itself the test* of whether the headers are any good (rule ⑧ — struggle-to-describe is the deep-module failure signal). So they collapse into **one door, one grounding pass, two renderers**:
+Navigability has two scales — per-file (a header) and per-repo (a map) — and they run on **different cadences**: a header should be refreshed *every time you touch a file* (continuous, cheap, like a lint), while the map is regenerated *periodically* (heavy, batched, a teaching projection). Binding them to one door forced either over-scoping the cheap job or under-delivering the expensive one (ADR-029, superseding ADR-019's merge). So they are **two doors over a shared grounding approach**, and this is the light, frequent one. The header is a file's **interface** (rule ②): `/shape:reconcile` reads it as its cheapest "is this implemented?" signal, and every agent reads it via `head -12` before diving into the body.
 
-- **header-render** (Phase A) — file-level navigability. See `references/header-render.md`.
-- **map-render** (Phase B) — repo-level navigability. See `references/map-render.md` (+ `references/visual-spec.md`).
-
-The engine stays two pieces deliberately: the header diff is gated *between* them (Phase A is reviewed before Phase B reads the new headers), and `/shape:reconcile` consumes only the header artifact (not the map). `sync` is the single front door; the two phases are how it grows (a future third renderer — deps graph, changelog — slots in under the same door).
+See `references/header-render.md` for the full header-render procedure.
 
 ## Scope
 
-**Language-agnostic.** The header CONVENTION (title + 2-3 sentence detail + `Reads:` line) applies to any language with the syntax flexed per stack; the map renderer is generic HTML and the source-scan works on any stack. Both phases degrade gracefully on unknown stacks to universal checks + flag what was skipped.
+**Language-agnostic.** The header CONVENTION (title + 2-3 sentence detail + `Reads:` line) applies to any language, with the comment syntax flexed per stack. Degrades gracefully on unknown stacks to universal checks + flags what was skipped.
 
-This skill **writes**: file-top headers across the repo (Phase A) and `docs/codebase-map/index.html` (Phase B). Phase A shows a diff and is gated before Phase B runs.
+This skill **writes** file-top headers across the repo (or a bounded scope: a domain / changed files). It shows a diff and is gated before applying.
 
 ## The 8 rules (the through-line of every nav skill)
 
-1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision so it never surfaces in the interface; red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). *sync is this rule applied to navigation: the header is a file's interface, the map is the repo's.*
-2. **Interface-first at every scale** — *this skill's whole reason for being.* One door, surfaced progressively: a module's interface (header), a subsystem's barrel/facade, the whole codebase's index/map. Drill into bodies only as needed.
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision so it never surfaces in the interface; red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). *A header is this rule applied to a file: the interface a reader gets without the body.*
+2. **Interface-first at every scale** — *this skill's whole reason for being.* The header surfaces a module's interface so you drill into the body only as needed.
 3. **Explicit dependencies** — functions deterministic; deps explicit. The header's `Reads:` line makes a file's dependencies explicit.
-4. **Right grain — neither giant nor fragmented** — don't header thin files (Button / icons / tiny barrels); don't draw fake anatomies for 2-file domains. Don't force structure where there isn't any.
+4. **Right grain — neither giant nor fragmented** — don't header thin files (Button / icons / tiny barrels / 2-line modules). Don't force a header where the name already says it.
 5. **Fit the framework** — standard doc-comment syntax per language; no exotic `@tag`s.
 6. **Rearrange, don't rewrite** — restructuring an existing top comment into the convention preserves its substance; never paraphrase or shorten.
 7. **Below 90% confidence → ask** — about scope, which files are load-bearing, intent.
-8. **Agent-navigability is the audit** — *running the map phase IS the audit.* Every place you struggle to write a one-line description is a deep-module failure signal; it goes in the audit block (and usually means that file needs a header).
+8. **Agent-navigability is the audit** — *every place you struggle to write a file's one-line header is a deep-module failure signal* — that file's interface isn't clear yet (often: it does too much). Note it; it usually means the file, not the header, needs work.
 
 ## Process
 
-The flow is **one grounding pass, then two gated phases**. Phase A's diff is the gate before Phase B.
-
-### Step 1 — Grounding pass (shared)
+### Step 1 — Grounding pass
 
 Reuse-via-transcript: if `/nav:audit` already ran against this scope earlier in the session, reuse its inventory. Otherwise establish it once:
 - Detect stack + bound scope (whole repo / a domain / changed files).
 - Domain inventory: top-level folders, file count + LOC, leader files, layer (foundation / state / ui).
-- For each load-bearing file (leader / ≥150 LOC / barrel / user-named), `head -15` it to capture its current role + whether its top reveals its purpose.
+- For each load-bearing file (leader / ≥150 LOC / barrel / user-named), `head -15` it to capture its current role + whether its top already reveals its purpose.
 
-This single read feeds **both** phases — don't re-scan per phase.
-
-### Step 2 — Phase A: header-render (gated)
+### Step 2 — Header-render (gated)
 
 Follow `references/header-render.md` fully:
 - Identify load-bearing files from the grounding pass (skip tests / icons / name-says-it-all primitives).
 - Classify each (no header / wrong-format / already-good) and compose the header per the convention + language syntax.
-- **Show the diff. Wait for user OK** (batch-OK fine if the user prefers; auto-apply only on explicit "just apply" intent). *This is the gate.*
+- **Show the diff. Wait for user OK** (batch-OK fine if the user prefers; auto-apply only on explicit "just apply" intent). *This is the gate* — headers are not refactors; the user sees them first.
 - Apply, then run the stack's test gate — headers are comments, should stay green; if not, a header has a syntax error → revert + fix.
 - If the project's CLAUDE.md lacks the header convention, offer to add it.
 
-### Step 3 — Phase B: map-render
+### Step 3 — Report (+ offer the map)
 
-Follow `references/map-render.md` (+ `references/visual-spec.md`):
-- Re-scan now that headers exist — the map reads each file's fresh `head -12` instead of re-deriving its role.
-- Render `docs/codebase-map/index.html` (bilingual EN + zh-Hant by default; domains, anatomies, master graph, module map, conventions).
-- Keep the rule-⑧ struggle log; any file you still had to guess at is a header gap to note.
-- Optional: screenshots if a dev server runs; browser-verify the HTML.
-- Write/refresh the grounding **audit block** at the top: ✓ VERIFIED · ⚠ FIXED this revision (which headers added/changed, what map sections changed) · ⚖ JUDGMENT.
-
-### Step 4 — Test gate + report
-
-Re-run the stack's test gate (still green — only comments + a docs HTML changed). Then summarize to chat:
+Summarize to chat:
 
 ```markdown
-## Sync report — <ISO date>
-- Headers: <N> files added/restructured/skipped (list)
-- Map: regenerated at docs/codebase-map/index.html (domains, anatomies, audit findings)
-- Audit block updated
-- Verify: `head -12 <file>` · `open docs/codebase-map/index.html`
+## Header sync — <ISO date>
+- Headers: <N> files added / restructured / skipped (list)
+- Verify: `head -12 <file>`
 ```
+
+Then, if the repo-level map is also stale (or absent), *offer* `/nav:map` — it reads the freshly-synced headers as its cheapest grounding. (An offer, not an auto-run; skills don't invoke each other.)
 
 Do NOT commit unless the user asks. If on the default git branch, suggest branching first.
 
 ## Discipline (do not skip)
 
-- **One grounding pass.** Both phases consume the same read — don't scan the repo twice.
-- **Header diff is the gate.** Phase A is reviewed before Phase B reads the new headers. Headers are not refactors; the user sees them first.
+- **Header diff is the gate.** Headers mutate source; the user reviews them before they land.
 - **Skip thin files explicitly + list them.** Document the deliberate omissions (rule ④).
 - **Preserve substance.** Restructuring an existing top comment moves its content into the convention's shape — never paraphrase (rule ⑥).
-- **Every map claim grounded.** No fake edges, no fake anatomies; mark `(uncertain)` rather than asserting. Stale audit block = lie.
 - **Don't refactor while syncing.** If the grounding pass surfaces a structural smell (giant file, layer violation), *note it* — hand to `/nav:refactor` as a separate session. Don't absorb it.
 - **Rule ⑦ applies.** Below 90% on scope / which files are load-bearing → ask.
 
@@ -92,15 +74,15 @@ Do NOT commit unless the user asks. If on the default git branch, suggest branch
 
 | Temptation | Why to refuse |
 |---|---|
-| Scan the repo separately for each phase | Defeats the point — one grounding pass feeds both |
-| Skip the header diff, go straight to the map | Phase A mutates source; it must be reviewed before Phase B builds on it |
+| Skip the diff, just apply the headers | Headers mutate source; show them first (unless the user said "just apply") |
 | Header every file uniformly | Rule ④ — Button/icons/barrels don't need them |
-| Draw a fake anatomy for a 2-file domain | Structure-theatre — use a Module-map row |
+| Paraphrase an existing top comment while reshaping it | Rule ⑥ — move its substance verbatim into the convention's shape |
 | "While I'm here, let me also refactor X" | Refactors need narrow scope + their own discipline → `/nav:refactor` |
-| Ship the map monolingual without opt-out | Bilingual (EN + zh-Hant) is the default; removing it later is harder |
+| Regenerate the codebase map in the same breath | Different cadence + a separate door → `/nav:map` (ADR-029) |
 
 ## Companion skills
 
+- **`/nav:map`** — the sibling: renders the repo-level bilingual codebase map from these headers. Run `sync` first (the map reads the headers as its grounding); run `map` periodically, not every change.
 - **`/nav:audit`** — read-only health check; its inventory is reused as `sync`'s grounding pass when it ran earlier in the session.
 - **`/nav:refactor`** — execute any structural move the grounding pass surfaces (separate session).
 - **`/shape:reconcile`** — consumes the header artifact `sync` maintains (`head -12` = the cheapest "is this implemented?" signal).

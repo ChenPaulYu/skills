@@ -1,6 +1,6 @@
 # ADR 019 — `sync` collapses `headers` + `map` into one door (engine stays two render phases)
 
-**Status**: accepted
+**Status**: superseded by [ADR-029](029-resplit-sync-and-map-by-cadence.md) — the "engine stays two pieces" half holds; the "one door" half is reversed (headers + map have different cadences, so two doors)
 **Date**: 2026-06-01
 **Amends**: [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) (the skill roster — still five, the two "describe" verbs merge)
 

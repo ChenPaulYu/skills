@@ -1,6 +1,6 @@
 # Engine — header-render (file-level navigability)
 
-> Phase A of `/nav:sync`. Apply a uniform skill-style header to load-bearing source files in any language, so the first 8-12 lines answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code.
+> The header-render procedure for `/nav:sync`. Apply a uniform skill-style header to load-bearing source files in any language, so the first 8-12 lines answer "what is this, and what does it depend on?" without reading the body. This is rule ① + rule ② applied to source code.
 
 ## What this phase produces
 
@@ -82,7 +82,7 @@ For each file getting a new/restructured header:
 
 ### Step 4 — Show diff before applying
 
-Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent. **This is the gate** — when `/nav:sync` runs both phases, the header diff is reviewed before the map phase reads the new headers.
+Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent. **This is the gate** — the header diff is reviewed before applying (headers mutate source); a later `/nav:map` then reads the freshly-written headers.
 
 ### Step 5 — Apply
 
@@ -197,7 +197,7 @@ export function useSelection(...) {
 
 ## Discipline (do not skip)
 
-- **Show diff first.** Headers are not refactors; the user reviews before applying. This diff is the gate between the two `/nav:sync` phases.
+- **Show diff first.** Headers are not refactors; the user reviews before applying. This diff is the gate before anything lands.
 - **Skip thin files explicitly + list them.** Don't pretend they don't exist; document the deliberate omission.
 - **Preserve substance.** When restructuring existing doc comments, move the content into the convention's shape — never paraphrase.
 - **Test gate after applying.** Headers shouldn't break anything; if they do, revert + fix.

@@ -7,7 +7,7 @@
 
 | Plugin | What it covers |
 |---|---|
-| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync the navigation layer (file-top headers + bilingual codebase map), ground a spec into a plan. Built on Ousterhout's deep-module principles. |
+| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, ground a spec into a plan. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
 | [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton: Gap / Claim / Mechanism / Evidence / Conclusion. Makes cross-document comparison possible; locates where your own claim sits relative to prior art. |
 
@@ -23,7 +23,8 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
-- `/nav:sync` — re-sync the navigation layer to the code: file-top headers + the bilingual `docs/codebase-map/index.html`, one grounding pass, two phases
+- `/nav:sync` — sync file-top headers to the code (per-file navigability; continuous, per-change), gated diff
+- `/nav:map` — render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads `sync`'s headers)
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact) — the execution verb, refactor's behaviour-changing twin
 
