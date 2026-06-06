@@ -12,7 +12,7 @@ Recurring, lightweight alignment on **what to build next**. Read the converged d
 
 A plan written as prose floats — you re-read it and decide nothing. And a plan that lives only in chat evaporates by the next session. `align` makes the plan a **real, current artifact you point at**: a one-layer status board the human scans and clicks, backed by a lean index the agent executes against. Because the human view and the agent view are two renders of the *same* present state, they can't quietly drift into two different stories.
 
-It is the pre-build mirror of `nav-sync`'s codebase map: where the map projects the *existing code*, align projects the *planned work*.
+It is the pre-build mirror of `nav-map`'s codebase map: where the map projects the *existing code*, align projects the *planned work*.
 
 ## The shape spine (restated — this skill is self-contained)
 

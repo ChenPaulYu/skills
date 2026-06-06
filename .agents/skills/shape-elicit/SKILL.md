@@ -36,7 +36,7 @@ The AI is the **proposer**; the user is the **refiner / picker**. Your job is **
 
 ## Grounding is the quality, not a convenience
 
-The forks must be **anchored in the real repo** — the actual modules, types, schema, constraints — not abstract Socratic prompts. This is the *only* reason a grounded grill beats a generic chat: when you can see the code, the fork gets *sharp* (a precise a/b about real entities), instead of good-but-floaty philosophy. Before grilling, read the real thing; lean on `nav-sync`'s output to ground cheaply (a `head -12` header tells you a module's role without reading it; the codebase map gives the repo shape). An ungrounded elicit is just abstract Socratic noise — re-ground before continuing.
+The forks must be **anchored in the real repo** — the actual modules, types, schema, constraints — not abstract Socratic prompts. This is the *only* reason a grounded grill beats a generic chat: when you can see the code, the fork gets *sharp* (a precise a/b about real entities), instead of good-but-floaty philosophy. Before grilling, read the real thing; lean on the nav layer to ground cheaply (`nav-sync`'s `head -12` headers tell you a module's role without reading it; `nav-map`'s codebase map gives the repo shape). An ungrounded elicit is just abstract Socratic noise — re-ground before continuing.
 
 ## When it fires — and the boundary with mockup
 
@@ -65,7 +65,7 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 ## Protocol — a volley loop, not fixed stages
 
 1. **Summoned.** The user calls it. Confirm the one decision in scope (mirror).
-2. **Ground.** Read the real repo region the decision touches (modules, types, constraints; `nav-sync`'s headers + map if present) so forks are sharp.
+2. **Ground.** Read the real repo region the decision touches (modules, types, constraints; `nav-sync`'s headers + `nav-map`'s map if present) so forks are sharp.
 3. **Volley.** Each turn, in one short move: mirror the shift → drill one layer toward the principle → erect **one** named fork or refutable claim → invite the hit. One sharp thing. Apply friction; don't agree to advance.
 4. **Exit on snap.** The moment the user lands a principle / picks decisively / says "that's it" — **stop**. Do not continue the checklist. Weight-adaptive exit is the core.
 5. **Land the residue (small).** Compress to **one line** — the named principle + the forks decided — and write a `thoughts/<date>-<topic>.md` doc in the `blueprints/` tree, in the progressive-disclosure shape (title + one-line role + ≤3-line TL;DR + sections that lead with their point). Small residue, not a transcript.

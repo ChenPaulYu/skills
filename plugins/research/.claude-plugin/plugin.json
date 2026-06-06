@@ -1,7 +1,7 @@
 {
   "name": "research",
-  "version": "0.2.0",
-  "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, or map a full landscape across sources framed by your claim. Works on academic papers, technical writeups, competitor analyses, design proposals.",
+  "version": "0.3.0",
+  "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, map a full landscape across sources framed by your claim, or critique a paper adversarially into a referee report (claim↔evidence audit + self-attack). Works on academic papers, technical writeups, competitor analyses, design proposals.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"
@@ -14,6 +14,8 @@
     "argument-anatomy",
     "gap-analysis",
     "dissect",
+    "critique",
+    "peer-review",
     "agent-skills"
   ]
 }

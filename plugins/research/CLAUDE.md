@@ -7,7 +7,7 @@
 
 A collection of skills for **reading external sources with intent** — understanding what arguments claim, what evidence they produce, and what remains open. The through-line is **argument anatomy**: every document making a claim can be dissected into Gap / Claim / Mechanism / Evidence / Conclusion, and every dissection can be compared against your own claim to locate prior art and open ground.
 
-Two skills today: `dissect` (single or batch argument anatomy — one note per document) and `map` (claim-framed landscape synthesis across N sources). Candidate skill pending: `feedback` (extract design implications from competitor empirical results). See `docs/adr/027-research-plugin.md` for the family charter and promotion criteria.
+Three skills today: `dissect` (single or batch argument anatomy — one note per document), `map` (claim-framed landscape synthesis across N sources), and `critique` (adversarial assessment of one paper into a referee report — claim↔evidence audit + self-attack). The verbs sit on one spine: `dissect` *understands* an argument, `map` *positions* it against your claim, `critique` *assesses* whether its evidence holds. `critique` consumes `dissect` (reuse the descriptive skeleton, then ground deeper only on the attack surfaces). Candidate skill pending: `feedback` (extract design implications from competitor empirical results). See `docs/adr/027-research-plugin.md` for the family charter and promotion criteria.
 
 **Domain-agnostic by design.** The Gap→Claim→Mechanism→Evidence framework applies to academic papers, technical blog posts, competitor analyses, RFCs, and design proposals. The `dissect` skill's output is always the same skeleton — making cross-document comparison possible regardless of source type.
 

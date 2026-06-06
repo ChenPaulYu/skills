@@ -11,7 +11,7 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Three plugins: nav (6 skills) + shape (6 skills) + research (1 skill) —
+    • Three plugins: nav (6 skills) + shape (6 skills) + research (3 skills) —
       see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
@@ -25,20 +25,34 @@
     • research skills: dissect (argument anatomy — single or batch; dispatches a
       sub-agent per document to read in full, inject → read → check per ADR-008;
       one note per document), map (claim-framed landscape synthesis across N
-      sources — already done / gap / priority order). research v0.2.0; standalone
-      (no nav/shape dependency). feedback as candidate skill (ADR-027).
+      sources — already done / gap / priority order), critique (adversarial
+      referee report on one paper — claim↔evidence audit + self-attack; consumes
+      dissect; ADR-030). research v0.3.0; standalone (no nav/shape dependency).
+      feedback as candidate skill (ADR-027).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 29 ADRs in docs/adr/ — 001..029 with cross-supersede / refine links
+    • 30 ADRs in docs/adr/ — 001..030 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (13 flat skills: nav-* / research-* /
+    • Codex mirror: .agents/skills/ (15 flat skills: nav-* / research-* /
       shape-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; scripts/validate-codex-skills.mjs
       gates both Claude Code source frontmatter and Codex mirror drift.
 
-  ⚠ FIXED in this revision (rev 31)
+  ⚠ FIXED in this revision (rev 32)
+    1. research: new third skill `critique` — adversarial referee report on one
+       paper (claim↔evidence audit + self-attack every finding before it ships →
+       cut-log; two coupled cores: ground attack surfaces to recompute-depth, then
+       refute). Consumes `dissect`; the rating stays the reviewer's (verdict
+       checkpoint). ADR-030, from observations 2026-06-06-adversarial-paper-
+       critique-self-attack + 2026-06-06-grounding-is-intent-relative. research
+       2 → 3 skills; v0.2.0 → 0.3.0. RES_NODES gains critique (assess kind);
+       RES_EDGES gains critique→dissect. research anatomy lede/title (en+zh) +
+       VERIFIED counts. Codex mirror 13 → 15 (build-codex.mjs regenerated;
+       validator green). ADR count 29 → 30.
+
+  ⚠ FIXED in revision (rev 31)
     1. nav: the single `sync` door re-split into `sync` (file headers) + a new
        `map` skill, by CADENCE (ADR-029, superseding the ADR-019 merge). sync is
        now headers-ONLY — per-file navigability, continuous/per-change cadence,
@@ -651,9 +665,9 @@
     <section id="research-anatomy">
       <h2>
         <span class="layer-chip foundation" data-t="layer_plugin">plugin</span>
-        <span data-t="res_anat_title">research anatomy — dissect</span>
+        <span data-t="res_anat_title">research anatomy — dissect · map · critique</span>
       </h2>
-      <div class="lede" data-t="res_anat_lede">Two skills — <code>dissect</code> produces independent skeletons; <code>map</code> synthesizes them into a landscape.<ul class="anat-list"><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>map</b> · claim-framed landscape across N sources: evaluates each against your claim, synthesizes the gap, produces a related-work priority order. Reuses dissection notes from <code>notes/</code> when available. Output: one <code>notes/landscape.md</code>.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027.</div>
+      <div class="lede" data-t="res_anat_lede">Three skills — <code>dissect</code> produces independent skeletons; <code>map</code> synthesizes them into a landscape; <code>critique</code> assesses one paper adversarially into a referee report.<ul class="anat-list"><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>map</b> · claim-framed landscape across N sources: evaluates each against your claim, synthesizes the gap, produces a related-work priority order. Reuses dissection notes from <code>notes/</code> when available. Output: one <code>notes/landscape.md</code>.</li><li><b>critique</b> · adversarially assess one paper into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027, ADR-030.</div>
       <div class="graphwrap">
         <svg class="graph" id="resGraph" viewBox="0 0 400 160"></svg>
         <div class="panel" id="resPanel"></div>
@@ -734,8 +748,8 @@ const T = {
     shape_default_role: 'Verb-grouped skills around a blueprints hub: mockup, elicit (converge) · align (project) · reconcile · build (make it real). Click a node for its role.',
     shape_default_click_label: 'tip',
     shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. doctor (orchestrator) is deferred until the family proves out.',
-    res_anat_title: 'research anatomy — dissect',
-    res_anat_lede: "Two skills — <code>dissect</code> produces independent skeletons; <code>map</code> synthesizes them into a landscape.<ul class='anat-list'><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>map</b> · claim-framed landscape across N sources: evaluates each against your claim, synthesizes the gap, produces a related-work priority order. Reuses dissection notes from <code>notes/</code> when available. Output: one <code>notes/landscape.md</code>.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027.",
+    res_anat_title: 'research anatomy — dissect · map · critique',
+    res_anat_lede: "Three skills — <code>dissect</code> produces independent skeletons; <code>map</code> synthesizes them into a landscape; <code>critique</code> assesses one paper adversarially into a referee report.<ul class='anat-list'><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>map</b> · claim-framed landscape across N sources: evaluates each against your claim, synthesizes the gap, produces a related-work priority order. Reuses dissection notes from <code>notes/</code> when available. Output: one <code>notes/landscape.md</code>.</li><li><b>critique</b> · adversarially assess one paper into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027, ADR-030.",
     res_anat_callout: 'The unit of analysis is the <b>argument</b>, not the document. Gap/Claim/Mechanism/Evidence makes cross-document comparison possible — lay multiple dissection notes side by side and the prior-art landscape becomes visible. Inject your own claim to get the "Implications" section: what does this paper leave open that yours addresses?',
     res_default_h3: 'research plugin anatomy',
     res_default_role: 'Two skills — dissect (argument anatomy, sub-agent per doc) + map (landscape synthesis). Candidate: feedback. Click a node for its role.',
@@ -806,8 +820,8 @@ const T = {
     shape_default_role: '依動詞分組、圍著 blueprints hub:mockup、elicit(收斂)· align(投影)· reconcile · build(做出來)。點 node 看角色。',
     shape_default_click_label: '提示',
     shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。doctor(orchestrator)等家族成熟再加。',
-    res_anat_title: 'research 解剖 —— dissect',
-    res_anat_lede: "兩個 skill —— <code>dissect</code> 產出獨立骨架;<code>map</code> 把它們合成成全景。<ul class='anat-list'><li><b>dissect</b> · 把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008 紀律);主 agent 確認後存檔。單篇或批量 —— 每份文件一個 note。output 存 <code>notes/</code>。</li><li><b>map</b> · 以 claim 為框架的 N 篇全景:對照你的 claim 評估每篇、合成 gap、輸出 related work 優先序。有 <code>notes/</code> 的 dissect 筆記時 reuse。output:一份 <code>notes/landscape.md</code>。</li></ul>獨立運作 —— 不依賴 nav 或 shape。候選 skill:<code>feedback</code>(從競品實驗結果萃取設計意涵)。見 ADR-027。",
+    res_anat_title: 'research 解剖 —— dissect · map · critique',
+    res_anat_lede: "三個 skill —— <code>dissect</code> 產出獨立骨架;<code>map</code> 把它們合成成全景;<code>critique</code> 把一篇論文對抗式評估成 referee report。<ul class='anat-list'><li><b>dissect</b> · 把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008 紀律);主 agent 確認後存檔。單篇或批量 —— 每份文件一個 note。output 存 <code>notes/</code>。</li><li><b>map</b> · 以 claim 為框架的 N 篇全景:對照你的 claim 評估每篇、合成 gap、輸出 related work 優先序。有 <code>notes/</code> 的 dissect 筆記時 reuse。output:一份 <code>notes/landscape.md</code>。</li><li><b>critique</b> · 把一篇論文對抗式評估成 referee report —— claim↔evidence 審計(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。兩個耦合核心:把攻擊面 ground 到能重算的深度,再反駁。consume dissect;rating 留給評審本人。output:分析底稿 + review draft + cut-log。</li></ul>獨立運作 —— 不依賴 nav 或 shape。候選 skill:<code>feedback</code>(從競品實驗結果萃取設計意涵)。見 ADR-027、ADR-030。",
     res_anat_callout: '分析單位是<b>論證</b>,不是文件。Gap/Claim/Mechanism/Evidence 讓跨文件比較成為可能 —— 把多份 dissect 筆記並排,先行研究的全景就浮現了。注入你自己的 claim 以得到「意義」段落:這篇論文留下了什麼空白,正是你的 claim 要填的?',
     res_default_h3: 'research plugin 解剖',
     res_default_role: '兩個 skill —— dissect(論證解剖,每份文件一個 sub-agent)+ map(全景合成)。候選:feedback。點 node 看角色。',
@@ -934,8 +948,9 @@ const SHAPE_EDGES = [
 const RES_NODES = [
   {id:'dissect', kind:'assess', x:80, y:70, w:130, role:{en:'argument anatomy', zh:'論證解剖'}, desc:{en:'Decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008). Single doc or batch — one note per document. Optional "Implications for your claim" section. Output saved to notes/. For a synthesized landscape, use map.', zh:'把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008)。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。output 存 notes/。要合成全景用 map。'}},
   {id:'map', kind:'orchestrator', x:260, y:70, w:120, role:{en:'landscape synthesis', zh:'全景合成'}, desc:{en:'Claim-framed landscape across N sources: evaluates each against your claim (prior art / adjacent / design input / orthogonal), synthesizes the gap, and produces a related-work priority order. Reuses dissection notes from notes/ when they exist. Output: one notes/landscape.md.', zh:'以 claim 為鏡頭的 N 篇全景:對照你的 claim 評估每篇(先行研究/相鄰/設計輸入/正交)、合成出 gap、輸出 related work 優先序。有 notes/ 中的 dissect 筆記時直接 reuse。output:一份 notes/landscape.md。'}},
+  {id:'critique', kind:'assess', x:440, y:70, w:135, role:{en:'adversarial referee', zh:'對抗式評審'}, desc:{en:'Adversarially assess one paper into a referee report: claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log. ADR-030.', zh:'把一篇論文對抗式評估成 referee report:claim↔evidence 審計(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。兩個耦合核心:把攻擊面 ground 到能重算的深度,再反駁。consume dissect;rating 留給評審本人。output:分析底稿 + review draft + cut-log。ADR-030。'}},
 ];
-const RES_EDGES = [['map','dissect']];
+const RES_EDGES = [['map','dissect'],['critique','dissect']];
 
 const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},

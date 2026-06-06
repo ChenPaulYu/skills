@@ -1,6 +1,6 @@
 # Engine — map-render (repo-level navigability)
 
-> Phase B of `nav-sync`. Produce a self-contained, interactive codebase map at `docs/codebase-map/index.html` — the "one door" to navigate a codebase top-down. Each domain gets a one-line description; structurally-rich domains get their own anatomy (a click-to-reveal SVG graph). Every claim is grounded against source; a visible audit block records what was verified vs guessed.
+> The render procedure for `nav-map`. Produce a self-contained, interactive codebase map at `docs/codebase-map/index.html` — the "one door" to navigate a codebase top-down. Each domain gets a one-line description; structurally-rich domains get their own anatomy (a click-to-reveal SVG graph). Every claim is grounded against source; a visible audit block records what was verified vs guessed.
 
 ## What this phase produces
 
@@ -9,7 +9,7 @@ A new reader (human or agent) shouldn't have to read 80 files to understand a re
 2. The architecture (3 layers, domain-by-domain)
 3. Anatomies (per-subsystem deep dives, click-to-reveal)
 
-This phase is also the **dogfood test** for rule ⑧ — if you struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header. Because `nav-sync` runs header-render first, the map phase can read each file's freshly-written `head -12` header instead of re-deriving its role.
+This render is also the **dogfood test** for rule ⑧ — if you struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header. Because `nav-sync` maintains the file-top headers, the map can read each file's `head -12` header instead of re-deriving its role — run `nav-sync` first when headers may be stale.
 
 ## Scope
 
@@ -59,7 +59,7 @@ For each anatomy: enumerate nodes (modules/types/hooks), edges (real relationshi
 While writing each domain/anatomy/file description, track honestly when you struggle:
 - Had to enumerate multiple responsibilities → flag it
 - Had to footnote an exception → flag it
-- Had to **guess** because top-of-file didn't reveal purpose → flag it (rule ① broken — this file needs a header in the header-render phase)
+- Had to **guess** because top-of-file didn't reveal purpose → flag it (rule ① broken — this file needs a header → hand to `nav-sync`)
 - Had to write > 3 sentences before feeling complete → flag it
 
 The flagged files go into the audit block's "self-eval" section. **Honesty matters more than coverage.**
@@ -143,4 +143,4 @@ At the top of `index.html`, in an HTML comment, record:
 - **No fake anatomies.** A domain with 2 files doesn't get an anatomy graph — that's structure-theatre. Use a Module-map row.
 - **Self-eval is honest.** If you struggled to describe something, say so in the audit block. Don't smooth it over.
 - **Stale audit block = lie.** Every regenerate updates the block (date + what changed).
-- **No new files beyond `docs/codebase-map/`.** This phase writes its own folder, not the rest of the repo. Files that lack a `head -12` header are fixed by the header-render phase, not here.
+- **No new files beyond `docs/codebase-map/`.** This skill writes its own folder, not the rest of the repo. Files that lack a `head -12` header are fixed by `nav-sync`, not here.
