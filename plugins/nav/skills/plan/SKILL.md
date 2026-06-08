@@ -118,6 +118,15 @@ Each step should be specific enough that another agent (or future-you) can execu
 | <path:line> | <one-line role + what changes> | <step N> |
 | ... | ... | ... |
 
+## Single-source-of-truth owners
+
+The design decisions this work introduces that should have **one owner** (not be re-expressed as copies) — token namespaces, color/constant homes, config keys. Name the owner now, so the *second* value references it instead of leaking. Foreseeable categories only; the emergent ones are caught later by `/nav:do`'s N+1 reflex and `/nav:audit`'s value-leakage check (per [ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md)).
+
+| Decision (the thing that changes as a unit) | Owner (where it lives) |
+|---|---|
+| <e.g. brand palette> | <e.g. `@theme` color tokens in `index.css`> |
+| ... | ... |
+
 ## Verification
 
 Concrete checks per step:
@@ -132,7 +141,7 @@ End-to-end: <how someone confirms the whole plan landed correctly — e.g., spec
 - ...
 ```
 
-Adjust sections per situation — Critical files is essential, Open questions only if Stage 2 had unanswered items, Out of scope only if there's real risk of scope creep.
+Adjust sections per situation — Critical files is essential, Open questions only if Stage 2 had unanswered items, Out of scope only if there's real risk of scope creep, Single-source-of-truth owners only when the work introduces shared design values (colors / constants / config / prompt fragments) that a second use would otherwise copy.
 
 **Write the file, then summarize to chat**: location, line count, key open questions (if any), what step 1 entails. Then proceed to Stage 4.
 
