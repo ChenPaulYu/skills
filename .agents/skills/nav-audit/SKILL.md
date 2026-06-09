@@ -17,7 +17,7 @@ Most "code review" focuses on bugs. This audit focuses on **shape** — does the
 **The 8 rules are language-agnostic.** This audit works on any codebase. It has a **universal core** of checks that applies everywhere, plus **stack-specific heuristics** that activate when a known stack is detected.
 
 **Universal checks** (run on every codebase):
-- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · information leakage / temporal decomposition (same design decision in ≥2 modules; boundaries by execution order) · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
+- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · information leakage / temporal decomposition (same design decision in ≥2 modules; boundaries by execution order) · **value-leakage** (a repeated value/literal that has an owner elsewhere, or a cluster of near-identical values — scanned across code AND non-code layers: CSS/design-tokens, prompt strings, config) · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
 
 **Stack-specific heuristics** (added when stack is detected):
 - **TS/React** (detect: `package.json` mentions `react`): `useState`/`useRef` counts, JSX render span, component prop counts
@@ -111,6 +111,9 @@ For each domain leader and every file > 100 LOC:
 | Cross-domain edges | Map imports between top-level folders; flag layer violations | ⑤ |
 | Information leakage | Same design decision (a file format, protocol, magic constant, schema) encoded in ≥2 modules with no single owner — a change forces edits in all of them | ① |
 | Temporal decomposition | Modules/classes split by execution order (e.g. `read`/`modify`/`write` over a shared format) rather than by knowledge — a common cause of the leakage above | ① |
+| Value-leakage (canary + proximity) | An **owned** value (a token / named const) with raw copies elsewhere → consolidate to the owner; a **cluster of near-identical values** (sub-JND, or no documented level-or-category reason) → collapse. Scan code AND non-code layers (CSS arbitrary values / `@theme` tokens, prompt strings, config). | ① |
+
+> **Value-leakage — run it anchored, not naive.** Don't scan every literal (that flags `2` / `'px'` → noise that gets ignored). Two *anchored* screens: **canary** — inventory the *owners* (CSS-var / `@theme` tokens, exported color/const consts, config keys), then `grep` each owner's value for raw copies outside its definition → each copy is a leak (anchoring on what's already owned is the human-proof that this category *is* a decision). **proximity** — cluster near-identical values (e.g. ΔE for colors); a cluster with no single owner, or members within just-noticeable distance, is drift. **The machine screens physical duplication/proximity; *you* judge semantic legitimacy** — a value escapes consolidation only if it is *perceptibly* distinct AND maps to a real, documented level/category (a sub-JND "category" is drift, whatever the stated reason). This is the **aggregate backstop** for what `nav-do` (per-change) and `nav-plan` (foresight) structurally can't catch — see [ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md).
 
 **TS/React specific (only if React detected):**
 
