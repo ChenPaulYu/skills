@@ -9,9 +9,10 @@
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, ground a spec into a plan. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
-| [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton: Gap / Claim / Mechanism / Evidence / Conclusion. Makes cross-document comparison possible; locates where your own claim sits relative to prior art. |
+| [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton, untangle how a set of sources relate, or critique a paper adversarially into a referee report. Locates where your own claim sits relative to prior art. |
+| [`think`](plugins/think/) | **Reason about a problem** — apply a named reasoning lens that forces a structure the default "think harder" skips. `first-principles`: strip a question to its axioms, rebuild from them, surface where that diverges from convention. Feeds `shape`. |
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** is independent — it reads the external world to inform the work, with no dependency on either. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world) and **think** (reason about a problem) are independent cognition toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -40,6 +41,12 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 **`research` — read with intent:**
 
 - `/research:dissect` — dissect any argument-carrying document into Gap / Claim / Mechanism / Evidence / Conclusion; optional "Implications for your claim" section; output saved to `notes/`
+- `/research:untangle` — untangle how N sources relate (lineage / clusters / contradictions / contested ground), with optional claim-framed positioning
+- `/research:critique` — adversarially assess one paper into a referee report (claim↔evidence audit + self-attack)
+
+**`think` — reason about a problem:**
+
+- `/think:first-principles` — strip a question to its irreducible axioms, rebuild the answer from them, surface where that diverges from convention; output saved to `thinking/`
 
 ## Install
 
@@ -50,9 +57,10 @@ In Claude Code:
 /plugin install nav@skills
 /plugin install shape@skills
 /plugin install research@skills
+/plugin install think@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, and `/research:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research` is independent — install alone or with the others.)
+That's it — the `/nav:*`, `/shape:*`, `/research:*`, and `/think:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research` and `think` are independent — install alone or with the others.)
 
 ### Local development (Paul only)
 

@@ -11,8 +11,8 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Three plugins: nav (6 skills) + shape (6 skills) + research (3 skills) —
-      see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+    • Four plugins: nav (6 skills) + shape (6 skills) + research (3 skills) +
+      think (1 skill) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), dogfood (use a built feature for real → friction + coverage
@@ -30,18 +30,47 @@
       referee report on one paper — claim↔evidence audit + self-attack; consumes
       dissect; ADR-030). research v0.4.0; standalone (no nav/shape dependency).
       feedback as candidate skill (ADR-027).
+    • think skills: first-principles (strip a question to its irreducible axioms,
+      rebuild from them, surface where that diverges from convention — forced
+      structure: assumptions · axioms · rebuilt · divergence). invert + second-order
+      as the seed family. think v0.1.0; standalone, feeds shape one-way (ADR-034).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 31 ADRs in docs/adr/ — 001..031 with cross-supersede / refine links
+    • 34 ADRs in docs/adr/ — 001..034 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (15 flat skills: nav-* / research-* /
-      shape-*) + root AGENTS.md, generated from plugins/ by
+    • Codex mirror: .agents/skills/ (16 flat skills: nav-* / research-* /
+      shape-* / think-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; scripts/validate-codex-skills.mjs
       gates both Claude Code source frontmatter and Codex mirror drift.
 
-  ⚠ FIXED in this revision (rev 34)
+  ⚠ FIXED in this revision (rev 35)
+    1. NEW PLUGIN `think` (ADR-034) — reason about a problem through a named
+       reasoning lens that forces a structure the default "think harder" skips.
+       First skill `first-principles`: name the conventional answer + inherited
+       assumptions → strip to irreducible axioms → rebuild from them alone →
+       surface the DIVERGENCE from convention (the fixed five-part output is the
+       value). Distinct from /shape:elicit by who-holds-the-answer: elicit is
+       maieutic (draws it OUT of you, react-not-author), think is generative
+       (DERIVES it from the problem's base truths) — so a new plugin, not an
+       elicit mode. Lens family (vs one skill + lens arg) chosen because a plugin
+       is justified by a family, and the lenses pass research's razor (distinct
+       procedure + output): first-principles decomposes down, invert negates,
+       second-order projects forward. Value-guardrail: a lens ships only if it
+       forces a structure the default omits (else it's the ceremony that retired
+       nav's doctor, ADR-021). invert + second-order are seed (planned); promote
+       per ADR-018. Standalone, feeds shape one-way. plugins/think/ (plugin.json
+       + CLAUDE.md + skills/first-principles/SKILL.md); marketplace + README +
+       this site (DOMAINS think + CB_NODES think node + header + command card,
+       en+zh); codex auto-discovered (16 skills, validator green). A THINK
+       anatomy graph is deferred until ≥2 lenses (one node has no edges to draw).
+       ADR 33 → 34.
+    2. docs sync: research was under-reported as 1-2 skills in marketplace.json
+       (v0.2.0, stale "map") + README + this site's CB_NODES/blurb — corrected to
+       its real 3 (dissect / untangle / critique, v0.4.0).
+
+  ⚠ FIXED in rev 34 (kept for history)
     1. shape: `rehearse` reoriented + renamed → `dogfood` (ADR-033, supersedes
        ADR-020). Engine inverted — from a top-down logic-walk that always rendered
        a mockup, to an experience-first DOGFOOD of the real build: drive the real
@@ -785,7 +814,7 @@ const T = {
     res_anat_lede: "Three skills — <code>dissect</code> gives the nodes; <code>untangle</code> gives the edges (how the papers relate); <code>critique</code> assesses one paper adversarially into a referee report.<ul class='anat-list'><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>untangle</b> · the relational structure across N sources — lineage (who builds on whom) / clusters (parallel approaches) / contradictions / contested ground. Reuses dissect notes from <code>notes/</code>. Claim is optional: with it, adds a positioning layer (where your claim sits, the gap, related-work priority). Output: one note in <code>notes/</code>.</li><li><b>critique</b> · adversarially assess one paper into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027, ADR-030, ADR-031.",
     res_anat_callout: 'The unit of analysis is the <b>argument</b>, not the document. Gap/Claim/Mechanism/Evidence makes cross-document comparison possible — lay multiple dissection notes side by side and the prior-art landscape becomes visible. Inject your own claim to get the "Implications" section: what does this paper leave open that yours addresses?',
     res_default_h3: 'research plugin anatomy',
-    res_default_role: 'Two skills — dissect (argument anatomy, sub-agent per doc) + map (landscape synthesis). Candidate: feedback. Click a node for its role.',
+    res_default_role: 'Three skills — dissect (argument anatomy) + untangle (relational structure across sources) + critique (adversarial referee report). Candidate: feedback. Click a node for its role.',
     res_default_click_label: 'tip',
     res_default_click_text: 'dissect dispatches a sub-agent per document (inject → read → check, ADR-008). Works on papers, blog posts, competitor analyses, RFCs. The output skeleton is fixed so multiple notes can be compared side by side.',
     leg_decide: 'converge', leg_project: 'project', leg_reconcile: 'reconcile', leg_build: 'build', leg_artifact: 'blueprints (convention)',
@@ -857,7 +886,7 @@ const T = {
     res_anat_lede: "三個 skill —— <code>dissect</code> 給節點;<code>untangle</code> 給邊(文獻怎麼關聯);<code>critique</code> 把一篇論文對抗式評估成 referee report。<ul class='anat-list'><li><b>dissect</b> · 把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008 紀律);主 agent 確認後存檔。單篇或批量 —— 每份文件一個 note。output 存 <code>notes/</code>。</li><li><b>untangle</b> · 一批文獻的關係結構 —— lineage(誰建在誰上)/ cluster(平行做法)/ contradiction(誰駁誰)/ contested ground(還在爭的)。reuse <code>notes/</code> 的 dissect 筆記。claim 可選:給了就多一層定位(你坐在哪、gap、related-work 優先序)。output:一份 <code>notes/</code> note。</li><li><b>critique</b> · 把一篇論文對抗式評估成 referee report —— claim↔evidence 審計(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。兩個耦合核心:把攻擊面 ground 到能重算的深度,再反駁。consume dissect;rating 留給評審本人。output:分析底稿 + review draft + cut-log。</li></ul>獨立運作 —— 不依賴 nav 或 shape。候選 skill:<code>feedback</code>(從競品實驗結果萃取設計意涵)。見 ADR-027、ADR-030、ADR-031。",
     res_anat_callout: '分析單位是<b>論證</b>,不是文件。Gap/Claim/Mechanism/Evidence 讓跨文件比較成為可能 —— 把多份 dissect 筆記並排,先行研究的全景就浮現了。注入你自己的 claim 以得到「意義」段落:這篇論文留下了什麼空白,正是你的 claim 要填的?',
     res_default_h3: 'research plugin 解剖',
-    res_default_role: '兩個 skill —— dissect(論證解剖,每份文件一個 sub-agent)+ map(全景合成)。候選:feedback。點 node 看角色。',
+    res_default_role: '三個 skill —— dissect(論證解剖)+ untangle(來源間的關聯結構)+ critique(對抗式 referee report)。候選:feedback。點 node 看角色。',
     res_default_click_label: '提示',
     res_default_click_text: 'dissect 每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008)。適用論文、部落格、競品分析、RFC。骨架固定,多份筆記可並排比較。',
     leg_decide: '收斂', leg_project: '投影', leg_reconcile: '對賬', leg_build: '做出來', leg_artifact: 'blueprints(約定)',
@@ -925,18 +954,27 @@ const DOMAINS = {
   research: {
     layer: 'foundation',
     path: 'plugins/research/',
-    blurb: {en:'Read external sources with intent. Two skills: dissect (argument anatomy — dispatches a sub-agent per document, inject→read→check, ADR-008) + map (claim-framed landscape synthesis). Standalone — no nav/shape dependency. Candidate: feedback. v0.2.0; see research/CLAUDE.md + ADR-027.', zh:'有意圖地閱讀外部資料。兩個 skill:dissect(論證解剖 — 每份文件派發 sub-agent 完整讀取,inject→read→check,ADR-008)+ map(以 claim 為框架的全景合成)。獨立運作,不依賴 nav 或 shape。候選:feedback。v0.2.0;見 research/CLAUDE.md + ADR-027。'},
+    blurb: {en:'Read external sources with intent. Three skills: dissect (argument anatomy — dispatches a sub-agent per document, inject→read→check, ADR-008) + untangle (relational structure across N sources — lineage / clusters / contradictions / contested ground, optional claim-framed positioning) + critique (adversarial referee report on one paper — claim↔evidence audit + self-attack). Standalone — no nav/shape dependency. Candidate: feedback. v0.4.0; see research/CLAUDE.md + ADR-027/030/031.', zh:'有意圖地閱讀外部資料。三個 skill:dissect(論證解剖 — 每份文件派發 sub-agent 完整讀取,inject→read→check,ADR-008)+ untangle(N 篇來源的關聯結構 — lineage / cluster / contradiction / contested ground,可選 claim 定位)+ critique(對一篇 paper 的對抗式 referee report — claim↔evidence 稽核 + 自我攻擊)。獨立運作,不依賴 nav 或 shape。候選:feedback。v0.4.0;見 research/CLAUDE.md + ADR-027/030/031。'},
     files: [
       ['/research:dissect', '', {en:'★ Dissect one or more argument-carrying documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008); main agent checks the returned note before saving. Single doc or batch — one note per document. Optional "Implications for your claim" section. Output saved to notes/.', zh:'★ 把一篇或多篇論證型文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008);主 agent 確認後存檔。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。output 存到 notes/。'}],
       ['/research:untangle', '', {en:'★ Untangle how N sources relate — lineage (who builds on whom) / clusters / contradictions / contested ground. Claim is optional: with it, adds positioning (where you sit, the gap, related-work priority). Reuses dissect notes from notes/. Output: one note. ADR-031 (map→untangle rename + relational reframe).', zh:'★ 把 N 篇文獻的關聯理出來 —— lineage(誰建在誰上)/ cluster / contradiction / contested ground。claim 可選:給了就多一層定位(你坐在哪、gap、related-work 優先序)。reuse notes/ 的 dissect 筆記。output:一份 note。ADR-031(map→untangle 改名 + 關係 reframe)。'}],
     ],
   },
+  think: {
+    layer: 'foundation',
+    path: 'plugins/think/',
+    blurb: {en:'Reason about a problem through a named reasoning lens that forces a structure the default "think harder" skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way (an insight → a thought / mockup / plan). v0.1.0; see think/CLAUDE.md + ADR-034.', zh:'用具名 reasoning lens 推理問題,逼出預設「想認真點」會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape(洞見 → thought / mockup / plan)。v0.1.0;見 think/CLAUDE.md + ADR-034。'},
+    files: [
+      ['/think:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:plan ground). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:plan ground)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034。"}],
+    ],
+  },
 };
 
 const CB_NODES = [
-  {id:'nav', kind:'plugin', x:120, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
-  {id:'shape', kind:'plugin', x:350, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor deferred. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor 待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
-  {id:'research', kind:'plugin', x:580, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 1 skill (dissect); map + feedback as candidates. Standalone — no nav/shape dependency. v0.1.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。1 個 skill(dissect);map、feedback 為候選。獨立,不依賴 nav/shape。v0.1.0。'}},
+  {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
+  {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor deferred. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor 待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
+  {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.4.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.4.0。'}},
+  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way. v0.1.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape。v0.1.0。'}},
 ];
 const CB_EDGES = [['shape','nav']];
 

@@ -20,8 +20,14 @@
     {
       "name": "research",
       "source": "./plugins/research",
-      "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, or map a full landscape across sources framed by your claim.",
-      "version": "0.2.0"
+      "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of sources relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), or critique a paper adversarially into a referee report (claim↔evidence audit + self-attack).",
+      "version": "0.4.0"
+    },
+    {
+      "name": "think",
+      "source": "./plugins/think",
+      "description": "Reason about a problem through a named reasoning lens that forces a structure the default 'think harder' skips. first-principles: strip a question to its irreducible axioms, rebuild from them, surface where that diverges from convention. invert + second-order are the seed family. Feeds shape one-way; standalone.",
+      "version": "0.1.0"
     }
   ]
 }
