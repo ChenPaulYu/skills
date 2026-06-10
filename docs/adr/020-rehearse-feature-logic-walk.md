@@ -1,6 +1,6 @@
 # ADR 020 — `shape:rehearse` — walk a feature's usage, render where the logic breaks
 
-**Status**: accepted
+**Status**: superseded by [ADR-033](docs/adr/033-rehearse-reorient-to-experience-dogfood.md) — `rehearse` was reoriented from this top-down logic-walk (always-render-a-mockup) to an experience-first dogfood of the real build (evidence-rich friction report, render optional), **and renamed `rehearse` → `dogfood`** to match. The two design choices below survive (human-purpose floor · layer-is-the-diagnosis); the engine, output, and name do not.
 **Date**: 2026-06-01
 **Relates to**: [ADR-013](docs/adr/013-diagnosis-folds-into-elicit.md) (same-engine → don't fork razor), [ADR-018](docs/adr/018-promotion-gate-is-evidence-not-session-count.md) (promotion gate = evidence sufficiency)
 

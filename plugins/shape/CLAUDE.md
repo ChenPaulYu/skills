@@ -23,7 +23,7 @@ Grouped by verb (mirrors `nav`'s family shape):
 - **converge** — turn an open question into a decision:
   - `mockup` — render-to-decide: a real interactive HTML (UI mockup, or diagram for backend/agent/data/flow). *(built)*
   - `elicit` — draw the decision out by a grounded fork (react-not-author, drill-to-principle, compress-to-one-line; weight-adaptive exit — stop on the snap; summoned, not auto) → a `thoughts/` doc. *(built)*
-  - `rehearse` — pressure-test a feature's *logic*: walk `user intent → usage scenario → check against what's really built`, render the holes as a mockup (reuses `mockup`'s render path). The hole's layer = direction-wrong (missing intent) vs incomplete (dead-end scenario), handed to `elicit`. mockup's logic-twin (mockup decides look/structure; rehearse walks logic-coverage). *(built; ADR-020)*
+  - `dogfood` — use a *built* feature that feels unsmooth for real: drive the REAL interface (`agent-browser` / `curl` / CLI) against a list of user intents, report **friction** (works but clunky → a UX idea) + the **coverage gaps** that fall out (an intent with no path → a logic hole). Experience-first; logic-coverage is the byproduct. Output is a friction report (not a mandatory mockup); render is an optional redesign hand-off. A gap's layer (missing intent = direction · dead-end = incomplete) routes it, handed to `elicit`. Borrows `/verify`·`/run`'s drive-the-real-app method (asks "is it smooth + what's missing", not "is it correct"). *(built; ADR-033, supersedes ADR-020)*
 - **project** — render the current plan:
   - `align` — read `thoughts/` + real state → decide now/next/later *with the user* → write `plan.md` (agent) + regenerate `overview.html` (human). The pre-build mirror of `/nav:sync`'s codebase map. *(built)*
 - **reconcile** — keep the archive honest:
@@ -74,4 +74,4 @@ Three skills need to *see* the running thing — `mockup` (render the artifact),
 
 ## Status
 
-Six skills built (`mockup`, `elicit`, `rehearse`, `align`, `reconcile`, `build`); `doctor` (orchestrator) deferred until the family proves out. `elicit`'s behavioral spec comes from `docs/observations/2026-05-29-thought-mode-how-paul-converges.md`; `build` + the browser-verify slot land in ADR-011. History: `docs/observations/2026-05-29-shape-plugin.md`.
+Six skills built (`mockup`, `elicit`, `dogfood`, `align`, `reconcile`, `build`); `doctor` (orchestrator) deferred until the family proves out. `elicit`'s behavioral spec comes from `docs/observations/2026-05-29-thought-mode-how-paul-converges.md`; `build` + the browser-verify slot land in ADR-011. History: `docs/observations/2026-05-29-shape-plugin.md`.

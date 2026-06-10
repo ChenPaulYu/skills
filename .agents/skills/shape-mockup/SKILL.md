@@ -36,7 +36,7 @@ Everything below **derives** from the core — when in doubt, trace back:
 - **Yes → this skill.** Including structural / data / flow decisions — an interactive diagram settles "how do these entities relate", "how should this agent branch", "what's the pipeline shape".
 - **No → verbal clarification (a grounded fork).** Only pure definitional / ontology questions where no render would help — "what *is* a moment". Don't force a render where none clarifies.
 
-**Sibling — `shape-rehearse`:** when the question is "does this feature's *usage* hold together" (walk the intents/scenarios, find where the logic has no answer), that's rehearse, not mockup. rehearse **reuses this skill's render path** (same interactive HTML, same `mockups/`) but its front is a usage-coverage walk, not a generate-look/structure-candidates step. mockup decides *look / structure*; rehearse walks *logic-coverage*. They pair: mockup the flow, then rehearse it.
+**Sibling — `shape-dogfood`:** when the question is "this *built* feature feels unsmooth — what's wrong" (dogfood the real interface, report the friction + the coverage gaps that fall out), that's dogfood, not mockup. mockup renders a *synthetic candidate* to decide look/structure *before* building; dogfood drives the *already-built* thing to critique its experience. They pair **across time**: mockup the flow → build it → dogfood the result — and dogfood hands a redesign-level finding *back* to mockup to render the new shape. mockup decides *look / structure*; dogfood critiques *the built experience*.
 
 ## Default protocol — light (the norm)
 
