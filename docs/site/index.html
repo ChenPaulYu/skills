@@ -19,7 +19,10 @@
       gaps; evidence-rich report, borrows /verify·/run, ADR-033), align (decide next + render the
       plan), reconcile (amend stale facts / prune stale notes; decision-change →
       /shape:elicit), build (drive In-progress to done; meta-skill). shape v0.3.0;
-      doctor (orchestrator) deferred. blueprints/ = artifact convention (not a
+      doctor (orchestrator) deferred; position (converge a product's canon from
+      many feedings across days) a planned candidate, raw — full design in
+      docs/observations/2026-06-10-position-verb-canon-campaign.md, crystallize per
+      ADR-018. blueprints/ = artifact convention (not a
       skill); identity = forward motion: intent → form → built+verified code
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • research skills: dissect (argument anatomy — single or batch; dispatches a
@@ -45,7 +48,19 @@
       YAML-safe and within Codex's length limit; scripts/validate-codex-skills.mjs
       gates both Claude Code source frontmatter and Codex mirror drift.
 
-  ⚠ FIXED in this revision (rev 35)
+  ⚠ FIXED in this revision (rev 36)
+    1. shape: `position` registered as a planned candidate verb (raw, not built) —
+       a converge verb that lands a product's CANON from many heterogeneous
+       feedings across days (vs elicit = one concept, mockup = one render). Three
+       kernels: ingest-assess (every feeding → a delta report — new / metabolized /
+       conflict / needs-ruling — with guarding: conflicts block), altitude test
+       (axiom / principle / approach / bet; catches conversation-sediment lists),
+       two-tier landing (core/ confirmed canon + thoughts/ dated hypotheses). NOT
+       built — full design in docs/observations/2026-06-10-position-verb-canon-
+       campaign.md; crystallize per ADR-018's evidence gate (one campaign so far).
+       shape/CLAUDE.md candidate note + this site (header + shape node).
+
+  ⚠ FIXED in rev 35 (kept for history)
     1. NEW PLUGIN `think` (ADR-034) — reason about a problem through a named
        reasoning lens that forces a structure the default "think harder" skips.
        First skill `first-principles`: name the conventional answer + inherited
@@ -972,7 +987,7 @@ const DOMAINS = {
 
 const CB_NODES = [
   {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
-  {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor deferred. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor 待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
+  {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor + position (converge product canon) planned. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor、position(收斂產品 canon)待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.4.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.4.0。'}},
   {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way. v0.1.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape。v0.1.0。'}},
 ];
