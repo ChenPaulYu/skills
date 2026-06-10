@@ -1,6 +1,6 @@
 ---
 date: 2026-06-10
-status: raw — design converged with Paul, build pending ("我們再接著做")
+status: crystallized → plugins/shape/skills/setup (ADR-036, same day)
 ---
 
 # `shape:setup` — archetype-driven project scaffolding with a three-layer knowledge base
@@ -43,7 +43,7 @@ references/archetypes/<name>.md  屬性檔:組合與黏合 + 坑(fullstack-web �
 2. **Gotchas, all hit live (→ fullstack-web.md):** pnpm 11 blocks postinstall → `pnpm-workspace.yaml: allowBuilds: esbuild` · pytest can't import `app` → `pythonpath=["."]` · vite proxy target literal `127.0.0.1` (Node tries ::1 first → ECONNREFUSED/500) · tsconfig include must exclude vite.config.ts (else @types/node) · audiorective: `useValue(engine.core.state)` needs a pure-read computed wrap (SignalAccessor's write overload resolves T to void).
 3. **Verification chain (archetype-parameterized)** — the structure default "scaffold and declare done" skips: fullstack-web = `uv sync && pytest` → `pnpm typecheck/build/lint/test` → `./dev.sh` for real → `curl /api/health` direct AND via vite proxy → browser click-test + screenshot → teardown ports. The proxy curl + browser click are the two steps unit-green misses. CLI = `--help` + smoke command; lib = tests + build.
 
-## Build list (when we proceed)
+## Build list — ✅ built (same day, ADR-036)
 
 `plugins/shape/skills/setup/SKILL.md`(中立引擎)+ `references/stack-principles.md` + `references/archetypes/fullstack-web.md`(蒸餾自 trackmate+crate)+ ADR-036(setup verb:三層設計、no-init razor 的區辨、晉升迴圈)+ shape CLAUDE.md/manifests/site rev。First field run = Traversa.
 
