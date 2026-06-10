@@ -67,6 +67,7 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
 - **Detail / component-level** → **retire on ship.** Once the real thing ships, the **running system is the ground truth**; the artifact's job is done. Keeping it as a "north star the system must match" inverts reality → drift / lie.
 - **Structural / high-level** → may persist, **but must carry a freshness / supersession stamp**: "intent as of `<date>`, shipped `<ref>`, details defer to the real system." Without the stamp it's a lie.
 - **It can't auto-regenerate from source** (unlike a generated codebase map) → discipline is **retire + stamp, never silent refresh.** Most discard; a permanent lock is a rare exception.
+- **Enforcement point: `/shape:reconcile` (ADR-037).** At mockup time nothing is shipped yet, so retirement/stamping can't execute here — reconcile's `mockups/` sweep does it post-ship: pre-conditions (decision settled · pick + deferred branches verifiably recorded in the owning doc · inbound links resolved) → prune, with git as the deep archive; parked decisions keep their mockup with a parked stamp. This skill *states* the rule; reconcile *executes* it.
 
 ## Storage & format
 
@@ -74,6 +75,7 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
 - **Format:** a **single self-contained interactive HTML file** (the non-negotiable) — inline styles + script, deterministic data, no build, no external assets. Screenshots are transient supplements, never the deliverable.
 - **Progressive disclosure (agent-scannable):** open the file with a top `<!-- -->` comment stating **what it is · the candidates rendered · the pick (once decided)**, so an agent grasps the artifact from `head` without parsing the whole DOM. Interface-first applies to the throwaway too — a human points at the rendered thing; an agent reads the header. (Same rule as the blueprints overview template's top comment.)
 - **Only thing that leaves the throwaway zone:** a promoted visual-lock (rare) — committed or referenced from the project's CLAUDE.md, always stamped. Everything else is discarded.
+- **Lifecycle end:** committed folders don't accumulate forever — `/shape:reconcile` sweeps `mockups/` as its third tier (ADR-037), retiring a folder once its decision ships and the pick (+ any deferred branch) is verified recorded in the owning doc. Prune is recoverable (`git log --follow`); record the pick in the doc at step 5 so the sweep finds it absorbed, not orphaned.
 
 ## Grounded-replica discipline (what makes an artifact trustworthy)
 
