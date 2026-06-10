@@ -34,6 +34,7 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/shape:elicit` — converge a conceptual decision by a grounded grill — or root-cause a logic flaw (diagnostic mode)
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
+- `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
 - `/shape:align` — decide now/next/later *with you* → a `blueprints/` status board (`plan.md` + bilingual `overview.html`)
 - `/shape:reconcile` — keep the blueprints honest — amend stale facts, prune/consolidate stale `thoughts/` + `plans/`
 - `/shape:build` — drive the plan's In-progress column to done, autonomously but confidence-gated (stop below 90%)

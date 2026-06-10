@@ -1,9 +1,11 @@
 ---
 date: 2026-06-10
-status: raw
+status: crystallized → plugins/shape/skills/position (ADR-035, same day)
 ---
 
 # `position` — a shape verb for converging product canon from multi-source feedings (full design, pending crystallization)
+
+> **Crystallized 2026-06-10** with a user reframe: position = the skill for **writing core (principle-wise) documents** of any subject — the invariant is the artifact class (user-ratified · principle-altitude · self-contained), not the topic "product positioning". See ADR-035 + the SKILL.md; this note keeps the founding design + field validation.
 
 > Source: TrackMate positioning campaign (trackmate repo, 2026-06-10). One long session went from "what is TrackMate" through four paradigm shifts (Artifact Feed → chat-first → workbench → Cursor-frame), an authority surgery (three core docs demoted to thoughts), a first-principles re-layering (`/shape:elicit` + `/shape:mockup`), and landed `docs/core/positioning.md` as a single-root principle tree. The session exposed a repeatable engine no existing verb owns. Design converged with Paul; **agreed to crystallize as `shape:position` later** — this note holds the full design so nothing is lost to the context window.
 
@@ -73,8 +75,16 @@ The campaign closes when the open-questions list is the only thing still moving.
 - ADR-034: the verb's birth — graduation model + the position/reconcile mirror boundary.
 - First eval case: the TrackMate session transcript (a complete worked example incl. the failure).
 
+## Field validation(2026-06-10 afternoon — the engine ran for real, same day)
+
+- **Graduation executed (first live case):** `thoughts/ui-positioning.md` → `core/design.md` after the user ratified five visual picks — the freeze test (explicit user sign-off) worked as designed; the thought got a graduated stamp, the canon got a self-containment clause.
+- **Altitude audit re-fired on a second doc:** design.md had accreted all day; the same 原則/作法/賭注 test (UI flavor: "survives a UI redesign = core; would be redrawn = form → thought") split it cleanly, plus the user supplied a weighting the engine should respect (「style 和 layout 最重要,其他都還好」— canon's center of gravity is the *user's*, not the taxonomy's).
+- **New kernel detail:** canon docs accrete *during* the campaign, not just at feedings — the engine needs a **periodic altitude re-audit** of its own canon (a pre-code reconcile-ish maintenance pass), not a single landing-time check.
+- **Rename ripple:** canon file renamed (positioning→position) to match the verb — cross-reference updates touched 7 files; the skill should own reference-integrity on canon renames.
+
 ## Related
 
 - `2026-06-02-first-principles-positioning-check.md` — adjacent but distinct: that's a single *level-claim check* move (research positioning); this is the whole product-canon campaign engine. The level-check could become one instrument inside position's ingest-assess.
 - `2026-05-29-thought-mode-how-paul-converges.md` — the volley pattern position's feedings follow.
 - `2026-06-03-reconcile-needs-graduate-and-a-decisions-tier.md` — the other half of the mirror boundary.
+- `2026-06-10-churn-is-an-altitude-alarm.md` · `2026-06-10-first-principles-as-post-design-self-audit.md` — two instruments discovered while the engine ran.
