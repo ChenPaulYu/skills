@@ -80,19 +80,21 @@ The cross-decision-contradiction check is genuinely new: two decisions converged
 
 `mockup`'s own rule — detail-level artifacts **retire on ship**, structural locks carry a freshness stamp — has its enforcement point *here*: at mockup time nothing is shipped yet, and no other verb returns to `mockups/` post-ship. Without this sweep, `mockups/` grows monotonically (committed-by-default makes every decision leave a folder nothing deletes) — the same bug graduate fixed for `thoughts/`, one tier down.
 
-**A mockup has no lifecycle of its own — its currency is inherited from the decision it served.** Three ordered pre-conditions, then the verdict:
+**A mockup exists to represent what the running system cannot yet represent; once code absorbs it, representation transfers and it exits** (ADR-039). One question per folder: *"does this still represent something the code doesn't have?"* Three ordered pre-conditions, then the verdict:
 
 1. **Decision settled/shipped?** Same evidence as thoughts: code grep, `head -12` headers. ("No one cites it" alone never triggers prune — an uncited mockup for an in-flight decision is kept.)
 2. **Residue absorbed?** The pick **and any deferred branch** must be *verifiably* recorded in the owning thought / `decisions.md` — verified by reading, not assumed (mockup's step 5 should have written it; confirm it did). This is a judgment check, not a grep — present per collect-don't-conclude, mark `uncertain` rather than guess.
 3. **Inbound links resolved?** Grep `blueprints/` for citations into the folder — this one *is* mechanical; list the hits as evidence.
 
+**Default direction:** a folder failing all keep-clauses gets prune as the *default proposal* (the per-file gate stands — propose, don't presume). The razor exists so a sweep is one gated round, not three (ADR-039).
+
 | situation | action |
 |---|---|
 | ①②③ all pass | **prune** — git is the deep archive; `git log --follow -- <path>` + `git checkout <sha> -- <path>` restores it |
 | ② fails — the pick or a deferred branch lives only in the mockup | **salvage → then prune**: write the line into the owning doc, incl. a pointer (`rendered candidates: git history at mockups/<date>-<topic>/`), verify it landed, then prune — consolidate's merge → verify → remove, pointed at a mockup |
-| whole decision parked (plan's *later*) | **keep + parked stamp** ("parked, intent as of `<date>`") — the converge job is dormant, not done; re-rendering on un-park is waste |
-| ③ hits a load-bearing citation (a ratified sample serving as visual spec) | **keep + freshness stamp** (amend) — it's a structural visual-lock; re-check each sweep like a `decisions.md` section: "still operative, or is the running system the ground truth now?" |
-| decision in-flight | **keep**, untouched |
+| whole decision parked (plan's *later*) | **keep + parked stamp** ("parked, intent as of `<date>`") — the converge job is dormant, not done; re-rendering on un-park is waste (= code won't absorb it for now — the deferred intent still needs a representative) |
+| **canon-pinned** — cited from the project's CORE/canon docs (the part code can *never* absorb, e.g. texture sampling) | **keep + freshness stamp** (amend) — ONLY canon can pin: citations from sibling blueprints docs (thoughts/plans) are re-pointable (salvage → a `git log --follow` pointer) and never block retirement. Re-check each sweep like a `decisions.md` section: "still operative, or is the running system the ground truth now?" |
+| decision in-flight | **keep**, untouched (= code hasn't absorbed it yet) |
 | folder untracked | **hard gate** — resolve tracked status before any other action; untracked never entered git, so prune would be permanent destruction |
 
 **Tracked-check discipline:** ask git's ledger, not the disk — `git ls-files`, never `ls`. The depth-unanchored `mockups/` gitignore trap means a folder can sit on disk looking committed while git never held it (field case: 65 untracked mockup folders in one repo).
