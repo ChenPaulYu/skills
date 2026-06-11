@@ -1,0 +1,9 @@
+{
+  "name": "research",
+  "version": "0.4.0",
+  "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of sources relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), or critique a paper adversarially into a referee report (claim↔evidence audit + self-attack). Works on academic papers, technical writeups, competitor analyses, design proposals.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  }
+}

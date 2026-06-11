@@ -1,0 +1,9 @@
+{
+  "name": "think",
+  "version": "0.1.0",
+  "description": "Reason about a problem through a named reasoning lens that forces a structured analysis the default 'think harder' won't produce. First skill: first-principles (strip a question to its irreducible axioms, rebuild the answer from them alone, surface where that diverges from convention). invert (negate the goal → failure modes) and second-order (trace consequences forward) are the seed family, promoted per evidence. Each lens has a fixed output shape and feeds one-way into shape (an insight → a thought / mockup / plan). Standalone — no nav/shape dependency.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  }
+}

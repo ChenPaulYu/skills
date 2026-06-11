@@ -1,7 +1,7 @@
 # skills
 
-> Paul's personal Claude marketplace.
-> A growing collection of focused, single-purpose Claude plugins.
+> Paul's personal agent-skills marketplace.
+> A growing collection of focused, single-purpose plugins — one source tree, installable in **Claude Code**, **Antigravity CLI (`agy`)**, **Codex**, **opencode**, and **Cursor**.
 
 ## What's in here
 
@@ -52,7 +52,13 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
 ## Install
 
-In Claude Code:
+One source tree, two channels, five agents: **Claude Code** and **Antigravity CLI (`agy`)** import the plugins natively (namespace preserved — `/nav:audit`); **Codex**, **opencode**, and **Cursor** auto-discover the generated flat mirror `.agents/skills/` (flat names — `nav-audit`; see [Codex compatibility](#codex-compatibility)). The plugins under `plugins/` are the single source of truth everywhere.
+
+Shortcut for any harness — tell your agent:
+
+> Fetch and follow instructions from `https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md`
+
+Or by hand. In Claude Code:
 
 ```bash
 /plugin marketplace add ChenPaulYu/skills
@@ -63,6 +69,59 @@ In Claude Code:
 ```
 
 That's it — the `/nav:*`, `/shape:*`, `/research:*`, and `/think:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research` and `think` are independent — install alone or with the others.)
+
+### Antigravity CLI (`agy`)
+
+Antigravity CLI natively imports Claude Code plugins — same `SKILL.md` format, same `/<plugin>:<skill>` namespace, **no conversion needed**. Two ways to wire this repo up:
+
+**Global install (recommended).** Clone the repo, then import each plugin directory:
+
+```bash
+git clone https://github.com/ChenPaulYu/skills.git && cd skills
+agy plugin install plugins/nav
+agy plugin install plugins/shape
+agy plugin install plugins/research
+agy plugin install plugins/think
+```
+
+Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:build`, …).
+
+**Project-level auto-detection.** `agy` also reads `.agents/skills/` in the project you open it from — the same flat, generated mirror Codex uses (see [Codex compatibility](#codex-compatibility) below). Inside this repo that mirror is already committed, so opening `agy` here loads all skills under their flat names (`nav-audit`, `shape-build`, …) with no install step. To reuse them in another project, copy the skill dirs you want into that project's `.agents/skills/`.
+
+Prefer the global install: it keeps the namespace, tracks the plugin source, and doesn't depend on the generated mirror.
+
+### Codex · opencode · Cursor (flat mirror)
+
+All three auto-discover `.agents/skills/` — so **inside a clone of this repo there is nothing to install**; the committed mirror loads automatically. For global use (all projects), copy the mirror into `~/.agents/skills/`:
+
+```bash
+git clone https://github.com/ChenPaulYu/skills.git && cd skills
+mkdir -p ~/.agents/skills && cp -r .agents/skills/* ~/.agents/skills/
+```
+
+Skills surface under flat names (`nav-audit`, `shape-build`, …). Verify per agent: Codex — `/skills`; opencode — `opencode debug skill`; Cursor — type `/` in Agent chat and search `nav-audit`. (Note: agy's global install above already materializes the same skills into `~/.agents/skills/`, so if you ran it, opencode and Cursor are covered.)
+
+Cursor alternative — native plugin form: each plugin also carries a `.cursor-plugin/plugin.json` (Cursor's plugin layout matches Claude Code's, so the same directory serves both), which makes a cloned plugin installable as a local Cursor plugin:
+
+```bash
+ln -s "$(pwd)/plugins/nav" ~/.cursor/plugins/local/nav   # repeat per plugin; restart Cursor
+```
+
+Cursor's `/add-plugin` marketplace is a separate, review-gated publishing channel — not needed for any of this.
+
+### npx (skills.sh CLI)
+
+The [skills.sh](https://skills.sh/) CLI wraps the same clone-and-copy in an npm-like UX, and tracks installs in a `skills-lock.json` so `npx skills update` can refresh them later:
+
+```bash
+# Interactive — pick skills and target agents from a list:
+npx skills add ChenPaulYu/skills
+
+# Non-interactive — values are space-separated; '*' selects all:
+npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
+```
+
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 36 entries — the same 18 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 
@@ -87,7 +146,7 @@ node scripts/validate-codex-skills.mjs
 
 The validator checks both sides of the contract: Claude Code source skills under `plugins/` must have valid YAML frontmatter, and the Codex mirror under `.agents/skills/` must be regenerated, YAML-safe, and within Codex's metadata limit.
 
-Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill, regenerate, and validate.
+Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. The same mirror serves **opencode** and **Cursor**, which scan the identical project + global directories — one generated mirror, three consumers. Antigravity CLI (`agy`) reads the same directory in project-level mode — though for `agy` the [global plugin install](#antigravity-cli-agy) above is preferred, since it keeps the plugin namespace. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill, regenerate, and validate.
 
 ## Philosophy (the through-line)
 
