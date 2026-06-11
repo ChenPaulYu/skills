@@ -25,11 +25,11 @@ For each doc, gather evidence from three angles; none alone is decisive — pres
 2. **Self-declaration.** Does the doc's own top say shipped / completed / superseded?
 3. **Date.** Older docs are likelier stale — a *prior*, not a verdict.
 
-Combine into a per-doc verdict: **current** · **current · N stale fact(s)** (→ amend) · **likely stale** (→ prune) · **superseded by `<other>`** (→ consolidate) · **shipped · holds durable residue** (→ graduate) · **uncertain**. Honesty over tidiness — mark `uncertain` rather than guessing.
+Combine into a per-doc verdict: **current** · **current · N stale fact(s)** (→ amend) · **likely stale** (→ prune) · **superseded by `<other>`** (→ consolidate) · **shipped · holds durable residue** (→ graduate) · **canon-grade** (settled + axiom/principle altitude → recommend `/shape:position` graduation — see routing below) · **uncertain**. Honesty over tidiness — mark `uncertain` rather than guessing.
 
 ## Protocol
 
-**Step 1 — Inventory.** Locate `blueprints/` (commonly `docs/blueprints/`). List **`thoughts/*.md`, `plans/*.md`, and `mockups/*/`** — reconcile maintains all three layers (`thoughts/` = converged decisions; `plans/` = `nav:plan`'s grounded code-plans; `mockups/` = the decision artifacts, swept by inherited currency — see the mockups tier below). Detect the stack so Step 2's grep uses the right syntax. **Plans drift too, and check sharper**: a plan carries explicit steps + a Verification table, so grep each step's Critical-files against the code — all shipped → prune; *some* shipped → amend (mark which landed). Same verdicts, gates, and fact-vs-decision boundary as thoughts.
+**Step 1 — Inventory.** Locate `blueprints/` (commonly `docs/blueprints/`). List **`thoughts/*.md`, `plans/*.md`, and `mockups/*/`** — plus, when the project has a `docs/core/` canon layer, the **pending-amendments ledger `docs/core/amendments.md`** (ADR-041; see the ledger row below) — reconcile maintains all three layers (`thoughts/` = converged decisions; `plans/` = `nav:plan`'s grounded code-plans; `mockups/` = the decision artifacts, swept by inherited currency — see the mockups tier below). Detect the stack so Step 2's grep uses the right syntax. **Plans drift too, and check sharper**: a plan carries explicit steps + a Verification table, so grep each step's Critical-files against the code — all shipped → prune; *some* shipped → amend (mark which landed). Same verdicts, gates, and fact-vs-decision boundary as thoughts.
 
 **Step 2 — Gather evidence (read-only).** Per doc, collect the three signals. Grep code, read each doc's top, note dates. **Touch nothing yet.**
 
@@ -66,13 +66,16 @@ The gap: a thought **fully shipped** but still carrying durable *rationale* — 
 
 **Keep `decisions.md` clean — fold-forward + prune, never a status-flagged graveyard.** Every section is *currently operative*. When a later decision reverses one: has a successor → fold the tombstone forward (`Supersedes: X — because Z`) then drop the stale section; abandoned → write a live `Rejected: X — because Z` then drop it. The anti-re-litigation guard lives in a *live* section; **git is the deep archive**. This is reconcile's **consolidate** (merge → verify → remove) pointed at a section. (Deliberately diverges from this repo's own `docs/adr/`, which keeps superseded ADRs with a `Status` flag — meta-history is low-volume; an operational `decisions.md` stays clean. Naming follows: living-per-topic → feature-section; immutable append-log → date+number.)
 
-**Three-tier currency sweep:**
+**Currency sweep (three blueprints tiers + the canon ledger):**
 
 | tier | predicate | action |
 |---|---|---|
 | `thoughts/` | "implemented + settled yet?" | graduate / prune / amend / keep |
 | `decisions.md` | "still operative, or superseded?" + "do any two live sections contradict?" | fold-forward + drop the stale section (never delete the *guard*) |
 | `mockups/` | "is the decision it served settled, and its residue absorbed?" | retire (salvage → prune) / stamp / keep — see the mockups tier below (ADR-037) |
+| `docs/core/amendments.md` | "absorbed by a position summon, or reversed by later reality?" | prune the entry / amend / keep — **never write core itself** (the door, ADR-041); this sweep is the ledger's exit, so it doesn't become the fourth grow-only layer (ADR-026/017/037 lineage) |
+
+**Routing between the two durable layers (ADR-041).** `blueprints/decisions.md` (this skill's) and `docs/core/` (position's) are both durable; route by altitude: **approach / bet / feature-why → `decisions.md`** — graduate here as below; **settled axiom / principle (defines what the thing IS) → core** — the verdict is **canon-grade**: *recommend* `/shape:position` graduation and stop, exactly like the decision-change → `/shape:elicit` hand-off. reconcile never writes core — without this reminder, a canon-grade thought's best sweep outcome is demotion into decisions.md.
 
 The cross-decision-contradiction check is genuinely new: two decisions converged in separate `elicit` sessions can quietly conflict, which per-doc currency won't catch — a single curated file makes it visible. Detection is **push-primary** (a reversing decision declares `Supersedes: X` at birth in elicit) + **pull-safety-net** (this sweep). Marking a superseded section is fact-sync (the reversal already happened) — inside the amend boundary. The **human view of `decisions.md` is a `🧭 Decisions` layer in `overview.html`**, rendered by `/shape:align` — reconcile maintains `decisions.md`, align projects it. *Not a consensus skill* — "confirming consensus" is a property of the converge verbs, maintained by this sweep, not a verb (ADR-026).
 
