@@ -80,6 +80,41 @@ function validateClaudeSources(pluginSkills) {
         );
       }
     }
+    validateLinks(item.skillMd);
+  }
+}
+
+function validateLinks(file) {
+  const content = readFileSync(file, "utf8");
+  const linkRegex = /\[([^\]]*?)\]\(([^)]+?)\)/g;
+  let match;
+  const fileDir = dirname(file);
+
+  while ((match = linkRegex.exec(content)) !== null) {
+    const link = match[2].trim();
+    if (/^[a-z]+:\/\//i.test(link) && !link.startsWith("file:///")) continue;
+
+    if (link.startsWith("./") || link.startsWith("../")) {
+      errors.push(
+        `${rel(file)}: Link "${link}" violates skills-root-relative paths rule (uses ./ or ../)`,
+      );
+      continue;
+    }
+
+    let targetPath = link.replace(/^file:\/\/\//, ""); // strip file:/// if present
+    targetPath = targetPath.split("#")[0];
+    if (!targetPath) continue;
+
+    // Determine if it is a root-relative link or skill-local relative link
+    const isRootRelative =
+      targetPath.startsWith("plugins/") ||
+      targetPath.startsWith("docs/") ||
+      targetPath.startsWith("scripts/");
+    const fullPath = isRootRelative ? join(ROOT, targetPath) : join(fileDir, targetPath);
+
+    if (!existsSync(fullPath)) {
+      errors.push(`${rel(file)}: Broken link "${link}" -> "${targetPath}" does not exist`);
+    }
   }
 }
 

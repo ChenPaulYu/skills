@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-12 (rev 48)
+  Last audit: 2026-06-12 (rev 49)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -64,7 +64,12 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 48)
+  ⚠ FIXED in this revision (rev 49)
+    1. validator: added skills-root-relative path and broken file link validation
+       check for markdown links in all SKILL.md files to prevent broken internal links
+       or violations of the root-relative path rule.
+
+  ⚠ FIXED in rev 48 (kept for history)
     1. codex: added `--sync-global` flag to build-codex.mjs to automate copying
        and updating of local skill files to global ~/.agents/skills/ directory.
        This supports both prefixed and un-prefixed global skills.
