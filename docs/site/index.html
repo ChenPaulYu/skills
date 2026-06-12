@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-12 (rev 45)
+  Last audit: 2026-06-12 (rev 46)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -64,7 +64,14 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 45)
+  ⚠ FIXED in this revision (rev 46)
+    1. metadata: shortened descriptions of 11 plugin skills (audit, do, critique,
+       dissect, untangle, build, dogfood, elicit, position, setup, first-principles)
+       to be strictly under 1000 characters. This resolves Codex load validation
+       errors when skills are installed globally or run flat, keeping compatibility
+       with Codex's metadata constraints.
+
+  ⚠ FIXED in rev 45 (kept for history)
     1. research: new fourth skill `provenance` (ADR-042) — the SELF-AUDIT verb:
        trace every load-bearing citation in the USER'S OWN documents back to a
        verified source; scan → trace → classify (first-hand verified /
