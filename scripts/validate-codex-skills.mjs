@@ -70,9 +70,15 @@ function validateClaudeSources(pluginSkills) {
     }
     if (!description) {
       errors.push(`${rel(item.skillMd)} is missing a description`);
-    }
-    if (isYamlUnsafePlainScalar(description.raw)) {
-      errors.push(`${rel(item.skillMd)} description is not YAML-safe; quote it or remove plain ": "`);
+    } else {
+      if (isYamlUnsafePlainScalar(description.raw)) {
+        errors.push(`${rel(item.skillMd)} description is not YAML-safe; quote it or remove plain ": "`);
+      }
+      if (description.value.length > CODEX_DESCRIPTION_LIMIT) {
+        errors.push(
+          `${rel(item.skillMd)} description is ${description.value.length} chars, over limit of ${CODEX_DESCRIPTION_LIMIT} (breaks compatibility when installed globally via agy)`,
+        );
+      }
     }
   }
 }

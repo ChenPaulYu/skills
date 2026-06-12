@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-12 (rev 46)
+  Last audit: 2026-06-12 (rev 47)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -64,7 +64,13 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 46)
+  ⚠ FIXED in this revision (rev 47)
+    1. validator: added description length limit check to Claude Code source
+       skills validation in validate-codex-skills.mjs. This ensures any future
+       source skill description exceeding 1024 characters is caught during local
+       validation.
+
+  ⚠ FIXED in rev 46 (kept for history)
     1. metadata: shortened descriptions of 11 plugin skills (audit, do, critique,
        dissect, untangle, build, dogfood, elicit, position, setup, first-principles)
        to be strictly under 1000 characters. This resolves Codex load validation
