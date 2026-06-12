@@ -128,3 +128,9 @@ A pick has two natural next steps, and the offer should name **both** (ADR-028) 
 - A visual-lock only as a rare, stamped exception (structural-level).
 - (Escalation, rare) multiple files + a decision note.
 - (When the pick settles something actionable) a guarded, one-shot **offer** of the next step — **track it** (`/shape:align`) and/or **build it** (`/nav:do` small · `/nav:plan` bigger · `/shape:build` multi-item, ADR-028) — never an auto-call.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

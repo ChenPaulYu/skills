@@ -100,3 +100,9 @@ This is the most concentrated point of shape↔nav communication — build *cont
 - **`/nav:plan`** — grounds each item into a code-level plan (build's step 1).
 - **`/nav:refactor`** — the implementation discipline build applies (verbatim move + test gates).
 - **`/nav:sync`** — cheap header grounding for the inject step.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

@@ -207,3 +207,9 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 - **`nav-audit`** — Mode 2 is the read-only quick check (gap analysis, stop). This skill (`plan`) is the full workflow. Run audit alone when you just want to know "can this be done"; run plan when you've decided to do it.
 - **`nav-refactor`** — typical next step from a plan that includes structural moves. The plan's `Approach` section often lists `nav-refactor` invocations.
 - **`shape-mockup`** *(sibling family)* — the one cross-family edge: when Stage 2 hits visual/interaction ambiguity, the clarification is a render, not a question — hand off to `shape-mockup` and fold the picked design back into the plan. `nav` keeps existing code navigable; `shape` gives intent its form before building. They meet here.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

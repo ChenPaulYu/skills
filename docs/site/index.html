@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-11 (rev 44)
+  Last audit: 2026-06-12 (rev 45)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -11,7 +11,7 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Four plugins: nav (6 skills) + shape (8 skills) + research (3 skills) +
+    • Four plugins: nav (6 skills) + shape (8 skills) + research (4 skills) +
       think (1 skill) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
@@ -34,11 +34,15 @@
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
     • research skills: dissect (argument anatomy — single or batch; dispatches a
       sub-agent per document to read in full, inject → read → check per ADR-008;
-      one note per document), untangle (relational structure across N sources —
+      one note per document; forensic mode audits cited-as vs actually-says +
+      identity-from-content), untangle (relational structure across N sources —
       lineage / clusters / contradictions / contested ground; optional claim-framed
       positioning; ADR-031, renamed+reframed from map), critique (adversarial
       referee report on one paper — claim↔evidence audit + self-attack; consumes
-      dissect; ADR-030). research v0.4.0; standalone (no nav/shape dependency).
+      dissect; ADR-030), provenance (self-audit of YOUR documents' citations —
+      scan → trace → classify first-hand/second-hand/orphan → quarantine list;
+      critique's mirror; dispatches forensic dissects as repair arm; ADR-042).
+      research v0.5.0; standalone (no nav/shape dependency).
       feedback as candidate skill (ADR-027).
     • think skills: first-principles (strip a question to its irreducible axioms,
       rebuild from them, surface where that diverges from convention — forced
@@ -46,9 +50,9 @@
       as the seed family. think v0.1.0; standalone, feeds shape one-way (ADR-034).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 41 ADRs in docs/adr/ — 001..041 with cross-supersede / refine links
+    • 42 ADRs in docs/adr/ — 001..042 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (18 flat skills: nav-* / research-* /
+    • Codex mirror: .agents/skills/ (19 flat skills: nav-* / research-* /
       shape-* / think-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
@@ -60,7 +64,35 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 44)
+  ⚠ FIXED in this revision (rev 45)
+    1. research: new fourth skill `provenance` (ADR-042) — the SELF-AUDIT verb:
+       trace every load-bearing citation in the USER'S OWN documents back to a
+       verified source; scan → trace → classify (first-hand verified /
+       second-hand / orphan) → quarantine list (read-or-demote). Critique's
+       mirror: critique audits their claims vs their evidence; provenance
+       audits your citations vs your sources. Born from a field incident
+       (docs/observations/2026-06-12-unread-citations-become-load-bearing.md):
+       a web-survey number promoted to "direct evidence for the thesis" with
+       no PDF ever read — and the shelf PDF assumed to be that paper was a
+       different paper entirely. Key insight: PROMOTION STRIPS PROVENANCE —
+       a second-hand claim looks more trustworthy the higher it climbs.
+    2. research: dissect gains FORENSIC MODE (provenance's repair arm; ships
+       together) — identity-from-content first (never trust the filename) +
+       cited-as vs actually-says audit of the user's existing citations, with
+       verdicts (verified / needs qualification / unsupported) + corrected
+       citable sentence-form. New "Citation verification" output section +
+       two discipline bullets (never-trust-the-filename; headline numbers
+       carry conditions). research 3 → 4 skills; v0.4.0 → 0.5.0; ADR 41 → 42.
+       Updated: provenance SKILL.md (new) + dissect SKILL.md + research
+       CLAUDE.md (spine: provenance = the reflexive corner) + plugin.json +
+       .cursor-plugin + marketplace.json + README (table, command list,
+       picker 36→38) + this site (header + audit block + RES_NODES/RES_EDGES
+       + command card) + codex mirror regenerated (18 → 19 skills).
+    3. drift caught while editing: /research:critique had NO command card in
+       this site's research files list (missed when ADR-030 landed) — added
+       alongside the provenance card.
+
+  ⚠ FIXED in rev 44 (kept for history)
     1. Positioning widened TRI-PLATFORM → FIVE-AGENT, TWO-CHANNEL — native
        plugin import (Claude Code · agy, namespaced /nav:audit) vs the flat
        mirror .agents/skills/ (Codex · opencode · Cursor, flat nav-audit).
@@ -1123,10 +1155,12 @@ const DOMAINS = {
   research: {
     layer: 'foundation',
     path: 'plugins/research/',
-    blurb: {en:'Read external sources with intent. Three skills: dissect (argument anatomy — dispatches a sub-agent per document, inject→read→check, ADR-008) + untangle (relational structure across N sources — lineage / clusters / contradictions / contested ground, optional claim-framed positioning) + critique (adversarial referee report on one paper — claim↔evidence audit + self-attack). Standalone — no nav/shape dependency. Candidate: feedback. v0.4.0; see research/CLAUDE.md + ADR-027/030/031.', zh:'有意圖地閱讀外部資料。三個 skill:dissect(論證解剖 — 每份文件派發 sub-agent 完整讀取,inject→read→check,ADR-008)+ untangle(N 篇來源的關聯結構 — lineage / cluster / contradiction / contested ground,可選 claim 定位)+ critique(對一篇 paper 的對抗式 referee report — claim↔evidence 稽核 + 自我攻擊)。獨立運作,不依賴 nav 或 shape。候選:feedback。v0.4.0;見 research/CLAUDE.md + ADR-027/030/031。'},
+    blurb: {en:"Read external sources with intent. Four skills: dissect (argument anatomy — dispatches a sub-agent per document, inject→read→check, ADR-008; forensic mode audits cited-as vs actually-says) + untangle (relational structure across N sources — lineage / clusters / contradictions / contested ground, optional claim-framed positioning) + critique (adversarial referee report on one paper — claim↔evidence audit + self-attack) + provenance (self-audit of your own documents' citations — first-hand / second-hand / orphan + quarantine list; critique's mirror). Standalone — no nav/shape dependency. Candidate: feedback. v0.5.0; see research/CLAUDE.md + ADR-027/030/031/042.", zh:'有意圖地閱讀外部資料。四個 skill:dissect(論證解剖 — 每份文件派發 sub-agent 完整讀取,inject→read→check,ADR-008;forensic mode 稽核「引用的 vs 原文說的」)+ untangle(N 篇來源的關聯結構 — lineage / cluster / contradiction / contested ground,可選 claim 定位)+ critique(對一篇 paper 的對抗式 referee report — claim↔evidence 稽核 + 自我攻擊)+ provenance(自查你自己文件的引用 — first-hand / second-hand / orphan + 隔離清單;critique 的鏡像)。獨立運作,不依賴 nav 或 shape。候選:feedback。v0.5.0;見 research/CLAUDE.md + ADR-027/030/031/042。'},
     files: [
-      ['/research:dissect', '', {en:'★ Dissect one or more argument-carrying documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008); main agent checks the returned note before saving. Single doc or batch — one note per document. Optional "Implications for your claim" section. Output saved to notes/.', zh:'★ 把一篇或多篇論證型文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008);主 agent 確認後存檔。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。output 存到 notes/。'}],
+      ['/research:dissect', '', {en:'★ Dissect one or more argument-carrying documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008); main agent checks the returned note before saving. Identity confirmed from content, never the filename. Single doc or batch — one note per document. Optional "Implications for your claim" section. Forensic mode (when the doc is already cited in your notes): audits cited-as vs actually-says, returns the corrected citable form. Output saved to notes/.', zh:'★ 把一篇或多篇論證型文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008);主 agent 確認後存檔。身分從內文驗證,絕不信檔名。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。forensic mode(文件已被你的筆記引用時):稽核「引用的 vs 原文說的」,回傳修正後的可引句式。output 存到 notes/。'}],
       ['/research:untangle', '', {en:'★ Untangle how N sources relate — lineage (who builds on whom) / clusters / contradictions / contested ground. Claim is optional: with it, adds positioning (where you sit, the gap, related-work priority). Reuses dissect notes from notes/. Output: one note. ADR-031 (map→untangle rename + relational reframe).', zh:'★ 把 N 篇文獻的關聯理出來 —— lineage(誰建在誰上)/ cluster / contradiction / contested ground。claim 可選:給了就多一層定位(你坐在哪、gap、related-work 優先序)。reuse notes/ 的 dissect 筆記。output:一份 note。ADR-031(map→untangle 改名 + 關係 reframe)。'}],
+      ['/research:critique', '', {en:'★ Adversarially assess one paper into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Consumes dissect; grounds deeper on attack surfaces. The rating stays with the reviewer. Output: analysis note + review draft + cut-log. ADR-030.', zh:'★ 把一篇論文對抗式評估成 referee report —— claim↔evidence 稽核(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。consume dissect;在攻擊面 ground 更深。rating 留給評審本人。output:分析底稿 + review draft + cut-log。ADR-030。'}],
+      ['/research:provenance', '', {en:"★ Audit YOUR OWN documents' citations — trace every load-bearing number / quote / role-claim back to a reading note + source document; classify first-hand verified / second-hand / orphan; emit a quarantine list (read-or-demote). Promotion strips provenance — the sweep catches what intake rules let slip. Repair arm: dissect in forensic mode. Never silently edits the audited docs. ADR-042.", zh:'★ 審計你自己文件裡的引用 —— 每個承重的數字 / 引言 / 角色宣稱逐條回溯到閱讀筆記 + 源文件;分類 first-hand verified / second-hand / orphan;產出隔離清單(補讀或降級)。晉升會洗掉出處 —— intake 規則漏掉的,靠 sweep 抓回來。修理臂:forensic mode 的 dissect。絕不默改被審文件。ADR-042。'}],
     ],
   },
   think: {
@@ -1196,8 +1230,9 @@ const RES_NODES = [
   {id:'dissect', kind:'assess', x:80, y:70, w:130, role:{en:'argument anatomy', zh:'論證解剖'}, desc:{en:'Decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008). Single doc or batch — one note per document. Optional "Implications for your claim" section. Output saved to notes/. For a synthesized landscape, use map.', zh:'把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008)。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。output 存 notes/。要合成全景用 map。'}},
   {id:'untangle', kind:'orchestrator', x:260, y:70, w:120, role:{en:'relational structure', zh:'關係結構'}, desc:{en:'Untangle how N sources relate — the edges: lineage (who builds on whom) / clusters (parallel approaches) / contradictions / contested ground. Claim is optional: with it, overlays positioning (where your claim sits, the gap it fills, a related-work priority order). Reuses dissect notes from notes/. Output: one note. ADR-031.', zh:'把 N 篇文獻的關聯理出來 —— 邊:lineage(誰建在誰上)/ cluster(平行做法)/ contradiction(誰駁誰)/ contested ground(還在爭的)。claim 可選:給了就疊一層定位(你坐在哪、gap、related-work 優先序)。reuse notes/ 的 dissect 筆記。output:一份 note。ADR-031。'}},
   {id:'critique', kind:'assess', x:440, y:70, w:135, role:{en:'adversarial referee', zh:'對抗式評審'}, desc:{en:'Adversarially assess one paper into a referee report: claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log. ADR-030.', zh:'把一篇論文對抗式評估成 referee report:claim↔evidence 審計(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。兩個耦合核心:把攻擊面 ground 到能重算的深度,再反駁。consume dissect;rating 留給評審本人。output:分析底稿 + review draft + cut-log。ADR-030。'}},
+  {id:'provenance', kind:'assess', x:620, y:70, w:140, role:{en:'citation self-audit', zh:'引用自查'}, desc:{en:"Audit YOUR OWN documents' citations — the reflexive corner, critique's mirror. Scan load-bearing numbers / quotes / role-claims → trace each back to a reading note + source document → classify first-hand verified / second-hand / orphan → quarantine list (read-or-demote). Key insight: promotion strips provenance — a second-hand claim looks more trustworthy the higher it climbs. Repair arm: dispatches dissect in forensic mode (cited-as vs actually-says). Never edits the audited docs silently. ADR-042.", zh:'審計你自己文件裡的引用 —— 反身的一角,critique 的鏡像。掃出承重的數字 / 引言 / 角色宣稱 → 逐條回溯到閱讀筆記 + 源文件 → 分類 first-hand verified / second-hand / orphan → 隔離清單(補讀或降級)。核心洞察:晉升會洗掉出處 —— 二手 claim 爬得越高看起來越可信。修理臂:派 forensic mode 的 dissect(引用的 vs 原文說的)。絕不默改被審文件。ADR-042。'}},
 ];
-const RES_EDGES = [['untangle','dissect'],['critique','dissect']];
+const RES_EDGES = [['untangle','dissect'],['critique','dissect'],['provenance','dissect']];
 
 const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},

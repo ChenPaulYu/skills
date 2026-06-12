@@ -104,3 +104,9 @@ align is **pre-build** (intent side). It ends at "decided + recorded in blueprin
 - **`shape-mockup`** — converge a *visual / structural* decision into a disposable interactive artifact (lands in `mockups/`).
 - **`shape-reconcile`** — check `thoughts/` against current reality and clean out what's stale (the cleanup align defers to).
 - **`nav-plan`** — the build-side sibling: ground one blueprint item into a code-level implementation plan.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

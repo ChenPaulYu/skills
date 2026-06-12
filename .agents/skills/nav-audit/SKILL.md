@@ -213,3 +213,9 @@ Stack: <detected stack(s)> · <N> domains · <N> source files (~<N> LOC) · stac
 - A **wide-surface store** (20-member object) is fine *if it's a store*; the wide surface lets gesture hooks take it as one prop and stay narrow (rule ⑤). Stores are a deliberate exception to rule ①.
 - A **single-renderer facade** (one impl behind an `index.ts`) is still valuable — the door is the value, not the count of implementations (rule ②).
 - An **old module imported once** is not dead. "Dead" = zero inbound imports (excluding tests + entry point).
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

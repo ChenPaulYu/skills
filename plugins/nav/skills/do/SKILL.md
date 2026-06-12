@@ -99,3 +99,9 @@ Write the behaviour-changing code, placed per the inject pass. Keep moves and ad
 - **`/nav:audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
 - **`/nav:sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and run **`/nav:map`** if that role change is worth reflecting in the codebase map).
 - **`/shape:elicit` · `/shape:mockup`** — when the change isn't actually decided yet; converge first, then `do`.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

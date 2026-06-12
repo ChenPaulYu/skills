@@ -107,3 +107,9 @@ The session turns "this feels off" into "watch this — archiving is clunky (her
 - **`/nav:plan`** — grounds an incomplete gap or a friction tweak into a code-level plan to finish.
 - **`/shape:build`** — implements the planned paths.
 - **`/shape:align`** — triages a trackable dogfood finding into `plan.md`.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

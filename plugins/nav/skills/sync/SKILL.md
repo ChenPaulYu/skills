@@ -86,3 +86,9 @@ Do NOT commit unless the user asks. If on the default git branch, suggest branch
 - **`/nav:audit`** — read-only health check; its inventory is reused as `sync`'s grounding pass when it ran earlier in the session.
 - **`/nav:refactor`** — execute any structural move the grounding pass surfaces (separate session).
 - **`/shape:reconcile`** — consumes the header artifact `sync` maintains (`head -12` = the cheapest "is this implemented?" signal).
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

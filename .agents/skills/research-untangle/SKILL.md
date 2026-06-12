@@ -126,3 +126,9 @@ One note. Suggest `notes/<topic>-untangled.md` (or `notes/landscape.md`). Read-o
 - **The gap / contested ground must be specific.** "No one studied X" is not contested ground. "Two papers claim opposite results on whether Y causes Z, and neither isolates the confound" is.
 - **Must-differentiate is a threat, surfaced honestly** — a referee will find it whether you name it or not.
 - **Rule ⑦ applies.** Below 90% confidence on an edge (especially a claimed contradiction), flag it: "(uncertain — re-read section X before relying on this)".
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

@@ -92,3 +92,9 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 - **`/shape:mockup`** — render the rebuilt option when it's decided by seeing it.
 - **`/nav:plan`** — ground the rebuilt answer into a code-level plan once settled.
 - **`/think:invert` · `/think:second-order`** *(planned)* — sibling lenses; a different operation on the same problem.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

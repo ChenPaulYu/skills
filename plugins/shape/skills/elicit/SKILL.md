@@ -107,3 +107,9 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 - **`/shape:reconcile`** — retires those `thoughts/` docs once reality absorbs them.
 - **`/nav:sync`** — its file headers + codebase map ground the forks (and trace the flaw) cheaply in the real code.
 - **`/nav:audit`** — the broad, unconditional smell-scan; diagnostic-mode elicit is the *targeted* root-cause of a specific flaw you point at.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

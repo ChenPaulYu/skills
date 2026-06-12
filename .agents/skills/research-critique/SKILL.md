@@ -127,3 +127,9 @@ Plus a **cut-log** (in the analysis note): each dropped criticism + why it did n
 - **Credit honesty; be fair.** Where the authors are transparent about a limitation, say so. Generous-but-rigorous beats hostile.
 - **Framing vs. fabrication.** Distinguish "the claim is over-stated as written" (re-scopable) from "the result is wrong" (fatal). Most fixable weaknesses are the former — say which.
 - **Rule ⑦ applies.** Below 90% confidence on a finding — especially after the self-attack is inconclusive — soften it or move it to a question, do not assert.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

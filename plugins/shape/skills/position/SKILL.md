@@ -116,3 +116,9 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 - **`/think:first-principles`** — the pre-landing self-audit lens (the "conventional answer" may be the canon just written).
 - **`/shape:reconcile`** — the post-code mirror: maintains what position birthed.
 - **`/shape:align` · `/nav:plan`** — downstream consumers of the landed canon and thoughts.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

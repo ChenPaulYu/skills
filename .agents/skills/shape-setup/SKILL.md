@@ -75,3 +75,9 @@ Opinions live in references; the engine never hardcodes a stack. This is also wh
 - **`shape-build`** — picks up after setup: drives the first real plan items onto the verified ground.
 - **`shape-position`** — the canon docs a new product needs (`docs/core/`) are authored by position, not setup; setup only opens the tree.
 - **browser-verify slot** (shape AGENTS.md) — the web verification chain's browser leg uses the same capability contract (default `agent-browser`, close when done).
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

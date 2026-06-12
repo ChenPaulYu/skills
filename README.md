@@ -9,7 +9,7 @@
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, ground a spec into a plan. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
-| [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton, untangle how a set of sources relate, or critique a paper adversarially into a referee report. Locates where your own claim sits relative to prior art. |
+| [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton, untangle how a set of sources relate, critique a paper adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
 | [`think`](plugins/think/) | **Reason about a problem** — apply a named reasoning lens that forces a structure the default "think harder" skips. `first-principles`: strip a question to its axioms, rebuild from them, surface where that diverges from convention. Feeds `shape`. |
 
 `nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world) and **think** (reason about a problem) are independent cognition toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
@@ -45,6 +45,7 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/research:dissect` — dissect any argument-carrying document into Gap / Claim / Mechanism / Evidence / Conclusion; optional "Implications for your claim" section; output saved to `notes/`
 - `/research:untangle` — untangle how N sources relate (lineage / clusters / contradictions / contested ground), with optional claim-framed positioning
 - `/research:critique` — adversarially assess one paper into a referee report (claim↔evidence audit + self-attack)
+- `/research:provenance` — audit your own documents' citations: trace every load-bearing number / quote / claim back to a verified source, classify first-hand / second-hand / orphan, emit a quarantine list; repairs via `dissect`'s forensic mode
 
 **`think` — reason about a problem:**
 
@@ -121,7 +122,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 36 entries — the same 18 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 38 entries — the same 19 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 

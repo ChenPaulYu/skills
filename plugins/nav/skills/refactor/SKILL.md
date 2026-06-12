@@ -178,3 +178,9 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 - **`/nav:do`** — the behaviour-*changing* twin: when the work adds/changes behaviour rather than preserving it (this skill is moves only).
 - **`/nav:audit`** — find what to refactor.
 - **`/nav:map`** — after the refactor lands, regenerate the codebase **map** so it reflects the new shape (the audit block records what changed). (Per-file headers of touched files are already synced in Step 7; for a holistic header sweep across the repo, run **`/nav:sync`**.)
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.
