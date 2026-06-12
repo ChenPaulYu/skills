@@ -182,6 +182,7 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
 - Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
 - Avoid academic jargon and unnecessary verbosity.
 - Keep explanations concise and actionable.
