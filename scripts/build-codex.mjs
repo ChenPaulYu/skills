@@ -193,3 +193,51 @@ function* walk(dir) {
 }
 
 build();
+
+if (process.argv.includes("--sync-global")) {
+  syncGlobal();
+}
+
+function syncGlobal() {
+  const HOME = process.env.HOME || process.env.USERPROFILE;
+  if (!HOME) return;
+  const globalDir = join(HOME, ".agents", "skills");
+  if (!existsSync(globalDir)) {
+    console.log(`\n→ Global directory ~/.agents/skills does not exist. Skipping global sync.`);
+    return;
+  }
+
+  console.log(`\n→ Syncing to global directory: ${globalDir}`);
+  let prefixedCount = 0;
+  let unprefixedCount = 0;
+
+  for (const plugin of PLUGINS) {
+    const skillsDir = join(PLUGINS_DIR, plugin, "skills");
+    if (!existsSync(skillsDir)) continue;
+    for (const skill of readdirSync(skillsDir)) {
+      const srcSkillDir = join(skillsDir, skill);
+      if (!statSync(srcSkillDir).isDirectory()) continue;
+
+      const flat = `${plugin}-${skill}`;
+      const srcSkillMd = join(srcSkillDir, "SKILL.md");
+
+      // 1. Copy prefixed compiled skill (from .agents/skills/ flat mirror)
+      const compiledSkillDir = join(OUT_DIR, flat);
+      const destPrefixedDir = join(globalDir, flat);
+      if (existsSync(compiledSkillDir)) {
+        if (existsSync(destPrefixedDir)) rmSync(destPrefixedDir, { recursive: true });
+        cpSync(compiledSkillDir, destPrefixedDir, { recursive: true });
+        prefixedCount++;
+      }
+
+      // 2. Overwrite un-prefixed skill if it exists globally (from agy install)
+      const destUnprefixedDir = join(globalDir, skill);
+      const destUnprefixedMd = join(destUnprefixedDir, "SKILL.md");
+      if (existsSync(destUnprefixedDir) && existsSync(srcSkillMd)) {
+        cpSync(srcSkillMd, destUnprefixedMd);
+        unprefixedCount++;
+      }
+    }
+  }
+  console.log(`✓ Synced ${prefixedCount} prefixed skills and updated ${unprefixedCount} un-prefixed global skills.`);
+}

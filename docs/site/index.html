@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-12 (rev 47)
+  Last audit: 2026-06-12 (rev 48)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -64,7 +64,12 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 47)
+  ⚠ FIXED in this revision (rev 48)
+    1. codex: added `--sync-global` flag to build-codex.mjs to automate copying
+       and updating of local skill files to global ~/.agents/skills/ directory.
+       This supports both prefixed and un-prefixed global skills.
+
+  ⚠ FIXED in rev 47 (kept for history)
     1. validator: added description length limit check to Claude Code source
        skills validation in validate-codex-skills.mjs. This ensures any future
        source skill description exceeding 1024 characters is caught during local
