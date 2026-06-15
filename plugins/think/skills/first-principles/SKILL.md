@@ -56,7 +56,7 @@ first-principles *reasons*; it does not decide or build. Once the note is up, *o
 **Summoned on a "reason this from the ground up / challenge the assumptions" request** — not auto-fired because a hard question appeared.
 
 - **vs `/shape:elicit` (the line to hold):** elicit draws the answer **out of you** by a grounded grill — *you* hold it, elicit is maieutic (`react-not-author`). first-principles **derives** an answer from the problem's base truths — the agent applies the frame, the answer comes from the axioms, not from your gut. **elicit extracts; first-principles derives.** They pair: run first-principles to get a grounded divergence, then `/shape:elicit` to converge it into a decision *with you*. When the question is really "help me surface what *I* already think", that's elicit, not this.
-- **vs the other think lenses:** first-principles decomposes **down** to axioms and rebuilds **up**; `invert` negates the goal and reasons about failure; `second-order` traces consequences **forward**. Same plugin, different operation.
+- **vs `/think:orthogonal`:** first-principles decomposes **down** to axioms and rebuilds up (depth); `orthogonal` factors **sideways** into mutually-independent axes (separation). The two ways to take a problem apart — reach for `orthogonal` when something feels like one messy thing hiding several independent problems.
 - **vs `/research:dissect`:** dissect anatomizes an *external document's* argument; first-principles reasons about *your problem* from scratch — no source text.
 
 ## Anti-patterns (refuse these)
@@ -91,7 +91,7 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 - **`/shape:elicit`** — converge the divergence into a decision *with the user* (first-principles derives the input; elicit draws out the call). The pairing partner.
 - **`/shape:mockup`** — render the rebuilt option when it's decided by seeing it.
 - **`/nav:plan`** — ground the rebuilt answer into a code-level plan once settled.
-- **`/think:invert` · `/think:second-order`** *(planned)* — sibling lenses; a different operation on the same problem.
+- **`/think:orthogonal`** — the separation lens (factor sideways into mutually-independent axes); first-principles is the depth lens. The two decomposition moves.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).

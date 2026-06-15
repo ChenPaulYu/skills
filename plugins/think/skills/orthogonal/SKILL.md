@@ -1,0 +1,65 @@
+---
+name: orthogonal
+description: "Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) primitives — the axes along which it actually varies independently — then verify the independence (move one, the others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled (two 'separate' things that are really one). Forces a fixed structure the default skips: the tangle, candidate axes, the independence check, the true degrees of freedom, the payload. Reasons in-chat (no file artifact); offers to route the result to shape. Fires on \"what are the independent dimensions here\", \"disentangle this\", \"are these orthogonal\", \"separate the concerns\", \"factor this into independent parts\", \"this conflates several things\", \"decouple X and Y\". Distinct from /think:first-principles (which reduces DOWN to axioms and rebuilds; orthogonal factors SIDEWAYS into independent axes). Invokable as /think:orthogonal."
+---
+
+# orthogonal — factor a tangle into independent axes
+
+Take something treated as **one thing** (or as several *separate* things) and **factor it into mutually-independent primitives** — the axes along which it actually varies independently. The point is **not** "break it into parts" (any decomposition does that); it's to find axes that are **orthogonal** — moving along one doesn't move the others — and in doing so expose what was **conflated** (one word hiding N independent problems) or **falsely decoupled** (two "separate" things that are really one).
+
+## Why this skill exists
+
+Most "break it down" yields *overlapping* or *hierarchical* parts that still tangle — fix one and another shifts, because they were never independent. The model's default decomposition does this too. `orthogonal` forces the property that makes a decomposition actually useful: **independence**. When the axes are truly orthogonal, each can be reasoned about — and solved — on its own, and the count of axes is the problem's real degrees of freedom.
+
+## Core — the independence check (this IS the skill)
+
+> **A candidate axis earns its place only if it passes the orthogonality test: vary it, and the others stay put.** If moving "A" also moves "B", they are not two axes — they're one (merge them), or you cut along the wrong seam (re-cut). Naming candidate dimensions is easy; *proving they are independent* is the work, and the part the default skips.
+
+## The output — the five-part structure, always
+
+The output is the structured factoring itself, **in the conversation** — its shape IS the value:
+
+- **The tangle** — what is being treated as one thing (or as falsely-separate things); the word/phenomenon under the knife.
+- **Candidate axes** — the independent primitives you propose, each named in one line.
+- **Independence check** — for each pair: does moving one move the other? A coupling found = not yet clean → split further or merge. (This step is the soul; don't skip it.)
+- **True degrees of freedom** — the axes that survive the check: the real, independent dimensions.
+- **Payload** — what was conflated (one label hiding several), or where the "separate" things were actually coupled. The reframe is the finding.
+
+Lightweight by default: the analysis stays **in-chat** — think writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
+
+## Grounding
+
+Factor the **real** phenomenon, not an abstraction of it — anchor each axis in concrete instances ("at this value of axis A the thing looks like X; at that value, Y"). An ungrounded factoring invents tidy axes that don't survive contact with real cases. If the project has the relevant code/docs, read enough to make the axes concrete before asserting them.
+
+## vs `first-principles` — the sharpest line
+
+- **`first-principles`** reduces **down** to irreducible axioms and rebuilds the answer up (output: axioms · rebuilt · divergence). Its axis is **depth**.
+- **`orthogonal`** factors **sideways** into independent axes (output: the independent dimensions + what was conflated). Its axis is **separation**.
+- Either runs without the other: disentangle a problem into axes without touching its foundations, or reduce one question to axioms without splitting it into dimensions. Reach for `orthogonal` when something feels like "one messy thing" that won't yield to a single fix — the tell that several independent problems are wearing one name.
+
+## After the analysis — offer to route it (don't decide, don't auto-run)
+
+End with a guarded, one-shot **offer** to route the result — never an auto-call:
+- `/shape:elicit` — converge one axis into a decision *with the user*.
+- `/shape:mockup` — render an axis if it's a look/structure question.
+- `/nav:plan` — ground a now-separated piece into a code-level plan.
+
+## Output
+
+- **The five-part structure, in-chat** (no file artifact): The tangle · Candidate axes · Independence check · True degrees of freedom · Payload.
+- A guarded, one-shot **offer** to route the result (`/shape:elicit` · `/shape:mockup` · `/nav:plan`) — never an auto-call. To persist, route to shape.
+
+## Anti-patterns (refuse these)
+
+| Temptation | Why to refuse |
+|---|---|
+| List parts and stop | The independence check IS the value — unverified parts are just a list, not orthogonal axes. |
+| Hierarchical / overlapping parts dressed as axes | Sub-parts of one thing aren't independent dimensions — re-cut along seams that actually vary independently. |
+| Force orthogonality where the thing is genuinely one | If it doesn't factor, say so — "this is irreducibly one axis" is a valid result. |
+| Invent tidy axes ungrounded from the real cases | Floaty taxonomy — ground each axis in concrete instances. |
+
+## Companion skills
+
+- **`/think:first-principles`** — the depth lens (reduce down + rebuild); `orthogonal` is the separation lens (factor sideways). The two decomposition moves.
+- **`/shape:elicit`** — converge a separated axis into a decision *with the user*.
+- **`/nav:plan`** — ground a now-independent piece into a code plan.

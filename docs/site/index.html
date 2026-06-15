@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-15 (rev 52)
+  Last audit: 2026-06-15 (rev 53)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -12,7 +12,7 @@
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
     • Five plugins: nav (6 skills) + shape (8 skills) + research (4 skills) +
-      think (1 skill) + manage (3 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+      think (2 skills) + manage (3 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), position (canon-authoring campaign → core principle-wise docs:
@@ -44,10 +44,11 @@
       critique's mirror; dispatches forensic dissects as repair arm; ADR-042).
       research v0.5.0; standalone (no nav/shape dependency).
       feedback as candidate skill (ADR-027).
-    • think skills: first-principles (strip a question to its irreducible axioms,
-      rebuild from them, surface where that diverges from convention — forced
-      structure: assumptions · axioms · rebuilt · divergence). invert + second-order
-      as the seed family. think v0.1.0; standalone, feeds shape one-way (ADR-034).
+    • think skills: first-principles (decompose DOWN — strip to irreducible axioms,
+      rebuild, surface divergence) + orthogonal (decompose SIDEWAYS — factor a tangle
+      into mutually-independent axes, verify independence, name what was conflated).
+      Two decomposition lenses; in-chat. think v0.2.0; the speculative invert/second-order
+      seed was dropped for no usage evidence (ADR-046). Standalone, feeds shape (ADR-034/045/046).
     • manage skills: catchup (re-orient on where the work stands now, rebuilt from
       git/diff/plan, not chat memory), summarize (a complete objective recap of what
       the session did), observe (distill the one durable learning into a knowledge
@@ -55,9 +56,9 @@
       commands were migrated in. manage v0.1.0; standalone, cross-project (ADR-044).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 45 ADRs in docs/adr/ — 001..045 with cross-supersede / refine links
+    • 46 ADRs in docs/adr/ — 001..046 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (22 flat skills: manage-* / nav-* /
+    • Codex mirror: .agents/skills/ (23 flat skills: manage-* / nav-* /
       research-* / shape-* / think-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
@@ -77,7 +78,21 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 52)
+  ⚠ FIXED in this revision (rev 53)
+    1. think gains a SECOND lens `orthogonal` (ADR-046) — decompose SIDEWAYS: factor
+       a tangled phenomenon into mutually-independent axes, verify the independence
+       (move one, the others must not move), name what was conflated / falsely-coupled.
+       Pairs with first-principles (decompose DOWN): the two ways to take a problem
+       apart. In-chat (ADR-045). think v0.1.0 → 0.2.0; 1 → 2 skills; Codex 22 → 23.
+    2. DROPPED the speculative `invert` / `second-order` seed family — an evidence
+       audit (docs/observations/) found ZERO usage of them as lenses (every "invert"
+       hit is the everyday verb; "second-order" appears nowhere), while orthogonal is
+       the user's frequently-used lens. Per ADR-018 (promote by evidence) they had no
+       more standing than parked candidates, so they were removed from all live
+       surfaces (plugin.json · CLAUDE.md · README · this map · first-principles refs);
+       ADR-034 left as history. ADR count 45 → 46.
+
+  ⚠ FIXED in rev 52 (kept for history)
     1. think is now LIGHTWEIGHT (ADR-045) — reasons in-chat, writes NO file (was a
        thinking/<date>-<topic>.md artifact). Persistence is by routing to shape
        (/shape:elicit → thoughts/, /shape:mockup, /nav:plan), which think already
@@ -1261,9 +1276,10 @@ const DOMAINS = {
   think: {
     layer: 'foundation',
     path: 'plugins/think/',
-    blurb: {en:'Reason about a problem through a named reasoning lens that forces a structure the default "think harder" skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way (an insight → a thought / mockup / plan). v0.1.0; see think/CLAUDE.md + ADR-034.', zh:'用具名 reasoning lens 推理問題,逼出預設「想認真點」會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape(洞見 → thought / mockup / plan)。v0.1.0;見 think/CLAUDE.md + ADR-034。'},
+    blurb: {en:'Reason about a problem through a named reasoning lens that forces a structure the default "think harder" skips. 2 lenses — the two ways to take a problem apart: first-principles (down — reduce + rebuild) and orthogonal (sideways — factor into mutually-independent axes). Standalone — feeds shape one-way, in-chat (an insight → a thought / mockup / plan). v0.2.0; see think/CLAUDE.md + ADR-034/045/046.', zh:'用具名 reasoning lens 推理問題,逼出預設「想認真點」會跳過的結構。2 個 lens —— 拆解問題的兩個方向:first-principles(往下 —— 化約+重建)與 orthogonal(往旁 —— 拆成互相獨立的軸)。獨立 —— 單向餵 shape、in-chat(洞見 → thought / mockup / plan)。v0.2.0;見 think/CLAUDE.md + ADR-034/045/046。'},
     files: [
       ['/think:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:plan ground). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:plan ground)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034。"}],
+      ['/think:orthogonal', '', {en:"Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) axes — the dimensions it actually varies along independently — then VERIFY the independence (move one, the others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled. Forces a structure the default skips: tangle · candidate axes · independence check · true degrees of freedom · payload. In-chat; offers to route to shape. Distinct from /think:first-principles (down to axioms + rebuild; orthogonal factors sideways). ADR-046.", zh:"把一個糾結的現象拆成互相獨立(正交)的軸 —— 它真正獨立變動的維度 —— 再驗證獨立性(動一個,其他不能動),點出被混為一談(一個詞藏 N 個問題)或假性分開的東西。逼出預設會跳過的結構:糾結點 · 候選軸 · 獨立性檢查 · 真自由度 · payload。in-chat;offer route 到 shape。跟 /think:first-principles 不同(那是往下到公理+重建;orthogonal 往旁拆)。ADR-046。"}],
     ],
   },
   manage: {
@@ -1282,7 +1298,7 @@ const CB_NODES = [
   {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor + position (converge product canon) planned. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor、position(收斂產品 canon)待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.4.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.4.0。'}},
-  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way; reasons in-chat, no file artifact (persist via shape). v0.1.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape;in-chat 輸出、不寫檔(要保存就 route 到 shape)。v0.1.0。'}},
+  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 2 lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes). Standalone — feeds shape one-way; reasons in-chat, no file. v0.2.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。2 個 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)。獨立 —— 單向餵 shape;in-chat、不寫檔。v0.2.0。'}},
   {id:'manage', kind:'plugin', x:760, y:150, w:120, role:{en:'meta-lane', zh:'meta-lane'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 3 seed skills: catchup · summarize · observe (orient → recap → distill). Standalone, cross-project. v0.1.0.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。3 個 seed skill:catchup · summarize · observe(orient → recap → distill)。獨立、跨專案。v0.1.0。'}},
 ];
 const CB_EDGES = [['shape','nav']];

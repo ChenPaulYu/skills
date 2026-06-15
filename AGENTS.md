@@ -360,7 +360,12 @@ Eight skills built (`mockup`, `elicit`, `dogfood`, `position`, `setup`, `align`,
 
 A collection of skills for **reasoning about a problem through a named lens** — applying an explicit, disciplined reasoning frame that forces a structured analysis the model's default "think about it" won't produce. The object is **your own reasoning about a problem** (a belief, a decision, a design), not an external document (that's `research`) and not existing code (that's `nav`).
 
-First skill today: `first-principles` (strip a question to its irreducible axioms, rebuild the answer from those alone, surface where that diverges from convention). The seed family — `invert` (negate the goal → failure modes / what to avoid) and `second-order` (trace consequences forward, layer by layer) — is **planned, not committed**: each lens earns its own door only when its *procedure and output shape genuinely diverge* (the same razor `research` used — dissect=nodes, untangle=edges, critique=assess — and `shape` used in ADR-013). Promote per ADR-018's evidence gate. See `docs/adr/034-think-plugin.md` for the family charter.
+Two lenses today — **the two ways to take a problem apart**:
+
+- `first-principles` — decompose **down**: strip a question to its irreducible axioms, rebuild the answer from those alone, surface where that diverges from convention.
+- `orthogonal` — decompose **sideways**: factor a tangled phenomenon into mutually-independent axes, verify the independence (move one, the others stay put), and name what was conflated or falsely-coupled.
+
+Future lenses are added **by evidence** (ADR-018), not pre-listed — each must clear the value-guardrail (a forced structure the default skips) AND show real recurring use. (The originally-speculated `invert` / `second-order` seed was dropped for having no usage evidence — see `docs/adr/046-think-orthogonal-lens-drop-speculative-seed.md`; charter in `docs/adr/034-think-plugin.md`.)
 
 This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). It is **independent** — no dependency on `nav` or `shape`. It **feeds shape one-way** (a reasoning artifact → an `elicit` thought / a `mockup` / a `nav-plan`), the same guarded, one-way pattern as `research → shape`; it never invokes another plugin's skill (ADR-015).
 
@@ -385,7 +390,7 @@ What unifies the lenses is not a shared template (their procedures genuinely dif
 
 > Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
 
-- **Naming**: skills use the **canonical lens name** — `first-principles`, `invert`, `second-order` — not a coerced bare verb. The names are well-known mental models; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
+- **Naming**: skills use the **canonical lens name** — `first-principles`, `orthogonal` — not a coerced bare verb. The names are well-known reasoning concepts; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
 - **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
 - **Lightweight, in-chat by default**: a lens surfaces its analysis in the conversation and writes **no file** — think is the lightest plugin (pure reasoning). Persistence happens by routing to shape (`shape-elicit` → `thoughts/`, `shape-mockup`, `nav-plan`), never a think-owned artifact. It never writes source or makes a decision.
 - **Feeds shape, never invokes it**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `shape-elicit` to converge it, `shape-mockup` to render it, `nav-plan` to ground it. An offer, not a call.
