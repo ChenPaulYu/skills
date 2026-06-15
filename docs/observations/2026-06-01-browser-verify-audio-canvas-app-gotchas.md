@@ -1,6 +1,6 @@
 ---
 date: 2026-06-01
-status: raw
+status: promoted → references/browser-verify-gotchas.md (2026-06-15)
 ---
 
 # Browser-verifying an audio + pan/zoom-canvas web app: a recurring set of agent-browser gotchas that cost ~6 re-tries in one session

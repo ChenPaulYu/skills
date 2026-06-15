@@ -1,6 +1,6 @@
 ---
 date: 2026-06-11
-status: raw
+status: promoted → references/browser-verify-gotchas.md (2026-06-15)
 ---
 
 # Field-proven browser-verify hardening — four rules currently stranded in one project's CLAUDE.md, all universal

@@ -1,6 +1,6 @@
 ---
 date: 2026-06-08
-status: raw
+status: promoted → references/browser-verify-gotchas.md U8 + shape slot contract (2026-06-15)
 ---
 
 # Browser-verify has a teardown half that gets silently skipped — and writing the rule down doesn't make it fire (knowledge ≠ trigger)
