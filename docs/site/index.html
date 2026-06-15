@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-15 (rev 51)
+  Last audit: 2026-06-15 (rev 52)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -55,7 +55,7 @@
       commands were migrated in. manage v0.1.0; standalone, cross-project (ADR-044).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 44 ADRs in docs/adr/ — 001..044 with cross-supersede / refine links
+    • 45 ADRs in docs/adr/ — 001..045 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (22 flat skills: manage-* / nav-* /
       research-* / shape-* / think-*) + root AGENTS.md, generated from plugins/ by
@@ -77,7 +77,20 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 51)
+  ⚠ FIXED in this revision (rev 52)
+    1. think is now LIGHTWEIGHT (ADR-045) — reasons in-chat, writes NO file (was a
+       thinking/<date>-<topic>.md artifact). Persistence is by routing to shape
+       (/shape:elicit → thoughts/, /shape:mockup, /nav:plan), which think already
+       offers; a think-owned file was a redundant second home. Sharpens the family
+       line: shape/research/manage:observe produce artifacts, think is pure
+       reasoning. Updated think SKILL.md + CLAUDE.md + README + this think node.
+       ADR count 44 → 45.
+    2. README was missing the manage plugin (rendered 4 plugins, not 5) — added the
+       manage table row, lifecycle line, skills section, and install command. Root
+       CLAUDE.md gate now requires README.md AND docs/site/index.html to be updated
+       together on any plugin/skill roster change (the drift that caused this).
+
+  ⚠ FIXED in rev 51 (kept for history)
     1. NEW PLUGIN `manage` (ADR-044) — the meta-lane: reflect on your own working
        session (the work process itself, the cross-cutting object no other plugin
        owns). 3 seed skills, triad orient → recap → distill: catchup (where the
@@ -1269,7 +1282,7 @@ const CB_NODES = [
   {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor + position (converge product canon) planned. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor、position(收斂產品 canon)待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.4.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.4.0。'}},
-  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way. v0.1.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape。v0.1.0。'}},
+  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way; reasons in-chat, no file artifact (persist via shape). v0.1.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape;in-chat 輸出、不寫檔(要保存就 route 到 shape)。v0.1.0。'}},
   {id:'manage', kind:'plugin', x:760, y:150, w:120, role:{en:'meta-lane', zh:'meta-lane'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 3 seed skills: catchup · summarize · observe (orient → recap → distill). Standalone, cross-project. v0.1.0.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。3 個 seed skill:catchup · summarize · observe(orient → recap → distill)。獨立、跨專案。v0.1.0。'}},
 ];
 const CB_EDGES = [['shape','nav']];

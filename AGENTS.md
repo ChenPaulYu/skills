@@ -62,15 +62,20 @@ The hook (`scripts/hooks/pre-commit`) blocks a commit whose generated artifacts 
 
 - `.agents/skills/` + the repo-root `AGENTS.md` are generated from `plugins/` by `node scripts/build-codex.mjs`. Never hand-edit them — edit the plugin `SKILL.md` / `CLAUDE.md`, regenerate, then validate (same validator as above).
 
-### 3. Site map is gating
+### 3. Human-facing surfaces are gating — site map AND README
 
-Any change to a `SKILL.md`, a plugin manifest, or an ADR **requires the same commit** to update [`docs/site/index.html`](docs/site/index.html). Before committing, **always** run:
+There are **two** hand-maintained human-facing surfaces that drift if you forget them; a skill/roster change **requires the same commit** to update **both**:
+
+1. [`docs/site/index.html`](docs/site/index.html) — the interactive map. Update the relevant data array (`DOMAINS`, `CB_NODES`/`NAV_NODES`/`NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date + revision, add a FIXED entry naming what changed.
+2. [`README.md`](README.md) — the plugin table + the per-plugin skills list + the install commands. **A plugin or skill added / removed / renamed (or a plugin's one-line description materially changed) must be reflected here too.**
+
+Before committing, **always** run:
 
 ```bash
-git status docs/site/index.html
+git status docs/site/index.html README.md
 ```
 
-If you changed a skill but the site shows unmodified → **STOP** — you missed it. Update the relevant data array (`DOMAINS`, `NAV_NODES`, `NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date + revision, and add a FIXED entry naming what changed. Skip only for a pure typo / internal refactor with zero surface impact. **Stale map lies silently to every future reader** — that's why this is a hard gate, not a soft reminder.
+If you changed the roster but either shows unmodified → **STOP**, you missed it. Skip only for a pure typo / internal refactor with zero surface impact. **A stale surface lies silently to every future reader** — and the two drift independently (a real incident: the `manage` plugin landed in the site map but the README still listed four plugins). That's why both are hard gates, not soft reminders.
 
 ## Authoring conventions (every plugin, every skill)
 
@@ -381,8 +386,8 @@ What unifies the lenses is not a shared template (their procedures genuinely dif
 > Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
 
 - **Naming**: skills use the **canonical lens name** — `first-principles`, `invert`, `second-order` — not a coerced bare verb. The names are well-known mental models; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
-- **★ Forced-structure output**: every skill emits a fixed-shape artifact (the structure IS the value). State the shape in the SKILL.md and in the `Output` section; an agent must be able to grasp the artifact from its `head`.
-- **Read-only by default**: a lens surfaces its analysis and asks where to save (default `thinking/<date>-<topic>.md`). It never writes source or makes a decision without explicit user confirmation.
+- **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
+- **Lightweight, in-chat by default**: a lens surfaces its analysis in the conversation and writes **no file** — think is the lightest plugin (pure reasoning). Persistence happens by routing to shape (`shape-elicit` → `thoughts/`, `shape-mockup`, `nav-plan`), never a think-owned artifact. It never writes source or makes a decision.
 - **Feeds shape, never invokes it**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `shape-elicit` to converge it, `shape-mockup` to render it, `nav-plan` to ground it. An offer, not a call.
 
 ## Where things live

@@ -48,15 +48,20 @@ The hook (`scripts/hooks/pre-commit`) blocks a commit whose generated artifacts 
 
 - `.agents/skills/` + the repo-root `AGENTS.md` are generated from `plugins/` by `node scripts/build-codex.mjs`. Never hand-edit them — edit the plugin `SKILL.md` / `CLAUDE.md`, regenerate, then validate (same validator as above).
 
-### 3. Site map is gating
+### 3. Human-facing surfaces are gating — site map AND README
 
-Any change to a `SKILL.md`, a plugin manifest, or an ADR **requires the same commit** to update [`docs/site/index.html`](docs/site/index.html). Before committing, **always** run:
+There are **two** hand-maintained human-facing surfaces that drift if you forget them; a skill/roster change **requires the same commit** to update **both**:
+
+1. [`docs/site/index.html`](docs/site/index.html) — the interactive map. Update the relevant data array (`DOMAINS`, `CB_NODES`/`NAV_NODES`/`NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date + revision, add a FIXED entry naming what changed.
+2. [`README.md`](README.md) — the plugin table + the per-plugin skills list + the install commands. **A plugin or skill added / removed / renamed (or a plugin's one-line description materially changed) must be reflected here too.**
+
+Before committing, **always** run:
 
 ```bash
-git status docs/site/index.html
+git status docs/site/index.html README.md
 ```
 
-If you changed a skill but the site shows unmodified → **STOP** — you missed it. Update the relevant data array (`DOMAINS`, `NAV_NODES`, `NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date + revision, and add a FIXED entry naming what changed. Skip only for a pure typo / internal refactor with zero surface impact. **Stale map lies silently to every future reader** — that's why this is a hard gate, not a soft reminder.
+If you changed the roster but either shows unmodified → **STOP**, you missed it. Skip only for a pure typo / internal refactor with zero surface impact. **A stale surface lies silently to every future reader** — and the two drift independently (a real incident: the `manage` plugin landed in the site map but the README still listed four plugins). That's why both are hard gates, not soft reminders.
 
 ## Authoring conventions (every plugin, every skill)
 

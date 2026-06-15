@@ -33,8 +33,8 @@ What unifies the lenses is not a shared template (their procedures genuinely dif
 > Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
 
 - **Naming**: skills use the **canonical lens name** — `first-principles`, `invert`, `second-order` — not a coerced bare verb. The names are well-known mental models; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
-- **★ Forced-structure output**: every skill emits a fixed-shape artifact (the structure IS the value). State the shape in the SKILL.md and in the `Output` section; an agent must be able to grasp the artifact from its `head`.
-- **Read-only by default**: a lens surfaces its analysis and asks where to save (default `thinking/<date>-<topic>.md`). It never writes source or makes a decision without explicit user confirmation.
+- **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
+- **Lightweight, in-chat by default**: a lens surfaces its analysis in the conversation and writes **no file** — think is the lightest plugin (pure reasoning). Persistence happens by routing to shape (`/shape:elicit` → `thoughts/`, `/shape:mockup`, `/nav:plan`), never a think-owned artifact. It never writes source or makes a decision.
 - **Feeds shape, never invokes it**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `/shape:elicit` to converge it, `/shape:mockup` to render it, `/nav:plan` to ground it. An offer, not a call.
 
 ## Where things live

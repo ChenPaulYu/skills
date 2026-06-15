@@ -1,6 +1,6 @@
 ---
 name: first-principles
-description: "Reason a question or decision from first principles. Name the conventional answer and assumptions, strip away convention, identify irreducible axioms, rebuild the answer from axioms, and highlight the divergence (the payload). Forces structure: discarded assumptions, axioms, rebuilt conclusion, divergence. Fires on \"reason this from first principles\", \"strip the assumptions\", \"why do we do X this way\", \"is this convention or necessity\", \"rebuild from scratch\", \"challenge assumptions behind X\", \"first-principles this\". Analysis only; produces reasoning artifact and offers to route it (/shape:elicit, /shape:mockup, /nav:plan). Invokable as /think:first-principles."
+description: "Reason a question or decision from first principles. Name the conventional answer and assumptions, strip away convention, identify irreducible axioms, rebuild the answer from axioms, and highlight the divergence (the payload). Forces structure: discarded assumptions, axioms, rebuilt conclusion, divergence. Fires on \"reason this from first principles\", \"strip the assumptions\", \"why do we do X this way\", \"is this convention or necessity\", \"rebuild from scratch\", \"challenge assumptions behind X\", \"first-principles this\". Analysis only; reasons in-chat (no file artifact) and offers to route it (/shape:elicit, /shape:mockup, /nav:plan). Invokable as /think:first-principles."
 ---
 
 # First-principles — strip a question to its axioms, rebuild from them
@@ -29,9 +29,9 @@ The discipline that makes it real (not relabelled convention):
 4. **Rebuild from the axioms alone.** Reason up to an answer using only what survived. (e.g. "if cost scales with compute and the buyer has a fixed budget, usage-based pricing tracks value and cost better than per-seat.")
 5. **Surface the divergence.** Where does the rebuilt answer differ from convention? That gap is the finding — name it plainly, and its consequence. **If there's no divergence, say so** ("convention is already first-principles-sound here") — that's a valid, useful result, not a failure.
 
-## The artifact — the five-part structure, always
+## The output — the five-part structure, always
 
-The output is a `thinking/` note whose shape IS the value (an agent grasps it from `head`):
+The output is the **structured reasoning itself, in the conversation** — its shape IS the value (graspable at a glance):
 
 - **Question** — the one-sentence target.
 - **Conventional answer + inherited assumptions** — the default + the named assumptions it rests on (each flagged *convention* / *analogy* / *habit*).
@@ -39,7 +39,7 @@ The output is a `thinking/` note whose shape IS the value (an agent grasps it fr
 - **Rebuilt conclusion** — the answer derived from axioms alone.
 - **Divergence** — where rebuilt ≠ conventional, and what that implies (or "none — convention holds, here's why").
 
-Read-only by default: surface the note and ask where to save (default `thinking/<date>-<topic>.md`); never write source or make the decision.
+Lightweight by default: the analysis stays **in-chat** — think writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
 ## After the analysis — offer to route it (don't decide, don't auto-run)
 
@@ -83,7 +83,7 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 
 ## Output
 
-- **A `thinking/<date>-<topic>.md` note** in the fixed five-part shape: Question · Conventional answer + assumptions · Axioms (grounded) · Rebuilt conclusion · Divergence.
+- **The five-part structure, in-chat** (no file artifact): Question · Conventional answer + assumptions · Axioms (grounded) · Rebuilt conclusion · Divergence. To persist it, route to shape (below).
 - A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:plan` (ground) — never an auto-call.
 
 ## Companion skills
