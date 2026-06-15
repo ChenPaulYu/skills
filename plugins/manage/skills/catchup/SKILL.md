@@ -1,0 +1,53 @@
+---
+name: catchup
+description: "Re-orient on where the current work stands — in plain language, rebuilt from durable state (git / diff / changed files / any plan), NOT from chat memory, so it survives /clear, context compaction, or returning after a break. Fixed shape: goal, done, now, open, next. Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /manage:summarize (a complete objective recap of what the session DID — catchup is the state NOW plus what's next) and from /shape:align (which DECIDES next and writes a plan — catchup only reports). Also invokable as /manage:catchup."
+---
+
+# catchup — where are we, in plain language
+
+Tell the user **where the current work stands**, in simple, direct language. The value is **grounding**: rebuild the picture from **durable state** (git, the diff, changed files, any plan/todo) — NOT from conversation memory — so this still works after `/clear`, after context was compacted, or when returning after a break. That grounding is what separates `/manage:catchup` from "just summarize the chat".
+
+Optional focus from the user: **$ARGUMENTS** (if given, scope the catchup to that area; else cover the whole current work).
+
+**Read-only.** Do not edit, write, or commit anything. catchup only reports.
+
+## Step 1 — Rebuild from durable state (don't trust memory)
+
+Ground in the **current project** (cwd), primarily from git and files:
+
+```bash
+git -C . rev-parse --abbrev-ref HEAD 2>/dev/null   # current branch
+git -C . status --short 2>/dev/null                # uncommitted / untracked
+git -C . log --oneline -10 2>/dev/null             # recent commits
+git -C . diff --stat 2>/dev/null                   # changed-but-uncommitted
+```
+
+Then look for an explicit plan/todo if one exists (don't require it): a `blueprints/plan.md` / `blueprints/thoughts/` tree, `docs/plans/`, a `TODO`/`TASKS` file, or an in-session task list. Treat the live conversation as a **secondary** input only — git + files are primary so the catchup survives memory loss.
+
+If there's almost no signal (clean tree, no plan, no session history), say so plainly rather than inventing progress.
+
+## Step 2 — Report in a fixed shape, plain language
+
+Always answer these five, short and concrete, each traceable to a real signal from Step 1:
+
+- **🎯 Goal / 目標** — what we're actually trying to do (the current thread).
+- **✅ Done / 已完成** — what's shipped (committed) or clearly finished.
+- **📍 Now / 現在** — current state: what's in progress, what's uncommitted on the branch.
+- **⚠️ Open / 卡住·開著** — anything unresolved, undecided, failing, or deferred (open loops).
+- **➡️ Next / 下一步** — the single most concrete next action.
+
+Rules:
+- **Plain, direct language** — an orientation, not a report dump.
+- **Grounded, not guessed** — every line traces to a real signal (a commit message, a changed file, a status entry, a plan item). If something is ambiguous or git and memory disagree, mark it **uncertain** rather than smoothing it over.
+- **Short** — a scannable orientation read in ~15 seconds; lead with the point.
+- If `$ARGUMENTS` was given, keep the five sections but scope them to that area.
+
+## Step 3 — Stop
+
+No artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `/manage:observe`; for a complete objective recap of what happened, `/manage:summarize`.)
+
+## Companion skills
+
+- **`/manage:summarize`** — the complete, objective recap of what the session *did* (catchup is the state *now* + next; summarize is the full log of what *happened*).
+- **`/manage:observe`** — distill a durable learning from the session into the knowledge base.
+- **`/shape:align`** — when you want to *decide* next and write it into a plan (catchup only reports; align decides + writes).

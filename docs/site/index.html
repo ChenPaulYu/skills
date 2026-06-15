@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-15 (rev 50)
+  Last audit: 2026-06-15 (rev 51)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -11,8 +11,8 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Four plugins: nav (6 skills) + shape (8 skills) + research (4 skills) +
-      think (1 skill) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+    • Five plugins: nav (6 skills) + shape (8 skills) + research (4 skills) +
+      think (1 skill) + manage (3 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), position (canon-authoring campaign → core principle-wise docs:
@@ -48,12 +48,17 @@
       rebuild from them, surface where that diverges from convention — forced
       structure: assumptions · axioms · rebuilt · divergence). invert + second-order
       as the seed family. think v0.1.0; standalone, feeds shape one-way (ADR-034).
+    • manage skills: catchup (re-orient on where the work stands now, rebuilt from
+      git/diff/plan, not chat memory), summarize (a complete objective recap of what
+      the session did), observe (distill the one durable learning into a knowledge
+      base). The meta-lane triad orient → recap → distill; the prototype global
+      commands were migrated in. manage v0.1.0; standalone, cross-project (ADR-044).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 43 ADRs in docs/adr/ — 001..043 with cross-supersede / refine links
+    • 44 ADRs in docs/adr/ — 001..044 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (19 flat skills: nav-* / research-* /
-      shape-* / think-*) + root AGENTS.md, generated from plugins/ by
+    • Codex mirror: .agents/skills/ (22 flat skills: manage-* / nav-* /
+      research-* / shape-* / think-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; scripts/validate-codex-skills.mjs
@@ -72,7 +77,23 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 50)
+  ⚠ FIXED in this revision (rev 51)
+    1. NEW PLUGIN `manage` (ADR-044) — the meta-lane: reflect on your own working
+       session (the work process itself, the cross-cutting object no other plugin
+       owns). 3 seed skills, triad orient → recap → distill: catchup (where the
+       work stands now, rebuilt from git/diff/plan not chat memory), summarize (a
+       complete objective recap of what the session did), observe (distill the one
+       durable learning into docs/observations/). Pipeline summarize → observe;
+       catchup orthogonal. easy-explain excluded (a style, fails the value-guardrail).
+       Prototyped first as ~/.claude global commands, then promoted to a plugin
+       (per-project install trade accepted) and the globals removed. observe writes
+       to $SKILLS_REPO when set, else the current project. Marketplace 4 → 5 plugins;
+       Codex mirror 19 → 22; v0.1.0. Site: DOMAINS manage + CB_NODES manage node
+       (cbGraph viewBox 760 → 940) + header + install cards + ADR count 43 → 44.
+    2. build-manifests.mjs now mkdir-s a new plugin's .cursor-plugin/ before
+       writing (a fresh plugin has no projection dir yet).
+
+  ⚠ FIXED in rev 50 (kept for history)
     1. audit gains Mode 3 (deep sweep, ADR-043) — a depth strategy that fans out
        one read-only sub-agent per domain instead of a single satisficing pass,
        then merges + root-cause clusters + runs a completeness-critic loop-until-dry.
@@ -912,9 +933,9 @@
       <h2 data-t="install_title">Install — one source tree, five agents</h2>
       <p class="lede" data-t="install_lede">Two channels: <b>Claude Code</b> and <b>agy</b> import the plugins natively (namespaced <code>/&lt;plugin&gt;:&lt;verb&gt;</code>); <b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> auto-discover the flat mirror <code>.agents/skills/</code>. Shortcut for any harness — tell your agent: <i>“Fetch and follow instructions from <code>https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md</code>”</i>. Or by hand, in Claude Code:</p>
       <pre class="cmd"><code>/plugin marketplace add ChenPaulYu/skills
-/plugin install nav@skills        # + shape@skills · research@skills · think@skills</code></pre>
+/plugin install nav@skills        # + shape@skills · research@skills · think@skills · manage@skills</code></pre>
       <p class="lede" data-t="install_agy_lede">In <b>Antigravity CLI</b> (<code>agy</code>) — native Claude Code plugin import, same namespace, no conversion. Clone the repo, then:</p>
-      <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/research · plugins/think</code></pre>
+      <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/research · plugins/think · plugins/manage</code></pre>
       <p class="small muted" data-t="install_codex_note"><b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> need no install step inside this repo — all three auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>; no plugin namespace). For global use, copy the mirror into <code>~/.agents/skills/</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.</p>
       <p class="small muted" data-t="install_more">Two more routes: the <a href="https://skills.sh/" target="_blank">skills.sh</a> CLI (<code>npx skills add ChenPaulYu/skills</code> — pick the prefixed skill set) and, for Cursor, the native plugin form (each plugin ships a <code>.cursor-plugin/plugin.json</code>; symlink into <code>~/.cursor/plugins/local/</code>). Full guides: <a href="https://github.com/ChenPaulYu/skills#install" target="_blank">README → Install</a>.</p>
       <p class="small muted" data-t="install_note">Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.</p>
@@ -930,7 +951,7 @@
       <h2 data-t="pluginsmap_title">Plugins map — every plugin at a glance</h2>
       <p class="lede" data-t="pluginsmap_lede">One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.</p>
       <div class="graphwrap">
-        <svg class="graph" id="cbGraph" viewBox="0 0 760 320"></svg>
+        <svg class="graph" id="cbGraph" viewBox="0 0 940 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
       <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), and research (read external sources with intent). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup). research is standalone. See ADR-012, ADR-027.</span></div>
@@ -1232,6 +1253,16 @@ const DOMAINS = {
       ['/think:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:plan ground). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:plan ground)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034。"}],
     ],
   },
+  manage: {
+    layer: 'foundation',
+    path: 'plugins/manage/',
+    blurb: {en:'Reflect on your own working session — the meta-lane (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on). 3 seed skills, a triad orient → recap → distill: catchup, summarize, observe. Read-only except the observe write. Cross-project, standalone. v0.1.0; see manage/CLAUDE.md + ADR-044.', zh:'反思你自己的工作 session —— meta-lane(工作過程本身,不是其他 plugin 操作的 code/決策/文件/推理)。3 個 seed skill,三件套 orient → recap → distill:catchup、summarize、observe。除 observe 寫檔外唯讀。跨專案、獨立。v0.1.0;見 manage/CLAUDE.md + ADR-044。'},
+    files: [
+      ['/manage:catchup', '', {en:'Re-orient on where the work stands now — rebuilt from durable state (git / diff / changed files / any plan), NOT chat memory, so it survives /clear or context compaction. Fixed shape: goal · done · now · open · next. Read-only; summoned. Distinct from summarize (what the session DID) and /shape:align (which decides next + writes a plan).', zh:'重新定位工作現在到哪 —— 從持久狀態(git / diff / 改動檔 / plan)重建,不靠對話記憶,撐得過 /clear 或 context 壓縮。固定形狀:goal · done · now · open · next。唯讀;召喚式。跟 summarize(做了什麼)、/shape:align(決定下一步 + 寫 plan)不同。'}],
+      ['/manage:summarize', '', {en:'A complete, objective recap of what the session did — attempted → done → decided → changed (files / commits), neutral and exhaustive, not a selective TL;DR. Read-only; the raw input observe distills. Distinct from catchup (where you ARE now) and observe (the one keeper learning).', zh:'完整、客觀地 recap 這場 session 做了什麼 —— 嘗試 → 完成 → 決定 → 改動(檔案 / commit),中立且詳盡,不是選擇性 TL;DR。唯讀;observe 蒸餾的原料。跟 catchup(現在在哪)、observe(那條 keeper)不同。'}],
+      ['/manage:observe', '', {en:'Distill the one durable, reusable learning from the session into a knowledge base (docs/observations/) — the first step of a repo-evolution loop. Selective; writes one observation (status: raw, promote by evidence). Output to $SKILLS_REPO when set, else the current project. Often run after summarize. ADR-044.', zh:'把這場 session 一條耐久、可重用的學習蒸餾進 knowledge base(docs/observations/)—— repo 演進迴路第一步。選擇性;寫一條 observation(status: raw,憑證據晉升)。有設 $SKILLS_REPO 就寫那、否則當前專案。常接在 summarize 之後。ADR-044。'}],
+    ],
+  },
 };
 
 const CB_NODES = [
@@ -1239,6 +1270,7 @@ const CB_NODES = [
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor + position (converge product canon) planned. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor、position(收斂產品 canon)待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.4.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.4.0。'}},
   {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 1 skill (first-principles); invert + second-order as the seed family. Standalone — feeds shape one-way. v0.1.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。1 個 skill(first-principles);invert + second-order 為 seed family。獨立 —— 單向餵 shape。v0.1.0。'}},
+  {id:'manage', kind:'plugin', x:760, y:150, w:120, role:{en:'meta-lane', zh:'meta-lane'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 3 seed skills: catchup · summarize · observe (orient → recap → distill). Standalone, cross-project. v0.1.0.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。3 個 seed skill:catchup · summarize · observe(orient → recap → distill)。獨立、跨專案。v0.1.0。'}},
 ];
 const CB_EDGES = [['shape','nav']];
 

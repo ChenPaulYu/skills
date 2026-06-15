@@ -16,7 +16,7 @@
  *
  * Reads: node:fs · node:path (plugins/<p>/.claude-plugin/plugin.json · .claude-plugin/marketplace.json)
  */
-import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, statSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -49,7 +49,9 @@ function writeCursorProjection({ pluginDir, manifest }) {
     description: manifest.description,
     author: manifest.author,
   };
-  writeFileSync(join(pluginDir, ".cursor-plugin", "plugin.json"), toJson(projection));
+  const cursorDir = join(pluginDir, ".cursor-plugin");
+  mkdirSync(cursorDir, { recursive: true }); // a new plugin may not have the dir yet
+  writeFileSync(join(cursorDir, "plugin.json"), toJson(projection));
 }
 
 function syncMarketplaceVersions(owners) {

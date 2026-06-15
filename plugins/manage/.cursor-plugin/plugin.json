@@ -1,0 +1,9 @@
+{
+  "name": "manage",
+  "version": "0.1.0",
+  "description": "Reflect on your own working session — the meta-lane (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on). Three seed skills: catchup (re-orient on where the work stands now, rebuilt from git/diff/plan, not chat memory), summarize (a complete, objective recap of what the session did — the raw input observe distills), observe (distill the one durable, reusable learning into a knowledge base). The triad is orient -> recap -> distill. Read-only except observe's single write. Cross-project, language-agnostic.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  }
+}

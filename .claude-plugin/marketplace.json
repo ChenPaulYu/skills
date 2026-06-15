@@ -28,6 +28,12 @@
       "source": "./plugins/think",
       "description": "Reason about a problem through a named reasoning lens that forces a structure the default 'think harder' skips. first-principles: strip a question to its irreducible axioms, rebuild from them, surface where that diverges from convention. invert + second-order are the seed family. Feeds shape one-way; standalone.",
       "version": "0.1.0"
+    },
+    {
+      "name": "manage",
+      "source": "./plugins/manage",
+      "description": "Reflect on your own working session — the meta-lane (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on). Three seed skills: catchup (re-orient on where the work stands now, rebuilt from git/diff/plan, not chat memory), summarize (a complete, objective recap of what the session did), observe (distill the one durable learning into a knowledge base). orient -> recap -> distill. Read-only except observe's write. Cross-project, standalone.",
+      "version": "0.1.0"
     }
   ]
 }
