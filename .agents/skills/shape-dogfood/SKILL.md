@@ -31,6 +31,8 @@ This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses 
 3. **Mark friction + gaps against the captures.** Friction = the path *exists* but is clunky (too many steps, unclear feedback, awkward order, a missing affordance) — tie each to its screenshot / clip timestamp. Gap = an intent with *no coherent path* (dead-ends, contradicts, nothing to start with).
 4. **Classify each gap by layer** — missing intent (direction) vs dead-end scenario (incomplete) — so the report shows them distinctly and the hand-off is pre-sorted.
 
+> **Caveat — discount the harness's own artifacts.** The capture rig is not the user's conditions: a headless browser's default viewport is often unusually short/narrow, synthetic fixtures are sparser than real data, a scripted pointer lacks momentum. So a finding can be an **artifact of the harness, not the feature** (field case: "the primary action is below the fold" was true only at the rig's 569px height; at a normal 900px it was fully visible — only the *other* two findings were real). Before routing a finding to a fix, **re-confirm it at realistic conditions** (resize to a normal viewport, use representative data); tag the ones you couldn't reproduce as *suspected-harness-artifact* rather than shipping a fix for a non-problem.
+
 ## The report — evidence-rich, with ideas (not a mockup)
 
 The output is a **friction report grounded in the captured session** — *not* a rendered mockup of holes. Lead with the evidence; for each finding:

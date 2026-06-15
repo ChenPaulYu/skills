@@ -30,28 +30,25 @@ What unifies the lenses is not a shared template (their procedures genuinely dif
 
 ## Conventions for skills inside this plugin
 
-- **Naming**: skills use the **canonical lens name** — `first-principles`, `invert`, `second-order` — not a coerced bare verb. The names are well-known mental models; discoverability beats verb-purity here. (This deliberately diverges from `research`'s bare-verb convention, ADR-027 — different family, different idiom.)
-- **Self-contained**: every `SKILL.md` carries the through-line + the value-guardrail + the elicit boundary verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded.
+> Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
+
+- **Naming**: skills use the **canonical lens name** — `first-principles`, `invert`, `second-order` — not a coerced bare verb. The names are well-known mental models; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
 - **★ Forced-structure output**: every skill emits a fixed-shape artifact (the structure IS the value). State the shape in the SKILL.md and in the `Output` section; an agent must be able to grasp the artifact from its `head`.
-- **★ Stack- and domain-neutral examples**: examples must be legible without the origin project. Use generic problems (pricing, a launch, an architecture choice), never project-specific nouns.
-- **★ Skills-root-relative paths**: all paths are written as if `skills/` is root. No `./` or `../` prefixes.
 - **Read-only by default**: a lens surfaces its analysis and asks where to save (default `thinking/<date>-<topic>.md`). It never writes source or makes a decision without explicit user confirmation.
 - **Feeds shape, never invokes it**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `/shape:elicit` to converge it, `/shape:mockup` to render it, `/nav:plan` to ground it. An offer, not a call.
 
 ## Where things live
 
 ```
-.claude-plugin/plugin.json   → manifest (name=think, version, repo)
-CLAUDE.md                    → ← you are here (developer-facing)
+.claude-plugin/plugin.json   → think's manifest (the version + metadata owner)
+CLAUDE.md                    → ← you are here (think-specific)
 skills/<lens>/SKILL.md       → individual lenses, each self-contained
-../../README.md              → marketplace-level overview
-../../docs/adr/              → ADRs (marketplace-level — shared across plugins)
 ```
+
+Repo-wide layout + ADRs live in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
 ## When editing this plugin
 
-- New lens: scaffold `skills/<lens>/SKILL.md`, write the frontmatter description carefully (it determines triggering accuracy), write an ADR. **First check the value-guardrail**: name the structure this lens forces that the default omits. If you can't, it's not a skill.
-- Before adding or changing any skill, check the three ★ core principles above.
-- Renaming a lens: bump version in `plugin.json`; document the rename in an ADR.
-- Stale `SKILL.md` is worse than missing `SKILL.md`.
-- **Site-map update is gating**: any change to a `SKILL.md`, a plugin manifest, or an ADR requires updating `docs/site/index.html` in the same commit. Run `git status docs/site/index.html` before committing.
+Repo-wide editing rules (new-skill → ADR, the ★ authoring checks, renaming + versioning, the site-map gate, stale-`SKILL.md`) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
+
+- **New lens — first check the value-guardrail**: name the structure this lens forces that the default omits. If you can't, it's not a skill (the caution that retired nav's `doctor`, ADR-021).

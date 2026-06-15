@@ -30,14 +30,9 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 
 ## Conventions for skills inside this plugin
 
-- **Naming**: skills use **bare verbs** — `audit`, `refactor`, `sync`, `map`, `plan`. The plugin namespace (`nav:`) provides the topic context, so no `nav-` prefix on the skill name itself. See [ADR-005](docs/adr/005-marketplace-plus-plugin-restructure.md).
-- **Self-contained**: every `SKILL.md` includes the 8 rules verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded. Bulky reference docs (e.g. `skills/map/references/visual-spec.md`, plus the engine protocols `sync`'s `header-render.md` and `map`'s `map-render.md`) live in each skill's `references/` and are loaded only when actually rendering.
-- **★ Stack-neutral, standalone-legible examples (core principle)**: every example in a `SKILL.md` must be understandable from that skill *alone* — never leak a past project's domain nouns (specific component names, hooks, filenames, app concepts like a particular product's "TrackCard" or "annotation store"). Use generic, neutral placeholders (`UserList`, `useSelection`, `core/user`, `Editor.tsx`) so a reader who has never seen the origin project still gets it. A skill that only makes sense if you know Project X is a leaky skill — fix the example, don't ship the leak.
-- **★ Skills-root-relative paths (core principle)**: all paths — doc cross-references **and** example code — are written as if `skills/` (the marketplace root) is the root. **No `./` or `../` prefixes.** Doc links: `docs/adr/008-inject-check-at-handoff.md`, never `../../docs/…`. Example imports: alias form (`@/core/user`) or bare module names; a `Reads:` header line lists dep names without path prefixes (`core/user · app/useUsers`), never `../../core/…`. Relative-path noise ties a skill to a directory depth it has no business assuming.
-- **Frontmatter `description`**: written **broad** (matches multiple trigger phrasings) but **honest** about scope. No "pushy" cross-domain claims.
-- **Cross-references between skills**: spell them as `/nav:audit`, `/nav:refactor`, etc. — the form the user actually types. Bare names like `audit` are ambiguous out of context.
+> Repo-wide **authoring + maintenance** rules — naming, skills-root-relative paths, stack-neutral examples, frontmatter `description`, cross-reference form, read-only/write-gated, ADR-on-new-skill, the site-map gate, and versioning — live **once** in the repo-root [`CLAUDE.md`](CLAUDE.md) (don't re-copy them here — that's the rule ① leakage we just removed). The conventions below are nav's own **design patterns**; several are marketplace-wide and are referenced by sibling plugins, so nav is their single owner.
+
 - **Scope**: skills are **language-agnostic** with a universal core + per-stack heuristics (see [ADR-004](docs/adr/004-language-agnostic-scope.md)). Don't bail on unknown stacks — degrade gracefully to universal checks + flag what was skipped.
-- **Read-only by default**: skills that modify files (`sync`, `map`, `refactor`, `plan`) must show a diff first or only modify on explicit user confirmation.
 - **Skills don't invoke each other**. The meta-skill (`plan`) describes a sequence for the agent to follow — it references sibling protocols rather than re-implementing them. Atomic skills stay standalone-callable (see [ADR-003](docs/adr/003-five-skills-not-four-or-six.md)).
 - **Reuse-via-transcript pattern**: when a skill inlines another skill's protocol, Stage 1 should include a "scan recent turns; if `<other-skill>` already ran against the same input, reuse its output" preamble. Deterministic + zero coupling. Current users: `sync` (audit, as its grounding pass), `map` (audit or `sync`, as its grounding pass), `plan` (audit). See [ADR-006](docs/adr/006-nav-plan-skill.md).
 - **Offer-next-action pattern**: meta-skills end with `AskUserQuestion` listing 2-4 concrete next actions (sub-agent · in-session · save/done). Sub-agent is the recommended default when a self-contained next step exists — it enforces clean context = "separate session" at the architecture level. Atomic skills don't get this pattern (no single obvious next step). Always include a "save / done" option so the user can opt out without typing; one-shot per invocation (no re-offering after decline). Current users: **nav** — `plan` (Stage 4), `refactor` (Step 8); **shape** — `elicit` (offers `/shape:mockup` when render-decidable, `/shape:align` to track, or the execution route `/nav:do`·`/nav:plan` when the thought is a concrete build), `mockup` (offers `/shape:align` to track + the execution route — `/nav:do` small · `/nav:plan` bigger · `/shape:build` multi-item — ADR-028, so a just-converged pick routes to the build verb's check instead of flowing past it on ambient discipline), `dogfood` (routes the coverage gaps by layer → `/shape:elicit` / `/shape:mockup` / `/nav:plan`), `reconcile` (offers `/shape:align` to re-sync the board). See [`docs/adr/007-offer-next-action-pattern.md`](docs/adr/007-offer-next-action-pattern.md).
@@ -45,28 +40,20 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 - **N+1 trigger** (corollary of rules ④ + ②): first consumer of an inline util = inline is fine; **second consumer = extract a primitive** (don't copy-paste, don't shove a mode-flag into a facade). This is the operational trip-wire that turns "no needless abstraction" from a judgment call into a rule. Fires in the `refactor`/`plan` hand-offs above and in any integration check. **Value- and layer-agnostic**: "inline util" generalizes to any repeated *value* (a color, a constant, a config key, a prompt fragment) in any *layer* (code, CSS/design-tokens, prompts, config) — 2nd raw copy = give it an owner. But per-change is structurally blind to leakage that only shows in *aggregate* (each copy is locally fine); that emergent case is caught by `audit`'s value-leakage check (canary + perceptual-proximity clustering), not here — see [ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md).
 - **The verb is the only door for its deliverable (ADR-038)**: if you're about to hand-produce something a verb encodes — a decided behaviour-changing change (`/nav:do`), a structural move (`/nav:refactor`), a comparison mockup (`/shape:mockup`) — fire the verb instead of hand-rolling the artifact. The protocol around the artifact (check bracket · gated diffs · post-pick offers) *is* the deliverable; ambient fluency in the craft is the risk signal, not a waiver. Doesn't make verbs auto-fire — governs the case where you're already producing the deliverable. See [`docs/adr/038-verb-is-the-only-door-for-its-deliverable.md`](docs/adr/038-verb-is-the-only-door-for-its-deliverable.md).
 - **Canon is single-writer (ADR-041)**: if the project keeps a canon layer (`docs/core/*`-class constitution docs), no nav verb and no ambient flow ever edits it — even to sync a fact the user just ratified. Append a one-line pending amendment to `docs/core/amendments.md` (what changed · evidence · by which verb) instead; the project's canon-authoring verb adjudicates the ledger on its next summon. Freshness-law carve-out: stale header = fix same-commit; **stale canon = ledger entry (tracked debt), never a direct edit**. Shape-independent: the ledger is a file convention — it works whether or not the shape plugin is installed. See [`docs/adr/041-core-write-protocol-door-times-timing.md`](docs/adr/041-core-write-protocol-door-times-timing.md).
-- **Each new skill**: write an ADR in `docs/adr/` (marketplace-level) explaining why it exists, what overlaps it has with siblings, and how the trigger description avoids stealing fire from them.
-
 ## Where things live
 
 ```
-.claude-plugin/plugin.json   → manifest (name=nav, version, repo)
-CLAUDE.md                    → ← you are here (developer-facing)
+.claude-plugin/plugin.json   → nav's manifest (the version + metadata owner)
+CLAUDE.md                    → ← you are here (nav-specific: identity · 8 rules · design patterns)
 skills/<name>/SKILL.md       → individual skills, each self-contained
 skills/<name>/references/    → bulky reference docs loaded on demand
-../../README.md              → marketplace-level overview
-../../docs/adr/              → ADRs (marketplace-level — shared across plugins)
 ```
+
+Repo-wide layout (`marketplace.json`, `scripts/`, `docs/`) lives in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
 ## When editing this plugin
 
-- New skill: scaffold `skills/<name>/SKILL.md`, write its frontmatter description carefully (it determines triggering accuracy), test invocations cover the main trigger phrasings, write an ADR.
-- **Before adding or changing any skill, check the two ★ core principles above**: (1) every example is stack-neutral + standalone-legible — no past-project domain nouns; (2) every path is skills-root-relative — no `./` or `../` in doc links or example code. These are the most common ways a skill silently leaks its origin project or its directory depth; verify both before committing.
-- Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
-- Changing the 8 rules: this affects every skill — update each `SKILL.md` in the same commit, write an ADR.
-- Stale `SKILL.md` is worse than missing `SKILL.md` — same rule as project-level "stale header = lie".
-- **Site-map update is gating, not optional.** Any change to a `SKILL.md`, a plugin manifest, or an ADR REQUIRES the same commit to update [`docs/site/index.html`](docs/site/index.html). Before committing, **always** run:
-  ```bash
-  git status docs/site/index.html
-  ```
-  If you changed a skill but the site shows unmodified → **STOP** — you missed it. Update the relevant data array (`DOMAINS`, `NAV_NODES`, `NAV_EDGES`, `CONV`, sidebar links if anatomy structure changed), bump the audit-block date, and add a FIXED entry naming what changed. Skip only for pure typo / internal refactor with zero surface impact. **Stale map lies silently to every future reader** — that's why this is a hard gate, not a soft reminder.
+Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renaming + versioning, the site-map gate, stale-`SKILL.md` — live in the repo-root [`CLAUDE.md`](CLAUDE.md). nav-specific:
+
+- **Changing the 8 rules**: they are nav's framework, restated verbatim in every nav `SKILL.md` — update each in the **same commit**, and write an ADR.
+- **The 8 rules apply to nav's own files too** (the meta-discipline noted above): a `SKILL.md` past ~500 lines, or one enumerating many distinct responsibilities, gets split — same bar as the product code nav audits.

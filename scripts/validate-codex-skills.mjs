@@ -32,6 +32,7 @@ function main() {
   validateClaudeSources(pluginSkills);
   validateCodexMirror(pluginSkills, ROOT);
   validateGeneratedDrift();
+  validateManifestDrift();
 
   if (errors.length) {
     console.error(`Codex/Claude skill compatibility check failed (${errors.length}):`);
@@ -175,6 +176,45 @@ function validateGeneratedDrift() {
   }
 }
 
+/**
+ * Manifest drift: `.claude-plugin/plugin.json` is the single owner of each plugin's
+ * version/description/author; `.cursor-plugin/plugin.json` + marketplace.json versions
+ * are derived by scripts/build-manifests.mjs. Regenerate in a temp copy and compare.
+ */
+function validateManifestDrift() {
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-manifests-validate-"));
+  try {
+    cpSync(ROOT, tempRoot, {
+      recursive: true,
+      filter: (source) => !source.includes(`${ROOT}/.git`) && !source.includes(`${ROOT}/node_modules`),
+    });
+    execFileSync(process.execPath, ["scripts/build-manifests.mjs"], {
+      cwd: tempRoot,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+
+    const hint = "node scripts/build-manifests.mjs";
+    for (const plugin of sortedDirs(PLUGINS_DIR)) {
+      const cursor = join(plugin, ".cursor-plugin", "plugin.json");
+      if (!existsSync(join(PLUGINS_DIR, cursor))) continue;
+      compareFiles(
+        join(tempRoot, "plugins", cursor),
+        join(PLUGINS_DIR, cursor),
+        `plugins/${cursor}`,
+        hint,
+      );
+    }
+    compareFiles(
+      join(tempRoot, ".claude-plugin", "marketplace.json"),
+      join(ROOT, ".claude-plugin", "marketplace.json"),
+      ".claude-plugin/marketplace.json",
+      hint,
+    );
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
 function readPluginSkillsFrom(root) {
   const originalRoot = ROOT;
   const pluginSkills = [];
@@ -210,13 +250,13 @@ function compareTrees(expectedDir, actualDir, label) {
   }
 }
 
-function compareFiles(expected, actual, label) {
+function compareFiles(expected, actual, label, hint = "node scripts/build-codex.mjs") {
   if (!existsSync(actual)) {
-    errors.push(`${label} is missing; run node scripts/build-codex.mjs`);
+    errors.push(`${label} is missing; run ${hint}`);
     return;
   }
   if (readFileSync(expected, "utf8") !== readFileSync(actual, "utf8")) {
-    errors.push(`${label} is stale; run node scripts/build-codex.mjs`);
+    errors.push(`${label} is stale; run ${hint}`);
   }
 }
 

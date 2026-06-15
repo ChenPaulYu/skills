@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-12 (rev 49)
+  Last audit: 2026-06-15 (rev 50)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -50,21 +50,59 @@
       as the seed family. think v0.1.0; standalone, feeds shape one-way (ADR-034).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 42 ADRs in docs/adr/ — 001..042 with cross-supersede / refine links
+    • 43 ADRs in docs/adr/ — 001..043 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (19 flat skills: nav-* / research-* /
       shape-* / think-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; scripts/validate-codex-skills.mjs
-      gates both Claude Code source frontmatter and Codex mirror drift.
+      gates Claude Code source frontmatter, Codex mirror drift, AND manifest
+      drift.
+    • Manifest single-owner: each plugin's .claude-plugin/plugin.json owns its
+      name/version/description/author; .cursor-plugin/plugin.json (projection) +
+      marketplace.json versions are DERIVED by scripts/build-manifests.mjs and
+      do-not-hand-edit. Repo-root CLAUDE.md documents the gate; the validator
+      fails the build on any drift (killed a stale nav 0.4.0 / shape 0.5.0 in
+      marketplace.json). Repo-root CLAUDE.md (new) is the home for these
+      repo-wide build gates.
     • Antigravity CLI (agy) channel: agy plugin install plugins/<name> imports
       each Claude Code plugin natively (source "claude-code" in agy plugin
       list) — same SKILL.md format, same /<plugin>:<skill> namespace, no
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 49)
+  ⚠ FIXED in this revision (rev 50)
+    1. audit gains Mode 3 (deep sweep, ADR-043) — a depth strategy that fans out
+       one read-only sub-agent per domain instead of a single satisficing pass,
+       then merges + root-cause clusters + runs a completeness-critic loop-until-dry.
+       For large/legacy codebases (no headers/barrels, many domains) a single
+       context satisfices and silently misses domains; Mode 3 covers them all and
+       surfaces the few core broken abstractions, not a flat per-rule list.
+       Triggered explicitly ("deep audit", "徹底掃描", "full sweep") or
+       auto-suggested by Mode 1 when it detects a large/legacy shape (never
+       auto-run — N× cost is the user's call). audit node desc "two modes" →
+       "three modes". nav 0.5.0 → 0.6.0; marketplace.json nav version (was drifted
+       at 0.4.0) + stale sync/map description re-synced to 0.6.0. ADR count 42 → 43.
+    2. Manifest single-owner gate (rule ① fix for version leakage). Added
+       scripts/build-manifests.mjs: each plugin's .claude-plugin/plugin.json is
+       the sole owner of version/description/author; .cursor-plugin/plugin.json +
+       marketplace.json versions are now DERIVED from it. Extended
+       validate-codex-skills.mjs to gate manifest drift (same temp-regen-compare
+       mechanism as the Codex mirror). Fixed live drift: nav 0.4.0 + shape 0.5.0
+       in marketplace.json → both 0.6.0. Added a repo-root CLAUDE.md as the home
+       for repo-wide build gates (manifests + Codex mirror + site map).
+    3. CLAUDE.md single-owner consolidation (rule ① applied to the repo's own
+       meta-files). Repo-wide authoring + maintenance rules that were duplicated
+       across all 4 plugin CLAUDE.md files (site-map gate, new-skill→ADR, naming,
+       skills-root-relative paths, stack-neutral examples, frontmatter, read-only,
+       versioning) now live ONCE in the repo-root CLAUDE.md; each plugin CLAUDE.md
+       keeps only its identity + design patterns + a pointer to root. build-
+       codex.mjs now folds the root CLAUDE.md into AGENTS.md (so the Codex mirror
+       keeps the repo-wide rules). Plugin CLAUDE.md line counts: nav 73→59,
+       research 60→49, shape 85→78, think 58→54.
+
+  ⚠ FIXED in rev 49 (kept for history)
     1. validator: added skills-root-relative path and broken file link validation
        check for markdown links in all SKILL.md files to prevent broken internal links
        or violations of the root-relative path rule.
@@ -1206,7 +1244,7 @@ const CB_EDGES = [['shape','nav']];
 
 const NAV_NODES = [
   {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'ground + plan', zh:'底料 + 規劃'}, desc:{en:'Spec-grounded planning — inlines audit (Mode 2) on spec-touched domains, clarifies ambiguity via 3-5 questions, writes a plan artifact. Reuses prior audit output if it ran this session. Output lands in blueprints/plans/ when that tree exists (soft nav→shape; else docs/plans/) — ADR-017.', zh:'以 spec 為目標的規劃 —— 內嵌 audit Mode 2 在受影響 domains,以 3-5 問釐清不明,寫出 plan 檔。同 session 跑過 audit 會 reuse。有 blueprints/ 樹時輸出落 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017。'}},
-  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Two modes: unconditional health, or read-only quick-check against a spec.', zh:'唯讀審計,對照 8 條 deep-module 規則。兩模式:無條件健康,或對應 spec 的唯讀快檢。'}},
+  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
   {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass, behaviour-preserving. Syncs each touched file header inline in the same change (ADR-025, like do); the repo map regen stays sync job. plan recommends it; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass,行為不變。被動到的檔 header 在同一步 inline 同步(ADR-025,同 do);repo map 重生仍交給 sync。plan 會推薦;你自行呼叫。'}},
   {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file)', zh:'描述(檔案)'}, desc:{en:'Per-file navigability — file-top headers (per-language syntax; head -12 = role + Reads), refreshed inline, gated diff. Continuous, per-change cadence. Owns references/header-render.md; offers /nav:map at the end. Re-split from the former one-door sync (headers + map merged in ADR-019) by cadence — ADR-029.', zh:'每檔可導覽 —— 檔首 header(syntax 隨語言;head -12 即角色 + Reads),就地刷新、gated diff。連續、隨改的 cadence。擁有 references/header-render.md;結尾 offer /nav:map。從前身的一道門 sync(headers + map 在 ADR-019 合併)依 cadence 再拆 —— ADR-029。'}},
   {id:'map', kind:'describe', x:625, y:235, w:135, role:{en:'describe (project)', zh:'描述(專案)'}, desc:{en:'Per-repo navigability — the bilingual codebase map (draggable graphs, click-to-reveal, audit block — this file uses the same form). Periodic, batched cadence. Reads the headers sync maintains; owns references/map-render.md + visual-spec.md. Split out of sync by cadence — ADR-029 (supersedes the ADR-019 merge).', zh:'每 repo 可導覽 —— 雙語 codebase map(可拖曳圖、點看面板、audit block —— 本檔即此形式)。週期、批次的 cadence。讀 sync 維護的 header;擁有 references/map-render.md + visual-spec.md。依 cadence 從 sync 拆出 —— ADR-029(supersede ADR-019 的合併)。'}},

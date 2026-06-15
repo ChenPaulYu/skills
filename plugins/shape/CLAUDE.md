@@ -56,17 +56,11 @@ Record the seams; don't blur them:
 
 ## Conventions for skills inside this plugin
 
-These follow the marketplace conventions (see `plugins/nav/CLAUDE.md` for the full list); the load-bearing ones:
+> Repo-wide **authoring + maintenance** rules (naming, skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). Shape-specific:
 
-- **Naming**: bare verbs — `mockup`, `elicit`, `align`, `reconcile`. The `shape:` namespace gives the topic; no `shape-` prefix.
-- **Self-contained `SKILL.md`**: each restates the spine verbatim, so a triggered agent doesn't depend on this file. Bulky references (the blueprints spec, the overview template) live in `references/`, loaded on demand.
-- **★ Stack-neutral, standalone-legible examples**: never leak an origin project's domain nouns. The blueprints template + spec use generic placeholders — a reader who never saw the origin project still gets it.
-- **★ Skills-root-relative paths**: all paths written as if `skills/` (the marketplace root) is root — **no `./` or `../`** in doc links or example code.
 - **★ Progressive disclosure in every produced artifact** (so an agent scans fast, not just the human): a `thoughts/` doc opens with `# <title> — <one-line role>` + a ≤3-line TL;DR/status blockquote (`head -12` yields the gist without reading the body), sections lead with their point, enumerations go in tables, key terms bolded; a `mockup` artifact opens with a top-comment stating what it is · the candidates · the pick. This is `nav`'s interface-first (rule ②) applied to shape's outputs. Every skill that emits a doc/artifact (`elicit`, `mockup`, `align`) enforces it.
 - **Write-gated**: `align` and `reconcile` write files — show what will be written (or a diff) before committing. `reconcile`'s destructive ops follow the safety rules in its `SKILL.md` (check tracked/untracked, never `mv`-then-`rm`, diff before delete).
 - **Skills don't invoke each other**: they reference sibling protocols by name (e.g. reconcile → "run `/shape:align`"), never re-implement or call them.
-- **Each new skill / family change → an ADR** in `docs/adr/` (marketplace-level). The blueprints family landed in [`docs/adr/010-shape-blueprints-workflow.md`](docs/adr/010-shape-blueprints-workflow.md).
-- **Site-map is a gating update**: any change to a `SKILL.md`, manifest, or ADR requires the same change-set to update [`docs/site/index.html`](docs/site/index.html). Stale map lies to every future reader.
 
 ## browser-verify — a shared per-project capability slot
 

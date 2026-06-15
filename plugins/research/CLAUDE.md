@@ -32,10 +32,8 @@ The second use is what makes literature review productive. You are not catalogui
 
 ## Conventions for skills inside this plugin
 
-- **Naming**: skills use **bare verbs** — `dissect`, `map`, `feedback`. The plugin namespace (`research:`) provides topic context; no `research-` prefix on the skill name.
-- **Self-contained**: every `SKILL.md` includes the through-line and argument anatomy framework verbatim, so an agent triggered into the skill doesn't depend on this CLAUDE.md being loaded.
-- **★ Stack-neutral, standalone-legible examples**: every example must be understandable without knowing the origin project. Use generic document titles and claims, never real paper titles or project-specific nouns, unless the skill itself is about a specific well-known paper as a worked example.
-- **★ Skills-root-relative paths**: all paths — doc cross-references and example code — are written as if `skills/` is root. No `./` or `../` prefixes.
+> Repo-wide **authoring + maintenance** rules (naming, skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). research-specific:
+
 - **Read-only by default**: `dissect` surfaces a dissection note and asks where to save it. It never writes without explicit user confirmation.
 - **Output format is the artifact**: a dissection note is a structured markdown file comparable across documents. The format is fixed so multiple notes can be laid side by side.
 - **Claim injection is optional but recommended**: if the user's own claim is available, inject it so the skill can produce an "Implications for [your claim]" section. Without it, the skill still produces the structural skeleton; the implications section is blank.
@@ -43,17 +41,9 @@ The second use is what makes literature review productive. You are not catalogui
 ## Where things live
 
 ```
-.claude-plugin/plugin.json   → manifest (name=research, version, repo)
-CLAUDE.md                    → ← you are here (developer-facing)
+.claude-plugin/plugin.json   → research's manifest (the version + metadata owner)
+CLAUDE.md                    → ← you are here (research-specific)
 skills/<name>/SKILL.md       → individual skills, each self-contained
-../../README.md              → marketplace-level overview
-../../docs/adr/              → ADRs (marketplace-level — shared across plugins)
 ```
 
-## When editing this plugin
-
-- New skill: scaffold `skills/<name>/SKILL.md`, write the frontmatter description carefully (it determines triggering accuracy), write an ADR.
-- Before adding or changing any skill, check the two ★ core principles above: (1) standalone-legible examples; (2) skills-root-relative paths.
-- Renaming a skill: bump version in `plugin.json`; document the rename in an ADR.
-- Stale `SKILL.md` is worse than missing `SKILL.md`.
-- **Site-map update is gating**: any change to a `SKILL.md`, a plugin manifest, or an ADR requires updating `docs/site/index.html` in the same commit. Run `git status docs/site/index.html` before committing.
+Repo-wide layout + ADRs live in the repo-root [`CLAUDE.md`](CLAUDE.md), which also holds all editing rules (new-skill → ADR, the ★ authoring checks, renaming + versioning, the site-map gate). research adds nothing beyond the marketplace defaults.
