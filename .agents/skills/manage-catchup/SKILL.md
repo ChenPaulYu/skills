@@ -27,20 +27,21 @@ Then look for an explicit plan/todo if one exists (don't require it): a `bluepri
 
 If there's almost no signal (clean tree, no plan, no session history), say so plainly rather than inventing progress.
 
-## Step 2 — Report in a fixed shape, plain language
+## Step 2 — Report in a fixed shape: convey the core, not a skim
 
-Always answer these five, short and concrete, each traceable to a real signal from Step 1:
+Always answer these five. Each item must carry enough to actually **re-enter** the work — the **what · why · how-far**, not a one-line label echoed from a commit title:
 
-- **🎯 Goal / 目標** — what we're actually trying to do (the current thread).
-- **✅ Done / 已完成** — what's shipped (committed) or clearly finished.
-- **📍 Now / 現在** — current state: what's in progress, what's uncommitted on the branch.
-- **⚠️ Open / 卡住·開著** — anything unresolved, undecided, failing, or deferred (open loops).
-- **➡️ Next / 下一步** — the single most concrete next action.
+- **🎯 Goal / 目標** — what we're trying to do **and why** (the thread's point, not just its name).
+- **✅ Done / 已完成** — what shipped **+ why it was done that way** (the decision behind it, one plain clause).
+- **📍 Now / 現在** — what's in progress **+ how far it got** + what's uncommitted; enough that you know exactly where the cursor is.
+- **⚠️ Open / 卡住·開著** — what's unresolved / undecided / failing / deferred **+ why it's open** (the blocker or the unanswered question).
+- **➡️ Next / 下一步** — the most concrete next action + why it's next.
 
 Rules:
-- **Plain, direct language** — an orientation, not a report dump.
-- **Grounded, not guessed** — every line traces to a real signal (a commit message, a changed file, a status entry, a plan item). If something is ambiguous or git and memory disagree, mark it **uncertain** rather than smoothing it over.
-- **Short** — a scannable orientation read in ~15 seconds; lead with the point.
+- **Information density, not word count — this is the whole point.** The failure mode is a thin skim that conveys nothing; the fix is *signal per line*, not length. Plain, concise language (剪裁過的白話) — say each thing透徹 enough to re-enter, then stop. Not a 15-second skim, not a full report: as much as the **core** needs, zero padding. Optimize for information *transferred*, not characters written.
+- **Core, not detail — no code.** Convey the *why · what · how-far* at the **decision level**. **No code-level detail** — no file lists, diffs, or function names; that's noise for re-entering, not signal.
+- **The why is first-class.** Mine it from durable sources that actually carry it — commit-message **bodies**, `decisions.md`, `plan.md`, thoughts docs. If the why isn't recorded anywhere durable, say so / mark it inferred — don't invent one.
+- **Grounded, not guessed** — every line traces to a real signal (a commit body, a changed file, a status entry, a plan item). Ambiguous, or git vs. memory disagree → mark **uncertain**, don't smooth over.
 - If `$ARGUMENTS` was given, keep the five sections but scope them to that area.
 
 ## Step 3 — Stop
