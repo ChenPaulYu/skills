@@ -25,3 +25,11 @@ These are **universal mechanics of the browser-verify capability**, not TrackMat
 ## Evidence
 
 - TrackMate CLAUDE.md UI-smoke convention (updated 2026-06-11, commit `31ea10d`) carries all four with their war stories; the session-collision diagnosis and the parity drift are in the 2026-06-11 session transcript (audition verification saga, resolved with playing=true via isolated muted real-click).
+
+## Refinement (2026-06-16) — "real input" is pointer-specific, not synthetic-vs-real wholesale
+
+Bullet 4's "synthetic `.click()` has no user activation → real input" is sharper than "avoid synthetic events": the part that fails is the **pointer** — a synthetic pointer **drops button-state mid-move** (a programmatic move between down/up loses the pressed-button flag, so a drag reads as no-op) and `.click()` lacks user activation. Synthetic **keyboard** events stay fully reliable — `dispatchEvent(new KeyboardEvent('keydown', {key}))` arms a key-driven mode or sets state just fine (it only fails the React-controlled-input case, which is the *value-setter* gotcha in [[2026-06-02-react-vite-browser-verify-false-signals]], not a keyboard-vs-pointer issue). So the cheap pattern for verifying a keyboard-summoned gesture is **hybrid**: synthetic `keydown` to arm / set up state, real `mouse move/down/up` **only** for the actual pointer gesture — don't pay the real-mouse cost (find coords, sequence move→down→up) on the whole flow when only the click/drag needs it.
+
+- **Evidence (2026-06-16, TrackMate scissors / clip-cut)**: verified a keyboard-summoned Razor mode (`C` → scissors arms → click a clip to cut) by synthetic `keydown` `'c'`/`'Enter'` to arm the mode (worked first try) + real `mouse move/down/up` to cut. A synthetic pointer over the clip read as 0-effect ("broken"); the real mouse cut correctly (clip count 2→3). The split held both in the throwaway mockup and the real feature: keyboard-synthetic = reliable, pointer = must be real.
+
+(Could feed `references/browser-verify-gotchas.md`'s real-input line — sharpen "use real input" to "the pointer gesture needs real input; synthetic keyboard still arms modes / sets state." Flagged, not written here — observe adds the observation, not the reference.)
