@@ -1,19 +1,19 @@
 ---
 name: catchup
-description: "Re-orient on where the current work stands — in plain language, rebuilt from durable state (git / diff / changed files / any plan), NOT from chat memory, so it survives /clear, context compaction, or returning after a break. Fixed shape: goal, done, now, open, next. Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /manage:summarize (a complete objective recap of what the session DID — catchup is the state NOW plus what's next) and from /shape:align (which DECIDES next and writes a plan — catchup only reports). Also invokable as /manage:catchup."
+description: "Re-orient on where the current work stands — in plain language, rebuilt from durable state (git / diff / changed files / any plan) as the floor so it survives /clear, context compaction, or returning after a break, THEN enriched from the live context window when it's present (the why / in-flight decisions git can't carry — durable state is the floor, not a blinder). Conveys the core (what · why · how-far) at information-density, not a one-line skim. Fixed shape: goal, done, now, open, next. Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /manage:summarize (a complete objective recap of what the session DID — catchup is the state NOW plus what's next) and from /shape:align (which DECIDES next and writes a plan — catchup only reports). Also invokable as /manage:catchup."
 ---
 
 # catchup — where are we, in plain language
 
-Tell the user **where the current work stands**, in simple, direct language. The value is **grounding**: rebuild the picture from **durable state** (git, the diff, changed files, any plan/todo) — NOT from conversation memory — so this still works after `/clear`, after context was compacted, or when returning after a break. That grounding is what separates `/manage:catchup` from "just summarize the chat".
+Tell the user **where the current work stands**, in simple, direct language. The value is **grounding**: rebuild the picture from **durable state** (git, the diff, changed files, any plan/todo) so it still works after `/clear`, after context was compacted, or when returning after a break. Durable state is the **floor** — it guarantees catchup works even with an empty context — **not a blinder**: when the conversation IS still in the context window, *use it fully too*. It often holds what git can't — the **why**, decisions made but not yet committed, the nuance behind a change. The differentiator from "just summarize the chat" isn't *ignore* the chat; it's *don't depend on* it (ground in durable state so it survives memory loss, while still exploiting the live context when it's there).
 
 Optional focus from the user: **$ARGUMENTS** (if given, scope the catchup to that area; else cover the whole current work).
 
 **Read-only.** Do not edit, write, or commit anything. catchup only reports.
 
-## Step 1 — Rebuild from durable state (don't trust memory)
+## Step 1 — Rebuild from durable state, then enrich from live context
 
-Ground in the **current project** (cwd), primarily from git and files:
+Ground in the **current project** (cwd), starting from git and files:
 
 ```bash
 git -C . rev-parse --abbrev-ref HEAD 2>/dev/null   # current branch
@@ -22,7 +22,9 @@ git -C . log --oneline -10 2>/dev/null             # recent commits
 git -C . diff --stat 2>/dev/null                   # changed-but-uncommitted
 ```
 
-Then look for an explicit plan/todo if one exists (don't require it): a `blueprints/plan.md` / `blueprints/thoughts/` tree, `docs/plans/`, a `TODO`/`TASKS` file, or an in-session task list. Treat the live conversation as a **secondary** input only — git + files are primary so the catchup survives memory loss.
+Then look for an explicit plan/todo if one exists (don't require it): a `blueprints/plan.md` / `blueprints/thoughts/` tree, `docs/plans/`, a `TODO`/`TASKS` file, or an in-session task list.
+
+**Then enrich from the live context window — when it's there, mine it as a first-class source, not a leftover.** It carries what durable state often can't: the **why** behind a change, decisions reached but not yet committed, what was just tried/rejected, the open question being chewed on. Read git/files *first* (the floor — so catchup still works after `/clear`/compaction), but a present conversation is the richest seam for the *why* and the *in-flight* — don't down-rank it to "secondary," fold it in. (Where durable state and the conversation disagree, durable state wins for *what shipped*; the conversation wins for *why / intent*.)
 
 If there's almost no signal (clean tree, no plan, no session history), say so plainly rather than inventing progress.
 
