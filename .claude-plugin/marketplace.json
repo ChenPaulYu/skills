@@ -27,7 +27,7 @@
       "name": "think",
       "source": "./plugins/think",
       "description": "Reason about a problem through a named reasoning lens that forces a structure the default 'think harder' skips. first-principles: strip a question to its irreducible axioms, rebuild from them, surface where that diverges from convention. invert + second-order are the seed family. Feeds shape one-way; standalone.",
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     {
       "name": "manage",
