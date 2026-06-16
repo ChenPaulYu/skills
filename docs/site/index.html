@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-15 (rev 53)
+  Last audit: 2026-06-16 (rev 54)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -12,7 +12,7 @@
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
     • Five plugins: nav (6 skills) + shape (8 skills) + research (4 skills) +
-      think (2 skills) + manage (3 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+      think (3 skills) + manage (3 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), position (canon-authoring campaign → core principle-wise docs:
@@ -46,13 +46,18 @@
       feedback as candidate skill (ADR-027).
     • think skills: first-principles (decompose DOWN — strip to irreducible axioms,
       rebuild, surface divergence) + orthogonal (decompose SIDEWAYS — factor a tangle
-      into mutually-independent axes, verify independence, name what was conflated).
-      Two decomposition lenses; in-chat. think v0.2.0; the speculative invert/second-order
-      seed was dropped for no usage evidence (ADR-046). Standalone, feeds shape (ADR-034/045/046).
+      into mutually-independent axes, verify independence, name what was conflated) +
+      dialectic (put a claim ON TRIAL — steelman both sides, surface the load-bearing
+      assumption, name the deciding experiment; verdict three-way, not pass/fail).
+      Two take a problem apart, one puts a claim on trial; in-chat. think v0.3.0; the
+      speculative invert/second-order seed was dropped for no usage evidence (ADR-046).
+      Standalone, feeds shape (ADR-034/045/046/047).
     • manage skills: catchup (re-orient on where the work stands now, rebuilt from
       git/diff/plan, not chat memory), summarize (a complete objective recap of what
-      the session did), observe (distill the one durable learning into a knowledge
-      base). The meta-lane triad orient → recap → distill; the prototype global
+      the session did), observe (candidate-first — surface this session's candidate
+      learnings, user PICKS which to keep; own-learning → local docs/observations/,
+      a downstream user's skill-feedback → opt-in scrubbed upstream PR to docs/feedback/).
+      The meta-lane triad orient → recap → distill; the prototype global
       commands were migrated in. manage v0.1.0; standalone, cross-project (ADR-044).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
@@ -78,7 +83,24 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 53)
+  ⚠ FIXED in this revision (rev 54)
+    1. REGISTERED think's THIRD lens `dialectic` (ADR-047) — the skill file + ADR +
+       Codex mirror shipped in commit ee350ba but the REGISTRATION was missing: plugin
+       stayed at v0.2.0, and CLAUDE.md / README / this map / marketplace never mentioned
+       it (the validator only checks generated artifacts, so a half-registered skill
+       passes green — see CLAUDE.md "New-skill registration is a manual gate"). Now
+       completed: put a claim ON TRIAL — steelman both sides, surface the load-bearing
+       assumption, name the deciding experiment; three-way verdict (refuted /
+       unsettled-owned-bet / supported), built for paradigm-class questions. think
+       v0.2.0 → 0.3.0; 2 → 3 skills; Codex already 24. ADR count 46 → 47.
+    2. SYNCED observe's surfaces to its committed behaviour (commits 96a22b8 + cf2db79
+       reframed it candidate-first + added downstream skill-feedback → upstream PR, but
+       README + this map still said "distill the one durable learning / writes one
+       observation" — stale). Updated the README bullet + this map's VERIFIED block +
+       the observe command card to candidate-first + own-learning vs skill-feedback
+       routing.
+
+  ⚠ FIXED in rev 53 (kept for history)
     1. think gains a SECOND lens `orthogonal` (ADR-046) — decompose SIDEWAYS: factor
        a tangled phenomenon into mutually-independent axes, verify the independence
        (move one, the others must not move), name what was conflated / falsely-coupled.
@@ -1276,10 +1298,11 @@ const DOMAINS = {
   think: {
     layer: 'foundation',
     path: 'plugins/think/',
-    blurb: {en:'Reason about a problem through a named reasoning lens that forces a structure the default "think harder" skips. 2 lenses — the two ways to take a problem apart: first-principles (down — reduce + rebuild) and orthogonal (sideways — factor into mutually-independent axes). Standalone — feeds shape one-way, in-chat (an insight → a thought / mockup / plan). v0.2.0; see think/CLAUDE.md + ADR-034/045/046.', zh:'用具名 reasoning lens 推理問題,逼出預設「想認真點」會跳過的結構。2 個 lens —— 拆解問題的兩個方向:first-principles(往下 —— 化約+重建)與 orthogonal(往旁 —— 拆成互相獨立的軸)。獨立 —— 單向餵 shape、in-chat(洞見 → thought / mockup / plan)。v0.2.0;見 think/CLAUDE.md + ADR-034/045/046。'},
+    blurb: {en:'Reason about a problem through a named reasoning lens that forces a structure the default "think harder" skips. 3 lenses — two take a problem apart, one puts a claim on trial: first-principles (down — reduce + rebuild), orthogonal (sideways — factor into mutually-independent axes), and dialectic (on trial — steelman both sides, name the experiment that would decide it; verdict three-way). Standalone — feeds shape one-way, in-chat (an insight → a thought / mockup / plan). v0.3.0; see think/CLAUDE.md + ADR-034/045/046/047.', zh:'用具名 reasoning lens 推理問題,逼出預設「想認真點」會跳過的結構。3 個 lens —— 兩個把問題拆開、一個把主張送審:first-principles(往下 —— 化約+重建)、orthogonal(往旁 —— 拆成互相獨立的軸)、dialectic(送審 —— 正反兩面都 steelman,點出能分勝負的實驗;三向判決)。獨立 —— 單向餵 shape、in-chat(洞見 → thought / mockup / plan)。v0.3.0;見 think/CLAUDE.md + ADR-034/045/046/047。'},
     files: [
       ['/think:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:plan ground). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:plan ground)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034。"}],
       ['/think:orthogonal', '', {en:"Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) axes — the dimensions it actually varies along independently — then VERIFY the independence (move one, the others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled. Forces a structure the default skips: tangle · candidate axes · independence check · true degrees of freedom · payload. In-chat; offers to route to shape. Distinct from /think:first-principles (down to axioms + rebuild; orthogonal factors sideways). ADR-046.", zh:"把一個糾結的現象拆成互相獨立(正交)的軸 —— 它真正獨立變動的維度 —— 再驗證獨立性(動一個,其他不能動),點出被混為一談(一個詞藏 N 個問題)或假性分開的東西。逼出預設會跳過的結構:糾結點 · 候選軸 · 獨立性檢查 · 真自由度 · payload。in-chat;offer route 到 shape。跟 /think:first-principles 不同(那是往下到公理+重建;orthogonal 往旁拆)。ADR-046。"}],
+      ['/think:dialectic', '', {en:"Put a claim ON TRIAL — build its strongest case (steelman) AND its strongest attack (devil's advocate, also steelmanned — never a strawman, until it worries you), surface the single deepest load-bearing assumption, then name the one experiment that would decide it. Forces a structure the default skips: Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment, plus a THREE-WAY verdict (refuted / unsettled-owned-bet / supported) — for a frontier claim 'no evidence yet' is an owned bet, not a refutation. Built for paradigm-class questions with no standard answer. In-chat; offers to route to shape. Distinct from /research:critique (which audits an external doc's EXISTING evidence; dialectic stress-tests YOUR OWN forming claim, where the decider doesn't exist yet). ADR-047.", zh:"把一個主張送上審判台 —— 建出它最強的正方(steelman)跟最強的反方(devil's advocate,反方也要 steelman —— 絕不是 strawman,要強到讓你不安),點出整個主張賴以成立、最深的那個承重假設,再講出一個能分勝負的實驗。逼出預設會跳過的結構:Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment,加上三向判決(refuted / unsettled-owned-bet / supported)—— 對前沿主張,『還沒有證據』是一個看清楚並扛下的賭注,不是被推翻。為沒有標準答案的 paradigm 問題而生。in-chat;offer route 到 shape。跟 /research:critique 不同(那審外部文件裡『已存在』的證據;dialectic 壓測你自己還在成形的主張,決定性證據還不存在)。ADR-047。"}],
     ],
   },
   manage: {
@@ -1289,7 +1312,7 @@ const DOMAINS = {
     files: [
       ['/manage:catchup', '', {en:'Re-orient on where the work stands now — rebuilt from durable state (git / diff / changed files / any plan), NOT chat memory, so it survives /clear or context compaction. Fixed shape: goal · done · now · open · next. Read-only; summoned. Distinct from summarize (what the session DID) and /shape:align (which decides next + writes a plan).', zh:'重新定位工作現在到哪 —— 從持久狀態(git / diff / 改動檔 / plan)重建,不靠對話記憶,撐得過 /clear 或 context 壓縮。固定形狀:goal · done · now · open · next。唯讀;召喚式。跟 summarize(做了什麼)、/shape:align(決定下一步 + 寫 plan)不同。'}],
       ['/manage:summarize', '', {en:'A complete, objective recap of what the session did — attempted → done → decided → changed (files / commits), neutral and exhaustive, not a selective TL;DR. Read-only; the raw input observe distills. Distinct from catchup (where you ARE now) and observe (the one keeper learning).', zh:'完整、客觀地 recap 這場 session 做了什麼 —— 嘗試 → 完成 → 決定 → 改動(檔案 / commit),中立且詳盡,不是選擇性 TL;DR。唯讀;observe 蒸餾的原料。跟 catchup(現在在哪)、observe(那條 keeper)不同。'}],
-      ['/manage:observe', '', {en:'Distill the one durable, reusable learning from the session into a knowledge base (docs/observations/) — the first step of a repo-evolution loop. Selective; writes one observation (status: raw, promote by evidence). Output to $SKILLS_REPO when set, else the current project. Often run after summarize. ADR-044.', zh:'把這場 session 一條耐久、可重用的學習蒸餾進 knowledge base(docs/observations/)—— repo 演進迴路第一步。選擇性;寫一條 observation(status: raw,憑證據晉升)。有設 $SKILLS_REPO 就寫那、否則當前專案。常接在 summarize 之後。ADR-044。'}],
+      ['/manage:observe', '', {en:"Candidate-first: surface THIS session's candidate learnings, the user PICKS which to keep (zero/one/several) — agent proposes, user disposes, no silent auto-write. Each is classified own-learning (about the user's work → local docs/observations/) or skill-feedback (about a skill itself): a maintainer commits locally, but a DOWNSTREAM user's skill-feedback routes to an opt-in, scrubbed upstream PR (a docs/feedback/ inbox, why-led body) instead of a local note that goes nowhere. First step of the repo-evolution loop; status: raw, promote by evidence. Often run after summarize. ADR-044.", zh:"候選優先:列出這場 session 的候選學習,使用者挑要留哪些(零/一/多個)—— agent 提案、使用者裁奪,不靜默自動寫。每條分類為 own-learning(關於使用者自己的工作 → 本地 docs/observations/)或 skill-feedback(關於 skill 本身):維護者本地 commit,但下游使用者的 skill-feedback 走 opt-in、去識別化的上游 PR(docs/feedback/ inbox、why 開頭),而不是寫個沒人看的本地 note。repo 演進迴路第一步;status: raw,憑證據晉升。常接在 summarize 之後。ADR-044。"}],
     ],
   },
 };
@@ -1298,7 +1321,7 @@ const CB_NODES = [
   {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit) → dogfood the built result → plan (align) → build, keep honest (reconcile). 6 skills around a blueprints/ convention; doctor + position (converge product canon) planned. Depends on nav one-way (shape → nav). v0.3.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。6 個 skill 圍著 blueprints/ 約定;doctor、position(收斂產品 canon)待加。單向依賴 nav(shape → nav)。v0.3.0。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.4.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.4.0。'}},
-  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 2 lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes). Standalone — feeds shape one-way; reasons in-chat, no file. v0.2.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。2 個 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)。獨立 —— 單向餵 shape;in-chat、不寫檔。v0.2.0。'}},
+  {id:'think', kind:'plugin', x:585, y:150, w:120, role:{en:'reason a problem', zh:'推理問題'}, desc:{en:'Reason about a problem through a named lens that forces a structure default reasoning skips. 3 lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment). Standalone — feeds shape one-way; reasons in-chat, no file. v0.3.0.', zh:'用具名 lens 推理問題,逼出預設推理會跳過的結構。3 個 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗)。獨立 —— 單向餵 shape;in-chat、不寫檔。v0.3.0。'}},
   {id:'manage', kind:'plugin', x:760, y:150, w:120, role:{en:'meta-lane', zh:'meta-lane'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 3 seed skills: catchup · summarize · observe (orient → recap → distill). Standalone, cross-project. v0.1.0.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。3 個 seed skill:catchup · summarize · observe(orient → recap → distill)。獨立、跨專案。v0.1.0。'}},
 ];
 const CB_EDGES = [['shape','nav']];

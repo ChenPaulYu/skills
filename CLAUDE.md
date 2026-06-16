@@ -63,6 +63,30 @@ git status docs/site/index.html README.md
 
 If you changed the roster but either shows unmodified → **STOP**, you missed it. Skip only for a pure typo / internal refactor with zero surface impact. **A stale surface lies silently to every future reader** — and the two drift independently (a real incident: the `manage` plugin landed in the site map but the README still listed four plugins). That's why both are hard gates, not soft reminders.
 
+#### ⚠️ Adding a skill: the validator is BLIND to registration — it's a manual gate
+
+`validate-codex-skills.mjs` only checks that **generated** artifacts match their **sources** (cursor · codex · AGENTS · marketplace `version`). It is **blind to whether any human surface names a skill.** So a skill whose `SKILL.md` + ADR + Codex mirror are committed, but whose **version bump / CLAUDE.md roster / README / site map are missing, passes green.** This exact gap shipped `think:dialectic` **unregistered**: the skill file lived in `git`, the plugin still read `v0.2.0`, README + the map never named it — green the whole way, and `ADR-047` ended up *claiming* surfaces it hadn't updated (a stale ADR is a lie too).
+
+**A new skill is not "added" until it is registered. Adding `plugins/<plugin>/skills/<name>/SKILL.md` REQUIRES, in the SAME commit, ALL of:**
+
+| # | Surface | Edit |
+|---|---|---|
+| 1 | `plugins/<plugin>/.claude-plugin/plugin.json` | bump `version` (gate #1) + refresh its `description` |
+| 2 | `plugins/<plugin>/CLAUDE.md` | add the skill to the roster |
+| 3 | `README.md` | plugin-table line (if count/blurb changed) **+** the per-plugin skills list |
+| 4 | `docs/site/index.html` | VERIFIED skill list **+** plugin node/blurb **+** a command card **+** rev bump **+** ADR count |
+| 5 | regenerate | `build-manifests.mjs` + `build-codex.mjs` (marketplace · cursor · codex · AGENTS) |
+| 6 | `docs/adr/` | the ADR — and it must describe what the commit *actually* did, not what was planned |
+
+**Mechanical backstop the validator can't give you** — every skill slug must appear in **both** human surfaces (run before committing a roster change):
+
+```bash
+for d in plugins/*/skills/*/; do s=$(basename "$d"); \
+  grep -qw "$s" README.md && grep -qw "$s" docs/site/index.html || echo "UNREGISTERED: $s"; done
+```
+
+Any output → **STOP**: that skill is (or is about to be) committed half-registered. (Heuristic — a very short slug can match unrelated prose; eyeball those. The real gate is landing the table above in one commit.)
+
 ## Authoring conventions (every plugin, every skill)
 
 - **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `think` uses canonical lens names — `first-principles` — for discoverability); document the divergence in that plugin's CLAUDE.md.
@@ -76,7 +100,7 @@ If you changed the roster but either shows unmodified → **STOP**, you missed i
 ## When editing — maintenance rules
 
 - **Before adding or changing any skill**, check the ★ authoring principles above (the two most common leaks: an origin-project domain noun, and a `./`/`../` path).
-- **New skill** — scaffold `plugins/<plugin>/skills/<name>/SKILL.md`, write the frontmatter description carefully, test that invocations cover the main trigger phrasings, then **write an ADR** in `docs/adr/` (marketplace-level) explaining why it exists, its overlap with siblings, and how its trigger avoids stealing their fire.
+- **New skill** — scaffold `plugins/<plugin>/skills/<name>/SKILL.md`, write the frontmatter description carefully, test that invocations cover the main trigger phrasings, then **write an ADR** in `docs/adr/` (marketplace-level) explaining why it exists, its overlap with siblings, and how its trigger avoids stealing their fire. **Then REGISTER it** — the full 6-surface set in gate #3's registration table, in the **same commit** as the `SKILL.md`. The validator won't catch a miss; run the grep backstop there.
 - **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and document the rename in an ADR.
 - **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and write an ADR.
 - **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.

@@ -77,6 +77,30 @@ git status docs/site/index.html README.md
 
 If you changed the roster but either shows unmodified → **STOP**, you missed it. Skip only for a pure typo / internal refactor with zero surface impact. **A stale surface lies silently to every future reader** — and the two drift independently (a real incident: the `manage` plugin landed in the site map but the README still listed four plugins). That's why both are hard gates, not soft reminders.
 
+#### ⚠️ Adding a skill: the validator is BLIND to registration — it's a manual gate
+
+`validate-codex-skills.mjs` only checks that **generated** artifacts match their **sources** (cursor · codex · AGENTS · marketplace `version`). It is **blind to whether any human surface names a skill.** So a skill whose `SKILL.md` + ADR + Codex mirror are committed, but whose **version bump / CLAUDE.md roster / README / site map are missing, passes green.** This exact gap shipped `think-dialectic` **unregistered**: the skill file lived in `git`, the plugin still read `v0.2.0`, README + the map never named it — green the whole way, and `ADR-047` ended up *claiming* surfaces it hadn't updated (a stale ADR is a lie too).
+
+**A new skill is not "added" until it is registered. Adding `plugins/<plugin>/skills/<name>/SKILL.md` REQUIRES, in the SAME commit, ALL of:**
+
+| # | Surface | Edit |
+|---|---|---|
+| 1 | `plugins/<plugin>/.claude-plugin/plugin.json` | bump `version` (gate #1) + refresh its `description` |
+| 2 | `plugins/<plugin>/CLAUDE.md` | add the skill to the roster |
+| 3 | `README.md` | plugin-table line (if count/blurb changed) **+** the per-plugin skills list |
+| 4 | `docs/site/index.html` | VERIFIED skill list **+** plugin node/blurb **+** a command card **+** rev bump **+** ADR count |
+| 5 | regenerate | `build-manifests.mjs` + `build-codex.mjs` (marketplace · cursor · codex · AGENTS) |
+| 6 | `docs/adr/` | the ADR — and it must describe what the commit *actually* did, not what was planned |
+
+**Mechanical backstop the validator can't give you** — every skill slug must appear in **both** human surfaces (run before committing a roster change):
+
+```bash
+for d in plugins/*/skills/*/; do s=$(basename "$d"); \
+  grep -qw "$s" README.md && grep -qw "$s" docs/site/index.html || echo "UNREGISTERED: $s"; done
+```
+
+Any output → **STOP**: that skill is (or is about to be) committed half-registered. (Heuristic — a very short slug can match unrelated prose; eyeball those. The real gate is landing the table above in one commit.)
+
 ## Authoring conventions (every plugin, every skill)
 
 - **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `think` uses canonical lens names — `first-principles` — for discoverability); document the divergence in that plugin's CLAUDE.md.
@@ -90,7 +114,7 @@ If you changed the roster but either shows unmodified → **STOP**, you missed i
 ## When editing — maintenance rules
 
 - **Before adding or changing any skill**, check the ★ authoring principles above (the two most common leaks: an origin-project domain noun, and a `./`/`../` path).
-- **New skill** — scaffold `plugins/<plugin>/skills/<name>/SKILL.md`, write the frontmatter description carefully, test that invocations cover the main trigger phrasings, then **write an ADR** in `docs/adr/` (marketplace-level) explaining why it exists, its overlap with siblings, and how its trigger avoids stealing their fire.
+- **New skill** — scaffold `plugins/<plugin>/skills/<name>/SKILL.md`, write the frontmatter description carefully, test that invocations cover the main trigger phrasings, then **write an ADR** in `docs/adr/` (marketplace-level) explaining why it exists, its overlap with siblings, and how its trigger avoids stealing their fire. **Then REGISTER it** — the full 6-surface set in gate #3's registration table, in the **same commit** as the `SKILL.md`. The validator won't catch a miss; run the grep backstop there.
 - **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and document the rename in an ADR.
 - **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and write an ADR.
 - **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.
@@ -360,10 +384,11 @@ Eight skills built (`mockup`, `elicit`, `dogfood`, `position`, `setup`, `align`,
 
 A collection of skills for **reasoning about a problem through a named lens** — applying an explicit, disciplined reasoning frame that forces a structured analysis the model's default "think about it" won't produce. The object is **your own reasoning about a problem** (a belief, a decision, a design), not an external document (that's `research`) and not existing code (that's `nav`).
 
-Two lenses today — **the two ways to take a problem apart**:
+Three lenses today — **two take a problem apart, one puts a claim on trial**:
 
 - `first-principles` — decompose **down**: strip a question to its irreducible axioms, rebuild the answer from those alone, surface where that diverges from convention.
 - `orthogonal` — decompose **sideways**: factor a tangled phenomenon into mutually-independent axes, verify the independence (move one, the others stay put), and name what was conflated or falsely-coupled.
+- `dialectic` — put a claim **on trial**: build its strongest case (steelman) AND its strongest attack (devil's advocate — also steelmanned, never a strawman), surface the deepest load-bearing assumption, name the experiment that would decide it. Verdict is three-way (refuted / unsettled-owned-bet / supported), not pass/fail — for a frontier claim "no evidence yet" is an *owned bet*, not a refutation. Built for paradigm-class questions with no standard answer. (The parked `steelman` candidate from ADR-034/046 graduates here, but two-sided + adjudicating — hence `dialectic`, not the one-sided `steelman` — `docs/adr/047-think-dialectic-lens.md`.)
 
 Future lenses are added **by evidence** (ADR-018), not pre-listed — each must clear the value-guardrail (a forced structure the default skips) AND show real recurring use. (The originally-speculated `invert` / `second-order` seed was dropped for having no usage evidence — see `docs/adr/046-think-orthogonal-lens-drop-speculative-seed.md`; charter in `docs/adr/034-think-plugin.md`.)
 
@@ -373,7 +398,7 @@ This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). It is *
 
 The unit is a **reasoning move on a problem**, and each skill is **one named move with a forced structure + a fixed output shape**.
 
-What unifies the lenses is not a shared template (their procedures genuinely differ — decompose-down vs negate vs project-forward) but a shared **discipline**:
+What unifies the lenses is not a shared template (their procedures genuinely differ — decompose-down vs factor-sideways vs put-a-claim-on-trial) but a shared **discipline**:
 
 1. **A named frame, applied explicitly** — not "reason carefully" but "run *this* operation on the problem." The frame's steps are mandatory, in order.
 2. **A forced structure the default won't produce** — the value-guardrail. "Think harder about X" is what the model does anyway; a `think` skill earns its existence ONLY by forcing an output the default reasoning skips (e.g. first-principles MUST list the discarded assumptions + the irreducible axioms, not just present a conclusion). If a proposed lens can't name a structure the default omits, it is **not** a skill — it's ceremony (the caution that retired `nav`'s `doctor`, ADR-021).
@@ -390,7 +415,7 @@ What unifies the lenses is not a shared template (their procedures genuinely dif
 
 > Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
 
-- **Naming**: skills use the **canonical lens name** — `first-principles`, `orthogonal` — not a coerced bare verb. The names are well-known reasoning concepts; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
+- **Naming**: skills use the **canonical lens name** — `first-principles`, `orthogonal`, `dialectic` — not a coerced bare verb. The names are well-known reasoning concepts; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
 - **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
 - **Lightweight, in-chat by default**: a lens surfaces its analysis in the conversation and writes **no file** — think is the lightest plugin (pure reasoning). Persistence happens by routing to shape (`shape-elicit` → `thoughts/`, `shape-mockup`, `nav-plan`), never a think-owned artifact. It never writes source or makes a decision.
 - **Feeds shape, never invokes it**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `shape-elicit` to converge it, `shape-mockup` to render it, `nav-plan` to ground it. An offer, not a call.
