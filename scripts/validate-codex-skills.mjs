@@ -6,6 +6,10 @@
  * - Claude Code source lives under plugins/<plugin>/skills/<skill>/SKILL.md.
  * - Codex mirror lives under .agents/skills/<plugin>-<skill>/SKILL.md.
  * - The mirror must be exactly what scripts/build-codex.mjs generates.
+ * - Every skill is REGISTERED in both human surfaces (README + site map) — gate #3.
+ *   Without this the validator is blind to a half-registered skill (one whose SKILL.md
+ *   + mirror are committed but whose README/site-map entries are missing); it ships
+ *   green. The mechanical fix for the failure that shipped think:dialectic unregistered.
  */
 import {
   cpSync,
@@ -33,6 +37,7 @@ function main() {
   validateCodexMirror(pluginSkills, ROOT);
   validateGeneratedDrift();
   validateManifestDrift();
+  validateRegistration(pluginSkills);
 
   if (errors.length) {
     console.error(`Codex/Claude skill compatibility check failed (${errors.length}):`);
@@ -212,6 +217,35 @@ function validateManifestDrift() {
     );
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+/**
+ * Registration gate (#3): every skill must be named in BOTH human-facing surfaces —
+ * README.md and docs/site/index.html. The unambiguous token both carry is the
+ * invocation form `/<plugin>:<skill>` (README skills list + site map command card),
+ * which avoids the short-slug false positives a bare-name grep would hit. This is the
+ * one check the rest of the validator can't give: it compares generated artifacts to
+ * sources and is otherwise blind to whether a human ever wrote the skill down.
+ */
+function validateRegistration(pluginSkills) {
+  for (const [label, path] of [
+    ["README.md", join(ROOT, "README.md")],
+    ["docs/site/index.html", join(ROOT, "docs", "site", "index.html")],
+  ]) {
+    if (!existsSync(path)) {
+      errors.push(`${label} is missing; cannot verify skill registration (gate #3)`);
+      continue;
+    }
+    const content = readFileSync(path, "utf8");
+    for (const item of pluginSkills) {
+      const token = `/${item.plugin}:${item.skill}`;
+      if (!content.includes(token)) {
+        errors.push(
+          `${item.plugin}:${item.skill} is not registered in ${label} (no "${token}") — see CLAUDE.md gate #3 registration table`,
+        );
+      }
+    }
   }
 }
 
