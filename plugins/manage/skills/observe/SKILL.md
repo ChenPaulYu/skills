@@ -1,6 +1,6 @@
 ---
 name: observe
-description: "Surface THIS session's candidate durable learnings, let the user PICK which to keep, then write the chosen one(s) into a knowledge base (docs/observations/) — the first step of a repo-evolution loop (lived experience -> observation -> ADR -> skill). Candidate-first: list the non-obvious mechanisms/insights as one-line claims with why-worth-keeping, the user decides (zero / one / several), only then dedupe + write the picks in the established format (status: raw; promote by evidence, not session count). Summoned; read-only except the chosen observation file(s). Output goes to $SKILLS_REPO/docs/observations/ when the env var is set, else the current project's docs/observations/. Often run after /manage:summarize (the complete recap). Fires on \"observe this\", \"record a learning\", \"capture this insight\", \"write an observation\", \"log what we learned\", \"what's worth observing\". Also invokable as /manage:observe."
+description: "Surface THIS session's candidate durable learnings, let the user PICK which to keep (zero/one/several), then write only the picks — candidate-first, the agent proposes and the user disposes (no silent auto-write). Each candidate is classified own-learning (about the user's work → their local docs/observations/) or skill-feedback (about a skill itself): a maintainer commits it locally, but a DOWNSTREAM user's skill-feedback routes to an opt-in, scrubbed pull request upstream to github.com/ChenPaulYu/skills (a docs/feedback/ inbox, why-led body) instead of a local note that goes nowhere. Part of the repo-evolution loop (lived experience -> observation -> ADR -> skill). Summoned; read-only except the chosen file(s) / the feedback PR. Fires on \"observe this\", \"record a learning\", \"capture this insight\", \"write an observation\", \"log what we learned\", \"what's worth observing\". Also invokable as /manage:observe."
 ---
 
 # observe — harvest this session into a durable observation
@@ -23,31 +23,50 @@ date +%F
 - If neither exists, ask the user where observations should live (or whether to create `docs/observations/` in the current project) — don't write to a guessed path.
 - Use the real `date +%F` output for the filename + frontmatter — never guess the date.
 
+**Two kinds of observation route to two destinations** (classified per-candidate in Step 2, decided in Step 5):
+
+- **own-learning** — a learning about *the user's own work / codebase*. Destination = the local KB above. Private to them.
+- **skill-feedback** — a learning that is really *feedback about a skill itself* (a friction, a gap, "this verb should also do X"). The valuable destination is **the skills' author**. If the runner can commit to the skills repo (they ARE the maintainer — `$SKILLS_REPO` set, writable, its `origin` is the canonical skills repo, `gh` push works), it just commits locally like any observation. **Otherwise the runner is a downstream user** → the contribution path is an **upstream PR** (Step 5's PR branch), never a local write that goes nowhere. Detect write-access cheaply, don't ask identity:
+
+```bash
+# Is this runner the skills maintainer (can land a skill-feedback observation directly)?
+git -C "$TARGET" remote get-url origin 2>/dev/null   # is origin the canonical skills repo?
+gh repo view ChenPaulYu/skills --json viewerCanAdminister -q .viewerCanAdminister 2>/dev/null  # push access?
+```
+  No writable canonical skills repo → treat skill-feedback as **downstream → PR**.
+
 ## Step 2 — Surface the candidate learnings (don't write yet)
 
 Scan THIS session for the **non-obvious, reusable mechanisms or principles** worth keeping — what future-you would want to know, not a play-by-play. A keeper names a *signal* and a *move*, grounded in what actually happened. For each candidate, fix:
 
 - the non-obvious insight / mechanism / failure mode it surfaced;
 - the reusable principle, as a one-sentence **claim**;
-- the evidence (this session) + roughly how durable it is (one-off vs. likely-recurring).
+- the evidence (this session) + roughly how durable it is (one-off vs. likely-recurring);
+- its **kind** (Step 1): **own-learning** (about the user's work) or **skill-feedback** (about a skill itself) — this decides where it can go.
 
 Produce a **short list (≈2–5), ranked by value. Write nothing yet.** (If `/manage:summarize` ran earlier, mine its recap for candidates. If `$ARGUMENTS` named a focus, bias toward it but still scan wider.) If the session genuinely surfaced nothing keepable, say so plainly — don't manufacture a candidate to have something to show.
 
 ## Step 3 — Present the candidates, let the user pick
 
-Show the list — each candidate as **one line: the claim · why it's worth keeping · rough durability** (and "overlaps existing `<slug>`" when your dedupe sense already flags one). Then let the user choose **zero, one, or several**.
+Show the list — each candidate as **one line: the claim · kind (own-learning / skill-feedback) · why it's worth keeping · rough durability** (and "overlaps existing `<slug>`" when your dedupe sense already flags one). Mark a skill-feedback pick that would route upstream (downstream runner) so the user knows it means *opening a PR*, not a local note. Then let the user choose **zero, one, or several**.
 
 This is the **gate**: nothing is written until the user picks. Don't pre-decide or auto-write the "best" one — the user owns what enters their knowledge base; observe finds and offers, the user disposes. You may flag a recommended pick, but the choice is theirs. Only the picked candidate(s) proceed to Step 4.
 
-## Step 4 — Dedupe against existing observations
+## Step 4 — Route each pick (own KB vs upstream PR)
 
-```bash
-ls "$TARGET/docs/observations/"
-```
+Per pick, the kind (Step 2) + write-access (Step 1) decide the destination:
 
-If the learning **overlaps an existing observation**, prefer **appending/strengthening that file** (add a new evidence case, move it toward `landed` per the evidence gate) over creating a near-duplicate. Surface the overlap and let the user pick new-vs-append.
+| pick | destination |
+|---|---|
+| **own-learning** | local KB — Step 5 (write to `$TARGET/docs/observations/`) |
+| **skill-feedback**, runner CAN write the skills repo (maintainer) | local KB — Step 5 (it's their own skill) |
+| **skill-feedback**, runner CANNOT (downstream user) | **upstream PR — Step 5-PR** |
+
+**Dedupe applies to the local-KB path only:** `ls "$TARGET/docs/observations/"` — if the learning **overlaps an existing observation**, prefer **appending/strengthening that file** (add an evidence case, move it toward `landed`) over a near-duplicate; surface the overlap, user picks new-vs-append. (The PR path lands in a fresh file in the author's `docs/feedback/` inbox; the author dedupes on triage, not the contributor.)
 
 ## Step 5 — Write the picked observation(s) in the established format
+
+(Local-KB path. For the downstream skill-feedback path, see **Step 5-PR**.)
 
 Write **each** candidate the user picked (one file each; if they picked several, repeat this for each). Path: `"$TARGET/docs/observations/<YYYY-MM-DD>-<kebab-topic>.md"`. Read one existing file first to mirror its shape:
 
@@ -78,11 +97,35 @@ Conventions:
 - **Link** related ADRs and observations relative to the knowledge-base root (e.g. `docs/adr/0xx-...md`, `[[observation-slug]]`); no `./` or `../`.
 - **status: raw** for a single case (promotion is by *evidence*, not session count). Add a trip-wire line for what would graduate it.
 
+## Step 5-PR — Contribute downstream skill-feedback upstream (opt-in, scrubbed)
+
+When a picked **skill-feedback** observation routes upstream (downstream runner, Step 4), the contribution path is a **pull request to the skills' author** — `https://github.com/ChenPaulYu/skills` — not a local write that no one will read. Two guardrails are non-negotiable:
+
+- **Opt-in.** A PR is an outward, public action. Confirm explicitly first ("send this upstream as a PR to ChenPaulYu/skills?") — never auto-open. If they decline, offer to drop it or stash it as a local note instead.
+- **Scrub first.** The observation likely cites the runner's real files / decisions / proprietary context. Before pushing, **rewrite it to be about the SKILL, generically** — keep the friction + the why + a minimal reproducible shape; strip project names, paths, private detail. Show the scrubbed version for approval before it leaves the machine.
+
+Then open the PR via `gh` (fork → branch → add file → PR):
+
+```bash
+gh repo fork ChenPaulYu/skills --clone --remote 2>/dev/null   # fork + clone if not already
+# in the fork: add the scrubbed observation to the author's feedback inbox
+#   docs/feedback/<YYYY-MM-DD>-<kebab-topic>.md   (NOT docs/observations/ — that's the author's own)
+git checkout -b feedback/<kebab-topic>
+git add docs/feedback/<...>.md && git commit
+git push -u origin feedback/<kebab-topic>
+gh pr create --repo ChenPaulYu/skills --title "feedback: <one-line claim>" --body "<why-led body>"
+```
+
+- **Lands in `docs/feedback/`** (the author's inbox), one fresh file, same observation format (frontmatter `status: raw`; add `source: external`). The author triages → may graduate into `docs/observations/`. The contributor does NOT dedupe against the author's KB.
+- **The PR body leads with WHY.** Open with *why they're sending it* — what they were doing, the friction/gap the skill hit, what they'd want changed — then the scrubbed observation. The why is what lets the author judge it; a finding with no why is noise.
+- **If `gh` is missing or unauthenticated**, don't fail silently: write the scrubbed observation to a local file and hand the user the manual path ("`gh auth login`, or open a PR by hand at the repo URL with this file").
+
 ## Step 6 — Flag, then hand back (don't over-reach)
 
 - Note whether each written observation likely **feeds an existing ADR** (name it) or is a **candidate for a future ADR** — but **do NOT write the ADR**. Observations are raw evidence; ADRs come later, deliberately.
-- **Do not** edit any code, `SKILL.md`, manifest, or site map — observe only adds the observation(s).
-- Show each written file's path + contents (or the diff if you appended); let the user review/commit. Don't commit unless asked.
+- **Do not** edit any code, `SKILL.md`, manifest, or site map — observe only adds the observation(s) (or opens the feedback PR).
+- **Local-KB picks**: show each written file's path + contents (or the diff if you appended); let the user review/commit. Don't commit unless asked.
+- **Upstream-PR picks**: show the **PR URL** (or, if `gh` was unavailable, the local scrubbed file + the manual-PR instructions). The fork/branch/PR was already user-confirmed in Step 5-PR.
 
 ## Companion skills
 
