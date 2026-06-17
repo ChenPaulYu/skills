@@ -68,6 +68,8 @@ Then list:
 
 If the answer to any of these is "I'll figure it out" → rule ⑦, ask the user to clarify the scope before starting.
 
+**If the module has external consumers, freeze the contract first.** When the thing being refactored is imported by other code/projects (a library's public API, a package boundary), circle the **contract** before any move: the exported symbols + public signatures that must NOT change. Everything behind that line restructures freely; the contract bytes stay still ("保門面、整身體" — keep the facade, rework the body). This makes the contract a *gate* (Step 4), not a hope. State explicitly what's frozen (e.g. "`__init__` exports + every `YouTubeToolkit` public method signature") and what's free (handlers, internal helpers, return-dict *internals* if not part of the contract).
+
 ### Step 3 — Decompose into smallest behaviour-preserving steps
 
 Each step must be:
@@ -81,6 +83,11 @@ For a typical "extract a hook" refactor, the steps might be:
 3. Remove now-orphaned imports / state.
 4. (Repeat for the next hook.)
 
+**Common verbatim recipes** (each keeps the original entry point as a thin delegator, so the contract from Step 2 can't move — the recipe IS the "smallest behaviour-preserving step" for that shape):
+
+- **God-class / fat-facade → a service (or domain-module) layer.** The original class keeps every public method as a *one-line delegation*; the body moves verbatim into a service that holds a back-reference to the original (`self._toolkit` / `self._ctx`). Inside the moved body, mechanically rewrite the owner reference (`self.` → `self._toolkit.`) so cross-domain calls and helpers still resolve with **zero judgment** — which is exactly what makes each service delegable to a sub-agent and the move auditable. The public class shrinks to a delegation index; each domain's logic becomes one readable file.
+- **Giant function → private helpers.** Extract each cohesive block (build-params, process-response, assemble-result) into a `_private` helper of the same class; pass the locals it needs *in*, return what the caller needs *out*. The public function keeps its signature and becomes a short orchestrator. Don't over-fragment (rule ④) — extract to clarity, not to a pile of 3-line helpers.
+
 ### Step 4 — Apply ONE step, then test-gate
 
 After every single step, re-run the stack's gate trio (the one you established in Step 1):
@@ -91,6 +98,17 @@ pnpm typecheck && pnpm lint && pnpm test --run
 ```
 
 All three must stay green. If any breaks → **revert that step** and try a smaller decomposition. Do NOT pile on more changes hoping they'll fix it.
+
+**Contract gate (when Step 2 froze a contract).** Tests alone won't catch a quietly-widened public signature. Add a mechanical check that the frozen surface is byte-identical to before the move:
+
+```bash
+# e.g. Python: compare public signatures vs the previous commit
+git show HEAD:path/to/api.py | grep -E '^    def [a-z]' | sed 's/ \+/ /g' | sort > /tmp/before.txt
+grep -E '^    def [a-z]' path/to/api.py | sed 's/ \+/ /g' | sort > /tmp/after.txt
+comm -23 /tmp/before.txt /tmp/after.txt   # MUST be empty: nothing removed/changed
+```
+
+Adding new (e.g. private `_`-prefixed) members is fine; removing or changing a frozen one is a contract break → revert. Run this every phase, not just at the end.
 
 When green: optionally commit (small commits make bisecting trivial later).
 
