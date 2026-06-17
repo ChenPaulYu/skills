@@ -44,12 +44,25 @@ Two edges a caller-aware decorator does NOT cover, both worth a changelog line r
 - `isinstance(x, dict)` / direct `json.dumps(x)` on a return value that later becomes a typed object — unrelated to deprecation but the same "don't chase 100% compat with heavy machinery" judgment (cf. the Tier-3 Dict→dataclass plan from the same session, which uses a dict-access mixin + a documented exception rather than subclassing `dict`).
 - `sys._getframe(1)` reads the *immediate* caller; an internal helper that itself wraps the deprecated call would mask the warning. Fine here (facade/services call directly); note it if call depth grows.
 
+## Sequel — when removal IS on the table, deprecate → flip internals → remove (two steps, never one)
+
+The caller-aware decorator is the right move when you must **keep** the methods (external consumers you can't break). Later in the same session the constraint changed: a usage scan ([[vendored-copies-inflate-usage-scans]]) showed all consumers were internal and a breaking change was acceptable with a migration guide. So removal went back on the table — and the earlier "structural flip" the decorator had let us *avoid* now became the **enabling first step**, viable precisely because breaking + fixing our own tests was now allowed.
+
+The decisive sequencing: **you cannot just delete an internally-load-bearing public method — flip the internal callers off it first.**
+1. **Flip** (internal-only, zero public change): re-route every internal caller (the facade + cross-domain service calls — the ~112 sites) to call the service layer directly. After this the legacy methods have **zero internal callers** → pure external shims. Update the mock-point tests that mocked at the api-method seam (now mock at the service seam) — forward-compatible, since the methods are about to go.
+2. **Remove** (the breaking change): now deletion is a clean `rm` — the 100 methods drop, the file collapses (2017→149 lines), nothing internal depends on them. Ship a migration guide + major version bump.
+
+And the caller-aware deprecation wasn't wasted work: it became the **transition on-ramp** — the runtime warnings point each internal call site at its replacement *during* the migration, before step 2 lands. Deprecate-then-remove, with the flip in between.
+
+A clean intra-vs-cross refinement fell out of the flip: a service method calling another method *on the same service* should be `self.<m>()`, not `self._toolkit._<svc>.<m>()` — don't bounce through the back-ref to call yourself. A blanket "rewrite every `self._toolkit.<flat>` → `self._toolkit._<svc>.<m>`" over-routes intra-service calls; fix them to `self.` (it's also what made the mock-based unit tests mock the service's own method cleanly).
+
 ## Trip-wire to revisit
 
-If a second project needs the same "retire a wide legacy surface that's also internally load-bearing" move, this graduates from a one-off technique toward a documented pattern (and possibly a tiny shared helper in the nav refactor toolkit). Watch also for the masking caveat actually biting (a deprecated method warns from inside the package because an intermediate wrapper changed the immediate caller).
+If a second *independent* project needs the "retire a wide legacy surface that's also internally load-bearing" move (either the keep-it caller-aware path OR the remove-it flip-then-delete path), this graduates from a one-off toward a documented pattern (and possibly a tiny shared helper in the nav refactor toolkit). Watch also for the masking caveat actually biting (a deprecated method warns from inside the package because an intermediate wrapper changed the immediate caller).
 
 ## Evidence so far
 
-- **Only case (2026-06-17, brownfield nav conversion coda)**: chosen over the structural flip after the flip was implemented, measured (~112 internal calls, 8 broken mock-point tests), and reverted; the caller-aware decorator was applied to 49 legacy flat methods and verified — external call warns, `toolkit.get.video()` (recommended path, which internally routes through the deprecated method) stays silent; 224 tests green.
+- **Case 1 — keep-it (2026-06-17, brownfield nav conversion coda)**: structural flip implemented, measured (~112 internal calls, 8 broken mock-point tests), reverted; caller-aware decorator applied to 49 legacy flat methods — external call warns, `toolkit.get.video()` (recommended path, internally routing through the deprecated method) stays silent; 224 tests green.
+- **Case 2 — remove-it, same project, constraint relaxed (2026-06-17, later)**: usage scan proved consumers were internal → flip-then-remove. Step 1 flipped 67 facade + ~38 service call-sites to the service layer (intra-service calls simplified to `self.`), fixed the mock-point tests, zero public change; step 2 deleted ~100 flat methods (api.py 2017→149) + the deprecation shim, shipped MIGRATION.md + 2.0.0. Tests green throughout. The Case-1 deprecation served as the migration on-ramp.
 
-(One case → stays `raw`. Graduation = a second "retire-internally-load-bearing-API" case, or the masking caveat biting in practice.)
+(Two facets of one project, not two independent projects → stays `raw`. Graduation = a second *independent* codebase needing either path, or the masking caveat biting in practice.)
