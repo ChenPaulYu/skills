@@ -48,6 +48,8 @@ It's the full version of what `nav-audit <spec>` (Mode 2) starts. Audit Mode 2 s
 
 This isn't `nav-audit` being called — it's plan instructing the agent to apply the same protocol inline. Self-contained per ADR-001 #3.
 
+**If the spec touches an externally-consumed surface, circle the contract during grounding.** When the change restructures something other code/projects import (a library's public API, a package boundary) under a "don't break consumers" constraint, identify in Stage 1 exactly what the **frozen contract** is — the exported symbols + public signatures that must not change — versus what's free to move behind it. Carry it into the plan: the Approach phases restructure the body, and "the contract is byte-identical" becomes a per-phase **Verification** gate (a signature-diff vs the previous commit), not a hope. This is the planning half of `nav-refactor`'s contract-freeze ("保門面、整身體").
+
 ### Stage 2 — Clarify (interactive dialog with the user)
 
 A spec always has gaps the user knows but didn't write. Ask 3-5 targeted clarifying questions. Choose questions by **impact**:
@@ -127,6 +129,8 @@ The design decisions this work introduces that should have **one owner** (not be
 |---|---|
 | <e.g. brand palette> | <e.g. `@theme` color tokens in `index.css`> |
 | ... | ... |
+
+**Naming an owner is not adopting it — pair each new owner with an explicit adoption step + a check.** If a phase *creates* a new owner (a primitive, a shared helper, a token home) that supersedes a pattern currently hand-rolled in N places, the plan must also contain the phase that **rewires those N call sites onto it** — and a Verification line that the owner actually has callers (e.g. `grep -r run_with_fallback src/ | wc -l` > 0). This is the failure mode a verbatim-move refactor invites: `nav-refactor` will faithfully *carry the old hand-rolled pattern along* unless a step explicitly adopts the new owner, leaving the "owner" as dead code that only a later whole-repo grounding pass (`nav-map`) catches. Don't let the table assert an adoption that no phase performs.
 
 ## Verification
 
