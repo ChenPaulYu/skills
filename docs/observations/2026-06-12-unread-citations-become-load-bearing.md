@@ -1,6 +1,6 @@
 ---
 date: 2026-06-12
-status: raw
+status: landed
 ---
 
 # Second-hand citations launder into load-bearing claims — and no existing gate catches them
@@ -66,10 +66,42 @@ because the EnactToM thread happened to be pulled.
 
 Dogfood target ready-made: run it on enact and sweep PICon / PPol / PersonaGym.
 
+## Update (2026-06-18, enact) — both verbs shipped and dogfooded; a second case widened the failure taxonomy
+
+The dogfood target above was executed. `research:provenance` traced the three flagged claims;
+two `research:dissect` forensic passes fetched the real papers. The outcome both validated the
+verbs and showed the failure class is wider than "qualifiers stripped":
+
+- **The corruption is in the summary, not the paper.** 2 of 3 flagged papers (PICon, PPol)
+  turned out **real and usable** once fetched first-hand — the second-hand danger is purely the
+  intermediary summary, not the source. Forensic verify both *rescues* real cites and *catches*
+  fakes; "second-hand" is not a synonym for "wrong".
+- **Two laundering shapes beyond the original "unqualified number":**
+  - *Fabrication (the number exists nowhere)* — PPol's "80.0% real-human baseline" appears in no
+    version of the paper and greps to zero across the whole repo: a deep-research hallucination
+    back-filled to match a "close to real human" phrasing. (Companion: LoCoMo's "6.4%" is a
+    repo-internal **circular** cite — the dissect cites the repo's own earlier note as authority,
+    no named source anywhere = orphan.) This is worse than a dropped qualifier: there is no
+    upstream to demote *to*.
+  - *Mischaracterisation against the authors' explicit words* — the repo labelled PICon
+    "Multi-turn **Adversarial** Interrogation"; the paper explicitly disavows it ("rather than any
+    coercive or adversarial interrogation tactics"). A second-hand label can **invert** the
+    source's own framing, not just blur it.
+- **Sharpening for the verbs**: provenance's three-verdict scale holds, but forensic dissect's
+  "citation verification" output should explicitly flag (a) numbers with *no locatable source*
+  (fabrication/orphan, not merely unqualified) and (b) labels/framing that **contradict the
+  source's self-description** — both are sharper, more dangerous failures than the qualifier loss
+  the 2026-06-12 case showed.
+
 ## Evidence so far
 
 - 2026-06-12, enact: the full EnactToM chain above (one laundered number, one misidentified
   PDF, three more unverified second-hand entries still on the shelf).
+- 2026-06-18, enact: provenance recheck + 2 forensic dissects on the three flagged claims —
+  confirmed LoCoMo 6.4% orphan; caught PPol "80.0%" as **fabricated** (exists nowhere) and PICon
+  "adversarial" as **contradicting the authors' explicit words**; both PICon and PPol otherwise
+  verified first-hand and usable. The proposed verbs (provenance + forensic dissect) shipped and
+  worked → status `landed`.
 - Related earlier signal: 2026-06-01 "verify the belief before acting on it" — same root
   (an assumption treated as fact because nothing forced the check); this observation is the
   research-citation specialization of it, with a concrete promotion-ladder mechanism.
