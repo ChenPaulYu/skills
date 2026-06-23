@@ -1,0 +1,64 @@
+---
+name: report
+description: "Write a structured, standup-shaped update into a relay coordination repo so a counterpart's agent can grasp in seconds what needs them. Distils your recent work into Needs-decision · Blocked-on · Done, each item id'd and @-routed, continuing open threads rather than restarting. Use when the user asks to \"report in relay\", \"write my relay update\", \"send a status report to X\", \"post an update\", or \"relay report\". Content verb; the read-side is /relay:digest, the response side is /relay:reply. Writes one append-only entry, gated by a diff."
+---
+
+# report — a standup-shaped update
+
+Turn your recent work into a structured entry the other side's agent can triage at a glance. Not a changelog — the value is the **forced shape** that makes "what needs you" jump out.
+
+## Scope
+
+Operates on a **content repo** (`relay.yml` at root), one project at a time. Writes **one append-only entry** (`thoughts/<date>-<handle>.md`); shows a diff and is gated. Authored to `/nav:compose` discipline (lead with the point; one line per item).
+
+## Process
+
+### Step 1 — Resolve + pull + read current state
+- **Resolve who's running**: match the git author email to a person's `git:` field in `relay.yml` → your handle.
+- **Pull** (get everyone's latest), then **read the current state** — open items in `thoughts/` + `decisions/` — so you *continue* threads (reference existing ids), not restart them.
+
+### Step 2 — Distil into the buckets
+Write `thoughts/<date>-<handle>.md`:
+```markdown
+---
+date: <ISO>
+by: <handle>
+---
+## Needs-decision
+- [<handle>-<slug>] @<who> [@<who2>…] — <one line; lead with the point; say your lean>
+## Blocked-on
+- [<handle>-<slug>] @<who> — <what's blocking, since when>
+## Done
+- <visibility only — no id needed>
+```
+- **id = `<handle>-<slug>`** (your handle + a slug from the item's gist) — author-namespaced, collision-free; **type comes from the bucket, never the id**; the id is permanent.
+- **`@<who>` = the people whose call/action it is.** For a `[D]`, the `@`-set is its approver set (all must accept to graduate) — `@` few for a fast call, many for broad buy-in.
+
+### Step 3 — Gate + commit
+**Show the diff. Wait for OK** (or "just post"), then commit + push.
+
+## Discipline
+- **Continue, don't restart** — reference open ids; only mint a new id for genuinely new items.
+- **Append-only** — write only *your* dated file; never edit anyone else's entry.
+- **Lead with the point** (`/nav:compose`); one line per item; group by bucket, not by chronology.
+- **Pull before, push after; gate before commit.**
+
+## Anti-patterns (refuse these)
+| Temptation | Why to refuse |
+|---|---|
+| Dump a chronological changelog | The value is the bucket shape (what needs them), not "what I did when" |
+| Put the type in the id (`D1`/`B1`) | Type is the bucket; the id is `<handle>-<slug>` only |
+| Re-raise an open item with a new id | Continue the existing thread — reference its id |
+| Edit a teammate's entry to "tidy" | Append-only; never touch others' files |
+
+## Companion skills
+- **`/relay:digest`** — the read side (the counterpart sees your update filtered for them).
+- **`/relay:reply`** — how the counterpart responds (accept / clear / counter).
+- **`/nav:compose`** — the prose discipline each item is written to.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

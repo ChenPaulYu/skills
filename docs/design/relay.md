@@ -86,7 +86,7 @@ An id is `<handle>-<slug>` (e.g. `paul-redis-cache`, `cto-staging-db`). **Author
 
 - **Explicit accept, never inferred** — a presence check (like a GitHub PR *Approve*), not the agent judging the discussion mood.
 - **Silence ≠ consent** — nothing graduates without an affirmative act.
-- **Who counts**: default = the `@`-assigned decider; stricter (owner + reviewer / N approvers) configurable in `project.yml`.
+- **Who counts = the `@`-set, unanimously.** A [D]'s `@`-list **is** its approver set (set by the proposer, extendable in-thread); it graduates when **every currently-`@`-ed person has left an explicit accept**. The proposer sets the bar by who they `@` — few = a fast call, many = broad buy-in; **no separate config needed**. One reject → not unanimous → stays open (a revise/abandon signal); silence → stays open + nudge. (`@`-self only = a logged personal decision, not consensus.) Optional later (not v1): a `project.yml` policy that auto-adds `@owner` to every [D], or a quorum rule.
 - **Revoke = supersede** — overriding a ratified decision is itself a consensus act: a NEW decision that must pass the accept gate; the old file flips `status: superseded`. A consensus decision stays in force until another consensus replaces it (no silent / unilateral reversal).
 - **Authenticity** — a plain git author string is spoofable (`git config user.name boss`), so a bare accept could be forged. **Baseline: a private repo** (removes outsiders) + the *explicit, written* assumption that **colleagues don't forge each other**. **Optional hardening: signed-commit accepts** — git-native (works on any host; on GitHub it shows as the *Verified* badge), checked against the decider's registered signing key. Opt-in, not v1. Authenticity is **not** coupled to GitHub's API — commit *signing* is the host-agnostic mechanism; the GitHub badge is merely a view of it.
 
@@ -97,7 +97,7 @@ An id is `<handle>-<slug>` (e.g. `paul-redis-cache`, `cto-staging-db`). **Author
 | **launch** | create a project (scaffold the space + define its frame) | structure |
 | **register** | register a person — name · github · optional title (→ roster) — and assign a per-project role | structure |
 | **report** | write a structured update (borrows the standup skeleton) | content |
-| **reply** | respond to an item — **accept** (graduates the [D] to `decisions/` *right then*, event-driven & conflict-free) / clear a blocker / counter | content |
+| **reply** | respond to an item — **accept** (the accept that *completes the [D]'s `@`-set* graduates it to `decisions/` right then, event-driven & conflict-free) / clear a blocker / counter | content |
 | **digest** | compute the per-viewer **live** view ("what needs you") — read-only, recomputed from source, writes nothing | content |
 | **settle** | **owner-only**, periodic *non-critical* hygiene: archive closed threads, prune, refresh `index.md` (graduation already happened at accept — lag here is harmless, and a race just re-runs) | content |
 

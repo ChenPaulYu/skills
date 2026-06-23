@@ -12,8 +12,9 @@
 | [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton, untangle how a set of sources relate, critique a paper adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
 | [`think`](plugins/think/) | **Reason about a problem** — apply a named reasoning lens that forces a structure the default "think harder" skips. Four lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it), and `graft` (borrow a mature model's structure and adapt it to your domain — map every primitive; the adapt list is the payload). Feeds `shape`. |
 | [`manage`](plugins/manage/) | **Reflect on your session** — the meta-lane: `catchup` (where the work stands now, rebuilt from git/diff/plan, not chat memory), `summarize` (a complete objective recap of what the session did), `observe` (distill the one durable learning into a knowledge base). Cross-cutting; independent. |
+| [`relay`](plugins/relay/) | **Coordinate with a counterpart** — async, through your agents, over a shared git repo: `launch`/`register` set up the project + people; `report`/`reply` exchange standup-shaped updates that converge decisions to explicit consensus; `digest` shows the live "what needs you"; `settle` keeps it tidy. Structured updates, not chat. Independent. |
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **think** (reason about a problem), and **manage** (reflect on your own working session — the meta-lane) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **think** (reason about a problem), **manage** (reflect on your own working session — the meta-lane), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -62,6 +63,15 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/manage:summarize` — a complete, objective recap of what the session did (the raw input `observe` distills)
 - `/manage:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
 
+**`relay` — coordinate with a counterpart** (async, over a shared git repo; standalone):
+
+- `/relay:launch` — create a project (scaffold its space + frame; bootstraps the repo on first run)
+- `/relay:register` — enrol a person (name · git · github · title) + assign a per-project role
+- `/relay:report` — write a standup-shaped update (Needs-decision · Blocked-on · Done; id'd + @-routed)
+- `/relay:reply` — accept / clear / counter an item (an accept completing a decision's @-set graduates it to `decisions/`)
+- `/relay:digest` — the live, per-viewer "what needs you" (read-only; the awareness entry)
+- `/relay:settle` — owner-only periodic hygiene (archive resolved threads · prune · refresh the `index.md` snapshot)
+
 ## Install
 
 One source tree, two channels, five agents: **Claude Code** and **Antigravity CLI (`agy`)** import the plugins natively (namespace preserved — `/nav:audit`); **Codex**, **opencode**, and **Cursor** auto-discover the generated flat mirror `.agents/skills/` (flat names — `nav-audit`; see [Codex compatibility](#codex-compatibility)). The plugins under `plugins/` are the single source of truth everywhere.
@@ -79,9 +89,10 @@ Or by hand. In Claude Code:
 /plugin install research@skills
 /plugin install think@skills
 /plugin install manage@skills
+/plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, `/research:*`, `/think:*`, and `/manage:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research`, `think`, and `manage` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/shape:*`, `/research:*`, `/think:*`, `/manage:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research`, `think`, `manage`, and `relay` are independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 
@@ -134,7 +145,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 52 entries — the same 26 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 64 entries — the same 32 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 

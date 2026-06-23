@@ -1,0 +1,60 @@
+---
+name: launch
+description: "Create a new project in a relay coordination repo — scaffold its space (project.yml · thoughts/ · decisions/ · archive/ · index.md) and define its frame. Bootstraps the relay repo itself (relay.yml roster) on first run. Use when the user asks to \"launch a relay project\", \"create a project\", \"set up a new coordination project / workspace\", \"start a relay repo\", or \"open a new project in relay\". Structure verb (creates the workspace); to add people use /relay:register, to post updates use /relay:report. Writes files, gated by a diff."
+---
+
+# launch — create a relay project
+
+Bring a new **coordination project** into existence: scaffold its workspace and define its frame. The structural counterpart to the content verbs — `launch` makes the room; `report`/`reply`/`digest`/`settle` are what happens inside it.
+
+## Scope
+
+Operates on a **content repo** (the org's relay repo, marked by `relay.yml` at its root). On the very first run in an empty repo, it also **bootstraps** the repo (creates `relay.yml` with the running user as the first person). Writes files; shows a diff and is gated before applying.
+
+## Process
+
+### Step 1 — Locate or bootstrap the repo
+- Find `relay.yml` at the working-dir root. **If absent**, this is first-run: resolve who's running (git author email/name), create a minimal `relay.yml` registering them (handle seeded from their github), and note that more people are added later with `/relay:register`.
+
+### Step 2 — Name + frame the project (rule: below 90% → ask)
+- Ask the **project name** (a slug, e.g. `billing`) and, optionally, its **frame** (one-line mission / scope). A project is a workspace for people to coordinate; the frame is light and rarely changes.
+
+### Step 3 — Scaffold (gated)
+Create under `projects/<name>/`:
+```
+project.yml        # members: { <you>: owner }   — you are the first owner
+thoughts/          # (empty) append-only entries land here
+decisions/         # (empty) ratified decisions land here
+archive/           # (empty) settle moves closed threads here
+core/<name>.md     # optional — the frame, if given
+index.md           # seed snapshot: "## Open  _(none)_"
+```
+`project.yml` shape: `members:` mapping `<handle>: <role>`. **Show the diff. Wait for OK**, then commit + push.
+
+### Step 4 — Report
+Summarize: project created, you registered as owner, next steps (`/relay:register` to add people · `/relay:report` to post the first update).
+
+## Discipline
+- **Gate before writing.** Scaffolding mutates the repo; show it first.
+- **Don't invent members.** `launch` seeds only *you* as owner; others come via `/relay:register`.
+- **Pull before, push after** (git protocol). Direct to `main`.
+- **A project is its members coordinating** — keep `core/` light; it is not a campaign (no `position`-style ceremony).
+
+## Anti-patterns (refuse these)
+| Temptation | Why to refuse |
+|---|---|
+| Scaffold without showing the diff | Mutates the repo; gate first |
+| Pre-create empty roles / fake members | Only you (owner) is seeded; use `/relay:register` |
+| Build a heavy `core/` charter up front | The frame is light; over-framing is `position`-ceremony relay doesn't have |
+
+## Companion skills
+- **`/relay:register`** — add people + assign roles after the project exists.
+- **`/relay:report`** — post the first update into the new project.
+- **`/nav:compose`** — discipline for any prose you write into `core/`.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

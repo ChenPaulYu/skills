@@ -34,6 +34,12 @@
       "source": "./plugins/manage",
       "description": "Reflect on your own working session — the meta-lane (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on). Three seed skills: catchup (re-orient on where the work stands now, rebuilt from git/diff/plan, not chat memory), summarize (a complete, objective recap of what the session did), observe (distill the one durable learning into a knowledge base). orient -> recap -> distill. Read-only except observe's write. Cross-project, standalone.",
       "version": "0.1.0"
+    },
+    {
+      "name": "relay",
+      "source": "./plugins/relay",
+      "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. Six verbs: launch (create a project), register (enrol a person + role), report (a standup-shaped update), reply (accept / clear / counter — an accept completing a decision's approver set graduates it), digest (the live, per-viewer 'what needs you'), settle (owner-only periodic hygiene). git-native, human-gated, designed for multi-person. Language-agnostic.",
+      "version": "0.1.0"
     }
   ]
 }
