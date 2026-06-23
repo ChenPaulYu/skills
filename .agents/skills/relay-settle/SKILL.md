@@ -10,7 +10,7 @@ Keep a project's hot set small and its snapshot fresh. **Non-critical by design*
 
 ## Scope
 
-Operates on a **content repo** (`relay.yml` at root), one project. **Owner-only** (the running user must be `owner` in `project.yml`) — one responsible party keeps concurrency low. Writes (moves to `archive/`, prunes, refreshes `index.md`); shows a diff and is gated.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md) — one project. **Owner-only** (the running user must be `owner` in `project.yml`) — one responsible party keeps concurrency low. Writes (moves to `archive/`, prunes, refreshes `index.md`); shows a diff and is gated.
 
 ## Process
 

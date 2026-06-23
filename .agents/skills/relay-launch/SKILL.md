@@ -10,12 +10,13 @@ Bring a new **coordination project** into existence: scaffold its workspace and 
 
 ## Scope
 
-Operates on a **content repo** (the org's relay repo, marked by `relay.yml` at its root). On the very first run in an empty repo, it also **bootstraps** the repo (creates `relay.yml` with the running user as the first person). Writes files; shows a diff and is gated before applying.
+Operates on the **content repo** — a *separate* coordination repo (located via `$RELAY_REPO`, else **ask where it should live** — never assume cwd, which is usually some other project). On the very first run in an empty repo it also **bootstraps** the repo (creates `relay.yml` with the running user as the first person). Writes files; shows a diff and is gated before applying.
 
 ## Process
 
 ### Step 1 — Locate or bootstrap the repo
-- Find `relay.yml` at the working-dir root. **If absent**, this is first-run: resolve who's running (git author email/name), create a minimal `relay.yml` registering them (handle seeded from their github), and note that more people are added later with `relay-register`.
+- **Resolve the content repo**: `$RELAY_REPO` if set, else **ask the user where the relay repo is / should live** — do NOT assume the current dir (it's usually another project).
+- Find `relay.yml` there. **If absent**, this is first-run: resolve who's running (git author email/name), create a minimal `relay.yml` registering them (handle seeded from their github; record their git email as the resolver), and note more people are added later with `relay-register`.
 
 ### Step 2 — Name + frame the project (rule: below 90% → ask)
 - Ask the **project name** (a slug, e.g. `billing`) and, optionally, its **frame** (one-line mission / scope). A project is a workspace for people to coordinate; the frame is light and rarely changes.

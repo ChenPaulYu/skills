@@ -10,7 +10,7 @@ Compute "what's waiting on **you**" from the shared repo, right now. The read si
 
 ## Scope
 
-Operates on a **content repo** (`relay.yml` at root), one project (or all). **Read-only — writes nothing.** The shared committed snapshot is `index.md` (maintained by `relay-settle`); `digest` is the *live* view and is authoritative even when `index.md` lags.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md) — one project (or all). **Read-only — writes nothing.** The shared committed snapshot is `index.md` (maintained by `relay-settle`); `digest` is the *live* view and is authoritative even when `index.md` lags.
 
 ## Process
 

@@ -9,7 +9,7 @@ Turn your recent work into a structured entry the other side's agent can triage 
 
 ## Scope
 
-Operates on a **content repo** (`relay.yml` at root), one project at a time. Writes **one append-only entry** (`thoughts/<date>-<handle>.md`); shows a diff and is gated. Authored to `/nav:compose` discipline (lead with the point; one line per item).
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project at a time. Writes **one append-only entry** (`thoughts/<date>-<handle>.md`); shows a diff and is gated. Authored to `/nav:compose` discipline (lead with the point; one line per item).
 
 ## Process
 

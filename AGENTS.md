@@ -253,7 +253,13 @@ A toolkit for **coordinating with a counterpart asynchronously, through your age
 - **Tool repo** = this marketplace (the `relay` plugin) — the protocol, universal.
 - **Content repo** = the org's actual relay repo — the real data (people, projects, reports, decisions). One company = one content repo, many projects.
 
-The skills operate on a **content repo**, discovered from the working dir (it has a `relay.yml` at its root). Never hard-code paths; read `relay.yml` first.
+**Locating the content repo (every skill's first step).** The content repo is a **separate** repo (the coordination repo) — it is **almost never the current working directory** (you're usually in some other project). Resolve it in order, and **never silently assume cwd**:
+
+1. **`$RELAY_REPO`** env var, if set (mirrors manage's `$SKILLS_REPO`) — the default content repo.
+2. else the **current dir**, only if it actually has a `relay.yml` at its root (you're already inside a relay repo).
+3. else **ASK the user** for the content-repo path — or offer `relay-launch` to create one.
+
+Then read its `relay.yml` first; never hard-code paths.
 
 ## The three axes (never tangle them)
 

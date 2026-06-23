@@ -10,7 +10,7 @@ Answer the items pointing at you. The high-stakes case is **accept**: when your 
 
 ## Scope
 
-Operates on a **content repo** (`relay.yml` at root). Writes **one append-only entry** (`thoughts/<date>-<handle>.md`) and, when an accept graduates a decision, **one `decisions/<id>.md`** — both in one gated commit.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md). Writes **one append-only entry** (`thoughts/<date>-<handle>.md`) and, when an accept graduates a decision, **one `decisions/<id>.md`** — both in one gated commit.
 
 ## Process
 

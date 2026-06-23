@@ -10,7 +10,7 @@ Add a person to the relay's **structure**: who they are (global roster) and what
 
 ## Scope
 
-Operates on a **content repo** (`relay.yml` at root). Writes two layers; shows a diff and is gated.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md). Writes two layers; shows a diff and is gated.
 
 ## The two layers (don't conflate)
 - **Identity → global `relay.yml`** (one source, stable across projects): name · git · github · optional title.
