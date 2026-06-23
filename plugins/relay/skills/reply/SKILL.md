@@ -31,7 +31,7 @@ by: <handle>
 ```
 
 ### Step 3 — Graduate on completion (event-driven)
-For each `[D]` you **accept**: check its `@`-set (from where it was raised). **If every `@`-ed person has now accepted**, this accept completes it → **also write** `decisions/<id>.md` in the same commit:
+For each `[D]` you **accept**: confirm completion **deterministically** — run `node scripts/check-acceptance.mjs <project-dir> <id>` and graduate **only** ids it reports `complete: true` (it computes the `@`-set vs the accepts; don't eyeball the thread — the script is the consensus gate, ADR-051). **If your accept completes the set**, this same commit **also writes** `decisions/<id>.md`:
 ```markdown
 ---
 id: <id>
@@ -50,7 +50,7 @@ If the `@`-set is **not yet complete**, just leave the accept; it graduates when
 
 ## Discipline
 - **Accept is explicit + presence-checked** — never infer consent from discussion; silence ≠ consent.
-- **Graduate only on a complete `@`-set** — one new `decisions/` file (conflict-free); don't graduate a half-approved [D].
+- **Graduate only on a complete `@`-set** — confirmed by `scripts/check-acceptance.mjs` (a computed set-comparison, not an inferred one); one new `decisions/` file (conflict-free); never graduate a half-approved [D].
 - **Supersede, don't rewrite** — overriding a live decision = a new [D] through the gate + flip the old to `superseded`.
 - **Append-only; pull before, push after; gate before commit.**
 

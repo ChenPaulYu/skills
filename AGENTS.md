@@ -355,6 +355,19 @@ from: thoughts/<file>    # back-link to the originating thread
 
 relay docs (reports, decisions, `index.md`) are authored to **`nav-compose`** discipline (lead with the point, one fact one owner, right grain). Repo-wide authoring + maintenance rules (naming, skills-root-relative paths, frontmatter, the gates) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
+## Helper scripts (ADR-051)
+
+relay is a structured-data protocol, so unlike the analysis plugins it **bundles helper scripts** for its deterministic / correctness-critical work, split from the LLM's judgment work:
+
+- **Code (a bundled `scripts/` in the owning skill)** — mechanical + correctness-critical: set-comparison, structured parsing, signature checks.
+- **The LLM (SKILL.md prose)** — judgment: distilling a report into buckets, writing a decision's rationale.
+
+**Language by task:** parsing / set-logic → **node (`.mjs`)** (bash parses structured text fragilely; a fragile gate is the wrong risk); git / verification → **bash** (it's git commands).
+
+**Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
+
+Current: **`skills/reply/scripts/check-acceptance.mjs`** — the consensus gate (computes which decisions have a complete `@`-set, so graduation is exact not inferred). Next batch (sanctioned, not built): signature/github verification (bash), digest/settle state computation (node).
+
 ## Where things live
 
 ```

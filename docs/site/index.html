@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-23 (rev 56)
+  Last audit: 2026-06-23 (rev 57)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -61,7 +61,7 @@
       commands were migrated in. manage v0.1.0; standalone, cross-project (ADR-044).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 50 ADRs in docs/adr/ — 001..050 with cross-supersede / refine links
+    • 51 ADRs in docs/adr/ — 001..051 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (32 flat skills: manage-* / nav-* / relay-* /
       research-* / shape-* / think-*) + root AGENTS.md, generated from plugins/ by
@@ -83,7 +83,15 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 56)
+  ⚠ FIXED in this revision (rev 57)
+    1. relay gains its first BUNDLED HELPER SCRIPT (ADR-051, marketplace-first) — skills/reply/
+       scripts/check-acceptance.mjs computes a decision's @-set vs its accepts so graduation is
+       an EXACT set-comparison, never an LLM judgement that could ratify a non-consensus.
+       Establishes the code-vs-judgment split (code = deterministic / correctness-critical; LLM
+       = judgment) + language-by-task (parsing → node, git/verification → bash) + the per-skill
+       bundling constraint. relay v0.1.0 → 0.1.1; no new skill/slug. ADR count 50 → 51.
+
+  ⚠ FIXED in rev 56 (kept for history)
     1. NEW PLUGIN `relay` (ADR-050) — coordinate asynchronously with a counterpart through your
        agents over a shared git repo: structured updates (not chat), decisions to explicit
        consensus (the @-set unanimously; graduation is event-driven at the completing accept),
