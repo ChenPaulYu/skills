@@ -29,7 +29,7 @@ relay-repo/
       decisions/         # one file per ratified decision (a FOLDER, not one big file)
       thoughts/          # append-only, per-author, dated entries (reports + replies)
       archive/           # closed threads moved out of the hot path
-      index.md           # computed current state — the door (agent-read, derived, regenerable)
+      index.md           # SHARED current-state snapshot — written by settle, for glance/onboarding (derived; may lag, digest is the live authoritative view)
 ```
 
 ## Three orthogonal axes (don't tangle them)
@@ -43,12 +43,14 @@ A role is the default position of the steering wheel, never a locked door. **Kee
 ```yaml
 # relay.yml — global roster (identity; one source)
 people:
-  paul:                    # short handle — used for @routing (@paul)
+  paul:                    # frozen relay handle — id prefix + @routing (@paul); seeded from github at register, then independent
     name: Paul Chen
-    github: ChenPaulYu     # identity anchor: links a git commit author → this person; the GitHub link
+    git:    paul@rytho.ai  # resolution key — the agent matches the running git author (email; may be a list) → this person
+    github: ChenPaulYu     # display + GitHub link + the seed for the handle (NOT the resolver: git commits carry email, not the github handle)
     title: Founder         # optional — org position, NOT a per-project role
   cto:
     name: ...
+    git:    ...
     github: ...
     title: CTO
 
@@ -58,7 +60,7 @@ members:
   cto:  reviewer
 ```
 
-`register` writes **both layers**: a person into `relay.yml` (name · github · optional title), and into a project's `project.yml` with a role. The **github account is the anchor** that resolves a git commit back to a person (identity resolution); `@`-routing uses the short handle (`@paul`).
+`register` writes **both layers**: a person into `relay.yml` (handle · name · git · github · optional title), and into a project's `project.yml` with a role. **Identity resolution** matches the running **git author (email)** against each person's `git:` field — *not* the github handle (git commits don't carry it); `@`-routing uses the frozen **handle** (`@paul`), seeded from github at register then frozen (a github rename never breaks ids).
 
 ## The item model
 
@@ -72,12 +74,21 @@ A report is **standup-shaped**, every item carries a **stable id** + an **`@who`
 
 `@who` is universal (every actionable item points at a person); **approval belongs only to [D]**.
 
+### Item ids — author-namespaced (collision-free without a central allocator)
+
+An id is `<handle>-<slug>` (e.g. `paul-redis-cache`, `cto-staging-db`). **Author-namespaced**: each person allocates only within their own handle-prefix, so two people writing offline never collide — there is no central counter to coordinate (the whole point of append-only). The slug (from the item's gist) makes references self-describing (`re paul-redis-cache: ship it`).
+
+- **Type is not in the id** — it's given by the bucket the item sits under (`## Needs-decision`); no double-encoding.
+- **The id is permanent** — it threads across cycles, carries into `decisions/<id>.md` on graduation, and anchors supersede chains. So it uses the **frozen handle**, never the live github account.
+- **Residual edge**: one person on two offline devices could mint `paul-redis-cache` twice — rare, same-person, and `settle` dedups (`-2`). The multi-person hazard is gone.
+
 ## Consensus (the hard part, made simple)
 
 - **Explicit accept, never inferred** — a presence check (like a GitHub PR *Approve*), not the agent judging the discussion mood.
 - **Silence ≠ consent** — nothing graduates without an affirmative act.
 - **Who counts**: default = the `@`-assigned decider; stricter (owner + reviewer / N approvers) configurable in `project.yml`.
 - **Revoke = supersede** — overriding a ratified decision is itself a consensus act: a NEW decision that must pass the accept gate; the old file flips `status: superseded`. A consensus decision stays in force until another consensus replaces it (no silent / unilateral reversal).
+- **Authenticity** — a plain git author string is spoofable (`git config user.name boss`), so a bare accept could be forged. **Baseline: a private repo** (removes outsiders) + the *explicit, written* assumption that **colleagues don't forge each other**. **Optional hardening: signed-commit accepts** — git-native (works on any host; on GitHub it shows as the *Verified* badge), checked against the decider's registered signing key. Opt-in, not v1. Authenticity is **not** coupled to GitHub's API — commit *signing* is the host-agnostic mechanism; the GitHub badge is merely a view of it.
 
 ## The verb roster (6) — structure vs content
 
@@ -86,9 +97,9 @@ A report is **standup-shaped**, every item carries a **stable id** + an **`@who`
 | **launch** | create a project (scaffold the space + define its frame) | structure |
 | **register** | register a person — name · github · optional title (→ roster) — and assign a per-project role | structure |
 | **report** | write a structured update (borrows the standup skeleton) | content |
-| **reply** | respond to an item (accept / clear a blocker / counter) | content |
-| **digest** | compute the current state **filtered for the viewer** → `index.md` | content |
-| **settle** | periodic gated tidy: graduate accepted [D] → `decisions/`, archive closed, prune | content |
+| **reply** | respond to an item — **accept** (graduates the [D] to `decisions/` *right then*, event-driven & conflict-free) / clear a blocker / counter | content |
+| **digest** | compute the per-viewer **live** view ("what needs you") — read-only, recomputed from source, writes nothing | content |
+| **settle** | **owner-only**, periodic *non-critical* hygiene: archive closed threads, prune, refresh `index.md` (graduation already happened at accept — lag here is harmless, and a race just re-runs) | content |
 
 Deliberately **no `position`** (relay's canon = `decisions/`, authored by the consensus pipeline itself, not a campaign) and **no `init`** (`launch` owns structure creation). The roster is relay's own — *not* a clone of shape's.
 
@@ -144,6 +155,16 @@ Designed in from day one (a 2-person version would shortcut these and break at N
 ## First test scope
 
 **1 project, 2 people** — but the whole design is planned for multi-person; 2-person just collapses several axes to a single value.
+
+## Design-review scoreboard (holes found 2026-06-23 — all resolved)
+
+A skeptic pass found five holes; each is now handled (resolution lives in the topical section named):
+
+1. **id collision** (sequential ids can't work under append-only / offline / multi-party) → **author-namespaced `handle-slug`**; handle seeded-from-github, then frozen. *(Item ids)*
+2. **index.md contradiction** (can't be both a committed shared file and per-viewer) → **`digest` is live / per-viewer / read-only; `index.md` is a shared snapshot written only by `settle`**. *(verb roster · layout)*
+3. **identity resolution** (github handle ≠ git author) → **`git:` email is the resolver**; github is display/link only. *(Three axes)*
+4. **forgeable accept** (git author string is spoofable) → **private repo + a stated trust baseline**; signed-commit accepts as opt-in hardening (host-agnostic; GitHub's *Verified* badge is just a view). *(Consensus · Authenticity)*
+5. **settle has no trigger + concurrency races** → **graduation is event-driven at accept** (conflict-free; the critical part no longer needs settle); **`settle` is owner-only, non-critical hygiene** (lag harmless, race re-runs). *(verb roster)*
 
 ## Open / not yet decided
 
