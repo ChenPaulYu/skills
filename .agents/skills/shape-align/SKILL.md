@@ -44,8 +44,9 @@ blueprints/
 
 ### Step 1 — Locate or scaffold the tree (no separate init)
 
-Find `blueprints/` (commonly `docs/blueprints/`). **If absent, scaffold it on this first run** — there is deliberately no `shape:init`:
-- Ask **once** where it should live, then create `blueprints/thoughts/` + `blueprints/mockups/`, add `mockups/` to `.gitignore`, and seed `plan.md` + `overview.html` from the template.
+Find `blueprints/` (commonly `docs/blueprints/`). A project **born via `shape-setup`** already has the tree + the `AGENTS.md` priming block — skip to Step 2. Otherwise you're **adopting an existing repo** into the workflow, and this first run scaffolds it (there is deliberately no `shape:init`):
+- Ask **once** where it should live, then create `blueprints/thoughts/` + `blueprints/mockups/` + `blueprints/plans/`, and seed `plan.md` + `overview.html` from the template. **Commit `mockups/`** (it carries Pick logs + ratified samples that thoughts link into — per `blueprints-spec.md`); only a *root-level* scratch `/mockups/` is gitignored, never the blueprints one.
+- **Also install the priming layer the project lacks** (the reason adoption felt un-smooth): ensure the `## Dev workflow` block from [`references/dev-workflow-stub.md`](references/dev-workflow-stub.md) exists in the repo's `AGENTS.md` (sentinel-delimited, idempotent) — workflow-verb table + standing pointers + communication directive.
 - If it exists, skip creation — only fill what's missing (idempotent).
 
 ### Step 2 — Ground in current reality

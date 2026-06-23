@@ -10,12 +10,13 @@ Take "new project" from zero to a **running, verified baseline**: archetype dete
 
 ## Why this skill exists
 
-Default scaffold behavior is **write files, declare done**. It skips four structures, and each skip was paid for in the field (the founding run was the *third* manual scaffold of the same stack — afterhours-dj → crate → trackmate):
+Default scaffold behavior is **write files, declare done**. It skips five structures, and each skip was paid for in the field (the founding run was the *third* manual scaffold of the same stack — afterhours-dj → crate → trackmate):
 
 1. **Preflight** — the verification chain depends on tools (uv, pnpm, agent-browser); discovering one missing mid-run degrades verification to "trust me".
 2. **Principles consistency** — without standing rulings, each scaffold re-litigates tool choices (or silently drifts: pip here, poetry there).
 3. **Gotchas** — the same five traps (pnpm build-script blocking, pytest import paths, IPv6 proxy misses…) re-cost an afternoon each time.
 4. **Verification** — unit-green is not running: the proxy curl and the real-browser click are the two steps that catch what `pytest`/`tsc` miss.
+5. **Priming** — a fresh project's always-loaded `AGENTS.md` says nothing about the shape/nav workflow or the project's language, so the agent waits to be summoned for every verb and drifts to its default language between skill calls. Each project re-pays that manual bootstrap until its `AGENTS.md` accretes the priming by hand (the mature siblings became smooth this way; new ones start cold).
 
 ## Core — the one non-negotiable
 
@@ -25,7 +26,7 @@ Default scaffold behavior is **write files, declare done**. It skips four struct
 
 | Layer | File | What it holds | Neutrality |
 |---|---|---|---|
-| **Engine** | this SKILL.md | the protocol (archetype → principles → reference → preflight → scaffold → verify → commit → write-back) | stack-neutral |
+| **Engine** | this SKILL.md | the protocol (archetype → principles → reference → preflight → scaffold → prime → verify → commit → write-back) | stack-neutral |
 | **Stack principles** | `references/stack-principles.md` | the user's per-concern rulings ("if Python → uv", "if frontend → React+pnpm") + docs/git/.gitignore conventions + the port registry. **Read first, every run.** | the maintainer's; fork with your own |
 | **Archetypes** | `references/archetypes/<name>.md` | per-archetype composition, glue contracts, field-tested gotchas, the verification chain, named exemplar repos | accumulates per archetype |
 
@@ -39,14 +40,18 @@ Opinions live in references; the engine never hardcodes a stack. This is also wh
    b. *Exemplar mode* (new archetype): scaffold by grounding against the closest living exemplar or first principles, and **keep a setup log** (what was scaffolded, every deviation, every gotcha hit) — the log is the seed of a future archetype reference.
 3. **Preflight** — verify the toolchain *this archetype's chain* needs (e.g. web: `uv` · `pnpm`/`node` · `agent-browser` CLI + skill; CLI archetype doesn't need the browser leg). Missing tool → **fail helpfully, 3-way**: install [recommended, with the command] / proceed with that leg flagged-skipped / skip. Never silently degrade.
 4. **Scaffold.** Adapt the exemplar/reference to this project: name, **a fresh port pair from the registry** (never reuse another project's), project-specific deps. Honor the docs/git conventions in stack-principles (docs tree opens with the project; `blueprints/` — including `mockups/` — is NEVER gitignored).
-5. **Verify** — run the archetype's full chain. Fix until green; every fix that generalizes is a gotcha for step 7.
-6. **Commit in stages** — one commit per coherent stage (scaffold · each major wiring), conventional-commit style per stack-principles.
-7. **Write back** — new gotcha / deviation / ruling → update the archetype reference (or the setup log in exemplar mode); a ruling seen across two projects → propose graduating it into stack-principles. **The 晉升 loop**: setup logs graduate into `references/archetypes/<name>.md` only on the user's explicit sign-off — same gate as every other promotion (material → pool, state → history, UI → device, observation → skill).
+5. **Install the workflow-priming layer** so the project is *born* smooth — the structure skip #5 above. Three parts (a project missing any one feels un-smooth for shape/nav; see [`../align/references/dev-workflow-stub.md`](references/dev-workflow-stub.md)):
+   a. **`AGENTS.md` (birth version)** — write the `## Dev workflow` block from the stub: workflow-verb table + standing pointers + a **communication directive** (language per stack-principles). This is *not* the codebase-architecture doc `/init` later produces — different content, different time; they compose.
+   b. **The `blueprints/` tree** — materialize from align's templates ([`../align/references/blueprints-spec.md`](references/blueprints-spec.md) + `overview-template.html`): seed `plan.md` with the verified baseline as the first ✅ Shipped item, plus `thoughts/` · `plans/` · `mockups/`. **Weight-adaptive by archetype**: a product gets the full board incl. `overview.html`; a pure library may stay lean — seed `plan.md`, skip `overview.html` until a board is worth it (align's weight-adaptive clause).
+   c. Establish **one canonical location** (`docs/blueprints/`, grounded plans at `docs/blueprints/plans/`) so the project never half-adopts — nav output one place, board another, is the smell.
+6. **Verify** — run the archetype's full chain. Fix until green; every fix that generalizes is a gotcha for step 8.
+7. **Commit in stages** — one commit per coherent stage (scaffold · each major wiring), conventional-commit style per stack-principles.
+8. **Write back** — new gotcha / deviation / ruling → update the archetype reference (or the setup log in exemplar mode); a ruling seen across two projects → propose graduating it into stack-principles. **The 晉升 loop**: setup logs graduate into `references/archetypes/<name>.md` only on the user's explicit sign-off — same gate as every other promotion (material → pool, state → history, UI → device, observation → skill).
 
 ## Boundaries
 
-- **vs Claude Code's built-in `/init`** — that generates a AGENTS.md for an existing codebase; setup creates a *new* project's verified baseline.
-- **vs the "no init" razor** (shape AGENTS.md) — that razor rejects a skill whose payload is `mkdir -p` (scaffolding the blueprints tree folds into `align`'s first run, and still does). setup's payload is precisely the structure default scaffolding skips: archetype determination + principles + gotchas + a verification chain. Passes the value-guardrail (ADR-034); the razor stands for structure-theatre.
+- **vs Claude Code's built-in `/init`** — `/init` documents an *existing codebase* (reads code → architecture), which needs code to exist first. setup writes the **birth `AGENTS.md`**: workflow priming + stack rulings + communication directive — content that's true *before* there's code to document. The two compose: setup primes at birth, `/init` enriches with architecture once code exists. Not a conflict — different content, different time.
+- **vs the "no init" razor** (shape AGENTS.md) — that razor rejects a skill whose payload is *only* `mkdir -p`. setup scaffolds the `blueprints/` tree + the priming block at birth, but from align's templates (one source, two entry points — align still owns *populating* the board and scaffold-if-absent when adopting an existing repo), and it's one part of a high-value birth flow, not a bare-mkdir skill. setup's payload is the structure default scaffolding skips: archetype + principles + gotchas + verification chain + priming layer. Passes the value-guardrail (ADR-034); the razor stands for structure-theatre.
 - **vs `build`** — build drives plan items into code inside an existing project; setup lays the verified ground build stands on. Same family (make it real), opposite ends.
 - **vs `nav-do` / feature work** — setup never adds features; the baseline ends at "runs + verified + committed".
 
@@ -66,12 +71,13 @@ Opinions live in references; the engine never hardcodes a stack. This is also wh
 
 - A **running, verified baseline**: scaffold + green verification chain (each leg reported), staged commits.
 - The docs tree opened per convention.
+- The **workflow-priming layer**: `AGENTS.md` Dev-workflow block (verbs + pointers + communication directive) + the seeded `blueprints/` tree — the project is born ready for shape/nav, not needing manual summoning.
 - **Write-back**: archetype-reference delta, or (exemplar mode) a setup log seeded for graduation.
 - A report of anything skipped or deviated, never silent.
 
 ## Companion skills
 
-- **`shape-align`** — owns blueprints-tree scaffolding on its first run (the no-init razor's home); also where the new project's plan board starts.
+- **`shape-align`** — owns the blueprints **templates** (`references/{blueprints-spec.md, overview-template.html, dev-workflow-stub.md}`) and **populating** the board; setup materializes the tree + priming block from those templates at birth, align scaffolds-if-absent when adopting an existing repo and fills the board thereafter.
 - **`shape-build`** — picks up after setup: drives the first real plan items onto the verified ground.
 - **`shape-position`** — the canon docs a new product needs (`docs/core/`) are authored by position, not setup; setup only opens the tree.
 - **browser-verify slot** (shape AGENTS.md) — the web verification chain's browser leg uses the same capability contract (default `agent-browser`, close when done).

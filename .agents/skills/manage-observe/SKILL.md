@@ -42,14 +42,16 @@ Scan THIS session for the **non-obvious, reusable mechanisms or principles** wor
 
 - the non-obvious insight / mechanism / failure mode it surfaced;
 - the reusable principle, as a one-sentence **claim**;
-- the evidence (this session) + roughly how durable it is (one-off vs. likely-recurring);
-- its **kind** (Step 1): **own-learning** (about the user's work) or **skill-feedback** (about a skill itself) — this decides where it can go.
+- its **kind** (Step 1): **own-learning** (about the user's work) or **skill-feedback** (about a skill itself) — this decides where it can go **and which test selects it**;
+- the evidence (this session) + **the selector for its kind** — the two kinds are kept on *different* tests; don't apply one to both:
+  - **own-learning → durability.** Is this a real, likely-recurring lesson (one-off vs. recurring)? That's the keep-test for a personal-KB note.
+  - **skill-feedback → the counterfactual bind** (NOT durability). Can you name **(S) a skill · (P) a decision-point in it · (D) a general behaviour-delta**, such that *"if S did D at P, this wouldn't recur"*? Prescriptive + locatable + general = a real skill-improving keeper — because improving a skill = changing what the agent *does* via a concrete general delta to its text, so feedback that can't name S/P/D can't improve it. A true, durable **pitfall that binds to no skill** is *not* skill-feedback → **demote it to an own-learning note** (or drop it). **Durable ≠ skill-improving** — cataloguing pitfalls as "skill-feedback" is the failure mode this guards.
 
-Produce a **short list (≈2–5), ranked by value. Write nothing yet.** (If `manage-summarize` ran earlier, mine its recap for candidates. If `$ARGUMENTS` named a focus, bias toward it but still scan wider.) If the session genuinely surfaced nothing keepable, say so plainly — don't manufacture a candidate to have something to show.
+Produce a **short list (≈2–5). Write nothing yet.** **Rank the bind-passing skill-feedback first** — those can actually change a skill; the durable-but-unbindable pitfall (own-learning) notes sit *below* them, not interleaved as equals. (If `manage-summarize` ran earlier, mine its recap for candidates. If `$ARGUMENTS` named a focus, bias toward it but still scan wider.) If the session genuinely surfaced nothing keepable, say so plainly — don't manufacture a candidate to have something to show.
 
 ## Step 3 — Present the candidates, let the user pick
 
-Show the list — each candidate as **one line: the claim · kind (own-learning / skill-feedback) · why it's worth keeping · rough durability** (and "overlaps existing `<slug>`" when your dedupe sense already flags one). Mark a skill-feedback pick that would route upstream (downstream runner) so the user knows it means *opening a PR*, not a local note. Then let the user choose **zero, one, or several**.
+Show the list — **bind-passing skill-feedback first, then own-learning** — each candidate as **one line: the claim · kind · why it's worth keeping · its selector result** (skill-feedback: the bind it makes — *skill · decision-point · delta*; own-learning: rough durability) (and "overlaps existing `<slug>`" when your dedupe sense already flags one). Mark a skill-feedback pick that would route upstream (downstream runner) so the user knows it means *opening a PR*, not a local note. Then let the user choose **zero, one, or several**.
 
 This is the **gate**: nothing is written until the user picks. Don't pre-decide or auto-write the "best" one — the user owns what enters their knowledge base; observe finds and offers, the user disposes. You may flag a recommended pick, but the choice is theirs. Only the picked candidate(s) proceed to Step 4.
 
