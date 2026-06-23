@@ -32,9 +32,9 @@ by: <handle>
 ```
 
 ### Step 3 — Graduate on completion (event-driven)
-For each `[D]` you **accept**: confirm completion **deterministically**.
-- **If node is available** (the fast path): run `node scripts/check-acceptance.mjs <project-dir> <id>` and graduate **only** ids it reports `complete: true` (the exact consensus gate, ADR-051).
-- **If node is absent** (graceful fallback): compute the same check by hand — list the `[D]`'s `@`-set (its raise line) and every `re [id]: accept` author; it is complete **iff every `@`-ed handle appears as an accepter**.
+For each `[D]` you **accept**: confirm completion **deterministically**. **Preflight once** — run `node --version`; its success decides the path:
+- **node present** (fast path): run `node scripts/check-acceptance.mjs <project-dir> <id>` and graduate **only** ids it reports `complete: true` (the exact consensus gate, ADR-051).
+- **node absent** (graceful fallback): compute the same check by hand — list the `[D]`'s `@`-set (its raise line) and every `re [id]: accept` author; it is complete **iff every `@`-ed handle appears as an accepter**.
 
 Either way, **only a complete `@`-set graduates**. **If your accept completes the set**, this same commit **also writes** `decisions/<id>.md`:
 ```markdown
