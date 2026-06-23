@@ -364,6 +364,8 @@ relay is a structured-data protocol, so unlike the analysis plugins it **bundles
 
 **Language by task:** parsing / set-logic → **node (`.mjs`)** (bash parses structured text fragilely; a fragile gate is the wrong risk); git / verification → **bash** (it's git commands).
 
+**node is a fast-path, not a hard dependency** — it runs in the *agent's* environment (Claude Code / Cursor / Codex hosts almost always have it), **not** the coordinated project's toolchain (so "any async project" holds). When node is absent, the skill **degrades to a precise SKILL.md recipe** — the script raises reliability where node exists, it never gates the skill (ADR-051).
+
 **Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
 
 Current: **`skills/reply/scripts/check-acceptance.mjs`** — the consensus gate (computes which decisions have a complete `@`-set, so graduation is exact not inferred). Next batch (sanctioned, not built): signature/github verification (bash), digest/settle state computation (node).

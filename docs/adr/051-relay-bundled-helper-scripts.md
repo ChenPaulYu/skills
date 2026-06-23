@@ -33,6 +33,15 @@ The SKILL.md *orchestrates*: "run the helper to compute X (deterministic), then 
 
 **Not scripted (deliberate):** identity resolution (`whoami`) stays a SKILL.md recipe — trivial, used by all four content skills, and not worth a 4×-duplicated script.
 
+## On the node dependency
+
+A bundled `.mjs` needs node — but this does **not** break relay's "any async project" promise, for two reasons:
+
+1. **The helper runs in the agent's environment, not the coordinated project's toolchain.** relay coordinating a Python/Go/Rust project requires *that project* to have nothing; it requires the **agent host** to have node. And the agents that run relay (Claude Code, Cursor, Codex, …) are themselves node-based or run where node exists — so node is almost always present where relay actually runs.
+2. **node is a fast-path, not a hard requirement.** Each helper-using step degrades gracefully: when node is present, the script is the exact gate; when absent, the SKILL.md carries a precise recipe the agent computes by hand. This is the marketplace's standard "degrade gracefully on an unknown stack" stance — the script raises *reliability* where node exists, it does not *gate* the skill.
+
+(The git/verification batch will be bash, which is even more universally present — so the dependency concern is narrowest exactly where correctness is most parsing-bound.)
+
 ## Consequences
 
 - **relay v0.1.0 → 0.1.1** (a helper added; manifests + codex mirror regenerated — the mirror now carries `relay-reply/scripts/`).
