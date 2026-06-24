@@ -20,6 +20,7 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 ### Step 2 — Compute from the thought-stream
 - Read recent `thoughts/`, **stitch threads by id** (a thought and the reviews that reference it), and read each thought's `subject`.
 - **Every run, sweep for `@<you>`.** Scan *every* thought for any mention of your handle. A thought that names you **and you haven't responded to yet** (no `relay-review` from you on that id) = waiting for your review. A bare `@you` anywhere must be caught — no tag where someone named you is missed.
+- **Also compute what *you're* waiting on.** Your own thoughts that `@`-ed someone else and have **no review back yet** = waiting on them. This is the asker's lens — so you can see (and chase) your own open asks, not only what's parked on you.
 
 ### Step 3 — Present, filtered for the viewer
 ```
@@ -27,10 +28,13 @@ relay · <project> · for @<you> (live, <date>)
 
 Waiting for your review (n)        # thoughts @you you haven't answered
   • [<id>] <one line — what's wanted (a look / a call / unblock)> — @<by>, from “<subject>” → relay-review
+Waiting on others (n)              # YOUR @-asks with no review back yet
+  • [<id>] <what you asked> — @<who>, “<subject>” (since <date>)
 Recent (FYI)                       # latest thoughts, brief — flow you don't need to act on
   • “<subject>” — @<by>, <date>
 ```
 - **"Waiting for your review"** = every thought that `@`-mentions you and you haven't responded to — a progress note wanting a look, or an alignment wanting your agreement / pushback. Sorted first; this is the whole point.
+- **"Waiting on others"** = your own thoughts that `@`-ed someone and have no review back — so a stalled ask is visible to *you*, the asker, not silently rotting (the asker-liveness lens).
 - **"Recent"** = the latest thoughts by subject, brief — so you see what's flowing even when it doesn't need you.
 - Two-person: the same computation, the other lens — filter by `@<you>`.
 

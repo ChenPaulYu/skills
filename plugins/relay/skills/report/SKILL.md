@@ -32,7 +32,13 @@ subject: <one line — the headline; the reader and /relay:digest read it first>
 
 Two natural tones (same format, different depth):
 - **Progress** (common, short): what's **done** · what's **in progress** · what's **next** · and **flag anything that needs the reviewer**. One line per item; not a changelog.
-- **Alignment** (occasional, longer): a briefing that brings someone's mental model up to date on a concept / framing / decision — lead with a TL;DR, group by knowledge, end with a concrete example. Length is fine *when it's for understanding*, never as a chronological dump (that lives in the project repo; link to it).
+- **Alignment** (occasional, longer): a briefing that brings someone's mental model up to date on a concept / framing / decision. Lead with a TL;DR, group by knowledge, end with a concrete example. Length is fine *when it's for understanding*, never a chronological dump (that lives in the project repo; link to it). When the reader's model is **out of date**, these moves earn their keep:
+  - **State why you're sending it** — the doc's purpose, one line, *before* the content (don't make them infer it).
+  - **Anchor on the reader's OWN prior terms** — the vocabulary *they* authored or already know, not your cleanest metaphor. Lead with the **old→new mapping in their words**, *then* transform; a reader meets new names cold unless you bridge from theirs first. (Span generations if they do: anchor on the most concrete, footnote the earlier.)
+  - **Call out what actually changed** — renames **and** level / structure shifts — explicitly; don't only say "core unchanged" and leave them wondering what moved.
+  - **Mark shipped vs planned vs hypothesis** — never let a target read as already done.
+  - **One concrete walkthrough** (a real request flowing end-to-end) makes the abstract tangible.
+  - **Verify by reading it as someone with ONLY the old knowledge** — if they'd hit unfamiliar names before the bridge, reorder.
 
 Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers.
 
