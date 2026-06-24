@@ -1,9 +1,11 @@
 ---
 date: 2026-06-24
-status: raw
+status: superseded
 ---
 
 # relay collapses three coordination verbs (discuss · converge · sync) into one terse shape; it needs an explicit `kind` with per-kind length discipline
+
+> **Superseded same-day by [ADR-053](docs/adr/053-relay-thought-stream.md).** The *gap* this named (converge-brevity vs sync-needs-room) was real, but the fix below — three `kind`s + a consensus protocol — over-generalized it for relay's actual 1–2-person, progress-centric use, and was reverted to a single report→review thought-stream. What survived: **progress vs alignment is a *tone* you flex (short vs briefing-length), not a frontmatter `kind`.** Why the over-build happened, as a process lesson → [[design-for-actual-usage-not-general-case]]. Kept as raw evidence of the reasoning.
 
 > **TL;DR**: relay's `report`/`digest` optimize for *converge* (drive a decision to consensus) and treat everything else as a brief FYI tail. But async coordination has three distinct verbs — **discuss** (think together, no fork yet), **converge** (ratify a framed decision), **sync** (bring someone's model up to date) — and they need *different* length disciplines. Brevity is converge's rule, not sync's: a sync briefing's job is understanding-transfer, which sometimes needs room. Fix = a frontmatter `kind: discuss|converge|sync`; digest treats a `sync` entry as a pointer (show its `subject`, don't triage its body) so length doesn't drown the 3-second triage.
 
