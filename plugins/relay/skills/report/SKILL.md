@@ -23,6 +23,7 @@ Write `thoughts/<date>-<handle>.md`:
 ---
 date: <ISO>
 by: <handle>
+subject: <one line — what this update is about, so the reader (and /relay:digest) grasps the theme before the buckets>
 ---
 ## Needs-decision
 - [<handle>-<slug>] @<who> [@<who2>…] — <one line; lead with the point; say your lean>
@@ -31,6 +32,7 @@ by: <handle>
 ## Done
 - <visibility only — no id needed>
 ```
+- **`subject` = one line naming what this update is about** — a headline the reader (and `/relay:digest`) reads first, before the buckets. Lead with the point; it frames the entry, it is not a changelog of what you did.
 - **id = `<handle>-<slug>`** (your handle + a slug from the item's gist) — author-namespaced, collision-free; **type comes from the bucket, never the id**; the id is permanent.
 - **`@<who>` = the people whose call/action it is.** For a `[D]`, the `@`-set is its approver set (all must accept to graduate) — `@` few for a fast call, many for broad buy-in.
 

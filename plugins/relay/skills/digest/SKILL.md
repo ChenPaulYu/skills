@@ -18,6 +18,8 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 
 ### Step 2 — Compute the threads (don't trust `index.md`)
 - Read `thoughts/` (hot entries) + `decisions/`, and **stitch each thread by id**: an item raised in one entry, discussed/accepted in others. Recompute from source — `index.md` is only a snapshot and may lag.
+- **Read each entry's `subject`** (frontmatter) — the one-line theme of that update; carry it through so the viewer sees what each entry was about.
+- **Every run, sweep for `@<you>`.** Scan *every* entry, decision, and reply for any mention of your handle — not only the structured `[D]` approver-sets and blockers. A bare `@you` anywhere (a Done line, a reply, a counter) must be caught, so no tag where someone named you is ever missed.
 
 ### Step 3 — Present, filtered for the viewer
 Surface, sorted **what-needs-you first**:
@@ -28,10 +30,14 @@ Needs your decision (n)
   • [<id>] <one line> — <proposer> leans … → reply accept / reject / counter
 Waiting on you (n)        # blockers @you
   • [<id>] <what>
-(FYI)                     # done / broadcast items, brief
-  • …
+Mentions you (n)          # any OTHER @you — replies, counters, Done lines
+  • [<id or entry>] <one line> — from “<subject>”
+(FYI)                     # recent updates by subject + broadcast, brief
+  • “<subject>” — @<by>, <date>
 ```
-- "Needs your decision" = open `[D]` whose `@`-set includes you and you haven't accepted. "Waiting on you" = open blockers `@you`. Everything else is context, kept short.
+- "Needs your decision" = open `[D]` whose `@`-set includes you and you haven't accepted. "Waiting on you" = open blockers `@you`.
+- **"Mentions you"** = every other place the Step-2 sweep found `@you` (a reply, a counter, a Done line) that isn't already a decision/blocker above — so a tag never falls through the cracks. Each carries the `subject` of the entry it came from for context.
+- "FYI" lists recent entries by their `subject` so the viewer grasps the themes at a glance; broadcast/done items stay brief.
 - Multi-person: the SAME computation, a different lens per viewer — filter by `@<you>`.
 
 ## Discipline
@@ -46,6 +52,7 @@ Waiting on you (n)        # blockers @you
 | Write / refresh `index.md` here | That's `settle` (owner-only, deliberate); `digest` writing it = churn + conflicts |
 | Trust `index.md` as current | It's a lagging snapshot; recompute from `thoughts/` + `decisions/` |
 | Show everything equally | Sort "needs you" first; FYI stays brief — it's triage, not a dump |
+| Only scan the `[D]` `@`-set | A bare `@you` in a reply / Done line gets missed — sweep every entry, every run |
 
 ## Companion skills
 - **`/relay:report`** / **`/relay:reply`** — the write sides whose entries `digest` reads.
