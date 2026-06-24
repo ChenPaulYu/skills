@@ -6,7 +6,7 @@
 
 ## What this plugin is
 
-A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`manage`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent distills work into a structured artifact, the other's agent reads + responds, and the loop converges decisions to **explicit consensus** — all git-diffable, human-gated, zero chat. Descends from `manage:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded · multi-party**.
+A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`manage`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent writes a **thought**, the other's agent reads + responds — all git-diffable, human-gated, zero chat. The main pattern is **report → review**: one side posts a thought (progress, or an alignment briefing on how they're now framing something), the other reviews it (agree / comment / change). Descends from `manage:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded**. Tuned for **1–2 people, progress-centric** — no multi-party consensus protocol.
 
 **Six verbs, split structure vs content:**
 
@@ -14,10 +14,10 @@ A toolkit for **coordinating with a counterpart asynchronously, through your age
 |---|---|---|
 | `launch` | create a project (scaffold the space + its frame) | structure |
 | `register` | enroll a person (name · git · github · title) + assign a per-project role | structure |
-| `report` | write a standup-shaped update | content |
-| `reply` | respond to an item — accept / clear / counter (the accept that completes a [D]'s `@`-set graduates it) | content |
-| `digest` | the live, per-viewer "what needs you" (read-only) | content |
-| `settle` | owner-only periodic hygiene (archive · prune · refresh `index.md`) | content |
+| `report` | write a thought — progress or alignment | content |
+| `review` | respond to a thought — agree / comment / change | content |
+| `digest` | the live "what's waiting for my review" (read-only) | content |
+| `settle` | crystallize the stream into a current-state snapshot + pinned decisions; archive the rest | content |
 
 ## Two-repo split (load-bearing)
 
@@ -36,27 +36,27 @@ Then read its `relay.yml` first; never hard-code paths.
 
 - **Identity** (who you are) → global `relay.yml`; one source; **auto-resolved** (running git author email → a person's `git:` field). Carries name · git · github · optional title.
 - **Role** (owner / developer / reviewer) → per-project `project.yml`; **descriptive defaults, not locks**; optional.
-- **Action** (any verb) → anyone may do any action; not gated by identity or role (except `settle`, which is **owner-only** for low-concurrency).
+- **Action** (any verb) → anyone may do any action; not gated by identity or role (`settle` is **owner by convention** — one writer keeps its archive moves conflict-free — but it's non-critical).
 
 `title` (org position, e.g. "CTO") is identity-level + global; `role` is per-project + functional — keep them apart.
 
-## Consensus (the core mechanic)
+## Resolution & decisions (the core mechanic)
 
-- **Explicit accept, never inferred** — a presence check (like a GitHub PR *Approve*), not judging the discussion mood. **Silence ≠ consent.**
-- **Who counts = the `@`-set, unanimously.** A [D]'s `@`-list **is** its approver set (proposer-set, extendable in-thread); it graduates the moment **every currently-`@`-ed person has left an explicit accept**. The proposer sets the bar by who they `@` (few = fast, many = broad).
-- **Graduation is event-driven** — the accept that completes the `@`-set writes `decisions/<id>.md` *in that same `reply` commit*. No `settle` needed for it; conflict-free (one new file per decision).
-- **Revoke = supersede** — overriding a ratified decision is itself a consensus act (a new [D] through the gate); the old file flips `status: superseded`.
-- **Authenticity** — a git author is spoofable, so baseline defense is **a private repo + the stated assumption colleagues don't forge each other**; **signed-commit accepts** are opt-in hardening (host-agnostic; GitHub's *Verified* badge is just a view). Not coupled to GitHub's API.
+- **A review resolves it** — with 1–2 people there is **no `@`-set protocol**. You `report`; the other `review`s (`agree` / `comment` / `change`). An explicit **`agree` settles it**. Silence ≠ agreement.
+- **Thoughts link, not match** — a `review` references the thought it answers with a **markdown link to that thought's file** (`[<id>](<date>-<id>.md)`), so a thread is clickable, not reconstructed by scanning ids.
+- **Decisions are pinned, not graduated** — a "decision" is just *a thought that got an agreeing review*. `/relay:settle` harvests these into the `index.md` snapshot's **Decisions** section. There is **no separate `decisions/` file and no graduation gate**.
+- **Change one** — a new `report` + `review` supersedes the old; settle re-pins on its next run.
+- **Authenticity** — a git author is spoofable, so baseline defense is **a private repo + the stated assumption colleagues don't forge each other**; **signed-commit reviews** are opt-in hardening (host-agnostic). Not coupled to GitHub's API.
 
 ## Git protocol (canonical — skills restate the reflex inline)
 
 Paired with the append-only / shared-repo model. Each skill restates the lines it needs (self-contained at runtime); this is the owner.
 
 - **Pull before you act** (read or write) — get everyone's latest.
-- **Append-only** — write your OWN file (`thoughts/<date>-<handle>-<slug>.md`, one entry per file); **never edit someone else's entry** → conflict-free. (`decisions/<id>.md` is also append-new — one file per decision.)
+- **Append-only** — write your OWN file (`thoughts/<date>-<handle>-<slug>.md`, one thought per file); **never edit someone else's** → conflict-free. A `review` **links** to the thought it answers, never edits it.
 - **Commit + push after writing** — so others' agents can pull it.
 - **Gate before commit** — show the user first (the marketplace-wide write-gate).
-- **Shared-mutable files** (`index.md`, a superseded decision's `status`) are touched only by deliberate verbs (`settle`, supersede), and are regenerable.
+- **Shared-mutable files** (`index.md`) are touched only by `settle`, and are regenerable.
 - **Conflicts** (rare, only on shared files) → **regenerate via `settle`, don't hand-merge.**
 - Direct to `main`, no PR ceremony (it's a coordination repo).
 
@@ -81,47 +81,31 @@ members:
   <handle2>: [<role>, …]  # a member may hold several roles; consumers read list-aware
 ```
 
-**`thoughts/<date>-<handle>-<slug>.md`** (append-only; one entry, one **kind**, or a reply):
+**`thoughts/<date>-<handle>-<slug>.md`** (the only entry type — append-only; a `report` opens, a `review` answers):
 ```markdown
 ---
 date: <ISO>
 by: <handle>
-kind: converge | sync | discuss      # omit on a pure reply entry
-subject: <one line — read first, before the body>
+subject: <one line — the headline; read first>
+re: [<id>](<date>-<id>.md)     # review only — a link to the thought it answers
 ---
+<body — lead with the point, head-able>
 ```
-The body depends on `kind` (the three coordination verbs — lifecycle: discuss → converge → sync):
-- **converge** (decide → consensus): `## Needs-decision` / `## Blocked-on` / `## Done` — terse, one line per item, depth by link.
-- **sync** (bring a model up to speed): `## TL;DR` → explanation sections → `## Example`, plus optional `## Needs-ack`. Length allowed; **knowledge-organized, never a chronological log** (that lives in the project repo). Navigation per `/nav:compose`; grounding idiom (TL;DR→explanation→evidence→example) is sync's own.
-- **discuss** (think together, *before* a decision is framed): `## Question` / `## Angles` — responses are takes, not accept/reject.
-- **reply** (responds to any of the above): `## Replies` — `re [<id>]: accept | reject | cleared | counter`. A sync ack = `accept`; a discuss take = `counter`.
-- **id = `<handle>-<slug>`**, author-namespaced (collision-free without a central allocator); type is given by the bucket, **never in the id**; the id is permanent (threads cycles, carries into `decisions/`).
+- **report body** — *progress* (done · in progress · next · `@`-flag anything needing the counterpart) **or** *alignment* (a briefing: TL;DR → explanation → example). Flex length to the job; never a chronological work-log (that lives in the project repo — link to it).
+- **review body** — `## Review`, one line per answered id: `agree` / `comment` / `change` + why; each line **links** to the answered thought (`[<id>](<date>-<id>.md)`).
+- **id = `<handle>-<slug>`**, author-namespaced (collision-free, no central allocator); permanent. The file is `thoughts/<date>-<id>.md`, so a link by id resolves to the file.
+- **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field and no `decisions/` file** — tone (progress / alignment) is how you write it; decisions are pinned by `settle`.
 
-**`decisions/<id>.md`** (one file per ratified decision; written by the completing `reply`):
+**`index.md`** (per-project — the settled snapshot, written ONLY by `settle`, **lazily**):
 ```markdown
----
-id: <handle>-<slug>
-status: active            # active | superseded
-decided: <ISO>
-proposed-by: <handle>
-accepted-by: [<handle>, …]   # the full @-set that accepted
-supersedes: —            # or <id>
-from: thoughts/<file>    # back-link to the originating thread
----
-# <decision, distilled>
-
-<rationale, written to /nav:compose discipline — lead with the point, link don't restate>
+# <project> — current state (settled @ <date>, by <handle>)
+## Where things stand
+- <one line per live item / workstream>
+## Decisions (pinned)
+- [<id>] <decision> — agreed <date> (by <who>)
 ```
-
-**`index.md`** (content-repo or per-project — shared snapshot, written ONLY by `settle`):
-```markdown
-# <project> — current state (snapshot @ <date>, settle by <handle>)
-## Open
-- [<id>] <one-line> — @<who>
-## Recent decisions
-- [<id>] <decision> — accepted by <who> (<date>)
-```
-- `digest`'s live per-viewer view is **computed, not this file** — `index.md` may lag; `digest` is the authoritative current view.
+- `digest`'s live view is **computed from the thoughts, not this file** — `index.md` may lag; `digest` is authoritative for "what needs me now".
+- `settle` writes `index.md` + archives settled thoughts **only when run** (the stream got cluttered, or you want a fresh snapshot) — clean when it's worth cleaning, not eagerly.
 
 ## Awareness
 
@@ -144,7 +128,7 @@ relay is a structured-data protocol, so unlike the analysis plugins it **bundles
 
 **Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
 
-Current: **`skills/reply/scripts/check-acceptance.mjs`** — the consensus gate (computes which decisions have a complete `@`-set, so graduation is exact not inferred). Next batch (sanctioned, not built): signature/github verification (bash), digest/settle state computation (node).
+Current: **none bundled** — the consensus gate (`check-acceptance.mjs`) was retired with the `@`-set protocol (ADR-053). Sanctioned-but-not-built: signature / github verification (bash), digest / settle state computation (node).
 
 ## Where things live
 

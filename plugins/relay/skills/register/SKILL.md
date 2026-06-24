@@ -57,7 +57,7 @@ Role is a **descriptive default, not a lock** — it sets routing defaults (e.g.
 
 ## Companion skills
 - **`/relay:launch`** — create the project before registering people into it.
-- **`/relay:report`** / **`/relay:reply`** — what registered people then do.
+- **`/relay:report`** / **`/relay:review`** — what registered people then do.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).

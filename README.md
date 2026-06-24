@@ -67,10 +67,10 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
 - `/relay:launch` — create a project (scaffold its space + frame; bootstraps the repo on first run)
 - `/relay:register` — enrol a person (name · git · github · title) + assign a per-project role
-- `/relay:report` — write a standup-shaped update (Needs-decision · Blocked-on · Done; id'd + @-routed)
-- `/relay:reply` — accept / clear / counter an item (an accept completing a decision's @-set graduates it to `decisions/`)
-- `/relay:digest` — the live, per-viewer "what needs you" (read-only; the awareness entry)
-- `/relay:settle` — owner-only periodic hygiene (archive resolved threads · prune · refresh the `index.md` snapshot)
+- `/relay:report` — write a thought (progress or alignment; subject + body, `@`-route what needs the counterpart)
+- `/relay:review` — respond to a thought — agree / comment / change (your review resolves it; no @-set protocol)
+- `/relay:digest` — the live "what's waiting for my review" (read-only; the awareness entry)
+- `/relay:settle` — crystallize the thought-stream into a current-state snapshot + pinned decisions; archive the rest
 
 ## Install
 

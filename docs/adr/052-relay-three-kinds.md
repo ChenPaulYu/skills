@@ -1,6 +1,6 @@
 # ADR 052 — relay entries have three kinds: converge · sync · discuss
 
-**Status**: accepted
+**Status**: superseded by [ADR-053](docs/adr/053-relay-thought-stream.md) — the three kinds + consensus were over-engineered for the 1–2-person report→review pattern; relay collapsed to a thought-stream the same day.
 **Date**: 2026-06-24
 **Refines**: [ADR-050](docs/adr/050-relay-plugin.md) (the relay plugin — extends its single-shape entry into three kinds), [ADR-049](docs/adr/049-nav-compose-verb.md) (sync's body navigation is delegated to `compose`)
 **Evidence**: [[relay-conflates-converge-sync-discuss]], [[sync-is-distilled-state-not-worklog]], [[progressive-disclosure-two-axes]] (observations, 2026-06-24)

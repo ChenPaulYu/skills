@@ -1,6 +1,6 @@
 # relay — design draft (async, agent-mediated coordination between people)
 
-> **Status: DRAFT** · started 2026-06-23. A working capture of design decisions, not a ratified ADR. When relay is built, the decisions here graduate into a proper ADR + the plugin; until then this is the single place the design lives (so it survives `/clear`).
+> **Status: SUPERSEDED (2026-06-24)** · started 2026-06-23. relay shipped — current truth is the plugin (`plugins/relay/`) + [ADR-050](docs/adr/050-relay-plugin.md) and [ADR-053](docs/adr/053-relay-thought-stream.md). This is the historical **pre-build draft**; its consensus / three-kind / `reply` model was **retired** by ADR-053 (relay is now a `report → review` thought-stream, 1–2 person). Kept for rationale history — do not cite as current.
 >
 > **TL;DR** — A new marketplace plugin: people coordinate **asynchronously through their agents** over a **shared git repo**. You write structured updates; the other side's agent reads and responds; decisions reach **explicit consensus**; threads continue across cycles. Designed for **multi-person**, first tested with 1 project / 2 people. Six verbs: `launch · register · report · reply · digest · settle`.
 

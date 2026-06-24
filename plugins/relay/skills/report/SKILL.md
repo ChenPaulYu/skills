@@ -1,97 +1,64 @@
 ---
 name: report
-description: "Write a structured update into a relay coordination repo so a counterpart's agent can grasp in seconds what needs them. An entry is one of three kinds — converge (a framed decision → consensus, in Needs-decision · Blocked-on · Done buckets), sync (a briefing that brings someone up to speed), or discuss (an open question, before a decision is framed) — each id'd and @-routed, continuing open threads rather than restarting. Use when the user asks to \"report in relay\", \"write my relay update\", \"send a status report to X\", \"post an update\", \"sync X on Y\", or \"relay report\". Content verb; the read-side is /relay:digest, the response side is /relay:reply. Writes one append-only entry, gated by a diff."
+description: "Write a thought into a relay coordination repo — a progress update or a concept/framing alignment — so a counterpart's agent can grasp where things stand or how you're now thinking. One flexible shape (subject + body): short for progress, longer for alignment; the counterpart responds with /relay:review. Use when the user asks to \"report in relay\", \"write my relay update\", \"post progress\", \"sync X on the new framing\", or \"relay report\". Content verb; the read-side is /relay:digest, the response side is /relay:review. Writes one append-only thought, gated by a diff."
 ---
 
-# report — a standup-shaped update
+# report — write a thought (progress or alignment)
 
-Turn your recent work into a structured entry the other side's agent can triage at a glance. Not a changelog — the value is the **forced shape** that makes "what needs you" jump out.
+Post a **thought** the counterpart's agent can pick up: where the work stands (**progress** — the common case), or how you're now framing something (**alignment** — occasional, heavier). One shape, flexible length.
+
+> report and `/relay:review` write the **same thing** — an append-only thought. report opens; review responds (referencing a thought's id). The two tones (progress / alignment) are *how you write it*, not a frontmatter flag.
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project at a time. Writes **one append-only entry** (`thoughts/<date>-<handle>-<slug>.md`, one entry per file); shows a diff and is gated. Authored to `/nav:compose` discipline (lead with the point; converge stays terse, sync may run long).
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project at a time. Writes **one append-only thought** (`thoughts/<date>-<handle>-<slug>.md`, one per file); shows a diff and is gated. Authored to `/nav:compose` discipline (lead with the point; head-able top).
 
 ## Process
 
 ### Step 1 — Resolve + pull + read current state
 - **Resolve who's running**: match the git author email to a person's `git:` field in `relay.yml` → your handle.
-- **Pull** (get everyone's latest), then **read the current state** — open items in `thoughts/` + `decisions/` — so you *continue* threads (reference existing ids), not restart them.
+- **Pull** (get the latest), then **read the current state** — recent `thoughts/` — so you *continue* threads (reference existing ids) rather than restart them.
 
-### Step 2 — Pick the kind, write the entry
-An entry is one of three **kinds** — distinct coordination verbs, each with its own shape and length discipline. They form a lifecycle: **discuss → converge → sync** (think together → ratify a framed decision → broadcast the result). **One entry = one kind** (no hybrids); a second kind the same day is a second file.
-
-Write `thoughts/<date>-<handle>-<slug>.md` (one entry per file; `<slug>` from the subject):
+### Step 2 — Write the thought
+Write `thoughts/<date>-<handle>-<slug>.md` (`<slug>` from the subject):
 ```markdown
 ---
 date: <ISO>
 by: <handle>
-kind: converge | sync | discuss
-subject: <one line — what this entry is about; the reader and /relay:digest read it FIRST, before the body>
+subject: <one line — the headline; the reader and /relay:digest read it first>
 ---
-```
-Then the body for your kind:
-
-**converge** — drive a framed decision to consensus. Terse; top layer only (the point), depth by link.
-```markdown
-## Needs-decision
-- [<handle>-<slug>] @<who> [@<who2>…] — <one line; lead with the point; say your lean>
-## Blocked-on
-- [<handle>-<slug>] @<who> — <what's blocking, since when>
-## Done
-- <visibility only — no id needed>
+<body — lead with the point, head-able; flex the depth to the job>
 ```
 
-**sync** — bring someone's mental model up to date. A briefing; **length is allowed** because its job is understanding-transfer, not triage.
-```markdown
-## TL;DR
-<1–3 lines: the whole thing compressed — `head -12` yields the gist>
-## <explanation section, each leading with its point>
-## Example
-<a concrete instance that makes it click>
-## Needs-ack          # optional, light
-- [<handle>-<slug>] @<who> — confirm you've absorbed this / pushback?
-```
-Its **navigation** (lead-with-point · headings-as-interface · head-able top) follows `/nav:compose`; the **grounding** idiom (TL;DR → explanation → evidence → example) is sync's own to define. **Not a chronological work-log** — the raw log lives in the project repo (`progress.md`/`CHANGELOG`); a sync carries *distilled state* + a link.
+Two natural tones (same format, different depth):
+- **Progress** (common, short): what's **done** · what's **in progress** · what's **next** · and **flag anything that needs the reviewer**. One line per item; not a changelog.
+- **Alignment** (occasional, longer): a briefing that brings someone's mental model up to date on a concept / framing / decision — lead with a TL;DR, group by knowledge, end with a concrete example. Length is fine *when it's for understanding*, never as a chronological dump (that lives in the project repo; link to it).
 
-**discuss** — think together *before* a decision is framed. An open question, not a vote.
-```markdown
-## Question
-<the open question + why it matters>
-## Angles
-- <candidate direction / consideration> — @<who> for their take
-```
-Responses are takes (counters), not accept/reject; when it crystallizes into a decision, someone opens a **converge** `[D]` referencing it.
-
-Notes:
-- **`subject`** (every kind) = the headline the reader and `/relay:digest` read first.
-- **id = `<handle>-<slug>`** — author-namespaced, collision-free; **type comes from the bucket, never the id**; the id is permanent.
-- **`@<who>` = the people whose call/action it is.** For a `[D]` (or a sync ack), the `@`-set is its approver set — all must accept to graduate; `@` few for a fast call, many for broad buy-in.
+Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers.
 
 ### Step 3 — Gate + commit
 **Show the diff. Wait for OK** (or "just post"), then commit + push.
 
 ## Discipline
-- **One entry, one kind** — converge / sync / discuss don't mix in a file; a second kind is a second entry.
-- **Brevity is converge's rule, not sync's** — a converge item is one line (depth by link); a sync briefing may be as long as understanding needs (but knowledge-organized, never a chronological log).
-- **Continue, don't restart** — reference open ids; only mint a new id for genuinely new items.
-- **Append-only** — write only *your* dated file; never edit anyone else's entry.
-- **Lead with the point** (`/nav:compose`); group by knowledge, not by chronology.
+- **One thought per file, append-only** — write only *your* dated file; never edit someone else's.
+- **Continue, don't restart** — reference an open id; only mint a new one for genuinely new items.
+- **Lead with the point** (`/nav:compose`); group by knowledge, not chronology; the subject is the headline.
+- **Flex length to the job** — progress is short; alignment may run long *for understanding*, never as a raw work-log.
 - **Pull before, push after; gate before commit.**
 
 ## Anti-patterns (refuse these)
 | Temptation | Why to refuse |
 |---|---|
-| Dump a chronological changelog (any kind) | Group by knowledge, not "what I did when" — a work-log lives in the project repo; a sync carries distilled state + a link |
-| Make a sync long by padding rather than explaining | Length is for understanding; ramble is the sync anti-pattern, not length itself |
-| Mix kinds in one entry | One entry = one kind; a second kind is a second file |
-| Put the type in the id (`D1`/`B1`) | Type is the bucket; the id is `<handle>-<slug>` only |
+| Dump a chronological changelog | Group by knowledge — a raw work-log lives in the project repo; a thought carries distilled state + a link |
+| Pad an alignment thought to look thorough | Length is for understanding; ramble is the smell, not length |
 | Re-raise an open item with a new id | Continue the existing thread — reference its id |
-| Edit a teammate's entry to "tidy" | Append-only; never touch others' files |
+| Edit a teammate's thought to "tidy" | Append-only; never touch others' files |
 
 ## Companion skills
-- **`/relay:digest`** — the read side (the counterpart sees your update filtered for them).
-- **`/relay:reply`** — how the counterpart responds (accept / clear / counter).
-- **`/nav:compose`** — the prose discipline each item is written to.
+- **`/relay:digest`** — the read side ("what's waiting on me").
+- **`/relay:review`** — how the counterpart responds (ack / comment / change).
+- **`/relay:settle`** — periodically settles the thought-stream into a current-state snapshot + pinned decisions.
+- **`/nav:compose`** — the prose discipline the thought is written to.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).

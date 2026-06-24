@@ -1,7 +1,7 @@
 {
   "name": "relay",
-  "version": "0.1.4",
-  "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. Six verbs: launch (create a project), register (enroll a person + role), report (a standup-shaped update), reply (accept / clear / counter — an accept that completes a decision's approver set graduates it), digest (the live, per-viewer 'what needs you'), settle (owner-only periodic hygiene). git-native, human-gated, designed for multi-person. Language-agnostic.",
+  "version": "0.2.0",
+  "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured thoughts, not chat; threads continue across cycles. Six verbs: launch (create a project), register (enroll a person + role), report (write a thought — progress or alignment), review (respond — agree / comment / change), digest (the live 'what's waiting for my review'), settle (crystallize the stream into a current-state snapshot + pinned decisions). git-native, human-gated, tuned for 1-2 people and progress-centric. Language-agnostic.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"
@@ -12,9 +12,8 @@
     "async",
     "coordination",
     "handoff",
-    "consensus",
+    "report-review",
     "git-native",
-    "multi-person",
     "agent-skills"
   ]
 }

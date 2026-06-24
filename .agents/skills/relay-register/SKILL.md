@@ -37,11 +37,13 @@ people:
 Add to `projects/<project>/project.yml`:
 ```yaml
 members:
-  <handle>: <role>
+  <handle>: <role>             # one role
+  <handle2>: [<role>, <role>]  # or several — a member may hold multiple roles
 ```
-Role is a **descriptive default, not a lock** — it sets routing defaults (e.g. `@owner`), never gates who may act. **Show the diff. Wait for OK**, then commit + push.
+Role is a **descriptive default, not a lock** — it sets routing defaults (e.g. `@owner`), never gates who may act. A member may hold **one role or a list** (e.g. `[owner, developer]`); role-consumers read it list-aware — `settle`'s owner-check is `owner ∈ roles`, and `@role` routing matches if the role is in the list. **Show the diff. Wait for OK**, then commit + push.
 
 ## Discipline
+- **Registering is shared metadata, not a permission grant** — anyone may register anyone; it gates nothing (roles are defaults; only `settle` is owner-gated). So "should they register themselves, or may I do it for them?" → either; do it for them freely. The one input that must come *from the person* is their **git resolver email** (must match their commit author, or resolution silently fails) — a shared inbox (`hello@…`) collides across people and is a poor key.
 - **Identity once, role per project** — never re-type identity into `project.yml`; the handle links the two layers.
 - **`git` is the resolver, `github` is display** — git commits carry email, not the github handle.
 - **Handle is frozen** — seed from github, then independent (ids depend on it; it must not follow a github rename).
@@ -56,7 +58,7 @@ Role is a **descriptive default, not a lock** — it sets routing defaults (e.g.
 
 ## Companion skills
 - **`relay-launch`** — create the project before registering people into it.
-- **`relay-report`** / **`relay-reply`** — what registered people then do.
+- **`relay-report`** / **`relay-review`** — what registered people then do.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).

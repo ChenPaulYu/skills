@@ -1,52 +1,54 @@
 ---
 name: settle
-description: "Owner-only periodic tidy of a relay project — archive closed threads, prune noise, and refresh the shared index.md snapshot, keeping the hot set small. Non-critical: decisions already graduated at accept, so a lagging settle is harmless. Use when the user asks to \"settle the relay\", \"tidy the project\", \"archive resolved items\", \"refresh the snapshot / index\", \"clean up the relay\", or \"relay settle\". Content verb; owner-only. Writes (archives/prunes/refreshes), gated by a diff."
+description: "Settle a relay project's thought-stream into a durable snapshot — distil the running thoughts into a clean current-state (where things stand) + pinned decisions (what got agreed in review), then archive the settled thoughts. The crystallization verb: thoughts are the running log, settle turns them into the record you read to orient. Use when the user asks to \"settle the relay\", \"crystallize / snapshot the project\", \"what's the current state\", \"pin the decisions\", \"archive old thoughts\", or \"relay settle\". Content verb; writes the snapshot + archives, gated by a diff."
 ---
 
-# settle — owner-only periodic hygiene
+# settle — crystallize the stream into a current-state snapshot
 
-Keep a project's hot set small and its snapshot fresh. **Non-critical by design**: graduation already happened at accept-time (`/relay:reply`), so settle never blocks consensus — if it lags, the project just gets larger and `index.md` gets older, nothing breaks.
+A thought-stream (`/relay:report` + `/relay:review`) is a running log — it grows and nobody wants to re-read it. **settle is the periodic「沉澱」pass**: let the stream settle, separate the clear water (**current state**) from the sediment worth keeping (**decisions**), archive the rest. Read settle's output to orient without reading every thought.
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project. **Owner-only** (the running user must be `owner` in `project.yml`) — one responsible party keeps concurrency low. Writes (moves to `archive/`, prunes, refreshes `index.md`); shows a diff and is gated.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project. Writes the **`index.md` snapshot** + moves settled thoughts to `archive/`; shows a diff and is gated. By convention the project **owner** runs it (one writer keeps the archive moves conflict-free); non-critical and re-runnable.
 
 ## Process
 
-### Step 1 — Resolve + check owner + pull
-- **Resolve who's running** (git author email → `git:` in `relay.yml`). **Refuse** unless you are `owner` of this project in `project.yml`. **Pull.**
+### Step 1 — Resolve + pull
+- **Resolve who's running** (git author email → `git:` in `relay.yml`). **Pull.** (Owner by convention; see Scope.)
 
-### Step 2 — Archive closed threads
-- A thread is closed when: its `[D]` has graduated (a `decisions/<id>.md` exists), or its blocker was cleared, or it was rejected. **Move the originating entries' resolved items to `archive/`** (out of the hot path). Keep open threads in `thoughts/`.
+### Step 2 — Distil the stream
+Read `thoughts/` since the last snapshot and compute two things:
+- **Current state** — where things actually stand *now*: roll up the progress thoughts (an item raised then later reported done is *done*, not two lines).
+- **Pinned decisions** — anything a `report` proposed and a `review` **agreed** to. A decision is just *a thought that got an agreeing review*; settle pins it. There is **no separate consensus protocol** — settle harvests decisions from the stream.
 
-### Step 3 — Prune + refresh the snapshot
-- Prune pure noise (stale FYI already seen). Rewrite the shared **`index.md`** snapshot:
+### Step 3 — Write the snapshot + archive
+Rewrite the shared **`index.md`**:
 ```markdown
-# <project> — current state (snapshot @ <date>, settle by <handle>)
-## Open
-- [<id>] <one line> — @<who>
-## Recent decisions
-- [<id>] <decision> — accepted by <who> (<date>)
+# <project> — current state (settled @ <date>, by <handle>)
+## Where things stand
+- <one line per live item / workstream>
+## Decisions (pinned)
+- [<id>] <decision> — agreed <date> (by <who>)
 ```
-**Show the diff. Wait for OK**, then commit + push.
+Then **move the settled thoughts** (rolled-up progress, agreed decisions) to `archive/`, keeping only still-open items in `thoughts/`. **Show the diff. Wait for OK**, then commit + push.
 
 ## Discipline
-- **Owner-only** — refuse if you're not the project owner (keeps the destructive moves single-writer).
-- **Never un-graduate** — settle archives a decided thread; it does not write/alter `decisions/` (that happened at accept).
-- **Idempotent-ish + re-runnable** — if two settles race and conflict on a move, re-run (the moves are recomputable from "what's resolved").
-- **Pull before, push after; gate before commit.** Conflicts on shared files → regenerate, don't hand-merge.
+- **Settle, don't re-decide** — pin what review already agreed; never change a decision here (a changed decision is a new `report` + `review`).
+- **Roll up, don't list** — current state is the *distilled* now, not a copy of every progress line.
+- **Re-runnable** — snapshot + archive moves are recomputable from the stream; on a conflict, regenerate, don't hand-merge.
+- **Pull before, push after; gate before commit.**
 
 ## Anti-patterns (refuse these)
 | Temptation | Why to refuse |
 |---|---|
-| Let anyone run settle | Owner-only — its archive/prune moves aren't conflict-free; one writer keeps it safe |
-| Graduate decisions here | Graduation is event-driven at accept (`/relay:reply`); settle only tidies |
-| Hand-merge a conflict on `index.md` | It's regenerable — re-run settle instead |
-| Archive an open thread to "clean up" | Only closed (graduated / cleared / rejected) threads move |
+| Re-litigate a decision while settling | settle crystallizes what review agreed; re-deciding is a new report + review |
+| Copy every thought into the snapshot | Current state is the rolled-up *now*, not the raw log — that's what `archive/` is for |
+| Hand-merge a conflict on `index.md` | It's regenerable — re-run settle |
+| Archive a still-open item to "clean up" | Only settled (done / agreed) thoughts move to archive |
 
 ## Companion skills
-- **`/relay:reply`** — graduates decisions (settle only archives their threads afterward).
-- **`/relay:digest`** — the live view; settle refreshes the complementary committed `index.md`.
+- **`/relay:report`** / **`/relay:review`** — the stream settle crystallizes.
+- **`/relay:digest`** — the live "what needs me" view; settle is its periodic durable complement.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
