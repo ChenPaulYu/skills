@@ -166,6 +166,21 @@ A skeptic pass found five holes; each is now handled (resolution lives in the to
 4. **forgeable accept** (git author string is spoofable) → **private repo + a stated trust baseline**; signed-commit accepts as opt-in hardening (host-agnostic; GitHub's *Verified* badge is just a view). *(Consensus · Authenticity)*
 5. **settle has no trigger + concurrency races** → **graduation is event-driven at accept** (conflict-free; the critical part no longer needs settle); **`settle` is owner-only, non-critical hygiene** (lag harmless, race re-runs). *(verb roster)*
 
+## Bloat review (2026-06-23 — via /think:orthogonal + /shape:elicit)
+
+"Is relay bloated?" factors into four independent axes; relay is lean on three, heavy on one:
+
+| axis | relay | bloated? |
+|---|---|---|
+| surface (verb count) | 6 (vs nav 7, shape 8); clean 2 structure + 4 content | no |
+| scope (jobs) | one — async coordination; no roster-clone, no `position` | no, tight |
+| per-use ceremony | ~1 verb + pull/gate/push | moderate |
+| **conceptual / mechanism load** | 3 axes · @-routing · consensus · supersede · two-repo · format · settle · awareness · git protocol · helper | **heavy** |
+
+**Verdict: relay is concept-heavy but NOT bloated *in use*.** At 2 people the heavy machinery (@-set, routing, multi-approver, soft/hard gates) **collapses to single values and never surfaces** — the felt model is just "I report → they accept → it's recorded." The weight is a *reading-the-design* artifact, not a use cost (an automatic-transmission car: the gearbox is in the engine bay, daily driving never touches it).
+
+**Decision: don't change the mechanism** — keep the generality + cambium-prototype value. If lightening is ever needed, the lever is **presentation** (lead with the simple 2-person path), **not** the mechanism. For now: no change.
+
 ## Open / not yet decided
 
 - **The concrete one-cycle file walkthrough** + exact entry/comment/decision file formats (the long-deferred "how `report` actually runs"). Next up.
