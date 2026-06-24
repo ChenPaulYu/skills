@@ -18,7 +18,7 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 
 ### Step 2 — Compute the threads (don't trust `index.md`)
 - Read `thoughts/` (hot entries) + `decisions/`, and **stitch each thread by id**: an item raised in one entry, discussed/accepted in others. Recompute from source — `index.md` is only a snapshot and may lag.
-- **Read each entry's `subject`** (frontmatter) — the one-line theme of that update; carry it through so the viewer sees what each entry was about.
+- **Read each entry's `kind`** (`converge`/`sync`/`discuss`) and `subject` (frontmatter) — the kind decides how to present it (triage a converge, point at a sync, invite input on a discuss); the subject is the one-line theme carried through.
 - **Every run, sweep for `@<you>`.** Scan *every* entry, decision, and reply for any mention of your handle — not only the structured `[D]` approver-sets and blockers. A bare `@you` anywhere (a Done line, a reply, a counter) must be caught, so no tag where someone named you is ever missed.
 
 ### Step 3 — Present, filtered for the viewer
@@ -26,18 +26,23 @@ Surface, sorted **what-needs-you first**:
 ```
 relay · <project> · for @<you> (live, <date>)
 
-Needs your decision (n)
+Needs your decision/ack (n)   # converge [D] + sync acks @you, unaccepted
   • [<id>] <one line> — <proposer> leans … → reply accept / reject / counter
-Waiting on you (n)        # blockers @you
+Waiting on you (n)            # blockers @you
   • [<id>] <what>
-Mentions you (n)          # any OTHER @you — replies, counters, Done lines
+Open for your input (n)       # discuss entries inviting your take
+  • [<id>] <the question> — from “<subject>”
+Mentions you (n)              # any OTHER @you — replies, counters, Done lines
   • [<id or entry>] <one line> — from “<subject>”
-(FYI)                     # recent updates by subject + broadcast, brief
+Briefings for you (n)         # sync entries — pointer only, NOT triaged
+  • “<subject>” — @<by>, <date> → open the file to read
+(FYI)                         # broadcast / done, brief
   • “<subject>” — @<by>, <date>
 ```
-- "Needs your decision" = open `[D]` whose `@`-set includes you and you haven't accepted. "Waiting on you" = open blockers `@you`.
-- **"Mentions you"** = every other place the Step-2 sweep found `@you` (a reply, a counter, a Done line) that isn't already a decision/blocker above — so a tag never falls through the cracks. Each carries the `subject` of the entry it came from for context.
-- "FYI" lists recent entries by their `subject` so the viewer grasps the themes at a glance; broadcast/done items stay brief.
+- "Needs your decision/ack" = open `converge` `[D]` (or a `sync` ack) whose `@`-set includes you and you haven't accepted. "Waiting on you" = open blockers `@you`.
+- **"Open for your input"** = `discuss` entries whose angles `@you` — they want your *take*, not a vote; don't rubber-stamp them.
+- **"Mentions you"** = every other place the Step-2 sweep found `@you` (a reply, a counter, a Done line) not already surfaced above — so a tag never falls through the cracks. Each carries its entry's `subject` for context.
+- **"Briefings for you" = `sync` entries shown as a pointer (subject + link), NOT exploded into triage.** A sync's body is for reading, not 3-second sorting; surfacing only its subject keeps a long briefing from drowning the triage. (Its optional ack still appears under "Needs your decision/ack".)
 - Multi-person: the SAME computation, a different lens per viewer — filter by `@<you>`.
 
 ## Discipline
@@ -53,6 +58,7 @@ Mentions you (n)          # any OTHER @you — replies, counters, Done lines
 | Trust `index.md` as current | It's a lagging snapshot; recompute from `thoughts/` + `decisions/` |
 | Show everything equally | Sort "needs you" first; FYI stays brief — it's triage, not a dump |
 | Only scan the `[D]` `@`-set | A bare `@you` in a reply / Done line gets missed — sweep every entry, every run |
+| Explode a `sync` briefing into the triage list | A sync is read, not sorted — show its subject as a pointer; triaging its body drowns the 3-second view |
 
 ## Companion skills
 - **`/relay:report`** / **`/relay:reply`** — the write sides whose entries `digest` reads.

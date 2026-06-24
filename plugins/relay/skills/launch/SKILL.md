@@ -30,7 +30,7 @@ archive/           # (empty) settle moves closed threads here
 core/<name>.md     # optional — the frame, if given
 index.md           # seed snapshot: "## Open  _(none)_"
 ```
-`project.yml` shape: `members:` mapping `<handle>: <role>`. **Show the diff. Wait for OK**, then commit + push.
+`project.yml` shape: `members:` mapping `<handle>: <role>` (a role may be a single token or a **list** — `[owner, developer]` — for a member who holds several; consumers read it list-aware). **Show the diff. Wait for OK**, then commit + push.
 
 ### Step 4 — Report
 Summarize: project created, you registered as owner, next steps (`/relay:register` to add people · `/relay:report` to post the first update).

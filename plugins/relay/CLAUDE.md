@@ -53,7 +53,7 @@ Then read its `relay.yml` first; never hard-code paths.
 Paired with the append-only / shared-repo model. Each skill restates the lines it needs (self-contained at runtime); this is the owner.
 
 - **Pull before you act** (read or write) — get everyone's latest.
-- **Append-only** — write your OWN dated file (`thoughts/<date>-<handle>.md`); **never edit someone else's entry** → conflict-free. (`decisions/<id>.md` is also append-new — one file per decision.)
+- **Append-only** — write your OWN file (`thoughts/<date>-<handle>-<slug>.md`, one entry per file); **never edit someone else's entry** → conflict-free. (`decisions/<id>.md` is also append-new — one file per decision.)
 - **Commit + push after writing** — so others' agents can pull it.
 - **Gate before commit** — show the user first (the marketplace-wide write-gate).
 - **Shared-mutable files** (`index.md`, a superseded decision's `status`) are touched only by deliberate verbs (`settle`, supersede), and are regenerable.
@@ -78,24 +78,23 @@ people:
 ```yaml
 members:
   <handle>: <role>        # owner | reviewer | developer | … (descriptive default, not a lock)
+  <handle2>: [<role>, …]  # a member may hold several roles; consumers read list-aware
 ```
 
-**`thoughts/<date>-<handle>.md`** (append-only; a report OR a reply):
+**`thoughts/<date>-<handle>-<slug>.md`** (append-only; one entry, one **kind**, or a reply):
 ```markdown
 ---
 date: <ISO>
 by: <handle>
+kind: converge | sync | discuss      # omit on a pure reply entry
+subject: <one line — read first, before the body>
 ---
-## Needs-decision
-- [<handle>-<slug>] @<who> [@<who2>…] — <one-line, lead with the point>
-## Blocked-on
-- [<handle>-<slug>] @<who> — <what's blocking, since when>
-## Done
-- <visibility only, no id needed>
-## Replies          # a reply entry uses this section
-- re [<id>]: **accept** — <why>          # accept / reject / clear / counter
-- re [<id>]: cleared — <how>
 ```
+The body depends on `kind` (the three coordination verbs — lifecycle: discuss → converge → sync):
+- **converge** (decide → consensus): `## Needs-decision` / `## Blocked-on` / `## Done` — terse, one line per item, depth by link.
+- **sync** (bring a model up to speed): `## TL;DR` → explanation sections → `## Example`, plus optional `## Needs-ack`. Length allowed; **knowledge-organized, never a chronological log** (that lives in the project repo). Navigation per `/nav:compose`; grounding idiom (TL;DR→explanation→evidence→example) is sync's own.
+- **discuss** (think together, *before* a decision is framed): `## Question` / `## Angles` — responses are takes, not accept/reject.
+- **reply** (responds to any of the above): `## Replies` — `re [<id>]: accept | reject | cleared | counter`. A sync ack = `accept`; a discuss take = `counter`.
 - **id = `<handle>-<slug>`**, author-namespaced (collision-free without a central allocator); type is given by the bucket, **never in the id**; the id is permanent (threads cycles, carries into `decisions/`).
 
 **`decisions/<id>.md`** (one file per ratified decision; written by the completing `reply`):

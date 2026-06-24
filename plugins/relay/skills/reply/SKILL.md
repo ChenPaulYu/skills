@@ -9,7 +9,7 @@ Answer the items pointing at you. The high-stakes case is **accept**: when your 
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md). Writes **one append-only entry** (`thoughts/<date>-<handle>.md`) and, when an accept graduates a decision, **one `decisions/<id>.md`** — both in one gated commit.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md). Writes **one append-only entry** (`thoughts/<date>-<handle>-<slug>.md`) and, when an accept graduates a decision, **one `decisions/<id>.md`** — both in one gated commit.
 
 ## Process
 
@@ -17,7 +17,7 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 - **Resolve who's running** (git author email → `git:` in `relay.yml` → your handle), **pull**, then find open items addressed to you (`@<your-handle>`).
 
 ### Step 2 — Respond by id
-Write `thoughts/<date>-<handle>.md`:
+Write `thoughts/<date>-<handle>-<slug>.md`:
 ```markdown
 ---
 date: <ISO>
@@ -29,6 +29,11 @@ by: <handle>
 - re [<id>]: cleared — <how>         # a blocker you've unblocked
 - re [<id>]: <counter / question>    # keeps the thread open
 ```
+
+Responding across kinds (all use the same `## Replies` lines):
+- a **converge** `[D]` → `accept` / `reject` / `counter`.
+- a **sync**'s `Needs-ack` item → `accept` ("absorbed it") or a `counter` (pushback); it's the same `[D]`+accept machinery.
+- a **discuss** angle → a **take** (use the `counter / question` line); it doesn't accept/reject — when the thread crystallizes, someone raises a converge `[D]` from it.
 
 ### Step 3 — Graduate on completion (event-driven)
 For each `[D]` you **accept**: confirm completion **deterministically**. **Preflight once** — run `node --version`; its success decides the path:
