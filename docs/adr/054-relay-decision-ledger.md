@@ -23,16 +23,16 @@ Two moves: name the ontology, then give decisions an append-only home.
 | mutability | **immutable** (it happened) | **supersedable** (a new one overrides) |
 | author | single | **jointly produced** (proposal + agreement) |
 
-**The load-bearing line: a decision is not a new artifact — it is a thought that acquired an "agreed" stamp.** The decision record is kept **self-contained**: the *distilled ruling + a one-line why*, not a bare pointer, and not a full copy of the deliberation. `log.md` is the **primary read**; the settled thought is moved to `archive/` (§2) as the optional deep-dive, git the deeper backstop.
+**The load-bearing line: a decision is not a new artifact — it is a thought that acquired an "agreed" stamp.** The decision record is kept **self-contained**: the *distilled ruling + a one-line why*, not a bare pointer, and not a full copy of the deliberation. `log.md` is the **primary read**; the settled thought **stays in `thoughts/`** (§2) as the raw source — relay never moves a thought.
 
 ### 2. Four roles, each with one owner
 
-- **`thoughts/`** — working drafts (the deliberation), holding only live items. **Moved to `archive/`** once settled (browsable — the deliberation stays readable without git archaeology); git is the deeper backstop. *Not* the system of record. *(Amended 2026-06-25 — was hard-delete; see Resolved.)*
-- **`decisions/log.md`** — the append-only **History**: every decision ever, including superseded ones; **only appended, never rewritten**. Each entry is **self-contained** — the distilled ruling + one-line why + provenance (`[<id>] <decision + why> — agreed <date> (by <who>)[, supersedes <id>]`); it reads on its own (`log.md` is the primary read; the archived thread is the deep-dive). Distillation, not a copy of the deliberation.
+- **`thoughts/`** — the **immutable append-only log** of the deliberation. Thoughts are **never moved or deleted**; "open vs settled" is computed by `digest`, not stored as a folder. *Not* a graduation target — the durable distillate is the ledger. *(Amended 2026-06-25 — pruning evolved hard-delete → archive/ → no-move; see Resolved.)*
+- **`decisions/log.md`** — the append-only **History**: every decision ever, including superseded ones; **only appended, never rewritten**. Each entry is **self-contained** — the distilled ruling + one-line why + provenance (`[<id>] <decision + why> — agreed <date> (by <who>)[, supersedes <id>]`); it reads on its own (`log.md` is the primary read; the thought in `thoughts/` is the raw source). Distillation, not a copy of the deliberation.
 - **`decisions/active.md`** — the **current in-force** decisions, **by reference** into `log.md`; regenerable (可丟可重生).
 - **progress / "where things stand"** — owned by **`digest`** (computed live), *not* a stored file.
 
-The split is "computed (disposable) vs stored (permanent)": computed = `digest` (current progress) + `active.md` (current in-force); permanent = `decisions/log.md` (decision history) + `archive/` (settled deliberation) + git (deeper backstop).
+The split is "computed (disposable) vs stored (permanent)": computed = `digest` (current progress **and** open-vs-settled) + `active.md` (current in-force); permanent = `decisions/log.md` (decision history) + `thoughts/` (the immutable deliberation log) + git (deeper backstop).
 
 ### 3. Supersession keeps the trail
 
@@ -40,18 +40,18 @@ History is append-only, so overturning a decision is **append a new decision** (
 
 ## Consequences
 
-- **`index.md` dissolves.** Its two ADR-053 sections relocate: `## Decisions (pinned)` → `decisions/log.md` + `active.md`; `## Where things stand` → `digest`. `settle` stops writing a project-root snapshot; instead it (a) **appends a decision pointer** to `log.md` + refreshes `active.md` when a thought gets an agreeing review, and (b) **moves** settled thoughts to `archive/`.
+- **`index.md` dissolves.** Its two ADR-053 sections relocate: `## Decisions (pinned)` → `decisions/log.md` + `active.md`; `## Where things stand` → `digest`. `settle` stops writing a project-root snapshot; instead it **only** (a) **appends a decision** to `log.md` + refreshes `active.md` when a thought gets an agreeing review. It **never moves or deletes a thought** — `thoughts/` is the immutable log and `digest` computes open-vs-settled.
 - **Refines a just-committed line.** `plugins/relay/CLAUDE.md` (commit `8ee287e`) says "thoughts are the immutable log; `index.md` is a projection." Restate: the immutable log is **git history + `decisions/log.md`**; **`thoughts/` is disposable working material**; **`active.md` is the projection**.
 - **`launch`** scaffolds `decisions/` again (`log.md` + `active.md`) — as a ledger, not the old per-file graduation dir ADR-053 retired.
 - **Lands as one commit**: format contract + `settle` / `digest` / `launch` SKILL.md + `plugins/relay/CLAUDE.md`, with a relay version bump and the content repo's `CLAUDE.md` project-structure line.
 
 ## Resolved (was open at draft)
 
-- **Settled thoughts move to `archive/`** (browsable). *(Amended 2026-06-25 — reversed the earlier hard-delete choice: for a low-volume, human-browsed coordination repo whose value IS the readable trail, a browsable archive beats git-only. The decision ledger stays the primary read either way.)* `log.md` entries are still **self-contained distillations** (§2).
+- **Thoughts are never moved or deleted** — `thoughts/` is the immutable log; "open vs settled" is `digest`'s computed view. *(Amended 2026-06-25 — pruning evolved hard-delete → archive/ → **no-move**. The no-move endpoint is the purest: thoughts never change, `settle` only appends to the ledger, and the active/settled split is **computed, not stored** — consistent with relay's own "compute, don't store" stance, and it dissolves the "did we archive a not-yet-agreed thought?" hazard. Trade accepted: a flat `thoughts/` grows, and a **dumb file-listing reader can't tell open from settled without computing** — relay assumes **smart readers**, since its awareness mechanism is `digest`. A counterpart's bespoke dashboard must compute open/settled itself; pulling the skill upgrades an *agent*, not a hand-rolled dashboard.)* `log.md` entries are still **self-contained distillations** (§2).
 - **Ledger filename = `log.md`** (with `active.md` the in-force view).
 - **Where a relay/tooling decision is recorded** — the ADR lives in the **skills repo** (here); an optional **FYI pointer thought** in the content repo gives the counterpart visibility, without miscategorizing tooling under a product project.
 
 ## Implementation
 
-- **Skills — done (2026-06-25).** Format contract (`plugins/relay/CLAUDE.md`) + `settle` (append-ledger + archive) + `digest` (drop `index.md` coupling) + `launch` (scaffold `decisions/` + `archive/`, no `index.md`) updated together; relay bumped `0.2.1 → 0.3.0`; manifests/codex regenerated; validator green. See [the plan](docs/plans/2026-06-25-relay-decision-ledger-impl.md).
-- **`accord` live-data migration — pending.** Run the new `settle` on `projects/music-agent-os/` to distil the already-agreed threads into the first `decisions/log.md` entries and retire `index.md` / legacy `decisions/` / `archive/`.
+- **Skills — done (2026-06-25).** Format contract (`plugins/relay/CLAUDE.md`) + `settle` (append-ledger; thoughts never move) + `digest` (drop `index.md` coupling) + `launch` (scaffold `decisions/`, no `archive/`/`index.md`) updated together; relay bumped `0.2.1 → 0.3.0`; manifests/codex regenerated; validator green. See [the plan](docs/plans/2026-06-25-relay-decision-ledger-impl.md).
+- **`accord` live-data migration — done (2026-06-25).** Distilled the already-agreed threads into `decisions/log.md` + `active.md`; retired `index.md`; thoughts stay in `thoughts/` (no `archive/`).
