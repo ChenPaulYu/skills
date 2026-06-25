@@ -88,7 +88,7 @@ members:
 ---
 date: <ISO>
 by: <handle>
-subject: <one line — the headline; read first>
+subject: "<one line — the headline; read first>"   # quote it — a colon (e.g. "re:", "ADR-054:") breaks unquoted YAML
 re: [<id>](<date>-<id>.md)     # review only, REQUIRED — the machine-parsable backlink digest stitches threads with
 ---
 <body — lead with the point, head-able>

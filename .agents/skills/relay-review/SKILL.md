@@ -23,7 +23,7 @@ Write `thoughts/<date>-<handle>-<slug>.md`:
 ---
 date: <ISO>
 by: <handle>
-subject: re: <what you're answering>
+subject: "re: <what you're answering>"     # quote it — the "re:" colon breaks unquoted YAML
 re: <link to the answered thought>     # REQUIRED — a markdown link, text = the answered thought's id, target = its file; the backlink digest stitches threads with
 ---
 ## Review

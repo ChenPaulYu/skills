@@ -28,7 +28,7 @@ Write `thoughts/<date>-<handle>-<slug>.md` (`<slug>` from the subject):
 ---
 date: <ISO>
 by: <handle>
-subject: <one line — the headline; the reader and relay-digest read it first>
+subject: "<one line — the headline; the reader and relay-digest read it first>"     # quote it — a colon in the subject breaks unquoted YAML
 ---
 <body — lead with the point, head-able; flex the depth to the job>
 ```
