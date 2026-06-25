@@ -40,7 +40,7 @@ Two natural tones (same format, different depth):
   - **One concrete walkthrough** (a real request flowing end-to-end) makes the abstract tangible.
   - **Verify by reading it as someone with ONLY the old knowledge** — if they'd hit unfamiliar names before the bridge, reorder.
 
-Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers.
+Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers. **A thought with no `@`-flag is FYI** — it informs, wants nothing back, and `digest` won't park it on anyone; that's a feature, not a forgotten ask. (The ask-vs-FYI / termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
 
 ### Step 3 — Gate + commit
 **Show the diff. Wait for OK** (or "just post"), then commit + push.

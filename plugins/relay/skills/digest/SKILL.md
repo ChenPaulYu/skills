@@ -18,8 +18,9 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 
 ### Step 2 — Compute from the thought-stream
 - Read recent `thoughts/`, **stitch threads by id** (a thought and the reviews that reference it), and read each thought's `subject`.
-- **Every run, sweep for `@<you>`.** Scan *every* thought for any mention of your handle. A thought that names you **and you haven't responded to yet** (no `/relay:review` from you on that id) = waiting for your review. A bare `@you` anywhere must be caught — no tag where someone named you is missed.
-- **Also compute what *you're* waiting on.** Your own thoughts that `@`-ed someone else and have **no review back yet** = waiting on them. This is the asker's lens — so you can see (and chase) your own open asks, not only what's parked on you.
+- **Every run, sweep for the `@<you>` flag.** Scan *every* thought for the `@<your-handle>` tag. A thought that `@`-flags you **and you haven't answered yet** (no `/relay:review` from you on that id) = waiting for your review. The `@`-flag is the *ask* signal — no `@<you>` tag where someone flagged you is ever missed.
+- **But "names you" ≠ "needs you" — FYI is not waiting.** The `@`-flag distinguishes an **ask** from an **FYI**. A thought that merely *mentions you in prose* (no `@`-flag), or whose latest state is a **closer** — an `agree`, or a review that says it needs no reply — is **self-closed**: it belongs in **Recent (FYI)**, never in "Waiting." Don't surface an already-agreed or FYI thread as parked on anyone. (The termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
+- **Also compute what *you're* waiting on.** Your own thoughts that `@`-flagged someone and have **no review back yet** = waiting on them. This is the asker's lens — so you can see (and chase) your own open asks. An ask that came back as an `agree`/FYI is **answered**, not still-waiting — drop it.
 
 ### Step 3 — Present, filtered for the viewer
 ```
@@ -32,7 +33,7 @@ Waiting on others (n)              # YOUR @-asks with no review back yet
 Recent (FYI)                       # latest thoughts, brief — flow you don't need to act on
   • “<subject>” — @<by>, <date>
 ```
-- **"Waiting for your review"** = every thought that `@`-mentions you and you haven't responded to — a progress note wanting a look, or an alignment wanting your agreement / pushback. Sorted first; this is the whole point.
+- **"Waiting for your review"** = every thought that **`@`-flags you** and you haven't answered — a progress note wanting a look, or an alignment wanting your agreement / pushback. **Excludes** FYI (no `@`-flag) and already-closed threads (an `agree`/no-reply-needed closer). Sorted first; this is the whole point.
 - **"Waiting on others"** = your own thoughts that `@`-ed someone and have no review back — so a stalled ask is visible to *you*, the asker, not silently rotting (the asker-liveness lens).
 - **"Recent"** = the latest thoughts by subject, brief — so you see what's flowing even when it doesn't need you.
 - Two-person: the same computation, the other lens — filter by `@<you>`.
@@ -47,7 +48,8 @@ Recent (FYI)                       # latest thoughts, brief — flow you don't n
 | Temptation | Why to refuse |
 |---|---|
 | Write / refresh `index.md` here | That's `settle`; `digest` writing it = churn + conflicts |
-| Only scan for explicit asks | A bare `@you` in any thought is "waiting for you" — sweep every thought, every run |
+| Miss the `@you` flag | The `@<you>` tag is the ask signal — sweep every thought, every run; never drop a real ask |
+| Nag about an FYI / already-agreed thread | "Names you" ≠ "needs you"; a prose mention, an `agree`, or a no-reply-needed closer is **Recent**, not "Waiting" |
 | Dump the full body of a long thought | Surface its subject + the one-line ask as a pointer; the body is read on open, not triaged |
 
 ## Companion skills

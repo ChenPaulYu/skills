@@ -30,8 +30,9 @@ subject: re: <what you're answering>
 - re [<id>]: change — <what to change & why>      # asks for a revision before you agree
 ```
 
-- **agree / comment / change** — say which, and why. With two people your `agree` settles it; a `change` sends it back; a `comment` keeps it open.
+- **agree / comment / change** — say which, and why. With two people your `agree` settles it; a `change` sends it back; a `comment` with a real question keeps it open.
 - **An alignment thought** (a framing) gets the same: `agree` = "I'm on board with this framing", `comment` = a take, `change` = "reframe X".
+- **A review can be a closer — say so.** An `agree`, or a `comment` that only *informs* (an execution note, a heads-up), is **self-closing**: the counterpart owes you nothing back. Make it unmistakable in-line — *"FYI, no reply needed unless you disagree"* — so the thread terminates instead of bouncing courtesy acks forever. Only a `change` or a genuine open question keeps it alive. (Termination contract: `relay/CLAUDE.md` → *Resolution & decisions*.)
 
 ### Step 3 — Gate + commit
 **Show the diff. Wait for OK**, then commit + push.
