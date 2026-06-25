@@ -1,15 +1,15 @@
 ---
 name: settle
-description: "Settle a relay project's thought-stream into the decision ledger — distil each thought that got an agreeing review into a self-contained ruling, APPEND it to decisions/log.md (append-only), regenerate decisions/active.md (current in-force), then HARD-DELETE the settled thoughts (git is the deep archive). The crystallization verb: thoughts are disposable drafts, settle turns the agreed ones into the durable record. Use when the user asks to \"settle the relay\", \"crystallize the project\", \"pin / log the decisions\", \"clean up settled thoughts\", or \"relay settle\". Content verb; appends to the ledger + prunes, gated by a diff. (ADR-054)"
+description: "Settle a relay project's thought-stream into the decision ledger — distil each thought that got an agreeing review into a self-contained ruling, APPEND it to decisions/log.md (append-only), regenerate decisions/active.md (current in-force), then ARCHIVE the settled thoughts to archive/ (browsable; git is the deeper backstop). The crystallization verb: thoughts are working drafts, settle turns the agreed ones into the durable record. Use when the user asks to \"settle the relay\", \"crystallize the project\", \"pin / log the decisions\", \"clean up settled thoughts\", or \"relay settle\". Content verb; appends to the ledger + prunes, gated by a diff. (ADR-054)"
 ---
 
 # settle — crystallize agreed thoughts into the decision ledger
 
-A thought-stream (`/relay:report` + `/relay:review`) is a running log of **disposable drafts** — it grows and nobody wants to re-read it. **settle is the periodic「沉澱」pass**: take the thoughts that got an agreeing review, distil each into a **self-contained ruling**, **append** it to the decision ledger, then **hard-delete** the settled drafts (git keeps the original). Read the ledger to orient without reading every thought.
+A thought-stream (`/relay:report` + `/relay:review`) is a running log of **disposable drafts** — it grows and nobody wants to re-read it. **settle is the periodic「沉澱」pass**: take the thoughts that got an agreeing review, distil each into a **self-contained ruling**, **append** it to the decision ledger, then **archive** the settled drafts to `archive/`. Read the ledger to orient without reading every thought.
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project. **Appends** to `decisions/log.md`, **regenerates** `decisions/active.md`, and **hard-deletes** settled thoughts (no `archive/`); shows a diff and is gated. By convention the project **owner** runs it (one writer keeps the ledger appends + `active.md` regeneration conflict-free); non-critical and re-runnable. "Where things stand" (progress) is **not** settle's job — `digest` computes it live.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project. **Appends** to `decisions/log.md`, **regenerates** `decisions/active.md`, and **moves** settled thoughts to `archive/`; shows a diff and is gated. By convention the project **owner** runs it (one writer keeps the ledger appends + `active.md` regeneration conflict-free); non-critical and re-runnable. "Where things stand" (progress) is **not** settle's job — `digest` computes it live.
 
 ## Process
 
@@ -17,7 +17,7 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 - **Resolve who's running** (git author email → `git:` in `relay.yml`). **Pull.** (Owner by convention; see Scope.)
 
 ### Step 2 — Harvest the agreed decisions
-Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *a thought that got an agreeing review*; no separate consensus protocol). For each, distil a **self-contained ruling**: the decision + a one-line why + provenance, written so it reads **without** the thought (which is about to be deleted). If it overrides an earlier decision, note `supersedes <id>`. Progress-only thoughts (no decision) are settled too — they just get hard-deleted, nothing to log.
+Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *a thought that got an agreeing review*; no separate consensus protocol). For each, distil a **self-contained ruling**: the decision + a one-line why + provenance, written so the ledger reads on its own (the thought moves to `archive/` for the deep-dive). If it overrides an earlier decision, note `supersedes <id>`. Progress-only thoughts (no decision) are settled too — they just get archived, nothing to log.
 
 ### Step 3 — Append to the ledger, regenerate active, prune
 1. **Append** each ruling to `decisions/log.md` (create it if absent) — **append-only, never rewrite** existing lines:
@@ -29,14 +29,14 @@ Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *
    # <project> — decisions in force (regenerated @ <date>)
    - [<id>] <decision> — agreed <date>
    ```
-3. **Hard-delete** the settled thoughts from `thoughts/` (`git rm`) — **no `archive/`**; the full deliberation survives in git history. Keep only still-open thoughts.
+3. **Move** the settled thoughts to `archive/` (`git mv`) — browsable, so the full deliberation stays one click from the ledger; keep only still-open thoughts in `thoughts/`.
 
 **Show the diff. Wait for OK**, then commit + push.
 
 ## Discipline
 - **Settle, don't re-decide** — log what review already agreed; never change a decision here (a changed decision is a new `report` + `review`, appended later with `supersedes`).
 - **Append, never rewrite `log.md`** — old entries (including superseded ones) stay forever; you only add lines. `active.md` is the one you regenerate.
-- **Self-contained rulings** — the thought is about to be hard-deleted, so each `log.md` line must read on its own. Distil, don't bare-pointer.
+- **Self-contained rulings** — `log.md` is the primary read, so each line must stand on its own (the archived thread is the deep-dive, not the ledger). Distil, don't bare-pointer.
 - **Re-runnable** — `active.md` is derived from `log.md`; on a conflict, regenerate, don't hand-merge.
 - **Pull before, push after; gate before commit.**
 
@@ -45,8 +45,8 @@ Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *
 |---|---|
 | Re-litigate a decision while settling | settle records what review agreed; re-deciding is a new report + review |
 | Rewrite / reorder `log.md` to "tidy" | It's append-only history — superseded entries stay; only `active.md` is regenerated |
-| Write a bare pointer (`[id] see thought`) to a thought you're deleting | The thought is hard-deleted — the ledger line must stand alone; distil the ruling + why |
-| Move settled thoughts to `archive/` | There is no `archive/` — settled thoughts are hard-deleted; git is the deep archive |
+| Write a bare pointer (`[id] see thought`) instead of distilling | `log.md` is the primary read — distil the ruling + why; the archived thought is the deep-dive, not the ledger |
+| Leave settled thoughts in `thoughts/` to keep them visible | They move to `archive/` — `thoughts/` holds only live drafts; `archive/` is the browsable settled record |
 | Store a "where things stand" snapshot | Progress is `digest`'s live job — settle only touches the decision ledger |
 
 ## Companion skills

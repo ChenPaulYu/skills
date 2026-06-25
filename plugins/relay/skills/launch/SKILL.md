@@ -1,6 +1,6 @@
 ---
 name: launch
-description: "Create a new project in a relay coordination repo — scaffold its space (project.yml · thoughts/ · decisions/) and define its frame. Bootstraps the relay repo itself (relay.yml roster) on first run. Use when the user asks to \"launch a relay project\", \"create a project\", \"set up a new coordination project / workspace\", \"start a relay repo\", or \"open a new project in relay\". Structure verb (creates the workspace); to add people use /relay:register, to post updates use /relay:report. Writes files, gated by a diff."
+description: "Create a new project in a relay coordination repo — scaffold its space (project.yml · thoughts/ · decisions/ · archive/) and define its frame. Bootstraps the relay repo itself (relay.yml roster) on first run. Use when the user asks to \"launch a relay project\", \"create a project\", \"set up a new coordination project / workspace\", \"start a relay repo\", or \"open a new project in relay\". Structure verb (creates the workspace); to add people use /relay:register, to post updates use /relay:report. Writes files, gated by a diff."
 ---
 
 # launch — create a relay project
@@ -24,12 +24,13 @@ Operates on the **content repo** — a *separate* coordination repo (located via
 Create under `projects/<name>/`:
 ```
 project.yml         # members: { <you>: owner }   — you are the first owner
-thoughts/           # (empty) append-only drafts land here (report + review)
+thoughts/           # (empty) live drafts land here (report + review)
 decisions/log.md    # seed header "# <name> — decision log (append-only)"; settle APPENDS agreed decisions
 decisions/active.md # seed "# <name> — decisions in force  _(none yet)_"; settle regenerates it
+archive/            # (empty) settle moves settled thoughts here (browsable)
 core/<name>.md      # optional — the frame, if given
 ```
-No `archive/` (settled thoughts are hard-deleted; git is the deep archive) and no `index.md` (progress is `digest`'s live job; decisions live in `decisions/`). See [ADR-054](docs/adr/054-relay-decision-ledger.md).
+No `index.md` — progress is `digest`'s live job; decisions live in `decisions/`. Settled thoughts move to `archive/` (browsable; git is the deeper backstop). See [ADR-054](docs/adr/054-relay-decision-ledger.md).
 `project.yml` shape: `members:` mapping `<handle>: <role>` (a role may be a single token or a **list** — `[owner, developer]` — for a member who holds several; consumers read it list-aware). **Show the diff. Wait for OK**, then commit + push.
 
 ### Step 4 — Report
