@@ -29,6 +29,10 @@ Write `thoughts/<date>-<handle>-<slug>.md` (`<slug>` from the subject):
 date: <ISO>
 by: <handle>
 subject: "<one line — the headline; the reader and relay-digest read it first>"     # quote it — a colon in the subject breaks unquoted YAML
+thread: "<link to the discussion root>"   # REQUIRED, quote it — which discussion. Opening a NEW topic? point to YOURSELF (this file). Continuing one? the existing root
+re: "<link to the thought you answer>"    # optional — set it (like a reply) when this continues a thread by answering a specific thought
+relate:                                    # optional — cross-discussion "see also" links; may be several
+  - "<link to a related thought>"
 ---
 <body — lead with the point, head-able; flex the depth to the job>
 ```

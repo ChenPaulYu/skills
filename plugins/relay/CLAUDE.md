@@ -89,8 +89,10 @@ members:
 date: <ISO>
 by: <handle>
 subject: "<one line — the headline; read first>"   # quote it — a colon (e.g. "re:", "ADR-054:") breaks unquoted YAML
-thread: "[<root-id>](<date>-<root-id>.md)"   # reply only, REQUIRED — quote it (a markdown link starts with [ = a YAML sequence). Which discussion (its opening thought); the grouping anchor
-re: "[<id>](<date>-<id>.md)"                 # reply only — quote it. The exact thought this answers (omit when it == thread, a direct reply to the root)
+thread: "[<root-id>](<date>-<root-id>.md)"   # REQUIRED on EVERY thought — which discussion (its opening thought); a new topic's opener points to itself. Quote it ([ starts a YAML sequence)
+re: "[<id>](<date>-<id>.md)"                 # optional — the exact thought you directly answer (omit if none, or when it == thread)
+relate:                                       # optional — cross-discussion "see also" links; may be several
+  - "[<id>](<date>-<id>.md)"
 ---
 <body — lead with the point, head-able>
 ```
@@ -98,9 +100,13 @@ re: "[<id>](<date>-<id>.md)"                 # reply only — quote it. The exac
 - **review body** — `## Review`, one line per answered id: `agree` / `comment` / `change` + why; each line **links** to the answered thought (`[<id>](<date>-<id>.md)`).
 - **conclusion body** — a **tone, not a `kind`**. When a discussion is too long / iterated for a one-line `log.md` entry, write a thought that **synthesizes** it (the outcome + why); `settle` then points `log.md` at this thought instead of inlining a line. Write one **only when the thread doesn't read linearly into the conclusion** — never to restate the thread. It doubles as the discussion's **navigation hub**: **link the related thoughts inline** so a reader grasps the whole arc and can jump to any piece in one place (the human-readable map), while naming the **`thread`** keeps the set machine-complete (a later thought is still grouped even if not hand-linked).
 - **id = `<handle>-<slug>`**, author-namespaced (collision-free, no central allocator); permanent. The file is `thoughts/<date>-<id>.md`, so a link by id resolves to the file.
-- **`thread` + `re` — two-level threading.** `thread` links the discussion's **opening thought** (the root) — the **grouping anchor**, read in O(1) so `digest`/a dashboard groups a discussion *without walking a chain* (survives a missing `re:` mid-thread). `re` links the **exact thought this answers** (the immediate parent) — the precise reply edge. A reply **always sets `thread`**; it sets `re` when answering something deeper than the root (omit `re` when it would equal `thread`). A discussion's **opening thought has neither**. Both are **inherent + immutable** (fixed at write time), so they are legitimate stored fields.
+- **Three link levels — `thread` · `re` · `relate`.**
+  - **`thread`** (grouping, *within* a discussion) — links the discussion's **opening thought** (the root); the **grouping anchor**, read in O(1) so `digest`/a dashboard groups *without walking a chain*. **Required on EVERY thought** — a new topic's opener points to **itself** (no orphans; every thought belongs to exactly one discussion).
+  - **`re`** (reply, *within*) — links the **exact thought you directly answer** (the immediate parent). Optional; omit when there's none or it would equal `thread`.
+  - **`relate`** (association, *cross-discussion*) — "see also" links to thoughts in **other** discussions. Optional; **may be several**.
+- **All links are stored ONE-WAY; backlinks are COMPUTED (Obsidian model).** You write only the **outgoing** link (in *your* thought); "who points at me" is **never stored** — `digest` (or a script / Obsidian) computes it. Storing a backlink would mean **editing the target thought**, which immutability forbids. So a plain GitHub viewer sees only outgoing links; a computing reader sees both directions. `thread` · `re` · `relate` are **inherent + immutable** → legitimate stored fields.
 - **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field** — tone (progress / alignment) is how you write it; decisions are appended to `decisions/log.md` by `settle`.
-- **No `status` field — "open vs settled" is computed, not stored.** A thought is *settled* when `digest` can derive it from the immutable stream: it's an FYI (no `@`-flag), or its ask got an answering `agree` (found by following `re:` backlinks), or it's superseded. Storing a `status` would mean **editing an immutable thought** when it closes — forbidden. Frontmatter holds only the **inherent, unchanging** facts (`date` · `by` · `subject` · `thread` · `re`); the **derived, changing** state (open/settled, who-waits-on-whom, progress) is `digest`'s computed view. This is why `thread` + `re` are required on a reply — they're the edges that make grouping + "settled?" computable.
+- **No `status` field — "open vs settled" is computed, not stored.** A thought is *settled* when `digest` can derive it from the immutable stream: it's an FYI (no `@`-flag), or its ask got an answering `agree` (found by following `re:` backlinks), or it's superseded. Storing a `status` would mean **editing an immutable thought** when it closes — forbidden. Frontmatter holds only the **inherent, unchanging** facts (`date` · `by` · `subject` · `thread` · `re` · `relate`); the **derived, changing** state (open/settled, who-waits-on-whom, progress, **backlinks**) is `digest`'s computed view. This is why the links (`thread` always, `re`/`relate` as needed) are stored outgoing-only — they're the edges that make grouping, "settled?", and backlinks computable.
 
 **`decisions/log.md`** (per-project — the append-only decision History; `settle` **appends**, never rewrites):
 ```markdown
@@ -139,7 +145,7 @@ relay is a structured-data protocol, so unlike the analysis plugins it **bundles
 
 **Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
 
-Current: **none bundled** — the consensus gate (`check-acceptance.mjs`) was retired with the `@`-set protocol (ADR-053). Sanctioned-but-not-built: signature / github verification (bash), digest / settle state computation (node).
+Current: **none bundled** — the consensus gate (`check-acceptance.mjs`) was retired with the `@`-set protocol (ADR-053). Sanctioned-but-not-built: signature / github verification (bash), digest / settle state computation (node), and a **backlink / nav generator** (node, owned by `settle`) — scans `thoughts/` for `thread`/`re`/`relate`, computes the backlink graph, and **regenerates a separate `nav` artifact** (never writes back into a thought — that would mutate an immutable file). Deferred until a non-Obsidian, non-agent reader (raw GitHub browsing) actually needs backlinks; agents use `digest`, humans use Obsidian meanwhile.
 
 ## Where things live
 
