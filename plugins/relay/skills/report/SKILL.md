@@ -1,6 +1,6 @@
 ---
 name: report
-description: "Write a thought into a relay coordination repo — a progress update or a concept/framing alignment — so a counterpart's agent can grasp where things stand or how you're now thinking. One flexible shape (subject + body): short for progress, longer for alignment; the counterpart responds with /relay:review. Use when the user asks to \"report in relay\", \"write my relay update\", \"post progress\", \"sync X on the new framing\", or \"relay report\". Content verb; the read-side is /relay:digest, the response side is /relay:review. Writes one append-only thought, gated by a diff."
+description: "Write a thought into a relay coordination repo — a progress update or a concept/framing alignment — so a counterpart's agent can grasp where things stand or how you're now thinking. One flexible shape (subject + body): short for progress, longer for alignment; the counterpart responds with /relay:review. Use when the user asks to \"report in relay\", \"write my relay update\", \"post progress\", \"sync X on the new framing\", or \"relay report\". Content verb; the read-side is /relay:digest, the response side is /relay:review. Writes one append-only thought into the relay CONTENT repo (the coordination repo with relay.yml) — ONLY there; authoring an ADR / design doc / README that lives in a code or tooling repo is /nav:compose, not a report. Gated by a diff."
 ---
 
 # report — write a thought (progress or alignment)
@@ -12,6 +12,8 @@ Post a **thought** the counterpart's agent can pick up: where the work stands (*
 ## Scope
 
 Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project at a time. Writes **one append-only thought** (`thoughts/<date>-<handle>-<slug>.md`, one per file); shows a diff and is gated. Authored to `/nav:compose` discipline (lead with the point; head-able top).
+
+**Relay content repo ONLY — not a doc authoring tool.** report writes a *coordination message to a counterpart*, and it lands **only** in the relay content repo (the one with `relay.yml`). A **durable document that lives in a code / tooling repo** — an ADR, a design doc, a README, a spec — is **`/nav:compose`**, never a report (even though both write prose and report borrows compose's *discipline*). The test: *message to a counterpart* → report; *document in a codebase* → compose. If the artifact's home is anywhere but the relay content repo, stop — it's not a report.
 
 ## Process
 
@@ -59,6 +61,7 @@ Mark anything needing the counterpart with **`@<handle>`** + what you want back 
 | Pad an alignment thought to look thorough | Length is for understanding; ramble is the smell, not length |
 | Re-raise an open item with a new id | Continue the existing thread — reference its id |
 | Edit a teammate's thought to "tidy" | Append-only; never touch others' files |
+| Use report to author an ADR / design doc / README in a code or tooling repo | report writes a coordination thought into the relay content repo only; a document that lives in a codebase is `/nav:compose` |
 
 ## Companion skills
 - **`/relay:digest`** — the read side ("what's waiting on me").
