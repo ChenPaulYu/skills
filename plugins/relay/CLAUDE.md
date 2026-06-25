@@ -89,8 +89,8 @@ members:
 date: <ISO>
 by: <handle>
 subject: "<one line — the headline; read first>"   # quote it — a colon (e.g. "re:", "ADR-054:") breaks unquoted YAML
-thread: [<root-id>](<date>-<root-id>.md)   # reply only, REQUIRED — which discussion (its opening thought); the grouping anchor
-re: [<id>](<date>-<id>.md)                 # reply only — the exact thought this answers (omit when it == thread, i.e. a direct reply to the root)
+thread: "[<root-id>](<date>-<root-id>.md)"   # reply only, REQUIRED — quote it (a markdown link starts with [ = a YAML sequence). Which discussion (its opening thought); the grouping anchor
+re: "[<id>](<date>-<id>.md)"                 # reply only — quote it. The exact thought this answers (omit when it == thread, a direct reply to the root)
 ---
 <body — lead with the point, head-able>
 ```

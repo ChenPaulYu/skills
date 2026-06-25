@@ -23,8 +23,8 @@ Write `thoughts/<date>-<handle>-<slug>.md`:
 date: <ISO>
 by: <handle>
 subject: "re: <what you're answering>"     # quote it — the "re:" colon breaks unquoted YAML
-thread: <link to the discussion's opening thought>   # REQUIRED — the grouping anchor (the root); digest groups by it
-re: <link to the exact thought you answer>           # the immediate parent; omit when it == thread (a direct reply to the root)
+thread: "<link to the discussion's opening thought>"   # REQUIRED, quote it (a markdown link starts with [ = a YAML sequence) — the grouping anchor (the root); digest groups by it
+re: "<link to the exact thought you answer>"           # quote it — the immediate parent; omit when it == thread (a direct reply to the root)
 ---
 ## Review
 - re [<id>]: **agree** — <why / any caveat>      # you accept it; settle may pin this as a decision
