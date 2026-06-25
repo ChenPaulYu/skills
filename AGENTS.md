@@ -330,9 +330,9 @@ re: [<id>](<date>-<id>.md)     # review only — a link to the thought it answer
 **`decisions/log.md`** (per-project — the append-only decision History; `settle` **appends**, never rewrites):
 ```markdown
 # <project> — decision log (append-only)
-- [<id>] <decision + one-line why> — agreed <date> (by <who>)[, supersedes <id>]
+- [<id>] <decision + one-line why> — agreed <date> by <who>, from <thought-link>[, supersedes <id>]
 ```
-- One **self-contained** line per decision, distilled so the ledger reads on its own (the full thread stays in `thoughts/` as the raw source). Newest appended at the end; superseded entries **stay** (a later entry marks `supersedes <id>`) — the "we changed our mind" trail is itself the record.
+- One **self-contained** line per decision, distilled so the ledger reads on its own. **Cite the source thought(s) as a markdown link** — `<thought-link>` resolves from `decisions/` as `../thoughts/<date>-<thought-id>.md` (proposal + the agreeing review). Stable, since thoughts never move; consistent with "thoughts link, not match." The link is the drill-in, the prose is self-contained. Newest appended at the end; superseded entries **stay** (a later entry marks `supersedes <id>`) — the "we changed our mind" trail is itself the record.
 
 **`decisions/active.md`** (per-project — the current in-force view, **regenerated** by `settle` from `log.md`):
 ```markdown

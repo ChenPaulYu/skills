@@ -22,8 +22,9 @@ Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *
 ### Step 3 — Append to the ledger, regenerate active
 1. **Append** each ruling to `decisions/log.md` (create it if absent) — **append-only, never rewrite** existing lines:
    ```markdown
-   - [<id>] <decision + one-line why> — agreed <date> (by <who>)[, supersedes <id>]
+   - [<id>] <decision + one-line why> — agreed <date> by <who>, from <thought-link>[, supersedes <id>]
    ```
+   `<thought-link>` is a markdown link whose text is the source thought's id and whose target is the thought file — from `decisions/` that target is `../thoughts/<date>-<thought-id>.md`. Cite the proposal + the agreeing review; stable since thoughts never move, so the link is the drill-in and the prose stays self-contained.
 2. **Regenerate** `decisions/active.md` from `log.md` — the in-force subset (drop any entry a later one `supersedes`):
    ```markdown
    # <project> — decisions in force (regenerated @ <date>)
