@@ -246,7 +246,7 @@ A toolkit for **coordinating with a counterpart asynchronously, through your age
 | `report` | write a thought — progress or alignment | content |
 | `review` | respond to a thought — agree / comment / change | content |
 | `digest` | the live "what's waiting for my review" (read-only) | content |
-| `settle` | crystallize the stream into a current-state snapshot + pinned decisions; archive the rest | content |
+| `settle` | append agreed decisions to the ledger (`decisions/log.md`) + regenerate `active.md`; hard-delete settled thoughts | content |
 
 ## Two-repo split (load-bearing)
 
@@ -265,15 +265,16 @@ Then read its `relay.yml` first; never hard-code paths.
 
 - **Identity** (who you are) → global `relay.yml`; one source; **auto-resolved** (running git author email → a person's `git:` field). Carries name · git · github · optional title.
 - **Role** (owner / developer / reviewer) → per-project `project.yml`; **descriptive defaults, not locks**; optional.
-- **Action** (any verb) → anyone may do any action; not gated by identity or role (`settle` is **owner by convention** — one writer keeps its archive moves conflict-free — but it's non-critical).
+- **Action** (any verb) → anyone may do any action; not gated by identity or role (`settle` is **owner by convention** — one writer keeps the ledger appends + `active.md` regeneration conflict-free — but it's non-critical).
 
 `title` (org position, e.g. "CTO") is identity-level + global; `role` is per-project + functional — keep them apart.
 
 ## Resolution & decisions (the core mechanic)
 
 - **A review resolves it** — with 1–2 people there is **no `@`-set protocol**. You `report`; the other `review`s (`agree` / `comment` / `change`). An explicit **`agree` settles it**. Silence ≠ agreement.
+- **Termination is built in — not every thought wants a reply.** Two kinds of traffic: an **ask** (a thought carrying an `@<handle>` flag, a `change`, or a `comment` with a real question) keeps the thread **open**; an **FYI** (a thought with no `@`-flag, or a review that only informs — an `agree`, or a `comment` that just tells you something) is **self-closing**. The rule: **respond only to move an open question — never reply just to acknowledge** (don't ack an ack). After an `agree` or an FYI, **silence = closed, not rudeness**; a settled-looking thread re-opens *only* on a `change` or genuine disagreement. (Distinguish from the bullet above: silence ≠ agreement on an *open ask* — you can't read consent into no answer; but silence *after* an explicit `agree`/FYI = done.) A writer who wants this unmistakable says so in-line ("FYI, no reply needed unless you disagree"). `digest` must honor this — an FYI / already-agreed thread is **not** "waiting" on anyone.
 - **Thoughts link, not match** — a `review` references the thought it answers with a **markdown link to that thought's file** (`[<id>](<date>-<id>.md)`), so a thread is clickable, not reconstructed by scanning ids.
-- **Decisions are pinned, not graduated** — a "decision" is just *a thought that got an agreeing review*. `relay-settle` harvests these into the `index.md` snapshot's **Decisions** section. There is **no separate `decisions/` file and no graduation gate**.
+- **Decisions are an append-only ledger, pinned not graduated** — a "decision" is just *a thought that got an agreeing review*. `relay-settle` distils each into a **self-contained ruling** and **appends** it to `decisions/log.md` (append-only, never rewritten); `decisions/active.md` is the regenerated in-force view. No graduation gate, no `@`-set — the agreeing review *is* the decision; `settle` records it. The deliberation thought is **hard-deleted** after settle, so the ledger entry must stand alone (git is the deep archive). See [ADR-054](docs/adr/054-relay-decision-ledger.md).
 - **Change one** — a new `report` + `review` supersedes the old; settle re-pins on its next run.
 - **Authenticity** — a git author is spoofable, so baseline defense is **a private repo + the stated assumption colleagues don't forge each other**; **signed-commit reviews** are opt-in hardening (host-agnostic). Not coupled to GitHub's API.
 
@@ -283,10 +284,11 @@ Paired with the append-only / shared-repo model. Each skill restates the lines i
 
 - **Pull before you act** (read or write) — get everyone's latest.
 - **Append-only** — write your OWN file (`thoughts/<date>-<handle>-<slug>.md`, one thought per file); **never edit someone else's** → conflict-free. A `review` **links** to the thought it answers, never edits it.
+- **Coordination lives in the append-only stream — never a co-edited "whiteboard."** A single mutable doc everyone edits would (a) **collide** under async agents (merge conflicts — the one thing append-only buys you) and (b) **overwrite the *why*** on every change (losing the decision trail). The "current state at a glance" need is met by a **computed** view (`digest`) and a **single-writer** projection (`decisions/active.md`, regenerated by `settle`) — never a shared-mutable free-for-all. (Event-sourcing framing: the immutable **log** is git history + the append-only `decisions/log.md`; `thoughts/` is disposable working material; `active.md` is a **projection** — don't hand-mutate the projection.) The only file a non-`settle` verb may co-produce is a **work artifact** (a spec, copy) that is the *object* of the work, not the coordination medium — and even then via single-owner edits or report/review, not free editing.
 - **Commit + push after writing** — so others' agents can pull it.
 - **Gate before commit** — show the user first (the marketplace-wide write-gate).
-- **Shared-mutable files** (`index.md`) are touched only by `settle`, and are regenerable.
-- **Conflicts** (rare, only on shared files) → **regenerate via `settle`, don't hand-merge.**
+- **Shared files in the decision path are single-writer** (the owner runs `settle`): `decisions/active.md` is **regenerated** by settle; `decisions/log.md` is **append-only** (settle appends, never rewrites). `settle` also hard-deletes settled thoughts (no `archive/`).
+- **Conflicts** (rare, only on shared files) → **regenerate via `settle`, don't hand-merge** (`active.md` is derived; `log.md` conflicts resolve by keeping both appended lines).
 - Direct to `main`, no PR ceremony (it's a coordination repo).
 
 ## Format contract (canonical — the shared shapes all six verbs read/write)
@@ -323,18 +325,23 @@ re: [<id>](<date>-<id>.md)     # review only — a link to the thought it answer
 - **report body** — *progress* (done · in progress · next · `@`-flag anything needing the counterpart) **or** *alignment* (a briefing: TL;DR → explanation → example). Flex length to the job; never a chronological work-log (that lives in the project repo — link to it).
 - **review body** — `## Review`, one line per answered id: `agree` / `comment` / `change` + why; each line **links** to the answered thought (`[<id>](<date>-<id>.md)`).
 - **id = `<handle>-<slug>`**, author-namespaced (collision-free, no central allocator); permanent. The file is `thoughts/<date>-<id>.md`, so a link by id resolves to the file.
-- **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field and no `decisions/` file** — tone (progress / alignment) is how you write it; decisions are pinned by `settle`.
+- **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field** — tone (progress / alignment) is how you write it; decisions are appended to `decisions/log.md` by `settle`.
 
-**`index.md`** (per-project — the settled snapshot, written ONLY by `settle`, **lazily**):
+**`decisions/log.md`** (per-project — the append-only decision History; `settle` **appends**, never rewrites):
 ```markdown
-# <project> — current state (settled @ <date>, by <handle>)
-## Where things stand
-- <one line per live item / workstream>
-## Decisions (pinned)
-- [<id>] <decision> — agreed <date> (by <who>)
+# <project> — decision log (append-only)
+- [<id>] <decision + one-line why> — agreed <date> (by <who>)[, supersedes <id>]
 ```
-- `digest`'s live view is **computed from the thoughts, not this file** — `index.md` may lag; `digest` is authoritative for "what needs me now".
-- `settle` writes `index.md` + archives settled thoughts **only when run** (the stream got cluttered, or you want a fresh snapshot) — clean when it's worth cleaning, not eagerly.
+- One **self-contained** line per decision, distilled so it reads *without* the (hard-deleted) thought. Newest appended at the end; superseded entries **stay** (a later entry marks `supersedes <id>`) — the "we changed our mind" trail is itself the record.
+
+**`decisions/active.md`** (per-project — the current in-force view, **regenerated** by `settle` from `log.md`):
+```markdown
+# <project> — decisions in force (regenerated @ <date>)
+- [<id>] <decision> — agreed <date>
+```
+- The in-force subset of `log.md` (superseded ones dropped). **Regenerable** — derived from `log.md`, safe to discard and rebuild.
+- "Where things stand" (progress) has **no stored file** — `digest` computes it live from the thoughts, and is authoritative for "what needs me now".
+- `settle` runs **lazily** (the stream got cluttered, or you want the ledger current) — clean when it's worth cleaning, not eagerly. Between runs, an agreed-but-not-yet-settled decision still lives in its `thoughts/` file.
 
 ## Awareness
 
@@ -342,7 +349,7 @@ re: [<id>](<date>-<id>.md)     # review only — a link to the thought it answer
 
 ## Conventions
 
-relay docs (reports, decisions, `index.md`) are authored to **`nav-compose`** discipline (lead with the point, one fact one owner, right grain). Repo-wide authoring + maintenance rules (naming, skills-root-relative paths, frontmatter, the gates) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
+relay docs (reports, the decision ledger `decisions/log.md` · `active.md`) are authored to **`nav-compose`** discipline (lead with the point, one fact one owner, right grain). Repo-wide authoring + maintenance rules (naming, skills-root-relative paths, frontmatter, the gates) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
 ## Helper scripts (ADR-051)
 

@@ -1,6 +1,6 @@
 # ADR 054 — relay: decisions are an append-only ledger, not pins in a regenerated snapshot
 
-**Status**: accepted (design — code/data implementation pending; see plan)
+**Status**: accepted — skills implemented 2026-06-25 (relay `0.3.0`); `accord` live-data migration is the last step (see plan)
 **Date**: 2026-06-25
 **Refines**: [ADR-053](docs/adr/053-relay-thought-stream.md) — keeps "a decision is a thought that got an agreeing review"; changes only **where a decision durably lives**, and names the thought/decision ontology 053 left implicit. Not a revert: no `@`-set, no graduation ceremony, no consensus protocol returns.
 
@@ -51,6 +51,7 @@ History is append-only, so overturning a decision is **append a new decision** (
 - **Ledger filename = `log.md`** (with `active.md` the in-force view).
 - **Where a relay/tooling decision is recorded** — the ADR lives in the **skills repo** (here); an optional **FYI pointer thought** in the content repo gives the counterpart visibility, without miscategorizing tooling under a product project.
 
-## Pending
+## Implementation
 
-- **Implementation** — `settle` / `digest` / `launch` / the format contract in `plugins/relay/CLAUDE.md` + a relay version bump + regenerated manifests/codex, landed as one commit; then migrate the live `accord` data on the first new `settle` run. Tracked in the implementation plan.
+- **Skills — done (2026-06-25).** Format contract (`plugins/relay/CLAUDE.md`) + `settle` (append-ledger + hard-delete) + `digest` (drop `index.md` coupling) + `launch` (scaffold `decisions/`, no `archive/`/`index.md`) updated together; relay bumped `0.2.1 → 0.3.0`; manifests/codex regenerated; validator green. See [the plan](docs/plans/2026-06-25-relay-decision-ledger-impl.md).
+- **`accord` live-data migration — pending.** Run the new `settle` on `projects/music-agent-os/` to distil the already-agreed threads into the first `decisions/log.md` entries and retire `index.md` / legacy `decisions/` / `archive/`.
