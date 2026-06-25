@@ -32,7 +32,7 @@ subject: "<one line — the headline; the reader and /relay:digest read it first
 <body — lead with the point, head-able; flex the depth to the job>
 ```
 
-Two natural tones (same format, different depth):
+Natural tones (same format, different depth — tone, not a `kind` field):
 - **Progress** (common, short): what's **done** · what's **in progress** · what's **next** · and **flag anything that needs the reviewer**. One line per item; not a changelog.
 - **Alignment** (occasional, longer): a briefing that brings someone's mental model up to date on a concept / framing / decision. Lead with a TL;DR, group by knowledge, end with a concrete example. Length is fine *when it's for understanding*, never a chronological dump (that lives in the project repo; link to it). When the reader's model is **out of date**, these moves earn their keep:
   - **State why you're sending it** — the doc's purpose, one line, *before* the content (don't make them infer it).
@@ -41,6 +41,7 @@ Two natural tones (same format, different depth):
   - **Mark shipped vs planned vs hypothesis** — never let a target read as already done.
   - **One concrete walkthrough** (a real request flowing end-to-end) makes the abstract tangible.
   - **Verify by reading it as someone with ONLY the old knowledge** — if they'd hit unfamiliar names before the bridge, reorder.
+- **Conclusion** (occasional): synthesize a long / iterated discussion into its outcome + why, referencing the `thread`. Write one **only when the thread doesn't read linearly into the conclusion** (a one-line `log.md` entry would undersell it) — never to restate the thread. `settle` points `log.md` at it (the index → the synthesis).
 
 Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers. **A thought with no `@`-flag is FYI** — it informs, wants nothing back, and `digest` won't park it on anyone; that's a feature, not a forgotten ask. (The ask-vs-FYI / termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
 

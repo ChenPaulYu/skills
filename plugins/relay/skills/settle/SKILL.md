@@ -17,7 +17,9 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 - **Resolve who's running** (git author email → `git:` in `relay.yml`). **Pull.** (Owner by convention; see Scope.)
 
 ### Step 2 — Harvest the agreed decisions
-Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *a thought that got an agreeing review*; no separate consensus protocol). For each, distil a **self-contained ruling**: the decision + a one-line why + provenance, written so the ledger reads on its own (the thought stays in `thoughts/` as the raw source). If it overrides an earlier decision, note `supersedes <id>`. Progress-only thoughts (no decision) just stay in `thoughts/` — nothing to log; `digest` stops surfacing them once they're done.
+Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *a thought that got an agreeing review*; no separate consensus protocol). For each, **default to a self-contained ruling**: the decision + a one-line why + provenance, written so the ledger reads on its own (the thought stays in `thoughts/` as the raw source). If it overrides an earlier decision, note `supersedes <id>`. Progress-only thoughts (no decision) just stay in `thoughts/` — nothing to log; `digest` stops surfacing them once they're done.
+
+**When a conclusion is too rich for a line** (a long / iterated discussion a one-liner would undersell): the `log.md` entry becomes a **pointer to a `conclusion` thought** (a synthesis someone wrote — outcome + why, referencing the `thread`) instead of an inlined ruling. Direction is always `log.md` → the thought. `log.md` stays the single index either way — reach for the pointer only when a line genuinely can't carry it, never by default.
 
 ### Step 3 — Append to the ledger, regenerate active
 1. **Append** each ruling to `decisions/log.md` (create it if absent) — **append-only, never rewrite** existing lines:
