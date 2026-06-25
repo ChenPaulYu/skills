@@ -1,6 +1,6 @@
 ---
 name: catchup
-description: "Re-orient on where the current work stands — in plain language, rebuilt from durable state (git / diff / changed files / any plan) as the floor so it survives /clear, context compaction, or returning after a break, THEN enriched from the live context window when it's present (the why / in-flight decisions git can't carry — durable state is the floor, not a blinder). Conveys the core (what · why · how-far) at information-density, not a one-line skim. Fixed shape: goal, done, now, open, next. Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /manage:summarize (a complete objective recap of what the session DID — catchup is the state NOW plus what's next) and from /shape:align (which DECIDES next and writes a plan — catchup only reports). Also invokable as /manage:catchup."
+description: "Re-orient on where the current work stands — in plain language, rebuilt from durable state (git / diff / changed files / on-disk folder layout / any plan) as the floor so it survives /clear, context compaction, or returning after a break, THEN enriched from the live context window when it's present (the why / in-flight decisions git can't carry — durable state is the floor, not a blinder). Conveys the core (what · why · how-far) at information-density, not a one-line skim. Fixed shape: goal, done, now, open, next. Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /manage:summarize (a complete objective recap of what the session DID — catchup is the state NOW plus what's next) and from /shape:align (which DECIDES next and writes a plan — catchup only reports). Also invokable as /manage:catchup."
 ---
 
 # catchup — where are we, in plain language
@@ -21,6 +21,15 @@ git -C . status --short 2>/dev/null                # uncommitted / untracked
 git -C . log --oneline -10 2>/dev/null             # recent commits
 git -C . diff --stat 2>/dev/null                   # changed-but-uncommitted
 ```
+
+**Then read the actual on-disk layout — the filesystem is durable state too, not just git.** List the folder structure and reconcile it against `git status`:
+
+```bash
+ls -F .                                            # the shape on disk right now — what folders/files exist
+find . -maxdepth 2 -type d -not -path '*/.*' 2>/dev/null | head -40   # subprojects / where work lives
+```
+
+Why this matters: git **misreads a move**. A reorg (files relocated, a dir renamed, a subtree pulled under a new container) shows up as a mass of `D` (deleted) + `??` (untracked) entries — but the files aren't gone, they **moved**. Only cross-checking the tree reveals that, so you report "the work was relocated under `X/`" instead of the false "the work was deleted." The directory layout also shows the project's **current shape** (which subprojects exist, where the cursor's work actually lives) that a commit log alone won't surface. When `git status` shows lots of delete+untracked, **assume a move until the tree proves otherwise.**
 
 Then look for an explicit plan/todo if one exists (don't require it): a `blueprints/plan.md` / `blueprints/thoughts/` tree, `docs/plans/`, a `TODO`/`TASKS` file, or an in-session task list.
 
