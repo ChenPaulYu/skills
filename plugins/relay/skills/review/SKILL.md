@@ -23,6 +23,7 @@ Write `thoughts/<date>-<handle>-<slug>.md`:
 date: <ISO>
 by: <handle>
 subject: re: <what you're answering>
+re: <link to the answered thought>     # REQUIRED — a markdown link, text = the answered thought's id, target = its file; the backlink digest stitches threads with
 ---
 ## Review
 - re [<id>]: **agree** — <why / any caveat>      # you accept it; settle may pin this as a decision
@@ -38,6 +39,7 @@ subject: re: <what you're answering>
 **Show the diff. Wait for OK**, then commit + push.
 
 ## Discipline
+- **Always set the `re:` backlink** (frontmatter) — it's the edge that lets `digest`/a dashboard **stitch the thread and compute "settled"** (an answered ask = settled) without parsing prose. An inline `re [<id>]` in the body is *not* enough on its own. (Answering several thoughts? `re:` the primary; cite the rest inline.)
 - **Explicit response** — `agree` is an affirmative act; silence ≠ agreement.
 - **Append-only** — write your OWN thought; never edit the one you're answering.
 - **Decisions are pinned by settle, not graduated here** — an `agree` is what settle harvests; review never writes `decisions/`.

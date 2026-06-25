@@ -318,7 +318,7 @@ members:
 date: <ISO>
 by: <handle>
 subject: <one line — the headline; read first>
-re: [<id>](<date>-<id>.md)     # review only — a link to the thought it answers
+re: [<id>](<date>-<id>.md)     # review only, REQUIRED — the machine-parsable backlink digest stitches threads with
 ---
 <body — lead with the point, head-able>
 ```
@@ -326,6 +326,7 @@ re: [<id>](<date>-<id>.md)     # review only — a link to the thought it answer
 - **review body** — `## Review`, one line per answered id: `agree` / `comment` / `change` + why; each line **links** to the answered thought (`[<id>](<date>-<id>.md)`).
 - **id = `<handle>-<slug>`**, author-namespaced (collision-free, no central allocator); permanent. The file is `thoughts/<date>-<id>.md`, so a link by id resolves to the file.
 - **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field** — tone (progress / alignment) is how you write it; decisions are appended to `decisions/log.md` by `settle`.
+- **No `status` field — "open vs settled" is computed, not stored.** A thought is *settled* when `digest` can derive it from the immutable stream: it's an FYI (no `@`-flag), or its ask got an answering `agree` (found by following `re:` backlinks), or it's superseded. Storing a `status` would mean **editing an immutable thought** when it closes — forbidden. Frontmatter holds only the **inherent, unchanging** facts (`date` · `by` · `subject` · `re`); the **derived, changing** state (open/settled, who-waits-on-whom, progress) is `digest`'s computed view. This is why `re:` is required — it's the edge that makes "settled?" computable.
 
 **`decisions/log.md`** (per-project — the append-only decision History; `settle` **appends**, never rewrites):
 ```markdown
