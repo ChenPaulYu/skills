@@ -70,7 +70,8 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/relay:report` — write a thought (progress or alignment; subject + body, `@`-route what needs the counterpart)
 - `/relay:review` — respond to a thought — agree / comment / change (your review resolves it; no @-set protocol)
 - `/relay:digest` — the live "what's waiting for my review" (read-only; the awareness entry)
-- `/relay:settle` — crystallize the thought-stream into a current-state snapshot + pinned decisions; archive the rest
+- `/relay:settle` — append agreed decisions to the ledger (`decisions/log.md`) + regenerate `active.md`; thoughts never move
+- `/relay:format` — sweep one project's thoughts to the current frontmatter spec (lint + fix, gated) — the `/nav:sync` of relay
 
 ## Install
 

@@ -8,7 +8,7 @@
 
 A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`manage`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent writes a **thought**, the other's agent reads + responds — all git-diffable, human-gated, zero chat. The main pattern is **report → review**: one side posts a thought (progress, or an alignment briefing on how they're now framing something), the other reviews it (agree / comment / change). Descends from `manage:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded**. Tuned for **1–2 people, progress-centric** — no multi-party consensus protocol.
 
-**Six verbs, split structure vs content:**
+**Seven verbs, split structure vs content:**
 
 | verb | does | layer |
 |---|---|---|
@@ -18,6 +18,7 @@ A toolkit for **coordinating with a counterpart asynchronously, through your age
 | `review` | respond to a thought — agree / comment / change | content |
 | `digest` | the live "what's waiting for my review" (read-only) | content |
 | `settle` | append agreed decisions to the ledger (`decisions/log.md`) + regenerate `active.md`; thoughts never move | content |
+| `format` | sweep one project's thoughts to the current frontmatter spec (lint + fix, gated) — the `/nav:sync` of relay | content |
 
 ## Two-repo split (load-bearing)
 
@@ -62,7 +63,7 @@ Paired with the append-only / shared-repo model. Each skill restates the lines i
 - **Conflicts** (rare, only on shared files) → **regenerate via `settle`, don't hand-merge** (`active.md` is derived; `log.md` conflicts resolve by keeping both appended lines).
 - Direct to `main`, no PR ceremony (it's a coordination repo).
 
-## Format contract (canonical — the shared shapes all six verbs read/write)
+## Format contract (canonical — the shared shapes all seven verbs read/write)
 
 The **single owner** of the file formats. A skill that reads or writes one of these restates the shape it touches; change a shape → update it here + every skill that touches it, in the same commit.
 
@@ -145,14 +146,14 @@ relay is a structured-data protocol, so unlike the analysis plugins it **bundles
 
 **Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
 
-Current: **none bundled** — the consensus gate (`check-acceptance.mjs`) was retired with the `@`-set protocol (ADR-053). Sanctioned-but-not-built: signature / github verification (bash), digest / settle state computation (node), and a **backlink / nav generator** (node, owned by `settle`) — scans `thoughts/` for `thread`/`re`/`relate`, computes the backlink graph, and **regenerates a separate `nav` artifact** (never writes back into a thought — that would mutate an immutable file). Deferred until a non-Obsidian, non-agent reader (raw GitHub browsing) actually needs backlinks; agents use `digest`, humans use Obsidian meanwhile.
+Current: **`format/scripts/lint.mjs`** (node, regex-based frontmatter linter — Layer 1 of `relay:format`; the consensus gate `check-acceptance.mjs` was retired with the `@`-set protocol, ADR-053). Sanctioned-but-not-built: signature / github verification (bash), digest / settle state computation (node), and a **backlink / nav generator** (node, owned by `settle`) — scans `thoughts/` for `thread`/`re`/`relate`, computes the backlink graph, and **regenerates a separate `nav` artifact** (never writes back into a thought — that would mutate an immutable file). Deferred until a non-Obsidian, non-agent reader (raw GitHub browsing) actually needs backlinks; agents use `digest`, humans use Obsidian meanwhile.
 
 ## Where things live
 
 ```
 .claude-plugin/plugin.json   → relay's manifest (version + metadata owner)
 CLAUDE.md                    → ← you are here (identity · protocol · format contract)
-skills/<name>/SKILL.md       → the six skills, each self-contained
+skills/<name>/SKILL.md       → the seven skills, each self-contained
 ```
 
 The **content repo** layout (`relay.yml`, `projects/<name>/…`) is the format contract above — it lives in the user's coordination repo, not here.
