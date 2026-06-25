@@ -41,7 +41,7 @@ Natural tones (same format, different depth — tone, not a `kind` field):
   - **Mark shipped vs planned vs hypothesis** — never let a target read as already done.
   - **One concrete walkthrough** (a real request flowing end-to-end) makes the abstract tangible.
   - **Verify by reading it as someone with ONLY the old knowledge** — if they'd hit unfamiliar names before the bridge, reorder.
-- **Conclusion** (occasional): synthesize a long / iterated discussion into its outcome + why, referencing the `thread`. Write one **only when the thread doesn't read linearly into the conclusion** (a one-line `log.md` entry would undersell it) — never to restate the thread. `settle` points `log.md` at it (the index → the synthesis).
+- **Conclusion** (occasional): synthesize a long / iterated discussion into its outcome + why. Write one **only when the thread doesn't read linearly into the conclusion** (a one-line `log.md` entry would undersell it) — never to restate the thread. `settle` points `log.md` at it (the index → the synthesis). It's also the discussion's **navigation hub**: **link the related thoughts inline** (one-stop — grasp the whole arc + jump to any piece); the `thread` anchor keeps the set complete, the inline links are the human-readable map.
 
 Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers. **A thought with no `@`-flag is FYI** — it informs, wants nothing back, and `digest` won't park it on anyone; that's a feature, not a forgotten ask. (The ask-vs-FYI / termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
 
