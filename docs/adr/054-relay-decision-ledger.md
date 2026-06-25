@@ -1,6 +1,6 @@
 # ADR 054 — relay: decisions are an append-only ledger, not pins in a regenerated snapshot
 
-**Status**: proposed (draft)
+**Status**: accepted (design — code/data implementation pending; see plan)
 **Date**: 2026-06-25
 **Refines**: [ADR-053](docs/adr/053-relay-thought-stream.md) — keeps "a decision is a thought that got an agreeing review"; changes only **where a decision durably lives**, and names the thought/decision ontology 053 left implicit. Not a revert: no `@`-set, no graduation ceremony, no consensus protocol returns.
 
@@ -23,12 +23,12 @@ Two moves: name the ontology, then give decisions an append-only home.
 | mutability | **immutable** (it happened) | **supersedable** (a new one overrides) |
 | author | single | **jointly produced** (proposal + agreement) |
 
-**The load-bearing line: a decision is not a new artifact — it is a thought that acquired an "agreed" stamp.** Its content already lives in the thought + its agreeing review, so the decision record is a **pointer + stamp, never a content copy** (a copy re-introduces the two-owners drift ADR-053 killed).
+**The load-bearing line: a decision is not a new artifact — it is a thought that acquired an "agreed" stamp.** Because the deliberation thought is **hard-deleted** once settled (§2), the decision record must be **self-contained**: the *distilled ruling + a one-line why*, not a bare pointer to a now-deleted thought, and not a full copy of the deliberation. One live copy (the ledger entry) → no two-owners drift; the full back-and-forth survives in git for the rare dig.
 
 ### 2. Four roles, each with one owner
 
-- **`thoughts/`** — disposable working drafts (the deliberation). Pruned from the working tree once settled; **git history keeps the original**. *Not* the system of record.
-- **`decisions/log.md`** — the append-only **History**: every decision ever, including superseded ones; **only appended, never rewritten**. Each entry is a pointer (`[<id>] <decision> — agreed <date> (by <who>)[, supersedes <id>]`) into the thought, not a copy.
+- **`thoughts/`** — disposable working drafts (the deliberation). **Hard-deleted** from the working tree once settled (no `archive/` folder); **git history is the deep archive** — the full deliberation is recoverable via git, just not browsable in the tree. *Not* the system of record.
+- **`decisions/log.md`** — the append-only **History**: every decision ever, including superseded ones; **only appended, never rewritten**. Each entry is **self-contained** — the distilled ruling + one-line why + provenance (`[<id>] <decision + why> — agreed <date> (by <who>)[, supersedes <id>]`); it must read *without* the (now-deleted) thought. Distillation, not a copy of the deliberation.
 - **`decisions/active.md`** — the **current in-force** decisions, **by reference** into `log.md`; regenerable (可丟可重生).
 - **progress / "where things stand"** — owned by **`digest`** (computed live), *not* a stored file.
 
@@ -45,8 +45,12 @@ History is append-only, so overturning a decision is **append a new decision** (
 - **`launch`** scaffolds `decisions/` again (`log.md` + `active.md`) — as a ledger, not the old per-file graduation dir ADR-053 retired.
 - **Lands as one commit**: format contract + `settle` / `digest` / `launch` SKILL.md + `plugins/relay/CLAUDE.md`, with a relay version bump and the content repo's `CLAUDE.md` project-structure line.
 
-## Out of scope / open
+## Resolved (was open at draft)
 
-- **Draft prune = hard delete (git-only) vs light `archive/` (browsable).** Leaning **git-only** ("用完即丟"); the trade is *browsable raw deliberation* vs *clean working tree*. git is the backstop, so decision-write quality becomes load-bearing.
-- **`log.md` naming** (vs `history.md`) — open. `active.md` is chosen.
-- **Where the company records this** — a relay/tooling decision; the content repo's only project is the product (`music-agent-os`), so a pure relay-`report` there would miscategorize. This ADR is the home; an optional pointer thought can give the counterpart visibility.
+- **Draft prune = hard delete (git-only).** No `archive/` folder; git is the deep archive. Consequence (load-bearing): `log.md` entries are **self-contained distillations** (§2), and decision-write quality matters more.
+- **Ledger filename = `log.md`** (with `active.md` the in-force view).
+- **Where a relay/tooling decision is recorded** — the ADR lives in the **skills repo** (here); an optional **FYI pointer thought** in the content repo gives the counterpart visibility, without miscategorizing tooling under a product project.
+
+## Pending
+
+- **Implementation** — `settle` / `digest` / `launch` / the format contract in `plugins/relay/CLAUDE.md` + a relay version bump + regenerated manifests/codex, landed as one commit; then migrate the live `accord` data on the first new `settle` run. Tracked in the implementation plan.
