@@ -23,7 +23,8 @@ Write `thoughts/<date>-<handle>-<slug>.md`:
 date: <ISO>
 by: <handle>
 subject: "re: <what you're answering>"     # quote it — the "re:" colon breaks unquoted YAML
-re: <link to the answered thought>     # REQUIRED — a markdown link, text = the answered thought's id, target = its file; the backlink digest stitches threads with
+thread: <link to the discussion's opening thought>   # REQUIRED — the grouping anchor (the root); digest groups by it
+re: <link to the exact thought you answer>           # the immediate parent; omit when it == thread (a direct reply to the root)
 ---
 ## Review
 - re [<id>]: **agree** — <why / any caveat>      # you accept it; settle may pin this as a decision
@@ -39,7 +40,7 @@ re: <link to the answered thought>     # REQUIRED — a markdown link, text = th
 **Show the diff. Wait for OK**, then commit + push.
 
 ## Discipline
-- **Always set the `re:` backlink** (frontmatter) — it's the edge that lets `digest`/a dashboard **stitch the thread and compute "settled"** (an answered ask = settled) without parsing prose. An inline `re [<id>]` in the body is *not* enough on its own. (Answering several thoughts? `re:` the primary; cite the rest inline.)
+- **Set `thread` (always) + `re` (the exact thought)** in frontmatter — `thread` links the discussion's opening thought (the grouping anchor; `digest` groups by it in O(1), robust to a missing mid-thread `re`); `re` links the immediate thought you answer (omit if it *is* the root). These edges let `digest`/a dashboard **group + compute "settled"** (an answered ask = settled) without parsing prose; an inline `re [<id>]` in the body is *not* enough.
 - **Explicit response** — `agree` is an affirmative act; silence ≠ agreement.
 - **Append-only** — write your OWN thought; never edit the one you're answering.
 - **Decisions are pinned by settle, not graduated here** — an `agree` is what settle harvests; review never writes `decisions/`.

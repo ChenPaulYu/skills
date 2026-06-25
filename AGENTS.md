@@ -318,15 +318,17 @@ members:
 date: <ISO>
 by: <handle>
 subject: "<one line — the headline; read first>"   # quote it — a colon (e.g. "re:", "ADR-054:") breaks unquoted YAML
-re: [<id>](<date>-<id>.md)     # review only, REQUIRED — the machine-parsable backlink digest stitches threads with
+thread: [<root-id>](<date>-<root-id>.md)   # reply only, REQUIRED — which discussion (its opening thought); the grouping anchor
+re: [<id>](<date>-<id>.md)                 # reply only — the exact thought this answers (omit when it == thread, i.e. a direct reply to the root)
 ---
 <body — lead with the point, head-able>
 ```
 - **report body** — *progress* (done · in progress · next · `@`-flag anything needing the counterpart) **or** *alignment* (a briefing: TL;DR → explanation → example). Flex length to the job; never a chronological work-log (that lives in the project repo — link to it).
 - **review body** — `## Review`, one line per answered id: `agree` / `comment` / `change` + why; each line **links** to the answered thought (`[<id>](<date>-<id>.md)`).
 - **id = `<handle>-<slug>`**, author-namespaced (collision-free, no central allocator); permanent. The file is `thoughts/<date>-<id>.md`, so a link by id resolves to the file.
+- **`thread` + `re` — two-level threading.** `thread` links the discussion's **opening thought** (the root) — the **grouping anchor**, read in O(1) so `digest`/a dashboard groups a discussion *without walking a chain* (survives a missing `re:` mid-thread). `re` links the **exact thought this answers** (the immediate parent) — the precise reply edge. A reply **always sets `thread`**; it sets `re` when answering something deeper than the root (omit `re` when it would equal `thread`). A discussion's **opening thought has neither**. Both are **inherent + immutable** (fixed at write time), so they are legitimate stored fields.
 - **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field** — tone (progress / alignment) is how you write it; decisions are appended to `decisions/log.md` by `settle`.
-- **No `status` field — "open vs settled" is computed, not stored.** A thought is *settled* when `digest` can derive it from the immutable stream: it's an FYI (no `@`-flag), or its ask got an answering `agree` (found by following `re:` backlinks), or it's superseded. Storing a `status` would mean **editing an immutable thought** when it closes — forbidden. Frontmatter holds only the **inherent, unchanging** facts (`date` · `by` · `subject` · `re`); the **derived, changing** state (open/settled, who-waits-on-whom, progress) is `digest`'s computed view. This is why `re:` is required — it's the edge that makes "settled?" computable.
+- **No `status` field — "open vs settled" is computed, not stored.** A thought is *settled* when `digest` can derive it from the immutable stream: it's an FYI (no `@`-flag), or its ask got an answering `agree` (found by following `re:` backlinks), or it's superseded. Storing a `status` would mean **editing an immutable thought** when it closes — forbidden. Frontmatter holds only the **inherent, unchanging** facts (`date` · `by` · `subject` · `thread` · `re`); the **derived, changing** state (open/settled, who-waits-on-whom, progress) is `digest`'s computed view. This is why `thread` + `re` are required on a reply — they're the edges that make grouping + "settled?" computable.
 
 **`decisions/log.md`** (per-project — the append-only decision History; `settle` **appends**, never rewrites):
 ```markdown

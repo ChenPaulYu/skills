@@ -50,7 +50,7 @@ Mark anything needing the counterpart with **`@<handle>`** + what you want back 
 
 ## Discipline
 - **One thought per file, append-only** — write only *your* dated file; never edit someone else's.
-- **Continue, don't restart** — reference an open id; only mint a new one for genuinely new items.
+- **Continue, don't restart** — continuing an existing discussion? Set `thread` (+ `re`) in frontmatter like a reply; only open a fresh thread (no `thread`/`re`) for a genuinely new topic.
 - **Lead with the point** (`nav-compose`); group by knowledge, not chronology; the subject is the headline.
 - **Flex length to the job** — progress is short; alignment may run long *for understanding*, never as a raw work-log.
 - **Pull before, push after; gate before commit.**
