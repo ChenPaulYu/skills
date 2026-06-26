@@ -49,6 +49,8 @@ Natural tones (same format, different depth — tone, not a `kind` field):
 
 Mark anything needing the counterpart with **`@<handle>`** + what you want back (a look / a call / unblock). That's what `/relay:digest` surfaces to them and what `/relay:review` answers. **A thought with no `@`-flag is FYI** — it informs, wants nothing back, and `digest` won't park it on anyone; that's a feature, not a forgotten ask. (The ask-vs-FYI / termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
 
+**Carrying images** (a screenshot, a mockup, a diagram) — embed them as standard markdown images pointing at a **relative** path (never an absolute path or an off-repo URL), per the content repo's asset convention (its `CLAUDE.md`: small-in-git / large-linked). The picture is part of the message, but `digest` is a *text* triage that can't see it — so when the visuals carry the point, **say so in the body** ("see the mockups below") so the counterpart's agent opens + renders them instead of reading the subject alone. (Format-contract rule + the surface duty: `relay/CLAUDE.md` → *Format contract*; `digest` does the flagging.)
+
 ### Step 3 — Gate + commit
 **Show the diff. Wait for OK** (or "just post"), then commit + push.
 
