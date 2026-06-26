@@ -91,8 +91,9 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
 
 A file written to disk is not yet a decidable artifact — the user has to *see* it. So after writing, **activate it and surface a clickable URL in the chat**, the way a good scaffold does:
 
-- **Open it** with the platform opener (`open <file>` on macOS, `xdg-open` on Linux, `start` on Windows) so it renders immediately.
-- **Hand over a URL in the reply** the user can click: a `file://<absolute-path>` link by default. If the artifact needs an HTTP origin (fetches, modules, anything `file://` blocks — rare for a self-contained mockup), start a throwaway static server (`python3 -m http.server` in the artifact's dir) and give the `http://localhost:<port>/<file>` URL instead, noting it's a temporary server.
+- **First check: local session or remote/headless one?** `open <file>` and a `file://` link only work when the agent shares a machine *with a display* with the human. On a remote server / cloud dev box / container (no local display — a `file://` path the user can't reach), don't hand a dead link: start a throwaway static server (`python3 -m http.server` in the artifact's dir) and hand over `http://localhost:<port>/<file>`. For a *series* of mockups in one session, start ONE server and reuse it. (The environment, not the artifact, is the usual trigger for needing a served URL.)
+- **Local session** → **open it** with the platform opener (`open <file>` on macOS, `xdg-open` on Linux, `start` on Windows) and hand over a clickable `file://<absolute-path>` link.
+- An artifact that needs an HTTP origin (fetches, modules, anything `file://` blocks — rare for a self-contained mockup) also forces the served-URL path, regardless of local-vs-remote.
 - Prefer a real origin over a screenshot: the whole point is that the user can hover / click / flip the live thing. A screenshot is a transient supplement, never the hand-off.
 
 ## The render step is per-project — the browser-verify slot

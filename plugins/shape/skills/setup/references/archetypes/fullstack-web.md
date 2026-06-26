@@ -1,6 +1,6 @@
 # Archetype: fullstack-web — uv/FastAPI backend + React/Vite frontend monorepo
 
-> Distilled 2026-06-10 from three live scaffolds; **exemplars(ground these, don't trust prose): crate**(`rytho-ai/crate` — mature)**· trackmate**(`rytho-ai/trackmate` — cleanest minimal baseline, commits `c44c423` scaffold + `46ef843` audiorective). Stack rulings come from `../stack-principles.md` — this file is composition, glue, gotchas, and the verification chain.
+> Distilled from live scaffolds. This file is composition, glue, gotchas, and the verification chain — stated **abstractly, each with its reason**, so it stands on its own. Stack rulings come from `../stack-principles.md`. **Ground against your closest living fullstack exemplar when you have one** (a real repo that runs beats prose) — the maintainer grounds their own private repos, which are *not shipped here and not the source of truth*; no specific app is presupposed. (Same discipline as `python-lib.md`'s exemplar note.)
 
 ## Composition
 
@@ -23,15 +23,16 @@
 - **dev.sh**: sources `dev.config`(FRONTEND_PORT/BACKEND_PORT from the registry)→ `free_port` both(lsof + kill, escalate -9)→ uvicorn on `127.0.0.1:$BACKEND_PORT --reload` in background with EXIT/INT/TERM trap → vite foreground `--strictPort`. Exports `BACKEND_PORT` because vite.config reads it.
 - **vite.config.ts**: proxy `/api` **and** `/audio` → `http://127.0.0.1:${BACKEND_PORT}`(same-origin app, relative audio URLs resolve)· `@` alias → `./src`.
 - **main.py**: lifespan creates data dirs · CORS `allow_origin_regex: http://localhost:\d+`(dev; prod locks to `frontend_origin`)· `/api/health` · StaticFiles mount `/audio`(ensure dir exists at mount time, not just lifespan).
-- **Audio(when the product is audio-native)**: `@audiorective/core` + `@audiorective/react`; engine root at `src/audio/engine.ts`(createEngine + createEngineContext, autoStart)· processors own all audio logic(see stack-principles).
+- **Audio(when the product is audio-native)**: a reactive web-audio lib (maintainer's pick: `@audiorective/core` + `@audiorective/react`); an engine root at `src/audio/engine.ts`· processors own all audio logic(see stack-principles).
 
 ## Gotchas(all field-hit; check each on every run)
 
 1. **pnpm ≥11 blocks postinstall scripts** → `frontend/pnpm-workspace.yaml`: `allowBuilds: esbuild`(else install exits 1 / ERR_PNPM_IGNORED_BUILDS).
-2. **pytest can't import `app`** → `[tool.pytest.ini_options] pythonpath = ["."]`(crate solves it by self-installing the package; this is the lighter fix).
+2. **pytest can't import `app`** → `[tool.pytest.ini_options] pythonpath = ["."]`(the lighter fix; the alternative is self-installing the package).
 3. **vite proxy target must be literal `127.0.0.1`**, never `localhost` — Node resolves ::1 first and misses the IPv4-bound backend(symptom: proxy ECONNREFUSED/500).
-4. **tsconfig `include` must NOT contain `vite.config.ts`** — else typecheck demands `@types/node`(crate convention: include `["src"]` only).
-5. **audiorective + useValue type-trap**: `useValue(engine.core.state)` resolves `T = void`(SignalAccessor's write overload); wrap as a pure-read computed — `useValue(() => engine.core.state())`.
+4. **tsconfig `include` must NOT contain `vite.config.ts`** — else typecheck demands `@types/node`(convention: include `["src"]` only).
+5. **(if using a reactive audio lib) the read-vs-write accessor trap**: a signal accessor passed bare to a read hook can resolve to the *write* overload (`T = void`) — wrap as a pure-read computed (e.g. with audiorective: `useValue(() => engine.core.state())`, not `useValue(engine.core.state)`).
+6. **a tool can preflight as "missing" while a *dangling symlink* squats its path** (`command -v` resolves the link, finds no target → "missing"; a plain reinstall then dies `EEXIST`). Probe `ls -l "$(command -v <t> 2>/dev/null || echo /usr/local/bin/<t>)"`; broken link → `--force` reinstall (or `rm` first), not a bare install.
 
 ## Preflight(this archetype)
 
@@ -48,4 +49,4 @@
 
 ## Per-project adaptation checklist
 
-Name(pyproject `name`/`description`, package.json, README, dev.sh echo)· **fresh port pair → append to the registry in stack-principles** · project-specific deps only(baseline stays lean; agent-sdk/anthropic etc. land with their feature)· smoke screen carries the product's brand mark(it becomes the first visual identity check).
+Name(pyproject `name`/`description`, package.json, README, dev.sh echo)· **fresh uncommon port pair, not used by your existing projects (see stack-principles' port note)** · project-specific deps only(baseline stays lean; agent-sdk/anthropic etc. land with their feature)· smoke screen carries the product's brand mark(it becomes the first visual identity check).
