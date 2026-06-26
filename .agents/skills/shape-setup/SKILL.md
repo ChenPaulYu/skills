@@ -63,7 +63,8 @@ Opinions live in references; the engine never hardcodes a stack. This is also wh
 | Skip preflight, hit the missing tool mid-chain | Preflight is step 3 for a reason; missing tools get the 3-way choice up front. |
 | Embed file bodies in skill prose | They drift. Ground the living exemplar; the reference records *decisions and gotchas*, not file dumps. |
 | Deviate from stack-principles "just this once" | A deviation is either surfaced and ruled (maybe it's a new principle) or it's drift. Never silent. |
-| Reuse another project's ports | The registry exists so dev servers never collide; take a fresh pair, register it. |
+| Reuse another project's ports | A fresh uncommon pair per project so dev servers never collide; record it in *your* fork / each project's `dev.config`, not a shipped list. |
+| Ship the author's concrete app data as a default | This is a SHARED skill: the reference layer ships as a labelled **example**, never preset with real ports / private repo names / a project list. Those are the user's — port registry ships **empty**, exemplars are optional grounding "you have or don't", rulings are stated abstractly. Concrete app data in a shipped reference leaks the author's setup and misleads every fork. |
 | gitignore `blueprints/` or `docs/` anything | Iron rule in stack-principles — the decision record stays in git. Watch the depth-unanchored `mockups/` trap. |
 | Skip the write-back | The knowledge base only compounds if every run pays its delta forward. |
 
