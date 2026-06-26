@@ -21,21 +21,23 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 - **Every run, sweep for the `@<you>` flag.** Scan *every* thought for the `@<your-handle>` tag. A thought that `@`-flags you **and you haven't answered yet** (no `/relay:review` from you on that id) = waiting for your review. The `@`-flag is the *ask* signal — no `@<you>` tag where someone flagged you is ever missed.
 - **But "names you" ≠ "needs you" — FYI is not waiting.** The `@`-flag distinguishes an **ask** from an **FYI**. A thought that merely *mentions you in prose* (no `@`-flag), or whose latest state is a **closer** — an `agree`, or a review that says it needs no reply — is **self-closed**: it belongs in **Recent (FYI)**, never in "Waiting." Don't surface an already-agreed or FYI thread as parked on anyone. (The termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
 - **Also compute what *you're* waiting on.** Your own thoughts that `@`-flagged someone and have **no review back yet** = waiting on them. This is the asker's lens — so you can see (and chase) your own open asks. An ask that came back as an `agree`/FYI is **answered**, not still-waiting — drop it.
+- **Flag thoughts that carry images.** While reading each thought, detect image references (markdown images / asset-folder links). digest is a *text* triage and **can't render a picture** — so a thought whose substance is partly visual (a screenshot, a mockup, a diagram) gets a `📎 N` marker **wherever it surfaces** (Waiting or Recent), so the visual isn't silently lost in triage. Detection is read-only (you flag, you don't fetch); the **surfacing duty** is the acting agent's (see Present + Discipline).
 
 ### Step 3 — Present, filtered for the viewer
 ```
 relay · <project> · for @<you> (live, <date>)
 
 Waiting for your review (n)        # thoughts @you you haven't answered
-  • [<id>] <one line — what's wanted (a look / a call / unblock)> — @<by>, from “<subject>” → /relay:review
+  • [<id>] <one line — what's wanted (a look / a call / unblock)> — @<by>, from “<subject>” [📎 N] → /relay:review
 Waiting on others (n)              # YOUR @-asks with no review back yet
   • [<id>] <what you asked> — @<who>, “<subject>” (since <date>)
 Recent (FYI)                       # latest thoughts, brief — flow you don't need to act on
-  • “<subject>” — @<by>, <date>
+  • “<subject>” — @<by>, <date> [📎 N]
 ```
 - **"Waiting for your review"** = every thought that **`@`-flags you** and you haven't answered — a progress note wanting a look, or an alignment wanting your agreement / pushback. **Excludes** FYI (no `@`-flag) and already-closed threads (an `agree`/no-reply-needed closer). Sorted first; this is the whole point.
 - **"Waiting on others"** = your own thoughts that `@`-ed someone and have no review back — so a stalled ask is visible to *you*, the asker, not silently rotting (the asker-liveness lens).
 - **"Recent"** = the latest thoughts by subject, brief — so you see what's flowing even when it doesn't need you.
+- **`📎 N` = images, flag then surface.** The marker means the thought carries N images digest can't show. digest only *flags* (read-only); when you then **act on** that thought (open it to review or relay it to the human), **render its images to the human, or hand them the file path** — never paraphrase the picture away. The visual is part of the payload (owner: `relay/CLAUDE.md` → *Format contract*).
 - Two-person: the same computation, the other lens — filter by `@<you>`.
 
 ## Discipline
@@ -51,6 +53,7 @@ Recent (FYI)                       # latest thoughts, brief — flow you don't n
 | Miss the `@you` flag | The `@<you>` tag is the ask signal — sweep every thought, every run; never drop a real ask |
 | Nag about an FYI / already-agreed thread | "Names you" ≠ "needs you"; a prose mention, an `agree`, or a no-reply-needed closer is **Recent**, not "Waiting" |
 | Dump the full body of a long thought | Surface its subject + the one-line ask as a pointer; the body is read on open, not triaged |
+| Paraphrase away an image-bearing thought's visuals | digest can't render — flag it `📎 N`, and when you act on it render the images to the human (or hand them the file path); the picture is part of the payload, lost silently in a text triage |
 
 ## Companion skills
 - **`/relay:report`** / **`/relay:review`** — the write + response sides whose thoughts `digest` reads.
