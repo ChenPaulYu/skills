@@ -20,6 +20,8 @@ It is the pre-build mirror of `/nav:map`'s codebase map: where the map projects 
 And the blueprints pipeline this skill maintains:
 
 > **One current state, two renders.** An agent reads markdown (`plan.md`); a human reads an interactive HTML projection (`overview.html`). Both are views of the *same* present reality, with dependencies pointing downstream only (overview ← plan ← thoughts) — never two sources that can drift.
+>
+> **The human render is consumption-gated.** The two-render split earns its upkeep only while *both* renders have a reader. `overview.html` is a cache of `plan.md`+`decisions.md` rendered for a human — and caching beats derive-on-demand only when reads are frequent (amortize the upkeep) AND regen is expensive. A solo / never-opened board is the opposite (reads ≈ 0, regen ≈ seconds) → **derive-on-demand wins**: keep `plan.md` as the *sole maintained* board (it's already human-readable), and generate the visual human view **fresh on demand** when actually wanted — never stored, so it cannot go stale. A maintained projection nobody reads is pure upkeep + a stale-render risk; **dropping the unread render *removes* the drift problem rather than creating it** (no second stored story to diverge). Don't maintain a render that has no reader.
 
 Corollaries that govern every step below:
 - **Decide *with* the user.** align triages; the user picks. Surface the candidate now/next/later split and let them move things — don't silently author the priorities.
@@ -65,6 +67,8 @@ Propose a split: **🚧 In progress** (the current batch's tail) · **▶ Next**
 Lean, one layer, grouped by status. Each entry = **what to do + which thought to read** — no prose essays. Shape per the spec's `plan.md` template.
 
 ### Step 5 — Regenerate `overview.html` (the human projection)
+
+**First — is the human render consumed? (consumption gate)** If the project is solo / the user signals they never open `overview.html`, **skip this step**: `plan.md` is the sole *maintained* board, and the visual human board is generated **on-demand** from it when actually wanted (never stored). Record the deviation in `plan.md`'s header so the next align run doesn't recreate the standing file. Retire an existing-but-unread `overview.html` (delete it; git holds it). Only maintain `overview.html` below when it has a real reader — see the consumption-gated corollary above.
 
 Copy [`references/overview-template.html`](plugins/shape/skills/align/references/overview-template.html) and fill its data arrays from `plan.md` **and `decisions.md`**:
 - One layer, three status columns + a Shipped strip (status, from `plan.md`).

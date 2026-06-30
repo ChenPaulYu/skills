@@ -99,6 +99,8 @@ Generate by copying [`overview-template.html`](overview-template.html) and filli
 
 The number of files is the weight knob. A tiny effort may have a single `thoughts/` doc and skip `overview.html` until the plan is worth a board. A large one accretes many thoughts + mockups. Don't force the full tree on a one-decision task; don't under-build a sprawling one. Same instinct as not forcing structure where there's none.
 
+**`overview.html` is consumption-gated, not just size-gated.** It is a *cache* of `plan.md`+`decisions.md` rendered for a human — worth maintaining only while a human actually reads it. Caching beats derive-on-demand only when reads are frequent (amortize the upkeep) AND regen is expensive; a solo / never-opened board inverts that (reads ≈ 0, regen ≈ seconds) → keep `plan.md` as the **sole maintained** board (it is already human-readable) and generate the human view **on-demand** — fresh from `plan.md`, never stored, so it cannot go stale. Don't scaffold or maintain a render that has no reader: retire an existing-but-unread `overview.html` (git holds it) and record the deviation in `plan.md`'s header so it isn't recreated. A maintained projection nobody reads is pure upkeep + a stale-render risk; **dropping the unread render *removes* the two-render drift, it doesn't create it**.
+
 ## The two seams with `nav`
 
 blueprints is pre-build (intent side); `nav` is build / post-build (code side). They meet at two points — record both, don't blur them:
