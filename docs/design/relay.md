@@ -6,9 +6,9 @@
 
 ## What relay is
 
-The object is **a coordination channel with a counterpart**, not your own work (that's `manage`) or your code (that's `nav`). You and others stay in sync **without live conversation**: each side's agent distills work into a structured artifact, the other's agent reads + responds, and the loop converges decisions to consensus — all git-diffable, human-gated, zero chat.
+The object is **a coordination channel with a counterpart**, not your own work (that's `reflect`) or your code (that's `nav`). You and others stay in sync **without live conversation**: each side's agent distills work into a structured artifact, the other's agent reads + responds, and the loop converges decisions to consensus — all git-diffable, human-gated, zero chat.
 
-Descends from `manage:observe` (structured artifact + git transport + human gate) but adds **two-way + recurring + threaded + multi-party**.
+Descends from `reflect:observe` (structured artifact + git transport + human gate) but adds **two-way + recurring + threaded + multi-party**.
 
 ## Two-repo split (the load-bearing separation)
 
@@ -144,7 +144,7 @@ Designed in from day one (a 2-person version would shortcut these and break at N
 
 - **nav** — a structural *echo*, not a dependency: `index.md` ≈ `nav:map` (computed top-down view); `settle`'s hygiene ≈ `nav:sync`/reconcile; the append/settle cadence ≈ sync/map. Same "keep an accreting repo navigable" world-view, **different object** (people-coordination vs code) → separate plugin, own vocabulary (`index`, not `map`).
 - **compose** — relay is a **consumer**: its `report` / decision / `index` docs are authored to `/nav:compose`'s deep-prose discipline. (relay is the "forthcoming relay" cited in ADR-049 as a compose consumer.)
-- **manage** — different object: manage reflects on *your own session*; relay hands off to *a counterpart*.
+- **reflect** — different object: it reflects on *your own session*; relay hands off to *a counterpart*.
 - **shape** — reused the two-tier + graduation idea (`core` / `decisions` / `thoughts`), but **not** the roster, and **no `position`** verb.
 
 ## Naming notes

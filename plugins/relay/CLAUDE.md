@@ -6,7 +6,7 @@
 
 ## What this plugin is
 
-A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`manage`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent writes a **thought**, the other's agent reads + responds — all git-diffable, human-gated, zero chat. The main pattern is **report → review**: one side posts a thought (progress, or an alignment briefing on how they're now framing something), the other reviews it (agree / comment / change). Descends from `manage:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded**. Tuned for **1–2 people, progress-centric** — no multi-party consensus protocol.
+A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`reflect`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent writes a **thought**, the other's agent reads + responds — all git-diffable, human-gated, zero chat. The main pattern is **report → review**: one side posts a thought (progress, or an alignment briefing on how they're now framing something), the other reviews it (agree / comment / change). Descends from `reflect:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded**. Tuned for **1–2 people, progress-centric** — no multi-party consensus protocol.
 
 **Seven verbs, split structure vs content:**
 
@@ -27,7 +27,7 @@ A toolkit for **coordinating with a counterpart asynchronously, through your age
 
 **Locating the content repo (every skill's first step).** The content repo is a **separate** repo (the coordination repo) — it is **almost never the current working directory** (you're usually in some other project). Resolve it in order, and **never silently assume cwd**:
 
-1. **`$RELAY_REPO`** env var, if set (mirrors manage's `$SKILLS_REPO`) — the default content repo.
+1. **`$RELAY_REPO`** env var, if set (mirrors reflect's `$SKILLS_REPO`) — the default content repo.
 2. else the **current dir**, only if it actually has a `relay.yml` at its root (you're already inside a relay repo).
 3. else **ASK the user** for the content-repo path — or offer `/relay:launch` to create one.
 

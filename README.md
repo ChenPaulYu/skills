@@ -11,10 +11,10 @@
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
 | [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton, untangle how a set of sources relate, critique a paper adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
 | [`think`](plugins/think/) | **Reason about a problem** — apply a named reasoning lens that forces a structure the default "think harder" skips. Four lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it), and `graft` (borrow a mature model's structure and adapt it to your domain — map every primitive; the adapt list is the payload). Feeds `shape`. |
-| [`manage`](plugins/manage/) | **Reflect on your session** — the meta-lane: `catchup` (where the work stands now, rebuilt from git/diff/plan, not chat memory), `summarize` (a complete objective recap of what the session did), `observe` (distill the one durable learning into a knowledge base). Cross-cutting; independent. |
+| [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup` (where the work stands now + next, rebuilt from git/diff/plan, not chat memory), `summarize` (a complete objective recap of what the session did), `observe` (distill the one durable learning into a knowledge base). Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart** — async, through your agents, over a shared git repo: `launch`/`register` set up the project + people; `report`/`reply` exchange standup-shaped updates that converge decisions to explicit consensus; `digest` shows the live "what needs you"; `settle` keeps it tidy. Structured updates, not chat. Independent. |
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **think** (reason about a problem), **manage** (reflect on your own working session — the meta-lane), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **think** (reason about a problem), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -57,11 +57,11 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/think:dialectic` — put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat
 - `/think:graft` — design a novel system that rhymes with a mature one by grafting it: map every primitive of a donor model onto your problem, read each as fit / break / adapt; the adapt list (borrowed structure reshaped for your domain) is the payload, not the fits. The disciplined middle between `first-principles` (invent) and lazy analogy (copy); in-chat
 
-**`manage` — reflect on your session** (the meta-lane; cross-project):
+**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project):
 
-- `/manage:catchup` — re-orient on where the work stands now, rebuilt from git/diff/plan (not chat memory); fixed shape goal · done · now · open · next
-- `/manage:summarize` — a complete, objective recap of what the session did (the raw input `observe` distills)
-- `/manage:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
+- `/reflect:catchup` — re-orient on where the work stands now + next, rebuilt from git/diff/plan (not chat memory); fixed shape goal · done · now · open · next
+- `/reflect:summarize` — a complete, objective recap of what the session did (the raw input `observe` distills)
+- `/reflect:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
 
 **`relay` — coordinate with a counterpart** (async, over a shared git repo; standalone):
 
@@ -89,11 +89,11 @@ Or by hand. In Claude Code:
 /plugin install shape@skills
 /plugin install research@skills
 /plugin install think@skills
-/plugin install manage@skills
+/plugin install reflect@skills
 /plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, `/research:*`, `/think:*`, `/manage:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research`, `think`, `manage`, and `relay` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/shape:*`, `/research:*`, `/think:*`, `/reflect:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research`, `think`, `reflect`, and `relay` are independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 

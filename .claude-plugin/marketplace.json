@@ -30,10 +30,10 @@
       "version": "0.4.0"
     },
     {
-      "name": "manage",
-      "source": "./plugins/manage",
-      "description": "Reflect on your own working session — the meta-lane (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on). Three seed skills: catchup (re-orient on where the work stands now, rebuilt from git/diff/plan, not chat memory), summarize (a complete, objective recap of what the session did), observe (distill the one durable learning into a knowledge base). orient -> recap -> distill. Read-only except observe's write. Cross-project, standalone.",
-      "version": "0.1.0"
+      "name": "reflect",
+      "source": "./plugins/reflect",
+      "description": "Reflect on your own working session — the one reflexive, cross-cutting family (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on); it sits across the object-families, not parallel to them. Three seed skills, three time-stances on the same session: catchup (orient — where the work stands now + next, rebuilt from git/diff/plan, not chat memory), summarize (recap — a complete, objective account of what the session did), observe (distill — the one durable learning into a knowledge base). orient -> recap -> distill. Read-only except observe's write. Cross-project, standalone.",
+      "version": "0.2.0"
     },
     {
       "name": "relay",

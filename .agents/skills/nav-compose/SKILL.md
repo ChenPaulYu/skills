@@ -12,7 +12,7 @@ Write a **document** the way nav writes code: as a deep module. The act of putti
 
 Deep-module discipline applies to **any accreting artifact, not just code** — the docs an agent writes (ADRs, design notes, reports, observations, READMEs, specs) go un-navigable the same way a codebase does: the point buried mid-paragraph, the same decision re-explained in three files, a doc that grew to cover five concerns. `sync` already applies the convention to one artifact (**file-top headers on code files**); `compose` applies the **same eight rules to the whole body of a prose document**.
 
-It is the prose-document sibling of `sync` (ADR-049): `sync` = the interface line atop a code file; `compose` = the structure of a file that *is* prose. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, manage's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
+It is the prose-document sibling of `sync` (ADR-049): `sync` = the interface line atop a code file; `compose` = the structure of a file that *is* prose. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
 
 ## Scope
 
@@ -52,7 +52,7 @@ Deliberately **not** carried — by right grain, so compose stays principles, no
 
 ### Step 1 — Frame
 
-Reuse-via-transcript: if an upstream skill (e.g. `shape-elicit`, `manage-observe`) already converged the content earlier in the session, reuse it as the source — don't re-derive.
+Reuse-via-transcript: if an upstream skill (e.g. `shape-elicit`, `reflect-observe`) already converged the content earlier in the session, reuse it as the source — don't re-derive.
 
 Establish three things (rule ⑦ — below 90% on any, ask):
 - **Type** — ADR / design doc / report / observation / README / spec / …
@@ -109,7 +109,7 @@ If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name 
 - **`nav-sync`** — the code-file sibling: file-top headers on code. compose is the whole-prose-document analog (ADR-049).
 - **`nav-audit`** — assesses code shape (read-only); compose authors docs.
 - **`shape-elicit`** — where undecided content goes when a rule-⑧ signal shows the point isn't settled.
-- **Consumers** — `/shape`, `manage-observe`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).
+- **Consumers** — `/shape`, `reflect-observe`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
