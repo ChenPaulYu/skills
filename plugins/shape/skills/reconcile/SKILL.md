@@ -15,7 +15,7 @@ A `thoughts/` doc describing already-shipped or superseded work doesn't just clu
 
 ## The shape spine (restated — this skill is self-contained)
 
-> **Capture before crystallize** — keep a decision while it's live, retire it once reality has absorbed it; reconcile is how the archive lets go without losing the record prematurely. **One current state, two renders** — `thoughts/` (agent) and `overview.html` (human) must both reflect *present* reality; a doc describing the past is a stale render, a lie like a stale codebase map.
+> **Capture before crystallize** — keep a decision while it's live, retire it once reality has absorbed it; reconcile is how the archive lets go without losing the record prematurely. **One current state, two renders** — `thoughts/` (agent) and `overview.html` (human) must both reflect *present* reality (the human render **only while it has a reader** — an unread `overview.html` is retired, not maintained; blueprints-spec § Weight-adaptive); a doc describing the past is a stale render, a lie like a stale codebase map.
 
 ## Staleness signals — collect, don't conclude
 
@@ -43,7 +43,7 @@ Combine into a per-doc verdict: **current** · **current · N stale fact(s)** (�
 - **Amend** is the lightest write but still an overwrite: change only the confirmed line(s), verbatim otherwise (same discipline as `/nav:refactor`'s move — no "while I'm here" rewrites); the `+` line states only what code shows; keep the doc's status/date current if it carries one.
 - **Consolidate beats raw delete** when live design remains — merge, verify, *then* remove. **Graduate** is consolidate pointed at a `decisions.md` section — see below.
 
-**Step 5 — Re-sync the renders.** After cleaning, the board may lag — *offer* (don't auto-call) `/shape:align` to refresh `plan.md` + `overview.html` (see "Offer" below). reconcile reconciles the notes; align renders — skills don't invoke each other.
+**Step 5 — Re-sync the renders.** After cleaning, the board may lag — *offer* (don't auto-call) `/shape:align` to refresh `plan.md` + `overview.html` (see "Offer" below). **But first consumption-gate the human render**: an `overview.html` no one reads is **retired, not refreshed** (it's a stale artifact this sweep clears — see the Offer). reconcile reconciles the notes; align renders — skills don't invoke each other.
 
 ## The amend boundary — sync facts, never re-decide
 
@@ -111,6 +111,8 @@ reconcile's currency check **consumes the file headers `/nav:sync` maintains**: 
 ## Offer to re-sync the board (don't auto-run)
 
 After the tree is trimmed, the rendered board may lag the cleaned `thoughts/`/`plans/`. **Offer — never auto-call — `/shape:align`** to re-sync `plan.md` + `overview.html`, via `AskUserQuestion` (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when something actually changed this run and a `blueprints/` board exists; always include a "leave the renders, I'll re-sync later" opt-out; don't re-offer after the pick. `align` is collaborative → runs in-session. An offer, not a call.
+
+**First, consumption-gate the human render (blueprints-spec § Weight-adaptive).** If the project still carries an `overview.html` that **no one reads** (solo / single-owner, or the user says they never open it), the right move is **retire it, not refresh it** — propose deleting it (git holds it) + recording the deviation in `plan.md`'s header, so the board stops being a maintenance + stale-render tax. An unread human render is exactly the kind of stale artifact this sweep exists to clear: a maintained projection with no reader is upkeep + a lie-risk, and `plan.md` already serves the human who wants the status (the visual board becomes on-demand). Only when the human render has a **real reader** does the offer stay "refresh it via align".
 
 ## Discipline (do not skip)
 
