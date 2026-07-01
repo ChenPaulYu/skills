@@ -11,6 +11,24 @@ The 8 deep-module rules nav audits for govern **these meta-files too** — the C
 - **Rule ② — interface-first / progressive disclosure.** Every doc leads with its point and drills in only as needed (`head`-able); the validator + gates are the one door to "did I keep the repo consistent?".
 - **Rule ④ — right grain.** A `SKILL.md` or CLAUDE.md past ~500 lines, or enumerating many distinct responsibilities, gets split — the same bar nav applies to product code.
 
+## Concurrent editors — check before you write, not at push time
+
+This repo has more than one active editor (the owner + agent sessions) pushing to `main`
+directly — no PR review gate catches a stale base before it lands. **Before your first
+edit in a session, not before your first push:**
+
+```bash
+git fetch origin && git log --oneline HEAD..origin/main
+```
+
+Non-empty output = `origin/main` moved since your local `main` — someone else has been
+working. `git pull --rebase origin main` (or at least re-read the files you're about to
+touch) **before** you start editing, so a concurrent change surfaces on a clean base
+instead of as a merge conflict discovered only when `git push` is rejected. Checking late
+still works (rebase, resolve, regenerate any derived file via its script, re-run the
+validator, continue) — but it's reactive; checking first is free and avoids the conflict
+outright when the edits don't actually overlap.
+
 ## Hard gates — run before every commit
 
 Each gate guards a **single-owner / generated-artifact** fact: exactly one file is the editable owner, the rest is **derived**. Hand-editing a derived copy = silent drift (rule ① information leakage). The validator turns drift into a failed build — so enforcement is mechanical, not memory.
