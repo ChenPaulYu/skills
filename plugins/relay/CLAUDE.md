@@ -134,6 +134,8 @@ relate:                                       # optional — cross-discussion "s
 
 relay docs (reports, the decision ledger `decisions/log.md` · `active.md`) are authored to **`/nav:compose`** discipline (lead with the point, one fact one owner, right grain). Repo-wide authoring + maintenance rules (naming, skills-root-relative paths, frontmatter, the gates) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
+**Cost tier (ADR-059)**: the criterion (mechanical verbs declare `model: sonnet` in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). relay's tiered verbs: **`format`** (syntactic conformance sweep) and **`digest`** (read-only scan, runs on every open). The judgment verbs (`report`, `review`, `settle` — they write or distill *meaning*) stay on the session model.
+
 ## Helper scripts (ADR-051)
 
 relay is a structured-data protocol, so unlike the analysis plugins it **bundles helper scripts** for its deterministic / correctness-critical work, split from the LLM's judgment work:

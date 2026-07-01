@@ -1,11 +1,14 @@
 ---
 name: format
-description: "Sweep one relay project's thoughts and bring their frontmatter up to the current format — like /nav:sync for headers, but for relay thought metadata. Checks every thought parses + conforms (quoted subject, required thread, well-formed thread/re/relate links) and fixes the non-conformant, gated by a diff. Syntactic only — it never changes what a thought SAYS. Use when the user asks to \"format the relay\", \"unify the thought format\", \"lint the thoughts\", \"fix the frontmatter\", or after the format spec evolves and old thoughts drift. One project at a time (not the whole repo). Content verb; the format owner is plugins/relay/CLAUDE.md. (relay 0.4.0)"
+model: sonnet
+description: "Sweep one relay project's thoughts and bring their frontmatter up to the current format — like /nav:sync for headers, but for relay thought metadata. Checks every thought parses + conforms (quoted subject, required thread, well-formed thread/re/relate links) and fixes the non-conformant, gated by a diff. Syntactic only — it never changes what a thought SAYS. Use when the user asks to \"format the relay\", \"unify the thought format\", \"lint the thoughts\", \"fix the frontmatter\", or after the format spec evolves and old thoughts drift. One project at a time (not the whole repo). Content verb; the format owner is plugins/relay/CLAUDE.md. (relay 0.5.0)"
 ---
 
 # format — sweep one project's thoughts to the current frontmatter spec
 
 The relay analog of `/nav:sync`: as the format spec evolves (a new field, a quoting rule), old thoughts drift. **format** sweeps **one project**, finds every thought whose frontmatter doesn't parse or doesn't conform, and fixes it — **syntactic conformance only, never the meaning**, gated by a diff.
+
+> **Cost tier (ADR-059):** this skill declares `model: sonnet` in its frontmatter — a syntactic conformance sweep is mechanical, so it runs on the cheaper model for that turn; the session model resumes on the next prompt. The diff gate is unchanged.
 
 ## Scope
 

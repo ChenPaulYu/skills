@@ -26,6 +26,7 @@ The pipeline is **`summarize` → `observe`** (complete objective recap → the 
 - **Read-only by default, one writer**: `catchup` + `summarize` never write (they report to chat); only `observe` writes, and only the single observation file (show it before/after). No skill edits code, manifests, or the site map.
 - **Summoned, not automatic**: all three fire on explicit call — being auto-summarized / auto-observed every turn is the anti-feature (same stance as `/shape:elicit`).
 - **Grounded, not from memory**: `catchup` / `summarize` rebuild from durable state (git / diff / files) so they survive a wiped context — that grounding *is* the value, not chat paraphrase.
+- **Cost tier (ADR-059)**: the criterion (mechanical verbs declare `model: sonnet` in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). reflect's tiered verb: **`summarize`** (a neutral, exhaustive recap from durable state). `catchup` (judges "now + next") and `observe` (selects the one durable learning) stay on the session model.
 
 ## The value-guardrail (why these three, and what's excluded)
 

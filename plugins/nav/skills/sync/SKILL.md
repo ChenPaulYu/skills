@@ -7,6 +7,8 @@ description: "Re-sync a codebase's file-top headers to its current state so an a
 
 Keep a codebase's **file-top headers** in step with its code, so `head -12` answers "what is this file?" without reading the body. This is the **per-file** half of the navigation layer; its sibling `/nav:map` renders the **per-repo** half (the bilingual codebase map) and consumes the headers this skill maintains.
 
+> **Cost tier (ADR-059) — deliberately NOT tiered.** sync stays on the session model: the headers it composes are the *source* every other navigability consumer reads (its sibling `/nav:map` renders from them and IS tiered to sonnet), and rule ⑧ makes composing a header double as a diagnosis — struggle-to-describe is the deep-module test. Authoring the source of truth is judgment work; a shallow header is a lie every future session inherits.
+
 ## Why this skill exists
 
 Navigability has two scales — per-file (a header) and per-repo (a map) — and they run on **different cadences**: a header should be refreshed *every time you touch a file* (continuous, cheap, like a lint), while the map is regenerated *periodically* (heavy, batched, a teaching projection). Binding them to one door forced either over-scoping the cheap job or under-delivering the expensive one (ADR-029, superseding ADR-019's merge). So they are **two doors over a shared grounding approach**, and this is the light, frequent one. The header is a file's **interface** (rule ②): `/shape:reconcile` reads it as its cheapest "is this implemented?" signal, and every agent reads it via `head -12` before diving into the body.

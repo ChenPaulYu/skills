@@ -1,5 +1,6 @@
 ---
 name: reflect-summarize
+model: sonnet
 description: "Produce a complete, objective recap of what THIS session did — what was attempted, done, decided, and changed (files / commits), in order, neutrally and exhaustively (not a selective TL;DR). Read-only; summoned; the raw input reflect-observe distills. Fires on \"summarize this session\", \"what did we do\", \"recap everything\", \"full summary of this session\", \"write up what happened\", \"give me the rundown\". Distinct from reflect-catchup (where the work stands NOW plus next — summarize is the complete log of what HAPPENED) and from reflect-observe (which selectively distills the one durable learning and writes it; summarize is the objective whole that feeds it)."
 disable-model-invocation: true
 ---
@@ -8,6 +9,8 @@ disable-model-invocation: true
 # summarize — a complete, objective recap of the session
 
 Give a **complete and objective** account of what this session *did* — the full record, in order, neutral in tone. This is the **recap** move of the meta-lane: not "where are we" (`reflect-catchup`) and not "the one keeper insight" (`reflect-observe`), but **everything that happened**, faithfully. It is often the raw input you then hand to `reflect-observe` to distill.
+
+> **Cost tier (ADR-059):** this skill declares `model: sonnet` in its frontmatter — an objective, neutral recap from durable state is mechanical, so it runs on the cheaper model for that turn; the session model resumes on the next prompt.
 
 Optional focus from the user: **$ARGUMENTS** (scope to an area if given; else the whole session).
 

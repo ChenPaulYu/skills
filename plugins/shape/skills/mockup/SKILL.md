@@ -100,6 +100,8 @@ A file written to disk is not yet a decidable artifact — the user has to *see*
 
 "Render + capture" uses shape's shared **browser-verify capability slot** (defined once in `plugins/shape/CLAUDE.md`, shared with `align` + `build`): a named default (`agent-browser`) + detect + fail-helpfully if missing + per-project override. Open the file / running system, locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a tool — name the capability.
 
+**Agent-side capture runs in the `browser-verifier` subagent (cost tier, ADR-058).** When the capture/verify is mechanical — confirming the artifact renders, checking a behaviour responds — dispatch the plugin's `browser-verifier` agent (model: sonnet) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context. Confirm a render **once**, not per iteration. The user-facing hand-off is unchanged: a live clickable origin, opened for the user — that part stays inline.
+
 ## After the pick — offer the next step: track it · build it (don't auto-run)
 
 A pick has two natural next steps, and the offer should name **both** (ADR-028) — an `AskUserQuestion` with a "just record the pick, I'll continue later" opt-out (offer-next-action, ADR-007/015):

@@ -27,7 +27,7 @@ Three things derive directly and carry the skill:
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real build** and records it.
 
 1. **List the user intents (the test script).** What is someone *trying to achieve*? — "keep a private copy", "find it again later", "undo without losing context". Include the intents the feature implies but you never designed for; this list is the floor that keeps the session bounded.
-2. **Drive the real interface to attempt each intent, capturing the run.** Frontend → the project's browser-verify slot (`agent-browser`): actually click the flow; **take a screenshot at each step and friction point, and record the session to video where the slot supports it** (degrade gracefully to screenshots if it doesn't). Backend / CLI → `curl` the endpoint or run the command and **save the actual request/response**. **Don't reason from the doc or from memory** — a belief about how your own feature behaves is often false; confirm it by doing it.
+2. **Drive the real interface to attempt each intent, capturing the evidence.** Frontend → the project's browser-verify slot (`agent-browser`): actually click the flow; **screenshot at each friction point and dead-end** — the moments that become findings — not every routine step, and **record video only when the user explicitly asks for it** (verify economy, ADR-058: a capture is evidence, not a progress note; captures go to disk and are referenced by path, never pasted into the chat). Backend / CLI → `curl` the endpoint or run the command and **save the actual request/response**. **Don't reason from the doc or from memory** — a belief about how your own feature behaves is often false; confirm it by doing it.
 3. **Mark friction + gaps against the captures.** Friction = the path *exists* but is clunky (too many steps, unclear feedback, awkward order, a missing affordance) — tie each to its screenshot / clip timestamp. Gap = an intent with *no coherent path* (dead-ends, contradicts, nothing to start with).
 4. **Classify each gap by layer** — missing intent (direction) vs dead-end scenario (incomplete) — so the report shows them distinctly and the hand-off is pre-sorted.
 
@@ -39,7 +39,7 @@ The output is a **friction report grounded in the captured session** — *not* a
 
 - **Friction** → *where it snagged · what it felt like · one concrete improvement idea*, each **embedding its screenshot** (and a clip timestamp from the recording where there is one).
 - **Coverage gap** → the intent that had no path + its layer tag (direction / incomplete), with the screenshot of the dead-end (or the failing response).
-- **The session recording** sits at the top of the report so the whole run is watchable end-to-end, not just the stills.
+- **The session recording** (when one was requested and captured) sits at the top of the report so the whole run is watchable end-to-end; by default the evidence is the friction-point stills + saved responses.
 
 **Render is demoted to an optional hand-off, not the output.** When a friction idea is big enough to be a *redesign* (not a tweak), *then* hand it to `shape-mockup` to render the new shape — but the default deliverable is the evidence-rich report, because the felt-unsmooth moment wants to *see* the problem and get ideas, not a fresh artifact to evaluate.
 
@@ -96,7 +96,7 @@ The session turns "this feels off" into "watch this — archiving is clunky (her
 
 ## Output
 
-- **An evidence-rich friction report** in `dogfood/<date>-<feature>/report.md` — a session recording up top, then each finding = where it snagged · what it felt like · an improvement idea, embedding its screenshot / response.
+- **An evidence-rich friction report** in `dogfood/<date>-<feature>/report.md` — a session recording up top when one was requested, then each finding = where it snagged · what it felt like · an improvement idea, embedding its screenshot / response.
 - **The session captures** — `session.mp4`/`.webm` (where supported), `shots/`, `responses/`.
 - **The coverage gaps that fell out**, each tagged by layer (direction vs incomplete) and routed: direction → `shape-elicit`/`shape-mockup`; incomplete → `nav-plan` + `shape-build`.
 - (Optional) a hand-off to `shape-mockup` for any finding big enough to be a *redesign* — not the default.

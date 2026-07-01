@@ -1,5 +1,6 @@
 ---
 name: reconcile
+model: sonnet
 description: "Reconcile design notes with reality — scan a blueprints/ tree (thoughts/, plans/, mockups/) for docs that drifted, then with the user amend, prune/consolidate, graduate, or retire them. Fires on \"check for outdated thoughts / docs\", \"which design notes are stale\", \"clean up / tidy the blueprints\", \"are these docs still current\", \"prune the old specs / mockups\", \"consolidate these notes\", \"graduate this shipped doc\", or after work ships and docs drift from code. Read-only check; every write gated per-file. AMEND syncs facts, never re-decides a *decision* — a changed design is /shape:elicit. Language-agnostic."
 ---
 
@@ -8,6 +9,8 @@ description: "Reconcile design notes with reality — scan a blueprints/ tree (t
 Design notes and plans accrete; reality moves past them. `reconcile` walks `blueprints/thoughts/`, **`blueprints/plans/`, and `blueprints/mockups/`**, decides honestly which docs have drifted, and — *with the user* — **amends** a doc's stale facts in place, **prunes / consolidates** a wholly-stale doc, **graduates** a shipped-but-durable rationale into `decisions.md`, or **retires** a shipped decision's mockup folder, so the tree stays a true picture of what's still open. The **check is read-only**; **every write is gated** behind per-file confirmation, because overwriting or deleting a design record is irreversible.
 
 Staleness isn't binary: a doc can be 90% live design with one line reality overtook. **`amend`** serves that middle case — correct the drifted *fact*, leave the rest verbatim. The line it must not cross — sync what's *true*, never re-decide what's *decided* — is the amend boundary (below).
+
+> **Cost tier (ADR-058):** this skill declares `model: sonnet` in its frontmatter — the sweep-and-compare work is mechanical, so it runs on the cheaper model for that turn; the session model resumes on the next prompt. The amend boundary is unchanged: anything that smells like a *decision* still stops and routes to `/shape:elicit`.
 
 ## Why this skill exists
 

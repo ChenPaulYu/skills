@@ -25,6 +25,24 @@ The 8 deep-module rules nav audits for govern **these meta-files too** — the C
 - **Rule ② — interface-first / progressive disclosure.** Every doc leads with its point and drills in only as needed (`head`-able); the validator + gates are the one door to "did I keep the repo consistent?".
 - **Rule ④ — right grain.** A `SKILL.md` or CLAUDE.md past ~500 lines, or enumerating many distinct responsibilities, gets split — the same bar nav applies to product code.
 
+## Concurrent editors — check before you write, not at push time
+
+This repo has more than one active editor (the owner + agent sessions) pushing to `main`
+directly — no PR review gate catches a stale base before it lands. **Before your first
+edit in a session, not before your first push:**
+
+```bash
+git fetch origin && git log --oneline HEAD..origin/main
+```
+
+Non-empty output = `origin/main` moved since your local `main` — someone else has been
+working. `git pull --rebase origin main` (or at least re-read the files you're about to
+touch) **before** you start editing, so a concurrent change surfaces on a clean base
+instead of as a merge conflict discovered only when `git push` is rejected. Checking late
+still works (rebase, resolve, regenerate any derived file via its script, re-run the
+validator, continue) — but it's reactive; checking first is free and avoids the conflict
+outright when the edits don't actually overlap.
+
 ## Hard gates — run before every commit
 
 Each gate guards a **single-owner / generated-artifact** fact: exactly one file is the editable owner, the rest is **derived**. Hand-editing a derived copy = silent drift (rule ① information leakage). The validator turns drift into a failed build — so enforcement is mechanical, not memory.
@@ -94,6 +112,7 @@ If you changed the roster but either shows unmodified → **STOP**, you missed i
 - **★ Skills-root-relative paths** — all paths (doc links **and** example code) are written as if `skills/` (the repo root) is root. **No `./` or `../` prefixes.** Doc links: `docs/adr/008-inject-check-at-handoff.md`. Example imports: alias form (`@/core/user`) or bare module names.
 - **Frontmatter `description`** — written **broad** (matches multiple trigger phrasings) but **honest** about scope; it determines triggering accuracy. No pushy cross-domain claims.
 - **Read-only / write-gated by default** — a skill that writes files shows the content (or a diff) before committing and never writes without explicit user confirmation; destructive ops follow the skill's own safety rules.
+- **Cost tier — mechanical verbs declare `model: sonnet`** ([ADR-058](docs/adr/058-shape-cost-tiers.md) · [ADR-059](docs/adr/059-cost-tier-marketplace-wide.md)) — a skill whose work is a mechanical sweep / format / scan / render-from-structured-source (rather than open-ended judgment) declares `model: sonnet` in its SKILL.md frontmatter: a **turn-level** override, the session model resumes on the user's next prompt, and every gate (diff, write-gate, confidence-gate) is unchanged. Judgment-heavy verbs stay on the session model. This bullet owns the *criterion*; **which of its verbs are tiered is listed in each plugin's CLAUDE.md** (the instance, one owner each).
 - **Cross-references between skills** are spelled `nav-audit`, `shape-mockup` — the form the user actually types, not bare names.
 
 ## When editing — maintenance rules
@@ -164,6 +183,8 @@ These rules **also apply to this plugin's own code** — meta-discipline. If a s
 - **N+1 trigger** (corollary of rules ④ + ②): first consumer of an inline util = inline is fine; **second consumer = extract a primitive** (don't copy-paste, don't shove a mode-flag into a facade). This is the operational trip-wire that turns "no needless abstraction" from a judgment call into a rule. Fires in the `refactor`/`plan` hand-offs above and in any integration check. **Value- and layer-agnostic**: "inline util" generalizes to any repeated *value* (a color, a constant, a config key, a prompt fragment) in any *layer* (code, CSS/design-tokens, prompts, config) — 2nd raw copy = give it an owner. But per-change is structurally blind to leakage that only shows in *aggregate* (each copy is locally fine); that emergent case is caught by `audit`'s value-leakage check (canary + perceptual-proximity clustering), not here — see [ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md).
 - **The verb is the only door for its deliverable (ADR-038)**: if you're about to hand-produce something a verb encodes — a decided behaviour-changing change (`nav-do`), a structural move (`nav-refactor`), a comparison mockup (`shape-mockup`) — fire the verb instead of hand-rolling the artifact. The protocol around the artifact (check bracket · gated diffs · post-pick offers) *is* the deliverable; ambient fluency in the craft is the risk signal, not a waiver. Doesn't make verbs auto-fire — governs the case where you're already producing the deliverable. See [`docs/adr/038-verb-is-the-only-door-for-its-deliverable.md`](docs/adr/038-verb-is-the-only-door-for-its-deliverable.md).
 - **Canon is single-writer (ADR-041)**: if the project keeps a canon layer (`docs/core/*`-class constitution docs), no nav verb and no ambient flow ever edits it — even to sync a fact the user just ratified. Append a one-line pending amendment to `docs/core/amendments.md` (what changed · evidence · by which verb) instead; the project's canon-authoring verb adjudicates the ledger on its next summon. Freshness-law carve-out: stale header = fix same-commit; **stale canon = ledger entry (tracked debt), never a direct edit**. Shape-independent: the ledger is a file convention — it works whether or not the shape plugin is installed. See [`docs/adr/041-core-write-protocol-door-times-timing.md`](docs/adr/041-core-write-protocol-door-times-timing.md).
+- **Cost tier (ADR-059)**: the criterion (mechanical verbs declare `model: sonnet` in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). nav's tiered verb: **`map`** (renders from already-maintained headers — derived work). **`sync` is deliberately NOT tiered**: it authors the headers everything else reads, and rule ⑧ makes composing a header double as a diagnosis — that's judgment work on the session model.
+
 ## Where things live
 
 ```
@@ -212,6 +233,7 @@ The pipeline is **`summarize` → `observe`** (complete objective recap → the 
 - **Read-only by default, one writer**: `catchup` + `summarize` never write (they report to chat); only `observe` writes, and only the single observation file (show it before/after). No skill edits code, manifests, or the site map.
 - **Summoned, not automatic**: all three fire on explicit call — being auto-summarized / auto-observed every turn is the anti-feature (same stance as `shape-elicit`).
 - **Grounded, not from memory**: `catchup` / `summarize` rebuild from durable state (git / diff / files) so they survive a wiped context — that grounding *is* the value, not chat paraphrase.
+- **Cost tier (ADR-059)**: the criterion (mechanical verbs declare `model: sonnet` in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). reflect's tiered verb: **`summarize`** (a neutral, exhaustive recap from durable state). `catchup` (judges "now + next") and `observe` (selects the one durable learning) stay on the session model.
 
 ## The value-guardrail (why these three, and what's excluded)
 
@@ -367,6 +389,8 @@ relate:                                       # optional — cross-discussion "s
 
 relay docs (reports, the decision ledger `decisions/log.md` · `active.md`) are authored to **`nav-compose`** discipline (lead with the point, one fact one owner, right grain). Repo-wide authoring + maintenance rules (naming, skills-root-relative paths, frontmatter, the gates) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
+**Cost tier (ADR-059)**: the criterion (mechanical verbs declare `model: sonnet` in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). relay's tiered verbs: **`format`** (syntactic conformance sweep) and **`digest`** (read-only scan, runs on every open). The judgment verbs (`report`, `review`, `settle` — they write or distill *meaning*) stay on the session model.
+
 ## Helper scripts (ADR-051)
 
 relay is a structured-data protocol, so unlike the analysis plugins it **bundles helper scripts** for its deterministic / correctness-critical work, split from the LLM's judgment work:
@@ -514,6 +538,7 @@ Record the seams; don't blur them:
 - **★ Progressive disclosure in every produced artifact** (so an agent scans fast, not just the human): a `thoughts/` doc opens with `# <title> — <one-line role>` + a ≤3-line TL;DR/status blockquote (`head -12` yields the gist without reading the body), sections lead with their point, enumerations go in tables, key terms bolded; a `mockup` artifact opens with a top-comment stating what it is · the candidates · the pick. This is `nav`'s interface-first (rule ②) applied to shape's outputs. Every skill that emits a doc/artifact (`elicit`, `mockup`, `align`) enforces it.
 - **Write-gated**: `align` and `reconcile` write files — show what will be written (or a diff) before committing. `reconcile`'s destructive ops follow the safety rules in its `SKILL.md` (check tracked/untracked, never `mv`-then-`rm`, diff before delete).
 - **Skills don't invoke each other**: they reference sibling protocols by name (e.g. reconcile → "run `shape-align`"), never re-implement or call them.
+- **Cost tier (ADR-058/059)**: the *criterion* (mechanical sweep/format/render → `model: sonnet` frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md); shape's tiered verbs are **`reconcile`** and **`align`**. Judgment-heavy verbs (`elicit`, `position`, `build`'s adjudication) stay on the session model. The same tier powers the browser-verify slot's `browser-verifier` subagent (below).
 
 ## browser-verify — a shared per-project capability slot
 
@@ -524,6 +549,8 @@ Three skills need to *see* the running thing — `mockup` (render the artifact),
 - **If missing, fail helpfully — never silently skip.** Surface a 3-way confidence-gate choice: **(a) install** [recommended] — `npm install -g agent-browser` (or `brew`/`cargo install agent-browser`) then `agent-browser install`; or as a skill `npx skills add vercel-labs/agent-browser`. **(b)** proceed without visual verify this run (flag items to eyeball). **(c)** skip verify for this item. Report what was skipped (no silent caps).
 - **Per-project override:** a project may bind a different helper (Playwright, puppeteer) in its own CLAUDE.md; the agent reads that. Absent an override, the default is agent-browser.
 - **Skills don't call skills:** name the capability + describe the contract; the executing agent invokes the tool (CLI shell-out, or triggers the agent-browser skill in its own turn).
+- **Delegate the pass to the `browser-verifier` subagent — the cost tier (ADR-058).** The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/shape/agents/browser-verifier.md) (model: sonnet). The caller injects URL · screenshot destination · expectation (mockup path or stated behaviour) · any interaction steps / tool override, and receives back a compact verdict (`PASS | DRIFT | BLOCKED | MISSING-TOOL` + reason + paths) — the drive-and-capture loop and its **image tokens stay in the subagent's context**, never entering the main conversation (where every screenshot is re-paid on every later turn). Delegate whenever the pass is mechanical (build's per-item verify, mockup's capture confirmation, align's board check); drive inline only when the user is being walked through the page live. The close-contract binds inside the subagent — its last move is `close`. Ships with the plugin, so it works on any machine that installed shape.
+- **Verify economy — capture at decision points, not per step.** A screenshot is *evidence* (Shipped-evidence, friction-evidence, a pick's record), never a progress note: `build` captures once per item at land (mid-item verification is the test gate); `dogfood` screenshots at friction/gap moments and records video **only on explicit request**; `mockup` confirms a render once, not per iteration; `align` opens the board without capturing. Screenshots live on disk (report/mockups tree) — referenced by path, not pasted into the chat.
 - **Known traps:** the slot's field manual ([`references/browser-verify-gotchas.md`](plugins/shape/references/browser-verify-gotchas.md)) is organized by scope — **universal** (session isolation · assert state-not-text · measure-before-toggle · selector-over-pixel clicks · poll-don't-snapshot · rule-out-mock-data · daemon-reset · teardown/`close` with its knowledge≠trigger cue-ladder + provenance-keyed reaper), **audio** (dual-backend mute · real-input for user-activation), **transform-canvas** (`position:fixed` → portal to body), and **React+Vite** (controlled-input native-setter, HMR console ghosts). Read before trusting a screenshot or console scan, and `close` the browser when the pass ends.
 
 ## Status

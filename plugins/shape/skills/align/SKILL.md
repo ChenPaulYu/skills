@@ -1,11 +1,14 @@
 ---
 name: align
+model: sonnet
 description: "Align on what to build next — read the current decisions (blueprints/thoughts/) and the actual state of work, decide with the user what is In progress / Next / Future, then write a lean plan.md and regenerate a human-facing overview.html status board. Fires on \"align on what's next\", \"what should we work on\", \"update the plan\", \"refresh the plan / overview\", \"where are we\", \"sync the blueprints\", \"re-do plan.md\", or hands over notes asking \"so what now\". NOT /nav:plan (this triages forward; that grounds a spec into code). Scaffolds blueprints/ on first run."
 ---
 
 # Align — decide what's next, render it
 
 Recurring, lightweight alignment on **what to build next**. Read the converged decisions and the real state of the work, decide *with the user* what's now / next / later, and land it as two views of one reality: a lean `plan.md` (the agent reads this) and an `overview.html` status board (the human reads this). Not a grand up-front roadmap — a quick, repeatable "where are we, what's next".
+
+> **Cost tier (ADR-059):** this skill declares `model: sonnet` in its frontmatter — the bulk of the work (scan the tree, rewrite `plan.md`, re-render `overview.html`) is mechanical, so it runs on the cheaper model for that turn; the session model resumes on the next prompt. Deciding now/next/later stays *with the user* — the tier changes the model, never the collaboration or the write gate.
 
 ## Why this skill exists
 
@@ -80,7 +83,7 @@ Copy [`references/overview-template.html`](plugins/shape/skills/align/references
 
 ### Step 6 — Verify + activate
 
-Open `overview.html` via shape's shared **browser-verify slot** (`plugins/shape/CLAUDE.md`; default `agent-browser`); confirm the lang toggle flips, cards expand, footer links resolve, zero console errors. **Hand over a clickable URL in the reply** so the user can open the board straight from chat — a `file://<absolute-path>` link by default; a throwaway `http://localhost:<port>` static server only if `file://` blocks something (rare for this self-contained file). Tell them what changed and offer to adjust density/tone of the detail panels.
+Open `overview.html` via shape's shared **browser-verify slot** (`plugins/shape/CLAUDE.md`; default `agent-browser`) — delegate the check to the plugin's `browser-verifier` subagent (model: sonnet; cost tier, ADR-058): it confirms the lang toggle flips, cards expand, footer links resolve, zero console errors, and returns a compact verdict; no screenshot needed (verify economy — the board is for the human to open, not evidence to capture). **Hand over a clickable URL in the reply** so the user can open the board straight from chat — a `file://<absolute-path>` link by default; a throwaway `http://localhost:<port>` static server only if `file://` blocks something (rare for this self-contained file). Tell them what changed and offer to adjust density/tone of the detail panels.
 
 ## The seam with `nav` — don't blur it
 

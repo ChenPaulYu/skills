@@ -1,11 +1,14 @@
 ---
 name: map
+model: sonnet
 description: "Render or refresh a repo-level bilingual codebase map (docs/codebase-map/index.html) so a human or agent can grasp the whole codebase top-down — domains, anatomies, the cross-domain import graph, a searchable module map, and conventions — without reading dozens of files. Runs a grounding pass that reads each load-bearing file's head -12 header, then renders the map. Use whenever the user asks to \"regenerate / update / refresh the codebase map\", \"render a map of the code\", \"show me a map of the repo\", \"onboard me to this codebase\", or after a wave of changes left the map stale. Reads file-top headers (run /nav:sync first so they're current); writes docs/codebase-map/index.html. The periodic, batched sibling of the per-change /nav:sync."
 ---
 
 # Codebase map — repo-level navigability
 
 Render the **bilingual codebase map** (`docs/codebase-map/index.html`) so one HTML answers "what *is* this repo?" — its domains, the anatomies of the structurally-rich ones, the cross-domain import graph, a searchable module map, and the conventions every module clears. This is the **per-repo** half of the navigation layer; its sibling `/nav:sync` maintains the **per-file** half (the headers this map reads).
+
+> **Cost tier (ADR-059):** this skill declares `model: sonnet` in its frontmatter — rendering the map from already-maintained headers is mechanical, high-volume work, so it runs on the cheaper model for that turn; the session model resumes on the next prompt.
 
 ## Why this skill exists
 
