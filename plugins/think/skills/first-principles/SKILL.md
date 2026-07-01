@@ -1,6 +1,6 @@
 ---
 name: first-principles
-description: "Reason a question or decision from first principles. Name the conventional answer and assumptions, strip away convention, identify irreducible axioms, rebuild the answer from axioms, and highlight the divergence (the payload). Forces structure: discarded assumptions, axioms, rebuilt conclusion, divergence. Fires on \"reason this from first principles\", \"strip the assumptions\", \"why do we do X this way\", \"is this convention or necessity\", \"rebuild from scratch\", \"challenge assumptions behind X\", \"first-principles this\". Analysis only; reasons in-chat (no file artifact) and offers to route it (/shape:elicit, /shape:mockup, /nav:plan)."
+description: "Reason a question or decision from first principles. Name the conventional answer and assumptions, strip away convention, identify irreducible axioms, rebuild the answer from axioms, and highlight the divergence (the payload). Forces structure: discarded assumptions, axioms, rebuilt conclusion, divergence. Fires on \"reason this from first principles\", \"strip the assumptions\", \"why do we do X this way\", \"is this convention or necessity\", \"rebuild from scratch\", \"challenge assumptions behind X\", \"first-principles this\". Analysis only; reasons in-chat (no file artifact) and offers to route it (/shape:elicit, /shape:mockup, /nav:do, /nav:plan)."
 ---
 
 # First-principles — strip a question to its axioms, rebuild from them
@@ -43,11 +43,14 @@ Lightweight by default: the analysis stays **in-chat** — think writes **no fil
 
 ## After the analysis — offer to route it (don't decide, don't auto-run)
 
-first-principles *reasons*; it does not decide or build. Once the note is up, *offer* — never auto-call — the next step, via `AskUserQuestion` (offer-next-action, ADR-007/015):
+first-principles *reasons*; it does not decide or build. Once the note is up, *offer* — never auto-call — the next step, via `AskUserQuestion` (offer-next-action, ADR-007/015/057):
 
 - **Converge it into a decision** → `/shape:elicit` (the divergence is a strong input to the grill — but the *decision* is still drawn out with you, not asserted here).
 - **Render the rebuilt option** → `/shape:mockup` (when the divergence is something you'd decide by seeing it).
-- **Ground it into code** → `/nav:plan` (when the rebuilt answer is settled enough to build).
+- **Execute a small, decided fix** → `/nav:do` (when the rebuilt conclusion is a one-sentence, one-file code change you can hold in your head — e.g. "swap the type-erasing assertion for an exhaustive lookup").
+- **Ground it into code** → `/nav:plan` (when the rebuilt answer is bigger or ambiguous enough to need a written, reviewed plan).
+
+`/nav:do` vs `/nav:plan` — reuse `do`'s own scoping question: can the fix be stated in one sentence and held in your head? Yes → `do`. Spans many files or still needs decisions → `plan`. (ADR-057)
 
 **Guarded + one-shot:** compose from what the analysis actually found, always include a "just leave the note, I'll take it from here" opt-out, don't re-offer after the pick. An offer, not a call — skills don't invoke each other.
 
@@ -84,13 +87,14 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 ## Output
 
 - **The five-part structure, in-chat** (no file artifact): Question · Conventional answer + assumptions · Axioms (grounded) · Rebuilt conclusion · Divergence. To persist it, route to shape (below).
-- A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:plan` (ground) — never an auto-call.
+- A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:do` (execute a small, decided fix) · `/nav:plan` (ground a bigger one) — never an auto-call.
 
 ## Companion skills
 
 - **`/shape:elicit`** — converge the divergence into a decision *with the user* (first-principles derives the input; elicit draws out the call). The pairing partner.
 - **`/shape:mockup`** — render the rebuilt option when it's decided by seeing it.
-- **`/nav:plan`** — ground the rebuilt answer into a code-level plan once settled.
+- **`/nav:do`** — execute the rebuilt answer directly when it's a small, decided, one-sentence code fix (ADR-057) — the common shape for a root-cause finding that turns out to be "swap this mechanism," not a redesign.
+- **`/nav:plan`** — ground the rebuilt answer into a code-level plan once settled (bigger/ambiguous work `/nav:do` doesn't fit).
 - **`/think:orthogonal`** — the separation lens (factor sideways into mutually-independent axes); first-principles is the depth lens. The two decomposition moves.
 
 ## Communication Style

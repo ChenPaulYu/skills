@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-06-30 (rev 58)
+  Last audit: 2026-07-01 (rev 59)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -62,7 +62,7 @@
       standalone, cross-project (ADR-044; renamed from manage, ADR-056).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 56 ADRs in docs/adr/ — 001..056 with cross-supersede / refine links
+    • 57 ADRs in docs/adr/ — 001..057 with cross-supersede / refine links
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (32 flat skills: nav-* / reflect-* / relay-* /
       research-* / shape-* / think-*) + root AGENTS.md, generated from plugins/ by
@@ -84,7 +84,18 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 58)
+  ⚠ FIXED in this revision (rev 59)
+    1. think:first-principles gains a FOURTH routing option `/nav:do` (ADR-057) — its
+       "offer to route" step previously listed only /shape:elicit · /shape:mockup ·
+       /nav:plan, so a rebuilt conclusion that was a small, decided, one-sentence code
+       fix (the common shape, e.g. "swap a type-erasing `as` assertion for an exhaustive
+       lookup") had no one-click destination and degraded to unstructured chat text —
+       the exact friction ADR-007's offer-next-action pattern exists to remove. Now
+       routes small/decided fixes to /nav:do (reusing do's own "one sentence, held in
+       your head" scoping test) and keeps /nav:plan for bigger/ambiguous work. No new
+       skill, no version bump (behavioral addition, ADR-015 precedent). ADR count 56 → 57.
+
+  ⚠ FIXED in rev 58 (kept for history)
     1. RENAMED plugin `manage` → `reflect` (ADR-056) — the old name read as *maintenance*
        (which is nav's job); the family's object is your own working SESSION, and its 3
        members (catchup · summarize · observe) are all REFLEXIVE acts — manage fit 0 of 3,
@@ -1350,7 +1361,7 @@ const DOMAINS = {
     path: 'plugins/think/',
     blurb: {en:'Reason about a problem through a named reasoning lens that forces a structure the default "think harder" skips. 4 lenses — two take a problem apart, one puts a claim on trial, one grafts a mature model: first-principles (down — reduce + rebuild), orthogonal (sideways — factor into mutually-independent axes), dialectic (on trial — steelman both sides, name the experiment that would decide it; verdict three-way), and graft (borrow a mature model + adapt it — map every primitive, the adapt list is the payload). Standalone — feeds shape one-way, in-chat (an insight → a thought / mockup / plan). v0.4.0; see think/CLAUDE.md + ADR-034/045/046/047/048.', zh:'用具名 reasoning lens 推理問題,逼出預設「想認真點」會跳過的結構。4 個 lens —— 兩個把問題拆開、一個把主張送審、一個嫁接成熟模型:first-principles(往下 —— 化約+重建)、orthogonal(往旁 —— 拆成互相獨立的軸)、dialectic(送審 —— 正反兩面都 steelman,點出能分勝負的實驗;三向判決)、graft(借成熟模型 + 適應 —— 映射每個 primitive,adapt 清單是 payload)。獨立 —— 單向餵 shape、in-chat(洞見 → thought / mockup / plan)。v0.4.0;見 think/CLAUDE.md + ADR-034/045/046/047/048。'},
     files: [
-      ['/think:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:plan ground). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:plan ground)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034。"}],
+      ['/think:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:do small decided fix · /nav:plan ground bigger work). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034/057.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:do 執行小而已決定的修法 · /nav:plan 接大一點的工作)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034/057。"}],
       ['/think:orthogonal', '', {en:"Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) axes — the dimensions it actually varies along independently — then VERIFY the independence (move one, the others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled. Forces a structure the default skips: tangle · candidate axes · independence check · true degrees of freedom · payload. In-chat; offers to route to shape. Distinct from /think:first-principles (down to axioms + rebuild; orthogonal factors sideways). ADR-046.", zh:"把一個糾結的現象拆成互相獨立(正交)的軸 —— 它真正獨立變動的維度 —— 再驗證獨立性(動一個,其他不能動),點出被混為一談(一個詞藏 N 個問題)或假性分開的東西。逼出預設會跳過的結構:糾結點 · 候選軸 · 獨立性檢查 · 真自由度 · payload。in-chat;offer route 到 shape。跟 /think:first-principles 不同(那是往下到公理+重建;orthogonal 往旁拆)。ADR-046。"}],
       ['/think:dialectic', '', {en:"Put a claim ON TRIAL — build its strongest case (steelman) AND its strongest attack (devil's advocate, also steelmanned — never a strawman, until it worries you), surface the single deepest load-bearing assumption, then name the one experiment that would decide it. Forces a structure the default skips: Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment, plus a THREE-WAY verdict (refuted / unsettled-owned-bet / supported) — for a frontier claim 'no evidence yet' is an owned bet, not a refutation. Built for paradigm-class questions with no standard answer. In-chat; offers to route to shape. Distinct from /research:critique (which audits an external doc's EXISTING evidence; dialectic stress-tests YOUR OWN forming claim, where the decider doesn't exist yet). ADR-047.", zh:"把一個主張送上審判台 —— 建出它最強的正方(steelman)跟最強的反方(devil's advocate,反方也要 steelman —— 絕不是 strawman,要強到讓你不安),點出整個主張賴以成立、最深的那個承重假設,再講出一個能分勝負的實驗。逼出預設會跳過的結構:Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment,加上三向判決(refuted / unsettled-owned-bet / supported)—— 對前沿主張,『還沒有證據』是一個看清楚並扛下的賭注,不是被推翻。為沒有標準答案的 paradigm 問題而生。in-chat;offer route 到 shape。跟 /research:critique 不同(那審外部文件裡『已存在』的證據;dialectic 壓測你自己還在成形的主張,決定性證據還不存在)。ADR-047。"}],
       ['/think:graft', '', {en:"Design a novel system that rhymes with a mature one by GRAFTING it — pick a donor model whose STRUCTURE resonates, map EVERY primitive of the donor onto your problem, then read each mapping as fit (adopt unchanged) / break (no image — design fresh) / adapt (borrow the structure but reshape it for your domain). The payload is the ADAPT list — where the borrowed structure had to change is where your design's identity lives; reporting only fits is reskinning, not grafting. Forces a structure the default skips: target · donor + why-it-rhymes · the full primitive map · fit/break/adapt reading · the adapted result. The disciplined middle between first-principles (invent from axioms) and lazy analogy (copy unchanged) — nearly fp's inverse (borrow-all vs strip-all). In-chat; offers to route to shape. ADR-048.", zh:"把一個成熟模型嫁接到你要設計的新系統上 —— 選一個結構共鳴(非表面像)的 donor,把它每一個 primitive 映射到你的問題,再把每個映射讀成 fit(原封採用)/ break(對不上,從頭設計)/ adapt(借結構但為領域重塑)。payload 是 adapt 清單 —— 借來的結構被迫改變的地方,就是你設計的身分;只報 fit = 換皮,不是嫁接。逼出預設會跳過的結構:target · donor + 為何 rhyme · 完整 primitive 映射 · fit/break/adapt 三讀 · 適應後的結果。是 first-principles(從公理發明)與 lazy analogy(原封照抄)之間的紀律中點 —— 近乎 fp 的反面(借滿 vs 剝光)。in-chat;offer route 到 shape。ADR-048。"}],
