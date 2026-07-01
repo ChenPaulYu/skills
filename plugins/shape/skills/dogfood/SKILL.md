@@ -1,6 +1,6 @@
 ---
 name: dogfood
-description: "Dogfood a built feature that feels unsmooth: use it like a user (browser drive, curl/CLI) against user intents and record the run. Produces a report with screenshots/responses, highlighting friction (clunky workflow -> UX improvement) and coverage gaps (missing intents -> design-logic holes). Fires on \"I finished X but it feels unsmooth/off\", \"this doesn't feel right to use\", \"try it and give me ideas\", \"what's awkward/clunky\", \"dogfood this feature\", \"what usage are we missing\". Routes coverage gaps to /shape:elicit/mockup or /nav:plan + /shape:build. Also invokable as /shape:dogfood."
+description: "Dogfood a built feature that feels unsmooth: use it like a user (browser drive, curl/CLI) against user intents and record the run. Produces a report with screenshots/responses, highlighting friction (clunky workflow -> UX improvement) and coverage gaps (missing intents -> design-logic holes). Fires on \"I finished X but it feels unsmooth/off\", \"this doesn't feel right to use\", \"try it and give me ideas\", \"what's awkward/clunky\", \"dogfood this feature\", \"what usage are we missing\". Routes coverage gaps to /shape:elicit/mockup or /nav:plan + /shape:build."
 ---
 
 # Dogfood — use the built feature for real, surface where it's unsmooth

@@ -1,6 +1,7 @@
 ---
 name: catchup
-description: "Re-orient on where the current work stands — in plain language, rebuilt from durable state (git / diff / changed files / on-disk folder layout / any plan) as the floor so it survives /clear, context compaction, or returning after a break, THEN enriched from the live context window when it's present (the why / in-flight decisions git can't carry — durable state is the floor, not a blinder). Conveys the core (what · why · how-far) at information-density, not a one-line skim. Fixed shape: goal, done, now, open, next. Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /reflect:summarize (a complete objective recap of what the session DID — catchup is the state NOW plus what's next) and from /shape:align (which DECIDES next and writes a plan — catchup only reports). Also invokable as /reflect:catchup."
+description: "Re-orient on where the current work stands — rebuilt from durable state (git / diff / changed files / on-disk layout / any plan) as the floor so it survives /clear or a break, then enriched from the live context window when present (the why / in-flight decisions git can't carry). Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /reflect:summarize (objective recap of what the session DID) and /shape:align (DECIDES next and writes a plan — catchup only reports)."
+disable-model-invocation: true
 ---
 
 # catchup — where are we, in plain language

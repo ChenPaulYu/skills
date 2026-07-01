@@ -1,6 +1,7 @@
 ---
 name: position
-description: "Author and maintain a project's core principle documents, converging messy multi-source input into self-contained canon. A campaign verb: many feedings over time, gated edits, landed two-tier (core/ = ratified canon; thoughts/ = dated hypotheses), grown by graduation. Write protocol (ADR-041): core is freeze-gated, other verbs queue amendments in docs/core/amendments.md. Fires on \"幫我定位 X\", \"turn these discussions into a core doc\", \"this core file has accreted\", \"graduate this thought\", or authoring docs/core/*.md. NOT for single-sitting concepts (use /shape:elicit), syncing shipped code (use /shape:reconcile), or code planning (use /nav:plan). Invokable as /shape:position."
+description: "Author and maintain a project's core principle documents, converging messy multi-source input into self-contained canon. A campaign verb: many feedings over time, gated edits, landed two-tier (core/ = ratified canon; thoughts/ = dated hypotheses), grown by graduation. Write protocol (ADR-041): core is freeze-gated, other verbs queue amendments in docs/core/amendments.md. Fires on \"幫我定位 X\", \"turn these discussions into a core doc\", \"this core file has accreted\", \"graduate this thought\", or authoring docs/core/*.md. NOT for single-sitting concepts (use /shape:elicit), syncing shipped code (use /shape:reconcile), or code planning (use /nav:plan)."
+disable-model-invocation: true
 ---
 
 # Position — author the canon layer (a gated, multi-feeding campaign)

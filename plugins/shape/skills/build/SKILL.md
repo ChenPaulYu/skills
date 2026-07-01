@@ -1,6 +1,7 @@
 ---
 name: build
-description: "Drive the plan's In-progress column to done autonomously and serial by default, stopping to ask if confidence drops below 90%. For each item, it plans via /nav:plan, implements with /nav:refactor discipline and inject-check hand-off, verifies (via browser verify or tests), marks Shipped, and updates the board via /shape:align. Can propose a parallel schedule for independent items. Fires on \"build the In-progress\", \"implement the plan\", \"do the next items\", \"run the plan to done\", \"ship the current batch\", \"just make it\" against a blueprints/ plan. Also invokable as /shape:build."
+description: "Drive the plan's In-progress column to done autonomously and serial by default, stopping to ask if confidence drops below 90%. For each item, it plans via /nav:plan, implements with /nav:refactor discipline and inject-check hand-off, verifies (via browser verify or tests), marks Shipped, and updates the board via /shape:align. Can propose a parallel schedule for independent items. Fires on \"build the In-progress\", \"implement the plan\", \"do the next items\", \"run the plan to done\", \"ship the current batch\", \"just make it\" against a blueprints/ plan."
+disable-model-invocation: true
 ---
 
 # Build — drive the In-progress column to done

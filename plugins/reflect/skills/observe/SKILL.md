@@ -1,6 +1,7 @@
 ---
 name: observe
-description: "Surface THIS session's candidate durable learnings, let the user PICK which to keep (zero/one/several), then write only the picks — candidate-first, the agent proposes and the user disposes (no silent auto-write). Each candidate is classified own-learning (about the user's work → their local docs/observations/) or skill-feedback (about a skill itself): a maintainer commits it locally, but a DOWNSTREAM user's skill-feedback routes to an opt-in, scrubbed pull request upstream to github.com/ChenPaulYu/skills (a docs/feedback/ inbox, why-led body) instead of a local note that goes nowhere. Part of the repo-evolution loop (lived experience -> observation -> ADR -> skill). Summoned; read-only except the chosen file(s) / the feedback PR. Fires on \"observe this\", \"record a learning\", \"capture this insight\", \"write an observation\", \"log what we learned\", \"what's worth observing\". Also invokable as /reflect:observe."
+description: "Surface THIS session's candidate durable learnings, let the user pick which to keep, then write only the picks — candidate-first, no silent auto-write. Classified as own-learning (→ local docs/observations/) or skill-feedback (→ an opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users). Part of the repo-evolution loop (lived experience → observation → ADR → skill). Summoned; read-only except the chosen file(s) / feedback PR. Fires on \"observe this\", \"record a learning\", \"capture this insight\", \"write an observation\", \"log what we learned\", \"what's worth observing\"."
+disable-model-invocation: true
 ---
 
 # observe — harvest this session into a durable observation
