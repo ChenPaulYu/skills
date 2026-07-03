@@ -24,10 +24,10 @@
       "version": "0.5.0"
     },
     {
-      "name": "think",
-      "source": "./plugins/think",
-      "description": "Reason about a problem through a named reasoning lens that forces a structure the default 'think harder' skips. first-principles: strip a question to its irreducible axioms, rebuild from them, surface where that diverges from convention. invert + second-order are the seed family. Feeds shape one-way; standalone.",
-      "version": "0.4.0"
+      "name": "frame",
+      "source": "./plugins/frame",
+      "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (four reasoning lenses: first-principles, orthogonal, dialectic, graft) or to an answer you already have (analogize — build a stress-tested analogy so it lands in plain language). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
+      "version": "0.5.0"
     },
     {
       "name": "reflect",
@@ -38,7 +38,7 @@
     {
       "name": "relay",
       "source": "./plugins/relay",
-      "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. Six verbs: launch (create a project), register (enrol a person + role), report (a standup-shaped update), reply (accept / clear / counter — an accept completing a decision's approver set graduates it), digest (the live, per-viewer 'what needs you'), settle (owner-only periodic hygiene). git-native, human-gated, designed for multi-person. Language-agnostic.",
+      "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. Seven verbs: launch (create a project), register (enrol a person + role), report (a standup-shaped update), review (respond — agree / comment / change), digest (the live 'what's waiting for my review'), settle (append agreed thoughts to the decision ledger), format (sweep thought frontmatter to the current spec). git-native, human-gated, designed for multi-person. Language-agnostic.",
       "version": "0.5.0"
     }
   ]

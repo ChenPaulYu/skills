@@ -81,18 +81,20 @@ git status docs/site/index.html README.md
 
 If you changed the roster but either shows unmodified → **STOP**, you missed it. Skip only for a pure typo / internal refactor with zero surface impact. **A stale surface lies silently to every future reader** — and the two drift independently (a real incident: the `manage` plugin landed in the site map but the README still listed four plugins). That's why both are hard gates, not soft reminders.
 
-#### Adding a skill: registration is gated — but the validator checks the *slug*, not the *prose*
+#### Adding a skill: registration is gated — but the validator checks the *slug*, not most of the *prose*
 
 `validate-codex-skills.mjs` **fails the build** if a skill's invocation token `/<plugin>:<skill>` is missing from `README.md` or `docs/site/index.html` (`validateRegistration`). So a *totally* unregistered skill can no longer commit green. This closes the gap that shipped `think:dialectic` half-registered — `SKILL.md` + mirror in `git`, but the plugin still read `v0.2.0` and no surface named it, green the whole way.
 
-**What the gate cannot catch — still on you, in the same commit as the `SKILL.md`:**
+A second check, `validateSiteMapVersions`, closes one narrow slice of the *content* gap: for every plugin, it confirms the site map's DOMAINS-card blurb and graph-node blurb (both English and Chinese independently — a one-language-only edit is a real failure mode, not a hypothetical) mention that plugin's current `vX.Y.Z` from `plugins/<plugin>/.claude-plugin/plugin.json`. It found and blocked exactly this drift on 2026-07-03 (site map rev 62) — three separate places in the file stating the same version, none the single owner, two of them silently rotting for several revisions.
 
-- **Stale surface *content*.** The slug being present ≠ the description being *true*. `observe` stayed named in README while its text went stale after a behaviour change — the validator saw the slug and passed. *A stale surface is a lie* — the same law as "stale header = lie", and it applies to the **ADR** too (`ADR-047` once *claimed* surfaces it hadn't updated).
-- **The surfaces the token-check doesn't reach:** the plugin `version` bump (gate #1) · the `plugins/<plugin>/CLAUDE.md` roster · the site map's node/blurb + **rev bump + ADR count** · the **ADR** itself. The validator guarantees a skill is *named*; only you guarantee it's named *correctly and everywhere*.
+**What the gate still cannot catch — still on you, in the same commit as the `SKILL.md`:**
+
+- **Stale surface *content* beyond the version token.** The slug being present, or the version being correct, ≠ the description being *true*. `observe` stayed named in README while its text went stale after a behaviour change — the validator saw the slug and passed. Skill counts and verb lists in the site map are also unchecked — phrasing varies too much across plugins ("Four skills" vs "4 lenses" vs "7 skills, one verb each") to regex reliably. *A stale surface is a lie* — the same law as "stale header = lie", and it applies to the **ADR** too (`ADR-047` once *claimed* surfaces it hadn't updated).
+- **The surfaces no check reaches at all:** the `plugins/<plugin>/CLAUDE.md` roster · the site map's **rev bump + ADR count** · the **ADR** itself. The validator guarantees a skill is *named* and its site-map version is *current*; only you guarantee everything else is named correctly and everywhere.
 
 ## Authoring conventions (every plugin, every skill)
 
-- **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `think` uses canonical lens names — `first-principles` — for discoverability); document the divergence in that plugin's CLAUDE.md.
+- **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `frame`'s reasoning lenses use canonical names — `first-principles` — for discoverability, while its `analogize` member uses a bare verb); document the divergence in that plugin's CLAUDE.md.
 - **Self-contained `SKILL.md`** — each skill restates its own through-line / rules / framework **verbatim**, so an agent triggered into it doesn't depend on any CLAUDE.md being loaded. Bulky reference docs go in the skill's `references/`, loaded on demand.
 - **★ Stack-neutral, standalone-legible examples** — every example must be understandable from the skill *alone*; never leak an origin project's domain nouns (component names, filenames, app concepts). Use generic placeholders (`UserList`, `core/user`, `Editor.tsx`). A skill that only makes sense if you know Project X is a leaky skill.
 - **★ Skills-root-relative paths** — all paths (doc links **and** example code) are written as if `skills/` (the repo root) is root. **No `./` or `../` prefixes.** Doc links: `docs/adr/008-inject-check-at-handoff.md`. Example imports: alias form (`@/core/user`) or bare module names.

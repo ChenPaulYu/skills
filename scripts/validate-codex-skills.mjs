@@ -10,6 +10,16 @@
  *   Without this the validator is blind to a half-registered skill (one whose SKILL.md
  *   + mirror are committed but whose README/site-map entries are missing); it ships
  *   green. The mechanical fix for the failure that shipped think:dialectic unregistered.
+ * - Each plugin's CURRENT VERSION (plugins/<plugin>/.claude-plugin/plugin.json) is
+ *   quoted correctly in docs/site/index.html's two live per-plugin blocks (the
+ *   DOMAINS card blurb + the graph-node blurb). This is the narrow, mechanically
+ *   checkable slice of gate #3's "stale surface lies silently" risk — the site map
+ *   duplicates version/skill-count prose across 3 places (VERIFIED-list narrative +
+ *   these two) with no single owner, and the free-form narrative isn't regular enough
+ *   to gate, but the version token in these two fixed-shape blocks is. Doesn't check
+ *   skill counts or verb lists — phrasing varies too much across plugins ("Four
+ *   skills" vs "4 lenses" vs "7 skills, one verb each") to regex reliably; that stays
+ *   a human/agent judgment call. Caught a real drift on 2026-07-03 (site map rev 62).
  */
 import {
   cpSync,
@@ -38,6 +48,7 @@ function main() {
   validateGeneratedDrift();
   validateManifestDrift();
   validateRegistration(pluginSkills);
+  validateSiteMapVersions();
 
   if (errors.length) {
     console.error(`Codex/Claude skill compatibility check failed (${errors.length}):`);
@@ -247,6 +258,75 @@ function validateRegistration(pluginSkills) {
       }
     }
   }
+}
+
+/**
+ * Version-in-site-map gate: docs/site/index.html states each plugin's version twice
+ * more, outside the VERIFIED-list narrative — once in its DOMAINS card blurb, once in
+ * its graph-node blurb. Both are single-line entries in the current file shape, so a
+ * plain per-line scan finds them without an HTML/JS parser. Reports every mismatch it
+ * finds (not just the first) so a fix pass sees the whole list at once.
+ */
+function validateSiteMapVersions() {
+  const sitePath = join(ROOT, "docs", "site", "index.html");
+  if (!existsSync(sitePath)) return; // already flagged by validateRegistration
+
+  const lines = readFileSync(sitePath, "utf8").split("\n");
+  const label = "docs/site/index.html";
+
+  for (const plugin of sortedDirs(PLUGINS_DIR)) {
+    const pluginJsonPath = join(PLUGINS_DIR, plugin, ".claude-plugin", "plugin.json");
+    if (!existsSync(pluginJsonPath)) continue;
+    const { version } = JSON.parse(readFileSync(pluginJsonPath, "utf8"));
+    const versionToken = `v${version}`;
+
+    const domainsLine = findLineAfter(lines, new RegExp(`^\\s*${plugin}:\\s*\\{\\s*$`), (l) =>
+      l.includes("blurb: {en:"),
+    );
+    checkBilingualVersion(domainsLine, "blurb: {en:", `DOMAINS.${plugin}.blurb`, versionToken, plugin, label);
+
+    const nodeLine = lines.find((l) => l.includes(`{id:'${plugin}', kind:'plugin'`));
+    checkBilingualVersion(nodeLine, "desc:{en:", `graph-node blurb for '${plugin}'`, versionToken, plugin, label);
+  }
+}
+
+/**
+ * A blurb line always carries both `en:'...'` and `zh:'...'` — checking the raw line
+ * for the version token would pass as long as EITHER language still had it, missing a
+ * one-language-only edit (an agent updating English and forgetting Chinese, or vice
+ * versa). Node lines also carry an earlier, unrelated `role:{en:..., zh:...}` pair
+ * before the `desc:` field, so we can't just split the whole line on the first "zh:" —
+ * that would grab role's zh, not desc's. Slice from fieldMarker first, then split.
+ */
+function checkBilingualVersion(line, fieldMarker, label, versionToken, plugin, fileLabel) {
+  if (!line) return;
+  const fieldIdx = line.indexOf(fieldMarker);
+  if (fieldIdx === -1) return;
+  const field = line.slice(fieldIdx);
+
+  const zhIdx = field.indexOf("zh:");
+  const enPart = zhIdx === -1 ? field : field.slice(0, zhIdx);
+  const zhPart = zhIdx === -1 ? "" : field.slice(zhIdx);
+
+  if (!enPart.includes(versionToken)) {
+    errors.push(
+      `${fileLabel}: ${label} (en) doesn't mention ${versionToken} (from plugins/${plugin}/.claude-plugin/plugin.json) — site map version prose is stale, see CLAUDE.md gate #3`,
+    );
+  }
+  if (zhPart && !zhPart.includes(versionToken)) {
+    errors.push(
+      `${fileLabel}: ${label} (zh) doesn't mention ${versionToken} (from plugins/${plugin}/.claude-plugin/plugin.json) — site map version prose is stale, see CLAUDE.md gate #3`,
+    );
+  }
+}
+
+function findLineAfter(lines, startRegex, matchFn, windowSize = 10) {
+  const startIdx = lines.findIndex((l) => startRegex.test(l));
+  if (startIdx === -1) return null;
+  for (let i = startIdx + 1; i < Math.min(startIdx + 1 + windowSize, lines.length); i++) {
+    if (matchFn(lines[i])) return lines[i];
+  }
+  return null;
 }
 
 function readPluginSkillsFrom(root) {

@@ -1,0 +1,9 @@
+{
+  "name": "frame",
+  "version": "0.5.0",
+  "description": "Apply an explicit, named frame that forces a structure the default skips — either to a problem (for the agent's own understanding) or to an answer you already have (for the user's). Four reasoning lenses — two take a problem APART, one puts a claim ON TRIAL, one GRAFTS a mature model: first-principles (decompose DOWN — strip to irreducible axioms, rebuild from them, surface where that diverges from convention), orthogonal (decompose SIDEWAYS — factor a tangled phenomenon into mutually-independent axes, verify the independence, name what was conflated), dialectic (put a claim ON TRIAL — steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it; verdict is three-way, not pass/fail), and graft (BORROW a mature model whose structure rhymes — map every primitive onto your problem, read each as fit/break/adapt; the adapt list, where the borrowed structure reshaped for your domain, is the payload — nearly first-principles' inverse, borrow-all vs strip-all). A fifth member faces the other direction: analogize (DELIVER — build a deliberately stress-tested analogy for a concept already understood, generate multiple candidates, check the mapping, name where it breaks). Each reasons or explains in-chat (no file artifact); the four lenses feed one-way into shape (an insight → a thought / mockup / plan), analogize does not (nothing left to converge). Standalone — no nav/shape dependency. Renamed from think.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  }
+}

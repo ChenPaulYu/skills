@@ -59,7 +59,7 @@ position guarantees ONE core file (the root positioning doc). Every further core
 
 ### 5. Periodic altitude re-audit(週期重審)
 
-Canon accretes *during* campaigns, not only at feedings. Before landing a domain into core — and whenever a core doc has absorbed a day of rulings — run a re-audit: the altitude test over every section, plus (by protocol) a `think-first-principles` self-audit where the *conventional answer under test is the design just shipped*. Field case: the self-audit caught an inverted entrance hierarchy and a process error (an afternoon of form-layer churn) the same day they were made.
+Canon accretes *during* campaigns, not only at feedings. Before landing a domain into core — and whenever a core doc has absorbed a day of rulings — run a re-audit: the altitude test over every section, plus (by protocol) a `frame-first-principles` self-audit where the *conventional answer under test is the design just shipped*. Field case: the self-audit caught an inverted entrance hierarchy and a process error (an afternoon of form-layer churn) the same day they were made.
 
 ## The write protocol — door × timing (ADR-041)
 
@@ -75,7 +75,7 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 1. **Summoned.** Confirm the campaign's object (what canon, which repo home — `docs/core/` if the project has one, else the blueprints tree).
 2. **Ground.** Read existing core / thoughts / memory; know the locked decisions before the first feeding arrives. **Then clear the ledger**: `docs/core/amendments.md` is the summon's first feeding (write protocol above).
 3. **Feeding loop** (repeats across days): ingest-assess → delta report → user rules per item → surgical edits **to the campaign log** (core stays read-only until a freeze moment).
-4. **Convergence moments, outsourced by protocol** (reuse-via-transcript, never skill-calls): a principle fork → `elicit`'s grill · a look/structure decision → `mockup`'s render · a pre-landing audit → `think-first-principles`.
+4. **Convergence moments, outsourced by protocol** (reuse-via-transcript, never skill-calls): a principle fork → `elicit`'s grill · a look/structure decision → `mockup`'s render · a pre-landing audit → `frame-first-principles`.
 5. **Land / graduate.** Two-tier landing; graduations as domains freeze; re-audit before each landing. **Landing is a freeze moment — the only time core is written** (write protocol).
 6. **Exit.** The campaign closes when the open-questions list is the only thing still moving. Re-summonable: later feedings, graduations, and re-layerings are new (smaller) campaigns.
 
@@ -115,7 +115,7 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 
 - **`shape-elicit`** — the in-campaign principle-fork converger (borrowed by protocol).
 - **`shape-mockup`** — the in-campaign render-to-decide moment (visual/structural rulings feed the canon).
-- **`think-first-principles`** — the pre-landing self-audit lens (the "conventional answer" may be the canon just written).
+- **`frame-first-principles`** — the pre-landing self-audit lens (the "conventional answer" may be the canon just written).
 - **`shape-reconcile`** — the post-code mirror: maintains what position birthed.
 - **`shape-align` · `nav-plan`** — downstream consumers of the landed canon and thoughts.
 

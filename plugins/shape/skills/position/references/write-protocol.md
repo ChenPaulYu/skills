@@ -16,7 +16,7 @@ The old protection was **content-only** ("core admits only user-confirmed direct
 
 Inside the door, core is writable **only at freeze moments**:
 
-1. **Campaign close** — after the re-audit (altitude test + `think:first-principles` self-audit), the campaign log's surviving rulings **batch-diff** into core.
+1. **Campaign close** — after the re-audit (altitude test + `frame:first-principles` self-audit), the campaign log's surviving rulings **batch-diff** into core.
 2. **Explicit per-item freeze order** — the user says "lock this into canon" mid-campaign; that item graduates on the spot (authority + altitude gates still run). The escape hatch, not the default.
 3. **Root-doc birth** — the campaign's founding landing is a freeze moment by definition.
 

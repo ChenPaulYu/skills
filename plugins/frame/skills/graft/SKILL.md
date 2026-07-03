@@ -86,9 +86,9 @@ graft *reasons*; it does not decide or build. Once the graft is up, *offer* — 
 
 ## Companion skills
 
-- **`/think:first-principles`** — the inverse lens (borrow none, strip to axioms); graft borrows all and adapts. The two ends of the borrow-spectrum.
-- **`/think:orthogonal`** — factors the target's own tangle into independent axes (no donor); graft overlays an external model.
-- **`/think:dialectic`** — puts a claim on trial; graft builds a design by transplant-and-adapt.
+- **`/frame:first-principles`** — the inverse lens (borrow none, strip to axioms); graft borrows all and adapts. The two ends of the borrow-spectrum.
+- **`/frame:orthogonal`** — factors the target's own tangle into independent axes (no donor); graft overlays an external model.
+- **`/frame:dialectic`** — puts a claim on trial; graft builds a design by transplant-and-adapt.
 - **`/shape:elicit`** — converge an adaptation into a decision *with the user*.
 - **`/shape:mockup`** — render an adapted structure when it's decided by seeing it.
 - **`/nav:plan`** — ground the grafted design into a code plan once settled.

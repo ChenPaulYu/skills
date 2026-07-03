@@ -95,18 +95,20 @@ git status docs/site/index.html README.md
 
 If you changed the roster but either shows unmodified → **STOP**, you missed it. Skip only for a pure typo / internal refactor with zero surface impact. **A stale surface lies silently to every future reader** — and the two drift independently (a real incident: the `manage` plugin landed in the site map but the README still listed four plugins). That's why both are hard gates, not soft reminders.
 
-#### Adding a skill: registration is gated — but the validator checks the *slug*, not the *prose*
+#### Adding a skill: registration is gated — but the validator checks the *slug*, not most of the *prose*
 
-`validate-codex-skills.mjs` **fails the build** if a skill's invocation token `/<plugin>:<skill>` is missing from `README.md` or `docs/site/index.html` (`validateRegistration`). So a *totally* unregistered skill can no longer commit green. This closes the gap that shipped `think-dialectic` half-registered — `SKILL.md` + mirror in `git`, but the plugin still read `v0.2.0` and no surface named it, green the whole way.
+`validate-codex-skills.mjs` **fails the build** if a skill's invocation token `/<plugin>:<skill>` is missing from `README.md` or `docs/site/index.html` (`validateRegistration`). So a *totally* unregistered skill can no longer commit green. This closes the gap that shipped `think:dialectic` half-registered — `SKILL.md` + mirror in `git`, but the plugin still read `v0.2.0` and no surface named it, green the whole way.
 
-**What the gate cannot catch — still on you, in the same commit as the `SKILL.md`:**
+A second check, `validateSiteMapVersions`, closes one narrow slice of the *content* gap: for every plugin, it confirms the site map's DOMAINS-card blurb and graph-node blurb (both English and Chinese independently — a one-language-only edit is a real failure mode, not a hypothetical) mention that plugin's current `vX.Y.Z` from `plugins/<plugin>/.claude-plugin/plugin.json`. It found and blocked exactly this drift on 2026-07-03 (site map rev 62) — three separate places in the file stating the same version, none the single owner, two of them silently rotting for several revisions.
 
-- **Stale surface *content*.** The slug being present ≠ the description being *true*. `observe` stayed named in README while its text went stale after a behaviour change — the validator saw the slug and passed. *A stale surface is a lie* — the same law as "stale header = lie", and it applies to the **ADR** too (`ADR-047` once *claimed* surfaces it hadn't updated).
-- **The surfaces the token-check doesn't reach:** the plugin `version` bump (gate #1) · the `plugins/<plugin>/CLAUDE.md` roster · the site map's node/blurb + **rev bump + ADR count** · the **ADR** itself. The validator guarantees a skill is *named*; only you guarantee it's named *correctly and everywhere*.
+**What the gate still cannot catch — still on you, in the same commit as the `SKILL.md`:**
+
+- **Stale surface *content* beyond the version token.** The slug being present, or the version being correct, ≠ the description being *true*. `observe` stayed named in README while its text went stale after a behaviour change — the validator saw the slug and passed. Skill counts and verb lists in the site map are also unchecked — phrasing varies too much across plugins ("Four skills" vs "4 lenses" vs "7 skills, one verb each") to regex reliably. *A stale surface is a lie* — the same law as "stale header = lie", and it applies to the **ADR** too (`ADR-047` once *claimed* surfaces it hadn't updated).
+- **The surfaces no check reaches at all:** the `plugins/<plugin>/CLAUDE.md` roster · the site map's **rev bump + ADR count** · the **ADR** itself. The validator guarantees a skill is *named* and its site-map version is *current*; only you guarantee everything else is named correctly and everywhere.
 
 ## Authoring conventions (every plugin, every skill)
 
-- **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `think` uses canonical lens names — `first-principles` — for discoverability); document the divergence in that plugin's CLAUDE.md.
+- **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `frame`'s reasoning lenses use canonical names — `first-principles` — for discoverability, while its `analogize` member uses a bare verb); document the divergence in that plugin's CLAUDE.md.
 - **Self-contained `SKILL.md`** — each skill restates its own through-line / rules / framework **verbatim**, so an agent triggered into it doesn't depend on any CLAUDE.md being loaded. Bulky reference docs go in the skill's `references/`, loaded on demand.
 - **★ Stack-neutral, standalone-legible examples** — every example must be understandable from the skill *alone*; never leak an origin project's domain nouns (component names, filenames, app concepts). Use generic placeholders (`UserList`, `core/user`, `Editor.tsx`). A skill that only makes sense if you know Project X is a leaky skill.
 - **★ Skills-root-relative paths** — all paths (doc links **and** example code) are written as if `skills/` (the repo root) is root. **No `./` or `../` prefixes.** Doc links: `docs/adr/008-inject-check-at-handoff.md`. Example imports: alias form (`@/core/user`) or bare module names.
@@ -138,6 +140,79 @@ docs/adr/                         → ADRs (marketplace-level, shared across plu
 docs/site/index.html             → the bilingual marketplace map (gating, see gate #3)
 README.md                         → human-facing marketplace overview
 ```
+
+
+---
+
+# frame — plugin conventions
+> Context for any agent (or human) editing **this plugin itself**.
+> For executing one of the skills, read its `SKILL.md` — each is self-contained.
+
+## What this plugin is
+
+A collection of skills that each apply an explicit, named **frame** — a disciplined structure the model's default reasoning (or default explaining) skips. A frame can point in either of two directions on the same object — **a problem**, or **an answer you already have**:
+
+- **Reasoning lenses (down/sideways/trial/graft)** — apply a frame to a **problem**, for the agent's own understanding: strip it to axioms, factor it into independent axes, put a claim on trial, or graft a mature model onto it.
+- **`analogize` (deliver)** — apply a frame to an **answer**, for the *user's* understanding: build and stress-test an analogy so an already-settled concept lands in plain language.
+
+Same discipline (name the frame, force the structure, don't take the default's shortcut), opposite direction of transfer: the lenses derive insight *for the agent*; `analogize` delivers insight *to the user*. Neither is an external document (that's `research`) or existing code (that's `nav`).
+
+> **Naming note (this plugin was `think` — renamed, see the rename ADR).** `think` mis-scoped the family to reasoning-about-a-problem only, which had no room for `analogize` (a fundamentally different direction — explaining, not deriving) without either stretching `think` past its name or force-fitting `analogize` somewhere it didn't belong. `frame` covers both: applying a frame is the shared act, regardless of whether the frame lands on a problem or an answer.
+
+Five members today — **two take a problem apart, one puts a claim on trial, one grafts a mature model, one delivers an answer**:
+
+- `first-principles` — decompose **down**: strip a question to its irreducible axioms, rebuild the answer from those alone, surface where that diverges from convention.
+- `orthogonal` — decompose **sideways**: factor a tangled phenomenon into mutually-independent axes, verify the independence (move one, the others stay put), and name what was conflated or falsely-coupled.
+- `dialectic` — put a claim **on trial**: build its strongest case (steelman) AND its strongest attack (devil's advocate — also steelmanned, never a strawman), surface the deepest load-bearing assumption, name the experiment that would decide it. Verdict is three-way (refuted / unsettled-owned-bet / supported), not pass/fail — for a frontier claim "no evidence yet" is an *owned bet*, not a refutation. Built for paradigm-class questions with no standard answer. (The parked `steelman` candidate from ADR-034/046 graduates here, but two-sided + adjudicating — hence `dialectic`, not the one-sided `steelman` — `docs/adr/047-think-dialectic-lens.md`.)
+- `graft` — borrow a mature model and **adapt** it: pick a donor whose *structure* rhymes (states/transitions/history…), map **every** primitive onto the target, read each as fit / break / adapt. The payload is the **adapt** list — where the borrowed structure had to reshape for the domain is the design's identity; reporting only fits is reskinning. Nearly `first-principles`' inverse (borrow-all vs strip-all); the disciplined middle between inventing from axioms and lazy analogy. `docs/adr/048-think-graft-lens.md`.
+- `analogize` — **deliver**: take a concept the agent already understands and build a deliberately stress-tested analogy for it — generate multiple candidates, check the mapping against the real structure, pick on fit, and name where the winner still breaks. The one member that faces the user rather than the problem. New — see the rename ADR.
+
+Future members are added **by evidence** (ADR-018), not pre-listed — each must clear the value-guardrail (a forced structure the default skips) AND show real recurring use. (The originally-speculated `invert` / `second-order` seed was dropped for having no usage evidence — see `docs/adr/046-think-orthogonal-lens-drop-speculative-seed.md`; charter in `docs/adr/034-think-plugin.md`.) `analogize` itself is provisional in this same sense — its trigger phrasing below is a first cut, expected to sharpen once real use shows which phrasings actually preceded wanting it.
+
+This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). It is **independent** — no dependency on `nav` or `shape`. It **feeds shape one-way** (a reasoning artifact → an `elicit` thought / a `mockup` / a `nav-plan`), the same guarded, one-way pattern as `research → shape`; it never invokes another plugin's skill (ADR-015). `analogize` is the one member that does **not** feed shape — an explanation has nothing further to converge or build (see its own SKILL.md).
+
+## The frame through-line
+
+The unit is a **named frame applied explicitly**, and each skill is **one named move with a forced structure + a fixed output shape**.
+
+What unifies the members is not a shared template (their procedures genuinely differ — decompose-down vs factor-sideways vs put-a-claim-on-trial vs build-and-stress-test-an-analogy) but a shared **discipline**:
+
+1. **A named frame, applied explicitly** — not "reason carefully" / "explain simply" but "run *this* operation." The frame's steps are mandatory, in order.
+2. **A forced structure the default won't produce** — the value-guardrail. "Think harder about X" / "say it more simply" is what the model does anyway; a `frame` skill earns its existence ONLY by forcing an output the default skips (e.g. first-principles MUST list the discarded assumptions + the irreducible axioms; analogize MUST compare candidates and name where the winner breaks). If a proposed member can't name a structure the default omits, it is **not** a skill — it's ceremony (the caution that retired `nav`'s `doctor`, ADR-021).
+3. **Grounded, not asserted** — a claim the frame leans on (an axiom said to be "physical fact", an analogy said to map cleanly) is checked against reality where checkable, and marked *uncertain* (or the breakage named) otherwise. A frame is not licence to fabricate premises, or ship a mapping that only resembles on vibes.
+4. **Analysis or delivery, never decision** — the reasoning lenses produce an *artifact* (the structured reasoning), then **hand off**: to converge it into a decision *with the user* is `shape-elicit`; to render it is `shape-mockup`; to ground it into code is `nav-plan`. `analogize` produces a *delivered explanation* with nowhere further to hand off — its object is already settled, only its legibility was in question. Either way: a `frame` skill reasons or explains; it doesn't decide or build.
+
+## frame vs its neighbours (the boundaries that keep it distinct)
+
+- **vs `shape-elicit`** — the sharpest line, by *who holds the answer, and which direction it moves*. elicit is **maieutic**: the *user* holds the answer and elicit draws it out by a grounded grill (`react-not-author`). The reasoning lenses are **generative**: the answer is *derived from the problem's own structure* by the agent applying a frame. `analogize` is **pedagogic**: the agent already holds the answer and delivers it *into* the user. elicit extracts; the lenses derive; analogize delivers. A lens analysis is a strong *input* to an elicit grill; analogize never feeds elicit (nothing left to converge).
+- **vs `/research:*`** — research anatomizes an *external document's* argument (Gap/Claim/Mechanism/Evidence). The reasoning lenses reason about *a problem from scratch* — there's no source document, the structure comes from the lens, not the text. `analogize` isn't about a document either — its object is a concept the conversation has already settled.
+- **vs the default** — see the value-guardrail above. Always ask: *what structure does this frame force that the model wouldn't have produced (or delivered) anyway?* If the answer is "none", don't ship it. For `analogize` specifically: ambient plain-language-with-a-metaphor is already a standing style default (every reply) — this skill only earns its place by doing something heavier than that default: comparing candidates, checking the mapping, naming the breakage.
+
+## Conventions for skills inside this plugin
+
+> Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). frame-specific:
+
+- **Naming — two idioms, side by side.** The four reasoning lenses use the **canonical lens name** — `first-principles`, `orthogonal`, `dialectic` — not a coerced bare verb; the names are well-known reasoning concepts and discoverability beats verb-purity here (the documented divergence from the marketplace bare-verb default, ADR-027). `analogize` uses the marketplace's default **bare verb** instead — it names an action (build-and-deliver-an-analogy), not a citable concept the way "first principles" or "dialectic" are. Both idioms coexist deliberately; don't force one onto the other.
+- **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
+- **Lightweight, in-chat by default**: a member surfaces its result in the conversation and writes **no file** — frame is the lightest plugin (pure reasoning or pure delivery). Persistence happens by routing to shape (`shape-elicit` → `thoughts/`, `shape-mockup`, `nav-plan`), never a frame-owned artifact, and `analogize` doesn't route onward at all (nothing to persist). It never writes source or makes a decision.
+- **Feeds shape, never invokes it (reasoning lenses only)**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `shape-elicit` to converge it, `shape-mockup` to render it, `nav-plan` to ground it. An offer, not a call. `analogize` is exempt — see above.
+
+## Where things live
+
+```
+.claude-plugin/plugin.json     → frame's manifest (the version + metadata owner)
+CLAUDE.md                      → ← you are here (frame-specific)
+skills/<member>/SKILL.md       → individual members, each self-contained
+```
+
+Repo-wide layout + ADRs live in the repo-root [`CLAUDE.md`](CLAUDE.md).
+
+## When editing this plugin
+
+Repo-wide editing rules (new-skill → ADR, the ★ authoring checks, renaming + versioning, the site-map gate, stale-`SKILL.md`) live in the repo-root [`CLAUDE.md`](CLAUDE.md). frame-specific:
+
+- **New member — first check the value-guardrail**: name the structure this frame forces that the default omits (whether the default is "reason about it" or "explain it simply"). If you can't, it's not a skill (the caution that retired nav's `doctor`, ADR-021).
+- **`analogize` is provisional-but-real** — it ships as a working skill, not a stub, but its trigger phrasing is a first cut pending real usage. Refine the `description` frontmatter in place as actual invocations show which phrasings actually preceded wanting it; that's a normal skill edit, not a redesign.
 
 
 ---
@@ -505,7 +580,7 @@ Grouped by verb (mirrors `nav`'s family shape):
   - `mockup` — render-to-decide: a real interactive HTML (UI mockup, or diagram for backend/agent/data/flow). *(built)*
   - `elicit` — draw the decision out by a grounded fork (react-not-author, drill-to-principle, compress-to-one-line; weight-adaptive exit — stop on the snap; summoned, not auto) → a `thoughts/` doc. *(built)*
   - `dogfood` — use a *built* feature that feels unsmooth for real: drive the REAL interface (`agent-browser` / `curl` / CLI) against a list of user intents, report **friction** (works but clunky → a UX idea) + the **coverage gaps** that fall out (an intent with no path → a logic hole). Experience-first; logic-coverage is the byproduct. Output is a friction report (not a mandatory mockup); render is an optional redesign hand-off. A gap's layer (missing intent = direction · dead-end = incomplete) routes it, handed to `elicit`. Borrows `/verify`·`/run`'s drive-the-real-app method (asks "is it smooth + what's missing", not "is it correct"). *(built; ADR-033, supersedes ADR-020)*
-  - `position` — **author the canon layer**: a gated multi-feeding *campaign* that lands core (principle-wise) docs. Five kernels: **ingest-assess** (per-feeding delta report — new / metabolized / conflict / needs-ruling — with *guarding*: conflicts with locked decisions block, not absorb) · **altitude instrument** (axiom/principle/approach/bet + the *churn alarm*: a second flip on the same decision = form-layer debate, lift to the rule) · **two-tier landing** (`core/` = user-ratified + self-contained; `thoughts/` = dated hypotheses) · **graduation** (core *grows* by user-frozen thoughts, never scaffolded) · **periodic re-audit** (canon accretes mid-campaign; pre-landing `think-first-principles` self-audit). **Doc-class framed** — any core doc, not just product positioning. **Write protocol (ADR-041)**: core single-writer + freeze-gated — mid-campaign rulings → the campaign log; other verbs → the `docs/core/amendments.md` ledger, adjudicated as each summon's first feeding. Mirror of `reconcile`: position *births* canon (pre-code, authority-driven), reconcile *keeps it true* (post-code, reality-driven). A meta-skill (ADR-008): borrows elicit / mockup / first-principles by protocol. *(built; ADR-035, write protocol ADR-041)*
+  - `position` — **author the canon layer**: a gated multi-feeding *campaign* that lands core (principle-wise) docs. Five kernels: **ingest-assess** (per-feeding delta report — new / metabolized / conflict / needs-ruling — with *guarding*: conflicts with locked decisions block, not absorb) · **altitude instrument** (axiom/principle/approach/bet + the *churn alarm*: a second flip on the same decision = form-layer debate, lift to the rule) · **two-tier landing** (`core/` = user-ratified + self-contained; `thoughts/` = dated hypotheses) · **graduation** (core *grows* by user-frozen thoughts, never scaffolded) · **periodic re-audit** (canon accretes mid-campaign; pre-landing `frame-first-principles` self-audit). **Doc-class framed** — any core doc, not just product positioning. **Write protocol (ADR-041)**: core single-writer + freeze-gated — mid-campaign rulings → the campaign log; other verbs → the `docs/core/amendments.md` ledger, adjudicated as each summon's first feeding. Mirror of `reconcile`: position *births* canon (pre-code, authority-driven), reconcile *keeps it true* (post-code, reality-driven). A meta-skill (ADR-008): borrows elicit / mockup / first-principles by protocol. *(built; ADR-035, write protocol ADR-041)*
 - **project** — render the current plan:
   - `align` — read `thoughts/` + real state → decide now/next/later *with the user* → write `plan.md` (agent) + regenerate `overview.html` (human). The pre-build mirror of `nav-sync`'s codebase map. *(built)*
 - **reconcile** — keep the archive honest:
@@ -556,68 +631,4 @@ Three skills need to *see* the running thing — `mockup` (render the artifact),
 ## Status
 
 Eight skills built (`mockup`, `elicit`, `dogfood`, `position`, `setup`, `align`, `reconcile`, `build`); `doctor` (orchestrator) deferred until the family proves out. `elicit`'s behavioral spec comes from `docs/observations/2026-05-29-thought-mode-how-paul-converges.md`; `build` + the browser-verify slot land in ADR-011; `position` lands in ADR-035; `setup` in ADR-036. History: `docs/observations/2026-05-29-shape-plugin.md`.
-
-
----
-
-# think — plugin conventions
-> Context for any agent (or human) editing **this plugin itself**.
-> For executing one of the skills, read its `SKILL.md` — each is self-contained.
-
-## What this plugin is
-
-A collection of skills for **reasoning about a problem through a named lens** — applying an explicit, disciplined reasoning frame that forces a structured analysis the model's default "think about it" won't produce. The object is **your own reasoning about a problem** (a belief, a decision, a design), not an external document (that's `research`) and not existing code (that's `nav`).
-
-Four lenses today — **two take a problem apart, one puts a claim on trial, one grafts a mature model**:
-
-- `first-principles` — decompose **down**: strip a question to its irreducible axioms, rebuild the answer from those alone, surface where that diverges from convention.
-- `orthogonal` — decompose **sideways**: factor a tangled phenomenon into mutually-independent axes, verify the independence (move one, the others stay put), and name what was conflated or falsely-coupled.
-- `dialectic` — put a claim **on trial**: build its strongest case (steelman) AND its strongest attack (devil's advocate — also steelmanned, never a strawman), surface the deepest load-bearing assumption, name the experiment that would decide it. Verdict is three-way (refuted / unsettled-owned-bet / supported), not pass/fail — for a frontier claim "no evidence yet" is an *owned bet*, not a refutation. Built for paradigm-class questions with no standard answer. (The parked `steelman` candidate from ADR-034/046 graduates here, but two-sided + adjudicating — hence `dialectic`, not the one-sided `steelman` — `docs/adr/047-think-dialectic-lens.md`.)
-- `graft` — borrow a mature model and **adapt** it: pick a donor whose *structure* rhymes (states/transitions/history…), map **every** primitive onto the target, read each as fit / break / adapt. The payload is the **adapt** list — where the borrowed structure had to reshape for the domain is the design's identity; reporting only fits is reskinning. Nearly `first-principles`' inverse (borrow-all vs strip-all); the disciplined middle between inventing from axioms and lazy analogy. `docs/adr/048-think-graft-lens.md`.
-
-Future lenses are added **by evidence** (ADR-018), not pre-listed — each must clear the value-guardrail (a forced structure the default skips) AND show real recurring use. (The originally-speculated `invert` / `second-order` seed was dropped for having no usage evidence — see `docs/adr/046-think-orthogonal-lens-drop-speculative-seed.md`; charter in `docs/adr/034-think-plugin.md`.)
-
-This plugin lives inside the `skills` marketplace (`ChenPaulYu/skills`). It is **independent** — no dependency on `nav` or `shape`. It **feeds shape one-way** (a reasoning artifact → an `elicit` thought / a `mockup` / a `nav-plan`), the same guarded, one-way pattern as `research → shape`; it never invokes another plugin's skill (ADR-015).
-
-## The think through-line
-
-The unit is a **reasoning move on a problem**, and each skill is **one named move with a forced structure + a fixed output shape**.
-
-What unifies the lenses is not a shared template (their procedures genuinely differ — decompose-down vs factor-sideways vs put-a-claim-on-trial) but a shared **discipline**:
-
-1. **A named frame, applied explicitly** — not "reason carefully" but "run *this* operation on the problem." The frame's steps are mandatory, in order.
-2. **A forced structure the default won't produce** — the value-guardrail. "Think harder about X" is what the model does anyway; a `think` skill earns its existence ONLY by forcing an output the default reasoning skips (e.g. first-principles MUST list the discarded assumptions + the irreducible axioms, not just present a conclusion). If a proposed lens can't name a structure the default omits, it is **not** a skill — it's ceremony (the caution that retired `nav`'s `doctor`, ADR-021).
-3. **Grounded, not asserted** — a claim the lens leans on (an axiom said to be "physical fact", a consequence said to be "inevitable") is checked against reality where checkable, and marked *uncertain* otherwise. Reasoning is not licence to fabricate premises to reach a wanted conclusion.
-4. **Analysis, not decision** — the lens produces an *artifact* (the structured reasoning), then **hands off**: to converge it into a decision *with the user* is `shape-elicit`; to render it is `shape-mockup`; to ground it into code is `nav-plan`. think reasons; it doesn't decide or build.
-
-## think vs its neighbours (the boundaries that keep it distinct)
-
-- **vs `shape-elicit`** — the sharpest line, by *who holds the answer*. elicit is **maieutic**: the *user* holds the answer and elicit draws it out by a grounded grill (`react-not-author`). think is **generative**: the answer is *derived from the problem's own structure* by the agent applying a frame. elicit extracts; think derives. They pair — a think analysis is a strong *input* to an elicit grill (or elicit may summon a lens as a move) — but the engines are distinct, which is why think is its own plugin and not an elicit mode.
-- **vs `/research:*`** — research anatomizes an *external document's* argument (Gap/Claim/Mechanism/Evidence). think reasons about *a problem from scratch* — there's no source document, the structure comes from the lens, not the text.
-- **vs the default** — see the value-guardrail above. Always ask: *what structure does this lens force that the model wouldn't have produced anyway?* If the answer is "none", don't ship it.
-
-## Conventions for skills inside this plugin
-
-> Repo-wide **authoring + maintenance** rules (skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
-
-- **Naming**: skills use the **canonical lens name** — `first-principles`, `orthogonal`, `dialectic` — not a coerced bare verb. The names are well-known reasoning concepts; discoverability beats verb-purity here. (This is the documented divergence from the marketplace bare-verb default, ADR-027 — different family, different idiom.)
-- **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
-- **Lightweight, in-chat by default**: a lens surfaces its analysis in the conversation and writes **no file** — think is the lightest plugin (pure reasoning). Persistence happens by routing to shape (`shape-elicit` → `thoughts/`, `shape-mockup`, `nav-plan`), never a think-owned artifact. It never writes source or makes a decision.
-- **Feeds shape, never invokes it**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `shape-elicit` to converge it, `shape-mockup` to render it, `nav-plan` to ground it. An offer, not a call.
-
-## Where things live
-
-```
-.claude-plugin/plugin.json   → think's manifest (the version + metadata owner)
-CLAUDE.md                    → ← you are here (think-specific)
-skills/<lens>/SKILL.md       → individual lenses, each self-contained
-```
-
-Repo-wide layout + ADRs live in the repo-root [`CLAUDE.md`](CLAUDE.md).
-
-## When editing this plugin
-
-Repo-wide editing rules (new-skill → ADR, the ★ authoring checks, renaming + versioning, the site-map gate, stale-`SKILL.md`) live in the repo-root [`CLAUDE.md`](CLAUDE.md). think-specific:
-
-- **New lens — first check the value-guardrail**: name the structure this lens forces that the default omits. If you can't, it's not a skill (the caution that retired nav's `doctor`, ADR-021).
 

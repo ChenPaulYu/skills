@@ -1,6 +1,6 @@
 ---
 name: orthogonal
-description: "Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) primitives — the axes it actually varies along — then verify independence (move one, others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled. Reasons in-chat; offers to route to shape. Fires on \"what are the independent dimensions here\", \"disentangle this\", \"are these orthogonal\", \"separate the concerns\", \"factor this into independent parts\", \"this conflates several things\", \"decouple X and Y\". Distinct from /think:first-principles (reduces DOWN to axioms; this factors SIDEWAYS)."
+description: "Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) primitives — the axes it actually varies along — then verify independence (move one, others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled. Reasons in-chat; offers to route to shape. Fires on \"what are the independent dimensions here\", \"disentangle this\", \"are these orthogonal\", \"separate the concerns\", \"factor this into independent parts\", \"this conflates several things\", \"decouple X and Y\". Distinct from /frame:first-principles (reduces DOWN to axioms; this factors SIDEWAYS)."
 ---
 
 # orthogonal — factor a tangle into independent axes
@@ -25,7 +25,7 @@ The output is the structured factoring itself, **in the conversation** — its s
 - **True degrees of freedom** — the axes that survive the check: the real, independent dimensions.
 - **Payload** — what was conflated (one label hiding several), or where the "separate" things were actually coupled. The reframe is the finding.
 
-Lightweight by default: the analysis stays **in-chat** — think writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
+Lightweight by default: the analysis stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
 ## Grounding
 
@@ -60,6 +60,6 @@ End with a guarded, one-shot **offer** to route the result — never an auto-cal
 
 ## Companion skills
 
-- **`/think:first-principles`** — the depth lens (reduce down + rebuild); `orthogonal` is the separation lens (factor sideways). The two decomposition moves.
+- **`/frame:first-principles`** — the depth lens (reduce down + rebuild); `orthogonal` is the separation lens (factor sideways). The two decomposition moves.
 - **`/shape:elicit`** — converge a separated axis into a decision *with the user*.
 - **`/nav:plan`** — ground a now-independent piece into a code plan.

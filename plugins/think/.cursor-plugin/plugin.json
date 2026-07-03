@@ -1,9 +1,0 @@
-{
-  "name": "think",
-  "version": "0.4.0",
-  "description": "Reason about a problem through a named reasoning lens that forces a structured analysis the default 'think harder' won't produce. Four lenses — two take a problem APART, one puts a claim ON TRIAL, one GRAFTS a mature model: first-principles (decompose DOWN — strip to irreducible axioms, rebuild from them, surface where that diverges from convention), orthogonal (decompose SIDEWAYS — factor a tangled phenomenon into mutually-independent axes, verify the independence, name what was conflated), dialectic (put a claim ON TRIAL — steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it; verdict is three-way, not pass/fail), and graft (BORROW a mature model whose structure rhymes — map every primitive onto your problem, read each as fit/break/adapt; the adapt list, where the borrowed structure reshaped for your domain, is the payload — nearly first-principles' inverse, borrow-all vs strip-all). Each reasons in-chat (no file artifact) and feeds one-way into shape (an insight → a thought / mockup / plan). Standalone — no nav/shape dependency.",
-  "author": {
-    "name": "Paul",
-    "url": "https://github.com/ChenPaulYu"
-  }
-}
