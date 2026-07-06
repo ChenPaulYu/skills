@@ -10,7 +10,7 @@ A thought-stream (`relay-report` + `relay-review`) is a running log of **disposa
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md) — one project. **Appends** to `decisions/log.md` and **regenerates** `decisions/active.md` — that is all it writes; it **never moves or deletes a thought** (they stay in `thoughts/`, the immutable log). Shows a diff and is gated. By convention the project **owner** runs it (one writer keeps the ledger appends + `active.md` regeneration conflict-free); non-critical and re-runnable. Both "where things stand" (progress) **and** "open vs settled" are **not** stored — `digest` computes them live.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see AGENTS.md) — one project. **Appends** to `decisions/log.md` and **regenerates** `decisions/active.md` — that is all it writes; it **never moves or deletes a thought** (they stay in `thoughts/`, the immutable log). Shows a diff and is gated. By convention the project **owner** runs it (one writer keeps the ledger appends + `active.md` regeneration conflict-free); non-critical and re-runnable. Both "where things stand" (progress) **and** "open vs settled" are **not** stored — `digest` computes them live.
 
 ## Process
 

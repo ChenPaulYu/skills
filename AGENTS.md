@@ -358,8 +358,11 @@ A toolkit for **coordinating with a counterpart asynchronously, through your age
 **Locating the content repo (every skill's first step).** The content repo is a **separate** repo (the coordination repo) — it is **almost never the current working directory** (you're usually in some other project). Resolve it in order, and **never silently assume cwd**:
 
 1. **`$RELAY_REPO`** env var, if set (mirrors reflect's `$SKILLS_REPO`) — the default content repo.
-2. else the **current dir**, only if it actually has a `relay.yml` at its root (you're already inside a relay repo).
-3. else **ASK the user** for the content-repo path — or offer `relay-launch` to create one.
+2. else the **cached path** at `~/.cache/relay/repo-path` (one line, the resolved repo's absolute path), if it exists **and** a `relay.yml` still lives at its root (a stale/moved repo falls through to the next step, not a hard error).
+3. else the **current dir**, only if it actually has a `relay.yml` at its root (you're already inside a relay repo).
+4. else **ASK the user** for the content-repo path — or offer `relay-launch` to create one.
+
+**Whichever step resolves it (2–4), write the result to `~/.cache/relay/repo-path`** (create the dir if needed) before moving on — so the *next* invocation, on this machine, skips straight to a warm cache hit instead of re-walking the fallback chain. This is a plain cache, not config: fine to `rm` it, fine for it to go stale (step 2 self-heals by falling through). Don't cache step 1 (`$RELAY_REPO` is already O(1)).
 
 Then read its `relay.yml` first; never hard-code paths.
 
@@ -479,7 +482,7 @@ relay is a structured-data protocol, so unlike the analysis plugins it **bundles
 
 **Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
 
-Current: **`format/scripts/lint.mjs`** (node, regex-based frontmatter linter — Layer 1 of `relay-format`; the consensus gate `check-acceptance.mjs` was retired with the `@`-set protocol, ADR-053). Sanctioned-but-not-built: signature / github verification (bash), digest / settle state computation (node), and a **backlink / nav generator** (node, owned by `settle`) — scans `thoughts/` for `thread`/`re`/`relate`, computes the backlink graph, and **regenerates a separate `nav` artifact** (never writes back into a thought — that would mutate an immutable file). Deferred until a non-Obsidian, non-agent reader (raw GitHub browsing) actually needs backlinks; agents use `digest`, humans use Obsidian meanwhile.
+Current: **`format/scripts/lint.mjs`** (node, regex-based frontmatter linter — Layer 1 of `relay-format`; the consensus gate `check-acceptance.mjs` was retired with the `@`-set protocol, ADR-053) and **`digest/scripts/compute-state.mjs`** (node — the digest state computer, ADR-061: thread grouping, unanswered-ask set-logic, settled/open, judgment `flags` for what set-logic must not decide; also powers the session-open hook via `--format hook`, replacing the naive grep that counted already-answered mentions). Sanctioned-but-not-built: signature / github verification (bash), settle state computation (node), and a **backlink / nav generator** (node, owned by `settle`) — scans `thoughts/` for `thread`/`re`/`relate`, computes the backlink graph, and **regenerates a separate `nav` artifact** (never writes back into a thought — that would mutate an immutable file). Deferred until a non-Obsidian, non-agent reader (raw GitHub browsing) actually needs backlinks; agents use `digest`, humans use Obsidian meanwhile.
 
 ## Where things live
 

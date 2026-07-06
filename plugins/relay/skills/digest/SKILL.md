@@ -12,7 +12,7 @@ Compute "what's waiting on **you**" from the thought-stream, right now. The read
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md) — one project (or all). **Read-only — writes nothing.** The durable output of `/relay:settle` is the decision ledger (`decisions/log.md` + `active.md`); `digest` is the **live** view of *progress* — what needs you now — computed from the thoughts. Progress has no stored snapshot; `digest` is its only home.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see CLAUDE.md) — one project (or all). **Read-only — writes nothing.** The durable output of `/relay:settle` is the decision ledger (`decisions/log.md` + `active.md`); `digest` is the **live** view of *progress* — what needs you now — computed from the thoughts. Progress has no stored snapshot; `digest` is its only home.
 
 ## Process
 
@@ -20,10 +20,16 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 - **Resolve who's running** (git author email → `git:` in `relay.yml` → your handle), then **pull** to get the latest.
 
 ### Step 2 — Compute from the thought-stream
+
+**Fast path (node available — ADR-051):** run the bundled state computer first:
+```bash
+node <this-skill>/scripts/compute-state.mjs <relay-repo> [--project <name>] [--for <handle>]
+```
+It returns the mechanical layer as JSON — thread grouping, unanswered `@`-asks (`waitingFor`/`waitingOn`), settled/open per thread, image counts — plus `flags` for the cases set-logic must not decide (e.g. `question-marks-no-mention`: a latest-in-thread entry with real ❓s but no `@`). **Your job then shrinks to judgment**: read ONLY the flagged thoughts (not the whole stream), decide each flag (real ask → surface it in Waiting; rhetorical → Recent), and render Step 3 from the JSON. No node → fall back to the manual recipe below.
 - Read recent `thoughts/`, **group discussions by the `thread` anchor** (`re` is the precise reply chain within a group; `relate` is a cross-discussion "see also"), and read each thought's `subject`. Links are stored outgoing-only — **compute backlinks** ("who points at me") by scanning; nothing stores them. This is also how "settled" is **computed**: a discussion whose latest reply is an `agree`/FYI-closer is settled; an ask with no answering `agree` is open — there is no stored status field.
 - **Every run, sweep for the `@<you>` flag.** Scan *every* thought for the `@<your-handle>` tag. A thought that `@`-flags you **and you haven't answered yet** (no `/relay:review` from you on that id) = waiting for your review. The `@`-flag is the *ask* signal — no `@<you>` tag where someone flagged you is ever missed.
 - **But "names you" ≠ "needs you" — FYI is not waiting.** The `@`-flag distinguishes an **ask** from an **FYI**. A thought that merely *mentions you in prose* (no `@`-flag), or whose latest state is a **closer** — an `agree`, or a review that says it needs no reply — is **self-closed**: it belongs in **Recent (FYI)**, never in "Waiting." Don't surface an already-agreed or FYI thread as parked on anyone. (The termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
-- **Also compute what *you're* waiting on.** Your own thoughts that `@`-flagged someone and have **no review back yet** = waiting on them. This is the asker's lens — so you can see (and chase) your own open asks. An ask that came back as an `agree`/FYI is **answered**, not still-waiting — drop it.
+- **Also compute what *you're* waiting on — using the full ask definition, not just the `@`-flag.** The canonical "ask" (`relay/CLAUDE.md` → *Resolution & decisions*) is broader than a tag: **an `@`-flag, a `change`, OR a `comment` that carries a real question** all keep a thread open. So a thought of yours counts as "waiting on them" whenever it's the **latest** entry in its thread, is **not** a closer (not `agree`, not an explicit "FYI, no reply needed"), and matches any of the three — even a long `comment` whose body poses real open questions but never literally types `@name`. Scanning only for a literal `@` here under-counts: a real open ask with no `@` silently falls through to "Recent" instead of surfacing as still-open. An ask that came back as an `agree`/FYI-closer is **answered**, not still-waiting — drop it.
 - **Flag thoughts that carry images.** While reading each thought, detect image references (markdown images / asset-folder links). digest is a *text* triage and **can't render a picture** — so a thought whose substance is partly visual (a screenshot, a mockup, a diagram) gets a `📎 N` marker **wherever it surfaces** (Waiting or Recent), so the visual isn't silently lost in triage. Detection is read-only (you flag, you don't fetch); the **surfacing duty** is the acting agent's (see Present + Discipline).
 
 ### Step 3 — Present, filtered for the viewer
@@ -32,13 +38,13 @@ relay · <project> · for @<you> (live, <date>)
 
 Waiting for your review (n)        # thoughts @you you haven't answered
   • [<id>] <one line — what's wanted (a look / a call / unblock)> — @<by>, from “<subject>” [📎 N] → /relay:review
-Waiting on others (n)              # YOUR @-asks with no review back yet
+Waiting on others (n)              # YOUR open asks (@-flag, change, or a real question) with no review back yet
   • [<id>] <what you asked> — @<who>, “<subject>” (since <date>)
 Recent (FYI)                       # latest thoughts, brief — flow you don't need to act on
   • “<subject>” — @<by>, <date> [📎 N]
 ```
 - **"Waiting for your review"** = every thought that **`@`-flags you** and you haven't answered — a progress note wanting a look, or an alignment wanting your agreement / pushback. **Excludes** FYI (no `@`-flag) and already-closed threads (an `agree`/no-reply-needed closer). Sorted first; this is the whole point.
-- **"Waiting on others"** = your own thoughts that `@`-ed someone and have no review back — so a stalled ask is visible to *you*, the asker, not silently rotting (the asker-liveness lens).
+- **"Waiting on others"** = your own thoughts that are the latest, non-closing entry in their thread and carry a real ask — an `@`-flag, a `change`, **or** a `comment` posing a genuine open question even without a literal `@` — and have no review back yet. Don't under-scan to "literal `@` only": a long comment that ends "these three I really want your take on" is just as much an open ask as a tagged one. So a stalled ask is visible to *you*, the asker, not silently rotting (the asker-liveness lens).
 - **"Recent"** = the latest thoughts by subject, brief — so you see what's flowing even when it doesn't need you.
 - **`📎 N` = images, flag then surface.** The marker means the thought carries N images digest can't show. digest only *flags* (read-only); when you then **act on** that thought (open it to review or relay it to the human), **render its images to the human, or hand them the file path** — never paraphrase the picture away. The visual is part of the payload (owner: `relay/CLAUDE.md` → *Format contract*).
 - Two-person: the same computation, the other lens — filter by `@<you>`.
@@ -55,6 +61,7 @@ Recent (FYI)                       # latest thoughts, brief — flow you don't n
 | Write / refresh a stored snapshot here | `digest` is read-only + computed; the durable ledger is `settle`'s job |
 | Miss the `@you` flag | The `@<you>` tag is the ask signal — sweep every thought, every run; never drop a real ask |
 | Nag about an FYI / already-agreed thread | "Names you" ≠ "needs you"; a prose mention, an `agree`, or a no-reply-needed closer is **Recent**, not "Waiting" |
+| Bury a real question in "Waiting on others" scan because it has no literal `@` | A `comment` posing a genuine open question is an ask too (`relay/CLAUDE.md` → *Resolution & decisions*) — check for closer-or-not, not just for the `@` glyph |
 | Dump the full body of a long thought | Surface its subject + the one-line ask as a pointer; the body is read on open, not triaged |
 | Paraphrase away an image-bearing thought's visuals | digest can't render — flag it `📎 N`, and when you act on it render the images to the human (or hand them the file path); the picture is part of the payload, lost silently in a text triage |
 

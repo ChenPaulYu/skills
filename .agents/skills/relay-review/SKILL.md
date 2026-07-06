@@ -10,7 +10,7 @@ Answer a thought pointing at you. A review is **the same shape as a `report`** �
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md). Writes **one append-only thought** (`thoughts/<date>-<handle>-<slug>.md`); shows a diff and is gated.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see AGENTS.md). Writes **one append-only thought** (`thoughts/<date>-<handle>-<slug>.md`); shows a diff and is gated.
 
 ## Process
 
