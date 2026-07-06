@@ -19,18 +19,27 @@ Operates on the **content repo** — a *separate* coordination repo located via 
 ### Step 1 — Resolve + pull
 - **Resolve who's running** (git author email → `git:` in `relay.yml` → your handle), then **pull** to get the latest.
 
-### Step 2 — Compute from the thought-stream
+### Step 2 — Compute the mechanical state (script-first, ADR-051)
 
-**Fast path (node available — ADR-051):** run the bundled state computer first:
+Run the bundled state computer — this IS the computation, not an optimization of it:
 ```bash
 node <this-skill>/scripts/compute-state.mjs <relay-repo> [--project <name>] [--for <handle>]
 ```
-It returns the mechanical layer as JSON — thread grouping, unanswered `@`-asks (`waitingFor`/`waitingOn`), settled/open per thread, image counts — plus `flags` for the cases set-logic must not decide (e.g. `question-marks-no-mention`: a latest-in-thread entry with real ❓s but no `@`). **Your job then shrinks to judgment**: read ONLY the flagged thoughts (not the whole stream), decide each flag (real ask → surface it in Waiting; rhetorical → Recent), and render Step 3 from the JSON. No node → fall back to the manual recipe below.
-- Read recent `thoughts/`, **group discussions by the `thread` anchor** (`re` is the precise reply chain within a group; `relate` is a cross-discussion "see also"), and read each thought's `subject`. Links are stored outgoing-only — **compute backlinks** ("who points at me") by scanning; nothing stores them. This is also how "settled" is **computed**: a discussion whose latest reply is an `agree`/FYI-closer is settled; an ask with no answering `agree` is open — there is no stored status field.
-- **Every run, sweep for the `@<you>` flag.** Scan *every* thought for the `@<your-handle>` tag. A thought that `@`-flags you **and you haven't answered yet** (no `/relay:review` from you on that id) = waiting for your review. The `@`-flag is the *ask* signal — no `@<you>` tag where someone flagged you is ever missed.
-- **But "names you" ≠ "needs you" — FYI is not waiting.** The `@`-flag distinguishes an **ask** from an **FYI**. A thought that merely *mentions you in prose* (no `@`-flag), or whose latest state is a **closer** — an `agree`, or a review that says it needs no reply — is **self-closed**: it belongs in **Recent (FYI)**, never in "Waiting." Don't surface an already-agreed or FYI thread as parked on anyone. (The termination contract is owned by `relay/CLAUDE.md` → *Resolution & decisions*.)
-- **Also compute what *you're* waiting on — using the full ask definition, not just the `@`-flag.** The canonical "ask" (`relay/CLAUDE.md` → *Resolution & decisions*) is broader than a tag: **an `@`-flag, a `change`, OR a `comment` that carries a real question** all keep a thread open. So a thought of yours counts as "waiting on them" whenever it's the **latest** entry in its thread, is **not** a closer (not `agree`, not an explicit "FYI, no reply needed"), and matches any of the three — even a long `comment` whose body poses real open questions but never literally types `@name`. Scanning only for a literal `@` here under-counts: a real open ask with no `@` silently falls through to "Recent" instead of surfacing as still-open. An ask that came back as an `agree`/FYI-closer is **answered**, not still-waiting — drop it.
-- **Flag thoughts that carry images.** While reading each thought, detect image references (markdown images / asset-folder links). digest is a *text* triage and **can't render a picture** — so a thought whose substance is partly visual (a screenshot, a mockup, a diagram) gets a `📎 N` marker **wherever it surfaces** (Waiting or Recent), so the visual isn't silently lost in triage. Detection is read-only (you flag, you don't fetch); the **surfacing duty** is the acting agent's (see Present + Discipline).
+It emits the full mechanical layer as JSON: thread grouping by the `thread` anchor, unanswered `@`-asks (`waitingFor` / `waitingOn`), settled/open per thread, image counts per thought, settle's `agreed` harvest — plus **`flags`** for what set-logic must not decide. **Trust its set-logic; don't re-derive by hand what it already computed.** (No node in this environment → apply the semantic contract below as a manual recipe over `thoughts/`.)
+
+### Step 2b — Judge what the script can't
+
+The script never silently decides a judgment call — it flags it. Your job is the residue:
+- **Read ONLY the flagged thoughts** (e.g. `question-marks-no-mention`: a latest-in-thread entry with real ❓s but no `@`) and decide each: a genuine open ask → surface it under Waiting; rhetorical / already-absorbed → Recent.
+- Read the thoughts you're about to surface just enough to write their **one-line ask summary** for Step 3 — the JSON has subjects, not distilled asks.
+
+### The semantic contract (what both paths — script and manual — must satisfy)
+
+- **Grouping**: discussions group by the `thread` anchor (`re` = the reply chain within; `relate` = cross-discussion "see also"). Links are stored outgoing-only — backlinks ("who points at me") are **computed** by scanning. "Settled" is computed the same way: a discussion whose latest reply is an `agree`/FYI-closer is settled; an ask with no answering `agree` is open — there is no stored status field.
+- **The `@<you>` sweep**: every thought, every run. A thought that `@`-flags you **and you haven't answered** (no `/relay:review` from you on that id) = waiting for your review. No `@<you>` where someone flagged you is ever missed.
+- **"Names you" ≠ "needs you" — FYI is not waiting.** A prose mention (no `@`-flag), or a thread whose latest state is a **closer** (an `agree`, or a review that says it needs no reply), is **self-closed** → **Recent (FYI)**, never "Waiting." (Termination contract: `relay/CLAUDE.md` → *Resolution & decisions*.)
+- **"Waiting on others" uses the full ask definition, not just the `@`-glyph.** The canonical ask is **an `@`-flag, a `change`, OR a `comment` carrying a real question** — so your thought counts as "waiting on them" when it's the latest, non-closing entry in its thread and matches any of the three, even with no literal `@name`. This is exactly the case the script surfaces as a flag rather than deciding. An ask answered by an `agree`/FYI-closer is **answered** — drop it.
+- **Image-bearing thoughts are flagged, never paraphrased away.** digest is a *text* triage that can't render a picture — a thought with images gets `📎 N` **wherever it surfaces**, and the acting agent later renders them to the human (see Present + Discipline).
 
 ### Step 3 — Present, filtered for the viewer
 ```

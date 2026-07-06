@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-// relay:digest — deterministic state computation over a project's thought-stream.
-// Owns the MECHANICAL layer of digest (ADR-051 split): thread grouping, @-ask
-// detection, answered/settled set-logic, FYI/closer markers, image/❓ counts.
+// relay — deterministic state computation over a project's thought-stream.
+// Owns the MECHANICAL layer (ADR-051 split) for TWO verbs: digest (thread
+// grouping, @-ask detection, answered/settled set-logic, FYI/closer markers,
+// image/❓ counts) and settle's harvest (`agreed`: every proposal←agreeing-review
+// pair, marked settledInLedger by checking decisions/log.md). Single owner =
+// digest (bundling constraint, relay/CLAUDE.md); settle calls it cross-skill.
 // The JUDGMENT layer (is this ❓-without-@ a real ask? tone of a closer?) stays
 // with the LLM — uncertain cases are emitted under `flags`, never silently decided.
 // Regex-based (no YAML dependency, per ADR-051's node-is-a-fast-path rule).
@@ -133,7 +136,27 @@ for (const project of projects) {
       subjects: [list[0].subject],
     });
   }
-  state.projects[project] = { threads: threadView, waitingFor, waitingOn, flags };
+
+  // settle's harvest: every (proposal ← agreeing review) pair, checked against the ledger.
+  // An agree answers its `re` target (or the thread root when re is omitted).
+  const ledgerPath = join(projectsDir, project, 'decisions', 'log.md');
+  const ledger = existsSync(ledgerPath) ? readFileSync(ledgerPath, 'utf8') : '';
+  const agreed = [];
+  for (const u of thoughts) {
+    if (!u.hasAgree) continue;
+    const proposal = u.re || (u.thread !== u.file ? u.thread : null);
+    if (!proposal) continue;
+    agreed.push({
+      proposal,
+      agreedBy: u.by,
+      in: u.file,
+      date: u.date,
+      reopenedByChange: u.hasChange, // agree on one point, change on another — settle judges
+      settledInLedger: ledger.includes(proposal),
+    });
+  }
+
+  state.projects[project] = { threads: threadView, waitingFor, waitingOn, flags, agreed };
 }
 
 // -- output --
