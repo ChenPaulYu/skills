@@ -12,7 +12,7 @@ The relay analog of `/nav:sync`: as the format spec evolves (a new field, a quot
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see CLAUDE.md). **One project at a time** (`projects/<name>/thoughts/`) — never the whole repo at once (too big; and conformance is per-project). Writes fixes to thought files; shows a diff and is gated.
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see CLAUDE.md). **One project at a time** (`projects/<name>/thoughts/`) — never the whole repo at once (too big; and conformance is per-project). Writes fixes to thought files; shows a diff and is gated.
 
 The format being conformed to is owned by [`plugins/relay/CLAUDE.md`](plugins/relay/CLAUDE.md) → *Format contract* — this skill enforces it, it doesn't define it.
 

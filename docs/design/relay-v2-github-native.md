@@ -1,6 +1,6 @@
 # relay v2 — GitHub-native redesign (delete the mechanism, keep the discipline)
 
-> **Status: DRAFT (2026-07-06)** · validated hands-on in [`ChenPaulYu/relay-v2-sandbox`](https://github.com/ChenPaulYu/relay-v2-sandbox) (issues #1–#4, PR #3, `scripts/digest.sh`). Supersedes-if-agreed: the file-based thought-stream protocol (ADR-050/053/054). Decision pending greented's review.
+> **Status: SHELVED (2026-07-06, same day)** — evaluated hands-on, then decided against migration (ADR-061): relay stays git-native. Two reasons: (1) it would reverse the agreed `[relay-as-platform]` decision (accord, 2026-06-25) by outsourcing the platform's core to GitHub; (2) it contradicts the company's substrate thesis (truth lives in repo files, agent-readable without API/auth). **Kept as the competitive baseline**: the isomorphism table below is the feature bar relay-as-product must meet (native notifications, self-approve blocking, stored state). The validated mechanics fed v1 directly — `compute-state.mjs` ports the sandbox `digest.sh` logic to the file protocol. Validated in [`ChenPaulYu/relay-v2-sandbox`](https://github.com/ChenPaulYu/relay-v2-sandbox) (issues #1–#4, PR #3).
 >
 > **TL;DR** — relay v1 rebuilt threading, mentions, review verbs, notifications, and open/settled state as a custom file protocol. GitHub already ships all five, natively, with mobile push. v2 deletes the mechanism and keeps the two disciplines GitHub does *not* enforce: **write a self-contained opening** and **distill before you close**. Seven verbs collapse to two skills + one 30-line script.
 

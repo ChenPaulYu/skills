@@ -9,12 +9,12 @@ Bring a new **coordination project** into existence: scaffold its workspace and 
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo (located via `$RELAY_REPO`, else **ask where it should live** — never assume cwd, which is usually some other project). On the very first run in an empty repo it also **bootstraps** the repo (creates `relay.yml` with the running user as the first person). Writes files; shows a diff and is gated before applying.
+Operates on the **content repo** — a *separate* coordination repo (located via `$RELAY_REPO`, else a cached prior resolution, else **ask where it should live** — never assume cwd, which is usually some other project). On the very first run in an empty repo it also **bootstraps** the repo (creates `relay.yml` with the running user as the first person). Writes files; shows a diff and is gated before applying.
 
 ## Process
 
 ### Step 1 — Locate or bootstrap the repo
-- **Resolve the content repo**: `$RELAY_REPO` if set, else **ask the user where the relay repo is / should live** — do NOT assume the current dir (it's usually another project).
+- **Resolve the content repo**: `$RELAY_REPO` if set, else the cached path at `~/.cache/relay/repo-path` if it still points at a real relay repo, else **ask the user where the relay repo is / should live** — do NOT assume the current dir (it's usually another project). Whichever way it's resolved (or just bootstrapped), cache it to `~/.cache/relay/repo-path` for next time (see `CLAUDE.md` → *Locating the content repo*).
 - Find `relay.yml` there. **If absent**, this is first-run: resolve who's running (git author email/name), create a minimal `relay.yml` registering them (handle seeded from their github; record their git email as the resolver), and note more people are added later with `/relay:register`.
 
 ### Step 2 — Name + frame the project (rule: below 90% → ask)

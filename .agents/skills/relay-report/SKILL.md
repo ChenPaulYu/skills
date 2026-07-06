@@ -12,7 +12,7 @@ Post a **thought** the counterpart's agent can pick up: where the work stands (*
 
 ## Scope
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else the current dir if it has `relay.yml`, else **ask the user** (never assume cwd; see AGENTS.md) — one project at a time. Writes **one append-only thought** (`thoughts/<date>-<handle>-<slug>.md`, one per file); shows a diff and is gated. Authored to `nav-compose` discipline (lead with the point; head-able top).
+Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see AGENTS.md) — one project at a time. Writes **one append-only thought** (`thoughts/<date>-<handle>-<slug>.md`, one per file); shows a diff and is gated. Authored to `nav-compose` discipline (lead with the point; head-able top).
 
 **Relay content repo ONLY — not a doc authoring tool.** report writes a *coordination message to a counterpart*, and it lands **only** in the relay content repo (the one with `relay.yml`). A **durable document that lives in a code / tooling repo** — an ADR, a design doc, a README, a spec — is **`nav-compose`**, never a report (even though both write prose and report borrows compose's *discipline*). The test: *message to a counterpart* → report; *document in a codebase* → compose. If the artifact's home is anywhere but the relay content repo, stop — it's not a report.
 
