@@ -20,7 +20,7 @@ Default scaffold behavior is **write files, declare done**. It skips five struct
 
 ## Core — the one non-negotiable
 
-> **Setup is done when the verification chain is green — not when the files are written.** The chain is archetype-parameterized and ends with the project actually running, exercised the way a user would (dev server up → API curled through the real proxy → browser click-test + screenshot for web; `--help` + smoke command for CLI; tests + build for a library). No leg is silently skipped — a skipped leg is reported as skipped.
+> **Setup is done when the verification chain is green — not when the files are written.** The chain is archetype-parameterized and ends with the project actually running, exercised the way a user would (dev server up → API curled through the real proxy → browser click-test + screenshot for web; `--help` + smoke command for CLI; tests + build for a library). No leg is silently skipped — a skipped leg is reported as skipped. If a chain's smoke leg would hit a live paid LLM endpoint, flag it before curling — one confirmed pass is enough to prove the leg is wired.
 
 ## The three layers
 

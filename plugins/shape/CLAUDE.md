@@ -62,6 +62,7 @@ Record the seams; don't blur them:
 - **Write-gated**: `align` and `reconcile` write files — show what will be written (or a diff) before committing. `reconcile`'s destructive ops follow the safety rules in its `SKILL.md` (check tracked/untracked, never `mv`-then-`rm`, diff before delete).
 - **Skills don't invoke each other**: they reference sibling protocols by name (e.g. reconcile → "run `/shape:align`"), never re-implement or call them.
 - **Cost tier (ADR-058/059)**: the *criterion* (mechanical sweep/format/render → `model: sonnet` frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md); shape's tiered verbs are **`reconcile`** and **`align`**. Judgment-heavy verbs (`elicit`, `position`, `build`'s adjudication) stay on the session model. The same tier powers the browser-verify slot's `browser-verifier` subagent (below).
+- **Live-LLM-cost signal (ADR-062)**: a different axis than the cost tier above — it flags the cost of the **feature being dogfooded/verified**, not the skill's own model/tokens, when that feature itself calls a live paid LLM (fan-out/multi-agent especially). Root definition + `nav:do`'s inheritance chain (`plan`, `refactor`) live in nav's [ADR-062](docs/adr/062-live-llm-cost-signal.md). shape's own instances (not inherited — each drives the real thing its own way): `dogfood`'s live-LLM-cost caveat, `build` step 4's non-visual behavioral-check flag, `setup`'s verification-chain smoke-leg flag.
 
 ## browser-verify — a shared per-project capability slot
 

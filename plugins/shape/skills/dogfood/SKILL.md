@@ -32,6 +32,8 @@ This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses 
 
 > **Caveat — discount the harness's own artifacts.** The capture rig is not the user's conditions: a headless browser's default viewport is often unusually short/narrow, synthetic fixtures are sparser than real data, a scripted pointer lacks momentum. So a finding can be an **artifact of the harness, not the feature** (field case: "the primary action is below the fold" was true only at the rig's 569px height; at a normal 900px it was fully visible — only the *other* two findings were real). Before routing a finding to a fix, **re-confirm it at realistic conditions** (resize to a normal viewport, use representative data); tag the ones you couldn't reproduce as *suspected-harness-artifact* rather than shipping a fix for a non-problem.
 
+> **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. Flag it once up front — name the call path and its rough cost knobs (model, turn/fan-out count) — then drive most of the intent list at the feature's own cheapest sufficient setting (a mock, or its lowest effort/turn knob), reserving one full-cost pass for the final "does it feel right" check.
+
 ## The report — evidence-rich, with ideas (not a mockup)
 
 The output is a **friction report grounded in the captured session** — *not* a rendered mockup of holes. Lead with the evidence; for each finding:
