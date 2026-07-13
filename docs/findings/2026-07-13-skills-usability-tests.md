@@ -34,6 +34,17 @@ status: confirmed
 
 **結論**：與 park A/B 實驗（`docs/findings/2026-07-13-park-ab-experiment.md`）的 C 臂結果一致且更強——實務工作流（強腦 park→冷啟動 catchup）達到滿分重建。catchup 的下限問題（純 git 11/20）在有 park 的工作流裡實測消失。
 
+## 4. Tolerant-reader 三態行為探針（驗 ADR-071，當日追測）
+
+**設計**：一個「亂放型」沙盒專案（有 code、一張含決定/進度/已棄路線的隨手 `NOTES.txt`、完全沒有 blueprints/plan.md/HANDOFF），三個互盲 Sonnet 探針各持一個 skill 協定去撞：`shape:reconcile`（結構缺席）、`shape:build`（板子缺席）、`reflect:catchup`（僅任意形筆記）。NOTES.txt 內埋紅鯡魚（「Excel 走 exceljs 試過、太肥、放棄」）。
+
+**結果：3/3 PASS**——
+- **reconcile**：走到當日新補的缺席退化句（原句引用回報），判定無樹可 reconcile、零檔案改動、指向 `/shape:align`；明確拒絕把 NOTES.txt 頂替為 blueprints。
+- **build**：最高風險動詞（自主寫 code）零 code 零檔案；抵住「NOTES 裡有『下一步做 categoryTotal』」的猜項誘惑，引協定禁令停下、指向 align。
+- **catchup**：正確自報最底層來源、把 NOTES.txt 作為 why 的輔助證據容忍吸收（三態中間態）、五欄與 code 交叉驗證（categoryTotal 缺席、無 package.json）、**紅鯡魚正確標為已棄非下一步**。
+
+**結論**：ADR-071 的容忍承諾是**行為**不是紙上宣示——「亂放不會壞」在缺席與任意形兩態都實測成立。這回答了 fixed-structure thought 開放題 3 的一半：**行為層已軟**；殘餘的學習成本若存在，在表述層（文件把 canonical 形狀擺太前面）——待 Paul 的刺痛案例最終確認。
+
 ## 侷限（誠實標記）
 
 - 路由測試是「description→選擇」的靜態盲測，非 Claude Code 真實觸發管線；但兩臂同法，對照有效。

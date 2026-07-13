@@ -44,4 +44,4 @@ park A/B 實驗（`docs/findings/2026-07-13-park-ab-experiment.md`）：**無結
    - scaffold 更自動（動詞把檔案宗教完全收進內務）
    - 其實是動詞層問題 → 復活 router（翻 matt-adoption 的 deferred 案）
 2. 若走「慣例化」：哪些結構該**保留**契約地位（直覺候選：relay 格式、manifest、core/ 凍結協定）——名單要逐一過。
-3. 「軟」怎麼被**感覺到**：是文件表述問題（處處把 canonical 形狀擺最前面，看起來像必修）還是行為問題（某些動詞實際上硬要求了）？兩者修法不同。
+3. 「軟」怎麼被**感覺到**：是文件表述問題（處處把 canonical 形狀擺最前面，看起來像必修）還是行為問題（某些動詞實際上硬要求了）？兩者修法不同。**→ 行為半邊已有答案（2026-07-13 三探針實測，`docs/findings/2026-07-13-skills-usability-tests.md` §4）：reconcile/build 缺席退化、catchup 容忍任意形＋紅鯡魚全過——行為層是真的軟。殘餘嫌疑只剩表述層，等刺痛案例定罪。**
