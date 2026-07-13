@@ -92,7 +92,7 @@
       ".agents/skills/reflect-summarize/SKILL.md": 1,
       ".agents/skills/shape-build/SKILL.md": 1,
       ".agents/skills/shape-setup/SKILL.md": 1,
-      "AGENTS.md": 1
+      "AGENTS.md": 2
     },
     "model_sonnet": {
       ".agents/skills/nav-audit/SKILL.md": 1,
@@ -165,6 +165,15 @@
         },
         "disable_model_invocation": {
           ".agents/skills/reflect-park/SKILL.md": "0->1"
+        }
+      }
+    },
+    {
+      "date": "2026-07-13",
+      "reason": "invocation-direction-law (W5) inventory (ADR-072): root CLAUDE.md gains a new Authoring-conventions bullet ('Invocation category is visible, not just in frontmatter') that names the existing disable-model-invocation frontmatter flag a second time in prose, alongside ADR-065's existing mention in the same file. No new capability — the same flag already counted once, now referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "bumps": {
+        "disable_model_invocation": {
+          "AGENTS.md": "1->2"
         }
       }
     }

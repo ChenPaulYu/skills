@@ -3,6 +3,25 @@
 > Paul's personal agent-skills marketplace.
 > A growing collection of focused, single-purpose plugins — one source tree, installable in **Claude Code**, **Antigravity CLI (`agy`)**, **Codex**, **opencode**, and **Cursor**.
 
+## Which verb do I want?
+
+A quick lookup for the highest-frequency intents — full plugin tables and per-skill detail follow below.
+
+| I want to… | Run |
+|---|---|
+| Audit my codebase's architecture / find smells | `/nav:audit` |
+| Plan a spec or feature against the actual code | `/nav:plan` |
+| Make a small, already-decided change | `/nav:do` |
+| Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
+| Think a decision through — I haven't decided yet | `/shape:elicit` |
+| Align on what to work on next | `/shape:align` |
+| Catch me up on where this session left off（接手現況） | `/reflect:catchup` |
+| Park a cursor before stepping away（收工留單） | `/reflect:park` |
+| Dissect / break down a paper's argument | `/research:dissect` |
+| Audit my own document's citations | `/research:provenance` |
+| Report progress to a counterpart over relay | `/relay:report` |
+| Recap everything this session did | `/reflect:summarize` |
+
 ## What's in here
 
 | Plugin | What it covers |
@@ -22,15 +41,20 @@ More plugins land here over time. Each lives in its own folder under `plugins/`,
 
 Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
+Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-direction-law-inventory.md)): **model-invoked** — the agent fires them off your phrasing — and **user-invoked** — summoned only by typing the command, never auto-fired. Each plugin's list below buckets them.
+
 **`nav` — keep code healthy:**
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
-- `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 - `/nav:sync` — sync file-top headers to the code (per-file navigability; continuous, per-change), gated diff
 - `/nav:map` — render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads `sync`'s headers)
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
+
+*User-invoked:*
+
+- `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
@@ -38,9 +62,12 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
 - `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
-- `/shape:setup` — scaffold a new project to a *verified* running baseline: archetype-driven (accumulating `references/archetypes/`), consistent with your standing stack principles, done only when the verification chain is green
 - `/shape:align` — decide now/next/later *with you* → a `blueprints/` status board (`plan.md` + bilingual `overview.html`)
 - `/shape:reconcile` — keep the blueprints honest — amend stale facts, prune/consolidate stale `thoughts/` + `plans/`
+
+*User-invoked:*
+
+- `/shape:setup` — scaffold a new project to a *verified* running baseline: archetype-driven (accumulating `references/archetypes/`), consistent with your standing stack principles, done only when the verification chain is green
 - `/shape:build` — drive the plan's In-progress column to done, autonomously but confidence-gated (stop below 90%)
 
 **`research` — read with intent:**
@@ -58,7 +85,7 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 - `/frame:graft` — design a novel system that rhymes with a mature one by grafting it: map every primitive of a donor model onto your problem, read each as fit / break / adapt; the adapt list (borrowed structure reshaped for your domain) is the payload, not the fits. The disciplined middle between `first-principles` (invent) and lazy analogy (copy); in-chat
 - `/frame:analogize` — build a deliberately stress-tested analogy for a concept you already understand: generate multiple candidates, check the mapping against the real structure, pick on fit, name where the winner breaks; delivers to the user rather than deriving for the agent, so it doesn't feed `shape`; in-chat
 
-**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project):
+**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project — *all four are user-invoked*):
 
 - `/reflect:catchup` — re-orient on where the work stands now + next, rebuilt from git/diff/plan (not chat memory); fixed shape goal · done · now · open · next
 - `/reflect:park` — write that same five-shape cursor + the current git SHA into the project's `HANDOFF.md` before stepping away, overwriting any prior one (catchup's write-side mirror)

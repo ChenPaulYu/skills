@@ -28,6 +28,8 @@ When a halt stops the run mid-batch (not just "ask and continue" but a real stop
 
 ## The per-item loop
 
+If `plan.md` doesn't exist yet, there's no board to drive — report that and point at `/shape:align` to create one first, rather than guessing at items (tolerant-reader degrade path, ADR-071).
+
 For each item in `plan.md`'s **In progress** column (each references a `thoughts/` doc):
 
 1. **Ground — via `/nav:plan`.** Turn the item/thought into a code-level plan (Context · Approach · Critical files · Verification). Reuse-via-transcript: if `/nav:plan` (or `/nav:audit` Mode 2) already ran for this item this session, reuse its output instead of re-running. (Under an approved parallel schedule, grounding for ALL items runs upfront as a read-only fan-out — see Scheduling below.)

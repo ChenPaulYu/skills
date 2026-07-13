@@ -6,7 +6,7 @@
 > 散文推薦需求交出 `disable-model-invocation`」讓步的一個結構性的家——平台閘門二元、沒有中間態,方向律
 > 用「文字規範 + 盤點表」補上。
 >
-> **狀態**:提案,待拍板。2026-07-13。
+> **狀態**:graduated (partial) → [ADR-072](docs/adr/072-invocation-direction-law-inventory.md)。提案 1(README 分桶宣告)已落地為 root CLAUDE.md 一條 bullet;提案 3(6 個 summoned-only skill 描述瘦身)已被 ADR-065 + `plan.md` Next 吸收,無需新落點;提案 2(方向性 cross-reference 規則、12 處候選違規的裁決)**維持未決**——本文「開放題」節的「留給 Paul」判斷未被 ADR-072 越俎代庖,原樣保留於本文,供後續拍板。2026-07-13。
 
 ## 背景:為什麼是這篇
 
