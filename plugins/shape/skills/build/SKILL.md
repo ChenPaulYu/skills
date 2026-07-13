@@ -47,6 +47,8 @@ Serial is the default and always correct. With **several chunky In-progress item
 4. **Run the tail in the shared tree** (no worktrees — decided trade): in-batch agents **write, don't test** (disjoint files ≠ disjoint import graphs — mid-batch test signal is contaminated); each returns a diff summary + `done|blocked`; ambiguity → `blocked`, back to the serial track.
 5. **Join — ONE authoritative gate**: full test gate; red → bisect by reverting item footprints. Then **check brackets serially per item** — integration is judgment work. Then land each item normally.
 
+Dispatched item agents (serial or the parallel tail) default to cheap tier (`model: sonnet`); a judgment-dense single item can be escalated on the spot (see root CLAUDE.md's Dispatch tiers).
+
 The dispatch facility is a **capability slot** (like browser-verify): a workflow/pipeline engine as named default, plain parallel sub-agents otherwise; **no facility → fully sequential. Degrade parallelism, never the gates.**
 
 ## browser-verify slot (the dependency, handled as a capability)

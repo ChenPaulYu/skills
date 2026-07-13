@@ -1,6 +1,6 @@
 ---
 name: graft
-description: "Design a novel system that rhymes with a mature one by GRAFTING it: pick a donor model whose structure resonates, map every primitive of the donor onto your problem, then read each mapping as fit (adopt unchanged) / break (design fresh) / adapt (borrow but reshape). The payload is the ADAPT list — only fits = reskinning, not grafting. Fires on \"reason this through git/X logic\", \"what would X look like as a Y\", \"map this onto <mature model>\", \"is our design just <known system> renamed\". The disciplined middle between first-principles (invent from axioms) and lazy analogy (copy unchanged). Analysis only; in-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan)."
+description: "Design by grafting a mature model onto a new problem: map every primitive, then classify each as fit / break / adapt — the adapt list is the payload. Fires on \"reason this through X logic\", \"map this onto <mature model>\", \"is our design just <known system> renamed\", \"借用...的架構\". The disciplined middle between first-principles (invent from axioms) and lazy analogy (copy unchanged). In-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan)."
 ---
 
 # Graft — borrow a mature model's structure, then adapt it to your domain

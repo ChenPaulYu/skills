@@ -186,7 +186,7 @@ Dispatch the domains **in parallel** (one message, multiple `Agent` calls; `suba
 - **The checks** — the universal Step 3 table + any stack-specific rows that apply, and the Step 4 self-eval (rule ⑧) on this domain's leaders.
 - **A fixed finding schema** so results merge cleanly: `{rule, severity (error|warn|info), file, line?, evidence, one-line claim}` + the rule ⑧ self-eval struggles.
 
-Each sub-agent returns its domain's findings + self-eval. It does **not** write files (read-only audit).
+Each sub-agent returns its domain's findings + self-eval. It does **not** write files (read-only audit). Reconnaissance sub-agents default to cheap tier (`model: sonnet`); a domain whose judgment call is unusually dense can be escalated on the spot (see root CLAUDE.md's Dispatch tiers).
 
 ### D3 — Merge + dedup (check ←, part 1)
 

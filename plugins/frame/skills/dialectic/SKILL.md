@@ -1,6 +1,6 @@
 ---
 name: dialectic
-description: "Put a claim on trial — build its strongest case (steelman) and its strongest attack (devil's advocate, also steelmanned, never a strawman), surface the deepest load-bearing assumption, then name the experiment that would decide it. For paradigm-class questions with no standard answer. Fires on \"steelman this\", \"steelman both sides\", \"play devil's advocate\", \"stress-test this idea\", \"strongest case for and against\", \"poke holes in my thesis\". Analysis only; in-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan). Distinct from /research:critique (audits an external doc's existing evidence; dialectic stress-tests your own forming claim, where the decider doesn't exist yet)."
+description: "Put a forming claim on trial: steelman both sides, surface the load-bearing assumption, then name the deciding experiment. Fires on \"steelman this\", \"play devil's advocate\", \"strongest case for and against\", \"這個論點站得住嗎\". In-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan). Distinct from /research:critique (audits an external doc's existing evidence; this stress-tests your own forming claim, where the decider doesn't exist yet)."
 ---
 
 # dialectic — put a claim on trial: strongest case vs strongest attack, then the deciding experiment

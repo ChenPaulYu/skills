@@ -1,6 +1,6 @@
 ---
 name: analogize
-description: "Build a deliberately stress-tested analogy to make an already-understood concept land in plain language — generate multiple candidate analogies, pick the one whose structure maps most precisely, then explicitly name where it breaks down so it doesn't get over-extended. Leads with one plain sentence, the analogy, then precise/technical detail only as needed. Fires when the user explicitly asks for a plain-language or metaphor-based explanation: \"explain this simply\", \"explain like I'm five\", \"eli5\", \"用比喻解釋\", \"打個比方\", \"說白話一點\", \"give me the plain-language version\", \"I still don't get it, try a different way\". Summoned, not automatic — every-reply plain language is a standing style default, not this skill. In-chat; writes no file. Distinct from /frame:first-principles (derives an answer FROM axioms; analogize re-expresses an answer you ALREADY have) and /shape:elicit (draws an answer OUT of the user; analogize puts an answer INTO the user's head)."
+description: "Build a deliberately stress-tested analogy for an already-understood concept, then name where it breaks down. Fires on ELI5 / plain-language / metaphor requests: \"explain like I'm five\", \"give me the plain-language version\", \"用比喻解釋\", \"打個比方\". In-chat, writes no file. Distinct from /frame:first-principles (derives an answer FROM axioms; this re-expresses one already held) and /shape:elicit (draws an answer OUT of the user; this puts one INTO their head)."
 ---
 
 # analogize — a stress-tested analogy, not the first one that comes to mind
