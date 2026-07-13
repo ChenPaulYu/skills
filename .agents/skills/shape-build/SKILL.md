@@ -17,7 +17,7 @@ It is a **meta-skill**, like `nav-plan`: it sequences other skills' protocols ra
 
 ## The shape spine (restated — this skill is self-contained)
 
-> **Converge by a real, disposable instance — never a description.** build is the spine's terminus: the disposable instances (mockups) converged the decision; build produces the **durable real thing** and verifies it against that mockup. The "two renders" (plan.md / overview.html) gain a third: the running system (a screenshot).
+> **Converge by a real, disposable instance — never a description.** build is the spine's terminus: the disposable instances (mockups) converged the decision; build produces the **durable real thing** and verifies it against that mockup. `plan.md`'s status gains a companion: the running system (a screenshot), referenced from the Shipped entry.
 
 > **Below 90% → ask (core principle, shared with `nav` rule ⑦).** This is build's leash. It runs autonomously **only while confidence holds**; the instant scope/boundary/intent on the current item drops below 90%, it stops and asks rather than plowing ahead.
 
@@ -33,7 +33,7 @@ For each item in `plan.md`'s **In progress** column (each references a `thoughts
 2. **Summarize — a visual checkpoint (mockup protocol).** Right after grounding, render a quick **interactive diagram summarizing the plan** — what changes, the approach, the affected files — following the `shape-mockup` protocol. An interactive diagram, *not* a prose description. Two payoffs: a **decidable checkpoint** to glance at before any code is written (confidence-gate — if the summary reveals the plan is wrong, stop and re-ground rather than build the wrong thing), and for an item that has **no existing mockup**, this summary *becomes* the verify target in step 4. (build *sequences* this — it does not call the mockup skill; the agent renders per the mockup protocol, into `mockups/`.)
 3. **Implement — `nav-refactor` discipline + inject↔check.** Move verbatim where refactoring; **test-gate after every step**. Do the work as a **sequential subagent-per-item** by default (concurrent edits in one tree collide; the only exception is an approved parallel tail — see Scheduling). Bracket the hand-off: **inject** the grounding the sub-agent can't see (critical files + roles, existing impls/seams to reuse, the **N+1 trigger**); **check** the returned diff (same-domain parallel impl · seam/facade read at intent · header hygiene) before accepting "done".
 4. **Verify — visual-first, against the mockup.** Use the **browser-verify slot** (see below): open the running feature → screenshot → place it **side-by-side with the item's mockup** (its own, or the step-2 summary if it had none) and check for drift. Non-visual items (backend / logic / data) → test-gate / behavioral check; do **not** force a screenshot where there's nothing to see (that's structure-theatre). The screenshot (+ mockup comparison) is the item's **Shipped evidence**. If a non-visual item's behavioral check would invoke a live paid LLM path (especially a fan-out/multi-agent one), flag it before running the item's check — same live-LLM-cost signal as `nav-do` — rather than silently re-running it full-cost per item.
-5. **Land.** Move the item to **Shipped** in `plan.md`; run **`shape-align`** to regenerate `overview.html` (with the screenshot as evidence). If the ship changed a fact recorded in a canon doc (`docs/core/*`-class), append a one-line pending amendment to `docs/core/amendments.md` — **never edit core** (the door, ADR-041). Then the next item.
+5. **Land.** Move the item to **Shipped** in `plan.md`, referencing the screenshot path as evidence; run **`shape-align`** to refresh the board. If the ship changed a fact recorded in a canon doc (`docs/core/*`-class), append a one-line pending amendment to `docs/core/amendments.md` — **never edit core** (the door, ADR-041). Then the next item.
 6. **Exit.** In-progress empty → stop and report (per-item: what shipped, the screenshot/mockup comparison, anything flagged).
 
 ## Scheduling — parallel dispatch is a policy, not a mode (ADR-040)
@@ -80,7 +80,7 @@ This is the most concentrated point of shape↔nav communication — build *cont
 ## Output
 
 - Items moved In-progress → Shipped, each with evidence (screenshot + mockup comparison, or the test/behavioral result).
-- A regenerated `overview.html` reflecting the new Shipped baseline.
+- An updated `plan.md` reflecting the new Shipped baseline, screenshots referenced by path.
 - A run report: what shipped · what was flagged/asked · what's blocked · what verification was degraded (if any).
 
 ## Anti-patterns (refuse these)

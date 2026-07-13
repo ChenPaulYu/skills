@@ -19,7 +19,8 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 
 | You want to… | Verb |
 |---|---|
-| Decide what to work on next / refresh the board | `shape-align` → `docs/blueprints/plan.md` (+ `overview.html`) |
+| Decide what to work on next / refresh the board | `shape-align` → `docs/blueprints/plan.md` |
+| See the board rendered visually | `shape-mockup` → an on-demand board snapshot |
 | Scope a feature against the actual code | `nav-plan` → `docs/blueprints/plans/` |
 | Implement a small decided change | `nav-do` |
 | Drive the in-progress board to done | `shape-build` |
@@ -28,7 +29,7 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 | Regenerate / render the repo map | `nav-map` → `docs/codebase-map/index.html` |
 | Audit architecture | `nav-audit` |
 
-**Standing pointers:** plan board = `docs/blueprints/plan.md` (agent) + `overview.html` (human) · grounded plans = `docs/blueprints/plans/` · repo map = `docs/codebase-map/index.html`.
+**Standing pointers:** plan board = `docs/blueprints/plan.md` (agent AND human — a visual view renders on demand via `shape-mockup`) · grounded plans = `docs/blueprints/plans/` · repo map = `docs/codebase-map/index.html`.
 
 **Communication:** converse with the user in **<project language — default per stack-principles, e.g. Traditional Chinese (Taiwanese phrasing)>**, plain and direct; keep code, identifiers, and commit messages in English.
 <!-- shape:dev-workflow end -->

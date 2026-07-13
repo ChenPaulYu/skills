@@ -12,6 +12,7 @@
 | Fullstack project | **monorepo: `backend/ + frontend/ + dev.sh`** | two repos |
 | Agent reasoning | **rented Claude** (claude-agent-sdk / anthropic), swappable via MCP | building an own reasoning engine (portfolio invariant) |
 | Communication | converse in **Traditional Chinese (Taiwanese phrasing)**, plain + analogy-led; code / identifiers / commit messages in English | monolingual-English chat by default |
+| Blueprints human render | **`plan.md` alone is the maintained board, always — no standing HTML file, ever.** A visual view, when wanted, renders fresh via `shape-mockup` (disposable, on-demand) — never a file `setup`/`align` scaffolds, maintains, or regenerates. | maintaining/regenerating a standing `overview.html`, or asking whether to |
 
 ## 慣例級 — twice-evidenced defaults (recurred across the maintainer's scaffolds)
 
@@ -36,7 +37,7 @@
 - Preflight per archetype; fail-helpfully 3-way on missing tools.
 - **One commit per stage**(scaffold · each major wiring), conventional commits(`feat/chore/docs(scope): …`)with substantive bodies; pushes on the user's word.
 - Docs tree opens with the project: `docs/core/`(canon — authored later by `shape-position`)+ `docs/blueprints/{thoughts,plans,mockups}`.
-- **Born primed** — every new project gets the workflow-priming layer at birth (setup step 5): a `AGENTS.md` `## Dev workflow` block (verbs + standing pointers + the Communication ruling above) **plus** the `docs/blueprints/` tree (weight-adaptive by archetype — product = full board, pure library = lean `plan.md`). Materialized from align's templates so setup and align can't drift. Grounded plans live at `docs/blueprints/plans/` — one canonical location, so a project never half-adopts (nav output one place, board another).
+- **Born primed** — every new project gets the workflow-priming layer at birth (setup step 5): a `AGENTS.md` `## Dev workflow` block (verbs + standing pointers + the Communication ruling above) **plus** the `docs/blueprints/` tree, always scaffolded with `plan.md` as its only standing board (per the Blueprints-human-render ruling above — a visual view renders on demand via `shape-mockup`, never pre-scaffolded). Materialized from align's templates so setup and align can't drift. Grounded plans live at `docs/blueprints/plans/` — one canonical location, so a project never half-adopts (nav output one place, board another).
 
 ## Docs / git / .gitignore 傳統
 

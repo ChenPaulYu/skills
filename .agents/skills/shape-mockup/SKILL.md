@@ -31,6 +31,8 @@ Everything below **derives** from the core — when in doubt, trace back:
 
 **Fires on the user's request to see / compare / render** — "mock this", "make a mockup", "draw / diagram / visualize this", "show me what X looks like", "try a few variants", "which of these", "I don't know the options — render them". It does **not** auto-fire just because a visual or structural element gets mentioned in passing. `shape-mockup` is the explicit override; otherwise it triggers on the request.
 
+**Also fires on "show me the board" / "what's the status, visually"** — a request to *see* the blueprints board rather than decide something. Render per the board-snapshot contract in [`../align/references/blueprints-spec.md`](references/blueprints-spec.md): copy `overview-template.html`, fill it from the current `plan.md` + `decisions.md`, activate it per the usual protocol below. **Always disposable** — never write it back as a standing `overview.html`; `align` does not maintain one. This is the family's answer to "I want to *see* the plan": render it fresh, don't keep a second file in sync.
+
 **Boundary (not "visual vs conceptual"):** the line is **"can a rendered interactive artifact make this decidable?"**
 
 - **Yes → this skill.** Including structural / data / flow decisions — an interactive diagram settles "how do these entities relate", "how should this agent branch", "what's the pipeline shape".

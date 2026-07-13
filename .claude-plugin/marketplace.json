@@ -15,7 +15,7 @@
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), position (canon-authoring campaign → core docs), setup (scaffold a new project to a verified baseline — archetype references + stack principles), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
-      "version": "0.7.1"
+      "version": "0.7.2"
     },
     {
       "name": "research",
