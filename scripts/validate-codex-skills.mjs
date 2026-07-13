@@ -38,11 +38,17 @@ import {
   formatCodexCompatAudit,
   validateCodexCompatPhase0,
 } from "./lib/codex-compat-audit.mjs";
+import {
+  findInstalledSkillCopies,
+  loadCodexProjection,
+  selectProfile,
+} from "./lib/codex-projection.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLUGINS_DIR = join(ROOT, "plugins");
 const CODEX_SKILLS_DIR = join(ROOT, ".agents", "skills");
 const CODEX_DESCRIPTION_LIMIT = 1024;
+const CODEX_PROJECTION = loadCodexProjection(ROOT);
 const errors = [];
 
 function main() {
@@ -53,8 +59,20 @@ function main() {
     return;
   }
 
+  if (process.argv.includes("--metadata-audit")) {
+    const pluginSkills = readPluginSkills();
+    validateCodexProjection(pluginSkills);
+    printMetadataAudit(pluginSkills);
+    if (errors.length) {
+      for (const error of errors) console.error(`- ${error}`);
+      process.exit(1);
+    }
+    return;
+  }
+
   const pluginSkills = readPluginSkills();
   validateClaudeSources(pluginSkills);
+  validateCodexProjection(pluginSkills);
   validateCodexMirror(pluginSkills, ROOT);
   validateGeneratedDrift();
   validateManifestDrift();
@@ -70,6 +88,87 @@ function main() {
   }
 
   console.log(`Codex/Claude skill compatibility ok: ${pluginSkills.length} plugin skills`);
+}
+
+function validateCodexProjection(pluginSkills) {
+  const expected = new Set(pluginSkills.map((item) => item.flat));
+  const descriptions = CODEX_PROJECTION.descriptions.skills ?? {};
+  const described = new Set(Object.keys(descriptions));
+  const maxPerSkill = CODEX_PROJECTION.descriptions.max_chars_per_skill;
+  const maxTotal = CODEX_PROJECTION.descriptions.max_total_chars;
+
+  for (const name of expected) {
+    if (!described.has(name)) {
+      errors.push(`platforms/codex/descriptions.json is missing ${name}`);
+    }
+  }
+  for (const name of described) {
+    if (!expected.has(name)) {
+      errors.push(`platforms/codex/descriptions.json has stale unknown skill ${name}`);
+    }
+  }
+
+  let total = 0;
+  for (const [name, description] of Object.entries(descriptions)) {
+    if (typeof description !== "string" || !description.trim()) {
+      errors.push(`Codex description for ${name} must be a non-empty string`);
+      continue;
+    }
+    total += description.length;
+    if (description.length > maxPerSkill) {
+      errors.push(`Codex description for ${name} is ${description.length} chars, over ${maxPerSkill}`);
+    }
+  }
+  if (total > maxTotal) {
+    errors.push(`Codex descriptions total ${total} chars, over metadata budget ${maxTotal}`);
+  }
+
+  const available = [...expected].sort();
+  for (const profileName of Object.keys(CODEX_PROJECTION.manifest.install_profiles ?? {})) {
+    try {
+      selectProfile(CODEX_PROJECTION, profileName, available);
+    } catch (error) {
+      errors.push(error.message);
+    }
+  }
+  const all = selectProfile(CODEX_PROJECTION, "all", available);
+  if (all.length !== available.length) {
+    errors.push(`Codex install profile "all" covers ${all.length}/${available.length} skills`);
+  }
+}
+
+function printMetadataAudit(pluginSkills) {
+  const descriptions = CODEX_PROJECTION.descriptions.skills;
+  const lengths = Object.entries(descriptions).map(([name, value]) => [name, value.length]);
+  const total = lengths.reduce((sum, [, length]) => sum + length, 0);
+  const longest = lengths.sort((a, b) => b[1] - a[1])[0];
+  console.log("Codex metadata audit");
+  console.log(`- Skills: ${pluginSkills.length}`);
+  console.log(`- Description characters: ${total}/${CODEX_PROJECTION.descriptions.max_total_chars}`);
+  console.log(`- Longest: ${longest[0]} (${longest[1]}/${CODEX_PROJECTION.descriptions.max_chars_per_skill})`);
+
+  for (const profileName of Object.keys(CODEX_PROJECTION.manifest.install_profiles)) {
+    const selected = selectProfile(
+      CODEX_PROJECTION,
+      profileName,
+      pluginSkills.map((item) => item.flat),
+    );
+    console.log(`- Profile ${profileName}: ${selected.length} skills`);
+  }
+
+  const copies = findInstalledSkillCopies(
+    process.env.HOME || process.env.USERPROFILE,
+    pluginSkills.map((item) => item.flat),
+  );
+  const workspaceOverlap = [...copies.entries()].filter(([, paths]) => paths.length > 0);
+  console.log(`- Current workspace/global overlap: ${workspaceOverlap.length}`);
+  const duplicates = [...copies.entries()].filter(([, paths]) => paths.length > 1);
+  if (!duplicates.length) {
+    console.log("- Global duplicate prefixed skills: none");
+    return;
+  }
+  console.log(`- Global duplicate prefixed skills: ${duplicates.length}`);
+  for (const [name, paths] of duplicates) console.log(`  ${name}: ${paths.join(" · ")}`);
 }
 
 function readPluginSkills() {

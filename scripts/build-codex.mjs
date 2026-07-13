@@ -17,11 +17,18 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync, existsSync, statSync, cpSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  codexDescription,
+  findInstalledSkillCopies,
+  loadCodexProjection,
+  selectProfile,
+} from "./lib/codex-projection.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLUGINS_DIR = join(ROOT, "plugins");
 const OUT_DIR = join(ROOT, ".agents", "skills");
 const AGENTS_MD = join(ROOT, "AGENTS.md");
+const PROJECTION = loadCodexProjection(ROOT);
 
 const PLUGINS = readdirSync(PLUGINS_DIR)
   .filter((plugin) => {
@@ -50,7 +57,7 @@ const NS = new RegExp(`/?\\b(${PLUGIN_PATTERN}):(${SKILL_PATTERN})\\b`, "g");
 // Full skills-root reference paths → repo-root-relative `references/…` (they travel with the dir).
 const REF_PATH = new RegExp(`plugins/(?:${PLUGIN_PATTERN})/skills/[^/]+/references/`, "g");
 const PLUGIN_CLAUDE = new RegExp(`plugins/(?:${PLUGIN_PATTERN})/CLAUDE\\.md`, "g");
-const CODEX_DESCRIPTION_BUDGET = 1000;
+const CODEX_DESCRIPTION_HARD_LIMIT = 1024;
 
 function escapeRegExp(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -72,15 +79,16 @@ function renameFrontmatter(text, bare, flat) {
 }
 
 /**
- * Codex validates skill metadata more strictly than Claude plugins do:
- * `description` must parse as YAML and must not exceed 1024 characters.
+ * Codex validates metadata more strictly than Claude plugins do. The projection sidecar
+ * supplies the normal budget; this hard limit remains a final format-safety backstop.
  */
-function normalizeCodexFrontmatter(text) {
+function normalizeCodexFrontmatter(text, flatName) {
   return text.replace(/^---\n([\s\S]*?)\n---/, (_match, frontmatter) => {
     const normalized = frontmatter.replace(/^description:\s*(.*)$/m, (_line, rawDescription) => {
-      let description = parseFrontmatterString(rawDescription.trim()).replace(/\s+/g, " ").trim();
-      if (description.length > CODEX_DESCRIPTION_BUDGET) {
-        description = `${description.slice(0, CODEX_DESCRIPTION_BUDGET - 3).trimEnd()}...`;
+      const sourceDescription = parseFrontmatterString(rawDescription.trim()).replace(/\s+/g, " ").trim();
+      let description = codexDescription(PROJECTION, flatName, sourceDescription);
+      if (description.length > CODEX_DESCRIPTION_HARD_LIMIT) {
+        description = `${description.slice(0, CODEX_DESCRIPTION_HARD_LIMIT - 3).trimEnd()}...`;
       }
       return `description: ${JSON.stringify(description)}`;
     });
@@ -121,7 +129,7 @@ function build() {
       let md = readFileSync(srcSkillMd, "utf8");
       md = renameFrontmatter(md, skill, flat);
       md = rewriteSkill(md);
-      md = normalizeCodexFrontmatter(md);
+      md = normalizeCodexFrontmatter(md, flat);
       const banner = GEN_BANNER_SKILL.replace("{plugin}", plugin).replace("{skill}", skill);
       md = md.replace(/^(---\n[\s\S]*?\n---\n)/, `$1${banner}`);
       writeFileSync(join(outSkillDir, "SKILL.md"), md);
@@ -197,8 +205,29 @@ function syncGlobal() {
   }
 
   console.log(`\n→ Syncing to global directory: ${globalDir}`);
-  let prefixedCount = 0;
-  let unprefixedCount = 0;
+  const profileName = argValue("--profile") ?? "all";
+  const available = PLUGINS.flatMap((plugin) =>
+    readdirSync(join(PLUGINS_DIR, plugin, "skills"))
+      .filter((skill) => existsSync(join(PLUGINS_DIR, plugin, "skills", skill, "SKILL.md")))
+      .map((skill) => `${plugin}-${skill}`),
+  ).sort();
+  const selected = selectProfile(PROJECTION, profileName, available);
+  const selectedSet = new Set(selected);
+  const receiptPath = join(globalDir, ".skills-marketplace-codex.json");
+  const previous = existsSync(receiptPath)
+    ? JSON.parse(readFileSync(receiptPath, "utf8")).skills ?? []
+    : [];
+  for (const flat of available) {
+    if (isGeneratedMarketplaceSkill(join(globalDir, flat, "SKILL.md"))) previous.push(flat);
+  }
+
+  for (const flat of new Set(previous)) {
+    if (selectedSet.has(flat)) continue;
+    const stale = join(globalDir, flat);
+    if (existsSync(stale)) rmSync(stale, { recursive: true });
+  }
+
+  let syncedCount = 0;
 
   for (const plugin of PLUGINS) {
     const skillsDir = join(PLUGINS_DIR, plugin, "skills");
@@ -208,7 +237,7 @@ function syncGlobal() {
       if (!statSync(srcSkillDir).isDirectory()) continue;
 
       const flat = `${plugin}-${skill}`;
-      const srcSkillMd = join(srcSkillDir, "SKILL.md");
+      if (!selectedSet.has(flat)) continue;
 
       // 1. Copy prefixed compiled skill (from .agents/skills/ flat mirror)
       const compiledSkillDir = join(OUT_DIR, flat);
@@ -216,17 +245,43 @@ function syncGlobal() {
       if (existsSync(compiledSkillDir)) {
         if (existsSync(destPrefixedDir)) rmSync(destPrefixedDir, { recursive: true });
         cpSync(compiledSkillDir, destPrefixedDir, { recursive: true });
-        prefixedCount++;
-      }
-
-      // 2. Overwrite un-prefixed skill if it exists globally (from agy install)
-      const destUnprefixedDir = join(globalDir, skill);
-      const destUnprefixedMd = join(destUnprefixedDir, "SKILL.md");
-      if (existsSync(destUnprefixedDir) && existsSync(srcSkillMd)) {
-        cpSync(srcSkillMd, destUnprefixedMd);
-        unprefixedCount++;
+        syncedCount++;
       }
     }
   }
-  console.log(`✓ Synced ${prefixedCount} prefixed skills and updated ${unprefixedCount} un-prefixed global skills.`);
+  writeFileSync(receiptPath, `${JSON.stringify({ profile: profileName, skills: selected }, null, 2)}\n`);
+  console.log(`✓ Synced ${syncedCount} compiled skills with Codex profile "${profileName}".`);
+  console.log("✓ Unprefixed Claude-source skills were not copied; Codex installs only the compiled names.");
+
+  if (process.argv.includes("--dedupe-global-roots")) {
+    const legacyRoot = join(HOME, ".codex", "skills");
+    let removed = 0;
+    for (const flat of available) {
+      const legacyDir = join(legacyRoot, flat);
+      if (!isGeneratedMarketplaceSkill(join(legacyDir, "SKILL.md"))) continue;
+      rmSync(legacyDir, { recursive: true });
+      removed++;
+    }
+    console.log(`✓ Removed ${removed} generated duplicate marketplace skills from ~/.codex/skills.`);
+  }
+
+  const copies = findInstalledSkillCopies(HOME, selected);
+  const duplicates = [...copies.entries()].filter(([, paths]) => paths.length > 1);
+  if (duplicates.length) {
+    console.warn("\n⚠ Duplicate Codex skill copies remain across ~/.agents/skills and ~/.codex/skills:");
+    for (const [name, paths] of duplicates) console.warn(`  ${name}: ${paths.join(" · ")}`);
+    console.warn("  Re-run with --dedupe-global-roots to remove generated marketplace duplicates.");
+  }
+}
+
+function argValue(flag) {
+  const index = process.argv.indexOf(flag);
+  return index === -1 ? null : process.argv[index + 1] ?? null;
+}
+
+function isGeneratedMarketplaceSkill(skillMd) {
+  if (!existsSync(skillMd)) return false;
+  return readFileSync(skillMd, "utf8").includes(
+    "GENERATED by scripts/build-codex.mjs from plugins/",
+  );
 }

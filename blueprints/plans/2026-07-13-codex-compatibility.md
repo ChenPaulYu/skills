@@ -4,6 +4,8 @@
 >
 > **Decision:** Treat the existing Claude Code marketplace as a frozen input contract. Add Codex behavior compatibility entirely in a Codex adapter/compiler and Codex-only artifacts. Do not edit `plugins/**`, root `CLAUDE.md`, `.claude-plugin/**`, or `.cursor-plugin/**`; do not bump Claude plugin versions.
 
+> **Progress — 2026-07-13:** The context-budget slice is implemented: Codex-only descriptions, metadata budgets, install profiles, receipt-owned pruning, global-root duplicate auditing/cleanup, and the translation guide. Behavioral capability lowering (`AskUserQuestion`, workers, model roles, browser verification, lifecycle claims) remains in Phases 1–5 and is still reported by the Phase 0 compatibility audit.
+
 ## Context
 
 The repository already produces a Codex mirror, but the mirror is format-compatible rather than behavior-compatible. `scripts/build-codex.mjs` flattens names (`nav:plan` → `nav-plan`), rewrites `CLAUDE.md` references to `AGENTS.md`, re-roots bundled references, and normalizes frontmatter descriptions. It does not currently lower Claude-only runtime semantics such as `AskUserQuestion`, `Agent` / `subagent_type`, `disable-model-invocation`, `model: sonnet`, bundled custom agents, or session-open behavior.

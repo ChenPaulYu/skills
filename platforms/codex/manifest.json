@@ -1,6 +1,37 @@
 {
   "schema_version": "1",
-  "adapter_release": "0.1.0-phase0",
+  "adapter_release": "0.2.0-projection",
+  "metadata_policy": {
+    "description_source": "platforms/codex/descriptions.json",
+    "description_strategy": "Codex-only, trigger-first summaries; Claude descriptions remain unchanged",
+    "single_active_copy": true
+  },
+  "install_profiles": {
+    "project-only": {
+      "summary": "Install no global marketplace skills; rely on the current project's .agents/skills mirror.",
+      "skills": []
+    },
+    "minimal": {
+      "summary": "Small everyday build loop.",
+      "skills": ["nav-do", "nav-plan", "shape-build", "reflect-catchup"]
+    },
+    "build": {
+      "summary": "Code navigation, convergence, execution, and session orientation.",
+      "skills": ["nav-*", "shape-*", "reflect-catchup", "reflect-observe", "reflect-summarize"]
+    },
+    "research": {
+      "summary": "Reasoning frames and document research.",
+      "skills": ["frame-*", "research-*"]
+    },
+    "collaboration": {
+      "summary": "Relay coordination and session reflection.",
+      "skills": ["relay-*", "reflect-*"]
+    },
+    "all": {
+      "summary": "Every generated skill; use only when the full roster is needed.",
+      "skills": ["*"]
+    }
+  },
   "capabilities": [
     {
       "id": "interactive_choice",
