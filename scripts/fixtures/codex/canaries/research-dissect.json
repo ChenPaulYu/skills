@@ -1,0 +1,11 @@
+{
+  "id": "research-dissect",
+  "mode": "generated",
+  "file": ".agents/skills/research-dissect/SKILL.md",
+  "expect": [
+    {
+      "category": "subagent_protocol",
+      "contains": "sub-agent"
+    }
+  ]
+}

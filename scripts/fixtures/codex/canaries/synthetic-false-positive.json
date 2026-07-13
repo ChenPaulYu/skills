@@ -1,0 +1,15 @@
+{
+  "id": "synthetic-false-positive",
+  "mode": "synthetic",
+  "file": "synthetic/false-positive.md",
+  "content": "This agent should explain the plan in plain English.\nThe initialization step is documented as /init without quotes in a code fence example name only.\n",
+  "reject": [
+    {
+      "category": "agent_call"
+    },
+    {
+      "category": "claude_init"
+    }
+  ],
+  "expected_total": 0
+}

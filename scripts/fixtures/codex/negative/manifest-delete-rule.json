@@ -1,0 +1,40 @@
+{
+  "id": "manifest-delete-rule",
+  "scenario": "baseline_metadata",
+  "scanner_roots": [
+    ".agents/skills",
+    "AGENTS.md"
+  ],
+  "rules": [
+    {
+      "id": "ask_user_question",
+      "label": "interactive_choice / AskUserQuestion",
+      "kind": "literal",
+      "pattern": "AskUserQuestion"
+    }
+  ],
+  "baseline": {
+    "scanner_roots": [
+      ".agents/skills",
+      "AGENTS.md"
+    ],
+    "rules": [
+      {
+        "id": "ask_user_question",
+        "fingerprint": "6c4c6e69bd5c6f56"
+      },
+      {
+        "id": "agent_call",
+        "fingerprint": "deadbeefdeadbeef"
+      }
+    ],
+    "per_file_max_counts": {
+      "ask_user_question": {},
+      "agent_call": {}
+    }
+  },
+  "expect_errors": [
+    "compat baseline rule \"agent_call\" no longer exists in manifest",
+    "compat baseline has extra category \"agent_call\" in per_file_max_counts"
+  ]
+}

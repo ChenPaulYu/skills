@@ -1,0 +1,19 @@
+{
+  "id": "shape-setup",
+  "mode": "generated",
+  "file": ".agents/skills/shape-setup/SKILL.md",
+  "expect": [
+    {
+      "category": "disable_model_invocation",
+      "contains": "disable-model-invocation"
+    },
+    {
+      "category": "claude_built_in",
+      "contains": "Claude Code's built-in"
+    },
+    {
+      "category": "claude_init",
+      "contains": "/init"
+    }
+  ]
+}

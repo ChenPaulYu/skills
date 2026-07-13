@@ -1,0 +1,134 @@
+{
+  "scanner_roots": [
+    ".agents/skills",
+    "AGENTS.md"
+  ],
+  "rules": [
+    {
+      "id": "ask_user_question",
+      "fingerprint": "6c4c6e69bd5c6f56"
+    },
+    {
+      "id": "agent_call",
+      "fingerprint": "cc215b2f58d6b601"
+    },
+    {
+      "id": "subagent_type",
+      "fingerprint": "0b6fcafcd8c8045c"
+    },
+    {
+      "id": "subagent_protocol",
+      "fingerprint": "b1c583c7f4438510"
+    },
+    {
+      "id": "disable_model_invocation",
+      "fingerprint": "83dd144f4b80370e"
+    },
+    {
+      "id": "model_sonnet",
+      "fingerprint": "f18f20eca4b72743"
+    },
+    {
+      "id": "claude_built_in",
+      "fingerprint": "3c935fbf28274117"
+    },
+    {
+      "id": "claude_init",
+      "fingerprint": "342d2592d463a7ac"
+    },
+    {
+      "id": "browser_verifier",
+      "fingerprint": "2f92fc8572d73c65"
+    },
+    {
+      "id": "agent_browser",
+      "fingerprint": "a26122dc66a32352"
+    },
+    {
+      "id": "session_open_claim",
+      "fingerprint": "30ed08e753fe2722"
+    }
+  ],
+  "per_file_max_counts": {
+    "ask_user_question": {
+      ".agents/skills/frame-dialectic/SKILL.md": 1,
+      ".agents/skills/frame-first-principles/SKILL.md": 1,
+      ".agents/skills/frame-graft/SKILL.md": 1,
+      ".agents/skills/nav-plan/SKILL.md": 4,
+      ".agents/skills/nav-refactor/SKILL.md": 2,
+      ".agents/skills/shape-dogfood/SKILL.md": 1,
+      ".agents/skills/shape-elicit/SKILL.md": 1,
+      ".agents/skills/shape-mockup/SKILL.md": 1,
+      ".agents/skills/shape-reconcile/SKILL.md": 1,
+      "AGENTS.md": 1
+    },
+    "agent_call": {
+      ".agents/skills/nav-audit/SKILL.md": 1,
+      ".agents/skills/nav-plan/SKILL.md": 1,
+      ".agents/skills/nav-refactor/SKILL.md": 1
+    },
+    "subagent_type": {
+      ".agents/skills/nav-audit/SKILL.md": 1,
+      ".agents/skills/nav-plan/SKILL.md": 1,
+      ".agents/skills/nav-refactor/SKILL.md": 1
+    },
+    "subagent_protocol": {
+      ".agents/skills/nav-audit/SKILL.md": 9,
+      ".agents/skills/nav-do/SKILL.md": 2,
+      ".agents/skills/nav-plan/SKILL.md": 10,
+      ".agents/skills/nav-refactor/SKILL.md": 4,
+      ".agents/skills/research-dissect/SKILL.md": 15,
+      ".agents/skills/shape-build/SKILL.md": 2,
+      ".agents/skills/shape-elicit/SKILL.md": 4,
+      ".agents/skills/shape-mockup/SKILL.md": 1,
+      "AGENTS.md": 8
+    },
+    "disable_model_invocation": {
+      ".agents/skills/nav-refactor/SKILL.md": 1,
+      ".agents/skills/reflect-catchup/SKILL.md": 1,
+      ".agents/skills/reflect-observe/SKILL.md": 1,
+      ".agents/skills/reflect-summarize/SKILL.md": 1,
+      ".agents/skills/shape-build/SKILL.md": 1,
+      ".agents/skills/shape-setup/SKILL.md": 1
+    },
+    "model_sonnet": {
+      ".agents/skills/nav-map/SKILL.md": 2,
+      ".agents/skills/reflect-summarize/SKILL.md": 2,
+      ".agents/skills/relay-digest/SKILL.md": 2,
+      ".agents/skills/relay-format/SKILL.md": 2,
+      ".agents/skills/shape-align/SKILL.md": 2,
+      ".agents/skills/shape-build/SKILL.md": 1,
+      ".agents/skills/shape-mockup/SKILL.md": 1,
+      ".agents/skills/shape-reconcile/SKILL.md": 2,
+      "AGENTS.md": 7
+    },
+    "claude_built_in": {
+      ".agents/skills/shape-setup/SKILL.md": 1
+    },
+    "claude_init": {
+      ".agents/skills/shape-align/references/dev-workflow-stub.md": 1,
+      ".agents/skills/shape-setup/SKILL.md": 4
+    },
+    "browser_verifier": {
+      ".agents/skills/shape-build/SKILL.md": 2,
+      ".agents/skills/shape-mockup/SKILL.md": 2,
+      "AGENTS.md": 4
+    },
+    "agent_browser": {
+      ".agents/skills/nav-map/references/map-render.md": 2,
+      ".agents/skills/nav-map/references/visual-spec.md": 2,
+      ".agents/skills/nav-refactor/SKILL.md": 1,
+      ".agents/skills/shape-build/SKILL.md": 10,
+      ".agents/skills/shape-dogfood/SKILL.md": 3,
+      ".agents/skills/shape-mockup/SKILL.md": 1,
+      ".agents/skills/shape-setup/SKILL.md": 3,
+      ".agents/skills/shape-setup/references/archetypes/fullstack-web.md": 5,
+      ".agents/skills/shape-setup/references/archetypes/python-lib.md": 1,
+      "AGENTS.md": 13
+    },
+    "session_open_claim": {
+      ".agents/skills/relay-digest/scripts/compute-state.mjs": 1,
+      "AGENTS.md": 2
+    }
+  }
+}

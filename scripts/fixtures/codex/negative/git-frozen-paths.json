@@ -1,0 +1,41 @@
+{
+  "id": "git-frozen-paths",
+  "scenario": "git_frozen_paths",
+  "frozen_contract_paths": [
+    "CLAUDE.md",
+    ".claude-plugin",
+    "plugins"
+  ],
+  "files": {
+    "plugins/nav/skills/plan/SKILL.md": "# baseline skill\n",
+    "plugins/frame/skills/analogize/SKILL.md": "# second baseline skill\n",
+    "scripts/build-codex.mjs": "console.log('generated only');\n"
+  },
+  "operations": [
+    {
+      "kind": "append",
+      "path": "plugins/nav/skills/plan/SKILL.md",
+      "content": "tracked unstaged edit\n"
+    },
+    {
+      "kind": "write",
+      "path": "plugins/new/skills/new/SKILL.md",
+      "content": "# untracked frozen file\n"
+    },
+    {
+      "kind": "append",
+      "path": "plugins/frame/skills/analogize/SKILL.md",
+      "content": "tracked staged edit\n"
+    },
+    {
+      "kind": "git_add",
+      "path": "plugins/frame/skills/analogize/SKILL.md"
+    }
+  ],
+  "expect_errors": [
+    "frozen Claude contract has tracked unstaged changes: plugins/nav/skills/plan/SKILL.md",
+    "frozen Claude contract has staged changes: plugins/frame/skills/analogize/SKILL.md",
+    "frozen Claude contract has untracked files: plugins/new/skills/new/SKILL.md"
+  ],
+  "expect_only": true
+}

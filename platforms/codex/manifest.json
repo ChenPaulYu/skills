@@ -1,0 +1,123 @@
+{
+  "schema_version": "1",
+  "adapter_release": "0.1.0-phase0",
+  "capabilities": [
+    {
+      "id": "interactive_choice",
+      "status": "planned",
+      "summary": "Codex lowering for user choice gates such as AskUserQuestion."
+    },
+    {
+      "id": "worker_dispatch",
+      "status": "planned",
+      "summary": "Codex lowering for Agent dispatch, subagent_type, and sub-agent protocol claims."
+    },
+    {
+      "id": "explicit_invocation_only",
+      "status": "planned",
+      "summary": "Codex lowering for disable-model-invocation semantics."
+    },
+    {
+      "id": "mechanical_model_tier",
+      "status": "planned",
+      "summary": "Codex lowering for Claude-only model tier metadata."
+    },
+    {
+      "id": "browser_verify",
+      "status": "planned",
+      "summary": "Codex lowering for browser-verifier and browser automation references."
+    },
+    {
+      "id": "project_guidance",
+      "status": "planned",
+      "summary": "Codex lowering for Claude-specific project priming references."
+    },
+    {
+      "id": "session_open_awareness",
+      "status": "planned",
+      "summary": "Codex lowering for session-open and runs-on-open claims."
+    }
+  ],
+  "generated_destinations": [
+    ".agents/skills",
+    "AGENTS.md"
+  ],
+  "frozen_contract_paths": [
+    "CLAUDE.md",
+    ".claude-plugin",
+    "plugins"
+  ],
+  "denylisted_unresolved_tokens": [
+    {
+      "id": "ask_user_question",
+      "label": "interactive_choice / AskUserQuestion",
+      "kind": "literal",
+      "pattern": "AskUserQuestion"
+    },
+    {
+      "id": "agent_call",
+      "label": "worker_dispatch / Agent call",
+      "kind": "regex",
+      "pattern": "`Agent`|\\bAgent\\s*\\(|\\bAgent\\s+tool\\b",
+      "flags": "g"
+    },
+    {
+      "id": "subagent_type",
+      "label": "worker_dispatch / subagent_type",
+      "kind": "literal",
+      "pattern": "subagent_type="
+    },
+    {
+      "id": "subagent_protocol",
+      "label": "worker_dispatch / sub-agent protocol",
+      "kind": "regex",
+      "pattern": "\\bsub-agent\\b",
+      "flags": "gi"
+    },
+    {
+      "id": "disable_model_invocation",
+      "label": "explicit_invocation_only / disable-model-invocation",
+      "kind": "literal",
+      "pattern": "disable-model-invocation"
+    },
+    {
+      "id": "model_sonnet",
+      "label": "mechanical_model_tier / model: sonnet",
+      "kind": "regex",
+      "pattern": "model:\\s*sonnet",
+      "flags": "gi"
+    },
+    {
+      "id": "claude_built_in",
+      "label": "project_guidance / Claude Code's built-in",
+      "kind": "literal",
+      "pattern": "Claude Code's built-in"
+    },
+    {
+      "id": "claude_init",
+      "label": "project_guidance / /init claim",
+      "kind": "regex",
+      "pattern": "`/init`|\"/init\"|'/init'",
+      "flags": "g"
+    },
+    {
+      "id": "browser_verifier",
+      "label": "browser_verify / browser-verifier reference",
+      "kind": "literal",
+      "pattern": "browser-verifier"
+    },
+    {
+      "id": "agent_browser",
+      "label": "browser_verify / agent-browser reference",
+      "kind": "literal",
+      "pattern": "agent-browser"
+    },
+    {
+      "id": "session_open_claim",
+      "label": "session_open_awareness / session-open claim",
+      "kind": "regex",
+      "pattern": "session-open|runs on every open|runs on open",
+      "flags": "gi"
+    }
+  ]
+}

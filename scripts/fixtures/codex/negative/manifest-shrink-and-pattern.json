@@ -1,0 +1,35 @@
+{
+  "id": "manifest-shrink-and-pattern",
+  "scenario": "baseline_metadata",
+  "scanner_roots": [
+    ".agents/skills"
+  ],
+  "rules": [
+    {
+      "id": "claude_init",
+      "label": "project_guidance / /init claim",
+      "kind": "regex",
+      "pattern": "\"/init\"",
+      "flags": "g"
+    }
+  ],
+  "baseline": {
+    "scanner_roots": [
+      ".agents/skills",
+      "AGENTS.md"
+    ],
+    "rules": [
+      {
+        "id": "claude_init",
+        "fingerprint": "342d2592d463a7ac"
+      }
+    ],
+    "per_file_max_counts": {
+      "claude_init": {}
+    }
+  },
+  "expect_errors": [
+    "compat baseline scanner_roots drifted",
+    "compat baseline fingerprint mismatch for claude_init"
+  ]
+}

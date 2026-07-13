@@ -1,0 +1,19 @@
+{
+  "id": "nav-plan",
+  "mode": "generated",
+  "file": ".agents/skills/nav-plan/SKILL.md",
+  "expect": [
+    {
+      "category": "ask_user_question",
+      "contains": "AskUserQuestion"
+    },
+    {
+      "category": "agent_call",
+      "contains": "Invoke `Agent`"
+    },
+    {
+      "category": "subagent_type",
+      "contains": "subagent_type=general-purpose"
+    }
+  ]
+}

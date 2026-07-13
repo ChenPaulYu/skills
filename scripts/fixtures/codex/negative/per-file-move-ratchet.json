@@ -1,0 +1,22 @@
+{
+  "id": "per-file-move-ratchet",
+  "scenario": "ratchet",
+  "audit_categories": {
+    "ask_user_question": {
+      "id": "ask_user_question",
+      "label": "interactive_choice / AskUserQuestion",
+      "perFileCounts": {
+        ".agents/skills/moved/SKILL.md": 2
+      }
+    }
+  },
+  "per_file_max_counts": {
+    "ask_user_question": {
+      ".agents/skills/original/SKILL.md": 2
+    }
+  },
+  "expect_errors": [
+    "compat ratchet exceeded for interactive_choice / AskUserQuestion in .agents/skills/moved/SKILL.md: 2 > baseline 0"
+  ],
+  "expect_only": true
+}

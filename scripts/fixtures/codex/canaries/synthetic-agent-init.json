@@ -1,0 +1,21 @@
+{
+  "id": "synthetic-agent-init",
+  "mode": "synthetic",
+  "file": "synthetic/agent-init.md",
+  "content": "Call Agent({ goal: 'scan' }) only after the root check.\nIf the Agent tool is unavailable, stop and report it.\nThe older Claude setup told users to run '/init' before continuing.\n",
+  "expect": [
+    {
+      "category": "agent_call",
+      "contains": "Agent({ goal: 'scan' })"
+    },
+    {
+      "category": "agent_call",
+      "contains": "Agent tool"
+    },
+    {
+      "category": "claude_init",
+      "contains": "'/init'"
+    }
+  ],
+  "expected_total": 3
+}

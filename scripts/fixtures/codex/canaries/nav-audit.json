@@ -1,0 +1,15 @@
+{
+  "id": "nav-audit",
+  "mode": "generated",
+  "file": ".agents/skills/nav-audit/SKILL.md",
+  "expect": [
+    {
+      "category": "agent_call",
+      "contains": "multiple `Agent` calls"
+    },
+    {
+      "category": "subagent_type",
+      "contains": "subagent_type=Explore"
+    }
+  ]
+}

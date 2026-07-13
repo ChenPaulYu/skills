@@ -1,0 +1,23 @@
+{
+  "id": "write-set-outside-generated",
+  "scenario": "write_set",
+  "changed_files": [
+    ".agents/skills/nav-plan/SKILL.md",
+    "platforms/codex/manifest.json",
+    "plugins/nav/skills/plan/SKILL.md"
+  ],
+  "generated_destinations": [
+    ".agents/skills",
+    "AGENTS.md"
+  ],
+  "frozen_contract_paths": [
+    "CLAUDE.md",
+    ".claude-plugin",
+    "plugins"
+  ],
+  "expect_errors": [
+    "temp build wrote outside generated_destinations: platforms/codex/manifest.json",
+    "frozen Claude contract changed during temp build: plugins/nav/skills/plan/SKILL.md",
+    "temp build wrote outside generated_destinations: plugins/nav/skills/plan/SKILL.md"
+  ]
+}

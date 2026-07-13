@@ -34,6 +34,10 @@ import { execFileSync } from "node:child_process";
 import { dirname, join, relative } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import {
+  formatCodexCompatAudit,
+  validateCodexCompatPhase0,
+} from "./lib/codex-compat-audit.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLUGINS_DIR = join(ROOT, "plugins");
@@ -42,6 +46,13 @@ const CODEX_DESCRIPTION_LIMIT = 1024;
 const errors = [];
 
 function main() {
+  if (process.argv.includes("--compat-audit")) {
+    const compat = validateCodexCompatPhase0(ROOT);
+    console.log(formatCodexCompatAudit(compat));
+    if (compat.errors.length) process.exit(1);
+    return;
+  }
+
   const pluginSkills = readPluginSkills();
   validateClaudeSources(pluginSkills);
   validateCodexMirror(pluginSkills, ROOT);
@@ -49,6 +60,8 @@ function main() {
   validateManifestDrift();
   validateRegistration(pluginSkills);
   validateSiteMapVersions();
+  const compat = validateCodexCompatPhase0(ROOT);
+  errors.push(...compat.errors);
 
   if (errors.length) {
     console.error(`Codex/Claude skill compatibility check failed (${errors.length}):`);
