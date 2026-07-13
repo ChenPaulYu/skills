@@ -37,7 +37,12 @@ export function runCodexCompatAudit(root) {
   };
 }
 
-export function validateCodexCompatPhase0(root) {
+export function validateCodexCompatPhase0(root, options = {}) {
+  // worktreeFreeze is the codex-workstream discipline (adapter work must not
+  // write Claude sources); it is NOT a repo-wide freeze. Default validator runs
+  // pass worktreeFreeze: false so normal marketplace evolution stays possible
+  // (arbitrated 2026-07-13, ADR-068). The --compat-audit door keeps it on.
+  const { worktreeFreeze = true } = options;
   const errors = [];
   const audit = runCodexCompatAudit(root);
   const baseline = readJson(join(root, BASELINE_PATH));
@@ -51,7 +56,7 @@ export function validateCodexCompatPhase0(root) {
   const negativeTests = validateNegativeFixtures(root);
   errors.push(...negativeTests.errors);
 
-  const frozen = validateFrozenContract(root, audit.manifest);
+  const frozen = validateFrozenContract(root, audit.manifest, worktreeFreeze);
   errors.push(...frozen.errors);
 
   return { root, audit, baseline, canaries, negativeTests, frozen, errors };
@@ -310,9 +315,11 @@ function buildNegativeFixtureErrors(fixture) {
   return errors;
 }
 
-function validateFrozenContract(root, manifest) {
+function validateFrozenContract(root, manifest, includeWorktreeFreeze = true) {
   const errors = [];
-  const worktree = validateFrozenWorktree(root, manifest.frozen_contract_paths);
+  const worktree = includeWorktreeFreeze
+    ? validateFrozenWorktree(root, manifest.frozen_contract_paths)
+    : { errors: [], staged: [], unstaged: [], untracked: [], skipped: true };
   errors.push(...worktree.errors);
 
   const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-frozen-"));

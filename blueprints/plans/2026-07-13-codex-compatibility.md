@@ -39,6 +39,8 @@ plugins/*/.cursor-plugin/**
 
 Every implementation phase must prove these paths have no diff. The adapter may **read** them but may not write them. The existing `.agents/skills/**` and root `AGENTS.md` remain generated Codex outputs and may change only through `scripts/build-codex.mjs`.
 
+> **Arbitration — 2026-07-13 ([ADR-068](docs/adr/068-codex-freeze-scoped-to-workstream.md)):** the freeze is **this workstream's own discipline, not a repo-wide freeze** — same-day it collided with the ADR-065/066/067 batch (normal marketplace evolution under `plugins/**` + root `CLAUDE.md`) and Paul ruled to re-scope. The worktree-freeze check now runs only under `--codex-compat` (and the full `--compat-audit` door); this workstream and its CI must use those flags. The temp-build purity check and the token ratchet stay in the default validator; legitimate Claude-side token growth is recorded per-entry in `compat-baseline.json`'s `ratchet_ledger` and is expected to ratchet back down when Phases 1–5 lower those semantics in the generator.
+
 The plan deliberately does not rename the canonical plugin tree or introduce a second editable copy of every `SKILL.md`. Claude remains the content owner; the Codex layer owns only the translation from Claude affordances to Codex affordances.
 
 ## Compatibility model

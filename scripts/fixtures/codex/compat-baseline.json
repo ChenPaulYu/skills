@@ -75,13 +75,13 @@
     "subagent_protocol": {
       ".agents/skills/nav-audit/SKILL.md": 9,
       ".agents/skills/nav-do/SKILL.md": 2,
-      ".agents/skills/nav-plan/SKILL.md": 10,
+      ".agents/skills/nav-plan/SKILL.md": 11,
       ".agents/skills/nav-refactor/SKILL.md": 4,
       ".agents/skills/research-dissect/SKILL.md": 15,
       ".agents/skills/shape-build/SKILL.md": 2,
       ".agents/skills/shape-elicit/SKILL.md": 4,
       ".agents/skills/shape-mockup/SKILL.md": 1,
-      "AGENTS.md": 8
+      "AGENTS.md": 9
     },
     "disable_model_invocation": {
       ".agents/skills/nav-refactor/SKILL.md": 1,
@@ -89,18 +89,21 @@
       ".agents/skills/reflect-observe/SKILL.md": 1,
       ".agents/skills/reflect-summarize/SKILL.md": 1,
       ".agents/skills/shape-build/SKILL.md": 1,
-      ".agents/skills/shape-setup/SKILL.md": 1
+      ".agents/skills/shape-setup/SKILL.md": 1,
+      "AGENTS.md": 1
     },
     "model_sonnet": {
+      ".agents/skills/nav-audit/SKILL.md": 1,
       ".agents/skills/nav-map/SKILL.md": 2,
+      ".agents/skills/nav-plan/SKILL.md": 1,
       ".agents/skills/reflect-summarize/SKILL.md": 2,
       ".agents/skills/relay-digest/SKILL.md": 2,
       ".agents/skills/relay-format/SKILL.md": 2,
       ".agents/skills/shape-align/SKILL.md": 2,
-      ".agents/skills/shape-build/SKILL.md": 1,
+      ".agents/skills/shape-build/SKILL.md": 2,
       ".agents/skills/shape-mockup/SKILL.md": 1,
       ".agents/skills/shape-reconcile/SKILL.md": 2,
-      "AGENTS.md": 7
+      "AGENTS.md": 8
     },
     "claude_built_in": {
       ".agents/skills/shape-setup/SKILL.md": 1
@@ -130,5 +133,26 @@
       ".agents/skills/relay-digest/scripts/compute-state.mjs": 1,
       "AGENTS.md": 2
     }
-  }
+  },
+  "ratchet_ledger": [
+    {
+      "date": "2026-07-13",
+      "reason": "ADR-068 arbitration: ADR-067 dispatch-tiers content legitimately adds worker-dispatch / model-tier / explicit-invocation language to nav-plan, nav-audit, shape-build and AGENTS.md. Conscious bump; to be ratcheted back down when build-codex learns to lower/strip Claude-only dispatch semantics (codex-compatibility Phases 1-5).",
+      "bumps": {
+        "subagent_protocol": {
+          ".agents/skills/nav-plan/SKILL.md": "10->11",
+          "AGENTS.md": "8->9"
+        },
+        "disable_model_invocation": {
+          "AGENTS.md": "0->1"
+        },
+        "model_sonnet": {
+          ".agents/skills/nav-audit/SKILL.md": "0->1",
+          ".agents/skills/nav-plan/SKILL.md": "0->1",
+          ".agents/skills/shape-build/SKILL.md": "1->2",
+          "AGENTS.md": "7->8"
+        }
+      }
+    }
+  ]
 }

@@ -78,7 +78,9 @@ function main() {
   validateManifestDrift();
   validateRegistration(pluginSkills);
   validateSiteMapVersions();
-  const compat = validateCodexCompatPhase0(ROOT);
+  const compat = validateCodexCompatPhase0(ROOT, {
+    worktreeFreeze: process.argv.includes("--codex-compat"),
+  });
   errors.push(...compat.errors);
 
   if (errors.length) {
