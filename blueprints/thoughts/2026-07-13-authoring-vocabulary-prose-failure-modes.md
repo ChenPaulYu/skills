@@ -2,7 +2,7 @@
 
 > **TL;DR**: mattpocock/skills 的 writing-great-skills skill 建了一套「skill prose 怎麼失效」的正式詞彙(Premature Completion / Negation / No-Op / Sediment / Sprawl / Leading Word / Completion Criterion),本文把每個詞對應到本 repo 已觀察到的具體案例——多半是本 repo **憑直覺已經做對(或半做對)**的事,只是沒有名字可指認、傳承、檢查。提案:root `CLAUDE.md` 的 Authoring conventions 加一節收留這套詞彙(單一 owner),各 plugin 引用而非各自重述。
 >
-> **狀態**: 提案,待拍板 · 2026-07-13
+> **狀態**：已 graduate → [ADR-069](docs/adr/069-adopt-prose-failure-vocabulary-plus-the-tell-column.md) · owner 檔 `plugins/nav/skills/compose/references/authoring-failure-modes.md` · 2026-07-13
 >
 > **來源**: [mattpocock/skills](https://github.com/mattpocock/skills) 的 [writing-great-skills SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/productivity/writing-great-skills/SKILL.md) + 同目錄 [GLOSSARY.md](https://github.com/mattpocock/skills/blob/main/skills/productivity/writing-great-skills/GLOSSARY.md)(本文透過 WebFetch 讀取,定義為轉述而非逐字複製)
 

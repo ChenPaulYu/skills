@@ -47,6 +47,8 @@ Beyond structure, compose carries the few **durable** sentence principles an age
 
 Deliberately **not** carried — by right grain, so compose stays principles, not a grammar textbook: punctuation/grammar minutiae, the commonly-misused-words catalogue, and the *volatile* list of AI-prose tells (the principle is here; the perishable word-list is not). If a deep copyedit ever needs the long-tail, the external `writing-clearly-and-concisely` is on the shelf — compose just doesn't depend on it.
 
+When authoring or restructuring **skill** prose specifically (a `SKILL.md` body, its anti-pattern table, its trigger phrasing), load [`references/authoring-failure-modes.md`](plugins/nav/skills/compose/references/authoring-failure-modes.md) on demand — the named ways skill prose reads but stops working (Premature Completion, Negation, No-Op, Sediment, Sprawl, Leading Word, Completion Criterion), each with a repo instance + an observable tell.
+
 ## Process
 
 ### Step 1 — Frame

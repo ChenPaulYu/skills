@@ -74,6 +74,7 @@
     },
     "subagent_protocol": {
       ".agents/skills/nav-audit/SKILL.md": 9,
+      ".agents/skills/nav-compose/references/authoring-failure-modes.md": 1,
       ".agents/skills/nav-do/SKILL.md": 2,
       ".agents/skills/nav-plan/SKILL.md": 11,
       ".agents/skills/nav-refactor/SKILL.md": 4,
@@ -87,6 +88,7 @@
       ".agents/skills/nav-refactor/SKILL.md": 1,
       ".agents/skills/reflect-catchup/SKILL.md": 1,
       ".agents/skills/reflect-observe/SKILL.md": 1,
+      ".agents/skills/reflect-park/SKILL.md": 1,
       ".agents/skills/reflect-summarize/SKILL.md": 1,
       ".agents/skills/shape-build/SKILL.md": 1,
       ".agents/skills/shape-setup/SKILL.md": 1,
@@ -151,6 +153,18 @@
           ".agents/skills/nav-plan/SKILL.md": "0->1",
           ".agents/skills/shape-build/SKILL.md": "1->2",
           "AGENTS.md": "7->8"
+        }
+      }
+    },
+    {
+      "date": "2026-07-13",
+      "reason": "Sonnet exec batch P1+P5 (blueprints/plans/2026-07-13-sonnet-exec-batch.md): ADR-069 lands nav:compose's new authoring-failure-modes.md reference doc, which cites the existing 'inject -> check' sub-agent hand-off term once as a Leading-Word example (worker_dispatch capability, not a new dispatch protocol). ADR-070 lands the new reflect:park skill with disable-model-invocation: true (explicit_invocation_only capability), consistent with every other summoned-only reflect member. Both are new generated files (baseline 0 -> 1), not growth in an existing file. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "bumps": {
+        "subagent_protocol": {
+          ".agents/skills/nav-compose/references/authoring-failure-modes.md": "0->1"
+        },
+        "disable_model_invocation": {
+          ".agents/skills/reflect-park/SKILL.md": "0->1"
         }
       }
     }

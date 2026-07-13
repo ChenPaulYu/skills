@@ -14,6 +14,12 @@ Optional focus from the user: **$ARGUMENTS** (if given, scope the catchup to tha
 
 ## Step 1 — Rebuild from durable state, then enrich from live context
 
+**Consumption priority — check for a parked cursor first.** Before falling back to git/diff reconstruction, look for a written cursor at the project root: `ls HANDOFF.md` (written by `/reflect:park`).
+
+- **`HANDOFF.md` present** → compare its recorded SHA against the current `git rev-parse HEAD`. **Matching SHA**: read it as the primary source for goal/done/now/open/next — it carries the *why* durable state alone can't. **Mismatched SHA**: code moved since park; downgrade it to **"possibly stale"** — still worth reading for the why, but revalidate the what-shipped/now against fresh `git status`/`diff` rather than trusting it at face value.
+- **No `HANDOFF.md`** → fall back to family artifacts (`blueprints/plan.md`, `blueprints/thoughts/`, `docs/plans/`, a `TODO`/`TASKS` file — see below), then pure git/file reconstruction if none of those exist either.
+- **Report which tier the picture came from** — HANDOFF.md (current) / HANDOFF.md (possibly stale) / a plan artifact / pure git-and-files — so the user knows how much to trust it.
+
 Ground in the **current project** (cwd), starting from git and files:
 
 ```bash
@@ -61,6 +67,7 @@ No artifact, no write, no commit. End after the report. (To capture a durable le
 
 ## Companion skills
 
+- **`/reflect:park`** — the write side; before stepping away, it writes the `HANDOFF.md` this skill checks first.
 - **`/reflect:summarize`** — the complete, objective recap of what the session *did* (catchup is the state *now* + next; summarize is the full log of what *happened*).
 - **`/reflect:observe`** — distill a durable learning from the session into the knowledge base.
 - **`/shape:align`** — when you want to *decide* next and write it into a plan (catchup only reports; align decides + writes).

@@ -25,6 +25,8 @@ It is a **meta-skill**, like `nav-plan`: it sequences other skills' protocols ra
 
 > **Run to done, but stop on doubt.** build is not "review every item" (too slow) nor "blast through to the end" (dangerous). It drives item after item on its own, and the cadence is governed by confidence: a clear item flows; an ambiguous one (unclear scope, a boundary it can't infer, intent it can't read) **halts and asks**. A red test halts. A blocked item surfaces — it never thrashes.
 
+When a halt stops the run mid-batch (not just "ask and continue" but a real stopping point where the session might end here), it's fine to mention `reflect-park` can save the cursor — offered, never auto-run; if the environment's harness (e.g. Claude Code) provides its own compaction/handoff mechanism, that satisfies the same need and `park` is redundant.
+
 ## The per-item loop
 
 For each item in `plan.md`'s **In progress** column (each references a `thoughts/` doc):

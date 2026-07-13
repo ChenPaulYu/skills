@@ -70,6 +70,17 @@ Each row: a baseline trigger sentence (2 English + 1 Chinese per skill, drawn fr
 
 Of the 5 pilot skills, only `analogize`'s pre-rewrite frontmatter carried native Chinese trigger quotes ("用比喻解釋", "打個比方", "說白話一點"). The other four skills' pre-rewrite descriptions were English-only. To still produce a "2 English + 1 Chinese" baseline row per the plan, the Chinese entry for those four was sourced from that skill's existing Chinese blurb in `docs/site/index.html` (real repo content, not invented) rather than fabricated from scratch — and is marked **(substituted)** above wherever used. This is disclosed here so the acceptance pass can weight those three checks accordingly.
 
+## Acceptance QA — final trigger judgment (Fable, 2026-07-13)
+
+Method: the session model read all five rewritten descriptions **in the context of the full 34-skill roster** and judged, per baseline sentence, which skill a router would select. This is the acceptance pass the static check above deferred.
+
+- **12/15 verbatim-cued sentences**: route correctly, no competitor ambiguity. **PASS.**
+- **"poke holes in my thesis"** (dialectic, dropped verbatim): nearest competitor is `/research:critique` ("find the weaknesses"), but the object "my thesis" (own forming claim, no external document) is exactly the boundary the new description spells out — "audits an external doc's existing evidence; this stress-tests your own forming claim". Routes to dialectic. **PASS** — carried by the boundary sentence, which is retained by design.
+- **"把一個主張送上審判台"** (dialectic, ZH semantic): "Put a forming claim on trial" is the direct conceptual translation (審判台 = on trial); bilingual routing holds. **PASS.**
+- **"把一個成熟模型嫁接到新系統"** (graft, ZH semantic): 嫁接 = graft, carried by both the skill name and "grafting a mature model onto a new problem" + ZH "借用...的架構". **PASS.**
+
+**Verdict: 15/15 — pilot ACCEPTED.** The lean-but-honest rewrite loses no routing accuracy in judgment-level QA; the -41% context-load saving stands. Rollout to the remaining 29 skills is a separate session's decision (per ADR-065), now unblocked.
+
 ## What this file does not claim
 
 This pilot verifies that a **static routing cue** for each baseline sentence survives the rewrite. It does **not** run the new descriptions against a live model to confirm real trigger accuracy is unchanged or improved — per the execution contract, that final trigger QA is **Fable/Paul's acceptance step**, not this pass's. Whether to roll the lean-but-honest convention out to the remaining 29 skills is a separate, later decision gated on that acceptance (see ADR-065's Consequences).

@@ -17,6 +17,7 @@
     "nav-sync": "Refresh load-bearing files' top headers so their first lines accurately describe purpose, details, and dependencies. Use to add, standardize, or repair file headers after code changes.",
     "reflect-catchup": "Reconstruct the current state of work from git, diffs, files, plans, and live context. Use for 'where are we?', resuming after a break, or getting oriented; read-only and focused on present state.",
     "reflect-observe": "Surface this session's candidate durable learnings, let the user choose, then write only selected observations or skill feedback. Use to record insights or decide what is worth preserving.",
+    "reflect-park": "Write the session's cursor (goal, done, now, open, next, plus the current git SHA) into the project's HANDOFF.md before stepping away, overwriting any prior file. Use to hand off work; explicitly invoked on Codex.",
     "reflect-summarize": "Produce a complete, neutral, chronological recap of what this session attempted, decided, changed, and committed. Use for full session summaries; read-only and not a selective learning distillation.",
     "relay-digest": "Read a relay coordination repo and show unresolved thoughts that mention the current person. Use for relay catch-up, pending reviews, or 'what needs me?'; read-only and explicitly invoked on Codex.",
     "relay-format": "Validate and normalize one relay project's thought frontmatter without changing meaning. Use to lint thoughts, fix metadata, or migrate old relay entries to the current format; diff-gated.",

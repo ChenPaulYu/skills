@@ -2,7 +2,7 @@
 
 > **TL;DR**: reflect 現況 catchup 讀、summarize 讀、只有 observe 寫(且只寫一條 learning)——「游標位置＋為什麼」這個事實在整個體系裡**沒有 owner**。提案新增 `reflect:park`:收工時把 goal/done/now/open/next 五欄(catchup 的鏡像)＋當下 git SHA 寫進耐久狀態,讓 catchup 不再只能從 git 骨架反推。三方外部證據獨立指向同一缺口,依 ADR-018 立案標準(recurrence path)已達標。
 >
-> **狀態**: 提案,待拍板;「交接單寫到哪」**已於 2026-07-13 由 Paul 經 `/shape:elicit` 裁決**(見下方開放題 1 的裁決記錄),其餘仍待整批拍板。2026-07-13。
+> **狀態**：已 graduate → [ADR-070](docs/adr/070-reflect-park-write-side-of-cursor.md) · owner 檔 `plugins/reflect/skills/park/SKILL.md` · 兩個 ✅ 裁決（交接單存放位置、家族歸屬）均已納入 ADR-070 · 2026-07-13。
 
 ## 缺口陳述(提案的心臟)
 
