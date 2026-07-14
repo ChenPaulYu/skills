@@ -1,0 +1,15 @@
+{
+  "id": "shape-dogfood",
+  "mode": "generated",
+  "file": ".agents/skills/shape-dogfood/SKILL.md",
+  "reject": [
+    { "category": "ask_user_question" }
+  ],
+  "expect_text": [
+    "**Interactive choice contract (Codex).**",
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "**An incomplete gap (dead-end path)** → `nav-plan`",
+    "just leave the report, I'll route later"
+  ]
+}

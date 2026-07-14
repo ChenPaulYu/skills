@@ -150,9 +150,13 @@ Adjust sections per situation — Critical files is essential, Open questions on
 
 **Write the file, then summarize to chat**: location, line count, key open questions (if any), what step 1 entails. Then proceed to Stage 4.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ### Stage 4 — Offer next action (don't make the user type the next command)
 
-After Stage 3's file write + summary, present implementation options via `AskUserQuestion`. The user *picks*; you do not pre-decide. This step exists because suggesting "next session: run `nav-refactor`" in chat text leaves the user to remember the command and type it; one click is friendlier. The discipline ("don't auto-execute") is preserved by the question itself — the user must affirmatively choose.
+After Stage 3's file write + summary, present implementation options via the Codex interactive chooser. The user *picks*; you do not pre-decide. This step exists because suggesting "next session: run `nav-refactor`" in chat text leaves the user to remember the command and type it; one click is friendlier. The discipline ("don't auto-execute") is preserved by the question itself — the user must affirmatively choose.
 
 **Default 3 options** (adjust labels per the plan's nature):
 
@@ -205,7 +209,7 @@ The dispatching agent never accepts `status: done` at face value: it reads the r
 
 - A markdown plan file at the agreed location.
 - A short chat summary: where the plan landed, headline open questions, what step 1 entails.
-- An `AskUserQuestion` next-action offer (Stage 4) unless skipped per the conditions above.
+- A Codex interactive-chooser next-action offer (Stage 4) unless skipped per the conditions above.
 - The skill itself does NOT execute. Execution only happens if the user picks option 1 (delegated to worker) or option 2 (continues inline by user choice). See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 
 ## Discipline (do not skip)
@@ -214,7 +218,7 @@ The dispatching agent never accepts `status: done` at face value: it reads the r
 - **Ask only high-signal clarifying questions.** A spec dump back at the user is noise; 3-5 surgical questions are signal. Stage 2 is rule ⑦ in workflow form.
 - **The plan is an artifact, not a chat.** A plan that lives only in the conversation is gone next session. Write the file.
 - **Confirm location before writing.** Repos have conventions; respect them. Prefer a `blueprints/plans/` home when a `blueprints/` tree is present (soft `nav → shape`; ADR-017), else `docs/plans/`. Ask once, then proceed.
-- **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the worker option provides the context separation. Rule ⑦ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
+- **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via the Codex interactive chooser — the user's pick is the supervision, the worker option provides the context separation. Rule ⑦ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 - **Bracket the worker hand-off: inject grounding in, check integration out.** A fresh worker is tactical — it sees only its slice, so it won't grep the domain for an existing home and it reads project rules literally. Stage 1 already did the grounding the worker lacks; inject it into the prompt, and run a deep-module integration pass on the returned diff before accepting "done". The feature is the worker's job; clean integration is the parent's. See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 - **Honest about uncertainty.** If Stage 1 had to guess at a file's role, say so in the Context. If Stage 2 left a question open, list it. The plan's value is grounded honesty, not false confidence.
 

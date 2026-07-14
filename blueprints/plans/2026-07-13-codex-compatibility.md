@@ -4,7 +4,7 @@
 >
 > **Decision:** Treat the existing Claude Code marketplace as a frozen input contract. Add Codex behavior compatibility entirely in a Codex adapter/compiler and Codex-only artifacts. Do not edit `plugins/**`, root `CLAUDE.md`, `.claude-plugin/**`, or `.cursor-plugin/**`; do not bump Claude plugin versions.
 
-> **Progress — 2026-07-13:** The context-budget slice is implemented: Codex-only descriptions, metadata budgets, install profiles, receipt-owned pruning, global-root duplicate auditing/cleanup, and the translation guide. Behavioral capability lowering (`AskUserQuestion`, workers, model roles, browser verification, lifecycle claims) remains in Phases 1–5 and is still reported by the Phase 0 compatibility audit.
+> **Progress — 2026-07-14:** The context-budget slice plus behavioral Phases 1-2 are implemented. The compiler boundary, explicit-invocation/mechanical-tier lowering, worker vocabulary, work-packet/return contracts, portable role TOMLs, and Paul's local role mapping have landed. Phase 3 (interactive choice) is the active implementation packet below; browser verification and lifecycle claims remain for Phase 4, followed by the full-roster hard gate in Phase 5.
 
 ## Context
 
@@ -153,26 +153,73 @@ current SHA
 
 ### Phase 3 — Port interactive supervision gates
 
-1. Convert offer-next-action sections to `interactive_choice` during Codex generation.
-2. Preserve the behavioral invariants:
-   - nothing executes before the user chooses;
-   - choices are mutually exclusive;
-   - a recommended choice is labeled;
-   - save/done remains an opt-out;
-   - the offer is one-shot;
-   - if no interactive chooser is available, ask directly and end the turn.
-3. Cover every current user-choice consumer, beginning with:
-   - `nav-plan`
-   - `nav-refactor`
-   - `shape-elicit`
-   - `shape-mockup`
-   - `shape-dogfood`
-   - `shape-reconcile`
-   - `frame-first-principles`
-   - `frame-dialectic`
-   - `frame-graft`
+#### Grounded starting state
 
-**Gate:** generated Codex skills contain no `AskUserQuestion` token, while fixture tests prove the choice contents and stop boundary survived.
+- The 2026-07-14 compatibility audit finds 14 unresolved `AskUserQuestion` tokens in 10 generated files: the nine skill consumers below plus two shared-guidance mentions in `AGENTS.md`. The source remains frozen; every change belongs to the compiler, Codex metadata/tests, generated mirror, or this plan.
+- `scripts/lib/codex-compat.mjs` is already the single owner for Codex lowering. `scripts/build-codex.mjs` only sequences transforms and writes files; Phase 3 must preserve that boundary.
+- The existing source sections already own each skill's actual option labels and routing meaning. The compiler must not copy or reconstruct those choices in a second table. It supplies only the host-level execution contract around them.
+- Current canaries cover `nav-plan` and `nav-refactor`, but only `nav-plan` positively expects the still-unlowered token. Seven choice consumers have no generated canary yet. The Phase 3 packet closes that proof gap rather than relying on a repository-wide grep alone.
+
+#### Single-owner design
+
+| Decision | Owner |
+|---|---|
+| Codex interactive-choice behavior and fallback semantics | `scripts/lib/codex-compat.mjs` — one exported contract plus named lowering/injection functions |
+| Which generated skills consume the contract, and each insertion anchor | `scripts/lib/codex-compat.mjs` — one consumer map keyed by flat skill name |
+| Each skill's option labels, recommendation, routing meaning, and opt-out wording | Frozen source `plugins/*/skills/*/SKILL.md`; compiler preserves rather than duplicates it |
+| Capability status and unresolved-token detection | `platforms/codex/manifest.json` |
+| Per-consumer behavioral evidence | `scripts/fixtures/codex/canaries/*.json` |
+| Remaining tolerated counts and ratchet history | `scripts/fixtures/codex/compat-baseline.json` |
+
+#### Implementation packet
+
+1. **Add a named interactive-choice lowering seam.**
+   - Add `lowerInteractiveChoiceProse(text)` for every compiled text profile. It removes the Claude-only token from skills, bundled text, and `AGENTS.md` using exact known constructs, replacing it with host-neutral Codex chooser language rather than a blind semantic rewrite.
+   - Add `injectInteractiveChoiceContract(text, flat)` for skill bodies only. It injects one canonical Codex contract at the configured offer section of each consumer; non-consumers are exact no-ops.
+   - Wire the prose lowering into skill, reference, and shared-guidance compilation, and wire contract injection into `compileSkillMarkdown`. Keep discovery/filesystem work out of the compiler.
+
+2. **Make the generated behavior executable, not merely renamed.** The canonical contract must tell the Codex agent to:
+   - use the host's structured user-input chooser when it is callable (currently `request_user_input`), otherwise ask one concise direct question in chat and end the turn;
+   - execute nothing downstream until the user makes an explicit choice;
+   - present mutually exclusive choices, label one recommendation when the source does, preserve the source's save/done/later opt-out, and accept a free-form alternative where the host supplies one;
+   - treat the offer as one-shot and not re-offer after decline/opt-out;
+   - treat selecting an explicitly-invoked-only continuation as an explicit invocation, preserving ADR-072's invocation-direction decision;
+   - carry forward the source section's actual labels and consequences instead of inventing generic replacements.
+
+3. **Cover the complete current consumer roster.** Configure exact, drift-detectable anchors for:
+   - `nav-plan`, `nav-refactor`
+   - `shape-elicit`, `shape-mockup`, `shape-dogfood`, `shape-reconcile`
+   - `frame-first-principles`, `frame-dialectic`, `frame-graft`
+
+   Anchor drift must fail validation or a canary; it must not silently return unchanged generated behavior. `AGENTS.md` receives only the host-neutral terminology rewrite because it describes the convention rather than executing a choice.
+
+4. **Turn all nine consumers into behavioral canaries.**
+   - Update `nav-plan.json` and `nav-refactor.json`; add canaries for the seven uncovered consumers.
+   - Every consumer rejects `ask_user_question`, expects the canonical contract, expects at least one source-owned option/routing phrase, and expects the stop-before-choice plus fallback/end-turn language.
+   - At least one canary proves recommendation preservation, one proves save/done/later opt-out preservation, one proves one-shot behavior, and one proves the explicitly-invoked-only selection rule. Collectively the nine fixtures cover every invariant; no single fixture stands in for roster-wide proof.
+
+5. **Ratchet and document the capability.**
+   - Update `platforms/codex/manifest.json` so `interactive_choice` points to the named compiler owner and states the structured-input/direct-question degradation honestly.
+   - Ratchet every `ask_user_question` baseline entry to zero and append a dated Phase 3 ledger entry. Do not delete the denylist rule: a future Claude-only choice construct must still fail until lowered.
+   - Regenerate `.agents/skills/**` and `AGENTS.md` only through `node scripts/build-codex.mjs`; never hand-edit generated artifacts.
+
+6. **Independently verify the returned implementation.** The judgment seat, not the executor, owns acceptance:
+   - inspect the full diff against the worker's Base SHA and reject edits under `plugins/**`, root `CLAUDE.md`, `.claude-plugin/**`, or `.cursor-plugin/**`;
+   - run `node scripts/build-codex.mjs` twice and prove the second run has zero diff;
+   - run `node scripts/validate-codex-skills.mjs --compat-audit` and require `interactive_choice / AskUserQuestion: 0 hit(s)` with all canaries and negative fixtures green;
+   - run `node scripts/validate-codex-skills.mjs --codex-compat` and the normal `node scripts/validate-codex-skills.mjs` gate;
+   - search generated output for `AskUserQuestion` and verify zero matches, then inspect representative generated flows from nav, shape, and frame to confirm the choice contents and stop boundary read coherently in context;
+   - confirm the worktree contains no unrelated or frozen-source edits before commit.
+
+#### Completion criterion
+
+Phase 3 is complete only when all nine consumers carry an executable Codex choice contract, generated output and `AGENTS.md` contain zero `AskUserQuestion` tokens, every invariant above has positive fixture evidence, the baseline is ratcheted to zero without removing future regression detection, two-run generation is deterministic, all three validator doors are green, and the frozen Claude contract is unchanged.
+
+#### Out of scope for this phase
+
+- Browser-verifier generation, `agent-browser` runtime behavior, and `relay-digest` session-open degradation remain Phase 4.
+- Full-roster adapter coverage reporting and converting the compatibility audit into a universal hard gate remain Phase 5.
+- Changing the Claude-side offer wording, plugin versions, marketplace surfaces, or ADR semantics is forbidden by this workstream's frozen-input contract.
 
 ### Phase 4 — Port bundled runtime capabilities
 

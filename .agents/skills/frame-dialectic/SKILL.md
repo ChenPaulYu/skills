@@ -48,9 +48,13 @@ The most dangerous misread of this skill is using "no evidence" to kill every id
 
 > dialectic does **not** demand you *have* the evidence. It demands you (a) survive logic and *existing* evidence, and (b) for what's genuinely unknown, name the bet so precisely that you're carrying it consciously, not stepping on it blindly. **The sin isn't an unproven assumption — frontier work always has one. The sin is mistaking it for a fact and building on it without knowing.** The whole move is one conversion: a *hidden, fatal assumption* → *a visible, owned bet*. Hidden, it's a landmine; named, it's a bet you chose.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ## After the trial — offer to route it (don't decide, don't auto-run)
 
-dialectic *tries* a claim; it does not decide its fate or build on it. Once the table is up, *offer* — never auto-call — the next step, via `AskUserQuestion` (offer-next-action, ADR-007/015):
+dialectic *tries* a claim; it does not decide its fate or build on it. Once the table is up, *offer* — never auto-call — the next step, via the Codex interactive chooser (offer-next-action, ADR-007/015):
 
 - **Converge it into a decision** → `shape-elicit` (the trial is a strong input to the grill — but whether to commit to the claim is still drawn out *with you*, not declared here).
 - **Render a side to decide by seeing it** → `shape-mockup`.

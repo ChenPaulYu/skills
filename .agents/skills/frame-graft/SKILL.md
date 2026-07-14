@@ -57,9 +57,13 @@ Map the **real** donor and the **real** target — anchor each primitive in a co
 - **vs `orthogonal`:** orthogonal decomposes the target's *own* tangle into independent axes (internal, no donor). graft overlays an *external* model (a donor). Different objects — orthogonal factors what's there; graft imports a structure to test against.
 - **vs `dialectic`:** dialectic puts a *claim* on trial (steelman vs attack); graft builds a *design* by transplant-and-adapt. dialectic judges; graft generates.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ## After the analysis — offer to route it (don't decide, don't auto-run)
 
-graft *reasons*; it does not decide or build. Once the graft is up, *offer* — never auto-call — the next step, via `AskUserQuestion` (offer-next-action, ADR-007/015):
+graft *reasons*; it does not decide or build. Once the graft is up, *offer* — never auto-call — the next step, via the Codex interactive chooser (offer-next-action, ADR-007/015):
 
 - **Converge an adaptation into a decision** → `shape-elicit` (the adapt/break points are strong grill inputs — but the call is drawn out *with* you, not asserted here).
 - **Render an adapted structure** → `shape-mockup` (when an adaptation is decided by seeing it).

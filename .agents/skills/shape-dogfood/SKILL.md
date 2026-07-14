@@ -45,9 +45,13 @@ The output is a **friction report grounded in the captured session** — *not* a
 
 **Render is demoted to an optional hand-off, not the output.** When a friction idea is big enough to be a *redesign* (not a tweak), *then* hand it to `shape-mockup` to render the new shape — but the default deliverable is the evidence-rich report, because the felt-unsmooth moment wants to *see* the problem and get ideas, not a fresh artifact to evaluate.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ## After the session — offer to route the findings (don't fix in place, don't auto-run)
 
-dogfood surfaces and reports; it does **not** redesign or implement. Once the report is up, *offer* — never auto-call — the next step **per each finding's kind**, via `AskUserQuestion` (offer-next-action, ADR-007/015):
+dogfood surfaces and reports; it does **not** redesign or implement. Once the report is up, *offer* — never auto-call — the next step **per each finding's kind**, via the Codex interactive chooser (offer-next-action, ADR-007/015):
 
 - **A friction idea the user wants to pursue** → a *tweak* → `nav-plan` (ground it) + `shape-build`; a *redesign* → `shape-mockup` (render the new shape) or `shape-elicit` (if the premise is in question).
 - **A direction-level gap (missing intent)** → `shape-elicit` (is the premise wrong? — a *new decision*, out of scope) and/or `shape-mockup`.

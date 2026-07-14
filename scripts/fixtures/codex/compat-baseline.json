@@ -50,18 +50,7 @@
     }
   ],
   "per_file_max_counts": {
-    "ask_user_question": {
-      ".agents/skills/frame-dialectic/SKILL.md": 1,
-      ".agents/skills/frame-first-principles/SKILL.md": 1,
-      ".agents/skills/frame-graft/SKILL.md": 1,
-      ".agents/skills/nav-plan/SKILL.md": 4,
-      ".agents/skills/nav-refactor/SKILL.md": 2,
-      ".agents/skills/shape-dogfood/SKILL.md": 1,
-      ".agents/skills/shape-elicit/SKILL.md": 1,
-      ".agents/skills/shape-mockup/SKILL.md": 1,
-      ".agents/skills/shape-reconcile/SKILL.md": 1,
-      "AGENTS.md": 2
-    },
+    "ask_user_question": {},
     "agent_call": {},
     "subagent_type": {},
     "subagent_protocol": {},
@@ -197,6 +186,24 @@
         }
       },
       "note": "reflect-summarize's prior disable_model_invocation/model_sonnet baseline entries (ADR-079 retired that skill before this ratchet) were removed as stale rather than dropped-to-zero."
+    },
+    {
+      "date": "2026-07-14",
+      "reason": "codex-compatibility Phase 3 ports the interactive supervision gate without changing frozen Claude sources. lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs in skill, bundled-text, and shared-guidance profiles; injectInteractiveChoiceContract hard-fails on anchor drift and adds the single canonical request_user_input/direct-question fallback contract to all nine current choice consumers. Source-owned labels, routing consequences, recommendations, opt-outs, one-shot behavior, and explicit-invocation semantics remain in their original offer sections. The denylist rule remains active for future regressions while all generated counts ratchet to zero.",
+      "drops": {
+        "ask_user_question": {
+          ".agents/skills/frame-dialectic/SKILL.md": "1->0",
+          ".agents/skills/frame-first-principles/SKILL.md": "1->0",
+          ".agents/skills/frame-graft/SKILL.md": "1->0",
+          ".agents/skills/nav-plan/SKILL.md": "4->0",
+          ".agents/skills/nav-refactor/SKILL.md": "2->0",
+          ".agents/skills/shape-dogfood/SKILL.md": "1->0",
+          ".agents/skills/shape-elicit/SKILL.md": "1->0",
+          ".agents/skills/shape-mockup/SKILL.md": "1->0",
+          ".agents/skills/shape-reconcile/SKILL.md": "1->0",
+          "AGENTS.md": "2->0"
+        }
+      }
     }
   ]
 }

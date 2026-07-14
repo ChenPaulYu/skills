@@ -3,12 +3,18 @@
   "mode": "generated",
   "file": ".agents/skills/nav-refactor/SKILL.md",
   "reject": [
+    { "category": "ask_user_question" },
     { "category": "agent_call" },
     { "category": "subagent_type" },
     { "category": "subagent_protocol" },
     { "category": "model_sonnet" }
   ],
   "expect_text": [
+    "**Interactive choice contract (Codex).**",
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.",
+    "Done — I'll handle from here",
     "Dispatch a scoped executor worker.",
     "## Worker dispatch contract (Codex)",
     "Step 8 option 2's inject/check bullets above are this contract in practice",

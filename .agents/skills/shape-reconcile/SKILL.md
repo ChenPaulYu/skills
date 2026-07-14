@@ -113,9 +113,13 @@ The cross-decision-contradiction check is genuinely new: two decisions converged
 
 reconcile's currency check **consumes the file headers `nav-sync` maintains**: load-bearing files with a `head -12` header make "is this implemented?" answerable without reading bodies — the strongest staleness signal. No headers → suggest `nav-sync` first; reconcile still works on grep alone, just less cheaply.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ## Offer to re-sync the board (don't auto-run)
 
-After the tree is trimmed, `plan.md` may lag the cleaned `thoughts/`/`plans/`. **Offer — never auto-call — `shape-align`** to refresh it, via `AskUserQuestion` (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when something actually changed this run and a `blueprints/` board exists; always include a "leave it, I'll re-sync later" opt-out; don't re-offer after the pick. `align` is collaborative → runs in-session. An offer, not a call.
+After the tree is trimmed, `plan.md` may lag the cleaned `thoughts/`/`plans/`. **Offer — never auto-call — `shape-align`** to refresh it, via the Codex interactive chooser (offer-next-action, ADR-007/015). **Guarded + one-shot:** offer only when something actually changed this run and a `blueprints/` board exists; always include a "leave it, I'll re-sync later" opt-out; don't re-offer after the pick. `align` is collaborative → runs in-session. An offer, not a call.
 
 **If the project still carries a leftover standing `overview.html`** (from before the shape family dropped the maintained-HTML-render mechanism), propose retiring it — delete it (git holds it) and note in `plan.md`'s header that a visual view now renders on demand via `shape-mockup` instead.
 

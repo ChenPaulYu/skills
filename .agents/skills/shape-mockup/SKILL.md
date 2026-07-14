@@ -105,9 +105,13 @@ A file written to disk is not yet a decidable artifact — the user has to *see*
 
 **Agent-side capture runs in the `browser-verifier` subagent (cost tier, ADR-058).** When the capture/verify is mechanical — confirming the artifact renders, checking a behaviour responds — dispatch the plugin's `browser-verifier` agent (mechanical-tier executor) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context. Confirm a render **once**, not per iteration. The user-facing hand-off is unchanged: a live clickable origin, opened for the user — that part stays inline.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ## After the pick — offer the next step: track it · build it (don't auto-run)
 
-A pick has two natural next steps, and the offer should name **both** (ADR-028) — an `AskUserQuestion` with a "just record the pick, I'll continue later" opt-out (offer-next-action, ADR-007/015):
+A pick has two natural next steps, and the offer should name **both** (ADR-028) — the Codex interactive chooser with a "just record the pick, I'll continue later" opt-out (offer-next-action, ADR-007/015):
 
 - **Track it → `shape-align`** — triage the decision into `plan.md` (now/next/later). `align` is collaborative, so it runs **in-session** (it needs this conversation's decision), not a clean worker. Offer this branch only when a `blueprints/` board exists (or scaffolding one is wanted).
 - **Build it now** — when the pick is a concrete, decided, *behaviour-changing* build, route by scope: small · holdable-in-head → **`nav-do`** (its check bracket — inject↔execute↔verify — is the point; don't flow into the build on ambient discipline and skip it); bigger / ambiguous / wants a written plan → **`nav-plan`**; driving multiple `plan.md` items → **`shape-build`**. This is the seam "make it functional" flows through — name the verb so the agent routes to its check instead of winging the build.

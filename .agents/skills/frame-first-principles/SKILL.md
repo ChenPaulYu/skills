@@ -44,9 +44,13 @@ The output is the **structured reasoning itself, in the conversation** — its s
 
 Lightweight by default: the analysis stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ## After the analysis — offer to route it (don't decide, don't auto-run)
 
-first-principles *reasons*; it does not decide or build. Once the note is up, *offer* — never auto-call — the next step, via `AskUserQuestion` (offer-next-action, ADR-007/015/057):
+first-principles *reasons*; it does not decide or build. Once the note is up, *offer* — never auto-call — the next step, via the Codex interactive chooser (offer-next-action, ADR-007/015/057):
 
 - **Converge it into a decision** → `shape-elicit` (the divergence is a strong input to the grill — but the *decision* is still drawn out with you, not asserted here).
 - **Render the rebuilt option** → `shape-mockup` (when the divergence is something you'd decide by seeing it).

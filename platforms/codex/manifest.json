@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "adapter_release": "0.3.0-worker-dispatch-contract",
+  "adapter_release": "0.4.0-interactive-choice-contract",
   "metadata_policy": {
     "description_source": "platforms/codex/descriptions.json",
     "description_strategy": "Codex-only, trigger-first summaries; Claude descriptions remain unchanged",
@@ -35,8 +35,20 @@
   "capabilities": [
     {
       "id": "interactive_choice",
-      "status": "planned",
-      "summary": "Codex lowering for user choice gates such as AskUserQuestion."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs with host-neutral chooser terminology in every compiled profile. #injectInteractiveChoiceContract inserts the canonical executable contract for all nine choice consumers: use request_user_input when callable; otherwise ask one concise direct question and end the turn; never execute before an explicit choice; preserve source-owned choices, recommendations, opt-outs, one-shot behavior, and explicit-invocation semantics. Ratcheted to zero across all generated output (codex-compatibility Phase 3).",
+      "interactive_choice_contract": "scripts/lib/codex-compat.mjs#CODEX_INTERACTIVE_CHOICE_CONTRACT",
+      "contract_consumers": [
+        ".agents/skills/nav-plan/SKILL.md",
+        ".agents/skills/nav-refactor/SKILL.md",
+        ".agents/skills/shape-elicit/SKILL.md",
+        ".agents/skills/shape-mockup/SKILL.md",
+        ".agents/skills/shape-dogfood/SKILL.md",
+        ".agents/skills/shape-reconcile/SKILL.md",
+        ".agents/skills/frame-first-principles/SKILL.md",
+        ".agents/skills/frame-dialectic/SKILL.md",
+        ".agents/skills/frame-graft/SKILL.md"
+      ]
     },
     {
       "id": "worker_dispatch",

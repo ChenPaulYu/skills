@@ -1,0 +1,15 @@
+{
+  "id": "shape-mockup",
+  "mode": "generated",
+  "file": ".agents/skills/shape-mockup/SKILL.md",
+  "reject": [
+    { "category": "ask_user_question" }
+  ],
+  "expect_text": [
+    "**Interactive choice contract (Codex).**",
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "**Track it → `shape-align`**",
+    "just record the pick, I'll continue later"
+  ]
+}

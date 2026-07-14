@@ -1,0 +1,15 @@
+{
+  "id": "frame-dialectic",
+  "mode": "generated",
+  "file": ".agents/skills/frame-dialectic/SKILL.md",
+  "reject": [
+    { "category": "ask_user_question" }
+  ],
+  "expect_text": [
+    "**Interactive choice contract (Codex).**",
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "**Run the Killer Experiment itself** → `shape-probe`",
+    "just leave the table, I'll take it from here"
+  ]
+}

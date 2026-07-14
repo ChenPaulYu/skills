@@ -17,6 +17,10 @@
  *                                  global replace — every rule is a precise (pattern, replacement)
  *                                  pair; generic prose ("agent-navigability", "coding agent") is
  *                                  untouched because none of these patterns can match it.
+ *   lowerInteractiveChoiceProse() — replaces exact `AskUserQuestion` constructs with host-neutral
+ *                                  Codex interactive-chooser terminology in every compiled profile.
+ *   injectInteractiveChoiceContract() — Phase 3: injects one executable chooser/fallback contract
+ *                                  before each of the nine source-owned offer sections.
  *   injectWorkerDispatchContract() — Phase 2: for the dispatch-heavy skills only, appends a
  *                                  concrete "Worker dispatch contract" section (the canonical
  *                                  work-packet / worker-return contracts below) right after that
@@ -30,9 +34,11 @@
  * Capability table this module implements (see blueprints/plans/2026-07-13-codex-compatibility.md):
  *   explicit_invocation_only, mechanical_model_tier  → lowerFrontmatter + lowerWorkerProse
  *   worker_dispatch (Agent/subagent_type/sub-agent)  → lowerWorkerProse + injectWorkerDispatchContract
+ *   interactive_choice (AskUserQuestion)             → lowerInteractiveChoiceProse +
+ *                                                       injectInteractiveChoiceContract
  *   project_guidance (CLAUDE.md→AGENTS.md, /init)    → createProjectGuidanceLowerer
- * Deliberately NOT lowered here (later phases): interactive_choice (AskUserQuestion, Phase 3),
- * browser_verify (Phase 4), session_open_awareness (Phase 4).
+ * Deliberately NOT lowered here (later phases): browser_verify (Phase 4),
+ * session_open_awareness (Phase 4).
  */
 import { scanTextForDenylist } from "./codex-compat-audit.mjs";
 
@@ -139,6 +145,66 @@ export function lowerWorkerProse(text) {
   out = lowerModelSonnetProse(out);
   out = lowerDisableInvocationProse(out);
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// lowerInteractiveChoiceProse — interactive_choice terminology (all profiles)
+// ---------------------------------------------------------------------------
+
+/** Exact source constructs only. The source sections continue to own their option labels and
+ * routing meaning; these rules replace only the Claude-specific chooser name around them. */
+const INTERACTIVE_CHOICE_PROSE_RULES = [
+  { find: "`AskUserQuestion`-style ask", replace: "host-structured interactive-choice ask" },
+  { find: "`AskUserQuestion` listing", replace: "the Codex interactive chooser listing" },
+  { find: "via `AskUserQuestion`", replace: "via the Codex interactive chooser" },
+  { find: "an `AskUserQuestion` with", replace: "the Codex interactive chooser with" },
+  { find: "An `AskUserQuestion` next-action offer", replace: "A Codex interactive-chooser next-action offer" },
+  { find: "an `AskUserQuestion`; one click", replace: "the Codex interactive chooser; one click" },
+  { find: "options via `AskUserQuestion`", replace: "options via the Codex interactive chooser" },
+];
+
+export function lowerInteractiveChoiceProse(text) {
+  let out = text;
+  for (const rule of INTERACTIVE_CHOICE_PROSE_RULES) out = out.split(rule.find).join(rule.replace);
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// injectInteractiveChoiceContract — Phase 3 executable chooser/fallback contract
+// ---------------------------------------------------------------------------
+
+/** The ONE Codex-side execution contract surrounding source-owned next-action choices. */
+export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When \`request_user_input\` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.`;
+
+/** Exact offer-section starts in compiled text. Insertion happens before the source-owned section,
+ * so the compiler adds behavior without copying any choice content. Missing or duplicate anchors
+ * are hard generation failures: source drift must never silently remove a supervision gate. */
+const INTERACTIVE_CHOICE_CONSUMERS = {
+  "nav-plan": "### Stage 4 — Offer next action (don't make the user type the next command)",
+  "nav-refactor": "### Step 8 — Offer next action (don't make the user type the next command)",
+  "shape-elicit": "6. **Offer the next step (don't auto-run).**",
+  "shape-mockup": "## After the pick — offer the next step: track it · build it (don't auto-run)",
+  "shape-dogfood": "## After the session — offer to route the findings (don't fix in place, don't auto-run)",
+  "shape-reconcile": "## Offer to re-sync the board (don't auto-run)",
+  "frame-first-principles": "## After the analysis — offer to route it (don't decide, don't auto-run)",
+  "frame-dialectic": "## After the trial — offer to route it (don't decide, don't auto-run)",
+  "frame-graft": "## After the analysis — offer to route it (don't decide, don't auto-run)",
+};
+
+export function injectInteractiveChoiceContract(text, flat) {
+  const anchor = INTERACTIVE_CHOICE_CONSUMERS[flat];
+  if (!anchor) return text;
+
+  const first = text.indexOf(anchor);
+  const second = first === -1 ? -1 : text.indexOf(anchor, first + anchor.length);
+  if (first === -1 || second !== -1) {
+    const state = first === -1 ? "missing" : "not unique";
+    throw new Error(`interactive-choice anchor ${state} for ${flat}: ${JSON.stringify(anchor)}`);
+  }
+
+  return `${text.slice(0, first)}${CODEX_INTERACTIVE_CHOICE_CONTRACT}\n\n${text.slice(first)}`;
 }
 
 // ---------------------------------------------------------------------------

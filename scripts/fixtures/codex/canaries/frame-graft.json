@@ -1,0 +1,15 @@
+{
+  "id": "frame-graft",
+  "mode": "generated",
+  "file": ".agents/skills/frame-graft/SKILL.md",
+  "reject": [
+    { "category": "ask_user_question" }
+  ],
+  "expect_text": [
+    "**Interactive choice contract (Codex).**",
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "**Render an adapted structure** → `shape-mockup`",
+    "just leave the analysis, I'll take it from here"
+  ]
+}

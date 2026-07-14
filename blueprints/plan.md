@@ -4,11 +4,11 @@
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
 ## 🚧 In progress —— Codex Phases 1–5：行為相容編譯
-- **Phase 1（compiler 抽取，已 commit）／Phase 2（worker 派工契約+3 個 role TOML+個人對映層，已驗收待 commit）完成；Phase 3–5 未動工。** `blueprints/plans/2026-07-13-codex-compatibility.md`。
+- **Phase 1（compiler 抽取）／Phase 2（worker 派工契約+3 個 role TOML+個人對映層）／Phase 3（互動選擇契約，9 consumers、15 canaries）完成；Phase 4–5 未動工。** `blueprints/plans/2026-07-13-codex-compatibility.md`。
 
 ## ▶ Next —— 接下來
 - **reflect:summarize 退役** — Paul 2026-07-14 拍板刪除：No-Op 檢驗不過（模型不裝 skill 也會做完整回顧），護城河最淺（對照 catchup 的三態機器/park 的落檔）。做法：ADR（引 ADR-021 doctor 退役先例）＋移除 SKILL.md＋全套 gate 反向（reflect 版本 bump、README、site map 中英、mirror regen）。**等 elicit 生態系四 phase 落完再動**（避免與在飛 sub-agent 撞 gating surfaces）。
-- **Codex Phases 1–5：行為相容編譯** — 讓 build-codex 降轉/剝除 Claude-only 語意，並把 `ratchet_ledger` 兩筆 bump 收回（`blueprints/plans/2026-07-13-codex-compatibility.md`，另一條工作線）
+- **Codex Phase 4：runtime capability** — 產生 browser-verifier 的 Codex 等價物、接上 shape 三個 consumers，並對 session-open 能力做支援或誠實降級；完成後再進 Phase 5 全 roster hardening（`blueprints/plans/2026-07-13-codex-compatibility.md`）。
 
 ## ⏸ Future —— deferred
 - **why/what/how 高度診斷（elicit 守門人第四種卡）** — Paul 2026-07-14 提出、方向已選（切對話紀律，不做分類軸——分類軸過不了 No-Op 檢驗）：「層次滑動型卡住」＝分岔立錯樓層（嘴上吵 how、分歧在 why），修法是把 fork 往上抬一層再立，借 `shape:position` 的 altitude instrument（axiom/principle/approach/bet ＋ churn alarm）by protocol，零新 skill。**等刺痛案例**（一場真的因層次滑動爛掉的討論）再落 SKILL.md——elicit 剛動完守門人刀（ADR-076），連續改同一 skill 是 Sprawl 起手式。

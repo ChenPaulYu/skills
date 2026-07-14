@@ -2,18 +2,20 @@
   "id": "nav-plan",
   "mode": "generated",
   "file": ".agents/skills/nav-plan/SKILL.md",
-  "expect": [
-    {
-      "category": "ask_user_question",
-      "contains": "AskUserQuestion"
-    }
-  ],
   "reject": [
+    { "category": "ask_user_question" },
     { "category": "agent_call" },
     { "category": "subagent_type" },
     { "category": "model_sonnet" }
   ],
   "expect_text": [
+    "**Interactive choice contract (Codex).**",
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "Present them as mutually exclusive choices and label a recommendation only when that section does.",
+    "Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.",
+    "Launch worker to execute step 1 *(Recommended)*",
+    "Save plan only — I'll come back later",
     "Dispatch a scoped executor worker.",
     "The dispatched worker defaults to cheap tier (the mechanical-tier executor role)",
     "## Worker dispatch contract (Codex)",

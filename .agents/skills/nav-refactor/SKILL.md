@@ -145,9 +145,13 @@ Output a summary to chat:
 
 Do NOT commit unless the user explicitly asks. Per the project's git discipline, branch first if on the default branch.
 
+> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+>
+> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+
 ### Step 8 — Offer next action (don't make the user type the next command)
 
-After Step 7's report, present next-action options via `AskUserQuestion`. The discipline ("don't commit / don't improve in this session") is preserved by the question — the user picks; nothing happens unless they do.
+After Step 7's report, present next-action options via the Codex interactive chooser. The discipline ("don't commit / don't improve in this session") is preserved by the question — the user picks; nothing happens unless they do.
 
 **Default 3 options** (drop or rephrase per situation):
 
@@ -211,7 +215,7 @@ The dispatching agent never accepts `status: done` at face value: it reads the r
 - **Browser pass at the end.** Tests prove unit behaviour, not integration. Pointer gestures, drag-drop, animations are rarely unit-tested.
 - **Rule ⑦ applies during the refactor.** If a step's correctness is below 90% confidence, **stop and clarify with the user** rather than improvising.
 - **Don't commit unless asked.** Show the diff; let the user decide when to land. (Step 8 makes "commit + open PR" a one-click option — that *is* asking.)
-- **DO offer next action (Step 8).** Suggesting the next command in chat text leaves discoverability friction on the table. Stage the option as an `AskUserQuestion`; one click > one typed command. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
+- **DO offer next action (Step 8).** Suggesting the next command in chat text leaves discoverability friction on the table. Stage the option as the Codex interactive chooser; one click > one typed command. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
 - **Bracket the improve hand-off: inject the seam in, check integration out.** A fresh improve worker doesn't know who consumes the extracted module — inject the seam so it doesn't add a parallel impl, and run a deep-module pass on its diff before accepting "done". See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
 
 ## When to stop and escalate to the user
