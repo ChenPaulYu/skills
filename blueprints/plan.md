@@ -4,7 +4,7 @@
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
 ## 🚧 In progress —— elicit 生態系落地
-- **elicit 生態系（survey · probe · 守門人）** — 2026-07-14 elicit 收斂完成、Paul 拍板：四象限知識狀態 → `shape:survey`（測繪盲點）與 `shape:probe`（實驗問現實）新建、teach 走路由（frame:analogize / deep-research）、elicit 升格守門人（卡住三分診斷 → offer 出去）。決策：`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md`；四 phase 計畫：`plans/2026-07-14-elicit-ecosystem.md`。**進度：Phase 0（收斂+計畫）、Phase 1（shape:survey + ADR-074）、Phase 2（shape:probe + ADR-075 + dialectic 橋）完成，均 sonnet 執行/判斷席驗收；Phase 3–4 未動工。**
+- **elicit 生態系（survey · probe · 守門人）** — 2026-07-14 elicit 收斂完成、Paul 拍板：四象限知識狀態 → `shape:survey`（測繪盲點）與 `shape:probe`（實驗問現實）新建、teach 走路由（frame:analogize / deep-research）、elicit 升格守門人（卡住三分診斷 → offer 出去）。決策：`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md`；四 phase 計畫：`plans/2026-07-14-elicit-ecosystem.md`。**進度：Phase 0（收斂+計畫）、Phase 1（shape:survey + ADR-074）、Phase 2（shape:probe + ADR-075 + dialectic 橋）、Phase 3（elicit 守門人 + ADR-076）完成，均 sonnet 執行/判斷席驗收；Phase 4（行為實測）進行中。**
 
 ## ▶ Next —— 接下來
 - **reflect:summarize 退役** — Paul 2026-07-14 拍板刪除：No-Op 檢驗不過（模型不裝 skill 也會做完整回顧），護城河最淺（對照 catchup 的三態機器/park 的落檔）。做法：ADR（引 ADR-021 doctor 退役先例）＋移除 SKILL.md＋全套 gate 反向（reflect 版本 bump、README、site map 中英、mirror regen）。**等 elicit 生態系四 phase 落完再動**（避免與在飛 sub-agent 撞 gating surfaces）。

@@ -33,7 +33,7 @@
     "shape-align": "Decide with the user what is In progress, Next, and Future from current decisions and actual work, then maintain a lean plan.md board. Use to align priorities or refresh what comes next.",
     "shape-build": "Drive a blueprints plan's In-progress items to verified completion, serially by default, with planning, scoped execution, checks, and board updates. Use to implement or ship the current plan.",
     "shape-dogfood": "Use a completed feature like a real user via browser or CLI, record evidence, and identify workflow friction or missing intent coverage. Use when a built feature feels awkward or unsmooth.",
-    "shape-elicit": "Converge a conceptual decision or root cause by proposing refutable structures and grilling the user until a choice is clear. Use for undecided concepts or logic holes, not visual comparisons.",
+    "shape-elicit": "Converge a conceptual decision or root cause by grilling the user to a choice; diagnoses stalls, offering /shape:survey or /shape:probe. Use for undecided concepts or logic holes, not visuals.",
     "shape-mockup": "Converge a visual, structural, flow, or option decision by generating a real interactive HTML artifact. Use to mock, compare, diagram, visualize, or try variants; never substitutes prose or ASCII.",
     "shape-position": "Author and maintain a project's ratified core principle documents from messy, repeated inputs. Use to establish positioning, graduate durable thoughts, or repair accreted canon, gated edits.",
     "shape-probe": "Design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument. Use to test an undecided claim, not for preference or friction.",
