@@ -18,6 +18,7 @@
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
+2026-07-14：**research 泛化＋能力優先**（ADR-080，research 0.6.0、shape 0.9.3）——物件從「論文」泛化為「論證型文件」（Paul 原則：paper 是文件的一種）；三條下游縫記錄（untangle→position/elicit、critique→probe、survey→deep-research）；deep-research offer 帶量級標示（b 案，ADR-062 實例）；`notes/`／`sources/` 由準契約降為 convention，複用改 tolerant 三態（決策：`thoughts/2026-07-14-research-generalize-argument-docs.md`）。路由探針（非論文觸發句）為 follow-up。
 2026-07-14：**relay:register 併入 launch**（ADR-078，relay 0.8.0，marketplace 36 skills）——structure-theatre 剃刀裁決（Paul 拍板選 A）：register 的協定內容（身分/角色兩層、handle 凍結、diff-gate）以 Branch B 形式全數保留在 launch 內；降級案（b）因真實價格（format 擴權＋walked-step 改寫，knowledge≠cue 法則否決便宜版）出局。
 2026-07-14：**frame 四鏡人話落地**（ADR-077，frame 0.6.0）——每鏡 protocol 尾端加 walked 落地步（零行話結論+比喻，借 analogize 紀律；禁詞範圍經探針抓漏後擴至整個落地段）。探針 3/4 過（orthogonal/dialectic/graft 落地品質佳）；first-principles 一次禁詞洩漏（已修 spec 歧義）+ 一次未達落地步的冷啟動雜訊,記為 cheap-tier 地板軟點（`docs/findings/2026-07-14-frame-plain-landing-probes.md`）。決策：`thoughts/2026-07-14-frame-plain-landing.md`。
 2026-07-14：**elicit 生態系全線落地**（`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md` · `plans/2026-07-14-elicit-ecosystem.md`）——Phase 1 `shape:survey`（ADR-074）、Phase 2 `shape:probe` + dialectic 橋（ADR-075）、Phase 3 elicit 守門人（ADR-076）、Phase 4 行為實測（`docs/findings/2026-07-14-elicit-ecosystem-probes.md`：路由 15/15、survey/probe 探針 PASS；**守門人探針四輪迭代後記為已知限制**——兩次 wiring fix 各封掉一種實測逃逸、鏈路首次可 fire，但冷啟動 sonnet 0/3 不可靠；實際 elicit 跑 session model，地板≠天花板）。全程 sonnet 執行、判斷席驗收（ADR-067 dispatch tiers 首次全流程實戰）。

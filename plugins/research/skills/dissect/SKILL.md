@@ -1,6 +1,6 @@
 ---
 name: dissect
-description: "Dissect papers, blog posts, RFCs, or design proposals into a structural skeleton — Gap, Claim, Mechanism, Evidence, Conclusion. Fires on \"break down this paper\", \"what does this paper claim?\". Forensic mode (already-cited documents) audits cited-as vs actually-says, returning the corrected citable form — fires on \"verify this citation\". For mapping relations across multiple papers, use /research:untangle."
+description: "Dissect argument documents — papers, blog posts, RFCs, design proposals, ADRs — into a structural skeleton: Gap, Claim, Mechanism, Evidence, Conclusion. Fires on \"break down this paper\", \"what does this paper claim?\", \"break down this RFC\". Forensic mode (already-cited documents) audits cited-as vs actually-says, returning the corrected citable form — fires on \"verify this citation\". For mapping relations across multiple documents, use /research:untangle."
 ---
 
 # research:dissect
@@ -35,7 +35,7 @@ Any document making a claim can be decomposed into five layers:
    - Flag what the evidence *doesn't* prove: missing ablations, narrow conditions, confounds.
 
 5. **Conclusion** — What does the author want the reader to believe at the end?
-   - Not a summary of the paper. The *claim about the world* they want established.
+   - Not a summary of the document. The *claim about the world* they want established.
    - Often: "X should be a standard component of Y" or "approach Z is insufficient because..."
 
 ## Scope
@@ -64,6 +64,8 @@ Accept documents in whatever form is provided:
 - Pasted text
 - A folder path (read all PDFs/markdown files inside, sorted by name)
 
+If a URL needs downloading to disk first, suggest `sources/` as the landing spot — a **convention, not a contract** (ADR-071): any location the user names works, and the location never affects the analysis.
+
 **Forensic mode** (an overlay on either mode): fires when the document is *already cited* in the
 user's working documents — the user says "verify this citation", "this number is already in my
 notes", or you can see existing mentions in the repo. Before dispatching (Step 3), grep the
@@ -88,12 +90,12 @@ A fresh sub-agent has no skill context. Inject everything it needs upfront:
 1. **The document** — absolute file path (or URL). Tell the sub-agent to read it fully before dissecting; do not skim. **Identity first**: confirm title / authors / venue from the document's own content before anything else — never trust the filename or the user's assumption about what the file is. If it is not the expected document, say so prominently at the top of the note and dissect what it actually is.
 2. **The 5-layer framework** — paste verbatim:
    - **Gap**: be specific about the failure mode. "Existing methods are insufficient" is not a gap. "CoT agents cannot verify their own reasoning outputs and cannot acquire new information after generation" is a gap.
-   - **Claim**: one or two sentences. If the paper has multiple claims, pick the central one and note the others.
+   - **Claim**: one or two sentences. If the document has multiple claims, pick the central one and note the others.
    - **Mechanism**: focus on the structural change, not the implementation details. "Inserts a Thought step before each Action in the same forward pass" is mechanism. "Uses GPT-4 with temperature 0.7" is not.
    - **Evidence**: for every experiment — (a) name the task, describe it in 1-2 plain sentences; (b) name the comparison baseline; (c) state the result (numbers); (d) explain why this result supports the claim. Flag what the evidence *doesn't* prove.
    - **Conclusion**: what do the authors want the reader to believe at the end? Quote or closely paraphrase their own words from the final section.
 3. **The output format template** — paste verbatim from the Output format section below.
-4. **The user's claim** (if provided) — tell the sub-agent to add an "Implications for [claim]" section covering: what this paper leaves open, whether its Evidence supports/contradicts/is orthogonal to the claim, whether its Mechanism overlaps. If no claim, omit this section.
+4. **The user's claim** (if provided) — tell the sub-agent to add an "Implications for [claim]" section covering: what this document leaves open, whether its Evidence supports/contradicts/is orthogonal to the claim, whether its Mechanism overlaps. If no claim, omit this section.
 5. **Existing citations (forensic mode only)** — paste every way the user's documents currently cite this work (exact numbers, quotes, claimed roles, with file:line). Instruct the sub-agent to verify each against the document — does it exist? exact value? metric definition? missing conditions or qualifiers (which split / subset / population, selection effects, mixed metrics)? — and to produce the "Citation verification" output section, ending with the corrected sentence-form the user should cite instead.
 6. **Discipline rules** — paste the bullets from the Discipline section below.
 7. **Return instruction** — tell the sub-agent its final text IS the dissection note (raw markdown). It should return nothing else.
@@ -105,7 +107,7 @@ Read the returned note before saving. STOP and ask the sub-agent to revise if an
 - Identity confirmed from the document's content (title / authors / venue) — and any mismatch with the expected document flagged at the top?
 - All five sections present (Gap, Claim, Mechanism, Evidence, Conclusion)?
 - Every Evidence experiment has a plain-language task description (not just a benchmark name)?
-- Conclusion quotes or closely paraphrases the paper's own words (not invented)?
+- Conclusion quotes or closely paraphrases the document's own words (not invented)?
 - Uncertainty flagged with "uncertain" where confidence < 90%?
 - Mechanism and Evidence kept separate (mechanism = how it works; evidence = proof it works)?
 - (Forensic mode) every injected citation has a verdict — **verified / needs qualification / unsupported** — with table/section location and a corrected citable form?
@@ -120,7 +122,7 @@ The sub-agent adds it as the final section of its output:
 
 > **Implications for [user's claim]**
 >
-> - What this paper's Conclusion leaves open that your claim addresses.
+> - What this document's Conclusion leaves open that your claim addresses.
 > - Whether their Evidence contradicts, supports, or is orthogonal to your claim.
 > - Whether their Mechanism overlaps with yours — and if so, how yours differs.
 
@@ -128,9 +130,11 @@ Include in the check (←): if a claim was provided and this section is missing 
 
 ### Step 5 — Output
 
-**Single-document mode**: produce one dissection note. Suggest `notes/<paper-shortname>.md` as the save path. Do not write without confirmation.
+**The in-chat skeleton is the deliverable; saving is an offer.** Present the dissection in the conversation first — that's the capability. Then *offer* to save (never write without confirmation; declining is a valid outcome).
 
-**Batch mode**: produce one note per document. Suggest `notes/<paper-shortname>.md` for each. Confirm save location once (apply to all, unless the user wants to specify per document). After all notes are saved, print a one-line summary table:
+**Single-document mode**: one dissection note. If the user wants it saved, suggest `notes/<doc-shortname>.md` as the conventional default — any location they name works (the folder is a convention, not a contract; ADR-071).
+
+**Batch mode**: one note per document. Confirm the save location once (the `notes/` convention as default; apply to all unless the user specifies per document). After all notes are saved, print a one-line summary table:
 
 ```
 | Paper | Saved to | Status |
@@ -206,7 +210,7 @@ section entirely when not in forensic mode.>
 
 ## Implications for [your claim]
 
-<What this paper leaves open. Whether its Evidence supports or contradicts yours. Whether its Mechanism overlaps and how yours differs.>
+<What this document leaves open. Whether its Evidence supports or contradicts yours. Whether its Mechanism overlaps and how yours differs.>
 
 *(Leave blank if no claim was provided.)*
 ```
@@ -214,7 +218,7 @@ section entirely when not in forensic mode.>
 ## Discipline
 
 - **Plain language first.** Never state a benchmark name without describing the task. A reader who doesn't know the field should be able to follow the Evidence section without looking anything up.
-- **Cite the paper's actual words for Conclusion.** The authors usually state their conclusion explicitly. Quote or closely paraphrase — don't invent one.
+- **Cite the document's actual words for Conclusion.** The authors usually state their conclusion explicitly. Quote or closely paraphrase — don't invent one.
 - **Flag what the evidence doesn't prove.** If a claim is ambitious but the evidence is narrow, say so. "The authors claim X, but the experiments only test Y — whether X holds beyond Y is unproven" is a more useful dissection than accepting the claim at face value.
 - **Don't conflate Mechanism with Evidence.** Mechanism = how it works. Evidence = proof that it works. These are separate.
 - **Never trust the filename.** A file's name is a claim, not a fact — identity comes from the document's content. (Real case: a PDF assumed for months to be paper A turned out on dissect to be a different paper entirely; the filename was a submission number.)

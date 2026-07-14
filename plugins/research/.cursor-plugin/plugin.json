@@ -1,7 +1,7 @@
 {
   "name": "research",
-  "version": "0.5.0",
-  "description": "Argument anatomy for research work — dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of sources relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), critique a paper adversarially into a referee report (claim↔evidence audit + self-attack), or run a provenance audit over your own documents (trace every load-bearing citation back to a verified source; quarantine the unread). Works on academic papers, technical writeups, competitor analyses, design proposals.",
+  "version": "0.6.0",
+  "description": "Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers, technical blog posts, anything that carries a claim-evidence structure. dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of documents relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), critique a document adversarially into a referee report (claim↔evidence audit + self-attack), or run a provenance audit over your own documents (trace every load-bearing citation back to a verified source; quarantine the unread). A paper is the most common instance, not the definition.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

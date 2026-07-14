@@ -1,6 +1,6 @@
 ---
 name: critique
-description: "Adversarially review a paper or argument document and draft a referee report: audit claims against evidence (validated != claimed) and self-attack every criticism before it ships. Best on empirical papers with tables/ablations. Fires on \"review this paper\", \"find the weaknesses\", \"are these results validated?\". For single-document argument anatomy, use /research:dissect; to map relations across papers, use /research:untangle."
+description: "Adversarially review an argument document — paper, RFC, design proposal, ADR — and draft a referee report: audit claims against evidence (validated != claimed) and self-attack every criticism before it ships. Best on empirical papers with tables/ablations. Fires on \"review this paper\", \"find the weaknesses\", \"are these results validated?\", \"stress-test this design doc's claims\". For single-document argument anatomy, use /research:dissect; to map relations across multiple documents, use /research:untangle."
 ---
 
 # research:critique
@@ -12,7 +12,7 @@ Adversarially assess a document's argument and produce a referee report. The uni
 `dissect` answers "what does this work argue, and does the evidence hold?" — it *understands*. `critique` goes one step further: it *assesses* adversarially and produces a usable review. The two disciplines that make a review credible — and that an LLM reliably skips — are:
 
 1. **Claim↔evidence audit (validated ≠ claimed).** Pull each verbatim claim, map it to the exact table/figure that should support it, and read the numbers. Most weaknesses live in the gap between what is *stated* and what is *shown*.
-2. **Self-attack before shipping.** Sharp-sounding criticisms are cheap; the discipline is recomputing one number, or re-reading the claim charitably, or checking whether the paper actually fails to do the thing you are about to fault it for — *before* the criticism goes in. **The reviewer's credibility comes as much from what they cut as from what they keep.**
+2. **Self-attack before shipping.** Sharp-sounding criticisms are cheap; the discipline is recomputing one number, or re-reading the claim charitably, or checking whether the document actually fails to do the thing you are about to fault it for — *before* the criticism goes in. **The reviewer's credibility comes as much from what they cut as from what they keep.**
 
 A review without (2) is a complaint generator. With it, every line is pre-pressure-tested.
 
@@ -20,7 +20,7 @@ A review without (2) is a complaint generator. With it, every line is pre-pressu
 
 > **Ground → Self-attack.** They are coupled, not sequential decoration.
 
-- **Ground (intent-scoped, to recompute-depth).** You can only refute a finding — recompute it, re-read the claim charitably, check the paper's text — on a mechanism you have grounded. So before attacking, ground the *attack surfaces*: the exact metric formulas, each ablation arm, what is fine-tuned, what each knob does. Shallow grounding → wrong critiques the self-attack cannot even catch. This grounding is **demand-driven by what you will test** — not "understand the whole paper" (reuse `dissect` for that).
+- **Ground (intent-scoped, to recompute-depth).** You can only refute a finding — recompute it, re-read the claim charitably, check the document's text — on a mechanism you have grounded. So before attacking, ground the *attack surfaces*: the exact metric formulas, each ablation arm, what is fine-tuned, what each knob does. Shallow grounding → wrong critiques the self-attack cannot even catch. This grounding is **demand-driven by what you will test** — not "understand the whole document" (reuse `dissect` for that).
 - **Self-attack.** For every candidate finding, try to kill it. Keep only survivors; log the kills.
 
 Everything else (the scans, severity calibration, drafting) is scaffolding around these two.
@@ -36,6 +36,7 @@ Everything else (the scans, severity calibration, drafting) is scaffolding aroun
 Best on **empirical papers with tables and ablations** (ML / MIR / systems), where claim↔evidence and ladder attribution have numbers to bite on. Degrades gracefully:
 
 - **Theory / qualitative work**: skip the number-recompute scans; keep the claim↔evidence audit, novelty bounding, and self-attack.
+- **Non-academic argument documents** (an RFC, a design proposal, a vendor whitepaper, an ADR): the claims are architectural or business rather than empirical — "this design scales to N", "this vendor's benchmark shows X" — but claim↔evidence audit and self-attack apply unchanged; ladder attribution degrades to "which change in the proposal actually produces the claimed gain."
 - The labels adapt; the discipline (validated ≠ claimed · attack your own findings) is constant.
 
 ## Protocol
@@ -49,7 +50,7 @@ Accept the document (file path, URL, or pasted text). Then ask once, briefly:
 
 ### Step 2 — Ground the attack surfaces (reuse `dissect`)
 
-If a `dissect` note exists for this document in `notes/`, reuse it as the descriptive skeleton — do not re-derive it. Then ground *deeper, only where you will strike*:
+A prior `dissect` skeleton may already exist — look for it **tolerantly, in three states** (ADR-071): ① dissected earlier in this conversation → use directly; ② the user points at a location → read there; ③ neither → check the conventional `notes/<doc-shortname>.md`, and if absent, derive the skeleton from the document itself. Announce which tier you used. Then ground *deeper, only where you will strike*:
 
 - **Extract the verbatim claims** from the abstract / contributions / conclusion — quote them exactly. Build a **claim↔evidence map**: for each claim, which table/figure is supposed to prove it.
 - **Ground the test surfaces to recompute-depth**: the exact definition of each headline metric (what it includes and omits), each arm of every ablation, what was trained vs. fine-tuned vs. frozen, and what each swept knob controls.
@@ -60,7 +61,7 @@ Output of this step: a claims list + a grounded map of where each will be tested
 
 Apply each scan; each produces zero or more **candidate** findings (not yet shippable):
 
-- **Claim↔evidence audit** — for each claim, mark *validated / not supported / narrower than claimed*, citing the numbers. The opening line of the Weaknesses is usually: "what the experiments validate ≠ what the paper claims."
+- **Claim↔evidence audit** — for each claim, mark *validated / not supported / narrower than claimed*, citing the numbers. The opening line of the Weaknesses is usually: "what the experiments validate ≠ what the document claims."
 - **Ladder attribution** — when an ablation chain exists (baseline → +A → +B), locate *which step* the headline gain comes from. A gain at an expected/borrowed step (e.g. "+conditioning") is not evidence for the *proposed* step.
 - **Metric completeness** — does the headline metric/composite drop an axis the method loses on? A score that omits the very axis where the method is weakest is suspect.
 - **Tautology check** — is the winning comparison near-tautological (conditioning on X → scoring better on X)? If so it is expected, not a contribution.
@@ -72,10 +73,10 @@ For **every** candidate finding, attempt to refute it before it ships, using whi
 
 - **Recompute** with an alternative metric/composite — does the conclusion flip? (If it survives, the finding is stronger; if it flips, soften or cut.)
 - **Charitable re-reading** — read the claim the way the most favourable author would. Does the criticism still bite, or was it attacking a strawman?
-- **Check the paper's text** — does the paper actually fail to do the thing you fault it for? (Often it already does it; cut.)
+- **Check the document's text** — does the document actually fail to do the thing you fault it for? (Often it already does it; cut.)
 - **Independent lens** — for a load-bearing finding, attack it from a second angle (a different metric, a different baseline).
 
-Each surviving finding ships with a stamp: **survived (with the evidence)**; each killed one goes to the **cut-log** with the reason. *(Examples of what this kills: a "missing baseline" the paper does not actually need; a "rigged metric" that still favours the method when recomputed fairly; an "acute" flaw that, re-scoped, is a narrow caveat.)*
+Each surviving finding ships with a stamp: **survived (with the evidence)**; each killed one goes to the **cut-log** with the reason. *(Examples of what this kills: a "missing baseline" the document does not actually need; a "rigged metric" that still favours the method when recomputed fairly; an "acute" flaw that, re-scoped, is a narrow caveat.)*
 
 ### Step 5 — Calibrate *(checkpoint)*
 
@@ -88,8 +89,10 @@ Each surviving finding ships with a stamp: **survived (with the evidence)**; eac
 
 Produce a **two-layer artifact** (read-only; confirm save locations):
 
-1. **Analysis note** — the full-evidence working note (every finding + the cut-log + the grounded map). Suggest `notes/<paper-shortname>.md`.
-2. **Review draft** — the lean deliverable in the reviewer's voice, pointing back to the analysis note. Suggest `notes/<paper-shortname>-review.md`. Structure: Summary · Strengths (credit generously) · Weaknesses (major → minor, each tied to a verifiable target) · Suggestions (two tiers: in-scope clarifications / beyond-scope ideas) · Overall + conditional rating.
+Both are presented in-chat first — the analysis is the deliverable; saving is an *offer*, and `notes/` is the conventional default, not a contract (any user-named location works; ADR-071).
+
+1. **Analysis note** — the full-evidence working note (every finding + the cut-log + the grounded map). Conventional default: `notes/<doc-shortname>.md`.
+2. **Review draft** — the lean deliverable in the reviewer's voice, pointing back to the analysis note. Conventional default: `notes/<doc-shortname>-review.md`. Structure: Summary · Strengths (credit generously) · Weaknesses (major → minor, each tied to a verifiable target) · Suggestions (two tiers: in-scope clarifications / beyond-scope ideas) · Overall + conditional rating.
 
 ## Output format
 
@@ -126,6 +129,11 @@ Plus a **cut-log** (in the analysis note): each dropped criticism + why it did n
 - **Credit honesty; be fair.** Where the authors are transparent about a limitation, say so. Generous-but-rigorous beats hostile.
 - **Framing vs. fabrication.** Distinguish "the claim is over-stated as written" (re-scopable) from "the result is wrong" (fatal). Most fixable weaknesses are the former — say which.
 - **Rule ⑦ applies.** Below 90% confidence on a finding — especially after the self-attack is inconclusive — soften it or move it to a question, do not assert.
+
+## Companion skills
+
+- **`/research:dissect`** — the descriptive skeleton this skill grounds deeper on; reuse its note instead of re-deriving one.
+- **`/shape:probe`** — critique audits **existing** evidence; when a Weakness is really "the decisive experiment doesn't exist yet" (not "the evidence shown doesn't support the claim," but "no evidence has been produced either way"), `probe` is where it can go: design and run the minimal experiment that would settle it. Guarded offer, degrades gracefully if `shape` isn't installed — the mirror of `/frame:dialectic`'s own `/shape:probe` bridge (ADR-012 pattern).
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).

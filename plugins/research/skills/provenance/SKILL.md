@@ -1,6 +1,6 @@
 ---
 name: provenance
-description: "Audit your OWN documents' citations: trace every load-bearing number, quote, and claim back to a verified source, classifying each first-hand verified / second-hand / orphan. The mirror of /research:critique: critique audits THEIR evidence; provenance audits YOUR use of theirs. Fires on \"are my citations sound\", \"which claims haven't we verified\", \"sweep for unread citations\". Suspect findings hand off to /research:dissect (forensic mode)."
+description: "Audit your OWN documents' citations: trace every load-bearing number, quote, and claim back to a verified source, classifying each first-hand verified / second-hand / orphan. The mirror of /research:critique: critique audits THEIR evidence; provenance audits YOUR use of theirs. Fires on \"are my citations sound\", \"which claims haven't we verified\", \"sweep for unread citations\", \"audit my ADR's citations\". Suspect findings hand off to /research:dissect (forensic mode)."
 ---
 
 # research:provenance
@@ -80,7 +80,7 @@ shape).
 For each record, walk the chain:
 
 1. Is there a reading/dissection note for the named source? Does the note **contain** the cited
-   fact (not merely cover the paper)?
+   fact (not merely cover the document)?
 2. Is the source document itself on the shelf? Has its **identity** been confirmed from content?
 3. Do intake tags mark it second-hand ("deep-research-covered", "no PDF", "from survey")?
    A tag anywhere upstream taints the claim everywhere downstream — the tag travels, even when
@@ -111,7 +111,8 @@ without confirmation):
 
 ## Quarantine list (read-or-demote before relying on these)
 For each second-hand / orphan item, the recommended remediation:
-- **fetch + forensic dissect** — get the source, verify cited-as vs actually-says
+- **fetch + forensic dissect** — get the source, verify cited-as vs actually-says (the source is known, just unread)
+- **offer deep-research** — for an **orphan** with no known candidate source at all (nothing to fetch, not even a name), offer `deep-research` to locate and verify one externally. Deep-research is a multi-agent research harness — it fans out dozens of searches and verification rounds, a cost an order of magnitude above the other two remediations here — so this offer names that cost up front, never auto-runs it (ADR-062).
 - **demote the wording** — keep the claim at the strength its provenance supports
 - **accept the risk** — explicit, recorded decision (e.g. deadline pressure), with the tag restored inline
 
@@ -139,7 +140,7 @@ re-state the residual quarantine so the user sees what is still open.
   audit's value is that every row is checkable in one jump.
 - **The tag travels.** One "no PDF / from survey" tag anywhere upstream taints every downstream
   restatement, no matter how confident the later prose sounds. Promotion is not verification.
-- **A note covering the paper ≠ a note containing the fact.** Check the fact, not the filename.
+- **A note covering the document ≠ a note containing the fact.** Check the fact, not the filename.
 - **Wording must match verdict.** Rank verbs ("suggests" < "shows" < "demonstrates" <
   "direct evidence") and flag any second-hand claim wearing first-hand wording.
 - **Rule ⑦ applies.** Below 90% confidence on a trace (ambiguous source name, two candidate

@@ -37,7 +37,7 @@ Both entrances land here for the same reason: nobody spontaneously summons a ski
    These route differently (a missing axis usually needs more explaining than a missing point), so keeping them apart is part of the diff's honesty.
 3. **Fill the gaps — sized to the gap, never uniform.**
    - **Small gap** → explain it in place: plain language, an analogy where one helps, done inline. No hand-off needed for a one-line fact.
-   - **Big gap** → don't try to teach it yourself in-line. **Offer** — never call — the verb built for that transfer: `/frame:analogize` when the gap is a concept that needs deliberate, stress-tested transfer into your head; `deep-research` when the gap is external-world knowledge that needs co-reading real sources. Offers are guarded and one-shot, same convention as every other offer in this family (ADR-007/015) — the user picks, or declines and keeps the diff as-is.
+   - **Big gap** → don't try to teach it yourself in-line. **Offer** — never call — the verb built for that transfer: `/frame:analogize` when the gap is a concept that needs deliberate, stress-tested transfer into your head; `deep-research` when the gap is external-world knowledge that needs co-reading real sources — note its cost when offering it: deep-research is a multi-agent research harness that fans out dozens of searches and verification rounds, a cost an order of magnitude above the sibling options here, so the nod to run it is an informed one, not a reflex (ADR-062). Offers are guarded and one-shot, same convention as every other offer in this family (ADR-007/015) — the user picks, or declines and keeps the diff as-is.
 
 ## Grounding — recon can be cheap, judgment can't
 
