@@ -1,0 +1,28 @@
+{
+  "id": "browser-runtime-missing-agent",
+  "scenario": "browser_runtime_contract",
+  "expect_only": true,
+  "manifest": {
+    "capabilities": [
+      {
+        "id": "browser_verify",
+        "runtime_artifact": ".codex/agents/browser-verifier.toml",
+        "contract_consumers": [
+          ".agents/skills/shape-build/SKILL.md"
+        ]
+      }
+    ],
+    "generated_destinations": [
+      ".agents/skills",
+      ".codex/agents/browser-verifier.toml",
+      "AGENTS.md"
+    ]
+  },
+  "files": {
+    ".agents/skills/shape-build/SKILL.md": "> **Browser-verify contract (Codex).** dispatch the pass to `.codex/agents/browser-verifier.toml`.\n"
+  },
+  "expect_errors": [
+    "browser runtime artifact is missing: .codex/agents/browser-verifier.toml",
+    "generated .codex/agents reference does not resolve: .agents/skills/shape-build/SKILL.md -> .codex/agents/browser-verifier.toml"
+  ]
+}

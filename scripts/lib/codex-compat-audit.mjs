@@ -18,6 +18,22 @@ const MANIFEST_PATH = join("platforms", "codex", "manifest.json");
 const BASELINE_PATH = join("scripts", "fixtures", "codex", "compat-baseline.json");
 const CANARY_DIR = join("scripts", "fixtures", "codex", "canaries");
 const NEGATIVE_DIR = join("scripts", "fixtures", "codex", "negative");
+const HOOK_SMOKE_DIR = join("scripts", "fixtures", "codex", "hook-smokes");
+const PRESERVATION_SMOKE_DIR = join("scripts", "fixtures", "codex", "preservation-smokes");
+const SESSION_START_HOOK_COMMAND = "node .codex/hooks/relay-digest-session-start.mjs";
+const GIT_LOCAL_ENV_VARS = [
+  "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+  "GIT_CONFIG",
+  "GIT_CONFIG_COUNT",
+  "GIT_CONFIG_PARAMETERS",
+  "GIT_DIR",
+  "GIT_INDEX_FILE",
+  "GIT_OBJECT_DIRECTORY",
+  "GIT_PREFIX",
+  "GIT_SHALLOW_FILE",
+  "GIT_WORK_TREE",
+  "GIT_COMMON_DIR",
+];
 
 /**
  * Scans arbitrary already-compiled text (not necessarily on disk yet) against the manifest's
@@ -68,10 +84,22 @@ export function validateCodexCompatPhase0(root, options = {}) {
   const negativeTests = validateNegativeFixtures(root);
   errors.push(...negativeTests.errors);
 
+  const browserRuntime = validateBrowserRuntimeContract(root, audit.manifest);
+  errors.push(...browserRuntime.errors);
+
+  const lifecycleHook = validateSessionOpenContract(root, audit.manifest);
+  errors.push(...lifecycleHook.errors);
+
+  const hookSmokes = validateHookSmokes(root);
+  errors.push(...hookSmokes.errors);
+
+  const preservationSmokes = validatePreservationSmokes(root);
+  errors.push(...preservationSmokes.errors);
+
   const frozen = validateFrozenContract(root, audit.manifest, worktreeFreeze);
   errors.push(...frozen.errors);
 
-  return { root, audit, baseline, canaries, negativeTests, frozen, errors };
+  return { root, audit, baseline, canaries, negativeTests, browserRuntime, lifecycleHook, hookSmokes, preservationSmokes, frozen, errors };
 }
 
 export function formatCodexCompatAudit(result) {
@@ -106,6 +134,10 @@ export function formatCodexCompatAudit(result) {
 
   lines.push(`Canary fixtures: ${result.canaries.passed}/${result.canaries.total} ok`);
   lines.push(`Negative fixtures: ${result.negativeTests.passed}/${result.negativeTests.total} ok`);
+  lines.push(`Browser runtime contract: ${result.browserRuntime.errors.length ? "FAIL" : "OK"}`);
+  lines.push(`Lifecycle hook contract: ${result.lifecycleHook.errors.length ? "FAIL" : "OK"}`);
+  lines.push(`Lifecycle hook smokes: ${result.hookSmokes.passed}/${result.hookSmokes.total} ok`);
+  lines.push(`Preservation smokes: ${result.preservationSmokes.passed}/${result.preservationSmokes.total} ok`);
   lines.push(`Frozen contract: ${result.frozen.errors.length ? "FAIL" : "OK"}`);
 
   if (result.errors.length) {
@@ -239,6 +271,15 @@ function validateGeneratedCanary(root, audit, fixture) {
       }
     }
   }
+  if (fixture.reject_text?.length) {
+    const filePath = join(root, fixture.file);
+    const content = existsSync(filePath) ? readFileSync(filePath, "utf8") : null;
+    for (const text of fixture.reject_text) {
+      if (content != null && content.includes(text)) {
+        errors.push(`generated canary ${fixture.id} unexpectedly still contains "${text}" in ${fixture.file}`);
+      }
+    }
+  }
   return errors;
 }
 
@@ -348,8 +389,389 @@ function buildNegativeFixtureErrors(fixture) {
     return errors;
   }
 
+  if (fixture.scenario === "browser_runtime_contract") {
+    const result = validateBrowserRuntimeContractFixture(fixture);
+    errors.push(...result.errors);
+    return errors;
+  }
+
+  if (fixture.scenario === "session_start_hook_contract") {
+    const result = validateSessionOpenContractFixture(fixture);
+    errors.push(...result.errors);
+    return errors;
+  }
+
   errors.push(`unknown negative fixture scenario: ${fixture.scenario}`);
   return errors;
+}
+
+function validateBrowserRuntimeContract(root, manifest) {
+  const errors = [];
+  const capability = manifest.capabilities?.find((item) => item.id === "browser_verify");
+  if (!capability) {
+    errors.push("browser_verify capability is missing from platforms/codex/manifest.json");
+    return { errors, tomlRefs: [] };
+  }
+
+  const artifact = capability.runtime_artifact;
+  if (typeof artifact === "string") {
+    if (!existsSync(join(root, artifact))) {
+      errors.push(`browser runtime artifact is missing: ${artifact}`);
+    }
+  } else {
+    errors.push("browser_verify capability is missing runtime_artifact");
+  }
+
+  for (const consumer of capability.contract_consumers || []) {
+    const consumerPath = join(root, consumer);
+    if (!existsSync(consumerPath)) {
+      errors.push(`browser contract consumer is missing: ${consumer}`);
+      continue;
+    }
+    const content = readFileSync(consumerPath, "utf8");
+    if (!content.includes(".codex/agents/browser-verifier.toml")) {
+      errors.push(`browser contract consumer is missing exact runtime reference ".codex/agents/browser-verifier.toml": ${consumer}`);
+    }
+  }
+
+  const tomlRefs = collectGeneratedTomlReferences(root, manifest.generated_destinations || []);
+  for (const ref of tomlRefs) {
+    if (!existsSync(join(root, ref.target))) {
+      errors.push(`generated .codex/agents reference does not resolve: ${ref.file} -> ${ref.target}`);
+    }
+  }
+
+  return { errors, tomlRefs };
+}
+
+function validateBrowserRuntimeContractFixture(fixture) {
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-browser-runtime-"));
+  const errors = [];
+  try {
+    mkdirSync(tempRoot, { recursive: true });
+    for (const [file, content] of Object.entries(fixture.files || {})) {
+      const full = join(tempRoot, file);
+      mkdirSync(dirname(full), { recursive: true });
+      writeFileSync(full, content);
+    }
+    const result = validateBrowserRuntimeContract(tempRoot, fixture.manifest || {});
+    errors.push(...result.errors);
+    return { errors };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function validateSessionOpenContract(root, manifest) {
+  const errors = [];
+  const capability = manifest.capabilities?.find((item) => item.id === "session_open_awareness");
+  if (!capability) {
+    errors.push("session_open_awareness capability is missing from platforms/codex/manifest.json");
+    return { errors, hookRefs: [] };
+  }
+
+  if (capability.status !== "lowered") {
+    errors.push(`session_open_awareness capability must be lowered, got ${JSON.stringify(capability.status)}`);
+  }
+  if (capability.matcher !== "startup|resume") {
+    errors.push(`session_open_awareness matcher must be "startup|resume", got ${JSON.stringify(capability.matcher)}`);
+  }
+  if (capability.project_trust_required !== true) {
+    errors.push("session_open_awareness capability must require project trust");
+  }
+  if (capability.default_behavior !== "on-demand") {
+    errors.push(`session_open_awareness default_behavior must be "on-demand", got ${JSON.stringify(capability.default_behavior)}`);
+  }
+
+  const runtimeArtifacts = capability.runtime_artifacts || [];
+  for (const artifact of runtimeArtifacts) {
+    if (!existsSync(join(root, artifact))) {
+      errors.push(`session-open runtime artifact is missing: ${artifact}`);
+    }
+  }
+
+  const consumerChecks = [
+    { needle: "Lifecycle awareness contract (Codex).", label: "lifecycle contract" },
+    { needle: "on demand", label: "on-demand language" },
+    { needle: "trusted", label: "trust language" },
+  ];
+  for (const consumer of capability.contract_consumers || []) {
+    const consumerPath = join(root, consumer);
+    if (!existsSync(consumerPath)) {
+      errors.push(`session-open contract consumer is missing: ${consumer}`);
+      continue;
+    }
+    const content = readFileSync(consumerPath, "utf8");
+    for (const check of consumerChecks) {
+      if (!content.includes(check.needle)) {
+        errors.push(`session-open contract consumer is missing ${check.label} "${check.needle}": ${consumer}`);
+      }
+    }
+  }
+
+  const configPath = join(root, ".codex", "hooks.json");
+  if (!existsSync(configPath)) {
+    errors.push("session-open hooks config is missing: .codex/hooks.json");
+  } else {
+    errors.push(...validateSessionStartHooksConfig(readJson(configPath)));
+  }
+
+  const hookRefs = collectGeneratedHookReferences(root, manifest.generated_destinations || []);
+  for (const ref of hookRefs) {
+    if (!existsSync(join(root, ref.target))) {
+      errors.push(`generated .codex/hooks reference does not resolve: ${ref.file} -> ${ref.target}`);
+    }
+  }
+
+  return { errors, hookRefs };
+}
+
+function validateSessionStartHooksConfig(config) {
+  const errors = [];
+  const entries = config?.hooks?.SessionStart;
+  if (!Array.isArray(entries) || entries.length === 0) {
+    errors.push("session-open hooks config must contain at least one hooks.SessionStart entry");
+    return errors;
+  }
+
+  const ownedEntries = entries.filter((entry) =>
+    Array.isArray(entry?.hooks) &&
+    entry.hooks.some((hook) => hook?.type === "command" && hook?.command === SESSION_START_HOOK_COMMAND),
+  );
+  if (ownedEntries.length !== 1) {
+    errors.push(`session-open hooks config must contain exactly one owned SessionStart command entry for ${JSON.stringify(SESSION_START_HOOK_COMMAND)}`);
+    return errors;
+  }
+
+  const [entry] = ownedEntries;
+  if (entry?.matcher !== "startup|resume") {
+    errors.push(`session-open hooks matcher must be exactly "startup|resume", got ${JSON.stringify(entry?.matcher)}`);
+  }
+  if (!Array.isArray(entry?.hooks) || entry.hooks.length !== 1) {
+    errors.push("session-open owned SessionStart entry must contain exactly one command hook");
+    return errors;
+  }
+
+  const [hook] = entry.hooks;
+  if (hook?.type !== "command") {
+    errors.push(`session-open hook type must be "command", got ${JSON.stringify(hook?.type)}`);
+  }
+  if (hook?.command !== SESSION_START_HOOK_COMMAND) {
+    errors.push(`session-open hook command must be exactly ${JSON.stringify(SESSION_START_HOOK_COMMAND)}, got ${JSON.stringify(hook?.command)}`);
+  }
+  if (hook?.timeout !== 5) {
+    errors.push(`session-open hook timeout must be exactly 5, got ${JSON.stringify(hook?.timeout)}`);
+  }
+  return errors;
+}
+
+function validateSessionOpenContractFixture(fixture) {
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-session-open-"));
+  const errors = [];
+  try {
+    mkdirSync(tempRoot, { recursive: true });
+    for (const [file, content] of Object.entries(fixture.files || {})) {
+      const full = join(tempRoot, file);
+      mkdirSync(dirname(full), { recursive: true });
+      writeFileSync(full, content);
+    }
+    const result = validateSessionOpenContract(tempRoot, fixture.manifest || {});
+    errors.push(...result.errors);
+    return { errors };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function validateHookSmokes(root) {
+  const results = [];
+  for (const fixtureFile of listFixtureJsonFiles(root, HOOK_SMOKE_DIR)) {
+    const fixture = readJson(fixtureFile);
+    const result = runHookSmokeFixture(root, fixture);
+    results.push({ id: fixture.id || basename(fixtureFile), errors: result.errors });
+  }
+  return summarizeFixtureResults("hook smoke", results);
+}
+
+function validatePreservationSmokes(root) {
+  const results = [];
+  for (const fixtureFile of listFixtureJsonFiles(root, PRESERVATION_SMOKE_DIR)) {
+    const fixture = readJson(fixtureFile);
+    const result = runPreservationSmokeFixture(root, fixture);
+    results.push({ id: fixture.id || basename(fixtureFile), errors: result.errors });
+  }
+  return summarizeFixtureResults("preservation smoke", results);
+}
+
+function runHookSmokeFixture(root, fixture) {
+  const errors = [];
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-hook-smoke-"));
+  const tempHome = join(tempRoot, "home");
+  const workspace = join(tempRoot, "workspace");
+  try {
+    mkdirSync(tempHome, { recursive: true });
+    mkdirSync(join(tempRoot, ".codex", "hooks"), { recursive: true });
+    mkdirSync(workspace, { recursive: true });
+    cpSync(
+      join(root, ".codex", "hooks", "relay-digest-session-start.mjs"),
+      join(tempRoot, ".codex", "hooks", "relay-digest-session-start.mjs"),
+    );
+
+    if (fixture.relay_repo?.enabled) {
+      writeTextFile(join(workspace, "relay.yml"), fixture.relay_repo.relay_yml || "people:\n");
+    }
+
+    if (fixture.relay_repo?.files) {
+      for (const [file, content] of Object.entries(fixture.relay_repo.files)) {
+        writeTextFile(join(workspace, file), content);
+      }
+    }
+
+    if (fixture.helper?.enabled) {
+      const helperPath = resolveHookHelperPath(tempRoot, tempHome, fixture.helper.location);
+      writeTextFile(helperPath, buildFixtureHelperScript(fixture.helper));
+    }
+
+    const payload = JSON.stringify({
+      hook_event_name: "SessionStart",
+      cwd: workspace,
+      source: "startup",
+      ...(fixture.payload || {}),
+    });
+
+    const result = spawnSync(process.execPath, [join(tempRoot, ".codex", "hooks", "relay-digest-session-start.mjs")], {
+      cwd: tempRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        HOME: tempHome,
+      },
+      input: payload,
+    });
+
+    if (result.error || result.status !== 0) {
+      errors.push(`hook smoke ${fixture.id} execution failed: ${summarizeSpawnFailure(result)}`);
+      return { errors };
+    }
+
+    const stdout = typeof result.stdout === "string" ? result.stdout.trim() : "";
+    if (fixture.expect_output === "empty") {
+      if (stdout !== "") {
+        errors.push(`hook smoke ${fixture.id} expected no output, got ${JSON.stringify(stdout)}`);
+      }
+      return { errors };
+    }
+
+    if (!stdout) {
+      errors.push(`hook smoke ${fixture.id} expected JSON output, got empty stdout`);
+      return { errors };
+    }
+
+    const output = safeJsonParse(stdout);
+    if (!output) {
+      errors.push(`hook smoke ${fixture.id} emitted invalid JSON`);
+      return { errors };
+    }
+
+    const additionalContext = output?.hookSpecificOutput?.additionalContext;
+    if (typeof additionalContext !== "string" || !additionalContext.trim()) {
+      errors.push(`hook smoke ${fixture.id} is missing hookSpecificOutput.additionalContext`);
+      return { errors };
+    }
+
+    for (const text of fixture.expect_output_contains || []) {
+      if (!additionalContext.includes(text)) {
+        errors.push(`hook smoke ${fixture.id} missing output text "${text}"`);
+      }
+    }
+    return { errors };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function runPreservationSmokeFixture(root, fixture) {
+  const errors = [];
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-preserve-"));
+  try {
+    cpSync(root, tempRoot, {
+      recursive: true,
+      filter: (source) => shouldCopyIntoTempRoot(root, source),
+    });
+
+    for (const [file, content] of Object.entries(fixture.seed_files || {})) {
+      writeTextFile(join(tempRoot, file), content);
+    }
+
+    for (let run = 0; run < (fixture.runs || 1); run++) {
+      const result = spawnSync(process.execPath, ["scripts/build-codex.mjs"], {
+        cwd: tempRoot,
+        encoding: "utf8",
+      });
+      if (result.error || result.status !== 0) {
+        errors.push(`preservation smoke ${fixture.id} build ${run + 1} failed: ${summarizeSpawnFailure(result)}`);
+        return { errors };
+      }
+    }
+
+    for (const file of fixture.expect_files || []) {
+      if (!existsSync(join(tempRoot, file))) {
+        errors.push(`preservation smoke ${fixture.id} expected file to survive rebuild: ${file}`);
+      }
+    }
+
+    for (const [file, snippets] of Object.entries(fixture.expect_text || {})) {
+      const full = join(tempRoot, file);
+      if (!existsSync(full)) {
+        errors.push(`preservation smoke ${fixture.id} expected text file is missing: ${file}`);
+        continue;
+      }
+      const content = readFileSync(full, "utf8");
+      for (const snippet of snippets) {
+        if (!content.includes(snippet)) {
+          errors.push(`preservation smoke ${fixture.id} missing text ${JSON.stringify(snippet)} in ${file}`);
+        }
+      }
+    }
+
+    for (const [file, snippets] of Object.entries(fixture.reject_text || {})) {
+      const full = join(tempRoot, file);
+      if (!existsSync(full)) continue;
+      const content = readFileSync(full, "utf8");
+      for (const snippet of snippets) {
+        if (content.includes(snippet)) {
+          errors.push(`preservation smoke ${fixture.id} unexpectedly kept text ${JSON.stringify(snippet)} in ${file}`);
+        }
+      }
+    }
+
+    return { errors };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function buildFixtureHelperScript(helper) {
+  const status = Number.isInteger(helper.status) ? helper.status : 0;
+  const stdout = JSON.stringify(helper.stdout || "");
+  const stderr = JSON.stringify(helper.stderr || "");
+  return [
+    "#!/usr/bin/env node",
+    `if (${stderr} !== \"\") process.stderr.write(${stderr});`,
+    `if (${stdout} !== \"\") process.stdout.write(${stdout});`,
+    `process.exit(${status});`,
+    "",
+  ].join("\n");
+}
+
+function resolveHookHelperPath(tempRoot, tempHome, location = "project") {
+  if (location === "home-agents") {
+    return join(tempHome, ".agents", "skills", "relay-digest", "scripts", "compute-state.mjs");
+  }
+  if (location === "home-codex") {
+    return join(tempHome, ".codex", "skills", "relay-digest", "scripts", "compute-state.mjs");
+  }
+  return join(tempRoot, ".agents", "skills", "relay-digest", "scripts", "compute-state.mjs");
 }
 
 function validateFrozenContract(root, manifest, includeWorktreeFreeze = true) {
@@ -489,6 +911,36 @@ function listGeneratedFiles(root, destinations) {
     }
   }
   return normalizeAndSort(files);
+}
+
+function collectGeneratedTomlReferences(root, destinations) {
+  return collectGeneratedPathReferences(
+    root,
+    destinations,
+    /(?:^|[^A-Za-z0-9._-])(\.codex\/agents\/[A-Za-z0-9._-]+\.toml)\b/g,
+  );
+}
+
+function collectGeneratedHookReferences(root, destinations) {
+  return collectGeneratedPathReferences(
+    root,
+    destinations,
+    /(?:^|[^A-Za-z0-9._-])(\.codex\/hooks\/[A-Za-z0-9._/-]+\.(?:mjs|js|json))\b/g,
+  );
+}
+
+function collectGeneratedPathReferences(root, destinations, regex) {
+  const refs = [];
+  const files = listGeneratedFiles(root, destinations);
+  for (const file of files) {
+    const content = readFileSync(join(root, file), "utf8");
+    const pattern = new RegExp(regex.source, regex.flags);
+    let match;
+    while ((match = pattern.exec(content)) !== null) {
+      refs.push({ file, target: match[1] });
+    }
+  }
+  return refs;
 }
 
 function buildCategorySummary(rules, findings) {
@@ -708,10 +1160,19 @@ function summarizeSpawnFailure(result) {
   return summarizeCommandOutput(result.stderr || result.stdout);
 }
 
+function buildChildGitEnv() {
+  const env = { ...process.env };
+  for (const key of GIT_LOCAL_ENV_VARS) {
+    delete env[key];
+  }
+  return env;
+}
+
 function listGitPaths(root, args, { context, errors }) {
   const result = spawnSync("git", args, {
     cwd: root,
     encoding: "utf8",
+    env: buildChildGitEnv(),
   });
 
   if (result.error || result.status !== 0) {
@@ -733,6 +1194,7 @@ function runGit(root, args, context, errors) {
   const result = spawnSync("git", args, {
     cwd: root,
     encoding: "utf8",
+    env: buildChildGitEnv(),
   });
   if (result.error || result.status !== 0) {
     errors.push(
@@ -749,6 +1211,14 @@ function writeTextFile(file, content) {
 
 function readExistingText(file) {
   return existsSync(file) ? readFileSync(file, "utf8") : "";
+}
+
+function safeJsonParse(value) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
 }
 
 function* walkFiles(dir) {

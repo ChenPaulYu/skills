@@ -22,6 +22,10 @@ Three things derive directly and carry the skill:
 - **Intent-driven, not aimless clicking.** You drive from a short list of *what users are trying to do* — this is what lets hands-on use catch an **absence** (a whole intent with no surface won't snag you if you only poke at what exists; it surfaces as "I tried to do G and there was nowhere to"). Enumerate human purposes, NOT every `state × action` cell — the intent list has a floor; the state-grid is a QA matrix that explodes.
 - **Every finding is shown, not asserted.** A friction claim carries its screenshot or clip; a backend finding quotes the real response. "Trust me, it's clunky" floats — the captured evidence is the point of dogfooding.
 
+> **Browser-verify contract (Codex).** When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent. Otherwise execute the identical pass directly in the current session. In either mode, first check for a project browser-verify override; absent one, use `agent-browser`, and verify the chosen helper is present before driving anything.
+>
+> Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`. Missing selected helper/override → return `MISSING-TOOL` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: `PASS | DRIFT | BLOCKED | MISSING-TOOL`, plus `reason`, `screenshots`, `console`, and `notes`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.
+
 ## The session — use it for real, capture as you go (dogfood's own front)
 
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real build** and records it.

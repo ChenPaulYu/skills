@@ -21,6 +21,17 @@
  *                                  Codex interactive-chooser terminology in every compiled profile.
  *   injectInteractiveChoiceContract() — Phase 3: injects one executable chooser/fallback contract
  *                                  before each of the nine source-owned offer sections.
+ *   lowerBrowserVerifyProse()     — Phase 4: replaces exact Claude runtime/browser-agent ownership
+ *                                  claims with Codex custom-agent / project-artifact wording,
+ *                                  without touching generic browser-helper prose.
+ *   injectBrowserVerifyContract()  — Phase 4: injects one executable browser-verify contract
+ *                                  before each browser-verify consumer section, using the source
+ *                                  heading verbatim as the exact unique anchor.
+ *   lowerSessionOpenProse()       — Phase 4: replaces exact legacy session-open / runs-on-open /
+ *                                  every-open claims with Codex lifecycle-hook wording, and
+ *                                  renames "session-open summary" to "hook-summary format".
+ *   injectSessionOpenContract()   — Phase 4: injects the compact lifecycle-awareness contract for
+ *                                  relay-digest only, at its unique top heading anchor.
  *   injectWorkerDispatchContract() — Phase 2: for the dispatch-heavy skills only, appends a
  *                                  concrete "Worker dispatch contract" section (the canonical
  *                                  work-packet / worker-return contracts below) right after that
@@ -36,9 +47,10 @@
  *   worker_dispatch (Agent/subagent_type/sub-agent)  → lowerWorkerProse + injectWorkerDispatchContract
  *   interactive_choice (AskUserQuestion)             → lowerInteractiveChoiceProse +
  *                                                       injectInteractiveChoiceContract
+ *   browser_verify                                   → injectBrowserVerifyContract
  *   project_guidance (CLAUDE.md→AGENTS.md, /init)    → createProjectGuidanceLowerer
- * Deliberately NOT lowered here (later phases): browser_verify (Phase 4),
- * session_open_awareness (Phase 4).
+ *   session_open_awareness                           → lowerSessionOpenProse +
+ *                                                       injectSessionOpenContract
  */
 import { scanTextForDenylist } from "./codex-compat-audit.mjs";
 
@@ -205,6 +217,158 @@ export function injectInteractiveChoiceContract(text, flat) {
   }
 
   return `${text.slice(0, first)}${CODEX_INTERACTIVE_CHOICE_CONTRACT}\n\n${text.slice(first)}`;
+}
+
+// ---------------------------------------------------------------------------
+// lowerBrowserVerifyProse — browser_verify runtime ownership/path lowering
+// ---------------------------------------------------------------------------
+
+const BROWSER_VERIFY_PROSE_RULES = [
+  {
+    find: "browser-verify slot's `browser-verifier` subagent",
+    replace: "browser-verify slot's `browser-verifier` custom agent",
+  },
+  {
+    find: "Delegate the pass to the `browser-verifier` subagent",
+    replace: "Delegate the pass to the `browser-verifier` custom agent",
+  },
+  {
+    find: "The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/shape/agents/browser-verifier.md) (mechanical-tier executor).",
+    replace:
+      "The slot's default *executor* is the generated project custom agent [`.codex/agents/browser-verifier.toml`](.codex/agents/browser-verifier.toml) (mechanical-tier executor).",
+  },
+  {
+    find: "dispatch the plugin's `browser-verifier` agent (mechanical-tier executor)",
+    replace:
+      "dispatch the generated `.codex/agents/browser-verifier.toml` custom agent (mechanical-tier executor)",
+  },
+  {
+    find: "dispatch the plugin's `browser-verifier` agent (mechanical-tier executor role)",
+    replace:
+      "dispatch the generated `.codex/agents/browser-verifier.toml` custom agent (mechanical-tier executor)",
+  },
+  {
+    find: "Agent-side capture runs in the `browser-verifier` subagent",
+    replace: "Agent-side capture runs in the `browser-verifier` custom agent",
+  },
+  {
+    find: "its **image tokens stay in the subagent's context**",
+    replace: "its **image tokens stay in the custom agent's context**",
+  },
+  {
+    find: "The screenshots' image tokens stay in the subagent; build's context holds only \"PASS/DRIFT + reason\".",
+    replace:
+      "The screenshots' image tokens stay in the custom agent's context; build's context holds only \"PASS/DRIFT + reason\".",
+  },
+  {
+    find: "Ships with the plugin, so it works on any machine that installed shape.",
+    replace:
+      "It is a generated project artifact: re-run `node scripts/build-codex.mjs` to refresh `.codex/agents/browser-verifier.toml`; if that file is absent, or if custom-agent runtime is unavailable, run the identical pass inline instead. Return `MISSING-TOOL` only when the selected browser helper/override is missing.",
+  },
+];
+
+export function lowerBrowserVerifyProse(text) {
+  let out = text;
+  for (const rule of BROWSER_VERIFY_PROSE_RULES) out = out.split(rule.find).join(rule.replace);
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// injectBrowserVerifyContract — Phase 4 executable browser-verify contract
+// ---------------------------------------------------------------------------
+
+export const CODEX_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Codex).** When custom-agent runtime is available **and** \`.codex/agents/browser-verifier.toml\` exists, dispatch the pass to that custom agent. Otherwise execute the identical pass directly in the current session. In either mode, first check for a project browser-verify override; absent one, use \`agent-browser\`, and verify the chosen helper is present before driving anything.
+>
+> Missing custom-agent runtime or artifact is an inline fallback, **not** \`MISSING-TOOL\`. Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
+
+const BROWSER_VERIFY_ANCHORS = {
+  "shape-build": "## browser-verify slot (the dependency, handled as a capability)",
+  "shape-mockup": "## The render step is per-project — the browser-verify slot",
+  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
+};
+
+function countExact(text, needle) {
+  let count = 0;
+  let index = text.indexOf(needle);
+  while (index !== -1) {
+    count += 1;
+    index = text.indexOf(needle, index + needle.length);
+  }
+  return count;
+}
+
+export function injectBrowserVerifyContract(text, flat) {
+  const anchor = BROWSER_VERIFY_ANCHORS[flat];
+  if (!anchor) return text;
+
+  const first = text.indexOf(anchor);
+  const second = text.indexOf(anchor, first + anchor.length);
+  if (first === -1 || second !== -1) {
+    const state = first === -1 ? "missing" : "not unique";
+    throw new Error(`browser-verify anchor ${state} for ${flat}: ${JSON.stringify(anchor)}`);
+  }
+
+  return `${text.slice(0, first)}${CODEX_BROWSER_VERIFY_CONTRACT}\n\n${text.slice(first)}`;
+}
+
+// ---------------------------------------------------------------------------
+// lowerSessionOpenProse + injectSessionOpenContract — Phase 4 lifecycle hooks
+// ---------------------------------------------------------------------------
+
+const SESSION_OPEN_PROSE_RULES = [
+  {
+    find: 'Also the awareness entry — an agent runs it on open.',
+    replace:
+      "Also the awareness entry — a trusted startup/resume hook may surface a compact relay-aware note before you invoke this on demand.",
+  },
+  {
+    find: 'The read side of relay — and its **awareness** mechanism: an agent auto-runs this on open so nothing rots unseen.',
+    replace:
+      "The read side of relay — and its **awareness** mechanism: a trusted startup/resume hook may surface a compact relay-aware note so nothing rots unseen before you run the full digest on demand.",
+  },
+  {
+    find: 'a read-only scan of the stream is mechanical (and runs often, on every open),',
+    replace: "a read-only scan of the stream is mechanical (and may run often via startup/resume hooks),",
+  },
+  {
+    find: "runs on every open",
+    replace: "may run via startup/resume hooks",
+  },
+  {
+    find: "for the session-open hook,",
+    replace: "for the startup/resume hook,",
+  },
+  {
+    find: "hook = one-line session-open summary",
+    replace: "hook = one-line hook-summary format",
+  },
+];
+
+export function lowerSessionOpenProse(text) {
+  let out = text;
+  for (const rule of SESSION_OPEN_PROSE_RULES) out = out.split(rule.find).join(rule.replace);
+  return out;
+}
+
+export const CODEX_SESSION_OPEN_CONTRACT = `> **Lifecycle awareness contract (Codex).** Default to invoking \`relay-digest\` on demand. A trusted \`SessionStart\` startup/resume hook may add a compact relay-aware note when a relay repo is detectable, but that hook is optional and never required for correctness. Missing hook runtime, missing helper, non-relay cwd, parse failure, or empty state all degrade to a safe no-op; the manual \`relay-digest\` path remains the source of truth.`;
+
+const SESSION_OPEN_CONSUMERS = {
+  "relay-digest": "# digest — what's waiting for my review",
+};
+
+export function injectSessionOpenContract(text, flat) {
+  const anchor = SESSION_OPEN_CONSUMERS[flat];
+  if (!anchor) return text;
+
+  const first = text.indexOf(anchor);
+  const second = first === -1 ? -1 : text.indexOf(anchor, first + anchor.length);
+  if (first === -1 || second !== -1) {
+    const state = first === -1 ? "missing" : "not unique";
+    throw new Error(`session-open anchor ${state} for ${flat}: ${JSON.stringify(anchor)}`);
+  }
+
+  const insertAt = first + anchor.length;
+  return `${text.slice(0, insertAt)}\n\n${CODEX_SESSION_OPEN_CONTRACT}${text.slice(insertAt)}`;
 }
 
 // ---------------------------------------------------------------------------

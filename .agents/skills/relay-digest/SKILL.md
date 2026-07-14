@@ -8,9 +8,11 @@ description: "Read a relay coordination repo and show unresolved thoughts that m
 
 # digest — what's waiting for my review
 
-Compute "what's waiting on **you**" from the thought-stream, right now. The read side of relay — and its **awareness** mechanism: an agent auto-runs this on open so nothing rots unseen.
+> **Lifecycle awareness contract (Codex).** Default to invoking `relay-digest` on demand. A trusted `SessionStart` startup/resume hook may add a compact relay-aware note when a relay repo is detectable, but that hook is optional and never required for correctness. Missing hook runtime, missing helper, non-relay cwd, parse failure, or empty state all degrade to a safe no-op; the manual `relay-digest` path remains the source of truth.
 
-> **Cost tier (ADR-059):** this skill declares the mechanical-tier executor role in its frontmatter — a read-only scan of the stream is mechanical (and runs often, on every open), so it runs on the cheaper model for that turn; the session model resumes on the next prompt.
+Compute "what's waiting on **you**" from the thought-stream, right now. The read side of relay — and its **awareness** mechanism: a trusted startup/resume hook may surface a compact relay-aware note so nothing rots unseen before you run the full digest on demand.
+
+> **Cost tier (ADR-059):** this skill declares the mechanical-tier executor role in its frontmatter — a read-only scan of the stream is mechanical (and may run often via startup/resume hooks), so it runs on the cheaper model for that turn; the session model resumes on the next prompt.
 
 ## Scope
 

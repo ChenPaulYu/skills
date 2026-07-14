@@ -99,11 +99,15 @@ A file written to disk is not yet a decidable artifact — the user has to *see*
 - An artifact that needs an HTTP origin (fetches, modules, anything `file://` blocks — rare for a self-contained mockup) also forces the served-URL path, regardless of local-vs-remote.
 - Prefer a real origin over a screenshot: the whole point is that the user can hover / click / flip the live thing. A screenshot is a transient supplement, never the hand-off.
 
+> **Browser-verify contract (Codex).** When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent. Otherwise execute the identical pass directly in the current session. In either mode, first check for a project browser-verify override; absent one, use `agent-browser`, and verify the chosen helper is present before driving anything.
+>
+> Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`. Missing selected helper/override → return `MISSING-TOOL` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: `PASS | DRIFT | BLOCKED | MISSING-TOOL`, plus `reason`, `screenshots`, `console`, and `notes`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.
+
 ## The render step is per-project — the browser-verify slot
 
 "Render + capture" uses shape's shared **browser-verify capability slot** (defined once in `AGENTS.md`, shared with `align` + `build`): a named default (`agent-browser`) + detect + fail-helpfully if missing + per-project override. Open the file / running system, locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a tool — name the capability.
 
-**Agent-side capture runs in the `browser-verifier` subagent (cost tier, ADR-058).** When the capture/verify is mechanical — confirming the artifact renders, checking a behaviour responds — dispatch the plugin's `browser-verifier` agent (mechanical-tier executor) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context. Confirm a render **once**, not per iteration. The user-facing hand-off is unchanged: a live clickable origin, opened for the user — that part stays inline.
+**Agent-side capture runs in the `browser-verifier` custom agent (cost tier, ADR-058).** When the capture/verify is mechanical — confirming the artifact renders, checking a behaviour responds — dispatch the generated `.codex/agents/browser-verifier.toml` custom agent (mechanical-tier executor) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context. Confirm a render **once**, not per iteration. The user-facing hand-off is unchanged: a live clickable origin, opened for the user — that part stays inline.
 
 > **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
 >

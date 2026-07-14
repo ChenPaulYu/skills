@@ -1,0 +1,8 @@
+{
+  "id": "no-relay",
+  "expect_output": "empty",
+  "helper": {
+    "enabled": true,
+    "stdout": "📬 relay: 1 則等你 review — run /relay:digest"
+  }
+}

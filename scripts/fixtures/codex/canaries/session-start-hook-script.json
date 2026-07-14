@@ -1,0 +1,23 @@
+{
+  "id": "session-start-hook-script",
+  "mode": "generated",
+  "file": ".codex/hooks/relay-digest-session-start.mjs",
+  "expect_text": [
+    "Project trust is enforced by the host",
+    "to a no-op.",
+    "[\"hook_event_name\"]",
+    "[\"cwd\"]",
+    "[\"source\"]",
+    "join(PROJECT_ROOT, \".agents\", \"skills\", \"relay-digest\", \"scripts\", \"compute-state.mjs\")",
+    "join(home, \".agents\", \"skills\", \"relay-digest\", \"scripts\", \"compute-state.mjs\")",
+    "join(home, \".codex\", \"skills\", \"relay-digest\", \"scripts\", \"compute-state.mjs\")",
+    "Startup/resume hook note:"
+  ],
+  "reject_text": [
+    "homedir()",
+    "function isTrustedProject(payload)",
+    "function firstBoolean(payload)",
+    "[\"hookEventName\"]",
+    "workspace\", \"trusted"
+  ]
+}

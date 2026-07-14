@@ -14,7 +14,7 @@
 //     <repo>       relay content repo root (has relay.yml)
 //     --project    limit to one project (default: all under projects/)
 //     --for        viewer handle (default: resolve git author email → relay.yml)
-//     --format     json (default) = full state; hook = one-line session-open summary
+//     --format     json (default) = full state; hook = one-line hook-summary format
 // Exit 0 = ok; 2 = bad usage / unreadable repo.
 
 import { readdirSync, readFileSync, existsSync } from 'node:fs';

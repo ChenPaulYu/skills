@@ -2,22 +2,17 @@
   "id": "shape-build",
   "mode": "generated",
   "file": ".agents/skills/shape-build/SKILL.md",
-  "expect": [
-    {
-      "category": "browser_verifier",
-      "contains": "browser-verifier"
-    },
-    {
-      "category": "agent_browser",
-      "contains": "agent-browser"
-    }
-  ],
   "reject": [
+    { "category": "legacy_browser_subagent" },
     { "category": "disable_model_invocation" },
     { "category": "model_sonnet" }
   ],
   "expect_text": [
     "> **Explicitly invoked only.**",
+    "> **Browser-verify contract (Codex).**",
+    "When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent.",
+    "Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`.",
+    "The screenshots' image tokens stay in the custom agent's context; build's context holds only \"PASS/DRIFT + reason\".",
     "Dispatched item agents (serial or the parallel tail) default to cheap tier (the mechanical-tier executor role)",
     "## Worker dispatch contract (Codex)",
     "write workers default to sequential (one item's work packet at a time)",

@@ -47,6 +47,9 @@ import {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLUGINS_DIR = join(ROOT, "plugins");
 const CODEX_SKILLS_DIR = join(ROOT, ".agents", "skills");
+const CODEX_AGENTS_DIR = join(ROOT, ".codex", "agents");
+const CODEX_HOOKS_DIR = join(ROOT, ".codex", "hooks");
+const CODEX_HOOKS_CONFIG = join(ROOT, ".codex", "hooks.json");
 const CODEX_DESCRIPTION_LIMIT = 1024;
 const CODEX_PROJECTION = loadCodexProjection(ROOT);
 const errors = [];
@@ -300,6 +303,17 @@ function validateGeneratedDrift() {
 
     validateCodexMirror(readPluginSkillsFrom(tempRoot), tempRoot);
     compareTrees(join(tempRoot, ".agents", "skills"), CODEX_SKILLS_DIR, ".agents/skills");
+    compareFiles(
+      join(tempRoot, ".codex", "agents", "browser-verifier.toml"),
+      join(CODEX_AGENTS_DIR, "browser-verifier.toml"),
+      ".codex/agents/browser-verifier.toml",
+    );
+    compareFiles(
+      join(tempRoot, ".codex", "hooks", "relay-digest-session-start.mjs"),
+      join(CODEX_HOOKS_DIR, "relay-digest-session-start.mjs"),
+      ".codex/hooks/relay-digest-session-start.mjs",
+    );
+    compareFiles(join(tempRoot, ".codex", "hooks.json"), CODEX_HOOKS_CONFIG, ".codex/hooks.json");
     compareFiles(join(tempRoot, "AGENTS.md"), join(ROOT, "AGENTS.md"), "AGENTS.md");
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });

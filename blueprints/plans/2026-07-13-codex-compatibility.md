@@ -4,7 +4,7 @@
 >
 > **Decision:** Treat the existing Claude Code marketplace as a frozen input contract. Add Codex behavior compatibility entirely in a Codex adapter/compiler and Codex-only artifacts. Do not edit `plugins/**`, root `CLAUDE.md`, `.claude-plugin/**`, or `.cursor-plugin/**`; do not bump Claude plugin versions.
 
-> **Progress — 2026-07-14:** The context-budget slice plus behavioral Phases 1-2 are implemented. The compiler boundary, explicit-invocation/mechanical-tier lowering, worker vocabulary, work-packet/return contracts, portable role TOMLs, and Paul's local role mapping have landed. Phase 3 (interactive choice) is the active implementation packet below; browser verification and lifecycle claims remain for Phase 4, followed by the full-roster hard gate in Phase 5.
+> **Progress — 2026-07-14:** Phases 1-4 are complete. The Codex compiler boundary, invocation/tier lowering, worker contracts, interactive-choice lowering, browser-runtime lowering, generated `.codex` runtime artifacts, and lifecycle-awareness lowering are in place and validator-backed. Phase 5 is next and remains unstarted.
 
 ## Context
 
@@ -235,6 +235,8 @@ Phase 3 is complete only when all nine consumers carry an executable Codex choic
    - Otherwise rewrite the Codex `relay-digest` render to “on-demand / explicitly invoked” and report that degradation.
 
 **Gate:** every runtime artifact referenced by a generated Codex skill exists; `shape-build` returns a real browser-verifier verdict or an explicit MISSING-TOOL/unsupported result.
+
+> **Phase 4 completion note — 2026-07-14:** Verified reality is now: the browser verifier is generated as the owned runtime artifact `.codex/agents/browser-verifier.toml`; the three browser consumers (`shape-build`, `shape-mockup`, `shape-dogfood`) fall back inline when custom-agent runtime or that artifact is absent; `agent-browser` is optional and only yields `MISSING-TOOL` when the selected helper/override itself is missing. Lifecycle awareness lowers to a trusted `SessionStart` startup/resume hook plus an explicit on-demand `relay-digest` fallback, owned by `.codex/hooks.json` and `.codex/hooks/relay-digest-session-start.mjs`. Rebuild preservation is smoke-validated: unrelated `.codex/agents/*`, unrelated hook files, and non-owned hook entries survive rebuild while the owned SessionStart command is refreshed in place. Evidence is fixture/smoke validation, not a claimed live browser run: 20/20 canaries, 9/9 negatives, 3/3 lifecycle smokes, 1/1 preservation smoke, all three validator doors green (`--compat-audit`, `--codex-compat`, default), and frozen Claude paths clean.
 
 ### Phase 5 — Migrate the full roster and harden validation
 

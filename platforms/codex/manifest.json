@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "adapter_release": "0.4.0-interactive-choice-contract",
+  "adapter_release": "0.5.0-phase4-runtime-contracts",
   "metadata_policy": {
     "description_source": "platforms/codex/descriptions.json",
     "description_strategy": "Codex-only, trigger-first summaries; Claude descriptions remain unchanged",
@@ -82,8 +82,26 @@
     },
     {
       "id": "browser_verify",
-      "status": "planned",
-      "summary": "Codex lowering for browser-verifier and browser automation references."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#lowerBrowserVerifyProse lowers the exact Claude-only browser runtime ownership/path claims before contract injection, leaving generic browser-helper prose untouched. scripts/lib/codex-compat.mjs#injectBrowserVerifyContract inserts the canonical executable browser contract for the three shape consumers: dispatch to `.codex/agents/browser-verifier.toml` only when custom-agent runtime is available and that artifact exists; otherwise run the identical pass inline. Artifact/runtime absence is fallback, not `MISSING-TOOL`; preserve `PASS | DRIFT | BLOCKED | MISSING-TOOL`, screenshot paths only, and close-on-exit. scripts/build-codex.mjs#buildBrowserVerifierAgent compiles the source shape agent into the project runtime artifact. Legacy browser-subagent/source-path claims ratchet to zero; `agent-browser` remains a declared optional helper, not an unresolved token.",
+      "compiler_owners": [
+        "scripts/lib/codex-compat.mjs#lowerBrowserVerifyProse",
+        "scripts/lib/codex-compat.mjs#injectBrowserVerifyContract",
+        "scripts/build-codex.mjs#buildBrowserVerifierAgent"
+      ],
+      "runtime_artifact": ".codex/agents/browser-verifier.toml",
+      "contract_consumers": [
+        ".agents/skills/shape-build/SKILL.md",
+        ".agents/skills/shape-mockup/SKILL.md",
+        ".agents/skills/shape-dogfood/SKILL.md"
+      ],
+      "optional_dependencies": [
+        {
+          "id": "agent-browser",
+          "status": "optional",
+          "missing_behavior": "If the selected override/default helper is missing, return `MISSING-TOOL` for the browser pass immediately; never auto-install from inside the pass. If custom-agent runtime or `.codex/agents/browser-verifier.toml` is unavailable, run the identical pass inline instead."
+        }
+      ]
     },
     {
       "id": "project_guidance",
@@ -92,12 +110,35 @@
     },
     {
       "id": "session_open_awareness",
-      "status": "planned",
-      "summary": "Codex lowering for session-open and runs-on-open claims."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#lowerSessionOpenProse lowers the precise legacy session-open / runs-on-open prose before contract injection while preserving the hook-summary format phrase for the runtime helper. scripts/lib/codex-compat.mjs#injectSessionOpenContract inserts the canonical lifecycle-awareness contract for relay-digest: default to invoking it on demand; a trusted SessionStart startup/resume hook may add a compact note when a relay repo is detectable, but runtime/helper absence and non-relay contexts degrade to a safe no-op. platforms/codex/hooks/hooks.json plus platforms/codex/hooks/relay-digest-session-start.mjs are the single-source templates, and scripts/build-codex.mjs#buildHooks compiles them into the project runtime artifacts. Legacy session-open / runs-on-open claims ratchet to zero across generated output (codex-compatibility Phase 4).",
+      "compiler_owners": [
+        "scripts/lib/codex-compat.mjs#lowerSessionOpenProse",
+        "scripts/lib/codex-compat.mjs#injectSessionOpenContract",
+        "scripts/build-codex.mjs#buildHooks"
+      ],
+      "template_sources": [
+        "platforms/codex/hooks/hooks.json",
+        "platforms/codex/hooks/relay-digest-session-start.mjs"
+      ],
+      "runtime_artifacts": [
+        ".codex/hooks.json",
+        ".codex/hooks/relay-digest-session-start.mjs"
+      ],
+      "contract_consumers": [
+        ".agents/skills/relay-digest/SKILL.md"
+      ],
+      "matcher": "startup|resume",
+      "project_trust_required": true,
+      "default_behavior": "on-demand",
+      "missing_behavior": "Missing hook runtime, missing helper, untrusted project, non-relay cwd, parse failure, and empty helper output all degrade to a safe no-op; relay-digest remains the source-of-truth manual path."
     }
   ],
   "generated_destinations": [
     ".agents/skills",
+    ".codex/agents/browser-verifier.toml",
+    ".codex/hooks/relay-digest-session-start.mjs",
+    ".codex/hooks.json",
     "AGENTS.md"
   ],
   "frozen_contract_paths": [
@@ -159,22 +200,17 @@
       "flags": "g"
     },
     {
-      "id": "browser_verifier",
-      "label": "browser_verify / browser-verifier reference",
-      "kind": "literal",
-      "pattern": "browser-verifier"
-    },
-    {
-      "id": "agent_browser",
-      "label": "browser_verify / agent-browser reference",
-      "kind": "literal",
-      "pattern": "agent-browser"
+      "id": "legacy_browser_subagent",
+      "label": "browser_verify / legacy browser-verifier runtime claim",
+      "kind": "regex",
+      "pattern": "browser-verifier subagent|\\[`agents/browser-verifier\\.md`\\]\\(plugins/shape/agents/browser-verifier\\.md\\)|Ships with the plugin",
+      "flags": "g"
     },
     {
       "id": "session_open_claim",
       "label": "session_open_awareness / session-open claim",
       "kind": "regex",
-      "pattern": "session-open|runs on every open|runs on open",
+      "pattern": "session-open|runs-on-open|runs on every open",
       "flags": "gi"
     }
   ]

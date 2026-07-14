@@ -1,6 +1,9 @@
 {
   "scanner_roots": [
     ".agents/skills",
+    ".codex/agents/browser-verifier.toml",
+    ".codex/hooks/relay-digest-session-start.mjs",
+    ".codex/hooks.json",
     "AGENTS.md"
   ],
   "rules": [
@@ -37,16 +40,12 @@
       "fingerprint": "342d2592d463a7ac"
     },
     {
-      "id": "browser_verifier",
-      "fingerprint": "2f92fc8572d73c65"
-    },
-    {
-      "id": "agent_browser",
-      "fingerprint": "a26122dc66a32352"
+      "id": "legacy_browser_subagent",
+      "fingerprint": "0c0b5a1b1a271ed9"
     },
     {
       "id": "session_open_claim",
-      "fingerprint": "30ed08e753fe2722"
+      "fingerprint": "2d128ab83bdf96d7"
     }
   ],
   "per_file_max_counts": {
@@ -58,27 +57,8 @@
     "model_sonnet": {},
     "claude_built_in": {},
     "claude_init": {},
-    "browser_verifier": {
-      ".agents/skills/shape-build/SKILL.md": 2,
-      ".agents/skills/shape-mockup/SKILL.md": 2,
-      "AGENTS.md": 4
-    },
-    "agent_browser": {
-      ".agents/skills/nav-map/references/map-render.md": 2,
-      ".agents/skills/nav-map/references/visual-spec.md": 2,
-      ".agents/skills/nav-refactor/SKILL.md": 1,
-      ".agents/skills/shape-build/SKILL.md": 10,
-      ".agents/skills/shape-dogfood/SKILL.md": 3,
-      ".agents/skills/shape-mockup/SKILL.md": 1,
-      ".agents/skills/shape-setup/SKILL.md": 3,
-      ".agents/skills/shape-setup/references/archetypes/fullstack-web.md": 5,
-      ".agents/skills/shape-setup/references/archetypes/python-lib.md": 1,
-      "AGENTS.md": 13
-    },
-    "session_open_claim": {
-      ".agents/skills/relay-digest/scripts/compute-state.mjs": 1,
-      "AGENTS.md": 2
-    }
+    "legacy_browser_subagent": {},
+    "session_open_claim": {}
   },
   "ratchet_ledger": [
     {
@@ -203,6 +183,37 @@
           ".agents/skills/shape-reconcile/SKILL.md": "1->0",
           "AGENTS.md": "2->0"
         }
+      }
+    },
+    {
+      "date": "2026-07-14",
+      "reason": "codex-compatibility Phase 4 lowers the browser runtime contract without changing frozen Claude sources. lowerBrowserVerifyProse replaces only the legacy runtime-ownership/path claims (`browser-verifier` subagent wording, plugin source-agent path, bundled-runtime claim, and the remaining shape-specific dispatch/context phrases) with the Codex custom-agent/project-artifact wording before injectBrowserVerifyContract adds the canonical `.codex/agents/browser-verifier.toml` contract to the three shape consumers. That contract dispatches only when custom-agent runtime is available and the generated artifact exists; artifact/runtime absence falls back inline, while `MISSING-TOOL` is reserved for a missing selected browser helper/override. build-codex now generates `.codex/agents/browser-verifier.toml`, generated drift compares that exact owned file, and the audit validates the runtime artifact plus every generated `.codex/agents/*.toml` reference. The broad `browser_verifier` / `agent_browser` denylist categories retire; the precise `legacy_browser_subagent` regression check ratchets to zero; session-open remains unchanged.",
+      "drops": {
+        "browser_verifier": {
+          ".agents/skills/shape-build/SKILL.md": "2->0",
+          ".agents/skills/shape-mockup/SKILL.md": "2->0",
+          "AGENTS.md": "4->0"
+        },
+        "agent_browser": {
+          ".agents/skills/nav-map/references/map-render.md": "2->retired",
+          ".agents/skills/nav-map/references/visual-spec.md": "2->retired",
+          ".agents/skills/nav-refactor/SKILL.md": "1->retired",
+          ".agents/skills/shape-build/SKILL.md": "10->retired",
+          ".agents/skills/shape-dogfood/SKILL.md": "3->retired",
+          ".agents/skills/shape-mockup/SKILL.md": "1->retired",
+          ".agents/skills/shape-setup/SKILL.md": "3->retired",
+          ".agents/skills/shape-setup/references/archetypes/fullstack-web.md": "5->retired",
+          ".agents/skills/shape-setup/references/archetypes/python-lib.md": "1->retired",
+          "AGENTS.md": "13->retired"
+        },
+        "legacy_browser_subagent": {}
+      }
+    },
+    {
+      "date": "2026-07-14",
+      "reason": "codex-compatibility Phase 4 lowers lifecycle-awareness claims without changing frozen Claude sources. lowerSessionOpenProse replaces only the legacy session-open / runs-on-open wording, preserving the relay helper's `hook-summary format` phrase while removing future-regression patterns from generated prose. injectSessionOpenContract adds the canonical relay-digest lifecycle contract: default to on-demand invocation, allow a trusted SessionStart startup/resume hook to add a compact note, and degrade safely to a no-op on any missing runtime/helper/non-relay path. build-codex now generates `.codex/hooks.json` plus `.codex/hooks/relay-digest-session-start.mjs`, generated drift compares the exact owned config/script files, the audit validates the exact config shape and all `.codex/hooks/*` references, and executable hook smokes cover no-relay, empty-summary, and success flows. The precise `session_open_claim` regression check ratchets to zero.",
+      "drops": {
+        "session_open_claim": {}
       }
     }
   ]

@@ -1,0 +1,37 @@
+{
+  "id": "session-open-missing-hook-artifact",
+  "scenario": "session_start_hook_contract",
+  "expect_only": true,
+  "manifest": {
+    "capabilities": [
+      {
+        "id": "session_open_awareness",
+        "status": "lowered",
+        "matcher": "startup|resume",
+        "project_trust_required": true,
+        "default_behavior": "on-demand",
+        "runtime_artifacts": [
+          ".codex/hooks.json",
+          ".codex/hooks/relay-digest-session-start.mjs"
+        ],
+        "contract_consumers": [
+          ".agents/skills/relay-digest/SKILL.md"
+        ]
+      }
+    ],
+    "generated_destinations": [
+      ".agents/skills",
+      ".codex/hooks/relay-digest-session-start.mjs",
+      ".codex/hooks.json",
+      "AGENTS.md"
+    ]
+  },
+  "files": {
+    ".agents/skills/relay-digest/SKILL.md": "> **Lifecycle awareness contract (Codex).** Default to invoking `relay-digest` on demand. A trusted `SessionStart` startup/resume hook may add a compact relay-aware note.\n",
+    ".codex/hooks.json": "{\n  \"hooks\": {\n    \"SessionStart\": [\n      {\n        \"matcher\": \"startup|resume\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/relay-digest-session-start.mjs\",\n            \"timeout\": 5\n          }\n        ]\n      }\n    ]\n  }\n}\n"
+  },
+  "expect_errors": [
+    "session-open runtime artifact is missing: .codex/hooks/relay-digest-session-start.mjs",
+    "generated .codex/hooks reference does not resolve: .codex/hooks.json -> .codex/hooks/relay-digest-session-start.mjs"
+  ]
+}
