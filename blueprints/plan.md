@@ -3,10 +3,10 @@
 > 2026-07-13 · status index (one layer, by status). Only "what to do + which doc".
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
-## 🚧 In progress —— （本輪批次已全數收尾，無在飛項）
+## 🚧 In progress —— elicit 生態系落地
+- **elicit 生態系（survey · probe · 守門人）** — 2026-07-14 elicit 收斂完成、Paul 拍板：四象限知識狀態 → `shape:survey`（測繪盲點）與 `shape:probe`（實驗問現實）新建、teach 走路由（frame:analogize / deep-research）、elicit 升格守門人（卡住三分診斷 → offer 出去）。決策：`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md`；四 phase 計畫：`plans/2026-07-14-elicit-ecosystem.md`。**進度：Phase 0（收斂+計畫）完成，Phase 1–4 未動工。**
 
 ## ▶ Next —— 接下來
-- **elicit 行為優化（兩個方向，待收斂）** — (1) 讓 elicit 主動把使用者「沒意識到自己不知道」的盲點攤出來；(2) 讓 elicit 反過來「教」使用者，幫助他們把需求講得更清楚。現況 SKILL.md 的收斂引擎（六個動作＋權重自適應退出）預設使用者已經有個模糊想法、AI 負責立分岔逼近，並沒有「主動揭露盲點」或「教使用者表達」這兩種機制——具體行為規格要先跑一輪 `/shape:elicit` 收斂，才落地成 SKILL.md 改動（Paul 2026-07-13 討論 elicit 路由實驗時提出）
 - **Codex Phases 1–5：行為相容編譯** — 讓 build-codex 降轉/剝除 Claude-only 語意，並把 `ratchet_ledger` 兩筆 bump 收回（`blueprints/plans/2026-07-13-codex-compatibility.md`，另一條工作線）
 - **anti-pattern 表 optional sweep** — 34 檔補「Instead — and the tell」欄，機械掃、cheap tier（ADR-069）
 
