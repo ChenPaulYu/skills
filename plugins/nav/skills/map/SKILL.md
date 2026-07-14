@@ -1,7 +1,7 @@
 ---
 name: map
 model: sonnet
-description: "Render or refresh the bilingual repo-level codebase map (docs/codebase-map/index.html) — domains, anatomies, the import graph, a module map — so a human or agent grasps the whole repo top-down without reading dozens of files. Fires on \"refresh the codebase map\" or \"onboard me to this codebase\". Reads file-top headers (run /nav:sync first so they're current); the periodic, batched sibling of the per-change /nav:sync."
+description: "Render or refresh the bilingual repo-level codebase map (docs/codebase-map/index.html) — domains, anatomies, the import graph, a module map — so a human or agent grasps the whole repo top-down without reading dozens of files. Fires on \"refresh the codebase map\" or \"create/open the architecture map\". For a conversational walkthrough or onboarding chat instead of a durable HTML render, use /nav:tour. Reads file-top headers (run /nav:sync first so they're current); the periodic, batched sibling of the per-change /nav:sync."
 ---
 
 # Codebase map — repo-level navigability
@@ -86,6 +86,7 @@ Do NOT commit unless the user asks. If on the default git branch, suggest branch
 - **`/nav:sync`** — the sibling: maintains the file-top headers this map reads. Run it first when headers may be stale (the map's cheapest grounding); run `map` periodically, after a wave of change.
 - **`/nav:audit`** — read-only health check; its inventory is reused as the grounding pass when it ran earlier in the session.
 - **`/nav:refactor`** — execute any structural move the render surfaces (separate session).
+- **`/nav:tour`** — the conversational sibling: consumes this map (when present) for an in-chat walkthrough and correction loop. It never writes or refreshes the map itself — a stale map surfaced mid-tour routes back here.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).

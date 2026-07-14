@@ -25,7 +25,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 
 | Plugin | What it covers |
 |---|---|
-| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
+| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, guide a conversational tour to a shared system model, ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
 | [`research`](plugins/research/) | **Rigorous reading and auditing of argument documents** — papers, RFCs, design proposals, ADRs, whitepapers, blog posts (a paper is the most common instance, not the definition). Dissect any argument document into its structural skeleton, untangle how a set of documents relate, critique one adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Four reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it), `graft` (borrow a mature model's structure and adapt it to your domain — map every primitive; the adapt list is the payload); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
@@ -47,6 +47,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:sync` — sync file-top headers to the code (per-file navigability; continuous, per-change), gated diff
 - `/nav:map` — render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads `sync`'s headers)
+- `/nav:tour` — guide a conversational walkthrough of what a codebase does, how it works, and why (rationale labeled Recorded/Inferred/Unknown), then propose a shared model for the user to correct; read-only, in-chat, `map`'s conversational sibling
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
@@ -174,7 +175,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 64 entries — the same 32 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 72 entries — the same 36 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 
