@@ -24,6 +24,7 @@ The output is the structured factoring itself, **in the conversation** — its s
 - **Independence check** — for each pair: does moving one move the other? A coupling found = not yet clean → split further or merge. (This step is the soul; don't skip it.)
 - **True degrees of freedom** — the axes that survive the check: the real, independent dimensions.
 - **Payload** — what was conflated (one label hiding several), or where the "separate" things were actually coupled. The reframe is the finding.
+- **Land it in plain words** — walked, not optional: close with one conclusion sentence with zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "orthogonal", "正交", "axis" / "軸" (need the concept? say it plainly: "these move independently — touching one doesn't move the other") — plus one analogy, chosen deliberately (borrow `frame:analogize`'s discipline **by protocol, never a call**: weigh it against alternatives in your head, pick on fit, and — if checkable — name in half a sentence where it breaks). The tangle · candidate axes · independence check · true degrees of freedom · payload above stay intact for anyone verifying; this step only adds the translation on top.
 
 Lightweight by default: the analysis stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
@@ -47,6 +48,7 @@ End with a guarded, one-shot **offer** to route the result — never an auto-cal
 ## Output
 
 - **The five-part structure, in-chat** (no file artifact): The tangle · Candidate axes · Independence check · True degrees of freedom · Payload.
+- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
 - A guarded, one-shot **offer** to route the result (`/shape:elicit` · `/shape:mockup` · `/nav:plan`) — never an auto-call. To persist, route to shape.
 
 ## Anti-patterns (refuse these)
@@ -57,6 +59,7 @@ End with a guarded, one-shot **offer** to route the result — never an auto-cal
 | Hierarchical / overlapping parts dressed as axes | Sub-parts of one thing aren't independent dimensions — re-cut along seams that actually vary independently. |
 | Force orthogonality where the thing is genuinely one | If it doesn't factor, say so — "this is irreducibly one axis" is a valid result. |
 | Invent tidy axes ungrounded from the real cases | Floaty taxonomy — ground each axis in concrete instances. |
+| End on a jargon sentence ("axis A and axis B check out independent") | That's the factoring without the landing — the plain-words conclusion + analogy has to be the actual last word, not the five-part output alone. |
 
 ## Companion skills
 

@@ -33,6 +33,7 @@ The output is the structured trial itself, **in the conversation** — its shape
 | **Devil's Advocate** | The strongest *attack*, also steelmanned. Run the three archetypes: **deflation** (it reduces to something we already have / already do), **competing explanation** (a different cause explains the same evidence — better prompting, more compute, more memory, caching…), **no-evidence** (no experiment has shown it beats the baseline). |
 | **Missing Evidence** | The single deepest assumption the whole claim hangs on, and **which bucket it's in**: already *contradicted by existing evidence* (fatal), or merely *not-yet-tested* (an owned bet). This is the assumption you must not mistake for a fact. |
 | **Killer Experiment** | The one experiment that would *decide it* — allowed to be future/hypothetical. The thing that turns "interesting philosophy" into "a testable claim." |
+| **Land it in plain words** | Walked, not optional: one conclusion sentence with zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "steelman", "dialectic" (need the concept? say it plainly: "the strongest honest case each side can make") — plus one analogy, chosen deliberately (borrow `frame:analogize`'s discipline **by protocol, never a call**: weigh it against alternatives, pick on fit, and — if checkable — name in half a sentence where it breaks). The trial above (Claim → Steelman → Devil's Advocate → Missing Evidence → Killer Experiment, plus the verdict) stays intact for anyone verifying; this row only adds the translation on top. |
 
 Lightweight by default: the trial stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
@@ -77,6 +78,7 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 | Let awareness excuse broken logic or existing counter-evidence | "I'm aware it's unproven" only covers genuine unknowns — not a snapped chain, not a result that already contradicts it. |
 | Invent a convenient opponent / a result to win | Ground the opposition in what the field actually holds; mark *uncertain* where you can't verify. Fabrication makes the trial theater. |
 | Decide the claim's fate or start building | dialectic tries + routes. The commit is `/shape:elicit`; the build is `/nav:plan`. |
+| End on a jargon sentence ("verdict: unsettled — owned bet") | That's the trial without the landing — the plain-words conclusion + analogy has to be the actual last word, not the five-part table alone. |
 
 ## Example — the move (domain-neutral)
 
@@ -95,6 +97,7 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 ## Output
 
 - **The five-part trial, in-chat** (no file artifact): Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment — plus a **three-way verdict** (refuted / unsettled-owned-bet / supported). To persist it, route to shape (below).
+- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
 - A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:plan` (ground) · `/shape:probe` (run the Killer Experiment, guarded on `shape` being installed) — never an auto-call.
 
 ## Companion skills

@@ -29,6 +29,7 @@ The discipline that makes it real (not relabelled convention):
 3. **Strip to axioms.** Remove each assumption that's "because that's how it's done." What irreducible truths remain about *this* problem? (e.g. "the cost we incur scales with compute, not users" · "the buyer is one team with a fixed budget" — facts, not norms.)
 4. **Rebuild from the axioms alone.** Reason up to an answer using only what survived. (e.g. "if cost scales with compute and the buyer has a fixed budget, usage-based pricing tracks value and cost better than per-seat.")
 5. **Surface the divergence.** Where does the rebuilt answer differ from convention? That gap is the finding — name it plainly, and its consequence. **If there's no divergence, say so** ("convention is already first-principles-sound here") — that's a valid, useful result, not a failure.
+6. **Land it in plain words.** Close with one conclusion sentence in zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "axiom", "公理", "first principles" itself (need the concept? say it plainly: "this is structurally unavoidable, not just habit"). Pair it with one analogy, chosen deliberately (borrow `frame-analogize`'s discipline **by protocol, never a call**: weigh it against the alternatives in your head, pick on fit, and — if it's checkable — name in half a sentence where it breaks). The five-part scaffold above stays intact for anyone verifying the reasoning; this step only adds the translation on top of it, never replaces it. Walked, not optional — the analysis isn't done until it's landed.
 
 ## The output — the five-part structure, always
 
@@ -39,6 +40,7 @@ The output is the **structured reasoning itself, in the conversation** — its s
 - **Axioms** — the irreducible truths that survived, each grounded (verified / definitional / *uncertain*).
 - **Rebuilt conclusion** — the answer derived from axioms alone.
 - **Divergence** — where rebuilt ≠ conventional, and what that implies (or "none — convention holds, here's why").
+- **Plain-language landing** — one zero-jargon conclusion sentence + one deliberately-chosen analogy (naming the break-point where checkable), always the last thing said.
 
 Lightweight by default: the analysis stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
@@ -73,6 +75,7 @@ first-principles *reasons*; it does not decide or build. Once the note is up, *o
 | Skip the divergence (just present a tidy derivation) | The divergence (rebuilt ≠ convention) is the payload. No divergence is a valid result — but say it explicitly. |
 | Decide or implement here | first-principles reasons + routes. The decision is `shape-elicit`; the build is `nav-plan`. |
 | Fire on any hard question in passing | Summoned on a "reason from first principles / challenge the assumptions" request. |
+| End on a jargon sentence ("the axiom is X, so the rebuilt conclusion is Y") | That's analysis without landing. The plain-words conclusion + analogy has to be the actual last word — the five-part scaffold alone doesn't count as done. |
 
 ## Example — the move (domain-neutral)
 
@@ -88,6 +91,7 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 ## Output
 
 - **The five-part structure, in-chat** (no file artifact): Question · Conventional answer + assumptions · Axioms (grounded) · Rebuilt conclusion · Divergence. To persist it, route to shape (below).
+- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
 - A guarded, one-shot **offer** to route the insight — `shape-elicit` (converge) · `shape-mockup` (render) · `nav-do` (execute a small, decided fix) · `nav-plan` (ground a bigger one) — never an auto-call.
 
 ## Companion skills

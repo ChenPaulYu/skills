@@ -31,6 +31,7 @@ The discipline that makes it real (not lazy analogy):
 3. **Map every primitive.** A table: each donor primitive → its image in the target. Force completeness — include the primitives you'd rather skip; those are where the surprises live.
 4. **Read each mapping — fit / break / adapt.** Per row: does it adopt unchanged (**fit**), have no image so you design fresh (**break**), or borrow-but-reshape for the domain (**adapt**)? Mark each.
 5. **Land the graft.** The payload, ranked: the **adapt** list (what each reshaped primitive became — your design's identity) + the **break** list (what the donor forced you to invent). Fits noted briefly as "free". If it's almost all fits → say so plainly: the graft is shallow (a reskin), or the donor was wrong.
+6. **Land it in plain words.** Close with one conclusion sentence with zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "graft", "primitive", "donor" (need the concept? say it plainly: "borrowed structure that had to change shape to survive here") — plus one analogy, chosen deliberately (borrow `frame:analogize`'s discipline **by protocol, never a call**: weigh it against alternatives in your head, pick on fit, and — if checkable — name in half a sentence where it breaks). The target · donor + resonance · map · reading · payload above stay intact for anyone verifying; this step only adds the translation on top. Walked, not optional — the analysis isn't done until it's landed.
 
 ## The output — the five-part structure, always
 
@@ -41,6 +42,7 @@ The output is the structured graft itself, **in the conversation** — its shape
 - **The map** — every donor primitive → its target image (the exhaustive table).
 - **The reading** — each mapping tagged fit / break / adapt.
 - **The graft (payload)** — the adapt list (reshaped primitives = the design's identity) + the breaks (designed fresh); fits flagged as free. If mostly fits: name the shallowness.
+- **Land it in plain words** — walked, not optional: one zero-jargon conclusion sentence + one deliberately-chosen analogy, always the last thing said (banned terms: "graft", "primitive", "donor"; see The walk step 6).
 
 Lightweight by default: the analysis stays **in-chat** — graft writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
 
@@ -78,10 +80,12 @@ graft *reasons*; it does not decide or build. Once the graft is up, *offer* — 
 | Let the donor's answer fill a break | The donor surfaced the gap; your **domain** answers it. Reflex-copying the donor across a break is the lazy-analogy failure. |
 | Force a graft where no model rhymes | If nothing structurally matches, a forced donor invents fake correspondences — reach for `first-principles` instead. |
 | Decide or implement here | graft reasons + routes. The decision is `/shape:elicit`; the build is `/nav:plan`. |
+| End on a jargon sentence ("the adapt list is the payload, fits are free") | That's the graft without the landing — the plain-words conclusion + analogy has to be the actual last word, not the five-part structure alone. |
 
 ## Output
 
 - **The five-part structure, in-chat** (no file artifact): Target · Donor + resonance · The map · The reading (fit/break/adapt) · The graft (adapt list + breaks). To persist, route to shape.
+- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
 - A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:plan` (ground) — never an auto-call.
 
 ## Companion skills

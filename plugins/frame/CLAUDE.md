@@ -51,6 +51,7 @@ What unifies the members is not a shared template (their procedures genuinely di
 - **★ Forced-structure output**: every skill emits a fixed-shape output (the structure IS the value). State the shape in the SKILL.md `Output` section so it's graspable at a glance.
 - **Lightweight, in-chat by default**: a member surfaces its result in the conversation and writes **no file** — frame is the lightest plugin (pure reasoning or pure delivery). Persistence happens by routing to shape (`/shape:elicit` → `thoughts/`, `/shape:mockup`, `/nav:plan`), never a frame-owned artifact, and `analogize` doesn't route onward at all (nothing to persist). It never writes source or makes a decision.
 - **Feeds shape, never invokes it (reasoning lenses only)**: end with a guarded, one-shot *offer* (ADR-007/015) to route the insight — `/shape:elicit` to converge it, `/shape:mockup` to render it, `/nav:plan` to ground it. An offer, not a call. `analogize` is exempt — see above.
+- **All four reasoning lenses end on a plain-language landing** — a final walked step (not optional) closing with one zero-jargon conclusion sentence + one deliberately-chosen analogy, `analogize`'s discipline borrowed **by protocol**, never a call. Each lens bans its own terms of art in that closing sentence (first-principles: axiom/公理/first principles · orthogonal: orthogonal/正交/axis/軸 · dialectic: steelman/dialectic · graft: graft/primitive/donor) — the criterion lives in ADR-077, this is the roster-level pointer.
 
 ## Where things live
 
