@@ -64,11 +64,10 @@ Rules:
 
 ## Step 3 — Stop
 
-No artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `reflect-observe`; for a complete objective recap of what happened, `reflect-summarize`.)
+No artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `reflect-observe`; for a full recap of what happened, just ask for one directly.)
 
 ## Companion skills
 
 - **`reflect-park`** — the write side; before stepping away, it writes the `HANDOFF.md` this skill checks first.
-- **`reflect-summarize`** — the complete, objective recap of what the session *did* (catchup is the state *now* + next; summarize is the full log of what *happened*).
 - **`reflect-observe`** — distill a durable learning from the session into the knowledge base.
 - **`shape-align`** — when you want to *decide* next and write it into a plan (catchup only reports; align decides + writes).

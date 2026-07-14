@@ -1,6 +1,6 @@
 ---
 name: catchup
-description: "Orient on where the current work stands — rebuilt from durable state (git, diff, files, plan) so it survives /clear or a break, then enriched from live context for the why. Read-only, summoned. Distinct from /reflect:summarize (objective recap of what the session DID) and /shape:align (DECIDES next and writes a plan — catchup only reports)."
+description: "Orient on where the current work stands — rebuilt from durable state (git, diff, files, plan) so it survives /clear or a break, then enriched from live context for the why. Read-only, summoned. Distinct from a plain session recap (what the session DID — just ask for it) and /shape:align (DECIDES next and writes a plan — catchup only reports)."
 disable-model-invocation: true
 ---
 
@@ -63,11 +63,10 @@ Rules:
 
 ## Step 3 — Stop
 
-No artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `/reflect:observe`; for a complete objective recap of what happened, `/reflect:summarize`.)
+No artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `/reflect:observe`; for a full recap of what happened, just ask for one directly.)
 
 ## Companion skills
 
 - **`/reflect:park`** — the write side; before stepping away, it writes the `HANDOFF.md` this skill checks first.
-- **`/reflect:summarize`** — the complete, objective recap of what the session *did* (catchup is the state *now* + next; summarize is the full log of what *happened*).
 - **`/reflect:observe`** — distill a durable learning from the session into the knowledge base.
 - **`/shape:align`** — when you want to *decide* next and write it into a plan (catchup only reports; align decides + writes).

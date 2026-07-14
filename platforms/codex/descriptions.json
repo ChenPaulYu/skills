@@ -18,7 +18,6 @@
     "reflect-catchup": "Reconstruct the current state of work from git, diffs, files, plans, and live context. Use for 'where are we?', resuming after a break, or getting oriented; read-only, present-state only.",
     "reflect-observe": "Surface this session's candidate durable learnings, let the user choose, then write only selected observations or skill feedback. Use to record insights or decide what is worth preserving.",
     "reflect-park": "Write the session's cursor (goal, done, now, open, next, plus the current git SHA) into HANDOFF.md before stepping away, overwriting any prior file. Use to hand off work; explicitly invoked on Codex.",
-    "reflect-summarize": "Produce a complete, neutral, chronological recap of what this session attempted, decided, changed, and committed. Use for full session summaries; read-only and not a selective learning distillation.",
     "relay-digest": "Read a relay coordination repo and show unresolved thoughts that mention the current person. Use for relay catch-up, pending reviews, or 'what needs me?'; read-only and explicitly invoked on Codex.",
     "relay-format": "Validate and normalize one relay project's thought frontmatter without changing meaning. Use to lint thoughts, fix metadata, or migrate old relay entries to the current format; diff-gated.",
     "relay-launch": "Scaffold a relay coordination project and roster, or add a person and assign their role. Use to create a relay project, register, onboard, or role-assign a teammate; writes relay.yml/project.yml behind a diff gate.",

@@ -17,7 +17,7 @@
     },
     "build": {
       "summary": "Code navigation, convergence, execution, and session orientation.",
-      "skills": ["nav-*", "shape-*", "reflect-catchup", "reflect-observe", "reflect-summarize"]
+      "skills": ["nav-*", "shape-*", "reflect-catchup", "reflect-observe"]
     },
     "research": {
       "summary": "Reasoning frames and document research.",

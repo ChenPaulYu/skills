@@ -20,7 +20,6 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Dissect / break down a paper's argument | `/research:dissect` |
 | Audit my own document's citations | `/research:provenance` |
 | Report progress to a counterpart over relay | `/relay:report` |
-| Recap everything this session did | `/reflect:summarize` |
 
 ## What's in here
 
@@ -30,7 +29,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
 | [`research`](plugins/research/) | **Read with intent** — dissect any argument-carrying document (paper, blog post, competitor analysis, RFC) into its structural skeleton, untangle how a set of sources relate, critique a paper adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Four reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it), `graft` (borrow a mature model's structure and adapt it to your domain — map every primitive; the adapt list is the payload); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
-| [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup` (where the work stands now + next, rebuilt from git/diff/plan, not chat memory), `park` (write that same cursor + a git SHA into `HANDOFF.md` before stepping away — catchup's write-side mirror), `summarize` (a complete objective recap of what the session did), `observe` (distill the one durable learning into a knowledge base). Cross-cutting; independent. |
+| [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup` (where the work stands now + next, rebuilt from git/diff/plan, not chat memory), `park` (write that same cursor + a git SHA into `HANDOFF.md` before stepping away — catchup's write-side mirror), `observe` (distill the one durable learning into a knowledge base). Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart** — async, through your agents, over a shared git repo: `launch` sets up the project + people (create a project, or add a person / assign a role); `report`/`review` exchange standup-shaped updates that converge decisions to explicit consensus; `digest` shows the live "what needs you"; `settle` keeps it tidy; `format` keeps the frontmatter conformant. Structured updates, not chat. Independent. |
 
 `nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
@@ -87,11 +86,10 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/frame:graft` — design a novel system that rhymes with a mature one by grafting it: map every primitive of a donor model onto your problem, read each as fit / break / adapt; the adapt list (borrowed structure reshaped for your domain) is the payload, not the fits. The disciplined middle between `first-principles` (invent) and lazy analogy (copy); in-chat
 - `/frame:analogize` — build a deliberately stress-tested analogy for a concept you already understand: generate multiple candidates, check the mapping against the real structure, pick on fit, name where the winner breaks; delivers to the user rather than deriving for the agent, so it doesn't feed `shape`; in-chat
 
-**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project — *all four are user-invoked*):
+**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project — *all three are user-invoked*):
 
 - `/reflect:catchup` — re-orient on where the work stands now + next, rebuilt from git/diff/plan (not chat memory); fixed shape goal · done · now · open · next
 - `/reflect:park` — write that same five-shape cursor + the current git SHA into the project's `HANDOFF.md` before stepping away, overwriting any prior one (catchup's write-side mirror)
-- `/reflect:summarize` — a complete, objective recap of what the session did (the raw input `observe` distills)
 - `/reflect:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
 
 **`relay` — coordinate with a counterpart** (async, over a shared git repo; standalone):
