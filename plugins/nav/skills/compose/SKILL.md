@@ -1,6 +1,6 @@
 ---
 name: compose
-description: "Author or restructure a prose document so it reads as a deep module — lead with the point, one fact one owner, grouped by knowledge not chronology, right grain, self-describing top. Use whenever the user asks to \"write / draft a doc\", \"author an ADR / design doc / spec / README\", \"structure this document\", \"turn these notes into a document\", \"clean up / tighten this prose\", or \"make this doc navigable\". For file-top headers on CODE files use /nav:sync — compose is their prose-document sibling. Grammar minutiae lives in the optional external writing-clearly-and-concisely skill. Writes/edits the document, gated by a diff."
+description: "Author a new document, or restructure a messy one, into deep-module shape: lead with the point, one fact one owner, grouped by knowledge not chronology. Fires on \"author an ADR / design doc / spec / README\" or \"turn these notes into a document\" / \"clean up this prose\". For file-top headers on CODE files use /nav:sync — compose is their prose-document sibling. Writes/edits the document, gated by a diff."
 ---
 
 # compose — documents as deep modules

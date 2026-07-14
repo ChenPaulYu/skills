@@ -2,7 +2,7 @@
 
 > **TL;DR**: Paul 提出 shape/nav 帶著大量固定的磁碟資料形狀（blueprints 樹、plan.md、headers、map、HANDOFF.md），用起來「要先學會這套」、不夠彈性。本輪 elicit 收斂到一半：把學習成本拆成**資料層**與**動詞層**兩層、立了「契約 vs 慣例」的 fork、盤點發現多數結構原則上已是慣例（soft）——**問題可能不是結構太硬，是「軟」沒有被使用者感覺到**（rule ② 的反面：工件層複雜度洩漏進人的介面）。**未收斂**：缺一個具體刺痛時刻來定藥方方向。
 >
-> **狀態**: 部分 graduated → [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md)（藥方一：契約名單明確化、藥方二：tolerant reader 三態 —— 已落地 in root CLAUDE.md；藥方四：README 動詞層小抄 —— 已落地於 `README.md`「Which verb do I want?」）· 2026-07-13 · 藥方三（表述翻轉）明文搭 description 減重推廣到其餘 29 skill 的車，未動；開放題（具體刺痛案例）保留，未收斂
+> **狀態**: 部分 graduated → [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md)（藥方一：契約名單明確化、藥方二：tolerant reader 三態 —— 已落地 in root CLAUDE.md；藥方四：README 動詞層小抄 —— 已落地於 `README.md`「Which verb do I want?」）· 2026-07-13 · 藥方三（表述翻轉）已隨 description 減重推廣落地 → [ADR-073](docs/adr/073-description-lean-rollout-marketplace-wide.md)（全 30 skill 意圖優先改寫）；開放題（具體刺痛案例）保留，未收斂
 
 ## 外部共鳴 — 這正是 Matt 的開場白
 

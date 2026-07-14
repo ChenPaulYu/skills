@@ -1,6 +1,6 @@
 ---
 name: dissect
-description: "Dissect papers or argument documents into a structural skeleton (Gap, Claim, Mechanism, Evidence, Conclusion). Works on papers, blog posts, RFCs, and design proposals. Fires on \"break down this paper\", \"what does this paper claim?\", \"read/analyze this paper\", \"dissect these papers\", \"help me understand these papers\". Forensic mode: if already cited, audits cited-as vs actually-says and returns corrected citable form on \"verify this citation\", \"did I cite this right?\", \"check my numbers against the paper\". For mapping relations across multiple papers, use /research:untangle."
+description: "Dissect papers, blog posts, RFCs, or design proposals into a structural skeleton — Gap, Claim, Mechanism, Evidence, Conclusion. Fires on \"break down this paper\", \"what does this paper claim?\". Forensic mode (already-cited documents) audits cited-as vs actually-says, returning the corrected citable form — fires on \"verify this citation\". For mapping relations across multiple papers, use /research:untangle."
 ---
 
 # research:dissect

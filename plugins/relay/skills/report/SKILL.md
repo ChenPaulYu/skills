@@ -1,6 +1,6 @@
 ---
 name: report
-description: "Write a thought into a relay coordination repo — a progress update or a concept/framing alignment — so a counterpart's agent can grasp where things stand or how you're now thinking. One flexible shape (subject + body): short for progress, longer for alignment; the counterpart responds with /relay:review. Use when the user asks to \"report in relay\", \"write my relay update\", \"post progress\", \"sync X on the new framing\", or \"relay report\". Content verb; the read-side is /relay:digest, the response side is /relay:review. Writes one append-only thought into the relay CONTENT repo (the coordination repo with relay.yml) — ONLY there; authoring an ADR / design doc / README that lives in a code or tooling repo is /nav:compose, not a report. Gated by a diff."
+description: "Write a thought into a relay coordination repo — progress, or a concept/framing alignment — so a counterpart's agent grasps where things stand. One flexible shape: short for progress, longer for alignment; the counterpart responds with /relay:review. Fires on \"report in relay\" or \"post progress\". Content verb; read side /relay:digest. Writes one append-only thought into the relay CONTENT repo ONLY — an ADR / design doc / README in a code repo is /nav:compose, not a report. Gated by a diff."
 ---
 
 # report — write a thought (progress or alignment)

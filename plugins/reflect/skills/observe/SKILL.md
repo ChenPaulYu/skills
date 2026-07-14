@@ -1,6 +1,6 @@
 ---
 name: observe
-description: "Surface THIS session's candidate durable learnings, let the user pick which to keep, then write only the picks — candidate-first, no silent auto-write. Classified as own-learning (→ local docs/observations/) or skill-feedback (→ an opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users). Part of the repo-evolution loop (lived experience → observation → ADR → skill). Summoned; read-only except the chosen file(s) / feedback PR. Fires on \"observe this\", \"record a learning\", \"capture this insight\", \"write an observation\", \"log what we learned\", \"what's worth observing\"."
+description: "Surface this session's candidate durable learnings, let you pick which to keep, then write only the picks — never a silent auto-write. Classified as own-learning (local docs/observations/) or skill-feedback (opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users). Feeds the repo-evolution loop: lived experience → observation → ADR → skill. Summoned; read-only except the chosen file(s) / feedback PR."
 disable-model-invocation: true
 ---
 

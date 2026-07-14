@@ -1,6 +1,6 @@
 ---
 name: settle
-description: "Settle a relay project's thought-stream into the decision ledger — distil each thought that got an agreeing review into a self-contained ruling, APPEND it to decisions/log.md (append-only), and regenerate decisions/active.md (current in-force). Thoughts are NEVER moved or deleted — they stay in thoughts/ (the immutable log); open-vs-settled is digest's computed view. The crystallization verb: settle turns agreed thoughts into the durable ledger. Use when the user asks to \"settle the relay\", \"crystallize the project\", \"pin / log the decisions\", or \"relay settle\". Content verb; appends to the ledger + regenerates active, gated by a diff. (ADR-054)"
+description: "Settle a relay project's thought-stream into the decision ledger — distil each agreed thought into a self-contained ruling, append it to decisions/log.md, and regenerate decisions/active.md. Thoughts are NEVER moved or deleted — open-vs-settled is digest's computed view. Fires on \"settle the relay\" or \"pin the decisions\". Content verb; appends to the ledger, regenerates active, gated by a diff. (ADR-054)"
 ---
 
 # settle — crystallize agreed thoughts into the decision ledger

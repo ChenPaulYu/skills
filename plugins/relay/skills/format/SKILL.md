@@ -1,7 +1,7 @@
 ---
 name: format
 model: sonnet
-description: "Sweep one relay project's thoughts and bring their frontmatter up to the current format — like /nav:sync for headers, but for relay thought metadata. Checks every thought parses + conforms (quoted subject, required thread, well-formed thread/re/relate links) and fixes the non-conformant, gated by a diff. Syntactic only — it never changes what a thought SAYS. Use when the user asks to \"format the relay\", \"unify the thought format\", \"lint the thoughts\", \"fix the frontmatter\", or after the format spec evolves and old thoughts drift. One project at a time (not the whole repo). Content verb; the format owner is plugins/relay/CLAUDE.md. (relay 0.5.0)"
+description: "Sweep one relay project's thoughts to the current frontmatter format — /nav:sync for relay thought metadata. Syntactic only: it never changes what a thought SAYS, gated by a diff. Fires on \"format the relay\" or \"fix the frontmatter\". One project at a time, not the whole repo. Content verb; format owner is plugins/relay/CLAUDE.md. (relay 0.5.0)"
 ---
 
 # format — sweep one project's thoughts to the current frontmatter spec

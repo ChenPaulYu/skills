@@ -1,6 +1,6 @@
 ---
 name: untangle
-description: "Untangle a pile of papers into the relational structure of the field (lineage, clusters, contradictions, and contested ground). The core is a relational map; add a claim to derive a positioning view (your location, the gap, related-work priority). Reuses /research:dissect notes. Fires on \"how do these papers relate\", \"untangle this literature\", \"what's the structure of this field\", \"map relationships across these papers\", \"see how these connect\", \"where does my claim fit\", \"find the gap across these\". For single dissect skeletons, use /research:dissect; for paper critiques, use /research:critique."
+description: "Untangle a pile of papers into the relational structure of a field: lineage, clusters, contradictions, contested ground. The core is a relational map; add a claim to derive a positioning view (your location, the gap, related-work priority). Reuses /research:dissect notes. Fires on \"how do these papers relate\", \"where does my claim fit\". For single dissect skeletons, use /research:dissect; for paper critiques, use /research:critique."
 ---
 
 # research:untangle

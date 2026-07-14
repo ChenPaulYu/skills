@@ -1,7 +1,7 @@
 ---
 name: summarize
 model: sonnet
-description: "Produce a complete, objective recap of what THIS session did — what was attempted, done, decided, and changed (files / commits), in order, neutrally and exhaustively (not a selective TL;DR). Read-only; summoned; the raw input /reflect:observe distills. Fires on \"summarize this session\", \"what did we do\", \"recap everything\", \"full summary of this session\", \"write up what happened\", \"give me the rundown\". Distinct from /reflect:catchup (where the work stands NOW plus next — summarize is the complete log of what HAPPENED) and from /reflect:observe (which selectively distills the one durable learning and writes it; summarize is the objective whole that feeds it)."
+description: "A complete, objective recap of what THIS session did — attempted, done, decided, changed (files / commits), in order, neutral and exhaustive, not a selective TL;DR. Read-only; summoned; the raw input /reflect:observe distills. Distinct from /reflect:catchup (where the work stands NOW plus next — summarize is the complete log of what HAPPENED) and from /reflect:observe (which selectively distills the one durable learning and writes it; summarize is the objective whole that feeds it)."
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: register
-description: "Register a person into a relay coordination repo — record their name · git email · github account · optional title in the global roster (relay.yml) and assign a per-project role (project.yml). Use when the user asks to \"register a person in relay\", \"add someone to the project\", \"onboard X\", \"assign a role\", or \"enrol a teammate\". Structure verb (manages who's in); to create the project itself use /relay:launch. Writes files, gated by a diff."
+description: "Register a person into a relay coordination repo — record identity (name · git email · github · title) in the global roster and a per-project role. Fires on \"register a person in relay\" or \"onboard X\". Structure verb; to create the project itself use /relay:launch. Writes files, gated by a diff."
 ---
 
 # register — enrol a person + assign a role

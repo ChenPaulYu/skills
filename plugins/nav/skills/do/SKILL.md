@@ -1,6 +1,6 @@
 ---
 name: do
-description: "Execute a small, decided, behaviour-changing change directly with deep-module discipline but without a plan.md. Use when the user wants to \"just add X\", \"make this small change\", \"implement this small feature\", \"quick add Y\", \"do this small thing\", or post-converge: \"make it functional\", \"wire it up for real\", \"make this real\". Too small for /nav:plan, but needs discipline rather than winging it. NOT for behaviour-preserving moves (use /nav:refactor) or large specs (use /nav:plan). Implements the inject-check bracket: inject (head -12 target file, search reusable impl) -> execute -> check (header, N+1 check, verify gate)."
+description: "Make a small, already-decided, behaviour-changing code change directly — with deep-module discipline, but no plan.md. Fires on \"just add X\", or post-converge \"make it functional\". NOT for behaviour-preserving moves (use /nav:refactor) or large/ambiguous specs (use /nav:plan). Runs inject (head -12 target, reuse-search) → execute → check (header, N+1, verify)."
 ---
 
 # Deep-module do — execute a small change, disciplined

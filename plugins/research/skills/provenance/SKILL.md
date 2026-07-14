@@ -1,6 +1,6 @@
 ---
 name: provenance
-description: "Audit your OWN documents' citations — trace every load-bearing number, quote, and \"X showed Y\" back to a verified source; classify each as first-hand verified / second-hand / orphan; produce a quarantine list. The mirror of /research:critique: critique audits THEIR evidence; provenance audits YOUR use of theirs. Use before a submission or decision. Fires on \"are my citations sound\", \"check my sources\", \"which claims haven't we verified\", \"does every number have an origin\", \"sweep for unread citations\", \"provenance check\", \"audit my references\". Suspect findings hand off to /research:dissect (forensic mode)."
+description: "Audit your OWN documents' citations: trace every load-bearing number, quote, and claim back to a verified source, classifying each first-hand verified / second-hand / orphan. The mirror of /research:critique: critique audits THEIR evidence; provenance audits YOUR use of theirs. Fires on \"are my citations sound\", \"which claims haven't we verified\", \"sweep for unread citations\". Suspect findings hand off to /research:dissect (forensic mode)."
 ---
 
 # research:provenance

@@ -1,6 +1,6 @@
 ---
 name: review
-description: "Respond to a relay thought addressed to you — acknowledge it, comment, or ask for a change — by writing your own thought that references its id. With 1-2 people there's no consensus protocol: your response is the resolution, and an agreeing review is what /relay:settle later pins as a decision. Use when the user asks to \"review in relay\", \"respond to the report\", \"ack this\", \"approve / agree with it\", \"ask for a change\", or \"relay review\". Content verb; the open side is /relay:report, the read side is /relay:digest. Writes one append-only thought, gated by a diff."
+description: "Respond to a relay thought addressed to you — acknowledge, comment, or ask for a change — by writing your own thought referencing its id. With 1-2 people there's no consensus protocol: your response is the resolution, and an agreeing review is what /relay:settle later pins as a decision. Fires on \"review in relay\" or \"ack this\". Content verb; open side /relay:report, read side /relay:digest. Writes one thought, gated by a diff."
 ---
 
 # review — respond to a thought (ack / comment / change)

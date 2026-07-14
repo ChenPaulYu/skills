@@ -1,7 +1,7 @@
 ---
 name: reconcile
 model: sonnet
-description: "Reconcile design notes with reality — scan a blueprints/ tree (thoughts/, plans/, mockups/) for docs that drifted, then with the user amend, prune/consolidate, graduate, or retire them. Fires on \"check for outdated thoughts / docs\", \"which design notes are stale\", \"clean up / tidy the blueprints\", \"are these docs still current\", \"prune the old specs / mockups\", \"consolidate these notes\", \"graduate this shipped doc\", or after work ships and docs drift from code. Read-only check; every write gated per-file. AMEND syncs facts, never re-decides a *decision* — a changed design is /shape:elicit. Language-agnostic."
+description: "Reconcile design notes with reality — scan blueprints/ (thoughts/, plans/, mockups/) for docs that drifted, then with you amend, prune/consolidate, graduate, or retire them. Fires on \"which design notes are stale\" or after work ships and docs drift from code. Read-only check; every write gated per-file. AMEND syncs facts, never re-decides a *decision* — a changed design is /shape:elicit."
 ---
 
 # Reconcile — make the notes match reality

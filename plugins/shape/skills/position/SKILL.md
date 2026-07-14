@@ -1,6 +1,6 @@
 ---
 name: position
-description: "Author and maintain a project's core principle documents, converging messy multi-source input into self-contained canon. A campaign verb: many feedings over time, gated edits, landed two-tier (core/ = ratified canon; thoughts/ = dated hypotheses), grown by graduation. Write protocol (ADR-041): core is freeze-gated, other verbs queue amendments in docs/core/amendments.md. Fires on \"幫我定位 X\", \"turn these discussions into a core doc\", \"this core file has accreted\", \"graduate this thought\", or authoring docs/core/*.md. NOT for single-sitting concepts (use /shape:elicit), syncing shipped code (use /shape:reconcile), or code planning (use /nav:plan)."
+description: "Author and maintain a project's core principle documents — a campaign verb: many gated feedings converge messy input into self-contained canon, two-tier (core/ = ratified, thoughts/ = dated hypotheses), grown only by graduation. Fires on \"幫我定位 X\" or \"this core file has accreted\". Freeze-gated (ADR-041) — other verbs queue an amendment instead of writing core. NOT for single-sitting concepts (use /shape:elicit), syncing shipped code (use /shape:reconcile), or code planning (use /nav:plan)."
 ---
 
 # Position — author the canon layer (a gated, multi-feeding campaign)

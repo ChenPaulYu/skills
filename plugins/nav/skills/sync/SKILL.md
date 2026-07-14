@@ -1,6 +1,6 @@
 ---
 name: sync
-description: "Re-sync a codebase's file-top headers to its current state so an agent (or human) can grasp any file from its first ~12 lines — the per-file navigability layer. Runs one grounding pass, then composes/restructures each load-bearing file's header (title + 2-3 sentence detail + Reads: line) and shows the diff before applying. Use whenever the user asks to \"sync the headers\", \"refresh / add / standardize file headers\", \"add skill-style headers\", \"make files self-describing\", \"make this file navigable\", or after restructuring when headers have drifted from the code. Writes file-top headers (any language). For the repo-level bilingual codebase map, see the sibling skill /nav:map (run sync first — the map reads these headers)."
+description: "Re-sync a codebase's file-top headers to its current state — the per-file navigability layer — so head -12 answers \"what is this file?\" without reading the body. Fires on \"sync the headers\" / \"make this file navigable\", or after restructuring leaves headers stale. Shows the diff before applying. For the repo-level bilingual codebase map, see the sibling /nav:map (run sync first — the map reads these headers)."
 ---
 
 # Header sync — file-top navigability

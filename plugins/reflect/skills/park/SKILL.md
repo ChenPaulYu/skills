@@ -1,6 +1,6 @@
 ---
 name: park
-description: "Write the current session's cursor into the project's HANDOFF.md before stepping away — goal/done/now/open/next (catchup's mirror) plus the git SHA at write time, overwriting any prior HANDOFF.md in place. Summoned only, never automatic; the write side of /reflect:catchup's read."
+description: "Before stepping away, write the session's cursor into the project's HANDOFF.md — goal, done, now, open, next (catchup's mirror), plus the git SHA at write time, overwriting any prior HANDOFF.md in place. Summoned only, never automatic; the write side of /reflect:catchup's read."
 disable-model-invocation: true
 ---
 

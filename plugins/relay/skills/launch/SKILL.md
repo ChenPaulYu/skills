@@ -1,6 +1,6 @@
 ---
 name: launch
-description: "Create a new project in a relay coordination repo — scaffold its space (project.yml · thoughts/ · decisions/) and define its frame. Bootstraps the relay repo itself (relay.yml roster) on first run. Use when the user asks to \"launch a relay project\", \"create a project\", \"set up a new coordination project / workspace\", \"start a relay repo\", or \"open a new project in relay\". Structure verb (creates the workspace); to add people use /relay:register, to post updates use /relay:report. Writes files, gated by a diff."
+description: "Create a new project in a relay coordination repo — scaffold project.yml · thoughts/ · decisions/, bootstrapping the repo's relay.yml roster on first run. Fires on \"launch a relay project\" or \"start a relay repo\". Structure verb; to add people use /relay:register, to post updates use /relay:report. Writes files, gated by a diff."
 ---
 
 # launch — create a relay project

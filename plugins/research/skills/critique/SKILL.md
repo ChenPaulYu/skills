@@ -1,6 +1,6 @@
 ---
 name: critique
-description: "Adversarially assess a paper or argument document and draft a referee report. Audit claims against evidence (validated != claimed), locate real sources of gains, and self-attack criticisms before shipping. Produces a full-evidence analysis note, a lean review draft, and a cut-log of dropped attacks. Best on empirical papers with tables/ablations. Use to review, critique, referee, or stress-test paper claims. Fires on \"review this paper\", \"critique this paper\", \"referee this\", \"write a review for X\", \"is this paper's central claim supported?\", \"find the weaknesses\", \"are these results validated?\". For single document argument anatomy, use /research:dissect; to map relations across papers, use /research:untangle."
+description: "Adversarially review a paper or argument document and draft a referee report: audit claims against evidence (validated != claimed) and self-attack every criticism before it ships. Best on empirical papers with tables/ablations. Fires on \"review this paper\", \"find the weaknesses\", \"are these results validated?\". For single-document argument anatomy, use /research:dissect; to map relations across papers, use /research:untangle."
 ---
 
 # research:critique

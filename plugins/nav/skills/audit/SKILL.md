@@ -1,6 +1,6 @@
 ---
 name: audit
-description: "Audit a codebase against deep-module principles (Ousterhout's \"A Philosophy of Software Design\"). Language-agnostic with stack heuristics. Three modes: (1) Health audit on \"audit my codebase\", \"review the architecture\", \"is this a deep module?\", \"what's wrong with this codebase?\", \"any architectural smells?\", \"do a full sweep/checkup\"; (2) Feasibility check on \"can this codebase support feature X?\", \"is this code ready for Y?\", \"does our architecture fit this plan?\"; (3) Deep sweep on \"deep audit\", \"徹底掃描\", \"full sweep\", \"find all the issues at once\", \"legacy sweep\", \"audit thoroughly\" — fans out one read-only sub-agent per domain so a large/legacy codebase gets scanned completely in one go (Mode 1 auto-suggests this when it detects a large legacy shape). Fires on modularity/progressive disclosure discussions. Read-only findings; to act, use /nav:sync, /nav:map, or /nav:refactor. For full spec planning, use /nav:plan."
+description: "Check whether a codebase is healthy, ready for a feature, or needs a full legacy sweep — three depths of one deep-module audit (Ousterhout). Fires on \"audit my codebase\" / \"any architectural smells?\" (health), \"can this codebase support feature X?\" against a spec (feasibility), or \"deep audit\" / \"徹底掃描\" (fan-out sweep, one sub-agent per domain, for a large/legacy repo). Read-only — act on findings via /nav:sync, /nav:map, or /nav:refactor; for full spec planning use /nav:plan."
 ---
 
 # Deep-module audit

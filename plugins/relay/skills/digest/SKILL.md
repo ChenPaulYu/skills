@@ -1,7 +1,7 @@
 ---
 name: digest
 model: sonnet
-description: "Show the live 'what's waiting for my review' from a relay coordination repo — read the thought-stream and surface every thought that @-mentions YOU and you haven't responded to yet. Read-only (writes nothing). Use when the user asks to \"digest the relay\", \"what needs me\", \"what's waiting for my review\", \"catch me up on the relay\", or \"relay digest\". Also the awareness entry — an agent runs it on open. Content verb; the write side is /relay:report, the response side is /relay:review."
+description: "Show the live \"what's waiting for my review\" in a relay coordination repo: every thought that @-mentions you, unanswered. Read-only, writes nothing. Fires on \"digest the relay\" or \"what needs me\". Also the awareness entry — an agent runs it on open. Content verb; write side /relay:report, response side /relay:review."
 ---
 
 # digest — what's waiting for my review

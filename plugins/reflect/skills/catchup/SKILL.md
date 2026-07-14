@@ -1,6 +1,6 @@
 ---
 name: catchup
-description: "Re-orient on where the current work stands — rebuilt from durable state (git / diff / changed files / on-disk layout / any plan) as the floor so it survives /clear or a break, then enriched from the live context window when present (the why / in-flight decisions git can't carry). Read-only; summoned. Fires on \"where are we\", \"catch me up\", \"where did we leave off\", \"what's the status\", \"recap where I'm at\", \"I'm lost, orient me\". Distinct from /reflect:summarize (objective recap of what the session DID) and /shape:align (DECIDES next and writes a plan — catchup only reports)."
+description: "Orient on where the current work stands — rebuilt from durable state (git, diff, files, plan) so it survives /clear or a break, then enriched from live context for the why. Read-only, summoned. Distinct from /reflect:summarize (objective recap of what the session DID) and /shape:align (DECIDES next and writes a plan — catchup only reports)."
 disable-model-invocation: true
 ---
 

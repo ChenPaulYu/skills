@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-13 (rev 66)
+  Last audit: 2026-07-13 (rev 67)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -87,14 +87,14 @@
       human-gated, multi-person, standalone (ADR-050).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 59 ADRs in docs/adr/ — 001..059 with cross-supersede / refine links
+    • 73 ADRs in docs/adr/ — 001..073 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay format +
       digest, reflect summarize; nav sync deliberately NOT tiered (it authors the
       headers everything else reads; rule ⑧ — describing IS diagnosing).
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (34 flat skills: nav-* / reflect-* / relay-* /
+    • Codex mirror: .agents/skills/ (35 flat skills: nav-* / reflect-* / relay-* /
       research-* / shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
@@ -114,7 +114,20 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ CHANGED in this revision (rev 66)
+  ⚠ CHANGED in this revision (rev 67)
+    1. description lean-but-honest convention (ADR-065) rolled out marketplace-
+       wide: the remaining 30 skills across nav/reflect/relay/research/shape
+       (frame's 5 were the pilot) had their frontmatter `description` field
+       rewritten by 5 Sonnet sub-agents, one per plugin — model-invoked skills
+       got the full lean-but-honest treatment, the 7 user-invoked skills
+       (nav:refactor, reflect:catchup/observe/park/summarize, shape:build/setup)
+       had their dead "Fires on..." trigger lists dropped for the first time.
+       Also carried the fixed-structure-learning-curve thought's 藥方三
+       (表述翻轉 / intent-first framing) along, per that thought's own note.
+       Marketplace-wide description total: 22,484 → 14,347 chars (63.8%).
+       ADR-073; full table in docs/findings/2026-07-13-description-diet-rollout.md.
+
+  ⚠ FIXED in rev 66 (kept for history)
     1. Two fixed-structure-learning-curve remedies landed (ADR-071):
        contracts-vs-conventions named once in root CLAUDE.md (only 3 real
        contracts: relay frontmatter, the manifest/generated-artifact set,

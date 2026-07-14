@@ -1,7 +1,7 @@
 ---
 name: align
 model: sonnet
-description: "Align on what to build next — read the current decisions (blueprints/thoughts/) and the actual state of work, decide with the user what is In progress / Next / Future, then write a lean plan.md, the agent's single maintained board. Fires on \"align on what's next\", \"what should we work on\", \"update the plan\", \"refresh the plan\", \"where are we\", \"sync the blueprints\", \"re-do plan.md\", or hands over notes asking \"so what now\". NOT /nav:plan (this triages forward; that grounds a spec into code). NOT a visual render — that's an on-demand /shape:mockup board snapshot. Scaffolds blueprints/ on first run."
+description: "Align on what to build next: decide with you what's In progress, Next, or Future from current decisions and real work, then write the single maintained plan.md board. Fires on \"where are we\" or \"what should we work on next\". NOT /nav:plan (this triages forward; that grounds a spec into code). NOT a visual render — that's an on-demand /shape:mockup board snapshot."
 ---
 
 # Align — decide what's next, render it

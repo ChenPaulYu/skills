@@ -1,6 +1,6 @@
 ---
 name: elicit
-description: "Converge conceptual decisions/root-causes by drawing them out of the user through a structured grill. One engine: forward decisions (\"what should X be\") or backward root-causes (\"why is X wrong\"). You propose refutable structures; the user refines/picks, saving convergence to a thoughts/ doc. Fires on \"help me think through X\", \"grill me on this\", \"I haven't decided X\", \"what IS a <concept>\", \"this has a logic hole\", \"help me figure out why X is broken\", \"root-cause this\". NOT for visual/flow choices (use /shape:mockup), smell-scans (use /nav:audit), or spec planning (use /nav:plan)."
+description: "Converge a conceptual decision or root cause by drawing it out of you through a structured grill — propose refutable structures for the user to pick, landing in a thoughts/ doc. One engine, two objects: forward (\"what should X be\") or backward (\"why is X wrong\"). Fires on \"help me think through X\" or \"I haven't decided X\". NOT for visual/flow choices (use /shape:mockup), smell-scans (use /nav:audit), or spec planning (use /nav:plan)."
 ---
 
 # Elicit — draw the decision out (grounded grill)
