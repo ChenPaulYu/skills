@@ -1,0 +1,101 @@
+---
+name: probe
+description: "Design and run a minimal experiment when nobody can settle a fork by argument: an A/B comparison, a blind judgment test, or a behavior probe that lets reality vote. Fires on \"run a small experiment to find out whether X\", \"we don't know — let's test it\", or offered when a fork is undecidable by argument. NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment). NOT /shape:dogfood (probes a built feature's friction). NOT /verify (checks a change did what it claims)."
+---
+
+# Probe — design a minimal experiment, let reality vote
+
+Take a fork that arguing longer cannot settle — not because nobody's tried hard enough, but because the answer doesn't live in anyone's head or in any document — and **design the smallest experiment that can discriminate**, run it, and read the verdict honestly. `probe` is the verb for the moment a decision stops being a reasoning problem and becomes a measurement problem.
+
+## Why this skill exists
+
+The four-quadrant knowledge map behind this family ([ADR-075](docs/adr/075-shape-probe-ask-reality.md)) names four states: you know you know it (`/shape:elicit` draws it out), you know you don't know it and the world does (`/shape:survey` maps it), you don't even know you're missing it (elicit detects the blind spot mid-grill and offers survey), and — the fourth — **nobody knows**. No amount of grilling the user, mapping the repo, or reading documentation answers a fourth-quadrant question, because the fact simply hasn't been measured yet. Grinding on it with more argument produces confident-sounding noise, not an answer. `probe` is the verb that stops arguing and starts measuring: design a minimal experiment, run it, let the result — not the strongest rhetoric — decide.
+
+The gap was real, not hypothetical: this repo has hand-rolled the deliverable `probe` now encodes at least three separate times, each time re-inventing the discipline from scratch — see ADR-075 for the citations. A verb that gets hand-produced three times without anyone naming it is exactly ADR-038's trigger condition ("if you're about to hand-roll a verb's deliverable, fire the verb instead").
+
+## Core — the one non-negotiable
+
+> **The deliverable is a verdict backed by pre-registered, measured evidence — never a rationalization written after seeing the data.** An experiment whose "what counts as a win" is decided after the numbers are in isn't an experiment; it's a story fit to the data. `probe` refuses to run without a verdict rule written down BEFORE the first trial executes.
+
+## Design chain — three lenses, borrowed by protocol (never by call)
+
+`probe` doesn't invoke `frame:dialectic`, `frame:first-principles`, or `frame:orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern `/shape:position` established for elicit/mockup/first-principles (ADR-008):
+
+1. **Locate the load-bearing assumption** — `frame:dialectic`'s move. A fork usually has several plausible-sounding cruxes; only one is actually load-bearing (the assumption that, if it flips, flips the decision). Don't design an experiment around a surface disagreement — find the one thing the fork actually rests on. If dialectic already ran and named a "Missing Evidence" row, that *is* this step's output — reuse it, don't re-derive it.
+2. **Strip it to the smallest testable claim** — `frame:first-principles`' move. Convention vs necessity: restate the load-bearing assumption as the smallest falsifiable statement, stripped of the surface phrasing that made it sound bigger or vaguer than it is. Test the necessity, never the wording ("does a graph database read faster" is testable; "is a graph database the right model" is not — reduce to the first before designing anything).
+3. **Control the variables** — `frame:orthogonal`'s move. Once the claim is stripped to size, vary exactly the one axis that claim is about and lock every other axis identical between conditions. Orthogonal's independence check — move one axis, the others must not move — **is, verbatim, the definition of a controlled experiment.** An experiment that lets two things vary at once never produced evidence about either.
+
+Budget goes to the load-bearing point from step 1, never to the surface phrasing the fork was originally argued in.
+
+## Minimal-experiment shapes — three canonical forms
+
+Pick the shape that matches what's actually uncertain; don't default to one out of habit.
+
+- **A/B comparison** — two variants run under identical conditions, one axis differs. Example: two onboarding copy variants shown to matched user cohorts, one metric (completion rate) compared.
+- **Blind judgment test** — independent judges assess outputs without being told which is which or what the "expected" answer is. Example: two response styles from a support tool, shown unlabeled to reviewers who each pick the one they'd rather receive; reviewers are never told which variant they're looking at.
+- **Behavior probe** — drive the real system in a controlled state and observe what actually happens, rather than reasoning about what should happen. Example: seed a cache with a known-cold state, fire the real request path, and observe whether the fallback path actually triggers — instead of arguing from the code whether it would.
+
+These three are canonical, not exhaustive — but a proposed fourth shape should earn its place the same way these did (recurring real use), not be invented per-session.
+
+## Execution discipline
+
+- **Pre-register the verdict rule before running anything.** Write down, before the first trial: what result maps to which conclusion. If you can't state this in one sentence before seeing data, the experiment isn't designed yet — don't run it.
+- **Smallest N that can actually discriminate.** More trials than needed to tell the shapes apart is budget wasted on certainty nobody asked for; fewer trials than needed produces a coin flip dressed as a finding. Size N to the effect you're trying to detect, not to a round number.
+- **Report negative or ambiguous results honestly.** An experiment that fails to discriminate between the candidates is itself a finding — it means the load-bearing assumption from step 1 wasn't as load-bearing as thought, or the test wasn't sharp enough. Report it as exactly that, never quietly reframe it into a win.
+
+## Dispatch — design and verdict stay with the session model
+
+Per the dispatch-tiers convention (ADR-067): designing the experiment (steps 1-3 above) and reading the verdict against the pre-registered rule is the judgment-dense part — it stays with the session model. The **execution legs** — running each variant, collecting the raw outputs, tallying results — can go to cheap-tier delegated agents, reporting back grounded in fact (the actual output, the actual number), never an impression of how it went.
+
+## Live-LLM-cost signal — probe's own instance (ADR-062)
+
+This is a **new instance** of the signal, not inherited from `nav:do`'s verify gate: if the experiment itself fans out calls to a paid LLM — multiple independent judges, N repeated trials, a multi-agent behavior probe — state the expected scale (which model, how many calls, roughly how many trials) and get a nod from the user **before running**, the same aware-while-writing-notify-at-the-gate posture ADR-062 established elsewhere. `probe` doesn't get to silently pick a cheaper path either — it names the cost, the user decides.
+
+## Read-only toward product code
+
+`probe` never edits source to make an experiment work. Fixtures, harness scripts, and transcripts produced while running an experiment are disposable — they live in a scratch or throwaway location, never committed as if they were the deliverable. The thing that lands and persists is the **findings doc**, not the harness that produced it.
+
+## Output
+
+A findings-style doc: method + data + verdict. Lands under the project's `docs/findings/` if that convention already exists in the repo, else `blueprints/thoughts/<date>-<topic>-probe.md`.
+
+**Tolerant reader (ADR-071):** neither `docs/findings/` nor `blueprints/` is a contract. If neither exists yet, scaffold the simpler of the two rather than failing; if either exists in a non-standard shape, tolerate it and write into whatever shape is there; either way, self-report which tier you wrote to so the user can calibrate trust in the result.
+
+The doc states explicitly, near the top, that **the evidence feeds the pending decision back** — into `/shape:elicit`'s next volley if a fork sent it here, or directly back to the user if they summoned `probe` on their own.
+
+**Write-gated.** Show the doc's content before writing it.
+
+## Boundary — three neighbors, one line each
+
+- **vs `/shape:mockup`** — mockup converges a **preference** by a rendered, disposable artifact you look at and pick from. `probe` converges a **fact** by a measured, disposable experiment you run and read. Same spine ("converge by a real disposable instance, never a description"), two different objects: look-and-feel is decided by seeing; a fact about the world is decided by measuring.
+- **vs `/shape:dogfood`** — dogfood drives an **already-built** feature to surface friction and coverage gaps in something that exists. `probe` answers a **still-undecided** question — there's often nothing built yet; the experiment itself may be the first real artifact either variant gets.
+- **vs `/verify`** — verify checks that a **change did what it claims** — a known expectation, confirmed. `probe` answers an **open unknown** — there's no known expectation yet; the whole point is finding out what's true.
+
+## Anti-patterns (refuse these)
+
+| Temptation | Why to refuse |
+|---|---|
+| Test the surface phrasing instead of the load-bearing assumption | Wastes the experiment on a wording dispute nobody actually needed settled. Run step 1 of the design chain first. |
+| Vary two things at once | Polluted evidence — you can't attribute the result to either axis. Orthogonal's independence check exists to catch exactly this. |
+| Decide the verdict rule after seeing the data | That's rationalization wearing an experiment's clothes. Pre-register before the first trial, no exceptions. |
+| Let the experiment sprawl past minimal | More trials/variants than the discriminating question needs is budget spent on false confidence, not better evidence. |
+| Edit product code to force a result | `probe` is read-only toward source. If the "experiment" requires changing the thing under test, it's not an experiment anymore. |
+| Hide an ambiguous or negative result | A finding that the assumption wasn't load-bearing, or the test wasn't sharp, is still a finding — report it as one. |
+| Fan out paid-LLM calls without the cost nod | ADR-062's own instance for this skill — name the scale, get the nod, then run. |
+
+## Companion skills
+
+- **`/shape:elicit`** — the fork that sends work here (a stuck volley) and the consumer of the evidence probe brings back.
+- **`/frame:dialectic`** — names the deciding experiment at its own trial's end; `probe` is the verb that actually runs it, closing the hand-off dialectic used to leave open.
+- **`/frame:first-principles`** — the strip-to-testable-claim move borrowed in design-chain step 2.
+- **`/frame:orthogonal`** — the control-the-variables discipline borrowed in design-chain step 3; its independence check literally defines a controlled experiment.
+- **`/shape:mockup`** — the preference-convergence sibling on the same spine; probe is its fact-convergence twin.
+- **`/shape:dogfood`** — friction on a built feature, not an open unknown.
+- **`/verify`** — correctness of a known change, not an undecided fact.
+
+## Communication Style
+- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
+- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
+- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
+- Avoid academic jargon and unnecessary verbosity.
+- Keep explanations concise and actionable.

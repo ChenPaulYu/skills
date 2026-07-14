@@ -61,6 +61,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/shape:elicit` — converge a conceptual decision by a grounded grill — or root-cause a logic flaw (diagnostic mode)
 - `/shape:survey` — map a decision space into independent axes grounded in the real repo, then report the diff versus what you already know (before deciding in unfamiliar terrain; not a repo map, not external research)
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
+- `/shape:probe` — design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
 - `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
 - `/shape:align` — decide now/next/later *with you* → a `blueprints/` status board (`plan.md` + bilingual `overview.html`)

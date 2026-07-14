@@ -1,6 +1,6 @@
 ---
 name: dialectic
-description: "Put a forming claim on trial: steelman both sides, surface the load-bearing assumption, then name the deciding experiment. Fires on \"steelman this\", \"play devil's advocate\", \"strongest case for and against\", \"這個論點站得住嗎\". In-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan). Distinct from /research:critique (audits an external doc's existing evidence; this stress-tests your own forming claim, where the decider doesn't exist yet)."
+description: "Put a forming claim on trial: steelman both sides, surface the load-bearing assumption, then name the deciding experiment. Fires on \"steelman this\", \"play devil's advocate\", \"strongest case for and against\", \"這個論點站得住嗎\". In-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan, /shape:probe). Distinct from /research:critique (audits an external doc's existing evidence; this stress-tests your own forming claim, where the decider doesn't exist yet)."
 ---
 
 # dialectic — put a claim on trial: strongest case vs strongest attack, then the deciding experiment
@@ -53,6 +53,7 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 - **Converge it into a decision** → `/shape:elicit` (the trial is a strong input to the grill — but whether to commit to the claim is still drawn out *with you*, not declared here).
 - **Render a side to decide by seeing it** → `/shape:mockup`.
 - **Ground the surviving claim into code** → `/nav:plan` (when it's settled enough to build).
+- **Run the Killer Experiment itself** → `/shape:probe`, when the verdict came back *unsettled — owned bet* and the deciding experiment named in that row is real work worth actually running, not just naming. **Guarded**: offered only when `shape` is installed; omitted otherwise (a broken option is worse than none) — mirrors `/nav:plan`'s guarded `/shape:mockup` offer (ADR-012).
 
 **Guarded + one-shot:** compose from what the trial actually found, always include a "just leave the table, I'll take it from here" opt-out, don't re-offer after the pick. An offer, not a call — skills don't invoke each other.
 
@@ -94,7 +95,7 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 ## Output
 
 - **The five-part trial, in-chat** (no file artifact): Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment — plus a **three-way verdict** (refuted / unsettled-owned-bet / supported). To persist it, route to shape (below).
-- A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:plan` (ground) — never an auto-call.
+- A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:plan` (ground) · `/shape:probe` (run the Killer Experiment, guarded on `shape` being installed) — never an auto-call.
 
 ## Companion skills
 
@@ -103,6 +104,7 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 - **`/shape:elicit`** — commit the surviving claim into a decision *with the user* (dialectic tries; elicit draws out the call). The pairing partner.
 - **`/research:critique`** — when the thing on trial is an *external paper* with evidence already in it, that's critique, not this.
 - **`/nav:plan`** — ground a surviving claim into a code-level plan once settled.
+- **`/shape:probe`** — runs the Killer Experiment this skill only names: when the verdict is *unsettled — owned bet*, probe designs and runs the minimal experiment that decides it. Guarded offer (ADR-012 pattern); degrades gracefully if `shape` isn't installed.
 
 ## Communication Style
 - Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
