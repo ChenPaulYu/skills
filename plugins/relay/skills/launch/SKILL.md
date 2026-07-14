@@ -1,26 +1,35 @@
 ---
 name: launch
-description: "Create a new project in a relay coordination repo — scaffold project.yml · thoughts/ · decisions/, bootstrapping the repo's relay.yml roster on first run. Fires on \"launch a relay project\" or \"start a relay repo\". Structure verb; to add people use /relay:register, to post updates use /relay:report. Writes files, gated by a diff."
+description: "Create a new project in a relay coordination repo, or add a person / assign a role to an existing one. Branch 1 (create): scaffold project.yml · thoughts/ · decisions/, bootstrapping the repo's relay.yml roster on first run — fires on \"launch a relay project\" or \"start a relay repo\". Branch 2 (people): record identity (name · git email · github · title) in the roster + a per-project role — fires on \"register a person in relay\" or \"onboard X\". Structure verb; to post updates use /relay:report. Writes files, gated by a diff."
 ---
 
-# launch — create a relay project
+# launch — create a relay project, or add a person to one
 
-Bring a new **coordination project** into existence: scaffold its workspace and define its frame. The structural counterpart to the content verbs — `launch` makes the room; `report`/`review`/`digest`/`settle` are what happens inside it.
+Bring a new **coordination project** into existence, or grow an existing one's **membership**: two branches of the same structural verb — `launch` makes the room and populates it; `report`/`review`/`digest`/`settle` are what happens inside it.
 
 ## Scope
 
 Operates on the **content repo** — a *separate* coordination repo (located via `$RELAY_REPO`, else a cached prior resolution, else **ask where it should live** — never assume cwd, which is usually some other project). On the very first run in an empty repo it also **bootstraps** the repo (creates `relay.yml` with the running user as the first person). Writes files; shows a diff and is gated before applying.
 
+## Which branch?
+
+- **"start a project / launch relay / scaffold a workspace"** → Branch A, Create a project.
+- **"add a person / register X / onboard X / assign a role"** → Branch B, Add a person or role.
+
+Both share Step 1 (locate/bootstrap the repo); pick up the matching step after that.
+
 ## Process
 
-### Step 1 — Locate or bootstrap the repo
-- **Resolve the content repo**: `$RELAY_REPO` if set, else the cached path at `~/.cache/relay/repo-path` if it still points at a real relay repo, else **ask the user where the relay repo is / should live** — do NOT assume the current dir (it's usually another project). Whichever way it's resolved (or just bootstrapped), cache it to `~/.cache/relay/repo-path` for next time (see `CLAUDE.md` → *Locating the content repo*).
-- Find `relay.yml` there. **If absent**, this is first-run: resolve who's running (git author email/name), create a minimal `relay.yml` registering them (handle seeded from their github; record their git email as the resolver), and note more people are added later with `/relay:register`.
+### Step 1 — Locate or bootstrap the repo (both branches)
+- **Resolve the content repo**: `$RELAY_REPO` if set, else the cached path at `~/.cache/relay/repo-path` if it still points at a real relay repo, else the current dir if it has `relay.yml`, else **ask the user where the relay repo is / should live** — do NOT assume the current dir (it's usually another project). Whichever way it's resolved (or just bootstrapped), cache it to `~/.cache/relay/repo-path` for next time (see `CLAUDE.md` → *Locating the content repo*).
+- Find `relay.yml` there. **If absent**, this is first-run: resolve who's running (git author email/name), create a minimal `relay.yml` registering them (handle seeded from their github; record their git email as the resolver), and note more people are added later via Branch B below.
 
-### Step 2 — Name + frame the project (rule: below 90% → ask)
+### Branch A — Create a project
+
+#### Step A2 — Name + frame the project (rule: below 90% → ask)
 - Ask the **project name** (a slug, e.g. `billing`) and, optionally, its **frame** (one-line mission / scope). A project is a workspace for people to coordinate; the frame is light and rarely changes.
 
-### Step 3 — Scaffold (gated)
+#### Step A3 — Scaffold (gated)
 Create under `projects/<name>/`:
 ```
 project.yml         # members: { <you>: owner }   — you are the first owner
@@ -32,12 +41,48 @@ core/<name>.md      # optional — the frame, if given
 No `index.md` and no `archive/` — progress and "open vs settled" are `digest`'s live (computed) job; decisions live in `decisions/`; thoughts are **never moved** (`thoughts/` is the immutable log). See [ADR-054](docs/adr/054-relay-decision-ledger.md).
 `project.yml` shape: `members:` mapping `<handle>: <role>` (a role may be a single token or a **list** — `[owner, developer]` — for a member who holds several; consumers read it list-aware). **Show the diff. Wait for OK**, then commit + push.
 
-### Step 4 — Report
-Summarize: project created, you registered as owner, next steps (`/relay:register` to add people · `/relay:report` to post the first update).
+#### Step A4 — Report
+Summarize: project created, you registered as owner, next steps (add people via this same skill's Branch B · `/relay:report` to post the first update).
+
+### Branch B — Add a person or role
+
+Add a person to the relay's **structure**: who they are (global roster) and what they are on a project (role).
+
+#### The two layers (don't conflate)
+- **Identity → global `relay.yml`** (one source, stable across projects): name · git · github · optional title.
+- **Role → per-project `project.yml`** (functional, may differ per project): owner / reviewer / developer / …
+
+#### Step B2 — Gather identity
+For the person: **name**, **git email** (the resolution key — matches their commit author; may be several), **github account** (display + link), optional **title** (org position, e.g. "CTO" — NOT a role).
+- **Handle** = the short id-prefix + `@`-routing token. **Default it from the github account**, then it is frozen (a github rename never breaks it). Offer a shorter alias.
+
+#### Step B3 — Write the roster (gated)
+Add to `relay.yml`:
+```yaml
+people:
+  <handle>:
+    name: <name>
+    git: <email>        # resolution key — NOT the github handle (commits carry email)
+    github: <account>
+    title: <title>      # optional
+```
+
+#### Step B4 — Assign a role (if registering into a project)
+Add to `projects/<project>/project.yml`:
+```yaml
+members:
+  <handle>: <role>             # one role
+  <handle2>: [<role>, <role>]  # or several — a member may hold multiple roles
+```
+Role is a **descriptive default, not a lock** — it sets routing defaults (e.g. `@owner`), never gates who may act. A member may hold **one role or a list** (e.g. `[owner, developer]`); role-consumers read it list-aware — `settle`'s owner-check is `owner ∈ roles`, and `@role` routing matches if the role is in the list. **Show the diff. Wait for OK**, then commit + push.
 
 ## Discipline
-- **Gate before writing.** Scaffolding mutates the repo; show it first.
-- **Don't invent members.** `launch` seeds only *you* as owner; others come via `/relay:register`.
+- **Gate before writing.** Scaffolding or roster edits mutate the repo; show the diff first.
+- **Don't invent members.** A fresh project seeds only *you* as owner; others come via Branch B.
+- **Registering is shared metadata, not a permission grant** — anyone may register anyone; it gates nothing (roles are defaults; only `settle` is owner-gated). So "should they register themselves, or may I do it for them?" → either; do it for them freely. The one input that must come *from the person* is their **git resolver email** (must match their commit author, or resolution silently fails) — a shared inbox (`hello@…`) collides across people and is a poor key.
+- **Identity once, role per project** — never re-type identity into `project.yml`; the handle links the two layers.
+- **`git` is the resolver, `github` is display** — git commits carry email, not the github handle.
+- **Handle is frozen** — seed from github, then independent (ids depend on it; it must not follow a github rename).
 - **Pull before, push after** (git protocol). Direct to `main`.
 - **A project is its members coordinating** — keep `core/` light; it is not a campaign (no `position`-style ceremony).
 
@@ -45,12 +90,15 @@ Summarize: project created, you registered as owner, next steps (`/relay:registe
 | Temptation | Why to refuse |
 |---|---|
 | Scaffold without showing the diff | Mutates the repo; gate first |
-| Pre-create empty roles / fake members | Only you (owner) is seeded; use `/relay:register` |
+| Pre-create empty roles / fake members | Only you (owner) is seeded; add people via Branch B |
 | Build a heavy `core/` charter up front | The frame is light; over-framing is `position`-ceremony relay doesn't have |
+| Put a job title where a role goes | `title` is global identity; `role` is per-project — different axes |
+| Use the github handle as the resolver | git commits carry email/name, not github — resolution would fail |
+| Make the role gate actions | Roles are defaults, not locks; anyone may act (except `settle` = owner) |
 
 ## Companion skills
-- **`/relay:register`** — add people + assign roles after the project exists.
-- **`/relay:report`** — post the first update into the new project.
+- **`/relay:report`** — post the first update into the new project, or after adding people.
+- **`/relay:review`** — what registered people then do.
 - **`/nav:compose`** — discipline for any prose you write into `core/`.
 
 ## Communication Style

@@ -7,7 +7,6 @@
 
 ## ▶ Next —— 接下來
 - **reflect:summarize 退役** — Paul 2026-07-14 拍板刪除：No-Op 檢驗不過（模型不裝 skill 也會做完整回顧），護城河最淺（對照 catchup 的三態機器/park 的落檔）。做法：ADR（引 ADR-021 doctor 退役先例）＋移除 SKILL.md＋全套 gate 反向（reflect 版本 bump、README、site map 中英、mirror regen）。**等 elicit 生態系四 phase 落完再動**（避免與在飛 sub-agent 撞 gating surfaces）。
-- **relay:launch＋register 合併案（待 Paul 裁決）** — 兩個結構動詞踩 structure-theatre 剃刀（本體＝建資料夾＋改 yaml，觸發頻率趨近零）；修法候選：register 併入 launch 分支，或雙雙降級為 relay/CLAUDE.md 協定說明。2026-07-14 冗餘掃描提出，未拍板。
 - **Codex Phases 1–5：行為相容編譯** — 讓 build-codex 降轉/剝除 Claude-only 語意，並把 `ratchet_ledger` 兩筆 bump 收回（`blueprints/plans/2026-07-13-codex-compatibility.md`，另一條工作線）
 - **anti-pattern 表 optional sweep** — 34 檔補「Instead — and the tell」欄，機械掃、cheap tier（ADR-069）
 
@@ -19,6 +18,7 @@
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
+2026-07-14：**relay:register 併入 launch**（ADR-078，relay 0.8.0，marketplace 36 skills）——structure-theatre 剃刀裁決（Paul 拍板選 A）：register 的協定內容（身分/角色兩層、handle 凍結、diff-gate）以 Branch B 形式全數保留在 launch 內；降級案（b）因真實價格（format 擴權＋walked-step 改寫，knowledge≠cue 法則否決便宜版）出局。
 2026-07-14：**frame 四鏡人話落地**（ADR-077，frame 0.6.0）——每鏡 protocol 尾端加 walked 落地步（零行話結論+比喻，借 analogize 紀律；禁詞範圍經探針抓漏後擴至整個落地段）。探針 3/4 過（orthogonal/dialectic/graft 落地品質佳）；first-principles 一次禁詞洩漏（已修 spec 歧義）+ 一次未達落地步的冷啟動雜訊,記為 cheap-tier 地板軟點（`docs/findings/2026-07-14-frame-plain-landing-probes.md`）。決策：`thoughts/2026-07-14-frame-plain-landing.md`。
 2026-07-14：**elicit 生態系全線落地**（`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md` · `plans/2026-07-14-elicit-ecosystem.md`）——Phase 1 `shape:survey`（ADR-074）、Phase 2 `shape:probe` + dialectic 橋（ADR-075）、Phase 3 elicit 守門人（ADR-076）、Phase 4 行為實測（`docs/findings/2026-07-14-elicit-ecosystem-probes.md`：路由 15/15、survey/probe 探針 PASS；**守門人探針四輪迭代後記為已知限制**——兩次 wiring fix 各封掉一種實測逃逸、鏈路首次可 fire，但冷啟動 sonnet 0/3 不可靠；實際 elicit 跑 session model，地板≠天花板）。全程 sonnet 執行、判斷席驗收（ADR-067 dispatch tiers 首次全流程實戰）。
 2026-07-13：mattpocock 比較調研、ADR-065 lean description 試點（frame -41%）、ADR-066 out-of-scope ledger、ADR-067 派工分層＋顧問席、ADR-068 Codex 凍結圈範圍仲裁、ADR-069 寫作理論 7 詞、ADR-070 /reflect:park＋catchup 取食順位、三組可用性實測全過。（detail in git log）

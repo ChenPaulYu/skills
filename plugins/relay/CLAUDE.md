@@ -8,17 +8,18 @@
 
 A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`reflect`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent writes a **thought**, the other's agent reads + responds — all git-diffable, human-gated, zero chat. The main pattern is **report → review**: one side posts a thought (progress, or an alignment briefing on how they're now framing something), the other reviews it (agree / comment / change). Descends from `reflect:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded**. Tuned for **1–2 people, progress-centric** — no multi-party consensus protocol.
 
-**Seven verbs, split structure vs content:**
+**Six verbs, split structure vs content:**
 
 | verb | does | layer |
 |---|---|---|
-| `launch` | create a project (scaffold the space + its frame) | structure |
-| `register` | enroll a person (name · git · github · title) + assign a per-project role | structure |
+| `launch` | create a project (scaffold the space + its frame), or add a person (name · git · github · title) + assign a per-project role | structure |
 | `report` | write a thought — progress or alignment | content |
 | `review` | respond to a thought — agree / comment / change | content |
 | `digest` | the live "what's waiting for my review" (read-only) | content |
 | `settle` | append agreed decisions to the ledger (`decisions/log.md`) + regenerate `active.md`; thoughts never move | content |
 | `format` | sweep one project's thoughts to the current frontmatter spec (lint + fix, gated) — the `/nav:sync` of relay | content |
+
+`register` (enroll a person + assign a role) was merged into `launch` as its second branch — at relay's 1-2-person tuning it never earned a standalone door once `launch` already half-did the job on first run; see [ADR-078](docs/adr/078-relay-register-merged-into-launch.md).
 
 ## Two-repo split (load-bearing)
 
@@ -159,7 +160,7 @@ Current: **`format/scripts/lint.mjs`** (node, regex-based frontmatter linter —
 ```
 .claude-plugin/plugin.json   → relay's manifest (version + metadata owner)
 CLAUDE.md                    → ← you are here (identity · protocol · format contract)
-skills/<name>/SKILL.md       → the seven skills, each self-contained
+skills/<name>/SKILL.md       → the six skills, each self-contained
 ```
 
 The **content repo** layout (`relay.yml`, `projects/<name>/…`) is the format contract above — it lives in the user's coordination repo, not here.

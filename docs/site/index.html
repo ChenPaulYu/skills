@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-14 (rev 72)
+  Last audit: 2026-07-14 (rev 73)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -12,7 +12,7 @@
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
     • Six plugins: nav (7 skills) + shape (10 skills) + research (4 skills) +
-      frame (5 skills) + reflect (4 skills) + relay (7 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+      frame (5 skills) + reflect (4 skills) + relay (6 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, plan, do, compose
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), survey (map a decision space in two layers — domain-prior axes
@@ -92,27 +92,28 @@
       accepted in principle, not built. reflect v0.4.0; standalone, cross-project
       (ADR-044; renamed from manage, ADR-056; park added, ADR-070).
     • relay skills: launch (scaffold a project's space + frame; bootstraps the
-      repo on first run), register (enrol a person — name/git/github/title —
-      + assign a per-project role), report (write a progress or alignment
-      thought), review (respond to a thought addressed to you — agree /
-      comment / change; your review IS the resolution, no consensus
-      protocol needed), digest (the live "what's waiting for my review",
-      read-only), settle (append agreed thoughts to the decision ledger +
-      regenerate active.md; thoughts never move), format (sweep one
-      project's thoughts to the current frontmatter spec — lint + fix,
-      gated; the /nav:sync of relay, ADR-055). report/review collapsed from
-      the earlier report/reply pairing (ADR-053). relay v0.7.0; git-native,
+      repo on first run; second branch enrols a person — name/git/github/title
+      — + assigns a per-project role, register merged in, ADR-078), report
+      (write a progress or alignment thought), review (respond to a thought
+      addressed to you — agree / comment / change; your review IS the
+      resolution, no consensus protocol needed), digest (the live "what's
+      waiting for my review", read-only), settle (append agreed thoughts to
+      the decision ledger + regenerate active.md; thoughts never move),
+      format (sweep one project's thoughts to the current frontmatter spec —
+      lint + fix, gated; the /nav:sync of relay, ADR-055). report/review
+      collapsed from the earlier report/reply pairing (ADR-053); register
+      collapsed into launch as a branch (ADR-078). relay v0.8.0; git-native,
       human-gated, multi-person, standalone (ADR-050).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 77 ADRs in docs/adr/ — 001..077 with cross-supersede / refine links
+    • 78 ADRs in docs/adr/ — 001..078 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay format +
       digest, reflect summarize; nav sync deliberately NOT tiered (it authors the
       headers everything else reads; rule ⑧ — describing IS diagnosing).
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (37 flat skills: nav-* / reflect-* / relay-* /
+    • Codex mirror: .agents/skills/ (36 flat skills: nav-* / reflect-* / relay-* /
       research-* / shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
@@ -132,7 +133,41 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ CHANGED in this revision (rev 72)
+  ⚠ CHANGED in this revision (rev 73)
+    1. `relay:register` merged into `relay:launch` as an explicit second branch;
+       `register` retired as a standalone skill (ADR-078). Both verbs were
+       structural bookkeeping (open a small YAML file, add/edit an entry, diff-
+       gate, commit) with no judgment work comparable to report/review/settle,
+       and `launch` already half-absorbed `register`'s job on first run (its
+       Step 1 bootstraps relay.yml for the running user). At relay's stated
+       1-2-person, progress-centric tuning, `register`'s residue below that
+       was too thin to earn a second maintained frontmatter, registration
+       footprint, and trigger surface — the same razor ADR-021 applied to
+       nav:doctor's retirement. A second option (demote both to a documented
+       CLAUDE.md protocol, no skill door) was priced out: relay.yml/
+       project.yml shapes are part of one of only three real *contracts* in
+       this repo (ADR-071), so demoting the write discipline to prose risks
+       either a format-linter extension or the knowledge≠cue failure mode
+       this repo's own findings caught four times on 2026-07-14 alone
+       (docs/findings/2026-07-14-elicit-ecosystem-probes.md; ADR-076; ADR-077).
+       `launch`'s Process now splits after the shared repo-location step into
+       Branch A (create a project) and Branch B (add a person / assign a
+       role) — register's protocol content (identity vs role layers, the
+       relay.yml/project.yml shapes, handle-freeze, "registering is metadata
+       not a permission grant") carries over verbatim as Branch B, byte-for-
+       byte where load-bearing. relay 7 → 6 skills; relay v0.7.0 → 0.8.0.
+       Updated: plugins/relay/skills/launch/SKILL.md (merged), plugins/relay/
+       skills/register/ (deleted), plugins/relay/.claude-plugin/plugin.json
+       (version + description), plugins/relay/CLAUDE.md (roster row + merge
+       note), README.md (skills list + plugin-table row), DOMAINS.relay +
+       relay graph-node blurb (both langs, v0.8.0 + merge mention), CONV.relay
+       (register row dropped, launch row extended), platforms/codex/
+       descriptions.json (relay-register removed, relay-launch rewritten),
+       Codex mirror regenerated (relay-register directory drops, relay-launch
+       mirror rebuilt) via scripts/build-codex.mjs. Marketplace-wide skill
+       count 37 → 36; Codex mirror 37 → 36 flat skills. ADR count 77 → 78.
+
+  ⚠ FIXED in rev 72 (kept for history)
     1. `frame`'s four reasoning lenses gain a mandatory PLAIN-LANGUAGE LANDING
        step (ADR-077; frame v0.5.2 → 0.6.0) — first-principles, orthogonal,
        dialectic, and graft each produce a forced structure optimized for
@@ -1757,10 +1792,9 @@ const DOMAINS = {
   relay: {
     layer: 'foundation',
     path: 'plugins/relay/',
-    blurb: {en:'Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. 7 verbs (launch · register · report · review · digest · settle · format), structure vs content. git-native, human-gated, multi-person. Standalone. v0.7.0; see relay/CLAUDE.md + ADR-050 + the design doc docs/design/relay.md.', zh:'透過雙方的 agent、在共用 git repo 上非同步協調 —— 結構化更新、不是聊天;決定收斂成明示共識;討論跨週期接續。7 個 verb(launch · register · report · review · digest · settle · format),分結構與內容。git-native、人把關、多人。獨立。v0.7.0;見 relay/CLAUDE.md + ADR-050 + 設計文件 docs/design/relay.md。'},
+    blurb: {en:'Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. 6 verbs (launch · report · review · digest · settle · format), structure vs content — launch now also enrols people + assigns roles (register merged in, ADR-078). git-native, human-gated, multi-person. Standalone. v0.8.0; see relay/CLAUDE.md + ADR-050 + the design doc docs/design/relay.md.', zh:'透過雙方的 agent、在共用 git repo 上非同步協調 —— 結構化更新、不是聊天;決定收斂成明示共識;討論跨週期接續。6 個 verb(launch · report · review · digest · settle · format),分結構與內容 —— launch 現在也負責註冊人員 + 指派角色(register 併入,ADR-078)。git-native、人把關、多人。獨立。v0.8.0;見 relay/CLAUDE.md + ADR-050 + 設計文件 docs/design/relay.md。'},
     files: [
-      ['/relay:launch', '', {en:'Create a project — scaffold its space (project.yml · thoughts/ · archive/ · index.md) + frame; bootstraps the repo (relay.yml roster) on first run. Structure verb. ADR-050.', zh:'開一個專案 —— scaffold 空間(project.yml · thoughts/ · archive/ · index.md)+ frame;第一次跑順手 bootstrap repo(relay.yml 名冊)。結構 verb。ADR-050。'}],
-      ['/relay:register', '', {en:'Enrol a person — name · git (resolver) · github (display) · optional title into the global roster, + a per-project role. Identity global, role per-project; handle seeded from github then frozen. ADR-050.', zh:'註冊一個人 —— name · git(解析鍵)· github(顯示)· 選配 title 進全域名冊,+ 每專案角色。身分全域、角色每專案;handle 從 github 帶入後凍結。ADR-050。'}],
+      ['/relay:launch', '', {en:'Create a project — scaffold its space (project.yml · thoughts/ · archive/ · index.md) + frame; bootstraps the repo (relay.yml roster) on first run. Branch 2: enrol a person — name · git (resolver) · github (display) · optional title into the global roster, + a per-project role; identity global, role per-project, handle seeded from github then frozen. Structure verb. ADR-050, ADR-078 (register merged in).', zh:'開一個專案 —— scaffold 空間(project.yml · thoughts/ · archive/ · index.md)+ frame;第一次跑順手 bootstrap repo(relay.yml 名冊)。分支二:註冊一個人 —— name · git(解析鍵)· github(顯示)· 選配 title 進全域名冊,+ 每專案角色;身分全域、角色每專案,handle 從 github 帶入後凍結。結構 verb。ADR-050、ADR-078(register 併入)。'}],
       ['/relay:report', '', {en:'Write a thought — progress (done · doing · next) or alignment (a briefing on how you now frame something); subject + body, @-route what needs the counterpart. Append-only, gated. ADR-053.', zh:'寫一個 thought —— 進度(做完 · 在做 · 接下來)或對齊(把你現在怎麼想一件事講清楚的 briefing);subject + body,用 @ 標出需要對方的。只增、gated。ADR-053。'}],
       ['/relay:review', '', {en:'Respond to a thought — agree / comment / change, linking the thought you answer by id. With 1-2 people your review resolves it; an agree is what settle later pins as a decision. No @-set. Append-only, gated. ADR-053.', zh:'回應一個 thought —— agree / comment / change,用 id 連結你回的那則。1-2 人時你 review 即定案;agree 之後由 settle 釘成決定。無 @-set。只增、gated。ADR-053。'}],
       ['/relay:digest', '', {en:'The live "what\'s waiting for my review" — sweep the thought-stream for thoughts that @-mention you and you haven\'t answered. Read-only; the awareness entry (agent runs it on open). ADR-053.', zh:'即時的「誰在等我 review」—— 掃 thought 串流,找出 @ 到你、你還沒回的。唯讀;awareness 入口(agent 開場跑)。ADR-053。'}],
@@ -1776,7 +1810,7 @@ const CB_NODES = [
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Read external sources with intent — argument anatomy for any document making a claim. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.5.0.', zh:'有意圖地閱讀外部資料 —— 對任何論證型文件做論證解剖。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.5.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize's discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.0. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.0。由 think 改名。'}},
   {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on; the one reflexive, cross-cutting family. 4 skills, two read/write pairs: catchup · park (the cursor) and summarize · observe (the knowledge); planned 5th retro (evaluative-on-process, not built). Standalone, cross-project. v0.4.0; renamed from manage (ADR-056); park added (ADR-070).', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象;唯一反身、橫切的家族。4 個 skill,兩對讀寫:catchup · park(管游標)與 summarize · observe(管知識);規劃中的第 5 個 retro(評價過程,尚未蓋)。獨立、跨專案。v0.4.0;由 manage 改名(ADR-056);新增 park(ADR-070)。'}},
-  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates (not chat), decisions to explicit consensus, threaded across cycles. 7 verbs (launch · register · report · review · digest · settle · format). git-native, multi-person, standalone. v0.7.0.', zh:'透過雙方 agent、在共用 git repo 上非同步協調 —— 結構化更新(非聊天)、決定收斂成明示共識、跨週期接續。7 個 verb(launch · register · report · review · digest · settle · format)。git-native、多人、獨立。v0.7.0。'}},
+  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates (not chat), decisions to explicit consensus, threaded across cycles. 6 verbs (launch · report · review · digest · settle · format); launch also enrols people + assigns roles (register merged in, ADR-078). git-native, multi-person, standalone. v0.8.0.', zh:'透過雙方 agent、在共用 git repo 上非同步協調 —— 結構化更新(非聊天)、決定收斂成明示共識、跨週期接續。6 個 verb(launch · report · review · digest · settle · format);launch 也負責註冊人員 + 指派角色(register 併入,ADR-078)。git-native、多人、獨立。v0.8.0。'}},
 ];
 const CB_EDGES = [['shape','nav']];
 
