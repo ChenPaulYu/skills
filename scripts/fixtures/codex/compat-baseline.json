@@ -60,7 +60,7 @@
       ".agents/skills/shape-elicit/SKILL.md": 1,
       ".agents/skills/shape-mockup/SKILL.md": 1,
       ".agents/skills/shape-reconcile/SKILL.md": 1,
-      "AGENTS.md": 1
+      "AGENTS.md": 2
     },
     "agent_call": {
       ".agents/skills/nav-audit/SKILL.md": 1,
@@ -173,6 +173,15 @@
       "reason": "invocation-direction-law (W5) inventory (ADR-072): root CLAUDE.md gains a new Authoring-conventions bullet ('Invocation category is visible, not just in frontmatter') that names the existing disable-model-invocation frontmatter flag a second time in prose, alongside ADR-065's existing mention in the same file. No new capability — the same flag already counted once, now referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
       "bumps": {
         "disable_model_invocation": {
+          "AGENTS.md": "1->2"
+        }
+      }
+    },
+    {
+      "date": "2026-07-14",
+      "reason": "ADR-081 extends ADR-067's dispatch-tiers convention with a pre-dispatch proposal gate, borrowing ADR-040's batch-proposal-gate pattern by name — root CLAUDE.md's dispatch-tiers bullet names 'AskUserQuestion-style ask' a second time, alongside the existing nav:plan Stage-4 mention already counted once. No new capability — the same interactive_choice mechanism, referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "bumps": {
+        "ask_user_question": {
           "AGENTS.md": "1->2"
         }
       }

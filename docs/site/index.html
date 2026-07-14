@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-14 (rev 75)
+  Last audit: 2026-07-14 (rev 76)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -112,7 +112,7 @@
       human-gated, multi-person, standalone (ADR-050).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 80 ADRs in docs/adr/ — 001..080 with cross-supersede / refine links
+    • 81 ADRs in docs/adr/ — 001..081 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay format +
@@ -140,7 +140,38 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ CHANGED in this revision (rev 75)
+  ⚠ CHANGED in this revision (rev 76)
+    1. Dispatch tiers convention (ADR-067) gains a PROPOSAL GATE + RETURN
+       SELF-REPORT + USER OVERRIDE PRECEDENCE (ADR-081; root CLAUDE.md only —
+       no plugin version bump, no skill file touched). Paul's complaint:
+       dispatch to a cheap-tier sub-agent was invisible — no signal before
+       ("did I agree to this tier?") or after ("did a weaker model actually do
+       this?") — so trust had nowhere to anchor. Rejected fix: name skills per
+       tier (e.g. a `nav:do-sonnet` variant) — fails ADR-067's own role-not-
+       model naming law and the N+1 problem (every dispatch-shaped skill would
+       need a tier-suffixed twin). Adopted fix borrows two patterns already
+       proven in this repo rather than inventing a third: ADR-040's batch
+       proposal gate (propose once, the user's nod starts the batch — never
+       per-agent, with a downgrade valve: "don't ask again for this line of
+       work" → drops to self-report-only) before dispatch, and ADR-071's
+       tolerant-reader self-report (mirrored to the write side: a fixed
+       report line `⚙ 派工:執行=<tier> ×N|判斷+驗收=session model`, no
+       dispatch = no line, plus a standard commit-message clause) after. User
+       tier designations always beat the default, scoped to their wording; a
+       persistent override is a written CLAUDE.md rule, never a remembered
+       conversation fact. The report line is required to live in the
+       dispatcher's own walked reporting step, not a footer or reference
+       note — citing docs/observations/2026-07-14-knowledge-is-not-cue-walked
+       -steps-fire.md's same-day finding that footer-only rules don't fire.
+       `shape:build`'s existing Scheduling batch gate (ADR-040) already
+       complies and is cited as prior art, not a change target. Updated: root
+       CLAUDE.md (★ Dispatch tiers bullet amended in place, one compact
+       sub-passage — rule ① single owner, no second dispatch bullet),
+       docs/adr/081-dispatch-proposal-gate-and-self-report.md (new). No
+       skill/plugin version changed; no SKILL.md touched (follow-up, not
+       blocking). ADR count 80 → 81.
+
+  ⚠ FIXED in rev 75 (kept for history)
     1. `research` GENERALIZED from "paper" to "argument document" (ADR-080; research
        v0.5.0 → 0.6.0). research was the marketplace's only family organized around
        an academic object — its own CLAUDE.md and all four SKILL.md descriptions
