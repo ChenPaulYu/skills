@@ -8,7 +8,7 @@ The old protection was **content-only** ("core admits only user-confirmed direct
 
 ## Gate 1 — the door (who)
 
-**Only an explicitly-summoned `shape-position` writes core. Zero exceptions** — not `nav-do`, not `build`, not `align`, not ambient conversation, and not sub-agents (doubly excluded: they inherit no canon authority from their parent). This is information hiding applied to canon authority: the "does this belong in core?" judgment lives in exactly one verb, so no other verb can get it wrong. It is ADR-038's clause at the canon layer — the verb is the only door for its deliverable.
+**Only an explicitly-summoned `shape-position` writes core. Zero exceptions** — not `nav-do`, not `build`, not `align`, not ambient conversation, and not workers (doubly excluded: they inherit no canon authority from their parent). This is information hiding applied to canon authority: the "does this belong in core?" judgment lives in exactly one verb, so no other verb can get it wrong. It is ADR-038's clause at the canon layer — the verb is the only door for its deliverable.
 
 **Orthogonality** (field-proved): a ship whose content the user ratified 30 seconds earlier passes *timing* but fails *door* when written by `nav-do` — one case, two gates, two verdicts; the axes measure different things.
 

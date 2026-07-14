@@ -2,18 +2,14 @@
   "id": "shape-setup",
   "mode": "generated",
   "file": ".agents/skills/shape-setup/SKILL.md",
-  "expect": [
-    {
-      "category": "disable_model_invocation",
-      "contains": "disable-model-invocation"
-    },
-    {
-      "category": "claude_built_in",
-      "contains": "Claude Code's built-in"
-    },
-    {
-      "category": "claude_init",
-      "contains": "/init"
-    }
+  "reject": [
+    { "category": "disable_model_invocation" },
+    { "category": "claude_built_in" },
+    { "category": "claude_init" }
+  ],
+  "expect_text": [
+    "> **Explicitly invoked only.**",
+    "This is *not* the codebase-architecture pass a later architecture-enrichment command produces",
+    "- **vs a host's built-in architecture-enrichment command** — that kind of command documents an *existing codebase*"
   ]
 }

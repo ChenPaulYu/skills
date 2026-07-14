@@ -73,7 +73,7 @@ Read the in-scope documents and extract every claim that leans on a source:
 
 Record each as: *claim (verbatim) · named source · file:line · wording strength* (see Discipline).
 This scan is grep + read work over the user's own repo — do it directly; dispatch parallel
-sub-agents only when the corpus is large (one per document set, each returning the same record
+workers only when the corpus is large (one per document set, each returning the same record
 shape).
 
 ### Step 3 — Trace each citation upstream

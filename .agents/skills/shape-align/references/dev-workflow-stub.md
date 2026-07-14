@@ -9,7 +9,7 @@ A new project feels un-smooth not because the skills don't trigger, but because 
 2. **The `blueprints/` tree** — so artifact-relative triggers ("update the plan", "where are we") have something real to act on.
 3. **A communication directive** — language + style. Skill SKILL.md files carry their own `Communication Style`, but that only loads *when a skill fires*; between skill invocations the agent drifts to its default. The project's always-loaded `AGENTS.md` is the only surface that holds the line every turn.
 
-This file is the block for part 1 + 3 (part 2 is the tree itself, per `blueprints-spec.md`). Sentinel-delimited so it's idempotent and survives a later `/init` regeneration — re-running setup/align replaces only between the markers. Fill the pointers to where this project keeps its board/plans/map; **drop rows the archetype never uses** (a pure library may never run `shape-mockup`).
+This file is the block for part 1 + 3 (part 2 is the tree itself, per `blueprints-spec.md`). Sentinel-delimited so it's idempotent and survives a later architecture-enrichment regeneration — re-running setup/align replaces only between the markers. Fill the pointers to where this project keeps its board/plans/map; **drop rows the archetype never uses** (a pure library may never run `shape-mockup`).
 
 ```markdown
 <!-- shape:dev-workflow start -->

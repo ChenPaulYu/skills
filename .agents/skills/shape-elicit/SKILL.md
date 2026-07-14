@@ -69,7 +69,7 @@ Same engine, object reversed: instead of converging *what X should be* (forward)
 - **Drill until the bug reframes from local to structural.** Not "the grip is misplaced" but "drag is a saturated dimension". The reframe **is** the diagnosis.
 - **Canonical first fork for a "feature feels off after building" symptom: direction-wrong (structural) vs incomplete (local).** Is the feature's *direction* wrong (its premise/scope doesn't hold → redesign) or is it just *unfinished* (the concept's fine, a usage path was left undefined → finish it)? The two route to opposite next actions — redesign (`shape-mockup` / forward-elicit) vs finish (`nav-plan` → `shape-build`) — so naming which it is *is* the decision. When the symptom is a half-built feature riddled with cases that don't add up, this is the fork to erect first. **But don't guess at the holes in conversation if they were never enumerated** — *offer* (guarded, one-shot, never auto-call) to run `shape-dogfood` first: it dogfoods the built feature against the user intents and reports the coverage gaps pre-sorted by layer (missing intent = direction · dead-end scenario = incomplete), and that layer-tag is this fork's first input. Grilling a feature's logic from memory is the imagination trap; dogfood grounds it in a hands-on session with the real build before you judge.
 
-Then it flows the same way: converge to a one-line cause + fix-direction; if the fix is visual/structural, hand to `shape-mockup` (e.g. "right-click vs visible button"); hand the rebuild to `shape-build` or a sub-agent (inject↔check). **Read-only — elicit finds the cause and converges the fix-direction; it does not edit the code in place.**
+Then it flows the same way: converge to a one-line cause + fix-direction; if the fix is visual/structural, hand to `shape-mockup` (e.g. "right-click vs visible button"); hand the rebuild to `shape-build` or a worker (inject↔check). **Read-only — elicit finds the cause and converges the fix-direction; it does not edit the code in place.**
 
 *(Diagnosis vs `nav-audit`: audit is a broad, unconditional smell-scan it runs* for *you; diagnostic-mode elicit is a* specific *flaw you point at and root-cause* with *it.)*
 
@@ -90,7 +90,7 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 
    **Post-landing, once the thought is written — the existing branches:**
    - **The decision turned out render-decidable** (the grill revealed the real fork is *look / layout / how entities relate* — a thing a rendered artifact would settle better than more words) → offer `shape-mockup` to converge it by a real interactive artifact. The drill's job (finding the *right* question) is done; mockup answers it. Don't keep grilling verbally what a render would settle.
-   - **The decision is a recorded `thoughts/` doc** → offer `shape-align` to triage it into `plan.md` (now/next/later). `align` is collaborative, so it runs **in-session** (it needs this conversation's decision), not a clean sub-agent.
+   - **The decision is a recorded `thoughts/` doc** → offer `shape-align` to triage it into `plan.md` (now/next/later). `align` is collaborative, so it runs **in-session** (it needs this conversation's decision), not a clean worker.
    - **The decision is itself a small, concrete, decided build** (the thought isn't a principle to track but a thing to make now) → offer the execution route: `nav-do` (small · holdable-in-head — its check bracket is the point) or `nav-plan` (bigger / wants a written plan), ADR-028. Weaker edge than mockup's (elicit usually lands a *principle*, not a build) — only when the thought really is a concrete change.
 
    **Guarded + one-shot:** show the branch(es) that apply, always include a "just leave it, I'll continue later" opt-out, offer the align branch only when a `blueprints/` board exists (or scaffolding one is wanted), and skip the whole thing during rapid-fire elicits — don't nag. Offers, not calls — skills don't invoke each other.
@@ -98,7 +98,7 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 ## Output
 
 - A `blueprints/thoughts/<date>-<topic>.md` doc: the decided principle (or the confirmed root cause + fix-direction), progressively disclosed (an agent grasps it from `head -12`).
-- That doc is now input to `shape-align` (triaged into the plan) and eventually `nav-plan` (grounded into code). In diagnostic mode it also hands off to `shape-mockup` (visual fix) and `shape-build` or a sub-agent (the rebuild).
+- That doc is now input to `shape-align` (triaged into the plan) and eventually `nav-plan` (grounded into code). In diagnostic mode it also hands off to `shape-mockup` (visual fix) and `shape-build` or a worker (the rebuild).
 - A guarded, one-shot **offer** to run `shape-align` and triage the new thought in (Step 6) — never an auto-call.
 - Most of the volley itself is discarded — the residue is the one-line principle/cause, not the back-and-forth.
 

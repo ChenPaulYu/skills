@@ -6,14 +6,15 @@
     {
       "category": "ask_user_question",
       "contains": "AskUserQuestion"
-    },
-    {
-      "category": "agent_call",
-      "contains": "Invoke `Agent`"
-    },
-    {
-      "category": "subagent_type",
-      "contains": "subagent_type=general-purpose"
     }
+  ],
+  "reject": [
+    { "category": "agent_call" },
+    { "category": "subagent_type" },
+    { "category": "model_sonnet" }
+  ],
+  "expect_text": [
+    "Dispatch a scoped executor worker.",
+    "The dispatched worker defaults to cheap tier (the mechanical-tier executor role)"
   ]
 }

@@ -32,7 +32,7 @@ The split criterion is one line: **does the phase ever need to talk to the user?
 
 ## The capability slot
 
-The concurrent dispatch facility is **named, not hardcoded** (same pattern as browser-verify): a workflow/pipeline engine where the harness provides one (named default); plain parallel sub-agents otherwise; **no facility → run fully sequential (the default loop). Degrade parallelism, never the gates.**
+The concurrent dispatch facility is **named, not hardcoded** (same pattern as browser-verify): a workflow/pipeline engine where the harness provides one (named default); plain parallel workers otherwise; **no facility → run fully sequential (the default loop). Degrade parallelism, never the gates.**
 
 ## The price, paid knowingly (decided 2026-06-11)
 

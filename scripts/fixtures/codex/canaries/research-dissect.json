@@ -2,10 +2,10 @@
   "id": "research-dissect",
   "mode": "generated",
   "file": ".agents/skills/research-dissect/SKILL.md",
-  "expect": [
-    {
-      "category": "subagent_protocol",
-      "contains": "sub-agent"
-    }
+  "reject": [
+    { "category": "subagent_protocol" }
+  ],
+  "expect_text": [
+    "dispatch a **worker** to read and dissect it"
   ]
 }

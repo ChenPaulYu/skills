@@ -40,18 +40,18 @@
     },
     {
       "id": "worker_dispatch",
-      "status": "planned",
-      "summary": "Codex lowering for Agent dispatch, subagent_type, and sub-agent protocol claims."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1)."
     },
     {
       "id": "explicit_invocation_only",
-      "status": "planned",
-      "summary": "Codex lowering for disable-model-invocation semantics."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#lowerFrontmatter strips disable-model-invocation from Codex frontmatter and injects an explicit body-level invocation-policy paragraph near the top of the skill. Ratcheted to zero across all generated output (codex-compatibility Phase 1)."
     },
     {
       "id": "mechanical_model_tier",
-      "status": "planned",
-      "summary": "Codex lowering for Claude-only model tier metadata."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#lowerFrontmatter strips model: sonnet from Codex frontmatter and injects an execution-tier note (delegate to the configured executor role where available, else run inline and report the degradation); lowerWorkerProse also rewrites remaining body-prose mentions of the removed field. Ratcheted to zero across all generated output (codex-compatibility Phase 1)."
     },
     {
       "id": "browser_verify",
@@ -60,8 +60,8 @@
     },
     {
       "id": "project_guidance",
-      "status": "planned",
-      "summary": "Codex lowering for Claude-specific project priming references."
+      "status": "lowered",
+      "summary": "scripts/lib/codex-compat.mjs#createProjectGuidanceLowerer moves the existing CLAUDE.md->AGENTS.md + namespace-flatten rewrites here and adds /init-assumption softening (Claude Code's built-in /init -> generic architecture-enrichment phrasing, no Claude-only command claim). claude_built_in and claude_init categories ratcheted to zero (codex-compatibility Phase 1)."
     },
     {
       "id": "session_open_awareness",

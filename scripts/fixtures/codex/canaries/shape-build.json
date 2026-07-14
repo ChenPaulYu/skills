@@ -4,10 +4,6 @@
   "file": ".agents/skills/shape-build/SKILL.md",
   "expect": [
     {
-      "category": "disable_model_invocation",
-      "contains": "disable-model-invocation"
-    },
-    {
       "category": "browser_verifier",
       "contains": "browser-verifier"
     },
@@ -15,5 +11,13 @@
       "category": "agent_browser",
       "contains": "agent-browser"
     }
+  ],
+  "reject": [
+    { "category": "disable_model_invocation" },
+    { "category": "model_sonnet" }
+  ],
+  "expect_text": [
+    "> **Explicitly invoked only.**",
+    "Dispatched item agents (serial or the parallel tail) default to cheap tier (the mechanical-tier executor role)"
   ]
 }

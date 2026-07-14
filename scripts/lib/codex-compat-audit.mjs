@@ -19,6 +19,18 @@ const BASELINE_PATH = join("scripts", "fixtures", "codex", "compat-baseline.json
 const CANARY_DIR = join("scripts", "fixtures", "codex", "canaries");
 const NEGATIVE_DIR = join("scripts", "fixtures", "codex", "negative");
 
+/**
+ * Scans arbitrary already-compiled text (not necessarily on disk yet) against the manifest's
+ * denylisted-token rule list — the single owner of that list stays `platforms/codex/manifest.json`;
+ * this is the shared entry point so `scripts/lib/codex-compat.mjs`'s `detectUnsupported` doesn't
+ * duplicate it.
+ */
+export function scanTextForDenylist(root, file, content) {
+  const manifest = readJson(join(root, MANIFEST_PATH));
+  const rules = manifest.denylisted_unresolved_tokens.map(compileRule);
+  return scanContent(file, content, rules);
+}
+
 export function runCodexCompatAudit(root) {
   const manifest = readJson(join(root, MANIFEST_PATH));
   const rules = manifest.denylisted_unresolved_tokens.map(compileRule);
@@ -180,14 +192,22 @@ function validateCanaries(root, audit) {
     const fixture = readJson(fixtureFile);
     const errors = fixture.mode === "synthetic"
       ? validateSyntheticCanary(audit.rules, fixture)
-      : validateGeneratedCanary(audit, fixture);
+      : validateGeneratedCanary(root, audit, fixture);
     results.push({ id: fixture.id || basename(fixtureFile), errors });
   }
 
   return summarizeFixtureResults("canary", results);
 }
 
-function validateGeneratedCanary(audit, fixture) {
+/**
+ * `expect` proves an OLD (still-unlowered) token remains — used for capabilities Phase 1 doesn't
+ * touch (browser_verify, ask_user_question, session_open_awareness).
+ * `reject` proves a token Phase 1 DOES lower no longer appears — the negative-space half of "the
+ * compiler actually changed the output" (not just "the old fixture still passes by accident").
+ * `expect_text` proves the NEW Codex-side instruction text is actually present (not just that the
+ * old token is gone) — checked against the compiled file directly, not the audit's finding list.
+ */
+function validateGeneratedCanary(root, audit, fixture) {
   const errors = [];
   const fileFindings = audit.findings.filter((finding) => finding.file === fixture.file);
   for (const expected of fixture.expect || []) {
@@ -200,6 +220,23 @@ function validateGeneratedCanary(audit, fixture) {
       errors.push(
         `generated canary ${fixture.id} is missing ${expected.category} containing "${expected.contains}" in ${fixture.file}`,
       );
+    }
+  }
+  for (const rejected of fixture.reject || []) {
+    const matches = fileFindings.filter((finding) => finding.category === rejected.category);
+    if (matches.length) {
+      errors.push(
+        `generated canary ${fixture.id} unexpectedly still matches ${rejected.category} in ${fixture.file}`,
+      );
+    }
+  }
+  if (fixture.expect_text?.length) {
+    const filePath = join(root, fixture.file);
+    const content = existsSync(filePath) ? readFileSync(filePath, "utf8") : null;
+    for (const text of fixture.expect_text) {
+      if (content == null || !content.includes(text)) {
+        errors.push(`generated canary ${fixture.id} is missing expected text "${text}" in ${fixture.file}`);
+      }
     }
   }
   return errors;

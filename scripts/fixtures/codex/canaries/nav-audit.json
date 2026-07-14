@@ -2,14 +2,13 @@
   "id": "nav-audit",
   "mode": "generated",
   "file": ".agents/skills/nav-audit/SKILL.md",
-  "expect": [
-    {
-      "category": "agent_call",
-      "contains": "multiple `Agent` calls"
-    },
-    {
-      "category": "subagent_type",
-      "contains": "subagent_type=Explore"
-    }
+  "reject": [
+    { "category": "agent_call" },
+    { "category": "subagent_type" },
+    { "category": "model_sonnet" }
+  ],
+  "expect_text": [
+    "one message, multiple read-only explorer worker dispatches — read-only is the point",
+    "Reconnaissance workers default to cheap tier (the mechanical-tier executor role)"
   ]
 }

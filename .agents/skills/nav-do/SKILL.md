@@ -12,7 +12,7 @@ Make a small, already-decided, **behaviour-changing** change happen **now** — 
 
 nav had a gap. Look at what each verb does to code: `audit` is read-only; `sync` writes file headers and `map` writes the codebase map, not feature code; `plan` writes a `plan.md` artifact, not code; `refactor` executes — but **behaviour-preserving** only (verbatim move + rewire, tests stay identical, rule ⑥). **Nothing executed a behaviour-*changing* change.** So for a feature too small to deserve `plan.md`, you were stuck choosing between the heavy plan path and dropping all deep-module discipline. `do` fills that slot.
 
-It is **the same execution discipline a sub-agent already carries when `nav-plan` (Stage 4) or `nav-refactor` (Step 8) dispatches it** — the inject↔check hand-off ([ADR-008](docs/adr/008-inject-check-at-handoff.md)) — but **promoted to a standalone, plan-less verb** you can summon directly. It is not `refactor` widened: refactor moves without changing behaviour; `do` changes behaviour. They are twins across one seam (preserve vs change).
+It is **the same execution discipline a worker already carries when `nav-plan` (Stage 4) or `nav-refactor` (Step 8) dispatches it** — the inject↔check hand-off ([ADR-008](docs/adr/008-inject-check-at-handoff.md)) — but **promoted to a standalone, plan-less verb** you can summon directly. It is not `refactor` widened: refactor moves without changing behaviour; `do` changes behaviour. They are twins across one seam (preserve vs change).
 
 ## Scope
 
@@ -95,7 +95,7 @@ Write the behaviour-changing code, placed per the inject pass. Keep moves and ad
 
 ## Companion skills
 
-- **`nav-plan`** — when the change is big/ambiguous enough to warrant a written, reviewed plan first; its Stage-4 sub-agent dispatch follows *this* skill's discipline.
+- **`nav-plan`** — when the change is big/ambiguous enough to warrant a written, reviewed plan first; its Stage-4 worker dispatch follows *this* skill's discipline.
 - **`nav-refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`nav-audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
 - **`nav-sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and run **`nav-map`** if that role change is worth reflecting in the codebase map).

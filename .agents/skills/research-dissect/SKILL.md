@@ -80,15 +80,15 @@ Before dissecting, ask once: **"What is your own claim, in one sentence? I'll ad
 
 Ask only once even in batch mode — the same claim frames all documents. If the user doesn't have one, skip the implications section in all notes.
 
-### Step 3 — Dispatch a sub-agent per document (inject → read → check)
+### Step 3 — Dispatch a worker per document (inject → read → check)
 
-For each document, dispatch a **sub-agent** to read and dissect it. Do not read the document yourself — the sub-agent does that. Process documents sequentially in batch mode (one sub-agent at a time, finish before starting the next).
+For each document, dispatch a **worker** to read and dissect it. Do not read the document yourself — the worker does that. Process documents sequentially in batch mode (one worker at a time, finish before starting the next).
 
-#### inject (→) — what to put in the sub-agent prompt
+#### inject (→) — what to put in the worker prompt
 
-A fresh sub-agent has no skill context. Inject everything it needs upfront:
+A fresh worker has no skill context. Inject everything it needs upfront:
 
-1. **The document** — absolute file path (or URL). Tell the sub-agent to read it fully before dissecting; do not skim. **Identity first**: confirm title / authors / venue from the document's own content before anything else — never trust the filename or the user's assumption about what the file is. If it is not the expected document, say so prominently at the top of the note and dissect what it actually is.
+1. **The document** — absolute file path (or URL). Tell the worker to read it fully before dissecting; do not skim. **Identity first**: confirm title / authors / venue from the document's own content before anything else — never trust the filename or the user's assumption about what the file is. If it is not the expected document, say so prominently at the top of the note and dissect what it actually is.
 2. **The 5-layer framework** — paste verbatim:
    - **Gap**: be specific about the failure mode. "Existing methods are insufficient" is not a gap. "CoT agents cannot verify their own reasoning outputs and cannot acquire new information after generation" is a gap.
    - **Claim**: one or two sentences. If the document has multiple claims, pick the central one and note the others.
@@ -96,14 +96,14 @@ A fresh sub-agent has no skill context. Inject everything it needs upfront:
    - **Evidence**: for every experiment — (a) name the task, describe it in 1-2 plain sentences; (b) name the comparison baseline; (c) state the result (numbers); (d) explain why this result supports the claim. Flag what the evidence *doesn't* prove.
    - **Conclusion**: what do the authors want the reader to believe at the end? Quote or closely paraphrase their own words from the final section.
 3. **The output format template** — paste verbatim from the Output format section below.
-4. **The user's claim** (if provided) — tell the sub-agent to add an "Implications for [claim]" section covering: what this document leaves open, whether its Evidence supports/contradicts/is orthogonal to the claim, whether its Mechanism overlaps. If no claim, omit this section.
-5. **Existing citations (forensic mode only)** — paste every way the user's documents currently cite this work (exact numbers, quotes, claimed roles, with file:line). Instruct the sub-agent to verify each against the document — does it exist? exact value? metric definition? missing conditions or qualifiers (which split / subset / population, selection effects, mixed metrics)? — and to produce the "Citation verification" output section, ending with the corrected sentence-form the user should cite instead.
+4. **The user's claim** (if provided) — tell the worker to add an "Implications for [claim]" section covering: what this document leaves open, whether its Evidence supports/contradicts/is orthogonal to the claim, whether its Mechanism overlaps. If no claim, omit this section.
+5. **Existing citations (forensic mode only)** — paste every way the user's documents currently cite this work (exact numbers, quotes, claimed roles, with file:line). Instruct the worker to verify each against the document — does it exist? exact value? metric definition? missing conditions or qualifiers (which split / subset / population, selection effects, mixed metrics)? — and to produce the "Citation verification" output section, ending with the corrected sentence-form the user should cite instead.
 6. **Discipline rules** — paste the bullets from the Discipline section below.
-7. **Return instruction** — tell the sub-agent its final text IS the dissection note (raw markdown). It should return nothing else.
+7. **Return instruction** — tell the worker its final text IS the dissection note (raw markdown). It should return nothing else.
 
-#### check (←) — before accepting the sub-agent's output
+#### check (←) — before accepting the worker's output
 
-Read the returned note before saving. STOP and ask the sub-agent to revise if any of the following fails:
+Read the returned note before saving. STOP and ask the worker to revise if any of the following fails:
 
 - Identity confirmed from the document's content (title / authors / venue) — and any mismatch with the expected document flagged at the top?
 - All five sections present (Gap, Claim, Mechanism, Evidence, Conclusion)?
@@ -117,9 +117,9 @@ If the note passes all checks, proceed to save.
 
 ### Step 4 — Implications for your claim (if claim provided)
 
-This section is produced by the sub-agent (injected in Step 3 item 4). No separate action needed by the main agent — it arrives in the returned note.
+This section is produced by the worker (injected in Step 3 item 4). No separate action needed by the main agent — it arrives in the returned note.
 
-The sub-agent adds it as the final section of its output:
+The worker adds it as the final section of its output:
 
 > **Implications for [user's claim]**
 >
@@ -127,7 +127,7 @@ The sub-agent adds it as the final section of its output:
 > - Whether their Evidence contradicts, supports, or is orthogonal to your claim.
 > - Whether their Mechanism overlaps with yours — and if so, how yours differs.
 
-Include in the check (←): if a claim was provided and this section is missing or thin, ask the sub-agent to revise before saving.
+Include in the check (←): if a claim was provided and this section is missing or thin, ask the worker to revise before saving.
 
 ### Step 5 — Output
 
