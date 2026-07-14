@@ -269,6 +269,8 @@ Phase 3 is complete only when all nine consumers carry an executable Codex choic
 
 **Gate:** a fresh Codex install can discover the skills and required agent roles; a fresh Claude install produces the same files and behavior as before this project.
 
+> **Phase 6 completion note — 2026-07-14:** The Codex layer is now documented and releasable as an **independent adapter** rather than a phase-labeled migration artifact. `platforms/codex/manifest.json` owns adapter `schema_version=2`, `adapter_release=1.0.0`, release-policy metadata, and the manifest-listed fresh-install smoke fixtures; [ADR-083](docs/adr/083-codex-adapter-independent-release.md) ratifies the contract while [`docs/codex-compatibility.md`](docs/codex-compatibility.md) remains the maintained operational guide. README + the bilingual site install card now point fresh users at the supported global adapter path, `node scripts/build-codex.mjs --sync-global --profile <name> --dedupe-global-roots`, which installs only compiled flat skills plus the runtime artifacts that profile actually needs into `~/.codex/`, never raw Claude-source copies. Release acceptance is executable: `node scripts/validate-codex-skills.mjs --release-smoke` passes **2/2** (fresh Codex HOME install + fresh Claude-side manifests/metadata preservation), `--compat-audit` is green at **20/20** canaries, **16/16** negatives, **3/3** hook smokes, **1/1** preservation smokes, **2/2** release smokes, and coverage **36/36**; both `--codex-compat` and the default validator are green; rebuild is deterministic; frozen Claude paths remain unchanged. Evidence is recorded in `docs/findings/2026-07-14-codex-phase6-release-smokes.md`.
+
 ## Critical files
 
 | File | Why it matters | Touched in phase |

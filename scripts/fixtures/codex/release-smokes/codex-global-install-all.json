@@ -1,0 +1,33 @@
+{
+  "id": "codex-global-install-all",
+  "scenario": "codex_global_install",
+  "profile": "all",
+  "dedupe_global_roots": true,
+  "verify_runtime_ownership_conflicts": true,
+  "verify_full_compat_exit": true,
+  "seed_legacy_duplicates": [
+    "nav-plan",
+    "relay-digest"
+  ],
+  "reject_legacy_duplicates": [
+    "nav-plan",
+    "relay-digest"
+  ],
+  "expect_skill_count": 36,
+  "expect_skills": [
+    "nav-plan",
+    "research-dissect",
+    "shape-build",
+    "relay-digest",
+    "reflect-catchup"
+  ],
+  "expect_runtime_files": [
+    ".codex/agents/executor.toml",
+    ".codex/agents/explorer.toml",
+    ".codex/agents/reviewer.toml",
+    ".codex/agents/browser-verifier.toml",
+    ".codex/hooks.json",
+    ".codex/hooks/relay-digest-session-start.mjs"
+  ],
+  "expect_hook_command": "node .codex/hooks/relay-digest-session-start.mjs"
+}

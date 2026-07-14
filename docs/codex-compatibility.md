@@ -2,6 +2,8 @@
 
 > Claude Code plugin files are the frozen source contract. Codex compatibility is a generated projection owned by `platforms/codex/` and `scripts/build-codex.mjs`.
 
+The Codex adapter now releases independently from the Claude marketplace. Its release/schema metadata and fresh-install smoke ownership live in `platforms/codex/manifest.json`; the ratified release contract is [ADR-083](docs/adr/083-codex-adapter-independent-release.md).
+
 ## The rule
 
 Never solve Codex compatibility by weakening or forking the Claude skill. Keep `plugins/**`, `CLAUDE.md`, `.claude-plugin/**`, and `.cursor-plugin/**` unchanged. Translate host-specific syntax and runtime assumptions while preserving the skill's behavioral gates.
@@ -31,11 +33,19 @@ Audit the current projection and global duplicates:
 node scripts/validate-codex-skills.mjs --metadata-audit
 ```
 
-Install one compiled profile into the canonical global Agent Skills root:
+Install one compiled profile into the supported global Codex roots:
 
 ```bash
-node scripts/build-codex.mjs --sync-global --profile build
+node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
 ```
+
+This command now:
+
+- creates `~/.agents/skills/` if it does not exist;
+- installs only compiled flat skills for the selected profile;
+- installs only the required Codex runtime artifacts for that profile into `~/.codex/` (portable role templates, generated browser verifier, lifecycle hook files when needed);
+- records a receipt and prunes only this generator's stale global copies/runtime artifacts;
+- never copies raw Claude-source skills into Codex roots.
 
 While developing this marketplace itself, eliminate project/global overlap entirely:
 
@@ -43,13 +53,7 @@ While developing this marketplace itself, eliminate project/global overlap entir
 node scripts/build-codex.mjs --sync-global --profile project-only
 ```
 
-For a one-time migration, remove only marketplace-generated duplicates from the older Codex-specific root:
-
-```bash
-node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
-```
-
-The cleanup checks the generated banner before deletion. It does not remove unrelated or hand-authored skills. Re-run the desired global profile after leaving a project that already carries the full mirror.
+`project-only` removes only the generator-owned global copies/runtime artifacts recorded in the receipt, leaving unrelated user files alone. The legacy-root cleanup checks the generated banner before deletion; it does not remove unrelated or hand-authored skills.
 
 ## Translation table
 
@@ -78,6 +82,8 @@ Portable skills speak in roles, not personal model names:
 
 For Paul's Codex environment, the intended mapping is GPT-5.6 for the root supervisor and GPT-5.4 for executor/explorer work. This mapping is Codex-only local/project policy. Until an emitted Codex agent configuration has been verified against the installed client, the adapter must report that the mapping is not runtime-enforced rather than claiming it switched models.
 
+The portable templates live in `platforms/codex/agents/*.toml`; Paul's local mapping remains documented, but non-portable, in `platforms/codex/local/README.md`.
+
 Every delegated work packet carries:
 
 ```text
@@ -100,9 +106,10 @@ The supervisor must inspect the diff and rerun proportionate verification. A wor
 2. Add or update the Codex-only projection rule. Do not edit the generated mirror directly.
 3. Add fixtures for the source signal, generated output, stop boundary, and explicit degradation if needed.
 4. Regenerate with `node scripts/build-codex.mjs`.
-5. Run both audits and the full validator:
+5. Run the release/install checks, both audits, and the full validator:
 
 ```bash
+node scripts/validate-codex-skills.mjs --release-smoke
 node scripts/validate-codex-skills.mjs --metadata-audit
 node scripts/validate-codex-skills.mjs --compat-audit
 node scripts/validate-codex-skills.mjs

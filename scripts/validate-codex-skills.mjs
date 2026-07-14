@@ -56,24 +56,47 @@ const CODEX_PROJECTION = loadCodexProjection(ROOT);
 const errors = [];
 
 function main() {
+  if (process.argv.includes("--release-smoke")) {
+    validateCodexManifestMetadata();
+    const compat = validateCodexCompatPhase0(ROOT, {
+      worktreeFreeze: process.argv.includes("--codex-compat"),
+    });
+    console.log(formatReleaseSmokeSummary(compat.releaseSmokes));
+    if (errors.length || compat.errors.length) {
+      for (const error of errors) console.error(`- ${error}`);
+      for (const error of compat.errors) console.error(`- ${error}`);
+      process.exit(1);
+    }
+    return;
+  }
+
   if (process.argv.includes("--compat-audit")) {
+    validateCodexManifestMetadata();
     const compat = validateCodexCompatPhase0(ROOT);
     console.log(formatCodexCompatAudit(compat));
-    if (compat.errors.length) process.exit(1);
+    if (errors.length || compat.errors.length) {
+      for (const error of errors) console.error(`- ${error}`);
+      process.exit(1);
+    }
     return;
   }
 
   if (process.argv.includes("--coverage-report")) {
+    validateCodexManifestMetadata();
     const compat = validateCodexCompatPhase0(ROOT, {
       worktreeFreeze: process.argv.includes("--codex-compat"),
     });
     console.log(formatCodexCoverageReport(compat.coverage));
-    if (compat.errors.length) process.exit(1);
+    if (errors.length || compat.errors.length) {
+      for (const error of errors) console.error(`- ${error}`);
+      process.exit(1);
+    }
     return;
   }
 
   if (process.argv.includes("--metadata-audit")) {
     const pluginSkills = readPluginSkills();
+    validateCodexManifestMetadata();
     validateCodexProjection(pluginSkills);
     printMetadataAudit(pluginSkills);
     if (errors.length) {
@@ -85,6 +108,7 @@ function main() {
 
   const pluginSkills = readPluginSkills();
   validateClaudeSources(pluginSkills);
+  validateCodexManifestMetadata();
   validateCodexProjection(pluginSkills);
   validateCodexMirror(pluginSkills, ROOT);
   validateGeneratedDrift();
@@ -103,6 +127,61 @@ function main() {
   }
 
   console.log(`Codex/Claude skill compatibility ok: ${pluginSkills.length} plugin skills`);
+}
+
+function validateCodexManifestMetadata() {
+  const manifest = CODEX_PROJECTION.manifest;
+  const releasePolicy = manifest.release_policy;
+
+  if (!/^\d+$/.test(String(manifest.schema_version || ""))) {
+    errors.push(`platforms/codex/manifest.json schema_version must be an integer string, got ${JSON.stringify(manifest.schema_version)}`);
+  }
+  if (!/^\d+\.\d+\.\d+$/.test(String(manifest.adapter_release || ""))) {
+    errors.push(`platforms/codex/manifest.json adapter_release must be independent semver (x.y.z), got ${JSON.stringify(manifest.adapter_release)}`);
+  }
+  if (/phase/i.test(String(manifest.adapter_release || ""))) {
+    errors.push(`platforms/codex/manifest.json adapter_release must not contain phase labels: ${JSON.stringify(manifest.adapter_release)}`);
+  }
+  if (!releasePolicy || typeof releasePolicy !== "object") {
+    errors.push("platforms/codex/manifest.json is missing release_policy");
+    return;
+  }
+  if (releasePolicy.adapter_versioning !== "independent-semver") {
+    errors.push(`platforms/codex/manifest.json release_policy.adapter_versioning must be "independent-semver", got ${JSON.stringify(releasePolicy.adapter_versioning)}`);
+  }
+  if (releasePolicy.schema_versioning !== "increment-on-required-contract-change") {
+    errors.push(`platforms/codex/manifest.json release_policy.schema_versioning must be "increment-on-required-contract-change", got ${JSON.stringify(releasePolicy.schema_versioning)}`);
+  }
+  if (releasePolicy.phase_labels_allowed_in_release !== false) {
+    errors.push("platforms/codex/manifest.json release_policy.phase_labels_allowed_in_release must be false");
+  }
+  if (releasePolicy.docs_owner !== "docs/codex-compatibility.md") {
+    errors.push(`platforms/codex/manifest.json release_policy.docs_owner must be "docs/codex-compatibility.md", got ${JSON.stringify(releasePolicy.docs_owner)}`);
+  } else if (!existsSync(join(ROOT, releasePolicy.docs_owner))) {
+    errors.push(`release_policy.docs_owner path is missing: ${releasePolicy.docs_owner}`);
+  }
+  if (releasePolicy.local_model_mapping_path !== "platforms/codex/local/README.md") {
+    errors.push(`platforms/codex/manifest.json release_policy.local_model_mapping_path must be "platforms/codex/local/README.md", got ${JSON.stringify(releasePolicy.local_model_mapping_path)}`);
+  } else if (!existsSync(join(ROOT, releasePolicy.local_model_mapping_path))) {
+    errors.push(`release_policy.local_model_mapping_path is missing: ${releasePolicy.local_model_mapping_path}`);
+  }
+  if (releasePolicy.public_role_contract !== "portable-roles-local-models") {
+    errors.push(`platforms/codex/manifest.json release_policy.public_role_contract must be "portable-roles-local-models", got ${JSON.stringify(releasePolicy.public_role_contract)}`);
+  }
+
+  const smokePaths = Array.isArray(releasePolicy.fresh_install_smokes) ? releasePolicy.fresh_install_smokes : [];
+  if (smokePaths.length < 2) {
+    errors.push("platforms/codex/manifest.json release_policy.fresh_install_smokes must list the Codex and Claude release smokes");
+  }
+  for (const path of smokePaths) {
+    if (typeof path !== "string" || !path.trim()) {
+      errors.push(`release_policy.fresh_install_smokes contains a non-string entry: ${JSON.stringify(path)}`);
+      continue;
+    }
+    if (!existsSync(join(ROOT, path))) {
+      errors.push(`release_policy.fresh_install_smokes path is missing: ${path}`);
+    }
+  }
 }
 
 function validateCodexProjection(pluginSkills) {
@@ -184,6 +263,15 @@ function printMetadataAudit(pluginSkills) {
   }
   console.log(`- Global duplicate prefixed skills: ${duplicates.length}`);
   for (const [name, paths] of duplicates) console.log(`  ${name}: ${paths.join(" · ")}`);
+}
+
+function formatReleaseSmokeSummary(releaseSmokes) {
+  const lines = ["Codex release smokes", `- Passed: ${releaseSmokes.passed}/${releaseSmokes.total}`];
+  if (releaseSmokes.errors.length) {
+    lines.push("- Errors:");
+    for (const error of releaseSmokes.errors) lines.push(`  ${error}`);
+  }
+  return lines.join("\n");
 }
 
 function readPluginSkills() {

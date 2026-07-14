@@ -97,13 +97,16 @@ export function validateCodexCompatPhase0(root, options = {}) {
   const preservationSmokes = validatePreservationSmokes(root);
   errors.push(...preservationSmokes.errors);
 
+  const releaseSmokes = validateReleaseSmokes(root, audit.manifest);
+  errors.push(...releaseSmokes.errors);
+
   const coverage = validateCodexCoverage(root, audit.manifest);
   errors.push(...coverage.errors);
 
   const frozen = validateFrozenContract(root, audit.manifest, worktreeFreeze);
   errors.push(...frozen.errors);
 
-  return { root, audit, baseline, canaries, negativeTests, browserRuntime, lifecycleHook, hookSmokes, preservationSmokes, coverage, frozen, errors };
+  return { root, audit, baseline, canaries, negativeTests, browserRuntime, lifecycleHook, hookSmokes, preservationSmokes, releaseSmokes, coverage, frozen, errors };
 }
 
 export function formatCodexCompatAudit(result) {
@@ -142,6 +145,7 @@ export function formatCodexCompatAudit(result) {
   lines.push(`Lifecycle hook contract: ${result.lifecycleHook.errors.length ? "FAIL" : "OK"}`);
   lines.push(`Lifecycle hook smokes: ${result.hookSmokes.passed}/${result.hookSmokes.total} ok`);
   lines.push(`Preservation smokes: ${result.preservationSmokes.passed}/${result.preservationSmokes.total} ok`);
+  lines.push(`Release smokes: ${result.releaseSmokes.passed}/${result.releaseSmokes.total} ok`);
   if (result.coverage) {
     lines.push(...formatCodexCoverageSummaryLines(result.coverage));
   }
@@ -654,6 +658,268 @@ function validatePreservationSmokes(root) {
     results.push({ id: fixture.id || basename(fixtureFile), errors: result.errors });
   }
   return summarizeFixtureResults("preservation smoke", results);
+}
+
+function validateReleaseSmokes(root, manifest) {
+  const results = [];
+  const fixtureFiles = manifest?.release_policy?.fresh_install_smokes || [];
+  for (const fixtureFile of fixtureFiles) {
+    const fullPath = join(root, fixtureFile);
+    const fixture = readJson(fullPath);
+    const errors = runReleaseSmokeFixture(root, fixture);
+    results.push({ id: fixture.id || basename(fullPath), errors });
+  }
+  const summary = summarizeFixtureResults("release smoke", results);
+  if (!process.env.CODEX_RELEASE_SMOKE_REGRESSION_CHILD) {
+    const entrypointFixture = fixtureFiles
+      .map((fixtureFile) => readJson(join(root, fixtureFile)))
+      .find((fixture) => fixture.verify_full_compat_exit === true);
+    if (entrypointFixture) summary.errors.push(...validateReleaseSmokeEntrypointRegression(root));
+  }
+  return summary;
+}
+
+function runReleaseSmokeFixture(root, fixture) {
+  if (fixture.scenario === "codex_global_install") {
+    return validateCodexGlobalInstallSmoke(root, fixture);
+  }
+  if (fixture.scenario === "claude_fresh_build") {
+    return validateClaudeFreshBuildSmoke(root, fixture);
+  }
+  return [`unknown release smoke scenario: ${fixture.scenario}`];
+}
+
+function validateCodexGlobalInstallSmoke(root, fixture) {
+  const errors = [];
+  const tempHome = mkdtempSync(join(tmpdir(), "skills-codex-release-home-"));
+  const env = { ...process.env, HOME: tempHome, USERPROFILE: tempHome };
+
+  try {
+    for (const skill of fixture.seed_legacy_duplicates || []) {
+      const sourceDir = join(root, ".agents", "skills", skill);
+      if (!existsSync(join(sourceDir, "SKILL.md"))) {
+        errors.push(`release smoke ${fixture.id} seed skill is missing from repo mirror: ${skill}`);
+        continue;
+      }
+      const legacyDir = join(tempHome, ".codex", "skills", skill);
+      mkdirSync(dirname(legacyDir), { recursive: true });
+      cpSync(sourceDir, legacyDir, { recursive: true });
+    }
+
+    const args = ["scripts/build-codex.mjs", "--sync-global", "--profile", fixture.profile || "all"];
+    if (fixture.dedupe_global_roots) args.push("--dedupe-global-roots");
+    const result = spawnSync(process.execPath, args, {
+      cwd: root,
+      encoding: "utf8",
+      env,
+    });
+    if (result.error || result.status !== 0) {
+      errors.push(`global install smoke build failed: ${summarizeSpawnFailure(result)}`);
+      return errors;
+    }
+
+    const globalSkillsDir = join(tempHome, ".agents", "skills");
+    const receiptPath = join(globalSkillsDir, ".skills-marketplace-codex.json");
+    if (!existsSync(receiptPath)) {
+      errors.push("global install smoke is missing ~/.agents/skills/.skills-marketplace-codex.json");
+      return errors;
+    }
+    const receipt = readJson(receiptPath);
+    if (receipt.profile !== (fixture.profile || "all")) {
+      errors.push(`global install smoke receipt profile drifted: ${JSON.stringify(receipt.profile)}`);
+    }
+    if (typeof fixture.expect_skill_count === "number" && receipt.skills?.length !== fixture.expect_skill_count) {
+      errors.push(`global install smoke receipt skill count drifted: ${receipt.skills?.length ?? "missing"} !== ${fixture.expect_skill_count}`);
+    }
+    if (fixture.verify_runtime_ownership_conflicts === true) {
+      if (!receipt.runtimeOwnership?.files || !receipt.runtimeOwnership?.sessionStartEntry) {
+        errors.push("global install smoke receipt is missing runtime ownership hashes");
+      }
+      errors.push(...validateRuntimeOwnershipConflictSmokes(root));
+    }
+
+    for (const skill of fixture.expect_skills || []) {
+      const skillMd = join(globalSkillsDir, skill, "SKILL.md");
+      if (!existsSync(skillMd)) {
+        errors.push(`global install smoke missing compiled skill: ${skill}`);
+        continue;
+      }
+      const content = readFileSync(skillMd, "utf8");
+      if (!content.includes("GENERATED by scripts/build-codex.mjs from plugins/")) {
+        errors.push(`global install smoke installed a non-generated skill copy: ${skill}`);
+      }
+      const findings = scanTextForDenylist(root, `.agents/skills/${skill}/SKILL.md`, content);
+      if (findings.length) {
+        errors.push(`global install smoke unresolved Claude-only token(s) remain in ${skill}: ${findings.map((item) => item.category).join(", ")}`);
+      }
+    }
+
+    for (const rel of fixture.expect_runtime_files || []) {
+      if (!existsSync(join(tempHome, rel))) {
+        errors.push(`global install smoke missing runtime artifact: ${rel}`);
+      }
+    }
+
+    for (const skill of fixture.reject_legacy_duplicates || []) {
+      if (existsSync(join(tempHome, ".codex", "skills", skill))) {
+        errors.push(`global install smoke kept duplicate legacy skill: .codex/skills/${skill}`);
+      }
+    }
+
+    const hookConfigPath = join(tempHome, ".codex", "hooks.json");
+    if (fixture.expect_hook_command && existsSync(hookConfigPath)) {
+      const config = readJson(hookConfigPath);
+      const entries = config?.hooks?.SessionStart || [];
+      const hasCommand = entries.some((entry) =>
+        Array.isArray(entry?.hooks) &&
+        entry.hooks.some((hook) => hook?.command === fixture.expect_hook_command),
+      );
+      if (!hasCommand) {
+        errors.push(`global install smoke missing SessionStart hook command ${JSON.stringify(fixture.expect_hook_command)}`);
+      }
+    }
+  } finally {
+    rmSync(tempHome, { recursive: true, force: true });
+  }
+
+  return errors;
+}
+
+function validateRuntimeOwnershipConflictSmokes(root) {
+  const errors = [];
+  const firstHome = mkdtempSync(join(tmpdir(), "skills-codex-runtime-conflict-first-"));
+  const editedHome = mkdtempSync(join(tmpdir(), "skills-codex-runtime-conflict-edited-"));
+  try {
+    const firstEnv = { ...process.env, HOME: firstHome, USERPROFILE: firstHome };
+    const userAgent = "name = \"user-executor\"\ndescription = \"preserve me\"\n";
+    const userHookScript = "#!/usr/bin/env node\nprocess.stdout.write(\"user hook\\n\");\n";
+    const userHookConfig = `${JSON.stringify({
+      hooks: {
+        SessionStart: [{
+          matcher: "user-owned",
+          hooks: [{ type: "command", command: SESSION_START_HOOK_COMMAND, timeout: 99 }],
+        }],
+      },
+    }, null, 2)}\n`;
+    writeTextFile(join(firstHome, ".codex", "agents", "executor.toml"), userAgent);
+    writeTextFile(join(firstHome, ".codex", "hooks", "relay-digest-session-start.mjs"), userHookScript);
+    writeTextFile(join(firstHome, ".codex", "hooks.json"), userHookConfig);
+
+    const first = spawnSync(process.execPath, ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"], {
+      cwd: root,
+      encoding: "utf8",
+      env: firstEnv,
+    });
+    if (first.status === 0) errors.push("runtime ownership smoke expected first-install same-name conflict to fail");
+    if (readFileSync(join(firstHome, ".codex", "agents", "executor.toml"), "utf8") !== userAgent) {
+      errors.push("runtime ownership smoke overwrote first-install user executor.toml");
+    }
+    if (readFileSync(join(firstHome, ".codex", "hooks", "relay-digest-session-start.mjs"), "utf8") !== userHookScript) {
+      errors.push("runtime ownership smoke overwrote first-install user hook script");
+    }
+    if (readFileSync(join(firstHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
+      errors.push("runtime ownership smoke overwrote first-install user hooks.json entry");
+    }
+    if (existsSync(join(firstHome, ".agents", "skills", ".skills-marketplace-codex.json"))) {
+      errors.push("runtime ownership smoke wrote a partial receipt before reporting first-install conflict");
+    }
+
+    const editedEnv = { ...process.env, HOME: editedHome, USERPROFILE: editedHome };
+    const install = spawnSync(
+      process.execPath,
+      ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"],
+      { cwd: root, encoding: "utf8", env: editedEnv },
+    );
+    if (install.status !== 0) {
+      errors.push(`runtime ownership smoke setup install failed: ${summarizeSpawnFailure(install)}`);
+      return errors;
+    }
+    const explorerPath = join(editedHome, ".codex", "agents", "explorer.toml");
+    const receiptPath = join(editedHome, ".agents", "skills", ".skills-marketplace-codex.json");
+    const editedExplorer = `${readFileSync(explorerPath, "utf8")}\n# user edit\n`;
+    writeFileSync(explorerPath, editedExplorer);
+    const receiptBefore = readFileSync(receiptPath, "utf8");
+    const prune = spawnSync(
+      process.execPath,
+      ["scripts/build-codex.mjs", "--sync-global", "--profile", "project-only"],
+      { cwd: root, encoding: "utf8", env: editedEnv },
+    );
+    if (prune.status === 0) errors.push("runtime ownership smoke expected modified receipt-owned prune to fail");
+    if (readFileSync(explorerPath, "utf8") !== editedExplorer) {
+      errors.push("runtime ownership smoke changed a user-edited explorer.toml during failed prune");
+    }
+    if (readFileSync(receiptPath, "utf8") !== receiptBefore) {
+      errors.push("runtime ownership smoke changed the receipt during failed prune");
+    }
+  } finally {
+    rmSync(firstHome, { recursive: true, force: true });
+    rmSync(editedHome, { recursive: true, force: true });
+  }
+  return errors;
+}
+
+function validateReleaseSmokeEntrypointRegression(root) {
+  const errors = [];
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-release-entrypoint-"));
+  try {
+    cpSync(root, tempRoot, { recursive: true, filter: (source) => shouldCopyIntoTempRoot(root, source) });
+    const manifestPath = join(tempRoot, MANIFEST_PATH);
+    const manifest = readJson(manifestPath);
+    const capability = manifest.capabilities?.find((item) => item.id === "worker_dispatch");
+    capability.generated_contract_markers.push("__release_smoke_must_fail_on_full_compat_error__");
+    writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+    const result = spawnSync(process.execPath, ["scripts/validate-codex-skills.mjs", "--release-smoke"], {
+      cwd: tempRoot,
+      encoding: "utf8",
+      env: { ...process.env, CODEX_RELEASE_SMOKE_REGRESSION_CHILD: "1" },
+    });
+    if (result.status === 0) {
+      errors.push("release-smoke entrypoint regression: command passed despite a non-release compatibility error");
+    }
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+  return errors;
+}
+
+function validateClaudeFreshBuildSmoke(root, fixture) {
+  const errors = [];
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-claude-release-"));
+  try {
+    cpSync(root, tempRoot, {
+      recursive: true,
+      filter: (source) => shouldCopyIntoTempRoot(root, source),
+    });
+
+    const monitored = fixture.monitored_paths || ["CLAUDE.md", ".claude-plugin", "plugins"];
+    const before = snapshotPaths(tempRoot, monitored);
+    const commands = fixture.commands || [
+      ["scripts/build-manifests.mjs"],
+      ["scripts/validate-codex-skills.mjs", "--metadata-audit"],
+    ];
+
+    for (const args of commands) {
+      const result = spawnSync(process.execPath, args, {
+        cwd: tempRoot,
+        encoding: "utf8",
+        env: { ...process.env, HOME: process.env.HOME, USERPROFILE: process.env.USERPROFILE },
+      });
+      if (result.error || result.status !== 0) {
+        errors.push(`fresh Claude build smoke failed for ${args.join(" ")}: ${summarizeSpawnFailure(result)}`);
+        return errors;
+      }
+    }
+
+    const after = snapshotPaths(tempRoot, monitored);
+    const drift = diffSnapshots(before, after);
+    if (drift.length) {
+      errors.push(`fresh Claude build smoke changed frozen/manifests paths: ${drift.join(", ")}`);
+    }
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+
+  return errors;
 }
 
 function validateCodexCoverage(root, manifest) {
@@ -1487,6 +1753,22 @@ function snapshotAllFiles(root) {
   const files = new Map();
   for (const file of walkFiles(root)) {
     files.set(normalizePath(relative(root, file)), readFileSync(file));
+  }
+  return files;
+}
+
+function snapshotPaths(root, paths) {
+  const files = new Map();
+  for (const relPath of paths) {
+    const fullPath = join(root, relPath);
+    if (!existsSync(fullPath)) continue;
+    if (statSync(fullPath).isDirectory()) {
+      for (const file of walkFiles(fullPath)) {
+        files.set(normalizePath(relative(root, file)), readFileSync(file));
+      }
+      continue;
+    }
+    files.set(normalizePath(relPath), readFileSync(fullPath));
   }
   return files;
 }

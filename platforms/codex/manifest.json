@@ -1,6 +1,18 @@
 {
-  "schema_version": "1",
-  "adapter_release": "0.6.0-phase5-full-roster-gates",
+  "schema_version": "2",
+  "adapter_release": "1.0.0",
+  "release_policy": {
+    "adapter_versioning": "independent-semver",
+    "schema_versioning": "increment-on-required-contract-change",
+    "phase_labels_allowed_in_release": false,
+    "docs_owner": "docs/codex-compatibility.md",
+    "public_role_contract": "portable-roles-local-models",
+    "local_model_mapping_path": "platforms/codex/local/README.md",
+    "fresh_install_smokes": [
+      "scripts/fixtures/codex/release-smokes/codex-global-install-all.json",
+      "scripts/fixtures/codex/release-smokes/claude-fresh-build.json"
+    ]
+  },
   "coverage_policy": {
     "class_definitions": {
       "A": "portable core",

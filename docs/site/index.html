@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-14 (rev 78)
+  Last audit: 2026-07-14 (rev 79)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -112,7 +112,7 @@
       human-gated, multi-person, standalone (ADR-050).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 81 ADRs in docs/adr/ — 001..081 with cross-supersede / refine links
+    • 83 ADRs in docs/adr/ — 001..083 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay format +
@@ -124,9 +124,12 @@
       research-* / shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
-      YAML-safe and within Codex's length limit; scripts/validate-codex-skills.mjs
-      gates Claude Code source frontmatter, Codex mirror drift, AND manifest
-      drift.
+      YAML-safe and within Codex's length limit; `node scripts/build-codex.mjs
+      --sync-global --profile <name> --dedupe-global-roots` is the supported
+      global install path (compiled skills + only the needed runtime artifacts
+      into `~/.codex/`); scripts/validate-codex-skills.mjs gates Claude Code
+      source frontmatter, Codex mirror drift, manifest drift, and fresh-install
+      release smokes (ADR-083).
     • Manifest single-owner: each plugin's .claude-plugin/plugin.json owns its
       name/version/description/author; .cursor-plugin/plugin.json (projection) +
       marketplace.json versions are DERIVED by scripts/build-manifests.mjs and
@@ -140,7 +143,36 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ CHANGED in this revision (rev 78)
+  ⚠ CHANGED in this revision (rev 79)
+    1. Codex adapter Phase 6 completed and released independently (ADR-083) —
+       the Codex layer is now documented and smoke-gated as its own release
+       line instead of a Phase-5 artifact. `platforms/codex/manifest.json`
+       moves from the phase-labeled prerelease string to independent adapter
+       semver (`1.0.0`) plus a release-policy block: schema policy, the
+       maintained guide owner (`docs/codex-compatibility.md`), role-vs-local-
+       model split, and manifest-owned fresh-install smoke fixtures. The
+       supported global Codex install path is no longer "copy
+       .agents/skills by hand": `node scripts/build-codex.mjs --sync-global
+       --profile <name> --dedupe-global-roots` now creates
+       `~/.agents/skills/`, installs only compiled flat skills, syncs only
+       the runtime artifacts that profile needs into `~/.codex/`
+       (portable role templates, generated browser verifier, lifecycle hook
+       files when needed), writes/prunes via the install receipt, and never
+       copies raw Claude-source skills into Codex roots. Fresh-install
+       acceptance is executable, not prose-only: new release smokes prove
+       a clean Codex HOME can install/discover the selected profile plus its
+       required runtime artifacts with no duplicate legacy copies or unresolved
+       Claude-only constructs, and that a fresh Claude-side manifests/metadata
+       pass preserves the frozen source contract unchanged. Updated:
+       docs/adr/083-codex-adapter-independent-release.md (new),
+       docs/codex-compatibility.md, README.md, platforms/codex/manifest.json,
+       scripts/build-codex.mjs, scripts/validate-codex-skills.mjs,
+       scripts/lib/codex-compat-audit.mjs, scripts/fixtures/codex/release-
+       smokes/*, this audit block, and the bilingual install card below.
+       Marketplace-wide skill count unchanged (36); plugin versions unchanged.
+       ADR count: 82 → 83.
+
+  ⚠ FIXED in rev 78 (kept for history)
     1. New skill `nav:tour` (ADR-082; nav 0.8.4 → 0.9.0): a conversational
        walkthrough that grounds a repo's capabilities/flow/rationale/
        constraints (three-tier tolerant evidence read, why-claims labeled
@@ -1633,7 +1665,7 @@
 /plugin install nav@skills        # + shape@skills · research@skills · frame@skills · reflect@skills</code></pre>
       <p class="lede" data-t="install_agy_lede">In <b>Antigravity CLI</b> (<code>agy</code>) — native Claude Code plugin import, same namespace, no conversion. Clone the repo, then:</p>
       <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/research · plugins/frame · plugins/reflect</code></pre>
-      <p class="small muted" data-t="install_codex_note"><b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> need no install step inside this repo — all three auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>; no plugin namespace). For global use, copy the mirror into <code>~/.agents/skills/</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.</p>
+      <p class="small muted" data-t="install_codex_note"><b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> need no install step inside this repo — all three auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>; no plugin namespace). For global use, run <code>node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots</code>: it creates <code>~/.agents/skills/</code>, installs compiled flat skills there, and syncs only the needed runtime artifacts into <code>~/.codex/</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.</p>
       <p class="small muted" data-t="install_more">Two more routes: the <a href="https://skills.sh/" target="_blank">skills.sh</a> CLI (<code>npx skills add ChenPaulYu/skills</code> — pick the prefixed skill set) and, for Cursor, the native plugin form (each plugin ships a <code>.cursor-plugin/plugin.json</code>; symlink into <code>~/.cursor/plugins/local/</code>). Full guides: <a href="https://github.com/ChenPaulYu/skills#install" target="_blank">README → Install</a>.</p>
       <p class="small muted" data-t="install_note">Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.</p>
     </section>
@@ -1740,7 +1772,7 @@ const T = {
     install_title: 'Install — one source tree, five agents',
     install_lede: 'Two channels: <b>Claude Code</b> and <b>agy</b> import the plugins natively (namespaced <code>/&lt;plugin&gt;:&lt;verb&gt;</code>); <b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> auto-discover the flat mirror <code>.agents/skills/</code>. Shortcut for any harness — tell your agent: <i>“Fetch and follow instructions from <code>https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md</code>”</i>. Or by hand, in Claude Code:',
     install_agy_lede: 'In <b>Antigravity CLI</b> (<code>agy</code>) — native Claude Code plugin import, same namespace, no conversion. Clone the repo, then:',
-    install_codex_note: '<b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> need no install step inside this repo — all three auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>; no plugin namespace). For global use, copy the mirror into <code>~/.agents/skills/</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.',
+    install_codex_note: '<b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> need no install step inside this repo — all three auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>; no plugin namespace). For global use, run <code>node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots</code>: it creates <code>~/.agents/skills/</code>, installs compiled flat skills there, and syncs only the needed runtime artifacts into <code>~/.codex/</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.',
     install_more: 'Two more routes: the <a href="https://skills.sh/" target="_blank">skills.sh</a> CLI (<code>npx skills add ChenPaulYu/skills</code> — pick the prefixed skill set) and, for Cursor, the native plugin form (each plugin ships a <code>.cursor-plugin/plugin.json</code>; symlink into <code>~/.cursor/plugins/local/</code>). Full guides: <a href="https://github.com/ChenPaulYu/skills#install" target="_blank">README → Install</a>.',
     install_note: 'Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.',
     arch_title: 'Architecture — three layers, one container',
@@ -1817,7 +1849,7 @@ const T = {
     install_title: '安裝 —— 單一源碼樹,五個 agent',
     install_lede: '兩條管道:<b>Claude Code</b> 與 <b>agy</b> 原生匯入 plugin(命名空間 <code>/&lt;plugin&gt;:&lt;verb&gt;</code>);<b>Codex</b>、<b>opencode</b>、<b>Cursor</b> 自動偵測扁平鏡像 <code>.agents/skills/</code>。任何 harness 的捷徑 —— 跟你的 agent 說:<i>「Fetch and follow instructions from <code>https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md</code>」</i>。或手動,在 Claude Code:',
     install_agy_lede: '在 <b>Antigravity CLI</b>(<code>agy</code>)—— 原生匯入 Claude Code plugin,命名空間相同,無需轉換。先 clone 本 repo,然後:',
-    install_codex_note: '<b>Codex</b>、<b>opencode</b>、<b>Cursor</b> 在本 repo 內皆無需安裝步驟 —— 三者都會自動偵測生成的扁平鏡像 <code>.agents/skills/</code>(<code>nav:audit</code> → <code>nav-audit</code>;無 plugin 命名空間)。要全域使用,把鏡像複製到 <code>~/.agents/skills/</code>。見 <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>。',
+    install_codex_note: '<b>Codex</b>、<b>opencode</b>、<b>Cursor</b> 在本 repo 內皆無需安裝步驟 —— 三者都會自動偵測生成的扁平鏡像 <code>.agents/skills/</code>(<code>nav:audit</code> → <code>nav-audit</code>;無 plugin 命名空間)。要全域使用,執行 <code>node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots</code>:它會建立 <code>~/.agents/skills/</code>、把編譯後的 flat skills 裝進去,並只把需要的 runtime artifact 同步到 <code>~/.codex/</code>。見 <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>。',
     install_more: '另外兩條路:<a href="https://skills.sh/" target="_blank">skills.sh</a> CLI(<code>npx skills add ChenPaulYu/skills</code> —— 選有前綴那套 skill),以及 Cursor 的原生 plugin 形式(每個 plugin 都附 <code>.cursor-plugin/plugin.json</code>;symlink 到 <code>~/.cursor/plugins/local/</code>)。完整指南:<a href="https://github.com/ChenPaulYu/skills#install" target="_blank">README → Install</a>。',
     install_note: '想在這個 marketplace 本身上迭代?用本機絕對路徑取代 GitHub handle —— 見 <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>。',
     arch_title: '架構 —— 三層、一個容器',

@@ -1,0 +1,18 @@
+{
+  "id": "claude-fresh-build",
+  "scenario": "claude_fresh_build",
+  "monitored_paths": [
+    "CLAUDE.md",
+    ".claude-plugin",
+    "plugins"
+  ],
+  "commands": [
+    [
+      "scripts/build-manifests.mjs"
+    ],
+    [
+      "scripts/validate-codex-skills.mjs",
+      "--metadata-audit"
+    ]
+  ]
+}

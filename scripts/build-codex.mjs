@@ -17,6 +17,7 @@
  * Reads: node:fs · node:path (plugins/ tree · plugins/<p>/CLAUDE.md)
  */
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync, existsSync, statSync, cpSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -50,6 +51,7 @@ const BROWSER_VERIFIER_SOURCE = join(ROOT, "plugins", "shape", "agents", "browse
 const BROWSER_VERIFIER_DEST = join(CODEX_AGENTS_DIR, "browser-verifier.toml");
 const CODEX_HOOKS_SOURCE_DIR = join(ROOT, "platforms", "codex", "hooks");
 const CODEX_HOOKS_CONFIG_SOURCE = join(CODEX_HOOKS_SOURCE_DIR, "hooks.json");
+const PORTABLE_CODEX_AGENTS_SOURCE_DIR = join(ROOT, "platforms", "codex", "agents");
 const PROJECTION = loadCodexProjection(ROOT);
 const SESSION_START_HOOK_COMMAND = "node .codex/hooks/relay-digest-session-start.mjs";
 const BROWSER_VERIFIER_DESCRIPTION_OLD =
@@ -306,6 +308,249 @@ function buildHooks() {
   }
 }
 
+function consumerFlatNames(capabilityId) {
+  const capability = PROJECTION.manifest.capabilities?.find((item) => item.id === capabilityId);
+  if (!capability) return new Set();
+  return new Set(
+    (capability.contract_consumers || [])
+      .map((consumer) => {
+        const match = consumer.match(/^\.agents\/skills\/([^/]+)\/SKILL\.md$/);
+        return match ? match[1] : null;
+      })
+      .filter(Boolean),
+  );
+}
+
+const WORKER_DISPATCH_CONSUMERS = consumerFlatNames("worker_dispatch");
+const MECHANICAL_TIER_CONSUMERS = consumerFlatNames("mechanical_model_tier");
+const BROWSER_VERIFY_CONSUMERS = consumerFlatNames("browser_verify");
+const SESSION_OPEN_CONSUMERS = consumerFlatNames("session_open_awareness");
+
+function needsAnyConsumer(selectedSet, consumers) {
+  for (const flat of selectedSet) {
+    if (consumers.has(flat)) return true;
+  }
+  return false;
+}
+
+function runtimePlanForSelection(selected) {
+  const selectedSet = new Set(selected);
+  const plan = {
+    portableAgents: [],
+    generatedAgents: [],
+    hookFiles: [],
+  };
+
+  const needsWorkerDispatch = needsAnyConsumer(selectedSet, WORKER_DISPATCH_CONSUMERS);
+  const needsMechanicalTier = needsAnyConsumer(selectedSet, MECHANICAL_TIER_CONSUMERS);
+  const needsBrowserVerify = needsAnyConsumer(selectedSet, BROWSER_VERIFY_CONSUMERS);
+  const needsSessionOpen = needsAnyConsumer(selectedSet, SESSION_OPEN_CONSUMERS);
+
+  if (needsWorkerDispatch || needsMechanicalTier) {
+    plan.portableAgents.push("executor.toml");
+  }
+  if (needsWorkerDispatch) {
+    plan.portableAgents.push("explorer.toml", "reviewer.toml");
+  }
+  if (needsBrowserVerify) {
+    plan.generatedAgents.push("browser-verifier.toml");
+  }
+  if (needsSessionOpen) {
+    plan.hookFiles.push("hooks.json", "hooks/relay-digest-session-start.mjs");
+  }
+
+  return plan;
+}
+
+function copyFileEnsuringParent(source, dest) {
+  mkdirSync(dirname(dest), { recursive: true });
+  cpSync(source, dest, { force: true });
+}
+
+function sha256(content) {
+  return createHash("sha256").update(content).digest("hex");
+}
+
+function fileHash(path) {
+  return sha256(readFileSync(path));
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function sessionStartEntriesWithOwnedCommand(config) {
+  const entries = Array.isArray(config?.hooks?.SessionStart) ? config.hooks.SessionStart : [];
+  return entries.filter(isOwnedSessionStartEntry);
+}
+
+function runtimeFileSpecs(homeCodexDir, runtimePlan) {
+  const specs = [];
+  for (const file of runtimePlan.portableAgents || []) {
+    specs.push({
+      rel: `agents/${file}`,
+      source: join(PORTABLE_CODEX_AGENTS_SOURCE_DIR, file),
+      dest: join(homeCodexDir, "agents", file),
+    });
+  }
+  for (const file of runtimePlan.generatedAgents || []) {
+    specs.push({ rel: `agents/${file}`, source: join(CODEX_AGENTS_DIR, file), dest: join(homeCodexDir, "agents", file) });
+  }
+  for (const file of runtimePlan.hookFiles || []) {
+    if (file === "hooks.json") continue;
+    const rel = file.replace(/^hooks\//, "");
+    specs.push({ rel: `hooks/${rel}`, source: join(CODEX_HOOKS_SOURCE_DIR, rel), dest: join(homeCodexDir, "hooks", rel) });
+  }
+  return specs;
+}
+
+function previousRuntimeFilePaths(previousPlan) {
+  return [
+    ...(previousPlan.portableAgents || []).map((file) => `agents/${file}`),
+    ...(previousPlan.generatedAgents || []).map((file) => `agents/${file}`),
+    ...(previousPlan.hookFiles || []).filter((file) => file !== "hooks.json"),
+  ];
+}
+
+function preflightGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership = {}) {
+  const conflicts = [];
+  const ownedFiles = ownership.files || {};
+  const nextSpecs = runtimeFileSpecs(homeCodexDir, nextPlan);
+  const nextPaths = new Set(nextSpecs.map((spec) => spec.rel));
+
+  for (const spec of nextSpecs) {
+    if (!existsSync(spec.dest)) continue;
+    const current = fileHash(spec.dest);
+    const expected = ownedFiles[spec.rel];
+    const source = fileHash(spec.source);
+    if (expected ? current !== expected : current !== source) {
+      conflicts.push(`Codex runtime ownership conflict: ~/.codex/${spec.rel} is not the receipt-owned version; preserving it unchanged`);
+    }
+  }
+
+  for (const rel of previousRuntimeFilePaths(previousPlan)) {
+    if (nextPaths.has(rel) || !ownedFiles[rel]) continue;
+    const dest = join(homeCodexDir, rel);
+    if (existsSync(dest) && fileHash(dest) !== ownedFiles[rel]) {
+      conflicts.push(`Codex runtime ownership conflict: ~/.codex/${rel} was modified after install; preserving it unchanged`);
+    }
+  }
+
+  const wantsHook = (nextPlan.hookFiles || []).includes("hooks.json");
+  const previouslyOwnedHook = ownership.sessionStartEntry;
+  const hooksConfigPath = join(homeCodexDir, "hooks.json");
+  const config = existsSync(hooksConfigPath) ? JSON.parse(readFileSync(hooksConfigPath, "utf8")) : {};
+  const commandEntries = sessionStartEntriesWithOwnedCommand(config);
+  if (previouslyOwnedHook) {
+    if (commandEntries.length !== 1 || sha256(canonicalJson(commandEntries[0])) !== previouslyOwnedHook) {
+      conflicts.push("Codex runtime ownership conflict: ~/.codex/hooks.json marketplace SessionStart entry was modified or removed; preserving it unchanged");
+    }
+  } else if (wantsHook && commandEntries.length) {
+    conflicts.push("Codex runtime ownership conflict: ~/.codex/hooks.json already contains the marketplace SessionStart command without an ownership receipt; preserving it unchanged");
+  }
+
+  if (conflicts.length) throw new Error(conflicts.join("\n"));
+}
+
+function nextRuntimeOwnership(runtimePlan) {
+  const files = {};
+  for (const spec of runtimeFileSpecs("", runtimePlan)) files[spec.rel] = fileHash(spec.source);
+  let sessionStartEntry = null;
+  if ((runtimePlan.hookFiles || []).includes("hooks.json")) {
+    const sourceConfig = JSON.parse(readFileSync(CODEX_HOOKS_CONFIG_SOURCE, "utf8"));
+    const entries = sessionStartEntriesWithOwnedCommand(sourceConfig);
+    if (entries.length !== 1) throw new Error("Codex hooks source must contain exactly one owned SessionStart entry");
+    sessionStartEntry = sha256(canonicalJson(entries[0]));
+  }
+  return { files, sessionStartEntry };
+}
+
+function pruneOwnedGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership = {}) {
+  const nextPortable = new Set(nextPlan.portableAgents || []);
+  const nextGenerated = new Set(nextPlan.generatedAgents || []);
+  const nextHooks = new Set(nextPlan.hookFiles || []);
+  const ownedFiles = ownership.files || {};
+
+  for (const agent of previousPlan.portableAgents || []) {
+    if (nextPortable.has(agent)) continue;
+    const stale = join(homeCodexDir, "agents", agent);
+    if (ownedFiles[`agents/${agent}`] && existsSync(stale)) rmSync(stale, { force: true });
+  }
+  for (const agent of previousPlan.generatedAgents || []) {
+    if (nextGenerated.has(agent)) continue;
+    const stale = join(homeCodexDir, "agents", agent);
+    if (ownedFiles[`agents/${agent}`] && existsSync(stale)) rmSync(stale, { force: true });
+  }
+
+  const shouldKeepHooks = nextHooks.size > 0;
+  if (!shouldKeepHooks && ownership.sessionStartEntry) {
+    const hooksConfigPath = join(homeCodexDir, "hooks.json");
+    if (existsSync(hooksConfigPath)) {
+      const config = JSON.parse(readFileSync(hooksConfigPath, "utf8"));
+      const hooks = config?.hooks && typeof config.hooks === "object" ? config.hooks : {};
+      const strippedHooks = stripOwnedSessionStartHooks(hooks);
+      if (strippedHooks === null) {
+        const nextConfig = { ...config };
+        delete nextConfig.hooks;
+        if (Object.keys(nextConfig).length === 0) rmSync(hooksConfigPath, { force: true });
+        else writeFileSync(hooksConfigPath, `${JSON.stringify(nextConfig, null, 2)}\n`);
+      } else {
+        const nextConfig = { ...config, hooks: strippedHooks };
+        if (nextConfig.hooks && Object.keys(nextConfig.hooks).length === 0) {
+          delete nextConfig.hooks;
+        }
+        if (Object.keys(nextConfig).length === 0) rmSync(hooksConfigPath, { force: true });
+        else writeFileSync(hooksConfigPath, `${JSON.stringify(nextConfig, null, 2)}\n`);
+      }
+    }
+  }
+  for (const hookFile of previousPlan.hookFiles || []) {
+    if (nextHooks.has(hookFile)) continue;
+    if (hookFile === "hooks.json" || !ownedFiles[hookFile]) continue;
+    const stale = join(homeCodexDir, hookFile);
+    if (existsSync(stale)) rmSync(stale, { force: true });
+  }
+}
+
+function installOwnedGlobalRuntime(homeCodexDir, runtimePlan) {
+  let installed = 0;
+  const homeAgentsDir = join(homeCodexDir, "agents");
+  const homeHooksDir = join(homeCodexDir, "hooks");
+
+  for (const file of runtimePlan.portableAgents) {
+    copyFileEnsuringParent(join(PORTABLE_CODEX_AGENTS_SOURCE_DIR, file), join(homeAgentsDir, file));
+    installed++;
+  }
+  for (const file of runtimePlan.generatedAgents) {
+    copyFileEnsuringParent(join(CODEX_AGENTS_DIR, file), join(homeAgentsDir, file));
+    installed++;
+  }
+
+  if (runtimePlan.hookFiles.length) {
+    mkdirSync(homeHooksDir, { recursive: true });
+    const sourceConfig = JSON.parse(readFileSync(CODEX_HOOKS_CONFIG_SOURCE, "utf8"));
+    const existingConfig = existsSync(join(homeCodexDir, "hooks.json"))
+      ? JSON.parse(readFileSync(join(homeCodexDir, "hooks.json"), "utf8"))
+      : {};
+    const mergedConfig = mergeOwnedSessionStartHook(existingConfig, sourceConfig);
+    writeFileSync(join(homeCodexDir, "hooks.json"), `${JSON.stringify(mergedConfig, null, 2)}\n`);
+    installed++;
+
+    for (const hookFile of runtimePlan.hookFiles) {
+      if (hookFile === "hooks.json") continue;
+      const rel = hookFile.replace(/^hooks\//, "");
+      copyFileEnsuringParent(join(CODEX_HOOKS_SOURCE_DIR, rel), join(homeHooksDir, rel));
+      installed++;
+    }
+  }
+
+  return installed;
+}
+
 function mergeOwnedSessionStartHook(existingConfig, sourceConfig) {
   const merged = structuredClone(existingConfig && typeof existingConfig === "object" ? existingConfig : {});
   const mergedHooks = merged.hooks && typeof merged.hooks === "object" ? merged.hooks : {};
@@ -331,14 +576,31 @@ function mergeOwnedSessionStartHook(existingConfig, sourceConfig) {
 
 function stripOwnedSessionStartHooks(entry) {
   if (!entry || typeof entry !== "object") return entry;
-  if (!Array.isArray(entry.hooks)) return entry;
+  if ("hooks" in entry && Array.isArray(entry.hooks)) {
+    const hooks = entry.hooks.filter(
+      (hook) => !(hook?.type === "command" && hook?.command === SESSION_START_HOOK_COMMAND),
+    );
+    if (hooks.length === entry.hooks.length) return entry;
+    if (hooks.length === 0) return null;
+    return { ...entry, hooks };
+  }
 
-  const hooks = entry.hooks.filter(
-    (hook) => !(hook?.type === "command" && hook?.command === SESSION_START_HOOK_COMMAND),
-  );
-  if (hooks.length === entry.hooks.length) return entry;
-  if (hooks.length === 0) return null;
-  return { ...entry, hooks };
+  if ("SessionStart" in entry) {
+    const sessionEntries = Array.isArray(entry.SessionStart) ? entry.SessionStart : [];
+    const keptEntries = sessionEntries
+      .map((sessionEntry) => stripOwnedSessionStartHooks(sessionEntry))
+      .filter((sessionEntry) => sessionEntry !== null);
+    const hooksObject = { ...entry };
+    if (keptEntries.length === 0) {
+      delete hooksObject.SessionStart;
+    } else {
+      hooksObject.SessionStart = keptEntries;
+    }
+    if (Object.keys(hooksObject).length === 0) return null;
+    return hooksObject;
+  }
+
+  return entry;
 }
 
 function isOwnedSessionStartEntry(entry) {
@@ -385,11 +647,7 @@ function syncGlobal() {
   const HOME = process.env.HOME || process.env.USERPROFILE;
   if (!HOME) return;
   const globalDir = join(HOME, ".agents", "skills");
-  if (!existsSync(globalDir)) {
-    console.log(`\n→ Global directory ~/.agents/skills does not exist. Skipping global sync.`);
-    return;
-  }
-
+  const homeCodexDir = join(HOME, ".codex");
   console.log(`\n→ Syncing to global directory: ${globalDir}`);
   const profileName = argValue("--profile") ?? "all";
   const available = PLUGINS.flatMap((plugin) =>
@@ -400,9 +658,20 @@ function syncGlobal() {
   const selected = selectProfile(PROJECTION, profileName, available);
   const selectedSet = new Set(selected);
   const receiptPath = join(globalDir, ".skills-marketplace-codex.json");
-  const previous = existsSync(receiptPath)
-    ? JSON.parse(readFileSync(receiptPath, "utf8")).skills ?? []
-    : [];
+  const previousReceipt = existsSync(receiptPath)
+    ? JSON.parse(readFileSync(receiptPath, "utf8"))
+    : {};
+  const runtimePlan = runtimePlanForSelection(selected);
+  preflightGlobalRuntime(
+    homeCodexDir,
+    previousReceipt.runtime ?? {},
+    runtimePlan,
+    previousReceipt.runtimeOwnership ?? {},
+  );
+
+  mkdirSync(globalDir, { recursive: true });
+  mkdirSync(join(homeCodexDir, "agents"), { recursive: true });
+  const previous = previousReceipt.skills ?? [];
   for (const flat of available) {
     if (isGeneratedMarketplaceSkill(join(globalDir, flat, "SKILL.md"))) previous.push(flat);
   }
@@ -437,9 +706,23 @@ function syncGlobal() {
       }
     }
   }
-  writeFileSync(receiptPath, `${JSON.stringify({ profile: profileName, skills: selected }, null, 2)}\n`);
+
+  pruneOwnedGlobalRuntime(
+    homeCodexDir,
+    previousReceipt.runtime ?? {},
+    runtimePlan,
+    previousReceipt.runtimeOwnership ?? {},
+  );
+  const runtimeInstalled = installOwnedGlobalRuntime(homeCodexDir, runtimePlan);
+  const runtimeOwnership = nextRuntimeOwnership(runtimePlan);
+
+  writeFileSync(
+    receiptPath,
+    `${JSON.stringify({ profile: profileName, skills: selected, runtime: runtimePlan, runtimeOwnership }, null, 2)}\n`,
+  );
   console.log(`✓ Synced ${syncedCount} compiled skills with Codex profile "${profileName}".`);
   console.log("✓ Unprefixed Claude-source skills were not copied; Codex installs only the compiled names.");
+  console.log(`✓ Synced ${runtimeInstalled} Codex runtime artifact(s) into ${join(HOME, ".codex")}.`);
 
   if (process.argv.includes("--dedupe-global-roots")) {
     const legacyRoot = join(HOME, ".codex", "skills");
