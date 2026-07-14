@@ -165,13 +165,13 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 
 ## Anti-patterns (refuse these, even if tempting)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| "While I'm moving this, let me also rename `foo` to `bar`" | Rename is its own commit — coupling it hides bugs |
-| "This logic could be simpler — let me clean it up while I move it" | That's improvement, not refactor. Do it in a separate session after the move lands |
-| "The tests don't cover this — I'll just hope it works" | Browser pass it. If you can't, narrow the refactor scope to what IS covered |
-| "I'll skip the typecheck this once, I know it'll pass" | The discipline IS the value. Skipping erodes trust in your own work |
-| "Let me batch 5 steps and test at the end" | When it breaks, you can't bisect. Each step gets its own gate |
+| "While I'm moving this, let me also rename `foo` to `bar`" | Make the rename its own commit — coupling it with a move hides bugs. Tell: the diff has a rename and a relocation tangled in the same hunk. |
+| "This logic could be simpler — let me clean it up while I move it" | Save the cleanup for a separate session after the move lands — that's improvement, not refactor. Tell: a "moved" file's line count or logic no longer matches the original verbatim. |
+| "The tests don't cover this — I'll just hope it works" | Browser pass it, or narrow the refactor scope to what IS covered. Tell: about to call the move done with no way to demonstrate the behaviour is unchanged. |
+| "I'll skip the typecheck this once, I know it'll pass" | Run the typecheck anyway — the discipline IS the value, and skipping erodes trust in your own work. Tell: reaching for "I know it'll pass" as the reason to skip a check that takes seconds. |
+| "Let me batch 5 steps and test at the end" | Gate each step individually — when a batched change breaks, you can't bisect it. Tell: five moves are staged before the first test run. |
 
 ## Discipline (do not skip)
 

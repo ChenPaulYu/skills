@@ -86,19 +86,19 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 
 ## Anti-patterns (refuse these — all field-tested failures)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Write unvetted details in canon voice | The original sin; cost a three-doc demotion surgery. When in doubt → thoughts. |
-| Admit items by importance, not altitude | Sediment list. Important ≠ same layer; run the test per claim. |
-| Let canon depend on links to be complete | Self-containment broken = the doc is mis-written, by definition. |
-| Rewrite the whole doc per feeding | Surgical edits only; the evolution log is the campaign's memory. |
-| Treat one input mode as the norm | The campaign's first accident (AI-paste) is not its definition; gate every modality. |
-| Absorb because the source sounds authoritative | Guarding is the job; conflicts block and surface. |
-| Scaffold core files upfront | Canon = frozen; nothing freezes early. Graduation only. |
-| Iterate a third form-variant after two flips | Churn alarm: lift to the rule layer first. |
-| Fire on everyday product chat | Campaign-level summons only. |
-| Write core mid-campaign on an in-conversation ruling | Ruling ≠ ratification — rulings land in the campaign log; core only at freeze moments (write protocol, ADR-041). |
-| Accept another verb's "it's ratified" core edit | The door: only summoned position writes core; everything else queues a `docs/core/amendments.md` line. |
+| Write unvetted details in canon voice | Route it to thoughts when in doubt — writing unvetted detail in canon voice is the original sin that cost a three-doc demotion surgery. Tell: about to write a sentence in the confident, settled voice for a claim nobody has actually vetted. |
+| Admit items by importance, not altitude | Run the altitude test per claim — important ≠ same layer, and admitting by importance produces a Sediment list. Tell: justifying an admission with "but this really matters" instead of "this is the same altitude as the rest." |
+| Let canon depend on links to be complete | Keep it self-contained — a doc that needs a link to be complete is mis-written, by definition. Tell: a reader would have to open another file to understand this sentence. |
+| Rewrite the whole doc per feeding | Make surgical edits only — the evolution log is the campaign's memory. Tell: about to regenerate the whole document instead of touching just the changed claim. |
+| Treat one input mode as the norm | Gate every modality — the campaign's first accident (AI-paste) is not its definition. Tell: the gate logic only accounts for the input format that happened most recently. |
+| Absorb because the source sounds authoritative | Block and surface conflicts — guarding is the job, not deferring to confident-sounding input. Tell: about to accept a claim because of how it's phrased rather than whether it's ratified. |
+| Scaffold core files upfront | Wait for graduation — canon is frozen, nothing freezes early. Tell: creating a `docs/core/` file before anything has actually been ratified into it. |
+| Iterate a third form-variant after two flips | Lift the churn to the rule layer instead of flipping again — two flips is the alarm. Tell: about to try a third phrasing of the same claim that's already flipped twice. |
+| Fire on everyday product chat | Wait for a campaign-level summons — this isn't for everyday conversation. Tell: about to touch canon prose off a passing remark, not a deliberate campaign session. |
+| Write core mid-campaign on an in-conversation ruling | Land rulings in the campaign log; write core only at freeze moments (ADR-041). Tell: about to edit `docs/core/` off something just decided in this conversation, before a freeze point. |
+| Accept another verb's "it's ratified" core edit | Queue it as a `docs/core/amendments.md` line instead — only summoned position writes core. Tell: another verb is asking to write directly into `docs/core/` rather than appending an amendment. |
 
 ## Output
 

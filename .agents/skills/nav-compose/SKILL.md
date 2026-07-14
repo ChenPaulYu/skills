@@ -94,16 +94,16 @@ If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name 
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Skip the diff, just write the file | compose mutates the doc; show it first (unless the user said "just write it") |
-| Bury the point in paragraph 3 | Rule ② — lead with it; the top is the interface |
-| Re-explain a decision that lives in another doc | Rule ① — link to the owner, don't copy the fact |
-| Organize by "what happened when" | Rule ④ — temporal decomposition; group by concern |
-| Paraphrase a draft while restructuring it | Rule ⑥ — move the substance verbatim |
-| Invent prose to fill an empty section | Rule ⑧ — the content isn't decided → `shape-elicit` |
-| Pad the doc with puffery / AI-promo vocab (`seamless`, `robust`, `leverage`, `delve`…) or over-format (bullets / bold on everything) | Generic puffery is needless words — a wide, low-signal interface (rules ① / ④). Be specific; say what it actually does. The *living* list of AI tells is owned by `writing-clearly-and-concisely` — point to it, don't copy it (a copied denylist ages into a lie). |
-| "While I'm here, let me deep line-edit every sentence" | The durable keystones are in *Sentence-level craft* — apply those; a deep copyedit (grammar, misused-words) is a separate pass → the external `writing-clearly-and-concisely` |
+| Skip the diff, just write the file | Show the diff first, unless the user said "just write it" — compose mutates the doc. Tell: about to call the write tool before the user has seen what changes. |
+| Bury the point in paragraph 3 | Lead with the point — rule ②, the top is the interface. Tell: a reader has to scroll past scene-setting to find the actual claim. |
+| Re-explain a decision that lives in another doc | Link to the owner, don't copy the fact — rule ①. Tell: the same decision's rationale is spelled out here as well as in its source doc. |
+| Organize by "what happened when" | Group by concern instead — rule ④, temporal decomposition is the trap. Tell: the section headings are dates or phase names, not topics. |
+| Paraphrase a draft while restructuring it | Move the substance verbatim — rule ⑥. Tell: the reorganized version says the same thing in different words instead of the same words in a new place. |
+| Invent prose to fill an empty section | Route to `shape-elicit` — rule ⑧, the content isn't decided yet. Tell: about to write a sentence that states a decision nobody has actually made. |
+| Pad the doc with puffery / AI-promo vocab (`seamless`, `robust`, `leverage`, `delve`…) or over-format (bullets / bold on everything) | Be specific — say what it actually does; the *living* denylist is owned by `writing-clearly-and-concisely`, point to it rather than copying it. Tell: a sentence would still be true with the adjective deleted. |
+| "While I'm here, let me deep line-edit every sentence" | Apply only the durable keystones in *Sentence-level craft*; route a deep copyedit to the external `writing-clearly-and-concisely`. Tell: about to touch a sentence whose meaning wasn't in question, only its grammar. |
 
 ## Companion skills
 

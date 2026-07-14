@@ -62,13 +62,13 @@ Mark anything needing the counterpart with **`@<handle>`** + what you want back 
 - **Pull before, push after; gate before commit.**
 
 ## Anti-patterns (refuse these)
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Dump a chronological changelog | Group by knowledge — a raw work-log lives in the project repo; a thought carries distilled state + a link |
-| Pad an alignment thought to look thorough | Length is for understanding; ramble is the smell, not length |
-| Re-raise an open item with a new id | Continue the existing thread — reference its id |
-| Edit a teammate's thought to "tidy" | Append-only; never touch others' files |
-| Use report to author an ADR / design doc / README in a code or tooling repo | report writes a coordination thought into the relay content repo only; a document that lives in a codebase is `/nav:compose` |
+| Dump a chronological changelog | Group by knowledge instead — a raw work-log lives in the project repo; a thought carries distilled state + a link. Tell: the report reads like `git log`, one bullet per commit. |
+| Pad an alignment thought to look thorough | Let length track understanding, not effort — ramble is the smell. Tell: a paragraph could be cut without losing any decision or fact. |
+| Re-raise an open item with a new id | Continue the existing thread by referencing its id. Tell: about to post a thought that restates a question already open elsewhere instead of linking to it. |
+| Edit a teammate's thought to "tidy" | Leave it — append-only, never touch others' files. Tell: about to open someone else's thought file in an editor. |
+| Use report to author an ADR / design doc / README in a code or tooling repo | Route that to `/nav:compose` instead — report writes a coordination thought into the relay content repo only. Tell: the content being written belongs in the target codebase, not the relay repo. |
 
 ## Companion skills
 - **`/relay:digest`** — the read side ("what's waiting on me").

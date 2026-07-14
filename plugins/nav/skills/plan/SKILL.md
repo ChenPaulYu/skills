@@ -192,14 +192,14 @@ The dispatched sub-agent defaults to cheap tier (`model: sonnet`); a judgment-de
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| "I'll skip Stage 2 — I can guess what the user means" | Rule ⑦. Guess = drift between agent and user. Ask the 3 questions |
-| "I'll write the plan straight to disk without asking where" | Surprising. The user has a convention; respect it |
-| "I'll execute step 1 while I'm here, the plan is obvious" | Plan and execute are different verbs. Conflating loses review gates. The right move is Stage 4 — offer execution via `AskUserQuestion`; if the user picks it, then proceed |
-| "I'll skip Stage 4 — the next step is obvious, the user can just type the command" | Discoverability friction is real. One click > one typed command. Always offer (unless the explicit skip condition fires) |
-| "I'll fold open questions into 'TBD' inline" | Lies. Open questions go in a labeled section so they're not forgotten |
-| "I'll write a generic plan template without grounding" | Defeats the purpose. Stage 1's gap analysis MUST appear in Context |
+| "I'll skip Stage 2 — I can guess what the user means" | Ask the 3 questions — rule ⑦, a guess drifts between agent and user. Tell: you're about to write "assuming the user wants..." instead of asking. |
+| "I'll write the plan straight to disk without asking where" | Ask where first — the user has a convention; respect it. Tell: about to call the write tool before a location has been confirmed. |
+| "I'll execute step 1 while I'm here, the plan is obvious" | Offer execution at Stage 4 instead and proceed only if the user picks it — plan and execute are different verbs, and conflating them loses review gates. Tell: code is being written before the plan itself has been shown to the user. |
+| "I'll skip Stage 4 — the next step is obvious, the user can just type the command" | Always offer the next action (unless the explicit skip condition fires) — discoverability friction is real; one click beats one typed command. Tell: the plan ends with prose describing what to do next instead of an offer to do it. |
+| "I'll fold open questions into 'TBD' inline" | Put open questions in a labeled section so they're not forgotten — inline TBDs lie by omission. Tell: a "TBD" sits buried mid-paragraph instead of surfaced in its own list. |
+| "I'll write a generic plan template without grounding" | Ground Stage 1's gap analysis explicitly in Context — a generic template defeats the purpose. Tell: the plan would read identically if the codebase behind it were swapped for a different one. |
 
 ## When to escalate to the user
 

@@ -75,13 +75,13 @@ Do NOT commit unless the user asks. If on the default git branch, suggest branch
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Skip the diff, just apply the headers | Headers mutate source; show them first (unless the user said "just apply") |
-| Header every file uniformly | Rule ④ — Button/icons/barrels don't need them |
-| Paraphrase an existing top comment while reshaping it | Rule ⑥ — move its substance verbatim into the convention's shape |
-| "While I'm here, let me also refactor X" | Refactors need narrow scope + their own discipline → `nav-refactor` |
-| Regenerate the codebase map in the same breath | Different cadence + a separate door → `nav-map` (ADR-029) |
+| Skip the diff, just apply the headers | Show the headers first, unless the user said "just apply" — headers mutate source. Tell: about to write the header into the file before the user has seen its text. |
+| Header every file uniformly | Skip the ones that don't need one — rule ④, buttons/icons/barrels don't earn a header. Tell: about to write a header for a one-line re-export file. |
+| Paraphrase an existing top comment while reshaping it | Move the comment's substance verbatim into the convention's shape — rule ⑥. Tell: the new header says the same thing in different words instead of the original words in the new shape. |
+| "While I'm here, let me also refactor X" | Route the refactor to `nav-refactor` — it needs its own narrow scope and discipline. Tell: the diff is restructuring code, not just adding or updating a header comment. |
+| Regenerate the codebase map in the same breath | Route to `nav-map` instead — different cadence, separate door (ADR-029). Tell: about to touch `docs/codebase-map/` during what started as a header sync. |
 
 ## Companion skills
 

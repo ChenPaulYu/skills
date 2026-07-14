@@ -74,13 +74,13 @@ Plain-language, metaphor-leaning replies are already a standing style default fo
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Ship the first analogy that comes to mind | That's the ambient default, not this skill — the comparison against alternatives is the value. |
-| An analogy that only resembles on vibes | If the structure doesn't map point-by-point, it will mislead the moment the user pushes on it. |
-| Never naming where it breaks | Silence here is what lets the user over-extend a leaky mapping later. |
-| Narrating the whole candidate search to the user | The discipline is internal; the deliverable is the clean four-part output, not a transcript of your search. |
-| Reaching for jargon "for precision" before the plain sentence | Plain-first is the point; technical detail is layered in *after*, only if it adds something the analogy didn't already convey. |
+| Ship the first analogy that comes to mind | Generate 2–3 candidates and pick on structural fit — that's the ambient default, not this skill; the comparison against alternatives is the value. Tell: the first comparison that popped to mind is also the one about to ship. |
+| An analogy that only resembles on vibes | Check the mapping point-by-point before handing it over — if the structure doesn't map, it will mislead the moment the user pushes on it. Tell: you can say it "feels similar" but can't name what part maps to what part. |
+| Never naming where it breaks | Say explicitly where the mapping stops holding — silence here is what lets the user over-extend a leaky mapping later. Tell: the explanation reads as complete with no "but it stops working when…" sentence. |
+| Narrating the whole candidate search to the user | Keep the comparison internal and hand over only the clean four-part output — the discipline is internal, not the deliverable. Tell: the reply opens with "I considered a few analogies before landing on…". |
+| Reaching for jargon "for precision" before the plain sentence | Lead with the plain sentence; layer in technical detail only after, and only if it adds something the analogy didn't already convey — plain-first is the point. Tell: the opening sentence needs a term the user would have to look up. |
 
 ## Companion skills
 

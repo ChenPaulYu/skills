@@ -103,20 +103,20 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Dump content / race to solve it | elicit converges by *reaction*; a solved paragraph gives nothing to push on. Stand up a fork instead. |
-| Agree / flatter to keep it pleasant | Agreement doesn't advance. Friction (refute / restructure) is what moves it. |
-| Give a wall of prose / an essay per turn | One sharp thing per turn. A wall buries the fork. |
-| Stop at the surface framing | Drill to the principle underneath — the real question is usually a layer down. |
-| Ask abstract Socratic questions ungrounded from the repo | Floaty, generic — the thing a chat bot does. Ground the fork in real code or it isn't sharp. |
-| Run a fixed question checklist to the end | The heavyweight-brainstorm sin. Exit on the snap, not the list. |
-| Auto-fire on any uncertainty | It's summoned. Grilling unbidden is the anti-feature. |
-| Grill a look / layout / visual-relation decision | A render would settle it better — hand to `/shape:mockup`. |
-| Keep a fat transcript as the residue | The residue is one line + the decided forks, landed as a lean thought. |
-| In diagnostic mode, edit the code to "just fix it" | elicit is read-only — it converges the cause + fix-direction; the rebuild hands off to `/shape:build` or a sub-agent. |
-| In diagnostic mode, guess the cause without tracing it against the code | Forks are *grounded* candidate causes narrowed by elimination, not hunches. |
-| Grill on when the user is missing a whole axis of the terrain | Honest stopping is the gatekeeper's duty — a grill against a blank spot is theater, not convergence. Diagnose the stall (Gatekeeper, above) and offer `/shape:survey`. |
+| Dump content / race to solve it | Stand up a fork instead — elicit converges by *reaction*; a solved paragraph gives nothing to push on. Tell: the reply is a finished answer instead of a choice to react to. |
+| Agree / flatter to keep it pleasant | Bring friction (refute / restructure) — agreement doesn't advance anything. Tell: the last three turns all validated what the user just said. |
+| Give a wall of prose / an essay per turn | Land one sharp thing per turn — a wall buries the fork. Tell: the turn takes more than a few sentences to reach the actual question. |
+| Stop at the surface framing | Drill to the principle underneath — the real question is usually a layer down. Tell: the fork restates the user's own framing instead of pushing past it. |
+| Ask abstract Socratic questions ungrounded from the repo | Ground the fork in real code — floaty questions are what a generic chatbot does. Tell: the question would be identical for any project, not this one. |
+| Run a fixed question checklist to the end | Exit on the snap, not the list — running the full checklist regardless is the heavyweight-brainstorm sin. Tell: still asking questions after the user has already converged. |
+| Auto-fire on any uncertainty | Stay summoned — grilling unbidden is the anti-feature. Tell: about to start a grill without the user having asked to think something through. |
+| Grill a look / layout / visual-relation decision | Hand off to `/shape:mockup` — a render settles it better than argument. Tell: the fork being drawn up is really about how something should look, not what it should be. |
+| Keep a fat transcript as the residue | Land one line + the decided forks as a lean thought — the transcript itself isn't the deliverable. Tell: about to save the raw back-and-forth instead of the distilled outcome. |
+| In diagnostic mode, edit the code to "just fix it" | Stay read-only — converge the cause + fix-direction, then hand the rebuild to `/shape:build` or a delegated agent. Tell: about to open an editor to patch the bug mid-diagnosis. |
+| In diagnostic mode, guess the cause without tracing it against the code | Narrow candidate causes by elimination against the actual code — a fork must be grounded, not a hunch. Tell: naming a cause you haven't actually traced through the source. |
+| Grill on when the user is missing a whole axis of the terrain | Diagnose the stall and offer `/shape:survey` — a grill against a blank spot is theater, not convergence. Tell: the user's answers keep circling because a whole option they don't know about is missing from the fork. |
 
 ## Companion skills
 

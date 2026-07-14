@@ -116,19 +116,19 @@ A pick has two natural next steps, and the offer should name **both** (ADR-028) 
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Force a render on a pure definitional / ontology question | If no render makes it decidable, it's verbal clarification — not this skill. |
-| Describe a backend / agent / data flow in prose when a diagram would settle it | A render isn't UI-only. Draw the interactive diagram. |
-| Offer ASCII / an option list / prose to decide from | A description isn't decidable. Render real candidates. |
-| Render only the options the user named | Generating a *divergent* set (incl. the "don't / merge" candidate) is half the value. |
-| An ungrounded / wrong-grain artifact | It floats; the judgement will be wrong. Ground it in the real thing. |
-| Treat "multiple candidates" as heavy | A row in one file is the *light default*, not the exception. |
-| Use real components / chase pixel-perfect / write production code | Overkill. A disposable replica is the point. |
-| Pad the artifact with chrome so it *looks* complete (full styling, i18n, extra candidates) | On a handfeel decision, length is a smell — chrome buries the one behaviour being judged and is where bugs hide. Build only the decision-critical interaction; cut the rest. |
-| Auto-fire on a passing mention, or decide for the user | Fire on the *request*; you generate + render, the user points. |
-| Keep a visual-lock as a permanent north-star the system must match | Retire on ship; the running system becomes the truth. |
-| Keep iterating after the user has picked | Exit on the pick. |
+| Force a render on a pure definitional / ontology question | Answer it as verbal clarification instead — a render only helps when it makes the question decidable. Tell: sketching a mockup for a question that's really "what do we mean by X." |
+| Describe a backend / agent / data flow in prose when a diagram would settle it | Draw the interactive diagram — a render isn't UI-only. Tell: writing a paragraph to describe a flow that would be one glance as a diagram. |
+| Offer ASCII / an option list / prose to decide from | Render real candidates — a description isn't decidable. Tell: about to type out an option list instead of building the candidates. |
+| Render only the options the user named | Generate a divergent set, including the "don't / merge" candidate — that's half the value. Tell: every candidate being built is a variant the user already suggested. |
+| An ungrounded / wrong-grain artifact | Ground it in the real thing — an ungrounded mockup floats and the judgement will be wrong. Tell: the mockup uses placeholder data or components that don't match what's actually in the codebase. |
+| Treat "multiple candidates" as heavy | Default to it — a row in one file is light, not the exception. Tell: building only one candidate because more "felt like too much." |
+| Use real components / chase pixel-perfect / write production code | Build a disposable replica — chasing production quality is overkill. Tell: importing the real component library instead of a throwaway approximation. |
+| Pad the artifact with chrome so it *looks* complete (full styling, i18n, extra candidates) | Build only the decision-critical interaction and cut the rest — on a handfeel decision, length is a smell that buries the one behaviour being judged. Tell: the mockup has full styling or i18n for a decision that's really about one interaction. |
+| Auto-fire on a passing mention, or decide for the user | Fire on the request, generate, and let the user point — never pick for them. Tell: about to declare a winner instead of rendering candidates for the user to choose. |
+| Keep a visual-lock as a permanent north-star the system must match | Retire it on ship — the running system becomes the truth. Tell: still comparing the shipped feature back against the mockup weeks later. |
+| Keep iterating after the user has picked | Exit on the pick. Tell: still tweaking the artifact after the user already said which one they want. |
 
 ## Output
 

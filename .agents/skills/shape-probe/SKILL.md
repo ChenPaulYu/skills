@@ -74,15 +74,15 @@ The doc states explicitly, near the top, that **the evidence feeds the pending d
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Test the surface phrasing instead of the load-bearing assumption | Wastes the experiment on a wording dispute nobody actually needed settled. Run step 1 of the design chain first. |
-| Vary two things at once | Polluted evidence — you can't attribute the result to either axis. Orthogonal's independence check exists to catch exactly this. |
-| Decide the verdict rule after seeing the data | That's rationalization wearing an experiment's clothes. Pre-register before the first trial, no exceptions. |
-| Let the experiment sprawl past minimal | More trials/variants than the discriminating question needs is budget spent on false confidence, not better evidence. |
-| Edit product code to force a result | `probe` is read-only toward source. If the "experiment" requires changing the thing under test, it's not an experiment anymore. |
-| Hide an ambiguous or negative result | A finding that the assumption wasn't load-bearing, or the test wasn't sharp, is still a finding — report it as one. |
-| Fan out paid-LLM calls without the cost nod | ADR-062's own instance for this skill — name the scale, get the nod, then run. |
+| Test the surface phrasing instead of the load-bearing assumption | Run step 1 of the design chain first — testing the phrasing wastes the experiment on a wording dispute nobody needed settled. Tell: the experiment's outcome wouldn't actually change anyone's next decision. |
+| Vary two things at once | Change one axis at a time — varying two pollutes the evidence, since you can't attribute the result to either. Tell: the experiment design has two independent variables moving in the same trial. |
+| Decide the verdict rule after seeing the data | Pre-register the verdict rule before the first trial, no exceptions — deciding after is rationalization wearing an experiment's clothes. Tell: about to define "what counts as a win" only after looking at the results. |
+| Let the experiment sprawl past minimal | Keep it to what the discriminating question needs — extra trials/variants buy false confidence, not better evidence. Tell: adding another variant "just to be thorough" when the core question is already answerable. |
+| Edit product code to force a result | Stay read-only toward source — if the "experiment" needs the thing under test changed, it isn't an experiment. Tell: about to modify the code being tested instead of just observing it. |
+| Hide an ambiguous or negative result | Report it as a finding — an assumption that wasn't load-bearing, or a test that wasn't sharp, is still worth knowing. Tell: tempted to omit a result because it doesn't support the expected direction. |
+| Fan out paid-LLM calls without the cost nod | Name the scale and get the nod before running (ADR-062). Tell: about to launch a multi-call fan-out without having surfaced its cost to the user first. |
 
 ## Companion skills
 

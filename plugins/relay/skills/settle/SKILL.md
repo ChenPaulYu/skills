@@ -52,13 +52,13 @@ Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *
 - **Pull before, push after; gate before commit.**
 
 ## Anti-patterns (refuse these)
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Re-litigate a decision while settling | settle records what review agreed; re-deciding is a new report + review |
-| Rewrite / reorder `log.md` to "tidy" | It's append-only history — superseded entries stay; only `active.md` is regenerated |
-| Write a bare pointer (`[id] see thought`) instead of distilling | `log.md` is the primary read — distil the ruling + why; the thought in `thoughts/` is the raw source, not the ledger |
-| Move or delete a settled thought | relay never relocates a thought — `thoughts/` is the immutable log; "open vs settled" is `digest`'s computed view |
-| Store a "where things stand" snapshot | Progress is `digest`'s live job — settle only touches the decision ledger |
+| Re-litigate a decision while settling | Record only what review already agreed — re-deciding is a new report + review, not a settle. Tell: about to change the substance of a ruling instead of transcribing what was agreed. |
+| Rewrite / reorder `log.md` to "tidy" | Leave it append-only — superseded entries stay; only `active.md` is regenerated. Tell: about to delete or reorder an existing entry in `log.md`. |
+| Write a bare pointer (`[id] see thought`) instead of distilling | Distil the ruling + why — `log.md` is the primary read, not an index into `thoughts/`. Tell: the entry has no content of its own, only a reference. |
+| Move or delete a settled thought | Leave it in place — `thoughts/` is the immutable log; "open vs settled" is `digest`'s computed view. Tell: about to move or remove a file out of `thoughts/`. |
+| Store a "where things stand" snapshot | Leave live progress to `digest` — settle only touches the decision ledger. Tell: about to write a status summary that isn't a ruling into `log.md` or `active.md`. |
 
 ## Companion skills
 - **`/relay:report`** / **`/relay:review`** — the stream settle crystallizes.

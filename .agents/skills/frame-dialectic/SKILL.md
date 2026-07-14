@@ -70,16 +70,16 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| A Devil's Advocate you can wave away | That's a strawman — you attacked the weak version. Re-attack until the objection actually worries you. |
-| Lukewarm "here are some pros and cons" | The default already does that. The value is *both sides at maximum strength* + a decider. |
-| Assert "A therefore C" without testing the arrow | Lay out the chain; test each link for cause vs correlation / coincidence / missing variable. A snapped link is often the finding. |
-| Kill an unproven frontier claim with "no evidence" | "Not yet tested" ≠ "refuted." The honest output is an *owned bet*, not a death sentence. (Three-way verdict.) |
-| Let awareness excuse broken logic or existing counter-evidence | "I'm aware it's unproven" only covers genuine unknowns — not a snapped chain, not a result that already contradicts it. |
-| Invent a convenient opponent / a result to win | Ground the opposition in what the field actually holds; mark *uncertain* where you can't verify. Fabrication makes the trial theater. |
-| Decide the claim's fate or start building | dialectic tries + routes. The commit is `shape-elicit`; the build is `nav-plan`. |
-| End on a jargon sentence ("verdict: unsettled — owned bet") | That's the trial without the landing — the plain-words conclusion + analogy has to be the actual last word, not the five-part table alone. |
+| A Devil's Advocate you can wave away | Re-attack the objection until it actually worries you — a strawman is the weak version; steelman the attack, not just the defense. Tell: you can dismiss your own counter-argument in one sentence without effort. |
+| Lukewarm "here are some pros and cons" | Push both sides to maximum strength, then adjudicate — the default already lists pros and cons; the value is the decider on top. Tell: the two sides read interchangeable with any other claim's pros/cons list. |
+| Assert "A therefore C" without testing the arrow | Lay out the chain and test each link for cause vs correlation / coincidence / missing variable. Tell: you stated the conclusion before naming the links that connect it to the premise. |
+| Kill an unproven frontier claim with "no evidence" | Return a three-way verdict — refuted / unsettled-owned-bet / supported — since "not yet tested" ≠ "refuted." Tell: the verdict collapses evidence-absent and evidence-against into the same "no". |
+| Let awareness excuse broken logic or existing counter-evidence | Reserve "I'm aware it's unproven" for genuine unknowns only — not a snapped chain, not a result that already contradicts it. Tell: you're using the word "unproven" to describe something that's actually been tested and failed. |
+| Invent a convenient opponent / a result to win | Ground the opposition in what the field actually holds and mark *uncertain* where you can't verify — fabrication makes the trial theater. Tell: you can't point to where the opposing view actually comes from. |
+| Decide the claim's fate or start building | Try + route — the commit is `shape-elicit`, the build is `nav-plan`. Tell: the reply ends with "so we should build X" instead of an offer to route. |
+| End on a jargon sentence ("verdict: unsettled — owned bet") | Close with a plain-words conclusion + analogy as the actual last word, not the five-part table alone. Tell: the final sentence needs "steelman" or "dialectic" to parse. |
 
 ## Example — the move (domain-neutral)
 

@@ -9,13 +9,13 @@
       "name": "nav",
       "source": "./plugins/nav",
       "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers), map (bilingual codebase HTML), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
-      "version": "0.8.3"
+      "version": "0.8.4"
     },
     {
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), position (canon-authoring campaign → core docs), setup (scaffold a new project to a verified baseline — archetype references + stack principles), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
-      "version": "0.9.3"
+      "version": "0.9.4"
     },
     {
       "name": "research",
@@ -27,7 +27,7 @@
       "name": "frame",
       "source": "./plugins/frame",
       "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (four reasoning lenses: first-principles, orthogonal, dialectic, graft) or to an answer you already have (analogize — build a stress-tested analogy so it lands in plain language). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.6.0"
+      "version": "0.6.1"
     },
     {
       "name": "reflect",
@@ -39,7 +39,7 @@
       "name": "relay",
       "source": "./plugins/relay",
       "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. Six verbs: launch (create a project, or enrol a person + role), report (a standup-shaped update), review (respond — agree / comment / change), digest (the live 'what's waiting for my review'), settle (append agreed thoughts to the decision ledger), format (sweep thought frontmatter to the current spec). git-native, human-gated, designed for multi-person. Language-agnostic.",
-      "version": "0.8.0"
+      "version": "0.8.1"
     }
   ]
 }

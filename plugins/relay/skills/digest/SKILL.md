@@ -65,14 +65,14 @@ Recent (FYI)                       # latest thoughts, brief — flow you don't n
 - **Lead with what needs them** — the whole point is 3-second triage.
 
 ## Anti-patterns (refuse these)
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Write / refresh a stored snapshot here | `digest` is read-only + computed; the durable ledger is `settle`'s job |
-| Miss the `@you` flag | The `@<you>` tag is the ask signal — sweep every thought, every run; never drop a real ask |
-| Nag about an FYI / already-agreed thread | "Names you" ≠ "needs you"; a prose mention, an `agree`, or a no-reply-needed closer is **Recent**, not "Waiting" |
-| Bury a real question in "Waiting on others" scan because it has no literal `@` | A `comment` posing a genuine open question is an ask too (`relay/CLAUDE.md` → *Resolution & decisions*) — check for closer-or-not, not just for the `@` glyph |
-| Dump the full body of a long thought | Surface its subject + the one-line ask as a pointer; the body is read on open, not triaged |
-| Paraphrase away an image-bearing thought's visuals | digest can't render — flag it `📎 N`, and when you act on it render the images to the human (or hand them the file path); the picture is part of the payload, lost silently in a text triage |
+| Write / refresh a stored snapshot here | Stay read-only + computed — the durable ledger is `settle`'s job. Tell: about to write a file inside `thoughts/` or `decisions/` during what started as a digest run. |
+| Miss the `@you` flag | Sweep every thought, every run — the `@<you>` tag is the ask signal and a real ask must never drop. Tell: the digest was assembled without a dedicated pass over every open thought's mentions. |
+| Nag about an FYI / already-agreed thread | Bucket a prose mention, an `agree`, or a no-reply-needed closer as **Recent**, not "Waiting" — "names you" ≠ "needs you". Tell: the "Waiting" list contains a thread that already ended in agreement. |
+| Bury a real question in "Waiting on others" scan because it has no literal `@` | Check for closer-or-not, not just the `@` glyph — a `comment` posing a genuine open question is an ask too. Tell: a thought ends with a question mark and no reply, but it's missing from "Waiting". |
+| Dump the full body of a long thought | Surface its subject + the one-line ask as a pointer; the body is read on open. Tell: the digest reproduces a whole paragraph instead of a one-line pointer. |
+| Paraphrase away an image-bearing thought's visuals | Flag it `📎 N` and render the images (or hand over the file path) when you act on it — digest can't render. Tell: an image-bearing thought's payload got reduced to a text description with no `📎` marker. |
 
 ## Companion skills
 - **`/relay:report`** / **`/relay:review`** — the write + response sides whose thoughts `digest` reads.

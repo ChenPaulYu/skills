@@ -76,14 +76,14 @@ Write the behaviour-changing code, placed per the inject pass. Keep moves and ad
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| "It's small, I'll just write it — skip the inject grep" | The reuse grep is the highest-value beat; skipping it is exactly how parallel impls ship (ADR-008). |
-| "While I'm adding this, let me also restructure that" | Adding ≠ rearranging. The restructure is a `/nav:refactor` — separate move, separate gate. |
-| "Tests pass, behaviour's obviously right, skip the real-app pass" | Behaviour changed — unit tests rarely cover gestures/flows. The verify gate is unconditional. |
-| "This is getting bigger than I thought, I'll keep going" | Mid-change scope blow-up = stop and switch to `/nav:plan`. Don't grow a `do` into an unplanned epic. |
-| "New 400-line file, no header, I'll add it later" | Later = never = a lie to the next reader. Header in the same change. |
-| "Second place that needs this helper — copy-paste is faster" | N+1 trigger: extract the primitive. Copy now = drift later. |
+| "It's small, I'll just write it — skip the inject grep" | Run the reuse grep first — it's the highest-value beat; skipping it is exactly how parallel impls ship (ADR-008). Tell: about to write a function whose name you haven't yet searched for elsewhere in the codebase. |
+| "While I'm adding this, let me also restructure that" | Keep adding separate from rearranging — the restructure is its own `/nav:refactor` move and gate. Tell: the diff touches files the stated change had no reason to open. |
+| "Tests pass, behaviour's obviously right, skip the real-app pass" | Run the verify gate unconditionally — behaviour changed, and unit tests rarely cover gestures/flows. Tell: "tests pass" is the only evidence offered that the change actually works. |
+| "This is getting bigger than I thought, I'll keep going" | Stop and switch to `/nav:plan` on mid-change scope blow-up — don't grow a `do` into an unplanned epic. Tell: the diff is touching a second domain the original ask never mentioned. |
+| "New 400-line file, no header, I'll add it later" | Add the header in the same change — later = never = a lie to the next reader. Tell: a brand-new file has no top-of-file summary and the change is about to be called done. |
+| "Second place that needs this helper — copy-paste is faster" | Extract the primitive — this is the N+1 trigger; copy now becomes drift later. Tell: pasting a block that already exists verbatim somewhere else in the codebase. |
 
 ## When to stop and escalate
 

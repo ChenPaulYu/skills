@@ -67,15 +67,15 @@ first-principles *reasons*; it does not decide or build. Once the note is up, *o
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Relabel the conventional answer as "first principles" | If the axioms still carry a convention, you didn't strip far enough. The test for every premise: *true, or just usually done?* |
-| Reverse-engineer axioms to reach the answer you already wanted | Motivated reasoning — the most common failure. Rebuild *forgetting* the conventional answer; let the axioms lead. |
-| Assert an axiom you didn't ground | A fabricated premise yields a confident wrong answer. Verify physical/factual axioms; mark the uncertain ones *uncertain*. |
-| Skip the divergence (just present a tidy derivation) | The divergence (rebuilt ≠ convention) is the payload. No divergence is a valid result — but say it explicitly. |
-| Decide or implement here | first-principles reasons + routes. The decision is `shape-elicit`; the build is `nav-plan`. |
-| Fire on any hard question in passing | Summoned on a "reason from first principles / challenge the assumptions" request. |
-| End on a jargon sentence ("the axiom is X, so the rebuilt conclusion is Y") | That's analysis without landing. The plain-words conclusion + analogy has to be the actual last word — the five-part scaffold alone doesn't count as done. |
+| Relabel the conventional answer as "first principles" | Keep stripping until every premise passes *true, or just usually done?* — if an axiom still carries a convention, you didn't strip far enough. Tell: the "irreducible axiom" is itself a common industry practice, not a fact. |
+| Reverse-engineer axioms to reach the answer you already wanted | Rebuild *forgetting* the conventional answer and let the axioms lead. Tell: you picked which axioms to list only after knowing where you wanted to land. |
+| Assert an axiom you didn't ground | Verify physical/factual axioms and mark the uncertain ones *uncertain* — a fabricated premise yields a confident wrong answer. Tell: you can't point to why the axiom is true, only that the derivation needs it. |
+| Skip the divergence (just present a tidy derivation) | State the divergence (rebuilt ≠ convention) explicitly — that comparison is the payload, and "no divergence" is a valid result only if said out loud. Tell: the output reads like a derivation with no sentence comparing it back to convention. |
+| Decide or implement here | Reason + route — the decision is `shape-elicit`, the build is `nav-plan`. Tell: the reply starts proposing an implementation instead of offering the route. |
+| Fire on any hard question in passing | Wait for an explicit "reason from first principles / challenge the assumptions" request. Tell: about to run the full strip-and-rebuild on a question that was just asked in passing. |
+| End on a jargon sentence ("the axiom is X, so the rebuilt conclusion is Y") | Close with a plain-words conclusion + analogy as the actual last word. Tell: the final sentence needs "axiom" or "first principles" to parse. |
 
 ## Example — the move (domain-neutral)
 

@@ -87,14 +87,14 @@ Role is a **descriptive default, not a lock** — it sets routing defaults (e.g.
 - **A project is its members coordinating** — keep `core/` light; it is not a campaign (no `position`-style ceremony).
 
 ## Anti-patterns (refuse these)
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Scaffold without showing the diff | Mutates the repo; gate first |
-| Pre-create empty roles / fake members | Only you (owner) is seeded; add people via Branch B |
-| Build a heavy `core/` charter up front | The frame is light; over-framing is `position`-ceremony relay doesn't have |
-| Put a job title where a role goes | `title` is global identity; `role` is per-project — different axes |
-| Use the github handle as the resolver | git commits carry email/name, not github — resolution would fail |
-| Make the role gate actions | Roles are defaults, not locks; anyone may act (except `settle` = owner) |
+| Scaffold without showing the diff | Gate the scaffold behind a diff first — it mutates the repo. Tell: about to create `project.yml` / `thoughts/` / `decisions/` before the user has seen what will land. |
+| Pre-create empty roles / fake members | Seed only the owner (you); add people via Branch B as they actually join. Tell: the roster lists a name for a person who hasn't been registered yet. |
+| Build a heavy `core/` charter up front | Keep the frame light — over-framing is `position`-ceremony relay doesn't have. Tell: about to write a multi-section constitution doc before a single thought has been posted. |
+| Put a job title where a role goes | Keep `title` (global identity) separate from `role` (per-project) — different axes. Tell: the value going into `role` reads like a résumé line, not a project responsibility. |
+| Use the github handle as the resolver | Resolve by git commit email/name — github handles aren't what commits carry. Tell: about to key a person lookup off their github username instead of their git identity. |
+| Make the role gate actions | Treat roles as defaults, not locks — anyone may act except `settle`, which stays owner-only. Tell: about to block someone from posting because their role isn't the "right" one. |
 
 ## Companion skills
 - **`/relay:report`** — post the first update into the new project, or after adding people.

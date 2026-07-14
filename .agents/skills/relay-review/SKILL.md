@@ -50,11 +50,11 @@ relate:                                                 # optional — cross-dis
 - **Pull before, push after; gate before commit.**
 
 ## Anti-patterns (refuse these)
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Infer "they seem fine with it" as agreement | Explicit `agree` only; silence ≠ consent |
-| Edit the original thought to mark it reviewed | Append-only; your review is your own thought |
-| Write a `decisions/` file here | Decisions are pinned by `relay-settle` from agreeing reviews; review just responds |
+| Infer "they seem fine with it" as agreement | Require an explicit `agree` — silence ≠ consent. Tell: about to mark a thread agreed because nobody objected, not because someone said so. |
+| Edit the original thought to mark it reviewed | Post your own thought instead — append-only, your review is a separate record. Tell: about to open and modify a file you didn't author. |
+| Write a `decisions/` file here | Leave that to `relay-settle` — decisions are pinned from agreeing reviews, review just responds. Tell: about to write into `decisions/` from inside a review. |
 
 ## Companion skills
 - **`relay-report`** — opens the thoughts you review.

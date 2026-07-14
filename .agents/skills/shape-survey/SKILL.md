@@ -61,15 +61,15 @@ Lands `blueprints/thoughts/<date>-<topic>-survey.md`, in the family's progressiv
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Hand back a generic textbook checklist | Ungrounded from your actual situation, any chatbot produces this — it isn't worth a verb. Ground every axis in the real repo/decisions. |
-| Solve or decide for the user | Survey maps; it doesn't rule. The ruling stays in `shape-elicit` (or the user directly) — survey's job ends at a grounded diff. |
-| Auto-fire on any uncertainty | It's summoned, or offered by elicit at a detected blind spot — never self-triggering on a passing "I'm not sure." |
-| Dump the full map when only the diff matters | The map is scaffolding; the deliverable is what's *missing* from the user's stated understanding, not everything that exists. |
-| Teach before mapping | Teaching is a service performed on a found gap. Map first (steps 1–2), only then fill (step 3) — teaching without a diff to anchor it floats. |
-| Merge "missing axis" and "missing point" into one gap list | They route differently and carry different weight — keep them reported separately. |
-| Call `frame-analogize` or `deep-research` directly instead of offering | Skills don't invoke each other. A big gap gets an offer, gated and one-shot; the user picks. |
+| Hand back a generic textbook checklist | Ground every axis in the real repo/decisions — an ungrounded checklist is what any chatbot produces, and isn't worth a verb. Tell: the axis list would be identical for a different project. |
+| Solve or decide for the user | Stop at a grounded diff — survey maps, it doesn't rule; the ruling stays in `shape-elicit` or the user directly. Tell: about to recommend which option the user should pick instead of mapping the terrain. |
+| Auto-fire on any uncertainty | Wait for a summons, or an offer from elicit at a detected blind spot — never self-trigger on a passing "I'm not sure." Tell: about to run a survey off an offhand expression of doubt, not an actual request. |
+| Dump the full map when only the diff matters | Report what's *missing* from the user's stated understanding — the full map is scaffolding, not the deliverable. Tell: the output restates everything the user already knew alongside the actual gap. |
+| Teach before mapping | Map first (steps 1–2), only then fill (step 3) — teaching without a diff to anchor it floats. Tell: explaining a concept before the gap that makes it relevant has been identified. |
+| Merge "missing axis" and "missing point" into one gap list | Report them separately — they route differently and carry different weight. Tell: a missing-axis finding and a missing-point finding are sitting in the same undifferentiated bullet list. |
+| Call `frame-analogize` or `deep-research` directly instead of offering | Offer it instead — skills don't invoke each other; a big gap gets a gated, one-shot offer and the user picks. Tell: about to run another skill's protocol inline rather than naming it as an option. |
 
 ## Companion skills
 

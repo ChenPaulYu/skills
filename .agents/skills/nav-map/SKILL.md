@@ -74,13 +74,13 @@ Do NOT commit unless the user asks. If on the default git branch, suggest branch
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Re-derive every file's role from its body | The headers (`nav-sync`) are the cheap grounding — read them; refresh them first if stale |
-| Draw a fake anatomy for a 2-file domain | Structure-theatre — use a Module-map row (rule ④) |
-| Assert an import edge you didn't verify | Rule ③/⑦ — edges are real imports or marked `(uncertain)` |
-| Ship the map monolingual | Bilingual (EN + zh-Hant) is the default; removing it later is harder |
-| Regenerate the map on every code change | Wrong cadence — that's the header sibling `nav-sync`; the map is periodic |
+| Re-derive every file's role from its body | Read the headers (`nav-sync`) — the cheap grounding — and refresh them first if stale, rather than reopening every file. Tell: about to read a file's full body just to write one summary line. |
+| Draw a fake anatomy for a 2-file domain | Use a Module-map row instead — rule ④, drawing a diagram for two files is structure-theatre. Tell: an anatomy box would contain only one arrow between two boxes. |
+| Assert an import edge you didn't verify | Mark it `(uncertain)` unless it's a real, checked import — rule ③/⑦. Tell: you're drawing an edge because it "should" exist, not because you grepped for the import. |
+| Ship the map monolingual | Ship bilingual (EN + zh-Hant) by default — removing it later is harder than including it now. Tell: about to publish a map with only one language filled in. |
+| Regenerate the map on every code change | Save it for the periodic pass — that's the header sibling `nav-sync`'s cadence, not the map's. Tell: reaching for `nav-map` right after a single small edit instead of after a batch of changes. |
 
 ## Companion skills
 

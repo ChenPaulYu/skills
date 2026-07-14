@@ -58,16 +58,16 @@ Opinions live in references; the engine never hardcodes a stack. This is also wh
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Scaffold and declare done | The non-negotiable: done = verification chain green. Unit-green ≠ running. |
-| Skip preflight, hit the missing tool mid-chain | Preflight is step 3 for a reason; missing tools get the 3-way choice up front. |
-| Embed file bodies in skill prose | They drift. Ground the living exemplar; the reference records *decisions and gotchas*, not file dumps. |
-| Deviate from stack-principles "just this once" | A deviation is either surfaced and ruled (maybe it's a new principle) or it's drift. Never silent. |
-| Reuse another project's ports | A fresh uncommon pair per project so dev servers never collide; record it in *your* fork / each project's `dev.config`, not a shipped list. |
-| Ship the author's concrete app data as a default | This is a SHARED skill: the reference layer ships as a labelled **example**, never preset with real ports / private repo names / a project list. Those are the user's — port registry ships **empty**, exemplars are optional grounding "you have or don't", rulings are stated abstractly. Concrete app data in a shipped reference leaks the author's setup and misleads every fork. |
-| gitignore `blueprints/` or `docs/` anything | Iron rule in stack-principles — the decision record stays in git. Watch the depth-unanchored `mockups/` trap. |
-| Skip the write-back | The knowledge base only compounds if every run pays its delta forward. |
+| Scaffold and declare done | Run the verification chain to green before calling it done — unit-green ≠ running. Tell: about to say "done" with the app never actually launched. |
+| Skip preflight, hit the missing tool mid-chain | Run preflight at step 3 — missing tools get the 3-way choice up front, not a surprise mid-chain. Tell: the chain has already started before tool availability was checked. |
+| Embed file bodies in skill prose | Ground the living exemplar and record only decisions + gotchas — embedded bodies drift out of sync. Tell: the reference doc contains a whole file's contents instead of a pointer to it. |
+| Deviate from stack-principles "just this once" | Surface the deviation and get it ruled — maybe it's a new principle, but it's never silent. Tell: about to do something the stack-principles doc doesn't cover without flagging it. |
+| Reuse another project's ports | Pick a fresh uncommon pair and record it in this project's `dev.config` — reuse collides dev servers. Tell: about to copy a port number straight from another project's config. |
+| Ship the author's concrete app data as a default | Ship the reference layer as a labelled example — real ports / private repo names / project lists leak the author's setup and mislead every fork. Tell: a shipped default still contains a real port, repo name, or project list from the original setup. |
+| gitignore `blueprints/` or `docs/` anything | Keep the decision record in git — that's the iron rule in stack-principles. Tell: about to add `blueprints/` or `docs/` to a `.gitignore`. |
+| Skip the write-back | Pay the delta forward — the knowledge base only compounds if every run writes back. Tell: the run found a new decision or gotcha and it isn't being recorded anywhere. |
 
 ## Output
 

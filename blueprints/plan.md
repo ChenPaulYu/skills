@@ -8,7 +8,6 @@
 ## ▶ Next —— 接下來
 - **reflect:summarize 退役** — Paul 2026-07-14 拍板刪除：No-Op 檢驗不過（模型不裝 skill 也會做完整回顧），護城河最淺（對照 catchup 的三態機器/park 的落檔）。做法：ADR（引 ADR-021 doctor 退役先例）＋移除 SKILL.md＋全套 gate 反向（reflect 版本 bump、README、site map 中英、mirror regen）。**等 elicit 生態系四 phase 落完再動**（避免與在飛 sub-agent 撞 gating surfaces）。
 - **Codex Phases 1–5：行為相容編譯** — 讓 build-codex 降轉/剝除 Claude-only 語意，並把 `ratchet_ledger` 兩筆 bump 收回（`blueprints/plans/2026-07-13-codex-compatibility.md`，另一條工作線）
-- **anti-pattern 表 optional sweep** — 34 檔補「Instead — and the tell」欄，機械掃、cheap tier（ADR-069）
 
 ## ⏸ Future —— deferred
 - **why/what/how 高度診斷（elicit 守門人第四種卡）** — Paul 2026-07-14 提出、方向已選（切對話紀律，不做分類軸——分類軸過不了 No-Op 檢驗）：「層次滑動型卡住」＝分岔立錯樓層（嘴上吵 how、分歧在 why），修法是把 fork 往上抬一層再立，借 `shape:position` 的 altitude instrument（axiom/principle/approach/bet ＋ churn alarm）by protocol，零新 skill。**等刺痛案例**（一場真的因層次滑動爛掉的討論）再落 SKILL.md——elicit 剛動完守門人刀（ADR-076），連續改同一 skill 是 Sprawl 起手式。
@@ -18,6 +17,7 @@
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
+2026-07-14：**anti-pattern 表 tell 欄掃描完成**（ADR-069 的 optional sweep 收尾）——實際 26 檔（板子估 34 高了），25 檔完成 merged 格式（park 原本就是 canonical），frame 0.6.1／nav 0.8.4／relay 0.8.1／shape 0.9.4，site map rev 77。sonnet 執行；它正確地照 ADR-069「merged not appended」抗命了 brief 的字面「加第三欄」。
 2026-07-14：**research 泛化＋能力優先**（ADR-080，research 0.6.0、shape 0.9.3）——物件從「論文」泛化為「論證型文件」（Paul 原則：paper 是文件的一種）；三條下游縫記錄（untangle→position/elicit、critique→probe、survey→deep-research）；deep-research offer 帶量級標示（b 案，ADR-062 實例）；`notes/`／`sources/` 由準契約降為 convention，複用改 tolerant 三態（決策：`thoughts/2026-07-14-research-generalize-argument-docs.md`）。路由探針 follow-up 已跑：12/12 全過（4 非論文觸發＋4 邊界防搶＋4 論文經典零退步，`docs/findings/2026-07-14-adr080-routing-probe.md`）。
 2026-07-14：**派工可見性**（ADR-081）——dispatch-tiers 增三件：事前提案閘門（一批一問＋降級閥，借 ADR-040）、回程自報行（⚙ 派工行＋commit 格式，鏡射 ADR-071 自報層級）、使用者 tier 指定壓過預設（持久覆寫=寫進 CLAUDE.md，不是記憶）。Paul 拍板：派工不可見則信任無錨點。
 2026-07-14：**relay:register 併入 launch**（ADR-078，relay 0.8.0，marketplace 36 skills）——structure-theatre 剃刀裁決（Paul 拍板選 A）：register 的協定內容（身分/角色兩層、handle 凍結、diff-gate）以 Branch B 形式全數保留在 launch 內；降級案（b）因真實價格（format 擴權＋walked-step 改寫，knowledge≠cue 法則否決便宜版）出局。

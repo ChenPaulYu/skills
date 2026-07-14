@@ -83,18 +83,18 @@ The session turns "this feels off" into "watch this — archiving is clunky (her
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Reason about how the feature behaves from the doc / memory | A belief about your own system is often false. **Use the real build** (browser / `curl`) — that's the whole engine. |
-| Report friction without showing it | A friction claim needs its screenshot / clip / response. "Trust me it's clunky" floats — captured evidence is the deliverable. |
-| Click around aimlessly | Drive from the **intent list**, or you'll miss the *absent* paths (nothing to stumble on) and only find shallow friction. |
-| Enumerate every `state × action` cell | That's a QA matrix — no floor, explodes. Use human intents; they have a floor. |
-| Make rendering a mockup the mandatory output | The output is an **evidence-rich report + ideas**. Render only when a finding is a *redesign* worth handing to `shape-mockup`. |
-| Only report friction, ignore the gaps that fall out | The session catches *both* — a clunky path AND an intent with no path. Report and tag both. |
-| Redesign or implement the fix in place | dogfood surfaces + routes; redesign is `shape-elicit`/`shape-mockup`, the finish is `nav-plan` + `shape-build`. |
-| Confuse it with `/verify` | verify checks correctness; dogfood critiques experience + coverage. Different question, same real app. |
-| Fire on a passing mention of a feature | Summoned on a "try it / it feels off / show me where it's clunky" request, like its mockup sibling. |
-| Keep going after the feature feels smooth | Exit when the friction is captured + named + routed (or the user has what they need). |
+| Reason about how the feature behaves from the doc / memory | Use the real build (browser / `curl`) — a belief about your own system is often false, and that's the whole engine. Tell: describing a flow's behaviour without having just driven it. |
+| Report friction without showing it | Capture the screenshot / clip / response — "trust me it's clunky" floats, captured evidence is the deliverable. Tell: a friction claim in the report has no attached evidence. |
+| Click around aimlessly | Drive from the intent list — aimless clicking misses the *absent* paths (nothing to stumble on) and only finds shallow friction. Tell: the session has no list of intents it's working through. |
+| Enumerate every `state × action` cell | Use human intents instead — they have a floor; a full state×action matrix is a QA exercise that explodes. Tell: the session is generating combinations instead of walking realistic user goals. |
+| Make rendering a mockup the mandatory output | Render only when a finding is a genuine redesign worth `shape-mockup` — the real output is an evidence-rich report + ideas. Tell: about to build a mockup before any friction has actually been found. |
+| Only report friction, ignore the gaps that fall out | Report and tag both — a clunky path AND an intent with no path at all. Tell: the report lists friction but has no section for missing coverage. |
+| Redesign or implement the fix in place | Surface + route — the redesign is `shape-elicit`/`shape-mockup`, the finish is `nav-plan` + `shape-build`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
+| Confuse it with `/verify` | Keep the question separate — verify checks correctness, dogfood critiques experience + coverage. Tell: the session is checking "does this work" instead of "does this feel right / is anything missing." |
+| Fire on a passing mention of a feature | Wait for a "try it / it feels off / show me where it's clunky" request. Tell: about to start a dogfood session off an incidental mention of a feature, not an actual ask. |
+| Keep going after the feature feels smooth | Exit when friction is captured + named + routed, or the user has what they need. Tell: continuing to poke at a flow after nothing new has surfaced for a while. |
 
 ## Output
 

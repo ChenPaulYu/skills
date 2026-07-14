@@ -72,15 +72,15 @@ graft *reasons*; it does not decide or build. Once the graft is up, *offer* — 
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Stop at the fits ("it's basically git") | Fits are free and carry no design identity. The payload is the **adapt** + **break** columns — reskinning a donor isn't grafting. |
-| Pick the donor you know, not the one that rhymes | Familiarity ≠ structural resonance. Name the resonance; if it's only surface, this is `first-principles`, not graft. |
-| Partial map (only the primitives you'd reach for) | The completeness is the forcing function — the skipped primitives are exactly where the surprises hide. Map them all. |
-| Let the donor's answer fill a break | The donor surfaced the gap; your **domain** answers it. Reflex-copying the donor across a break is the lazy-analogy failure. |
-| Force a graft where no model rhymes | If nothing structurally matches, a forced donor invents fake correspondences — reach for `first-principles` instead. |
-| Decide or implement here | graft reasons + routes. The decision is `/shape:elicit`; the build is `/nav:plan`. |
-| End on a jargon sentence ("the adapt list is the payload, fits are free") | That's the graft without the landing — the plain-words conclusion + analogy has to be the actual last word, not the five-part structure alone. |
+| Stop at the fits ("it's basically git") | Push through to the **adapt** + **break** columns — fits are free and carry no design identity; reskinning a donor isn't grafting. Tell: the report is a list of things that already match, with nothing that had to change. |
+| Pick the donor you know, not the one that rhymes | Name the actual structural resonance before picking — familiarity ≠ resonance. Tell: you'd struggle to say what state/transition/history the donor and target share beyond both being "systems". |
+| Partial map (only the primitives you'd reach for) | Map every primitive, not just the convenient ones — the skipped ones are exactly where the surprises hide. Tell: the map stops once the easy correspondences are listed. |
+| Let the donor's answer fill a break | Answer the gap from the **domain**, not the donor — reflex-copying the donor across a break is the lazy-analogy failure. Tell: a "break" row's resolution is just the donor's own behavior restated. |
+| Force a graft where no model rhymes | Reach for `first-principles` instead when nothing structurally matches — a forced donor invents fake correspondences. Tell: the fit/adapt/break columns are all stretching to make an unrelated system apply. |
+| Decide or implement here | Reason + route — the decision is `/shape:elicit`, the build is `/nav:plan`. Tell: the reply starts proposing an implementation instead of offering the route. |
+| End on a jargon sentence ("the adapt list is the payload, fits are free") | Close with a plain-words conclusion + analogy as the actual last word. Tell: the final sentence needs "graft", "primitive", or "donor" to parse. |
 
 ## Output
 

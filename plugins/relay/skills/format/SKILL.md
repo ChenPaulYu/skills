@@ -59,12 +59,12 @@ Now **read each thought** and use judgment the lint can't:
 - **Pull before, push after; gate before commit.**
 
 ## Anti-patterns (refuse these)
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Rewrite a thought's wording while "formatting" | Syntactic only — format never changes meaning; that would corrupt the record |
-| Sweep every project in the repo at once | One project at a time (too big; conformance is per-project) |
-| Guess a missing `thread` / `relate` target | Surface the judgment call; inventing a link mislinks the graph |
-| Inject backlinks into thoughts to "complete" links | Backlinks are computed, never stored — storing one mutates an immutable target |
+| Rewrite a thought's wording while "formatting" | Keep the change syntactic only — format never changes meaning, or it corrupts the record. Tell: the diff changes a sentence's words, not just its frontmatter or shape. |
+| Sweep every project in the repo at once | Do one project at a time — conformance is per-project and the sweep is too big otherwise. Tell: the diff spans `thoughts/` directories under more than one project. |
+| Guess a missing `thread` / `relate` target | Surface the judgment call instead of inventing a link — a guessed link mislinks the graph. Tell: about to fill in a `relate:` field with a target you're not certain is the right one. |
+| Inject backlinks into thoughts to "complete" links | Leave backlinks computed, never stored — storing one mutates an immutable target. Tell: about to write a new field into a thought that only exists to point back at another thought. |
 
 ## Companion skills
 - **`/relay:report`** / **`/relay:review`** — write thoughts *to* this format; `format` retro-fits old ones (the `/nav:sync` relationship).

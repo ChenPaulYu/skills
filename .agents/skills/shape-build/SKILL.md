@@ -91,17 +91,17 @@ This is the most concentrated point of shape↔nav communication — build *cont
 
 ## Anti-patterns (refuse these)
 
-| Temptation | Why to refuse |
+| Temptation | Instead — and the tell |
 |---|---|
-| Blast through all items without stopping | Confidence-gate is the core — stop on doubt, not just at the end. |
-| Re-implement nav-plan / nav-refactor inline | It's a meta-skill — sequence the protocols, don't duplicate them. |
-| Call another skill directly | Skills don't call skills — name the protocol, the agent runs it. |
-| Implement items in parallel without an approved schedule | Scheduling is adjudication — the criteria evidence + the user's nod come first (ADR-040). |
-| Trust an in-batch test run | Disjoint files ≠ disjoint import graphs — mid-batch signal is contaminated; the join gate is the only authoritative one. |
-| Force a screenshot on a pure-logic item | Structure-theatre — visual verify only where there's something to see. |
-| Silently skip visual verify when the helper's missing | Fail helpfully: offer install / test-only / skip, and report it. |
-| Mark Shipped on a red test or unverified diff | Test-gate + inject↔check gate every item. |
-| Plow past a blocked item | Surface it and ask — never thrash. |
+| Blast through all items without stopping | Stop on doubt, not just at the end — the confidence-gate is the core of the skill. Tell: three items marked done in a row with no pause to check any of them. |
+| Re-implement nav-plan / nav-refactor inline | Sequence the protocols instead of duplicating them — build is a meta-skill. Tell: about to hand-roll a planning or refactor step build should be citing by name. |
+| Call another skill directly | Name the protocol and let the agent run it — skills don't call skills. Tell: about to invoke another skill's door programmatically instead of describing the step. |
+| Implement items in parallel without an approved schedule | Get the criteria evidence + the user's nod first — scheduling is adjudication (ADR-040). Tell: two items are being worked simultaneously with no schedule the user signed off on. |
+| Trust an in-batch test run | Wait for the join gate — disjoint files can still share an import graph, so mid-batch signal is contaminated. Tell: about to mark an item verified off a test run from earlier in the same batch. |
+| Force a screenshot on a pure-logic item | Skip visual verify where there's nothing to see — that's structure-theatre. Tell: about to capture a screenshot of an item with no visual surface. |
+| Silently skip visual verify when the helper's missing | Fail helpfully — offer install / test-only / skip, and report it. Tell: visual verify quietly didn't happen and nothing in the output says why. |
+| Mark Shipped on a red test or unverified diff | Test-gate + inject↔check gate every item before Shipped. Tell: about to write "Shipped" next to an item whose last test run failed. |
+| Plow past a blocked item | Surface it and ask — never thrash. Tell: retrying the same blocked step a third time instead of stopping to ask. |
 
 ## Companion skills
 
