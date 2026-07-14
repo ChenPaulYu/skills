@@ -37,6 +37,7 @@
     "shape-mockup": "Converge a visual, structural, flow, or option decision by generating a real interactive HTML artifact. Use to mock, compare, diagram, visualize, or try variants; never substitutes prose or ASCII.",
     "shape-position": "Author and maintain a project's ratified core principle documents from messy, repeated inputs. Use to establish positioning, graduate durable thoughts, or repair accreted canon through gated edits.",
     "shape-reconcile": "Compare blueprints thoughts, plans, and mockups with shipped reality, then propose per-file amend, consolidate, graduate, retire, or prune actions. Read-only until each write is approved.",
-    "shape-setup": "Scaffold a new project to a verified running baseline using an archetype or grounded exemplar, with staged commits and verification. Use to start repos or projects, not to add features."
+    "shape-setup": "Scaffold a new project to a verified running baseline using an archetype or grounded exemplar, with staged commits and verification. Use to start repos or projects, not to add features.",
+    "shape-survey": "Map a decision space into independent axes grounded in the real repo, then report the diff versus what the user already knows. Use before deciding in unfamiliar terrain, not for repo maps or external research."
   }
 }

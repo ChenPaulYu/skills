@@ -4,7 +4,7 @@
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
 ## 🚧 In progress —— elicit 生態系落地
-- **elicit 生態系（survey · probe · 守門人）** — 2026-07-14 elicit 收斂完成、Paul 拍板：四象限知識狀態 → `shape:survey`（測繪盲點）與 `shape:probe`（實驗問現實）新建、teach 走路由（frame:analogize / deep-research）、elicit 升格守門人（卡住三分診斷 → offer 出去）。決策：`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md`；四 phase 計畫：`plans/2026-07-14-elicit-ecosystem.md`。**進度：Phase 0（收斂+計畫）完成，Phase 1–4 未動工。**
+- **elicit 生態系（survey · probe · 守門人）** — 2026-07-14 elicit 收斂完成、Paul 拍板：四象限知識狀態 → `shape:survey`（測繪盲點）與 `shape:probe`（實驗問現實）新建、teach 走路由（frame:analogize / deep-research）、elicit 升格守門人（卡住三分診斷 → offer 出去）。決策：`thoughts/2026-07-14-elicit-ecosystem-four-quadrants.md`；四 phase 計畫：`plans/2026-07-14-elicit-ecosystem.md`。**進度：Phase 0（收斂+計畫）、Phase 1（shape:survey + ADR-074，sonnet 執行/判斷席驗收）完成；Phase 2–4 未動工。**
 
 ## ▶ Next —— 接下來
 - **Codex Phases 1–5：行為相容編譯** — 讓 build-codex 降轉/剝除 Claude-only 語意，並把 `ratchet_ledger` 兩筆 bump 收回（`blueprints/plans/2026-07-13-codex-compatibility.md`，另一條工作線）

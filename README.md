@@ -59,6 +59,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
 - `/shape:elicit` — converge a conceptual decision by a grounded grill — or root-cause a logic flaw (diagnostic mode)
+- `/shape:survey` — map a decision space into independent axes grounded in the real repo, then report the diff versus what you already know (before deciding in unfamiliar terrain; not a repo map, not external research)
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
 - `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
