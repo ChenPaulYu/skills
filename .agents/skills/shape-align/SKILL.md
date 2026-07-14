@@ -35,7 +35,7 @@ Corollaries that govern every step below:
 
 ## What it produces — the blueprints tree
 
-See [`references/blueprints-spec.md`](references/blueprints-spec.md) for the full convention. In short:
+See [`references/blueprints-spec.md`](.agents/skills/shape-align/references/blueprints-spec.md) for the full convention. In short:
 
 ```
 blueprints/
@@ -51,7 +51,7 @@ blueprints/
 
 Find `blueprints/` (commonly `docs/blueprints/`). A project **born via `shape-setup`** already has the tree + the `AGENTS.md` priming block — skip to Step 2. Otherwise you're **adopting an existing repo** into the workflow, and this first run scaffolds it (there is deliberately no `shape:init`):
 - Ask **once** where it should live, then create `blueprints/thoughts/` + `blueprints/mockups/` + `blueprints/plans/`, and seed `plan.md` from the template. **Commit `mockups/`** (it carries Pick logs + ratified samples that thoughts link into — per `blueprints-spec.md`); only a *root-level* scratch `/mockups/` is gitignored, never the blueprints one.
-- **Also install the priming layer the project lacks** (the reason adoption felt un-smooth): ensure the `## Dev workflow` block from [`references/dev-workflow-stub.md`](references/dev-workflow-stub.md) exists in the repo's `AGENTS.md` (sentinel-delimited, idempotent) — workflow-verb table + standing pointers + communication directive.
+- **Also install the priming layer the project lacks** (the reason adoption felt un-smooth): ensure the `## Dev workflow` block from [`references/dev-workflow-stub.md`](.agents/skills/shape-align/references/dev-workflow-stub.md) exists in the repo's `AGENTS.md` (sentinel-delimited, idempotent) — workflow-verb table + standing pointers + communication directive.
 - If it exists, skip creation — only fill what's missing (idempotent).
 
 ### Step 2 — Ground in current reality

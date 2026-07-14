@@ -4,7 +4,7 @@
 >
 > **Decision:** Treat the existing Claude Code marketplace as a frozen input contract. Add Codex behavior compatibility entirely in a Codex adapter/compiler and Codex-only artifacts. Do not edit `plugins/**`, root `CLAUDE.md`, `.claude-plugin/**`, or `.cursor-plugin/**`; do not bump Claude plugin versions.
 
-> **Progress — 2026-07-14:** Phases 1-4 are complete. The Codex compiler boundary, invocation/tier lowering, worker contracts, interactive-choice lowering, browser-runtime lowering, generated `.codex` runtime artifacts, and lifecycle-awareness lowering are in place and validator-backed. Phase 5 is next and remains unstarted.
+> **Progress — 2026-07-14:** Phases 1-5 are complete. The Codex compiler boundary, invocation/tier lowering, worker contracts, interactive-choice lowering, browser-runtime lowering, generated `.codex` runtime artifacts, lifecycle-awareness lowering, and full-roster compatibility hardening are in place and validator-backed. Phase 6 remains open.
 
 ## Context
 
@@ -254,6 +254,8 @@ Phase 3 is complete only when all nine consumers carry an executable Codex choic
 
 **Gate:** zero unexplained compatibility findings across the roster; all generated artifacts deterministic; Claude contract unchanged.
 
+> **Phase 5 completion note — 2026-07-14:** Full-roster coverage is now **36/36** with zero unresolved compatibility categories. Capability rows are `browser_verify=3`, `explicit_invocation_only=6`, `interactive_choice=9`, `mechanical_model_tier=5`, `project_guidance=1`, `session_open_awareness=1`, and `worker_dispatch=5`. Verification is green at all declared Phase 5 gates: **20/20** canaries, **16/16** negatives, frozen contract **OK**, and the generated/runtime coverage audit is clean under `node scripts/validate-codex-skills.mjs --compat-audit`. This closes Phase 5 only; Phase 6 documentation/release work is still pending.
+
 ### Phase 6 — Document and release the Codex layer independently
 
 1. Write an ADR explaining:
@@ -286,7 +288,7 @@ Phase 3 is complete only when all nine consumers carry an executable Codex choic
 | `plugins/shape/skills/setup/SKILL.md:44` | Frozen source containing project-guidance and `/init` assumptions. Read only. | fixture input only |
 | `.agents/skills/**` | Generated Codex skill outputs. Never hand-edit. | generated 1–5 |
 | `.codex/agents/**` or documented install target | Generated/project Codex agent definitions, subject to official capability verification. | generated 2, 4 |
-| `docs/adr/060-codex-compatibility-layer.md` | Architectural ruling for the frozen-source adapter design. | 6 |
+| `docs/codex-compatibility.md` | Maintained translation procedure for the frozen-source Codex adapter. | 1–6 |
 
 ## Single-source-of-truth owners
 

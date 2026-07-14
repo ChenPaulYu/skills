@@ -1,0 +1,24 @@
+{
+  "id": "coverage-unexpected-generated-frontmatter",
+  "scenario": "coverage_contract",
+  "expect_only": true,
+  "manifest": {
+    "coverage_policy": {
+      "baseline_classes": ["A", "B"],
+      "capability_class": "C",
+      "degradation_class": "D",
+      "source_frontmatter_allowlist": ["name", "description", "model", "disable-model-invocation"],
+      "generated_frontmatter_allowlist": ["name", "description"],
+      "allowed_statuses": ["lowered", "degraded", "unsupported"]
+    },
+    "capabilities": [],
+    "generated_destinations": [".agents/skills"]
+  },
+  "files": {
+    "plugins/test/skills/demo/SKILL.md": "---\nname: demo\ndescription: \"demo\"\n---\n# demo\n",
+    ".agents/skills/test-demo/SKILL.md": "---\nname: test-demo\ndescription: \"demo\"\nextra: nope\n---\n# demo\n"
+  },
+  "expect_errors": [
+    "generated frontmatter key \"extra\" is not allowed"
+  ]
+}

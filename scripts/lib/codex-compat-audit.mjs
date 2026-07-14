@@ -77,6 +77,7 @@ export function validateCodexCompatPhase0(root, options = {}) {
 
   validateBaselineMetadata(audit, baseline, errors);
   validateBaselineRatchet(audit, baseline, errors);
+  validateNoUnresolvedGeneratedFindings(audit, errors);
 
   const canaries = validateCanaries(root, audit);
   errors.push(...canaries.errors);
@@ -96,17 +97,20 @@ export function validateCodexCompatPhase0(root, options = {}) {
   const preservationSmokes = validatePreservationSmokes(root);
   errors.push(...preservationSmokes.errors);
 
+  const coverage = validateCodexCoverage(root, audit.manifest);
+  errors.push(...coverage.errors);
+
   const frozen = validateFrozenContract(root, audit.manifest, worktreeFreeze);
   errors.push(...frozen.errors);
 
-  return { root, audit, baseline, canaries, negativeTests, browserRuntime, lifecycleHook, hookSmokes, preservationSmokes, frozen, errors };
+  return { root, audit, baseline, canaries, negativeTests, browserRuntime, lifecycleHook, hookSmokes, preservationSmokes, coverage, frozen, errors };
 }
 
 export function formatCodexCompatAudit(result) {
   const lines = [];
   const categories = Object.values(result.audit.categories);
 
-  lines.push("Codex compatibility audit — Phase 0");
+  lines.push("Codex compatibility audit");
   lines.push(`Scanned ${result.audit.generatedFiles.length} generated files`);
   lines.push(`Scanner roots: ${result.audit.scannerRoots.join(", ")}`);
   lines.push("");
@@ -138,6 +142,9 @@ export function formatCodexCompatAudit(result) {
   lines.push(`Lifecycle hook contract: ${result.lifecycleHook.errors.length ? "FAIL" : "OK"}`);
   lines.push(`Lifecycle hook smokes: ${result.hookSmokes.passed}/${result.hookSmokes.total} ok`);
   lines.push(`Preservation smokes: ${result.preservationSmokes.passed}/${result.preservationSmokes.total} ok`);
+  if (result.coverage) {
+    lines.push(...formatCodexCoverageSummaryLines(result.coverage));
+  }
   lines.push(`Frozen contract: ${result.frozen.errors.length ? "FAIL" : "OK"}`);
 
   if (result.errors.length) {
@@ -147,6 +154,29 @@ export function formatCodexCompatAudit(result) {
   }
 
   return lines.join("\n");
+}
+
+export function formatCodexCoverageReport(result) {
+  const lines = [];
+  const total = result.rows.length;
+  lines.push(`Coverage ${result.coveredCount}/${total}`);
+  for (const row of result.rows) {
+    lines.push(`${row.flat} | ${row.classes.join("+")} | ${row.capabilities.length ? row.capabilities.join(", ") : "none"}`);
+  }
+  lines.push(`Capability counts: ${formatCountMap(result.capabilityCounts)}`);
+  lines.push(`Capability statuses: ${formatCountMap(result.statusCounts)}`);
+  for (const [capability, flats] of Object.entries(result.capabilityMatches || {}).sort(([a], [b]) => a.localeCompare(b))) {
+    lines.push(`${capability}: ${flats.length ? flats.join(", ") : "none"}`);
+  }
+  return lines.join("\n");
+}
+
+function validateNoUnresolvedGeneratedFindings(audit, errors) {
+  for (const category of Object.values(audit.categories)) {
+    if (category.count === 0) continue;
+    const refs = category.findings.map((finding) => `${finding.file}:${finding.line}`).join(", ");
+    errors.push(`Phase 5: unresolved generated ${category.label} finding(s): ${refs}`);
+  }
 }
 
 function validateBaselineMetadata(audit, baseline, errors) {
@@ -401,6 +431,12 @@ function buildNegativeFixtureErrors(fixture) {
     return errors;
   }
 
+  if (fixture.scenario === "coverage_contract") {
+    const result = validateCoverageFixture(fixture);
+    errors.push(...result.errors);
+    return errors;
+  }
+
   errors.push(`unknown negative fixture scenario: ${fixture.scenario}`);
   return errors;
 }
@@ -583,6 +619,23 @@ function validateSessionOpenContractFixture(fixture) {
   }
 }
 
+function validateCoverageFixture(fixture) {
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-coverage-"));
+  const errors = [];
+  try {
+    mkdirSync(tempRoot, { recursive: true });
+    writeTextFile(join(tempRoot, MANIFEST_PATH), JSON.stringify(fixture.manifest || {}, null, 2));
+    for (const [file, content] of Object.entries(fixture.files || {})) {
+      writeTextFile(join(tempRoot, file), content);
+    }
+    const result = validateCodexCoverage(tempRoot, fixture.manifest || {});
+    errors.push(...result.errors);
+    return { errors };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
 function validateHookSmokes(root) {
   const results = [];
   for (const fixtureFile of listFixtureJsonFiles(root, HOOK_SMOKE_DIR)) {
@@ -601,6 +654,142 @@ function validatePreservationSmokes(root) {
     results.push({ id: fixture.id || basename(fixtureFile), errors: result.errors });
   }
   return summarizeFixtureResults("preservation smoke", results);
+}
+
+function validateCodexCoverage(root, manifest) {
+  const errors = [];
+  const sourceSkills = discoverSkillFiles(root, join("plugins"), "source", errors);
+  const generatedSkills = discoverSkillFiles(root, join(".agents", "skills"), "generated", errors);
+  const sourceByFlat = new Map(sourceSkills.map((skill) => [skill.flat, skill]));
+  const generatedByFlat = new Map(generatedSkills.map((skill) => [skill.flat, skill]));
+  const sourceFlats = normalizeAndSort([...sourceByFlat.keys()]);
+  const generatedFlats = normalizeAndSort([...generatedByFlat.keys()]);
+
+  for (const flat of sourceFlats) {
+    if (!generatedByFlat.has(flat)) errors.push(`Phase 5: missing generated skill for ${flat}: .agents/skills/${flat}/SKILL.md`);
+  }
+  for (const flat of generatedFlats) {
+    if (!sourceByFlat.has(flat)) errors.push(`Phase 5: missing source skill for ${flat}: plugins/*/skills/*/SKILL.md`);
+  }
+
+  const coveragePolicy = manifest.coverage_policy || {};
+  const sourceAllowlist = new Set(coveragePolicy.source_frontmatter_allowlist || []);
+  const generatedAllowlist = new Set(coveragePolicy.generated_frontmatter_allowlist || []);
+  const allowedStatuses = new Set(
+    coveragePolicy.allowed_statuses ||
+    coveragePolicy.capability_status_allowlist ||
+    [],
+  );
+  const baselineClasses = coveragePolicy.baseline_classes || ["A", "B"];
+  const capabilityClass = coveragePolicy.capability_class || "C";
+  const degradationClass = coveragePolicy.degradation_class || "D";
+  const degradationStatuses = new Set(coveragePolicy.degradation_statuses || ["degraded", "unsupported"]);
+
+  const capabilities = Array.isArray(manifest.capabilities) ? manifest.capabilities : [];
+  const capabilityMatches = new Map();
+  const capabilityCounts = {};
+  const statusCounts = {};
+
+  for (const capability of capabilities) {
+    const status = capability.status;
+    const hasValidStatus = allowedStatuses.has(status);
+    if (!hasValidStatus) {
+      errors.push(`Phase 5: capability ${capability.id} has invalid or missing status ${JSON.stringify(status)}`);
+    } else {
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+    }
+
+    validateManifestCapabilityPaths(root, capability, errors);
+    const sourceSignals = compileSourceSignals(capability.source_signals || []);
+    if (sourceSignals.length === 0) {
+      errors.push(`Phase 5: capability ${capability.id} is missing source_signals`);
+    }
+
+    const matchedFlats = [];
+    for (const source of sourceSkills) {
+      const matchedSignals = matchSourceSignals(source, sourceSignals);
+      if (matchedSignals.length === 0) continue;
+      matchedFlats.push(source.flat);
+    }
+    const normalizedMatches = normalizeAndSort(matchedFlats);
+    capabilityMatches.set(capability.id, normalizedMatches);
+    capabilityCounts[capability.id] = normalizedMatches.length;
+
+    const consumerFlats = normalizeAndSort(
+      (capability.contract_consumers || [])
+        .map((consumer) => {
+          if (!consumer.endsWith("/SKILL.md")) {
+            errors.push(`Phase 5: manifest capability ${capability.id} has non-skill contract consumer ${consumer}`);
+            return null;
+          }
+          const flat = flatSkillFromGeneratedPath(consumer);
+          if (!flat) {
+            errors.push(`Phase 5: manifest capability ${capability.id} has invalid contract consumer path ${consumer}`);
+            return null;
+          }
+          if (!generatedByFlat.has(flat)) {
+            errors.push(`Phase 5: manifest capability ${capability.id} references missing generated skill ${consumer}`);
+            return null;
+          }
+          return flat;
+        })
+        .filter(Boolean),
+    );
+    if (hasValidStatus && !sameMembers(consumerFlats, normalizedMatches)) {
+      errors.push(
+        `Phase 5: capability ${capability.id} contract_consumers drifted: coverage [${normalizedMatches.join(", ")}] vs manifest [${consumerFlats.join(", ")}]`,
+      );
+    }
+  }
+
+  const rows = [];
+  for (const flat of sourceFlats) {
+    const source = sourceByFlat.get(flat);
+    const generated = generatedByFlat.get(flat);
+    if (!generated) continue;
+
+    validateFrontmatterAllowlist(source, sourceAllowlist, "source", errors);
+    validateFrontmatterAllowlist(generated, generatedAllowlist, "generated", errors);
+
+    const capabilitiesForSkill = capabilities
+      .filter((capability) => (capabilityMatches.get(capability.id) || []).includes(flat))
+      .slice()
+      .sort((a, b) => a.id.localeCompare(b.id));
+    const classes = [...baselineClasses];
+    if (capabilitiesForSkill.length) classes.push(capabilityClass);
+    if (capabilitiesForSkill.some((capability) => degradationStatuses.has(capability.status))) {
+      classes.push(degradationClass);
+    }
+
+    validateGeneratedPolicyMarkers(source, generated, capabilitiesForSkill, errors);
+    validateGeneratedContractMarkers(generated, capabilitiesForSkill, errors);
+
+    rows.push({
+      flat,
+      classes,
+      capabilities: capabilitiesForSkill.map((capability) => capability.id),
+      generatedPath: generated.path,
+    });
+  }
+
+  errors.push(...validateGeneratedArtifactTargets(root, manifest));
+
+  const coveredRoster = normalizeAndSort(rows.map((row) => row.flat));
+  if (!sameMembers(sourceFlats, coveredRoster)) {
+    errors.push(`Phase 5: coverage roster mismatch: discovered [${sourceFlats.join(", ")}] vs covered [${coveredRoster.join(", ")}]`);
+  }
+
+  return {
+    totalSkills: sourceFlats.length,
+    coveredCount: rows.length,
+    rows,
+    capabilityCounts,
+    statusCounts,
+    capabilityMatches: Object.fromEntries(
+      capabilities.map((capability) => [capability.id, capabilityMatches.get(capability.id) || []]),
+    ),
+    errors,
+  };
 }
 
 function runHookSmokeFixture(root, fixture) {
@@ -762,6 +951,279 @@ function buildFixtureHelperScript(helper) {
     `process.exit(${status});`,
     "",
   ].join("\n");
+}
+
+function discoverSkillFiles(root, startDir, kind, errors) {
+  const fullStart = join(root, startDir);
+  if (!existsSync(fullStart)) return [];
+  const skills = [];
+  for (const file of walkFiles(fullStart)) {
+    const relPath = normalizePath(relative(root, file));
+    if (!relPath.endsWith("/SKILL.md")) continue;
+    const flat = kind === "source" ? flatSkillFromSourcePath(relPath) : flatSkillFromGeneratedPath(relPath);
+    if (!flat) continue;
+    const content = readFileSync(file, "utf8");
+    const frontmatter = parseTopYamlFrontmatter(content);
+    if (!frontmatter) {
+      errors.push(`Phase 5: ${kind} skill is missing top YAML frontmatter: ${relPath}`);
+      continue;
+    }
+    skills.push({ flat, path: relPath, content, frontmatter });
+  }
+  return skills.sort((a, b) => a.flat.localeCompare(b.flat));
+}
+
+function flatSkillFromSourcePath(path) {
+  const match = /^plugins\/([^/]+)\/skills\/([^/]+)\/SKILL\.md$/.exec(normalizePath(path));
+  if (!match) return null;
+  return `${match[1]}-${match[2]}`;
+}
+
+function flatSkillFromGeneratedPath(path) {
+  const match = /^\.agents\/skills\/([^/]+)\/SKILL\.md$/.exec(normalizePath(path));
+  return match ? match[1] : null;
+}
+
+function parseTopYamlFrontmatter(content) {
+  const lines = content.split("\n");
+  if (lines[0] !== "---") return null;
+  const keys = [];
+  const values = {};
+  for (let index = 1; index < lines.length; index++) {
+    const line = lines[index];
+    if (line === "---") return { keys, values };
+    const match = /^([A-Za-z0-9_-]+)\s*:\s*(.*)$/.exec(line);
+    if (!match) continue;
+    const key = match[1];
+    keys.push(key);
+    values[key] = parseScalarFrontmatterValue(match[2]);
+  }
+  return null;
+}
+
+function parseScalarFrontmatterValue(rawValue) {
+  const value = rawValue.trim();
+  if (value === "true") return true;
+  if (value === "false") return false;
+  if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+
+function validateFrontmatterAllowlist(skill, allowlist, kind, errors) {
+  for (const key of skill.frontmatter.keys) {
+    if (!allowlist.has(key)) {
+      errors.push(`Phase 5: ${kind} frontmatter key ${JSON.stringify(key)} is not allowed in ${skill.path}`);
+    }
+  }
+}
+
+function validateManifestCapabilityPaths(root, capability, errors) {
+  for (const field of [
+    "local_mapping",
+    "runtime_artifact",
+    "interactive_choice_contract",
+    "work_packet_contract",
+    "worker_return_contract",
+  ]) {
+    if (typeof capability[field] === "string") {
+      validateManifestPointer(root, capability.id, field, capability[field], errors);
+    }
+  }
+
+  for (const field of ["agents", "runtime_artifacts", "template_sources", "compiler_owners"]) {
+    for (const pointer of capability[field] || []) {
+      validateManifestPointer(root, capability.id, field, pointer, errors);
+    }
+  }
+}
+
+function validateGeneratedPolicyMarkers(source, generated, capabilitiesForSkill, errors) {
+  const activeMarkers = new Map();
+  for (const capability of capabilitiesForSkill) {
+    for (const marker of capability.generated_policy_markers || []) {
+      activeMarkers.set(marker, capability.id);
+      if (!generated.content.includes(marker)) {
+        errors.push(`Phase 5: generated ${capability.id} policy marker is missing in ${generated.path}`);
+      }
+    }
+  }
+
+  for (const marker of ["> **Explicitly invoked only.**", "> **Mechanical-tier skill.**"]) {
+    if (generated.content.includes(marker) && !activeMarkers.has(marker)) {
+      errors.push(`Phase 5: unexpected generated policy marker ${JSON.stringify(marker)} in ${generated.path}`);
+    }
+  }
+}
+
+function validateGeneratedContractMarkers(generated, capabilitiesForSkill, errors) {
+  const activeMarkers = new Map();
+  for (const capability of capabilitiesForSkill) {
+    for (const marker of capability.generated_contract_markers || []) {
+      activeMarkers.set(marker, capability.id);
+      if (!generated.content.includes(marker)) {
+        errors.push(`Phase 5: generated ${capability.id} contract marker is missing in ${generated.path}`);
+      }
+    }
+  }
+
+  for (const marker of [
+    "> **Interactive choice contract (Codex).**",
+    "## Worker dispatch contract (Codex)",
+    "> **Browser-verify contract (Codex).**",
+    "architecture enrichment adds detail once code exists.",
+    "> **Lifecycle awareness contract (Codex).**",
+  ]) {
+    if (generated.content.includes(marker) && !activeMarkers.has(marker)) {
+      errors.push(`Phase 5: unexpected generated contract marker ${JSON.stringify(marker)} in ${generated.path}`);
+    }
+  }
+}
+
+function validateGeneratedArtifactTargets(root, manifest) {
+  const errors = [];
+  for (const file of listGeneratedFiles(root, manifest.generated_destinations || [])) {
+    if (!/\.md$/i.test(file)) continue;
+    const content = readFileSync(join(root, file), "utf8");
+    for (const link of collectLocalMarkdownLinks(content)) {
+      const resolved = resolveGeneratedReference(root, file, link.target);
+      if (!resolved.exists) {
+        errors.push(`Phase 5: missing markdown target in ${file}: ${link.target}`);
+      }
+    }
+    for (const target of collectInlineBacktickPaths(content)) {
+      const resolved = resolveGeneratedReference(root, file, target);
+      if (!resolved.exists) {
+        errors.push(`Phase 5: missing inline path target in ${file}: ${target}`);
+      }
+    }
+  }
+  return errors;
+}
+
+function compileSourceSignals(signals) {
+  return signals.map((signal) => {
+    if (signal.scope === "frontmatter") return signal;
+    return compileRule(signal);
+  });
+}
+
+function matchSourceSignals(skill, signals) {
+  const matched = [];
+  for (const signal of signals) {
+    if (signal.scope === "frontmatter") {
+      const actual = skill.frontmatter.values[signal.field];
+      const expected = parseScalarFrontmatterValue(String(signal.value));
+      if (actual === expected) matched.push(signal.id || `${signal.field}:${signal.value}`);
+      continue;
+    }
+    const findings = scanContent(skill.path, skill.content, [signal]);
+    if (findings.length > 0) matched.push(signal.id || signal.pattern);
+  }
+  return matched;
+}
+
+function validateManifestPointer(root, capabilityId, field, pointer, errors) {
+  if (typeof pointer !== "string" || !pointer.trim()) {
+    errors.push(`Phase 5: capability ${capabilityId} has invalid ${field} pointer ${JSON.stringify(pointer)}`);
+    return;
+  }
+  const [file, symbol] = pointer.split("#");
+  const fullPath = join(root, file);
+  if (!existsSync(fullPath)) {
+    errors.push(`Phase 5: capability ${capabilityId} references missing ${field} ${pointer}`);
+    return;
+  }
+  if (symbol) {
+    const content = readFileSync(fullPath, "utf8");
+    if (!content.includes(symbol)) {
+      errors.push(`Phase 5: capability ${capabilityId} pointer ${pointer} is missing symbol ${symbol}`);
+    }
+  }
+}
+
+function collectLocalMarkdownLinks(content) {
+  const links = [];
+  const regex = /\[[^\]]+\]\(([^)]+)\)/g;
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    const target = match[1].trim();
+    if (isIgnorableLinkTarget(target)) continue;
+    links.push({ target });
+  }
+  return links;
+}
+
+function collectInlineBacktickPaths(content) {
+  const matches = [];
+  const regex = /`([^`]+)`/g;
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    const value = match[1].trim();
+    if (containsIllustrativePlaceholderPath(value)) continue;
+    if (value.endsWith("/")) continue;
+    if (
+      value.startsWith(".codex/agents/") ||
+      value.startsWith(".codex/hooks/") ||
+      value.startsWith("references/") ||
+      value.startsWith("scripts/")
+    ) {
+      matches.push(value);
+    }
+  }
+  return matches;
+}
+
+function isIgnorableLinkTarget(target) {
+  const cleanTarget = target.split("#")[0].trim();
+  return (
+    target.startsWith("#") ||
+    /^[a-z]+:\/\//i.test(target) ||
+    target.startsWith("mailto:") ||
+    target.startsWith("app://") ||
+    containsIllustrativePlaceholderPath(cleanTarget)
+  );
+}
+
+function resolveGeneratedReference(root, generatedPath, target) {
+  const cleanTarget = target.split("#")[0].trim();
+  if (!cleanTarget) return { exists: true };
+  if (cleanTarget === "references/") return { exists: true };
+  if (containsIllustrativePlaceholderPath(cleanTarget)) return { exists: true };
+  const generatedDir = dirname(join(root, generatedPath));
+  const generatedSkillRoot = generatedPath.startsWith(".agents/skills/")
+    ? join(root, normalizePath(generatedPath).split("/").slice(0, 3).join("/"))
+    : generatedDir;
+  const candidates = [];
+
+  if (cleanTarget.startsWith(".codex/") || cleanTarget.startsWith("scripts/")) {
+    candidates.push(join(root, cleanTarget));
+  } else if (cleanTarget.startsWith(".agents/skills/")) {
+    candidates.push(join(root, cleanTarget));
+  } else if (cleanTarget.startsWith("references/")) {
+    candidates.push(join(generatedSkillRoot, cleanTarget));
+  } else {
+    candidates.push(join(generatedDir, cleanTarget));
+    candidates.push(join(root, cleanTarget));
+  }
+
+  return { exists: candidates.some((candidate) => existsSync(candidate)) };
+}
+
+function containsIllustrativePlaceholderPath(target) {
+  return target.split("/").some((segment) => {
+    if (!segment) return false;
+    return /<[^<>/]+>/.test(segment) || /\{[^{}\/]+\}/.test(segment);
+  });
+}
+
+function formatCodexCoverageSummaryLines(result) {
+  return [
+    `Coverage: ${result.coveredCount}/${result.totalSkills}`,
+    `Capability rows: ${formatCountMap(result.capabilityCounts)}`,
+    `Capability statuses: ${formatCountMap(result.statusCounts)}`,
+  ];
 }
 
 function resolveHookHelperPath(tempRoot, tempHome, location = "project") {
@@ -1153,6 +1615,12 @@ function summarizeCommandOutput(output) {
     .split("\n")
     .slice(0, 4)
     .join(" | ") || "no stderr/stdout";
+}
+
+function formatCountMap(counts) {
+  const entries = Object.entries(counts || {}).sort(([a], [b]) => a.localeCompare(b));
+  if (entries.length === 0) return "none";
+  return entries.map(([key, value]) => `${key}=${value}`).join(", ");
 }
 
 function summarizeSpawnFailure(result) {

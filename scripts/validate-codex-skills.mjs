@@ -36,6 +36,7 @@ import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import {
   formatCodexCompatAudit,
+  formatCodexCoverageReport,
   validateCodexCompatPhase0,
 } from "./lib/codex-compat-audit.mjs";
 import {
@@ -58,6 +59,15 @@ function main() {
   if (process.argv.includes("--compat-audit")) {
     const compat = validateCodexCompatPhase0(ROOT);
     console.log(formatCodexCompatAudit(compat));
+    if (compat.errors.length) process.exit(1);
+    return;
+  }
+
+  if (process.argv.includes("--coverage-report")) {
+    const compat = validateCodexCompatPhase0(ROOT, {
+      worktreeFreeze: process.argv.includes("--codex-compat"),
+    });
+    console.log(formatCodexCoverageReport(compat.coverage));
     if (compat.errors.length) process.exit(1);
     return;
   }

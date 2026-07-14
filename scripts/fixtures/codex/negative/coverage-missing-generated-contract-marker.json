@@ -1,0 +1,43 @@
+{
+  "id": "coverage-missing-generated-contract-marker",
+  "scenario": "coverage_contract",
+  "expect_only": true,
+  "manifest": {
+    "coverage_policy": {
+      "baseline_classes": ["A", "B"],
+      "capability_class": "C",
+      "degradation_class": "D",
+      "degradation_statuses": ["degraded", "unsupported"],
+      "source_frontmatter_allowlist": ["name", "description", "model", "disable-model-invocation"],
+      "generated_frontmatter_allowlist": ["name", "description"],
+      "allowed_statuses": ["lowered", "degraded", "unsupported"]
+    },
+    "capabilities": [
+      {
+        "id": "interactive_choice",
+        "status": "lowered",
+        "source_signals": [
+          {
+            "id": "ask_user_question",
+            "kind": "literal",
+            "pattern": "AskUserQuestion"
+          }
+        ],
+        "generated_contract_markers": [
+          "> **Interactive choice contract (Codex).**"
+        ],
+        "contract_consumers": [
+          ".agents/skills/test-demo/SKILL.md"
+        ]
+      }
+    ],
+    "generated_destinations": [".agents/skills"]
+  },
+  "files": {
+    "plugins/test/skills/demo/SKILL.md": "---\nname: demo\ndescription: \"demo\"\n---\nUse AskUserQuestion here.\n",
+    ".agents/skills/test-demo/SKILL.md": "---\nname: test-demo\ndescription: \"demo\"\n---\n# demo\n"
+  },
+  "expect_errors": [
+    "generated interactive_choice contract marker is missing"
+  ]
+}

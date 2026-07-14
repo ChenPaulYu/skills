@@ -1,0 +1,38 @@
+{
+  "id": "coverage-capability-consumer-drift",
+  "scenario": "coverage_contract",
+  "expect_only": true,
+  "manifest": {
+    "coverage_policy": {
+      "baseline_classes": ["A", "B"],
+      "capability_class": "C",
+      "degradation_class": "D",
+      "degradation_statuses": ["degraded", "unsupported"],
+      "source_frontmatter_allowlist": ["name", "description", "model", "disable-model-invocation"],
+      "generated_frontmatter_allowlist": ["name", "description"],
+      "allowed_statuses": ["lowered", "degraded", "unsupported"]
+    },
+    "capabilities": [
+      {
+        "id": "interactive_choice",
+        "status": "lowered",
+        "source_signals": [
+          {
+            "id": "ask_user_question",
+            "kind": "literal",
+            "pattern": "AskUserQuestion"
+          }
+        ],
+        "contract_consumers": []
+      }
+    ],
+    "generated_destinations": [".agents/skills"]
+  },
+  "files": {
+    "plugins/test/skills/demo/SKILL.md": "---\nname: demo\ndescription: \"demo\"\n---\nUse AskUserQuestion here.\n",
+    ".agents/skills/test-demo/SKILL.md": "---\nname: test-demo\ndescription: \"demo\"\n---\n# demo\n"
+  },
+  "expect_errors": [
+    "Phase 5: capability interactive_choice contract_consumers drifted: coverage [test-demo] vs manifest []"
+  ]
+}

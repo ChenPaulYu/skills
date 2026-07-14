@@ -111,3 +111,14 @@ once, on `sonnet`. Does **not** close: multiple trials (N=1, not the ≥2-of-3 t
 rule in the probe proposal called for — the user opted for a single trial to look first),
 a sparse/no-map repo run (tolerant-fallback tier untested), or the Step 5 alignment-delta
 half of the loop (this trial only produced the first turn).
+
+## 2026-07-14 closure
+
+- Final Phase 3 gate: **PASS**.
+- Two independent blind routing judges both scored **15/15** against the intended owners.
+- Two real-repo behavioral runs are now documented: the marketplace repo, plus one temporary sparse git fixture with **no** map / README / ADR and visible files `package.json`, `NOTES.txt`, `src/queue.js`, `src/cli.js`, and `test/queue.test.js`.
+- In the sparse fallback run, GPT-5.4 `nav:tour` self-reported evidence tiers **2+3** (mainly tier 3), labeled dependency-free / offline operation as **Recorded**, default rejection semantics as **undecided rejection**, the overall repo shape as **Inferred** demo-like, and the default concurrency rationale as **Unknown**.
+- The first turn ended with exactly six falsifiable shared-model statements plus the exact correction question, satisfying Step 4.
+- The deliberate correction turn produced all four required Step 5 categories: **Confirmed**, **Corrected**, **Missing**, and **Intent/code divergence**, using only the required three sections.
+- `git status --short` before and after the behavioral runs was unchanged.
+- The later closure run explicitly forbade reads from the source marketplace docs / plugins / blueprints / site surfaces, avoiding the earlier contamination path.

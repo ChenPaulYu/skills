@@ -1,6 +1,36 @@
 {
   "schema_version": "1",
-  "adapter_release": "0.5.0-phase4-runtime-contracts",
+  "adapter_release": "0.6.0-phase5-full-roster-gates",
+  "coverage_policy": {
+    "class_definitions": {
+      "A": "portable core",
+      "B": "mechanical syntax",
+      "C": "host capability",
+      "D": "explicit degradation"
+    },
+    "baseline_classes": ["A", "B"],
+    "capability_class": "C",
+    "degradation_class": "D",
+    "degradation_statuses": [
+      "degraded",
+      "unsupported"
+    ],
+    "source_frontmatter_allowlist": [
+      "name",
+      "description",
+      "model",
+      "disable-model-invocation"
+    ],
+    "generated_frontmatter_allowlist": [
+      "name",
+      "description"
+    ],
+    "allowed_statuses": [
+      "lowered",
+      "degraded",
+      "unsupported"
+    ]
+  },
   "metadata_policy": {
     "description_source": "platforms/codex/descriptions.json",
     "description_strategy": "Codex-only, trigger-first summaries; Claude descriptions remain unchanged",
@@ -37,6 +67,16 @@
       "id": "interactive_choice",
       "status": "lowered",
       "summary": "scripts/lib/codex-compat.mjs#lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs with host-neutral chooser terminology in every compiled profile. #injectInteractiveChoiceContract inserts the canonical executable contract for all nine choice consumers: use request_user_input when callable; otherwise ask one concise direct question and end the turn; never execute before an explicit choice; preserve source-owned choices, recommendations, opt-outs, one-shot behavior, and explicit-invocation semantics. Ratcheted to zero across all generated output (codex-compatibility Phase 3).",
+      "source_signals": [
+        {
+          "id": "ask_user_question",
+          "kind": "literal",
+          "pattern": "AskUserQuestion"
+        }
+      ],
+      "generated_contract_markers": [
+        "> **Interactive choice contract (Codex).**"
+      ],
       "interactive_choice_contract": "scripts/lib/codex-compat.mjs#CODEX_INTERACTIVE_CHOICE_CONTRACT",
       "contract_consumers": [
         ".agents/skills/nav-plan/SKILL.md",
@@ -54,8 +94,34 @@
       "id": "worker_dispatch",
       "status": "lowered",
       "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 adds the concrete supervision/dispatch machinery on top: scripts/lib/codex-compat.mjs#injectWorkerDispatchContract appends a 'Worker dispatch contract (Codex)' section — the canonical work-packet contract (#CODEX_WORK_PACKET_CONTRACT: goal / scope+owned files / inputs+source of truth / constraints / done_when / verification commands / base SHA / return schema) and worker return contract (#CODEX_WORKER_RETURN_CONTRACT: status done|partial|blocked / files changed / diff summary / commands+results / assumptions / unresolved risks / current SHA) — to the five dispatch-heavy skills (nav-audit, nav-plan, nav-refactor, research-dissect, shape-build), each referencing that skill's own existing inject/check prose rather than duplicating it.",
+      "source_signals": [
+        {
+          "id": "agent_call",
+          "kind": "regex",
+          "pattern": "`Agent`|\\bAgent\\s*\\(|\\bAgent\\s+tool\\b",
+          "flags": "g"
+        },
+        {
+          "id": "subagent_type",
+          "kind": "literal",
+          "pattern": "subagent_type="
+        },
+        {
+          "id": "research_document_worker",
+          "kind": "literal",
+          "pattern": "Dispatch a sub-agent per document"
+        },
+        {
+          "id": "shape_build_item_worker",
+          "kind": "literal",
+          "pattern": "sequential subagent-per-item"
+        }
+      ],
       "work_packet_contract": "scripts/lib/codex-compat.mjs#CODEX_WORK_PACKET_CONTRACT",
       "worker_return_contract": "scripts/lib/codex-compat.mjs#CODEX_WORKER_RETURN_CONTRACT",
+      "generated_contract_markers": [
+        "## Worker dispatch contract (Codex)"
+      ],
       "contract_consumers": [
         ".agents/skills/nav-audit/SKILL.md",
         ".agents/skills/nav-plan/SKILL.md",
@@ -73,17 +139,75 @@
     {
       "id": "explicit_invocation_only",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerFrontmatter strips disable-model-invocation from Codex frontmatter and injects an explicit body-level invocation-policy paragraph near the top of the skill. Ratcheted to zero across all generated output (codex-compatibility Phase 1)."
+      "summary": "scripts/lib/codex-compat.mjs#lowerFrontmatter strips disable-model-invocation from Codex frontmatter and injects an explicit body-level invocation-policy paragraph near the top of the skill. Ratcheted to zero across all generated output (codex-compatibility Phase 1).",
+      "source_signals": [
+        {
+          "id": "disable_model_invocation_frontmatter",
+          "scope": "frontmatter",
+          "field": "disable-model-invocation",
+          "value": "true"
+        }
+      ],
+      "generated_policy_markers": [
+        "> **Explicitly invoked only.**"
+      ],
+      "contract_consumers": [
+        ".agents/skills/nav-refactor/SKILL.md",
+        ".agents/skills/reflect-catchup/SKILL.md",
+        ".agents/skills/reflect-observe/SKILL.md",
+        ".agents/skills/reflect-park/SKILL.md",
+        ".agents/skills/shape-build/SKILL.md",
+        ".agents/skills/shape-setup/SKILL.md"
+      ]
     },
     {
       "id": "mechanical_model_tier",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerFrontmatter strips model: sonnet from Codex frontmatter and injects an execution-tier note (delegate to the configured executor role where available, else run inline and report the degradation); lowerWorkerProse also rewrites remaining body-prose mentions of the removed field. Ratcheted to zero across all generated output (codex-compatibility Phase 1)."
+      "summary": "scripts/lib/codex-compat.mjs#lowerFrontmatter strips model: sonnet from Codex frontmatter and injects an execution-tier note (delegate to the configured executor role where available, else run inline and report the degradation); lowerWorkerProse also rewrites remaining body-prose mentions of the removed field. Ratcheted to zero across all generated output (codex-compatibility Phase 1).",
+      "source_signals": [
+        {
+          "id": "model_sonnet_frontmatter",
+          "scope": "frontmatter",
+          "field": "model",
+          "value": "sonnet"
+        }
+      ],
+      "generated_policy_markers": [
+        "> **Mechanical-tier skill.**"
+      ],
+      "contract_consumers": [
+        ".agents/skills/nav-map/SKILL.md",
+        ".agents/skills/relay-digest/SKILL.md",
+        ".agents/skills/relay-format/SKILL.md",
+        ".agents/skills/shape-align/SKILL.md",
+        ".agents/skills/shape-reconcile/SKILL.md"
+      ]
     },
     {
       "id": "browser_verify",
       "status": "lowered",
       "summary": "scripts/lib/codex-compat.mjs#lowerBrowserVerifyProse lowers the exact Claude-only browser runtime ownership/path claims before contract injection, leaving generic browser-helper prose untouched. scripts/lib/codex-compat.mjs#injectBrowserVerifyContract inserts the canonical executable browser contract for the three shape consumers: dispatch to `.codex/agents/browser-verifier.toml` only when custom-agent runtime is available and that artifact exists; otherwise run the identical pass inline. Artifact/runtime absence is fallback, not `MISSING-TOOL`; preserve `PASS | DRIFT | BLOCKED | MISSING-TOOL`, screenshot paths only, and close-on-exit. scripts/build-codex.mjs#buildBrowserVerifierAgent compiles the source shape agent into the project runtime artifact. Legacy browser-subagent/source-path claims ratchet to zero; `agent-browser` remains a declared optional helper, not an unresolved token.",
+      "source_signals": [
+        {
+          "id": "shape_build_browser_slot",
+          "kind": "literal",
+          "pattern": "## browser-verify slot (the dependency, handled as a capability)"
+        },
+        {
+          "id": "browser_verifier_subagent",
+          "kind": "regex",
+          "pattern": "`browser-verifier` subagent|plugin's `browser-verifier` agent",
+          "flags": "g"
+        },
+        {
+          "id": "shape_dogfood_browser_slot",
+          "kind": "literal",
+          "pattern": "Driving the frontend uses shape's shared **browser-verify slot**"
+        }
+      ],
+      "generated_contract_markers": [
+        "> **Browser-verify contract (Codex).**"
+      ],
       "compiler_owners": [
         "scripts/lib/codex-compat.mjs#lowerBrowserVerifyProse",
         "scripts/lib/codex-compat.mjs#injectBrowserVerifyContract",
@@ -106,12 +230,51 @@
     {
       "id": "project_guidance",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#createProjectGuidanceLowerer moves the existing CLAUDE.md->AGENTS.md + namespace-flatten rewrites here and adds /init-assumption softening (Claude Code's built-in /init -> generic architecture-enrichment phrasing, no Claude-only command claim). claude_built_in and claude_init categories ratcheted to zero (codex-compatibility Phase 1)."
+      "summary": "scripts/lib/codex-compat.mjs#createProjectGuidanceLowerer moves the existing CLAUDE.md->AGENTS.md + namespace-flatten rewrites here and adds /init-assumption softening (Claude Code's built-in /init -> generic architecture-enrichment phrasing, no Claude-only command claim). claude_built_in and claude_init categories ratcheted to zero (codex-compatibility Phase 1).",
+      "source_signals": [
+        {
+          "id": "claude_built_in",
+          "kind": "literal",
+          "pattern": "Claude Code's built-in"
+        },
+        {
+          "id": "claude_init",
+          "kind": "regex",
+          "pattern": "`/init`|\"/init\"|'/init'",
+          "flags": "g"
+        }
+      ],
+      "generated_contract_markers": [
+        "architecture enrichment adds detail once code exists."
+      ],
+      "contract_consumers": [
+        ".agents/skills/shape-setup/SKILL.md"
+      ]
     },
     {
       "id": "session_open_awareness",
       "status": "lowered",
       "summary": "scripts/lib/codex-compat.mjs#lowerSessionOpenProse lowers the precise legacy session-open / runs-on-open prose before contract injection while preserving the hook-summary format phrase for the runtime helper. scripts/lib/codex-compat.mjs#injectSessionOpenContract inserts the canonical lifecycle-awareness contract for relay-digest: default to invoking it on demand; a trusted SessionStart startup/resume hook may add a compact note when a relay repo is detectable, but runtime/helper absence and non-relay contexts degrade to a safe no-op. platforms/codex/hooks/hooks.json plus platforms/codex/hooks/relay-digest-session-start.mjs are the single-source templates, and scripts/build-codex.mjs#buildHooks compiles them into the project runtime artifacts. Legacy session-open / runs-on-open claims ratchet to zero across generated output (codex-compatibility Phase 4).",
+      "source_signals": [
+        {
+          "id": "runs_it_on_open",
+          "kind": "literal",
+          "pattern": "runs it on open"
+        },
+        {
+          "id": "auto_runs_on_open",
+          "kind": "literal",
+          "pattern": "auto-runs this on open"
+        },
+        {
+          "id": "on_every_open",
+          "kind": "literal",
+          "pattern": "on every open"
+        }
+      ],
+      "generated_contract_markers": [
+        "> **Lifecycle awareness contract (Codex).**"
+      ],
       "compiler_owners": [
         "scripts/lib/codex-compat.mjs#lowerSessionOpenProse",
         "scripts/lib/codex-compat.mjs#injectSessionOpenContract",

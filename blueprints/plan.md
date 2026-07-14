@@ -3,22 +3,21 @@
 > 2026-07-13 · status index (one layer, by status). Only "what to do + which doc".
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
-## 🚧 In progress —— Codex Phases 1–5：行為相容編譯
-- **Phase 1（compiler 抽取）／Phase 2（worker 派工契約+3 個 role TOML+個人對映層）／Phase 3（互動選擇契約，9 consumers、15 canaries）完成；Phase 4–5 未動工。** `blueprints/plans/2026-07-13-codex-compatibility.md`。
+## 🚧 In progress —— 暫無
+- **目前沒有在飛的板子需要掛在 In progress。**
 
 ## ▶ Next —— 接下來
-- **reflect:summarize 退役** — Paul 2026-07-14 拍板刪除：No-Op 檢驗不過（模型不裝 skill 也會做完整回顧），護城河最淺（對照 catchup 的三態機器/park 的落檔）。做法：ADR（引 ADR-021 doctor 退役先例）＋移除 SKILL.md＋全套 gate 反向（reflect 版本 bump、README、site map 中英、mirror regen）。**等 elicit 生態系四 phase 落完再動**（避免與在飛 sub-agent 撞 gating surfaces）。
-- **Codex Phase 4：runtime capability** — 產生 browser-verifier 的 Codex 等價物、接上 shape 三個 consumers，並對 session-open 能力做支援或誠實降級；完成後再進 Phase 5 全 roster hardening（`blueprints/plans/2026-07-13-codex-compatibility.md`）。
+- **reflect:retro（第 5 成員）** — ADR-056 原則接受 · 先過 vs observe 的界線 elicit＋ADR
 
 ## ⏸ Future —— deferred
 - **why/what/how 高度診斷（elicit 守門人第四種卡）** — Paul 2026-07-14 提出、方向已選（切對話紀律，不做分類軸——分類軸過不了 No-Op 檢驗）：「層次滑動型卡住」＝分岔立錯樓層（嘴上吵 how、分歧在 why），修法是把 fork 往上抬一層再立，借 `shape:position` 的 altitude instrument（axiom/principle/approach/bet ＋ churn alarm）by protocol，零新 skill。**等刺痛案例**（一場真的因層次滑動爛掉的討論）再落 SKILL.md——elicit 剛動完守門人刀（ADR-076），連續改同一 skill 是 Sprawl 起手式。
 - **fixed-structure 藥方順序** — `thoughts/2026-07-13-fixed-structure-learning-curve.md` · 等 Paul 的具體刺痛案例回來續 elicit
-- **reflect:retro（第 5 成員）** — ADR-056 原則接受 · 先過 vs observe 的界線 elicit＋ADR
 - **lifecycle buckets ＋ router** — Paul 於 matt-adoption 範圍裁決時剔除（deferred，非 rejected）
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
-2026-07-14：**新增 `nav:tour`**（ADR-082，nav 0.8.4 → 0.9.0，site map rev 78，marketplace 35 → 36 skills）——對話式導覽：三態容錯讀證據（map/header → 非標準文件 → source+git fallback）＋「為什麼」全標 Recorded/Inferred/Unknown，結尾強制丟出 4-7 條可證偽的共同理解句、等使用者糾正、回報分類過的認知差集（Confirmed/Corrected/Missing/Intent-code divergence）——這個強制糾正回合是它沒被 No-Op 檢驗擋下的唯一理由（複核 2026-07-14 elicit 生態系那次對通用 `teach` 的否決仍然成立）。`nav:map` frontmatter 同步收窄,拿掉「onboarding」觸發詞,移交給 tour。路由探針 15/15 全過、六個邊界鄰居零被搶;`/shape:probe` 追加冷啟動行為試驗（一個全新 sonnet sub-agent、只給 SKILL.md 內容、真跑這個 repo）驗證糾正回合真的會觸發——PASS：完整跑完五步、結尾有 6 條可證偽共同理解句 + 精確糾正提問,provenance 正確區分 Recorded/Inferred（`docs/findings/2026-07-14-nav-tour-routing-probe.md`）。仍是已知缺口:只跑 1 次試驗（使用者選擇先看 1 次而非原計畫 ≥2/3）、沒測過沒有 map 的 sparse repo、Step 5（收到使用者糾正後的差集回報)這半段沒被實測到。撰寫由 session model 直接執行,兩次驗證各派一個 sub-agent(general-purpose,第二次明確指定 sonnet)當獨立試驗者。
+2026-07-14：**Codex 相容層 Phases 1–5 完成**——全 roster 相容覆蓋 **36/36**，能力列數 `browser 3 / explicit 6 / interactive 9 / mechanical 5 / project 1 / session 1 / worker 5`，`--compat-audit` 驗證 **20/20 canaries**、**16/16 negatives**、零 unresolved categories、frozen contract clean；Phase 6 文件與釋出仍未開始（`blueprints/plans/2026-07-13-codex-compatibility.md`，`docs/findings/2026-07-14-codex-phase5-coverage.md`）。
+2026-07-14：**新增 `nav:tour`**（ADR-082，nav 0.8.4 → 0.9.0，site map rev 78，marketplace 35 → 36 skills）——對話式導覽：三態容錯讀證據（map/header → 非標準文件 → source+git fallback）＋「為什麼」全標 Recorded/Inferred/Unknown，結尾強制丟出 4-7 條可證偽的共同理解句、等使用者糾正、回報分類過的認知差集（Confirmed/Corrected/Missing/Intent-code divergence）——這個強制糾正回合是它沒被 No-Op 檢驗擋下的唯一理由（複核 2026-07-14 elicit 生態系那次對通用 `teach` 的否決仍然成立）。`nav:map` frontmatter 同步收窄,拿掉「onboarding」觸發詞,移交給 tour。Closure probes 現在已補齊：兩個獨立路由 judges 都是 **15/15**，一個無 map / README / ADR 的 sparse 真 git repo 成功走 tier 2+3 fallback，且 Step 5 糾正回合實測產出 **Confirmed/Corrected/Missing/Intent-code divergence** 四類差集；`git status --short` 前後不變（`docs/findings/2026-07-14-nav-tour-routing-probe.md`）。
 2026-07-14：**anti-pattern 表 tell 欄掃描完成**（ADR-069 的 optional sweep 收尾）——實際 26 檔（板子估 34 高了），25 檔完成 merged 格式（park 原本就是 canonical），frame 0.6.1／nav 0.8.4／relay 0.8.1／shape 0.9.4，site map rev 77。sonnet 執行；它正確地照 ADR-069「merged not appended」抗命了 brief 的字面「加第三欄」。
 2026-07-14：**research 泛化＋能力優先**（ADR-080，research 0.6.0、shape 0.9.3）——物件從「論文」泛化為「論證型文件」（Paul 原則：paper 是文件的一種）；三條下游縫記錄（untangle→position/elicit、critique→probe、survey→deep-research）；deep-research offer 帶量級標示（b 案，ADR-062 實例）；`notes/`／`sources/` 由準契約降為 convention，複用改 tolerant 三態（決策：`thoughts/2026-07-14-research-generalize-argument-docs.md`）。路由探針 follow-up 已跑：12/12 全過（4 非論文觸發＋4 邊界防搶＋4 論文經典零退步，`docs/findings/2026-07-14-adr080-routing-probe.md`）。
 2026-07-14：**派工可見性**（ADR-081）——dispatch-tiers 增三件：事前提案閘門（一批一問＋降級閥，借 ADR-040）、回程自報行（⚙ 派工行＋commit 格式，鏡射 ADR-071 自報層級）、使用者 tier 指定壓過預設（持久覆寫=寫進 CLAUDE.md，不是記憶）。Paul 拍板：派工不可見則信任無錨點。

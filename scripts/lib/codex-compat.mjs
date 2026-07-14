@@ -419,8 +419,8 @@ export function createProjectGuidanceLowerer({ plugins, skills }) {
   // `/nav:audit`, `nav:audit`, `/shape:mockup` → `nav-audit` / `shape-mockup`. Requires a real
   // verb after the colon, so bare-namespace prose ("the `nav:` namespace") is left untouched.
   const NS = new RegExp(`/?\\b(${pluginPattern}):(${skillPattern})\\b`, "g");
-  // Full skills-root reference paths → repo-root-relative `references/…` (they travel with the dir).
-  const REF_PATH = new RegExp(`plugins/(?:${pluginPattern})/skills/[^/]+/references/`, "g");
+  // Full skills-root reference paths → the owning generated skill's bundled references directory.
+  const REF_PATH = new RegExp(`plugins/(${pluginPattern})/skills/(${skillPattern})/references/`, "g");
   const PLUGIN_CLAUDE = new RegExp(`plugins/(?:${pluginPattern})/CLAUDE\\.md`, "g");
 
   /** Rewrites shared by both profiles: namespace flatten + plugin-CLAUDE.md → AGENTS.md path. */
@@ -431,7 +431,13 @@ export function createProjectGuidanceLowerer({ plugins, skills }) {
   /** Skill/reference profile: also re-root bundled reference paths + generic "CLAUDE.md" → "AGENTS.md",
    * then soften the /init assumption. */
   function lowerSkillGuidance(text) {
-    const rewritten = rewriteCommon(text).replace(REF_PATH, "references/").replace(/CLAUDE\.md/g, "AGENTS.md");
+    const rewritten = rewriteCommon(text)
+      .replace(
+        /plugins\/nav\/skills\/sync\/references\/visual-spec\.md/g,
+        "references/visual-spec.md",
+      )
+      .replace(REF_PATH, ".agents/skills/$1-$2/references/")
+      .replace(/CLAUDE\.md/g, "AGENTS.md");
     return lowerInitAssumption(rewritten);
   }
 
