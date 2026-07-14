@@ -3,7 +3,8 @@
 > 2026-07-13 · status index (one layer, by status). Only "what to do + which doc".
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
-## 🚧 In progress —— （無在飛項）
+## 🚧 In progress —— Codex Phases 1–5：行為相容編譯
+- **Phase 1（compiler 抽取，已 commit）／Phase 2（worker 派工契約+3 個 role TOML+個人對映層，已驗收待 commit）完成；Phase 3–5 未動工。** `blueprints/plans/2026-07-13-codex-compatibility.md`。
 
 ## ▶ Next —— 接下來
 - **reflect:summarize 退役** — Paul 2026-07-14 拍板刪除：No-Op 檢驗不過（模型不裝 skill 也會做完整回顧），護城河最淺（對照 catchup 的三態機器/park 的落檔）。做法：ADR（引 ADR-021 doctor 退役先例）＋移除 SKILL.md＋全套 gate 反向（reflect 版本 bump、README、site map 中英、mirror regen）。**等 elicit 生態系四 phase 落完再動**（避免與在飛 sub-agent 撞 gating surfaces）。

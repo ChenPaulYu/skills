@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "adapter_release": "0.2.0-projection",
+  "adapter_release": "0.3.0-worker-dispatch-contract",
   "metadata_policy": {
     "description_source": "platforms/codex/descriptions.json",
     "description_strategy": "Codex-only, trigger-first summaries; Claude descriptions remain unchanged",
@@ -41,7 +41,22 @@
     {
       "id": "worker_dispatch",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1)."
+      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 adds the concrete supervision/dispatch machinery on top: scripts/lib/codex-compat.mjs#injectWorkerDispatchContract appends a 'Worker dispatch contract (Codex)' section — the canonical work-packet contract (#CODEX_WORK_PACKET_CONTRACT: goal / scope+owned files / inputs+source of truth / constraints / done_when / verification commands / base SHA / return schema) and worker return contract (#CODEX_WORKER_RETURN_CONTRACT: status done|partial|blocked / files changed / diff summary / commands+results / assumptions / unresolved risks / current SHA) — to the five dispatch-heavy skills (nav-audit, nav-plan, nav-refactor, research-dissect, shape-build), each referencing that skill's own existing inject/check prose rather than duplicating it.",
+      "work_packet_contract": "scripts/lib/codex-compat.mjs#CODEX_WORK_PACKET_CONTRACT",
+      "worker_return_contract": "scripts/lib/codex-compat.mjs#CODEX_WORKER_RETURN_CONTRACT",
+      "contract_consumers": [
+        ".agents/skills/nav-audit/SKILL.md",
+        ".agents/skills/nav-plan/SKILL.md",
+        ".agents/skills/nav-refactor/SKILL.md",
+        ".agents/skills/research-dissect/SKILL.md",
+        ".agents/skills/shape-build/SKILL.md"
+      ],
+      "agents": [
+        "platforms/codex/agents/executor.toml",
+        "platforms/codex/agents/explorer.toml",
+        "platforms/codex/agents/reviewer.toml"
+      ],
+      "local_mapping": "platforms/codex/local/README.md"
     },
     {
       "id": "explicit_invocation_only",

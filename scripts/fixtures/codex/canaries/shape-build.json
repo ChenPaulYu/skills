@@ -18,6 +18,10 @@
   ],
   "expect_text": [
     "> **Explicitly invoked only.**",
-    "Dispatched item agents (serial or the parallel tail) default to cheap tier (the mechanical-tier executor role)"
+    "Dispatched item agents (serial or the parallel tail) default to cheap tier (the mechanical-tier executor role)",
+    "## Worker dispatch contract (Codex)",
+    "write workers default to sequential (one item's work packet at a time)",
+    "**Base SHA** — the commit/state it started from, so the returned diff has something to diff against.",
+    "The dispatching agent never accepts `status: done` at face value"
   ]
 }

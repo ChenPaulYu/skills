@@ -164,6 +164,33 @@ After Stage 3's file write + summary, present implementation options via `AskUse
 
 The dispatched worker defaults to cheap tier (the mechanical-tier executor role); a judgment-dense single step can be escalated on the spot (see root AGENTS.md's Dispatch tiers).
 
+## Worker dispatch contract (Codex)
+
+Stage 4 option 1's inject/check bullets above are this contract in practice: the inject list (plan file path, step scope, Verification expectation, Critical files + reusable seams, the N+1 trigger) supplies the work packet below; the check list (diff read, integration pass, header hygiene) is the root agent applying the worker return contract before accepting "done".
+
+**Work packet** (what the dispatching agent injects):
+
+- **Goal** — the one-sentence outcome this worker must achieve.
+- **Scope and owned files** — exactly which files/paths it may touch; everything outside that scope is out of bounds.
+- **Inputs and source of truth** — what to read before acting, and which document or state wins if sources disagree.
+- **Constraints and forbidden actions** — house rules it must not break (read-only, no scope creep, no mid-batch tests, etc.).
+- **done_when** — the concrete condition that makes "done" true, not a feeling.
+- **Verification commands** — the exact command(s) it must run and report the result of.
+- **Base SHA** — the commit/state it started from, so the returned diff has something to diff against.
+- **Return schema** — a pointer to the worker return contract below; its final message must follow it exactly.
+
+**Worker return** (what the worker must report back):
+
+- **status** — `done` | `partial` | `blocked`. Never claim `done` without satisfying done_when.
+- **Files changed** — the full list, matching the work packet's owned-files scope.
+- **Diff summary** — what actually changed, in prose, not just a file list.
+- **Commands and results** — every verification command it ran, with the actual output/exit status.
+- **Assumptions** — anything it inferred rather than was told.
+- **Unresolved risks** — anything left uncertain, deferred, or worth a second look.
+- **Current SHA** — the state after its change, so the read-the-diff step is exact.
+
+The dispatching agent never accepts `status: done` at face value: it reads the returned diff against Base SHA and reruns the Verification commands itself before treating the item as closed. A worker that reports `done` without a passing verification command is rejected and re-dispatched, not trusted.
+
 **Why the worker is the recommended default**: it enforces clean context (= the "separate session" discipline at the architecture level, not just by convention) and frees the planning session's context for review work the user might still want to do.
 
 **Optional extra option — visual summary of the plan (guarded):** when the plan carries visual / structural decisions **and** `shape-mockup` is available, add an option **"Render a visual summary (→ `shape-mockup`)"** — an interactive diagram of the approach + affected files, a decidable glance before execution (and a reusable verify target later). This is the **same cross-family edge** Stage 2 already uses (the offer is an *ask*, never auto). **Guard it:** omit the option if `shape-mockup` isn't installed (a broken option is worse than none) or the plan is purely non-visual. It's a **soft nav→shape recommendation**, never a hard dependency. `nav-plan` works fully without shape. (See [ADR-012](docs/adr/012-nav-plan-offers-visual-summary.md).)

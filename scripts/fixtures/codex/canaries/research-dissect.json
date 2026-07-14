@@ -6,6 +6,9 @@
     { "category": "subagent_protocol" }
   ],
   "expect_text": [
-    "dispatch a **worker** to read and dissect it"
+    "dispatch a **worker** to read and dissect it",
+    "## Worker dispatch contract (Codex)",
+    "specialized for document analysis rather than code (no files changed, no diff, no SHA)",
+    "asks the worker to revise (never silently rewrites it itself) if any item fails."
   ]
 }

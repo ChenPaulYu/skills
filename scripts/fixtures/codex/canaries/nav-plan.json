@@ -15,6 +15,10 @@
   ],
   "expect_text": [
     "Dispatch a scoped executor worker.",
-    "The dispatched worker defaults to cheap tier (the mechanical-tier executor role)"
+    "The dispatched worker defaults to cheap tier (the mechanical-tier executor role)",
+    "## Worker dispatch contract (Codex)",
+    "Stage 4 option 1's inject/check bullets above are this contract in practice",
+    "**Base SHA** — the commit/state it started from, so the returned diff has something to diff against.",
+    "The dispatching agent never accepts `status: done` at face value"
   ]
 }

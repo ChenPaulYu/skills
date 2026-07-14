@@ -17,13 +17,19 @@
  *                                  global replace — every rule is a precise (pattern, replacement)
  *                                  pair; generic prose ("agent-navigability", "coding agent") is
  *                                  untouched because none of these patterns can match it.
+ *   injectWorkerDispatchContract() — Phase 2: for the dispatch-heavy skills only, appends a
+ *                                  concrete "Worker dispatch contract" section (the canonical
+ *                                  work-packet / worker-return contracts below) right after that
+ *                                  skill's own existing inject/check prose — it references that
+ *                                  prose by name rather than duplicating it. No-op for every other
+ *                                  skill (returns text unchanged when the flat name isn't configured).
  *   detectUnsupported()           — scans compiled text for any remaining denylisted Claude-only
  *                                  token, sharing the manifest-driven rule list with
  *                                  scripts/lib/codex-compat-audit.mjs (no duplicated rule list).
  *
  * Capability table this module implements (see blueprints/plans/2026-07-13-codex-compatibility.md):
  *   explicit_invocation_only, mechanical_model_tier  → lowerFrontmatter + lowerWorkerProse
- *   worker_dispatch (Agent/subagent_type/sub-agent)  → lowerWorkerProse
+ *   worker_dispatch (Agent/subagent_type/sub-agent)  → lowerWorkerProse + injectWorkerDispatchContract
  *   project_guidance (CLAUDE.md→AGENTS.md, /init)    → createProjectGuidanceLowerer
  * Deliberately NOT lowered here (later phases): interactive_choice (AskUserQuestion, Phase 3),
  * browser_verify (Phase 4), session_open_awareness (Phase 4).
@@ -207,6 +213,123 @@ export function createProjectGuidanceLowerer({ plugins, skills }) {
   }
 
   return { rewriteCommon, lowerSkillGuidance, lowerSharedGuidance };
+}
+
+// ---------------------------------------------------------------------------
+// injectWorkerDispatchContract — Phase 2: work-packet + worker-return contracts,
+// owned once here, injected into the dispatch-heavy skills only.
+// ---------------------------------------------------------------------------
+
+/**
+ * The Codex work-packet contract (blueprints/plans/2026-07-13-codex-compatibility.md Phase 2,
+ * deliverable A). This is the ONE canonical text for "what the dispatching agent must put in a
+ * worker's brief" — every skill below references it instead of restating its own version.
+ */
+export const CODEX_WORK_PACKET_CONTRACT = `- **Goal** — the one-sentence outcome this worker must achieve.
+- **Scope and owned files** — exactly which files/paths it may touch; everything outside that scope is out of bounds.
+- **Inputs and source of truth** — what to read before acting, and which document or state wins if sources disagree.
+- **Constraints and forbidden actions** — house rules it must not break (read-only, no scope creep, no mid-batch tests, etc.).
+- **done_when** — the concrete condition that makes "done" true, not a feeling.
+- **Verification commands** — the exact command(s) it must run and report the result of.
+- **Base SHA** — the commit/state it started from, so the returned diff has something to diff against.
+- **Return schema** — a pointer to the worker return contract below; its final message must follow it exactly.`;
+
+/**
+ * The worker return contract (deliverable A, the other half). Every dispatched worker's final
+ * message must report these fields — this is what the dispatching agent's "check" step reads.
+ */
+export const CODEX_WORKER_RETURN_CONTRACT = `- **status** — \`done\` | \`partial\` | \`blocked\`. Never claim \`done\` without satisfying done_when.
+- **Files changed** — the full list, matching the work packet's owned-files scope.
+- **Diff summary** — what actually changed, in prose, not just a file list.
+- **Commands and results** — every verification command it ran, with the actual output/exit status.
+- **Assumptions** — anything it inferred rather than was told.
+- **Unresolved risks** — anything left uncertain, deferred, or worth a second look.
+- **Current SHA** — the state after its change, so the read-the-diff step is exact.`;
+
+/** Shared closing line proving the Phase 2 gate in prose: the dispatching agent reads the diff,
+ * reruns verification, and rejects an unsupported "done" rather than trusting the worker's word. */
+const CODEX_DISPATCH_REJECTION_CLOSE =
+  'The dispatching agent never accepts `status: done` at face value: it reads the returned diff against Base SHA and reruns the Verification commands itself before treating the item as closed. A worker that reports `done` without a passing verification command is rejected and re-dispatched, not trusted.';
+
+function genericContractBlock(intro) {
+  return [
+    intro,
+    "",
+    "**Work packet** (what the dispatching agent injects):",
+    "",
+    CODEX_WORK_PACKET_CONTRACT,
+    "",
+    "**Worker return** (what the worker must report back):",
+    "",
+    CODEX_WORKER_RETURN_CONTRACT,
+    "",
+    CODEX_DISPATCH_REJECTION_CLOSE,
+  ].join("\n");
+}
+
+/**
+ * Per-skill anchor + body config. `after` is an EXACT substring already present in the compiled
+ * text (post lowerWorkerProse) — the section is inserted immediately after it, at the next
+ * paragraph boundary. `body` is the section content (without the heading, added by the caller).
+ * Every entry references the skill's own inject/check prose by name rather than restating it —
+ * see the plan's injection-strategy note (Phase 2, deliverable B).
+ */
+const WORKER_DISPATCH_SECTIONS = {
+  "nav-audit": {
+    after:
+      "Each worker returns its domain's findings + self-eval. It does **not** write files (read-only audit). Reconnaissance workers default to cheap tier (the mechanical-tier executor role); a domain whose judgment call is unusually dense can be escalated on the spot (see root AGENTS.md's Dispatch tiers).",
+    body: genericContractBlock(
+      "D2's inject and D3–D5's check above are this contract, lowered to Codex vocabulary: each explorer worker's brief IS the work packet below (Scope = its assigned domain's files only; Constraints = read-only, no writes; Verification = read-only greps/finds, never a mutating command); its findings + self-eval IS the worker return below. D3's merge/dedup and D5's completeness critic are the root agent applying the rejection rule at the end of this section — an under-covered or unsupported domain gets re-dispatched, not accepted.",
+    ),
+  },
+  "nav-plan": {
+    after:
+      "The dispatched worker defaults to cheap tier (the mechanical-tier executor role); a judgment-dense single step can be escalated on the spot (see root AGENTS.md's Dispatch tiers).",
+    body: genericContractBlock(
+      "Stage 4 option 1's inject/check bullets above are this contract in practice: the inject list (plan file path, step scope, Verification expectation, Critical files + reusable seams, the N+1 trigger) supplies the work packet below; the check list (diff read, integration pass, header hygiene) is the root agent applying the worker return contract before accepting \"done\".",
+    ),
+  },
+  "nav-refactor": {
+    after:
+      "See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's rationale.",
+    body: genericContractBlock(
+      "Step 8 option 2's inject/check bullets above are this contract in practice: the inject (extracted file paths, the move-vs-improve discipline, deferred simplifications, the surrounding seam, the N+1 trigger) supplies the work packet below; the check (diff read for a parallel impl, header hygiene, the verify gate) is the root agent applying the worker return contract before accepting \"done\".",
+    ),
+  },
+  "shape-build": {
+    after:
+      "The dispatch facility is a **capability slot** (like browser-verify): a workflow/pipeline engine as named default, plain parallel workers otherwise; **no facility → fully sequential. Degrade parallelism, never the gates.**",
+    body: genericContractBlock(
+      "The per-item loop's step 3 inject/check bullets and this Scheduling section's join gate above are this contract in practice — write workers default to sequential (one item's work packet at a time); a parallel tail is only ever a set of disjoint, pre-approved work packets, never overlapping scope. The step-3 \"check the returned diff\" line and the join gate's full test rerun are the root agent applying the worker return contract before any item counts as done.",
+    ),
+  },
+  "research-dissect": {
+    after:
+      '7. **Return instruction** — tell the worker its final text IS the dissection note (raw markdown). It should return nothing else.',
+    body: [
+      "This inject → read → check protocol above already IS a work-packet/return-contract pair, specialized for document analysis rather than code (no files changed, no diff, no SHA):",
+      "",
+      "- **Goal** = the assigned document + the 5-layer framework (items 1–2 above). **Scope** = read this document only, don't wander into others. **Inputs / source of truth** = the document's own content, never the filename. **Constraints** = don't skim; don't invent the Conclusion. **done_when** = all five sections present and every item in the \"check (←)\" list below passes. **Verification** = the \"check (←)\" list, run by the dispatching agent against the returned note, not by the worker on itself. **Return schema** = the Output format template (item 3 above) — the note IS the return, not a separate status field.",
+      "- The dispatching agent never accepts a returned note at face value: it runs every \"check (←)\" item before saving, and — the document-analysis equivalent of \"reject an unsupported done\" — asks the worker to revise (never silently rewrites it itself) if any item fails.",
+    ].join("\n"),
+  },
+};
+
+/**
+ * Inserts the "Worker dispatch contract" section for the given flat skill name, right after its
+ * configured anchor's paragraph. No-op (returns text unchanged) for any flat name not configured
+ * above — this only touches the five dispatch-heavy skills the plan names (Phase 2, deliverable B).
+ */
+export function injectWorkerDispatchContract(text, flat) {
+  const config = WORKER_DISPATCH_SECTIONS[flat];
+  if (!config) return text;
+
+  const anchorIndex = text.indexOf(config.after);
+  if (anchorIndex === -1) return text; // anchor drifted out of source; fail open, not silently wrong
+
+  const insertAt = anchorIndex + config.after.length;
+  const section = `\n\n## Worker dispatch contract (Codex)\n\n${config.body}`;
+  return `${text.slice(0, insertAt)}${section}${text.slice(insertAt)}`;
 }
 
 // ---------------------------------------------------------------------------

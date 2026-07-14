@@ -165,6 +165,33 @@ After Step 7's report, present next-action options via `AskUserQuestion`. The di
 
 See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's rationale.
 
+## Worker dispatch contract (Codex)
+
+Step 8 option 2's inject/check bullets above are this contract in practice: the inject (extracted file paths, the move-vs-improve discipline, deferred simplifications, the surrounding seam, the N+1 trigger) supplies the work packet below; the check (diff read for a parallel impl, header hygiene, the verify gate) is the root agent applying the worker return contract before accepting "done".
+
+**Work packet** (what the dispatching agent injects):
+
+- **Goal** — the one-sentence outcome this worker must achieve.
+- **Scope and owned files** — exactly which files/paths it may touch; everything outside that scope is out of bounds.
+- **Inputs and source of truth** — what to read before acting, and which document or state wins if sources disagree.
+- **Constraints and forbidden actions** — house rules it must not break (read-only, no scope creep, no mid-batch tests, etc.).
+- **done_when** — the concrete condition that makes "done" true, not a feeling.
+- **Verification commands** — the exact command(s) it must run and report the result of.
+- **Base SHA** — the commit/state it started from, so the returned diff has something to diff against.
+- **Return schema** — a pointer to the worker return contract below; its final message must follow it exactly.
+
+**Worker return** (what the worker must report back):
+
+- **status** — `done` | `partial` | `blocked`. Never claim `done` without satisfying done_when.
+- **Files changed** — the full list, matching the work packet's owned-files scope.
+- **Diff summary** — what actually changed, in prose, not just a file list.
+- **Commands and results** — every verification command it ran, with the actual output/exit status.
+- **Assumptions** — anything it inferred rather than was told.
+- **Unresolved risks** — anything left uncertain, deferred, or worth a second look.
+- **Current SHA** — the state after its change, so the read-the-diff step is exact.
+
+The dispatching agent never accepts `status: done` at face value: it reads the returned diff against Base SHA and reruns the Verification commands itself before treating the item as closed. A worker that reports `done` without a passing verification command is rejected and re-dispatched, not trusted.
+
 ## Anti-patterns (refuse these, even if tempting)
 
 | Temptation | Instead — and the tell |

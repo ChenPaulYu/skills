@@ -1,17 +1,17 @@
 {
-  "id": "nav-audit",
+  "id": "nav-refactor",
   "mode": "generated",
-  "file": ".agents/skills/nav-audit/SKILL.md",
+  "file": ".agents/skills/nav-refactor/SKILL.md",
   "reject": [
     { "category": "agent_call" },
     { "category": "subagent_type" },
+    { "category": "subagent_protocol" },
     { "category": "model_sonnet" }
   ],
   "expect_text": [
-    "one message, multiple read-only explorer worker dispatches — read-only is the point",
-    "Reconnaissance workers default to cheap tier (the mechanical-tier executor role)",
+    "Dispatch a scoped executor worker.",
     "## Worker dispatch contract (Codex)",
-    "each explorer worker's brief IS the work packet below",
+    "Step 8 option 2's inject/check bullets above are this contract in practice",
     "**Base SHA** — the commit/state it started from, so the returned diff has something to diff against.",
     "The dispatching agent never accepts `status: done` at face value"
   ]

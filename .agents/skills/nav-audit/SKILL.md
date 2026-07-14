@@ -189,6 +189,33 @@ Dispatch the domains **in parallel** (one message, multiple read-only explorer w
 
 Each worker returns its domain's findings + self-eval. It does **not** write files (read-only audit). Reconnaissance workers default to cheap tier (the mechanical-tier executor role); a domain whose judgment call is unusually dense can be escalated on the spot (see root AGENTS.md's Dispatch tiers).
 
+## Worker dispatch contract (Codex)
+
+D2's inject and D3–D5's check above are this contract, lowered to Codex vocabulary: each explorer worker's brief IS the work packet below (Scope = its assigned domain's files only; Constraints = read-only, no writes; Verification = read-only greps/finds, never a mutating command); its findings + self-eval IS the worker return below. D3's merge/dedup and D5's completeness critic are the root agent applying the rejection rule at the end of this section — an under-covered or unsupported domain gets re-dispatched, not accepted.
+
+**Work packet** (what the dispatching agent injects):
+
+- **Goal** — the one-sentence outcome this worker must achieve.
+- **Scope and owned files** — exactly which files/paths it may touch; everything outside that scope is out of bounds.
+- **Inputs and source of truth** — what to read before acting, and which document or state wins if sources disagree.
+- **Constraints and forbidden actions** — house rules it must not break (read-only, no scope creep, no mid-batch tests, etc.).
+- **done_when** — the concrete condition that makes "done" true, not a feeling.
+- **Verification commands** — the exact command(s) it must run and report the result of.
+- **Base SHA** — the commit/state it started from, so the returned diff has something to diff against.
+- **Return schema** — a pointer to the worker return contract below; its final message must follow it exactly.
+
+**Worker return** (what the worker must report back):
+
+- **status** — `done` | `partial` | `blocked`. Never claim `done` without satisfying done_when.
+- **Files changed** — the full list, matching the work packet's owned-files scope.
+- **Diff summary** — what actually changed, in prose, not just a file list.
+- **Commands and results** — every verification command it ran, with the actual output/exit status.
+- **Assumptions** — anything it inferred rather than was told.
+- **Unresolved risks** — anything left uncertain, deferred, or worth a second look.
+- **Current SHA** — the state after its change, so the read-the-diff step is exact.
+
+The dispatching agent never accepts `status: done` at face value: it reads the returned diff against Base SHA and reruns the Verification commands itself before treating the item as closed. A worker that reports `done` without a passing verification command is rejected and re-dispatched, not trusted.
+
 ### D3 — Merge + dedup (check ←, part 1)
 
 Collect every domain's findings into one set. Dedup cross-domain duplicates (the same leaked value / format flagged from two sides is **one** finding with two sites, not two). Don't trust each worker blindly — this merge + the critic below **are** the check arm of the bracket.

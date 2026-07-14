@@ -1,0 +1,37 @@
+# agents.example.toml — Paul's PERSONAL role→model mapping for this workspace.
+#
+# This is NOT a portable marketplace artifact and is NOT read by any generated skill or
+# by scripts/build-codex.mjs. It exists purely as documentation of one way to layer a
+# personal model choice on top of the portable role templates in
+# platforms/codex/agents/*.toml, which deliberately omit `model`. See
+# platforms/codex/local/README.md for the full rationale.
+#
+# This file is illustrative, not installable as-is: Codex custom agents are one-agent-
+# per-file (see the official docs cited in platforms/codex/agents/executor.toml's
+# header), so an actual install copies each block below into its own
+# .codex/agents/<role>.toml (or ~/.codex/agents/<role>.toml), merged with that role's
+# portable developer_instructions from platforms/codex/agents/<role>.toml.
+
+# --- root session (supervisor) --------------------------------------------------
+# Not a dispatched custom agent — this is the interactive session model itself, set via
+# `codex --model gpt-5.6` or the `model` key in your own config.toml, not an agents/*.toml
+# file. Listed here for completeness of the role→model table.
+# model = "gpt-5.6"
+
+# --- executor --------------------------------------------------------------------
+[executor]
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+
+# --- explorer ----------------------------------------------------------------------
+[explorer]
+model = "gpt-5.4"
+model_reasoning_effort = "low"
+
+# --- reviewer ------------------------------------------------------------------------
+# Usually mechanical (rerun the stated commands, diff the stated scope) — same tier as
+# executor/explorer. Escalate a specific review to the root session's model (gpt-5.6) by
+# hand when a verdict itself is a judgment call, rather than raising this default.
+[reviewer]
+model = "gpt-5.4"
+model_reasoning_effort = "medium"

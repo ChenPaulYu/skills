@@ -101,6 +101,13 @@ A fresh worker has no skill context. Inject everything it needs upfront:
 6. **Discipline rules** — paste the bullets from the Discipline section below.
 7. **Return instruction** — tell the worker its final text IS the dissection note (raw markdown). It should return nothing else.
 
+## Worker dispatch contract (Codex)
+
+This inject → read → check protocol above already IS a work-packet/return-contract pair, specialized for document analysis rather than code (no files changed, no diff, no SHA):
+
+- **Goal** = the assigned document + the 5-layer framework (items 1–2 above). **Scope** = read this document only, don't wander into others. **Inputs / source of truth** = the document's own content, never the filename. **Constraints** = don't skim; don't invent the Conclusion. **done_when** = all five sections present and every item in the "check (←)" list below passes. **Verification** = the "check (←)" list, run by the dispatching agent against the returned note, not by the worker on itself. **Return schema** = the Output format template (item 3 above) — the note IS the return, not a separate status field.
+- The dispatching agent never accepts a returned note at face value: it runs every "check (←)" item before saving, and — the document-analysis equivalent of "reject an unsupported done" — asks the worker to revise (never silently rewrites it itself) if any item fails.
+
 #### check (←) — before accepting the worker's output
 
 Read the returned note before saving. STOP and ask the worker to revise if any of the following fails:
