@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-14 (rev 79)
+  Last audit: 2026-07-15 (rev 80)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -12,7 +12,7 @@
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
     • Six plugins: nav (8 skills) + shape (10 skills) + research (4 skills) +
-      frame (5 skills) + reflect (3 skills) + relay (6 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
+      frame (5 skills) + reflect (4 skills) + relay (6 skills) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync, map, tour, plan, do, compose
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), survey (map a decision space in two layers — domain-prior axes
@@ -90,13 +90,15 @@
       away, overwriting any prior one — catchup's write-side mirror, ADR-070), observe
       (candidate-first — surface this session's candidate learnings, user PICKS which to
       keep; own-learning → local docs/observations/, a downstream user's skill-feedback →
-      opt-in scrubbed upstream PR to docs/feedback/). One read/write pair (catchup/park =
-      the cursor) plus a standalone distiller (observe = the knowledge, scans the session
-      directly); planned 4th member retro (evaluative-on-process) accepted in principle,
-      not built; summarize retired for failing the No-Op test — a plain "summarize this
-      session" request already did what it did (ADR-079). reflect v0.5.0; standalone,
-      cross-project (ADR-044; renamed from manage, ADR-056; park added, ADR-070;
-      summarize retired, ADR-079).
+      opt-in scrubbed upstream PR to docs/feedback/), retrace (reconstruct a long
+      development arc as prior state → pressure → evidence → decision → status → next
+      pressure, provenance-label every bridge, gate on user correction, then render a
+      dated interactive artifact with concrete witnesses, ADR-084). catchup/park work the
+      cursor; observe distills one durable learning; retrace restores the whole causal path
+      for human re-entry. Planned 5th member retro remains evaluative-on-process and is
+      not built; summarize remains retired for failing the No-Op test (ADR-079). reflect
+      v0.6.0; standalone, cross-project (ADR-044; renamed from manage, ADR-056; park
+      added, ADR-070; summarize retired, ADR-079; retrace added, ADR-084).
     • relay skills: launch (scaffold a project's space + frame; bootstraps the
       repo on first run; second branch enrols a person — name/git/github/title
       — + assigns a per-project role, register merged in, ADR-078), report
@@ -112,7 +114,7 @@
       human-gated, multi-person, standalone (ADR-050).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 83 ADRs in docs/adr/ — 001..083 with cross-supersede / refine links
+    • 84 ADRs in docs/adr/ — 001..084 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay format +
@@ -120,7 +122,7 @@
       headers everything else reads; rule ⑧ — describing IS diagnosing); reflect
       has no tiered verb (its former tiered member, summarize, retired ADR-079).
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (36 flat skills: nav-* / reflect-* / relay-* /
+    • Codex mirror: .agents/skills/ (37 flat skills: nav-* / reflect-* / relay-* /
       research-* / shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
@@ -143,7 +145,32 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ CHANGED in this revision (rev 79)
+  ⚠ CHANGED in this revision (rev 80)
+    1. New skill `reflect:retrace` (ADR-084; reflect 0.5.0 → 0.6.0): causal
+       re-entry for a long development arc. It earns a door the retired
+       `reflect:summarize` did not by forcing six-field stages (prior state →
+       pressure → evidence → decision → status → next pressure), provenance-
+       labeling every rationale/bridge Recorded/Inferred/Unknown, separating
+       decided/implemented/verified/committed status, and stopping on a user
+       correction gate before it writes. The final deliverable is a dated,
+       browser-verified interactive artifact with real data shapes, commands,
+       probe metrics, images, or playable media beside the claims they support.
+       Distinct from `nav:tour` (current system model), `reflect:catchup`
+       (present cursor), `reflect:observe` (one keeper learning), and planned
+       `reflect:retro` (evaluative process diagnosis). Originating observation
+       remains raw after one case; thought preserves the naming/design journey.
+       Updated: plugins/reflect/skills/retrace/SKILL.md (new), plugins/reflect/
+       CLAUDE.md, plugins/reflect/.claude-plugin/plugin.json, README.md,
+       platforms/codex/descriptions.json, manifests + generated Codex mirror,
+       blueprints/thoughts/2026-07-15-reflect-retrace.md, docs/observations/
+       2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md,
+       docs/adr/084-reflect-retrace-causal-development-alignment.md, and this
+       bilingual map. Browser verification also fixed an existing unescaped
+       apostrophe in the frame graph blurb that prevented the site's inline
+       JavaScript from parsing. Marketplace-wide skill count 36 → 37. ADR
+       count 83 → 84.
+
+  ⚠ FIXED in rev 79 (kept for history)
     1. Codex adapter Phase 6 completed and released independently (ADR-083) —
        the Codex layer is now documented and smoke-gated as its own release
        line instead of a Phase-5 artifact. `platforms/codex/manifest.json`
@@ -1993,11 +2020,12 @@ const DOMAINS = {
   reflect: {
     layer: 'foundation',
     path: 'plugins/reflect/',
-    blurb: {en:'Reflect on your own working session — the one reflexive, cross-cutting family (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on); sits across the object-families, not parallel. 3 skills, one read/write pair plus a distiller: catchup/park work the cursor (catchup orients now+next; park writes that cursor + a git SHA into HANDOFF.md before stepping away), observe works the knowledge alone (scans the session directly and distills). Read-only except park/observe writes. Cross-project, standalone. v0.5.0; see reflect/CLAUDE.md + ADR-044 (renamed from manage, ADR-056) + ADR-070 (park) + ADR-079 (summarize retired).', zh:'反思你自己的工作 session —— 唯一反身、橫切的家族(工作過程本身,不是其他 plugin 操作的 code/決策/文件/推理);橫跨各家族,而非並排。3 個 skill,一對讀寫加一個獨立蒸餾者:catchup/park 管游標(catchup 定向 now+next;park 收工前把游標+git SHA 寫進 HANDOFF.md),observe 獨自管知識(直接掃 session 蒸餾)。除 park/observe 寫檔外唯讀。跨專案、獨立。v0.5.0;見 reflect/CLAUDE.md + ADR-044(由 manage 改名,ADR-056)+ ADR-070(park)+ ADR-079(summarize 退役)。'},
+    blurb: {en:'Reflect on your own working session — the one reflexive, cross-cutting family. 4 summoned skills: catchup/park work the cursor (read current state / write HANDOFF.md), observe distills selected durable learning, and retrace reconstructs a long development arc as provenance-labeled causal stages before rendering a user-corrected interactive alignment artifact with concrete witnesses. A plain chronological recap remains skill-free; summarize stays retired. Read-only except each writer\'s bounded artifact. Cross-project, standalone. v0.6.0; see reflect/CLAUDE.md + ADR-044/056/070/079/084.', zh:'反思你自己的工作 session —— 唯一反身、橫切的家族。4 個召喚式 skill:catchup/park 管游標(讀目前狀態/寫 HANDOFF.md),observe 蒸餾使用者挑選的耐久學習,retrace 把長開發歷程重建為有出處標籤的因果階段,經使用者校正後才畫成帶具體證據的互動式對齊 artifact。單純時間序 recap 不需要 skill;summarize 維持退役。除各 writer 的有界 artifact 外唯讀。跨專案、獨立。v0.6.0;見 reflect/CLAUDE.md + ADR-044/056/070/079/084。'},
     files: [
       ['/reflect:catchup', '', {en:'Re-orient on where the work stands now — rebuilt from durable state (git / diff / changed files / any plan), checking a parked HANDOFF.md first, NOT chat memory, so it survives /clear or context compaction. Fixed shape: goal · done · now · open · next. Read-only; summoned. Distinct from a plain session recap (what the session DID — just ask for it) and /shape:align (which decides next + writes a plan).', zh:'重新定位工作現在到哪 —— 從持久狀態(git / diff / 改動檔 / plan)重建,先查一份 parked 的 HANDOFF.md,不靠對話記憶,撐得過 /clear 或 context 壓縮。固定形狀:goal · done · now · open · next。唯讀;召喚式。跟單純的 session recap(做了什麼 —— 直接問就好)、/shape:align(決定下一步 + 寫 plan)不同。'}],
       ['/reflect:park', '', {en:"Write the session's cursor into HANDOFF.md before stepping away — the same five-shape mirror as catchup's report (goal · done · now · open · next) plus the current git SHA, overwriting any prior HANDOFF.md in place (one cursor, not a dated chain). Summoned only, never automatic. catchup checks this file's SHA on return and downgrades a mismatch to 'possibly stale'. ADR-070.", zh:"收工前把 session 的游標寫進 HANDOFF.md —— 跟 catchup 報告同一組五欄鏡像(goal · done · now · open · next)加上目前的 git SHA,原地蓋掉任何舊的 HANDOFF.md(只有一份游標,不留 dated chain)。純召喚,絕不自動。catchup 回來時會核對這份檔案的 SHA,不符就降級標記『可能過期』。ADR-070。"}],
       ['/reflect:observe', '', {en:"Candidate-first: surface THIS session's candidate learnings, the user PICKS which to keep (zero/one/several) — agent proposes, user disposes, no silent auto-write. Each is classified own-learning (about the user's work → local docs/observations/) or skill-feedback (about a skill itself): a maintainer commits locally, but a DOWNSTREAM user's skill-feedback routes to an opt-in, scrubbed upstream PR (a docs/feedback/ inbox, why-led body) instead of a local note that goes nowhere. First step of the repo-evolution loop; status: raw, promote by evidence. Scans the session directly. ADR-044.", zh:"候選優先:列出這場 session 的候選學習,使用者挑要留哪些(零/一/多個)—— agent 提案、使用者裁奪,不靜默自動寫。每條分類為 own-learning(關於使用者自己的工作 → 本地 docs/observations/)或 skill-feedback(關於 skill 本身):維護者本地 commit,但下游使用者的 skill-feedback 走 opt-in、去識別化的上游 PR(docs/feedback/ inbox、why 開頭),而不是寫個沒人看的本地 note。repo 演進迴路第一步;status: raw,憑證據晉升。直接掃 session。ADR-044。"}],
+      ['/reflect:retrace', '', {en:'Reconstruct why a long development arc moved from one stage to the next. Every stage carries prior state · pressure · evidence · decision · exact status · next pressure; every rationale/bridge is Recorded/Inferred/Unknown. First puts the causal outline in front of the user for correction, then writes a dated, browser-verified interactive artifact with concrete witnesses beside abstract claims. Summoned, judgment-tier; not catchup, current-codebase tour, recap, or evaluative retro. ADR-084.', zh:'重建一段長開發歷程為什麼一步步轉彎。每個階段固定帶 prior state · pressure · evidence · decision · 精確 status · next pressure;每條理由/橋都標 Recorded/Inferred/Unknown。先把因果 outline 放到使用者面前校正,再寫成帶具體證據、經瀏覽器驗過的 dated 互動 artifact。召喚式、判斷層;不是 catchup、現況 codebase tour、recap 或評價式 retro。ADR-084。'}],
     ],
   },
   relay: {
@@ -2019,8 +2047,8 @@ const CB_NODES = [
   {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 8 skills, language-agnostic. v0.9.0.', zh:'讓既有 code 長大後仍可導覽(post-build)。8 個 skill,跨語言。v0.9.0。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit/survey/probe/position) → dogfood the built result → plan (align) → build, keep honest (reconcile). survey maps a decision space and reports the diff vs your understanding, summoned or offered by elicit (ADR-074); probe designs and runs a minimal experiment when a fork can\'t be settled by argument, summoned or the destination of frame:dialectic\'s guarded offer (ADR-075); elicit is now the gatekeeper — a stalled volley gets diagnosed and offers survey/probe instead of forcing another fork (ADR-076). 10 skills around a blueprints/ convention; doctor (orchestrator) deferred. Depends on nav one-way (shape → nav). v0.9.4.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit/survey/probe/position)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。survey 測繪決策空間、回報跟你認知的差集,召喚或被 elicit offer(ADR-074);probe 設計並跑一個最小實驗,當分岔吵不出結果時,召喚或是 frame:dialectic guarded offer 的目的地(ADR-075);elicit 現在是守門人 —— volley 卡住時先診斷,offer survey/probe 而非硬立下一個 fork(ADR-076)。10 個 skill 圍著 blueprints/ 約定;doctor(orchestrator)待加。單向依賴 nav(shape → nav)。v0.9.4。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.6.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.6.0。'}},
-  {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize's discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},
-  {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on; the one reflexive, cross-cutting family. 3 skills, one read/write pair plus a distiller: catchup · park (the cursor) and observe alone (the knowledge); planned 4th retro (evaluative-on-process, not built); summarize retired (ADR-079). Standalone, cross-project. v0.5.0; renamed from manage (ADR-056); park added (ADR-070).', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象;唯一反身、橫切的家族。3 個 skill,一對讀寫加一個獨立蒸餾者:catchup · park(管游標)與 observe 獨自(管知識);規劃中的第 4 個 retro(評價過程,尚未蓋);summarize 已退役(ADR-079)。獨立、跨專案。v0.5.0;由 manage 改名(ADR-056);新增 park(ADR-070)。'}},
+  {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},
+  {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 4 summoned skills: catchup · park (the cursor), observe (selected durable learning), and retrace (a corrected causal development path + interactive alignment artifact); planned 5th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.6.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。4 個召喚式 skill:catchup · park(游標)、observe(挑選後的耐久學習)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 5 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.6.0;retrace 見 ADR-084。'}},
   {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates (not chat), decisions to explicit consensus, threaded across cycles. 6 verbs (launch · report · review · digest · settle · format); launch also enrols people + assigns roles (register merged in, ADR-078). git-native, multi-person, standalone. v0.8.1.', zh:'透過雙方 agent、在共用 git repo 上非同步協調 —— 結構化更新(非聊天)、決定收斂成明示共識、跨週期接續。6 個 verb(launch · report · review · digest · settle · format);launch 也負責註冊人員 + 指派角色(register 併入,ADR-078)。git-native、多人、獨立。v0.8.1。'}},
 ];
 const CB_EDGES = [['shape','nav']];

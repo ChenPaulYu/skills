@@ -168,6 +168,7 @@
         ".agents/skills/reflect-catchup/SKILL.md",
         ".agents/skills/reflect-observe/SKILL.md",
         ".agents/skills/reflect-park/SKILL.md",
+        ".agents/skills/reflect-retrace/SKILL.md",
         ".agents/skills/shape-build/SKILL.md",
         ".agents/skills/shape-setup/SKILL.md"
       ]

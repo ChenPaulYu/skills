@@ -1,7 +1,7 @@
 {
   "name": "reflect",
-  "version": "0.5.0",
-  "description": "Reflect on your own working session — the one reflexive, cross-cutting family (the work process itself, not the code/decisions/docs/reasoning the other plugins operate on); it sits across the object-families, not parallel to them. Three skills, one read/write pair plus a distiller: catchup/park work the cursor (catchup orients — where the work stands now + next, rebuilt from git/diff/plan, not chat memory, checking a parked HANDOFF.md first; park writes that same five-shape cursor + the current git SHA into HANDOFF.md before stepping away), observe works the knowledge (scans the session directly and distills the one durable, reusable learning into a knowledge base — a plain session recap needs no skill, so summarize was retired, ADR-079). Read-only except park's and observe's single writes. Cross-project, language-agnostic.",
+  "version": "0.6.0",
+  "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Four summoned skills: catchup/park work the cursor (read current state / write HANDOFF.md), observe distills selected durable learning, and retrace reconstructs a long development arc as provenance-labeled causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap needs no skill; summarize remains retired (ADR-079). Read-only except each writer's bounded artifact. Cross-project, language-agnostic.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"
