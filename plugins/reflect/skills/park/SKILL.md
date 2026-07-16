@@ -78,7 +78,7 @@ Write `HANDOFF.md` at the project root. No further action — `park` doesn't com
 
 ## Companion skills
 
-- **`/reflect:catchup`** — the read side; on return, it checks `HANDOFF.md`'s SHA against the current one and downgrades a mismatch to "possibly stale."
+- **`/reflect:catchup`** — the read side; on return, it checks `HANDOFF.md`'s SHA against the current one, downgrades a mismatch to "possibly stale," and **clears the cursor once consumed** (done or stale-and-absorbed) — so a parked cursor is single-use by design: park writes it, the next catchup that drains it removes it.
 - **`/reflect:observe`** — distills a durable, reusable *learning*; `park` writes the *cursor* (where/why), a different object entirely (see the family-fit check in ADR-070).
 
 ## Communication Style

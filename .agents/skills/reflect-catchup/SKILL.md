@@ -12,7 +12,7 @@ Tell the user **where the current work stands**, in simple, direct language. The
 
 Optional focus from the user: **$ARGUMENTS** (if given, scope the catchup to that area; else cover the whole current work).
 
-**Read-only.** Do not edit, write, or commit anything. catchup only reports.
+**Read-only, with one deliberate exception: clearing a consumed cursor (Step 3).** Do not edit or write anything else — catchup otherwise only reports.
 
 ## Step 1 — Rebuild from durable state, then enrich from live context
 
@@ -63,9 +63,16 @@ Rules:
 - **Grounded, not guessed** — every line traces to a real signal (a commit body, a changed file, a status entry, a plan item). Ambiguous, or git vs. memory disagree → mark **uncertain**, don't smooth over.
 - If `$ARGUMENTS` was given, keep the five sections but scope them to that area.
 
-## Step 3 — Stop
+## Step 3 — Clear the consumed cursor, then stop
 
-No artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `reflect-observe`; for a full recap of what happened, just ask for one directly.)
+**A read cursor is a used cursor — throw it away directly, no confirmation needed** (like a note on the fridge: once read, it comes down; park's own discipline already names a stale cursor left lying around as Sediment). After delivering the report, delete `HANDOFF.md` when either:
+
+- **Done** — the work it describes verifiably shipped (its Next items are in git history / the current report's Done), or
+- **Stale-and-absorbed** — its SHA mismatched and whatever residual *why* it carried has been folded into this report or superseded by newer durable artifacts (a fresher plan.md, thoughts docs).
+
+Just `rm HANDOFF.md` and say so in one line of the report — no write-gate; the file is one `reflect-park` call away from regeneration, and this is a deletion of consumed state, not an overwrite of live content. If the file is git-tracked, leave the deletion for the project's next normal commit (catchup still never commits). The one case to leave it: you're genuinely unsure its why has been captured anywhere — then say that instead of deleting.
+
+Beyond that, no artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `reflect-observe`; for a full recap of what happened, just ask for one directly.)
 
 ## Companion skills
 

@@ -1,7 +1,7 @@
 {
   "name": "reflect",
-  "version": "0.6.0",
-  "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Four summoned skills: catchup/park work the cursor (read current state / write HANDOFF.md), observe distills selected durable learning, and retrace reconstructs a long development arc as provenance-labeled causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap needs no skill; summarize remains retired (ADR-079). Read-only except each writer's bounded artifact. Cross-project, language-agnostic.",
+  "version": "0.7.0",
+  "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Four summoned skills: catchup/park work the single-use cursor (catchup reads current state and clears the consumed HANDOFF.md; park writes it), observe distills selected durable learning, and retrace reconstructs a long development arc as provenance-labeled causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap needs no skill; summarize remains retired (ADR-079). Read-only except each writer's bounded artifact. Cross-project, language-agnostic.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

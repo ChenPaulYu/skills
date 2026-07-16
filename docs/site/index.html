@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-15 (rev 80)
+  Last audit: 2026-07-16 (rev 81)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -85,7 +85,8 @@
       v0.6.1; the speculative invert/second-order
       seed was dropped for no usage evidence (ADR-046). Standalone.
     • reflect skills: catchup (re-orient on where the work stands now + next, rebuilt from
-      git/diff/plan, not chat memory — checks a parked HANDOFF.md first), park (write
+      git/diff/plan, not chat memory — checks a parked HANDOFF.md first, and clears the
+      consumed cursor after reporting: the cursor is single-use, ADR-085), park (write
       that same five-shape cursor + the current git SHA into HANDOFF.md before stepping
       away, overwriting any prior one — catchup's write-side mirror, ADR-070), observe
       (candidate-first — surface this session's candidate learnings, user PICKS which to
@@ -97,8 +98,9 @@
       cursor; observe distills one durable learning; retrace restores the whole causal path
       for human re-entry. Planned 5th member retro remains evaluative-on-process and is
       not built; summarize remains retired for failing the No-Op test (ADR-079). reflect
-      v0.6.0; standalone, cross-project (ADR-044; renamed from manage, ADR-056; park
-      added, ADR-070; summarize retired, ADR-079; retrace added, ADR-084).
+      v0.7.0; standalone, cross-project (ADR-044; renamed from manage, ADR-056; park
+      added, ADR-070; summarize retired, ADR-079; retrace added, ADR-084; catchup clears
+      the consumed cursor, ADR-085).
     • relay skills: launch (scaffold a project's space + frame; bootstraps the
       repo on first run; second branch enrols a person — name/git/github/title
       — + assigns a per-project role, register merged in, ADR-078), report
@@ -114,7 +116,7 @@
       human-gated, multi-person, standalone (ADR-050).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 84 ADRs in docs/adr/ — 001..084 with cross-supersede / refine links
+    • 85 ADRs in docs/adr/ — 001..085 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay format +
@@ -145,7 +147,31 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ CHANGED in this revision (rev 80)
+  ⚠ CHANGED in this revision (rev 81)
+    1. `reflect:catchup` now clears the consumed cursor (ADR-085; reflect
+       0.6.0 → 0.7.0, no new skill/slug): a read cursor is a used cursor —
+       after delivering its report, catchup deletes HANDOFF.md directly (no
+       confirmation) when the work it describes verifiably shipped, or when
+       its SHA mismatched and the residual why has been absorbed into the
+       report / newer durable artifacts; the one case to leave it is genuine
+       doubt that the why was captured. This is catchup's single bounded
+       write exception — read-only stands for everything else, and catchup
+       still never commits (a tracked deletion rides the project's next
+       normal commit). park's companion section now states the single-use
+       contract from its side: park writes the cursor, the catchup that
+       drains it removes it. Root cause: park's Anti-patterns named a stale
+       lying-around cursor as Sediment but no skill had authority to sweep
+       it — a real 2026-07-16 catchup found a cursor parked six commits
+       stale and could only report it. Ratified directly by Paul same day.
+       Updated: plugins/reflect/skills/catchup/SKILL.md (frontmatter + Step 3
+       "Clear the consumed cursor, then stop"), plugins/reflect/skills/park/
+       SKILL.md (companion section), plugins/reflect/CLAUDE.md (roster bullet
+       + writer census), plugins/reflect/.claude-plugin/plugin.json, README.md
+       (plugin table + both skill lines), docs/adr/085-reflect-catchup-clears-
+       consumed-cursor.md (new), manifests + generated Codex mirror, and this
+       bilingual map. Skill count unchanged (37). ADR count 84 → 85.
+
+  ⚠ FIXED in rev 80 (kept for history)
     1. New skill `reflect:retrace` (ADR-084; reflect 0.5.0 → 0.6.0): causal
        re-entry for a long development arc. It earns a door the retired
        `reflect:summarize` did not by forcing six-field stages (prior state →
@@ -2020,7 +2046,7 @@ const DOMAINS = {
   reflect: {
     layer: 'foundation',
     path: 'plugins/reflect/',
-    blurb: {en:'Reflect on your own working session — the one reflexive, cross-cutting family. 4 summoned skills: catchup/park work the cursor (read current state / write HANDOFF.md), observe distills selected durable learning, and retrace reconstructs a long development arc as provenance-labeled causal stages before rendering a user-corrected interactive alignment artifact with concrete witnesses. A plain chronological recap remains skill-free; summarize stays retired. Read-only except each writer\'s bounded artifact. Cross-project, standalone. v0.6.0; see reflect/CLAUDE.md + ADR-044/056/070/079/084.', zh:'反思你自己的工作 session —— 唯一反身、橫切的家族。4 個召喚式 skill:catchup/park 管游標(讀目前狀態/寫 HANDOFF.md),observe 蒸餾使用者挑選的耐久學習,retrace 把長開發歷程重建為有出處標籤的因果階段,經使用者校正後才畫成帶具體證據的互動式對齊 artifact。單純時間序 recap 不需要 skill;summarize 維持退役。除各 writer 的有界 artifact 外唯讀。跨專案、獨立。v0.6.0;見 reflect/CLAUDE.md + ADR-044/056/070/079/084。'},
+    blurb: {en:'Reflect on your own working session — the one reflexive, cross-cutting family. 4 summoned skills: catchup/park work the single-use cursor (catchup reads current state and clears the consumed HANDOFF.md after reporting; park writes it), observe distills selected durable learning, and retrace reconstructs a long development arc as provenance-labeled causal stages before rendering a user-corrected interactive alignment artifact with concrete witnesses. A plain chronological recap remains skill-free; summarize stays retired. Read-only except each writer\'s bounded artifact. Cross-project, standalone. v0.7.0; see reflect/CLAUDE.md + ADR-044/056/070/079/084/085.', zh:'反思你自己的工作 session —— 唯一反身、橫切的家族。4 個召喚式 skill:catchup/park 管一次性游標(catchup 讀目前狀態、報告後清掉用過的 HANDOFF.md;park 負責寫),observe 蒸餾使用者挑選的耐久學習,retrace 把長開發歷程重建為有出處標籤的因果階段,經使用者校正後才畫成帶具體證據的互動式對齊 artifact。單純時間序 recap 不需要 skill;summarize 維持退役。除各 writer 的有界 artifact 外唯讀。跨專案、獨立。v0.7.0;見 reflect/CLAUDE.md + ADR-044/056/070/079/084/085。'},
     files: [
       ['/reflect:catchup', '', {en:'Re-orient on where the work stands now — rebuilt from durable state (git / diff / changed files / any plan), checking a parked HANDOFF.md first, NOT chat memory, so it survives /clear or context compaction. Fixed shape: goal · done · now · open · next. Read-only; summoned. Distinct from a plain session recap (what the session DID — just ask for it) and /shape:align (which decides next + writes a plan).', zh:'重新定位工作現在到哪 —— 從持久狀態(git / diff / 改動檔 / plan)重建,先查一份 parked 的 HANDOFF.md,不靠對話記憶,撐得過 /clear 或 context 壓縮。固定形狀:goal · done · now · open · next。唯讀;召喚式。跟單純的 session recap(做了什麼 —— 直接問就好)、/shape:align(決定下一步 + 寫 plan)不同。'}],
       ['/reflect:park', '', {en:"Write the session's cursor into HANDOFF.md before stepping away — the same five-shape mirror as catchup's report (goal · done · now · open · next) plus the current git SHA, overwriting any prior HANDOFF.md in place (one cursor, not a dated chain). Summoned only, never automatic. catchup checks this file's SHA on return and downgrades a mismatch to 'possibly stale'. ADR-070.", zh:"收工前把 session 的游標寫進 HANDOFF.md —— 跟 catchup 報告同一組五欄鏡像(goal · done · now · open · next)加上目前的 git SHA,原地蓋掉任何舊的 HANDOFF.md(只有一份游標,不留 dated chain)。純召喚,絕不自動。catchup 回來時會核對這份檔案的 SHA,不符就降級標記『可能過期』。ADR-070。"}],
@@ -2048,7 +2074,7 @@ const CB_NODES = [
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit/survey/probe/position) → dogfood the built result → plan (align) → build, keep honest (reconcile). survey maps a decision space and reports the diff vs your understanding, summoned or offered by elicit (ADR-074); probe designs and runs a minimal experiment when a fork can\'t be settled by argument, summoned or the destination of frame:dialectic\'s guarded offer (ADR-075); elicit is now the gatekeeper — a stalled volley gets diagnosed and offers survey/probe instead of forcing another fork (ADR-076). 10 skills around a blueprints/ convention; doctor (orchestrator) deferred. Depends on nav one-way (shape → nav). v0.9.4.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit/survey/probe/position)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。survey 測繪決策空間、回報跟你認知的差集,召喚或被 elicit offer(ADR-074);probe 設計並跑一個最小實驗,當分岔吵不出結果時,召喚或是 frame:dialectic guarded offer 的目的地(ADR-075);elicit 現在是守門人 —— volley 卡住時先診斷,offer survey/probe 而非硬立下一個 fork(ADR-076)。10 個 skill 圍著 blueprints/ 約定;doctor(orchestrator)待加。單向依賴 nav(shape → nav)。v0.9.4。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.6.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.6.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},
-  {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 4 summoned skills: catchup · park (the cursor), observe (selected durable learning), and retrace (a corrected causal development path + interactive alignment artifact); planned 5th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.6.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。4 個召喚式 skill:catchup · park(游標)、observe(挑選後的耐久學習)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 5 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.6.0;retrace 見 ADR-084。'}},
+  {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 4 summoned skills: catchup · park (the single-use cursor — catchup clears it once consumed, ADR-085), observe (selected durable learning), and retrace (a corrected causal development path + interactive alignment artifact); planned 5th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.7.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。4 個召喚式 skill:catchup · park(一次性游標——catchup 讀完即清,ADR-085)、observe(挑選後的耐久學習)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 5 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.7.0;retrace 見 ADR-084。'}},
   {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates (not chat), decisions to explicit consensus, threaded across cycles. 6 verbs (launch · report · review · digest · settle · format); launch also enrols people + assigns roles (register merged in, ADR-078). git-native, multi-person, standalone. v0.8.1.', zh:'透過雙方 agent、在共用 git repo 上非同步協調 —— 結構化更新(非聊天)、決定收斂成明示共識、跨週期接續。6 個 verb(launch · report · review · digest · settle · format);launch 也負責註冊人員 + 指派角色(register 併入,ADR-078)。git-native、多人、獨立。v0.8.1。'}},
 ];
 const CB_EDGES = [['shape','nav']];

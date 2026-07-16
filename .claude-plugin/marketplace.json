@@ -33,7 +33,7 @@
       "name": "reflect",
       "source": "./plugins/reflect",
       "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Four summoned skills: catchup/park work the cursor, observe distills selected durable learning, and retrace reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap remains skill-free. Read-only except each writer's bounded artifact. Cross-project, standalone.",
-      "version": "0.6.0"
+      "version": "0.7.0"
     },
     {
       "name": "relay",
