@@ -1,6 +1,6 @@
 {
   "name": "nav",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Keep any codebase navigable as it grows — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, guide a conversational tour to a corrected shared system model, ground a spec into a plan, do a small change with deep-module discipline, compose a prose document as a deep module. Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
   "author": {
     "name": "Paul",

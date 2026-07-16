@@ -60,9 +60,13 @@ Two inputs, both required — never plan in a vacuum:
 
 **Sync-confirm done-ness — align is a status *sync*, not a read-only re-render.** For every item the *current* `plan.md` lists as In progress / Next — **especially any marked "待驗 / TBD / not-sure-if-done / 待驗是否已做"** — go *confirm it against the code*, don't carry the unresolved claim forward. If grounding shows it shipped, **move it to ✅ Shipped** in the triage (Step 3). A plan that still says "TBD: is X done?" *after* an align run is an align failure — the whole point is that the board reflects verified present reality. (This is item-*status* reconciliation, which is align's job; pruning a stale *thought doc* is still `/shape:reconcile`'s — don't conflate the two.)
 
+**Every carried item gets verified, mechanically — a sampled spot-check is not a sync (ADR-086).** The measured failure mode: a "refresh" that re-reads the board, reorders it, and carries every claim forward unverified — one real sweep then found **5 of 7 "Next" items had already shipped**, some for days. So: no 🚧/▶ item enters Step 3's triage without evidence attached (a grep hit, a `head -12` header, a `git log` ref, a test name). When the board is long, fan the per-item verification out to cheap parallel sub-agents (`model: sonnet`, read-only) instead of skipping it — verification cost is the reason this step gets rationalized away, so make it cheap rather than optional. Note the push-side counterpart: `/nav:do`'s board-sync gate updates items at ship time, so a healthy repo should make this pull pass boring — treat every stale item it still finds as a signal the push side was bypassed.
+
 ### Step 3 — Triage *with the user* into now / next / later
 
 Propose a split: **🚧 In progress** (the current batch's tail) · **▶ Next** (what to pick up) · **⏸ Future** (decided but deferred, with the blocker/why) · **✅ Shipped** (current baseline). Surface it and let the user move items, add, cut. This is the alignment — don't skip the dialog. If the grounding surfaced a thought that looks already-implemented or stale, **flag it but don't clean it here** — that's `/shape:reconcile`'s job.
+
+**No item vanishes silently (ADR-086).** Every item on the *previous* board must land somewhere visible in the new one — ✅ Shipped (with evidence), ⏸ Future (with the why/trigger), still in ▶ Next, or an **explicit, user-confirmed cut**. A reprioritization that quietly loses an item creates ghost work: the real case behind this rule is a mainline design item that vanished in a "refine priorities" pass and was only rediscovered later from a stale session-handoff file. If you're proposing to drop something, say so out loud in the triage — dropping is a decision the user makes, not a diff artifact.
 
 ### Step 4 — Write `plan.md` (the agent index — and the only maintained artifact)
 
@@ -73,6 +77,8 @@ Lean, one layer, grouped by status. Each entry = **what to do + which thought to
 ## The seam with `nav` — don't blur it
 
 align is **pre-build** (intent side). It ends at "decided + recorded in blueprints". `/nav:plan` is **build-side**: it takes a thought/spec and grounds it into a *codebase-level implementation plan*. `blueprints/` is the hand-off artifact. They are adjacent verbs, not overlapping — align triages forward into a status board; nav:plan grounds one item down into code. Never produce a code-implementation plan here.
+
+**Board currency is push-primary, align is the pull safety net (ADR-086).** The board's staleness problem is structural: work ships through execution verbs that historically never touched `plan.md`, so the board only healed when align was summoned — and it always lagged. The fix mirrors the ledger/file-header pattern that demonstrably stays current ("change lands → same commit updates the record"): `/nav:do`'s fourth check gate and `/nav:plan`'s board close-out update the touched item at ship time (push); align's every-item verification (Step 2) catches whatever bypassed them (pull). Neither side alone suffices — push keeps the board honest daily, pull keeps it honest against undisciplined writers.
 
 ## Discipline (do not skip)
 

@@ -1,6 +1,6 @@
 {
   "name": "shape",
-  "version": "0.9.4",
+  "version": "0.10.0",
   "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav (which keeps existing code navigable). Skills: mockup (render-to-decide — including an on-demand blueprints board snapshot), elicit (grounded grill → a thought), survey (map a decision space, report the diff vs your understanding), probe (design and run a minimal experiment when nobody can settle a fork by argument), position (canon-authoring campaign → core docs), setup (scaffold a new project to a verified baseline — archetype references + stack principles), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + write the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. blueprints/ is the artifact convention.",
   "author": {
     "name": "Paul",
