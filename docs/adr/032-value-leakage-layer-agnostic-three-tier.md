@@ -5,7 +5,7 @@
 
 ## Context
 
-A Crate session (observations [`the-lone-token-is-the-smell-and-the-template`](docs/observations/2026-06-08-the-lone-token-is-the-smell-and-the-template.md) + [`why-skills-miss-css-value-leakage`](docs/observations/2026-06-08-why-skills-miss-css-value-leakage.md)) surfaced a leakage class the nav skills walked straight past: a brand color `#b5894e` as raw hex **27 times**, ~50 palette hexes across ~20 files, while one design value (`--ease-glide`) was tokenized with a comment about "single owner."
+A Crate session (observations [`the-lone-token-is-the-smell-and-the-template`](docs/observations/2026-06-08-the-lone-token-is-the-smell-and-the-template.md) + [`why-skills-miss-css-value-leakage`](docs/observations/2026-06-08-why-skills-miss-css-value-leakage.md)) surfaced a leakage class the nav skills walked straight past: a brand accent color as raw hex **27 times**, ~50 palette hexes across ~20 files, while one design value (a motion-easing token) was tokenized with a comment about "single owner."
 
 Rule ① already names "magic constant … in ≥2 modules" — **the principle is fine and layer-agnostic** (deep-module is *decisions + owners + a narrow interface*, not "code"; the same session applied it to a **prompt** — HEAD/GROUNDING/TAIL + `build_system_prompt` — and to **CSS** — color tokens). What failed was the **operationalization**:
 

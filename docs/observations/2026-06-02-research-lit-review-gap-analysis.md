@@ -5,18 +5,18 @@ status: raw
 
 # Research lit review: frame the read around YOUR claim, not the papers
 
-> Source: Enact paper research session — reading 9 core papers + BDI papers + web search to map prior art. The pattern that made the output useful was giving the subagent the specific claim to evaluate against, not asking for summaries.
+> Source: an unpublished-paper research session — reading 9 core papers + BDI papers + web search to map prior art. The pattern that made the output useful was giving the subagent the specific claim to evaluate against, not asking for summaries.
 
 ## The case
 
-Reading 9 PDFs to map the prior art landscape for a research paper (Enact — identity-conditioned agent runtime). Two approaches were available:
+Reading 9 PDFs to map the prior art landscape for an unpublished research paper. Two approaches were available:
 
 **Approach A (naive):** "Read these papers and summarize them."
 Result: would have produced per-paper abstracts with no connection to the research gap.
 
 **Approach B (used):** "Read these papers. The paper being written claims X. For each paper, tell me what they propose, what they leave undone, and whether they overlap with claim X. Then synthesize: already done / not yet done."
 
-Result: produced a precise gap analysis — two unoccupied gaps identified across 9 papers (identity-conditioned perception, manner as structured output), and a clear related-work priority order.
+Result: produced a precise gap analysis — two unoccupied gaps identified across 9 papers, and a clear related-work priority order.
 
 ## The move
 

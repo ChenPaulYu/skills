@@ -8,7 +8,7 @@ status: raw
 ## What happened (twice in one session, TrackMate testbed)
 
 1. **reconcile / audit dead-module sweep**: a grep-based inbound-import scan reported **every file** as 0-inbound. Cause: `grep` aliased to `ugrep` with different semantics. The agent noticed the absurdity (everything dead) and discarded the round — survivable because the false negative was *implausibly broad*.
-2. **audit's SetupTone verdict**: a *targeted* dead-code check (`grep -rn "SetupTone" … | grep -v` after a `cd` that had silently failed — the harness resets cwd between Bash calls) returned zero references → reported as a ❌ violation → user approved → **`git rm` executed**. Only the typecheck gate (`Cannot find module './SetupTone'` — engine.ts imports it) stopped a wrong deletion from shipping. This false negative was *plausibly narrow* — nothing about "one 48-LOC scaffold file, zero refs" looked absurd.
+2. **audit's dead-file verdict**: a *targeted* dead-code check (`grep -rn "<component-name>" … | grep -v` after a `cd` that had silently failed — the harness resets cwd between Bash calls) returned zero references → reported as a ❌ violation → user approved → **`git rm` executed**. Only the typecheck gate (a module-not-found error — the engine module still imported it) stopped a wrong deletion from shipping. This false negative was *plausibly narrow* — nothing about "one 48-LOC scaffold file, zero refs" looked absurd.
 
 ## The signal
 
@@ -23,4 +23,4 @@ audit/reconcile's discipline says *cite evidence* — but evidence from an agent
 
 ## Evidence
 
-- TrackMate session 2026-06-11: discarded all-0-inbound round (disclosed in the audit report's self-eval); SetupTone `git rm` reverted in commit `3fa9a9a` ("audit's dead-code call … was wrong — a cwd-broken grep"). Cross-ref: same session's stale-cache observation — third tooling-environment trap of the day (alias · cwd reset · cache).
+- TrackMate session 2026-06-11: discarded all-0-inbound round (disclosed in the audit report's self-eval); the wrong `git rm` reverted in a specific commit ("audit's dead-code call … was wrong — a cwd-broken grep"). Cross-ref: same session's stale-cache observation — third tooling-environment trap of the day (alias · cwd reset · cache).

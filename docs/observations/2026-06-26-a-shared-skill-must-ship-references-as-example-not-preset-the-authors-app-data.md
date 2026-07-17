@@ -16,7 +16,7 @@ shape:setup separates a neutral engine (SKILL.md) from an opinion layer (`refere
 **"Fork-your-own" framing is not enough if the file still ships *populated* with the author's specifics.** A downstream user who installs the skill inherits the author's ports, repo names, and project list as apparent defaults — noise at best, a privacy/ίmisdirection leak at worst. The distinction that matters:
 
 - **Rulings / shapes** (uv over pip; monorepo layout; the registry's *format*) — generalizable, fine to ship as a worked example, clearly labelled "replace with yours."
-- **Concrete app data** (which project uses port 5420; the names of private repos; the list of the author's products) — **never** a shipped default. It's the user's, lives in their fork / their own projects, and the shared skill ships it **empty / abstract**.
+- **Concrete app data** (which project uses which port; the names of private repos; the list of the author's products) — **never** a shipped default. It's the user's, lives in their fork / their own projects, and the shared skill ships it **empty / abstract**.
 
 The skill-feedback bind (S · P · D):
 - **S** = `shape:setup` (its `references/` layer + the write-back / 晉升 step)
@@ -27,7 +27,7 @@ The skill-feedback bind (S · P · D):
 
 ## Evidence so far
 
-- **Only case (2026-06-26, lutherie setup)**: the shipped port registry held the maintainer's real ports (crate 5417 / trackmate 5420); the write-back step had just appended the new project's pair to that shared file; the user flagged the leak. Fix landed same session: registry ships empty + abstract framing + (this) anti-pattern.
+- **Only case (2026-06-26, lutherie setup)**: the shipped port registry held the maintainer's real ports (one pair per existing project); the write-back step had just appended the new project's pair to that shared file; the user flagged the leak. Fix landed same session: registry ships empty + abstract framing + (this) anti-pattern.
 
 (One case → stays `raw`. Promote if another shared skill is found shipping the author's concrete data as a default — that's the trip-wire to make "example-not-default" a marketplace-wide authoring rule, not just setup's.)
 

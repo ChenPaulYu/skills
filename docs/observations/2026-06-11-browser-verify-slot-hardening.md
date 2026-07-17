@@ -24,7 +24,7 @@ These are **universal mechanics of the browser-verify capability**, not TrackMat
 
 ## Evidence
 
-- TrackMate CLAUDE.md UI-smoke convention (updated 2026-06-11, commit `31ea10d`) carries all four with their war stories; the session-collision diagnosis and the parity drift are in the 2026-06-11 session transcript (audition verification saga, resolved with playing=true via isolated muted real-click).
+- TrackMate CLAUDE.md UI-smoke convention (updated 2026-06-11, a specific commit) carries all four with their war stories; the session-collision diagnosis and the parity drift are in the 2026-06-11 session transcript (audition verification saga, resolved with playing=true via isolated muted real-click).
 
 ## Refinement (2026-06-16) — "real input" is pointer-specific, not synthetic-vs-real wholesale
 

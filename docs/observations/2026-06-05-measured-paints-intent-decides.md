@@ -7,7 +7,7 @@ status: raw
 
 > Grounding for a future **`nav:audit` TS/React heuristic** (the per-stack family, alongside hook-counts / JSX-span). Source: one Crate session shipping the Track overview minimap (F2) + its dogfooding fixes — **three independent-looking UI bugs that turned out to share one root cause**, each fixed by the same move. Not yet promoted into the audit: it's `raw` (one project, one session) and half of it is a review heuristic, not a grep. See also [[2026-06-01-browser-verify-audio-canvas-app-gotchas]] (same app, the verification side).
 
-## The case (kept real — Crate's TrackCard)
+## The case (kept real — Crate's track card component)
 
 Three bugs, reported separately by the user over the session, each looking unrelated:
 

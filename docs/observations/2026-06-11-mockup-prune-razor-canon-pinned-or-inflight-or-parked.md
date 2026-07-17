@@ -51,5 +51,5 @@ i.e. an original stays while extraction value remains; once iterations have **ve
 
 ## Evidence
 
-- TrackMate commits `1085ceb` (round 3: 4 pruned) + `dcb5851` (round 4: 4 derivation-archaeology pruned after the user stated the razor) — 16 → 8 folders, zero live citations post-prune (grep-verified each time).
+- TrackMate: two specific commits (round 3: 4 pruned; round 4: 4 derivation-archaeology pruned after the user stated the razor) — 16 → 8 folders, zero live citations post-prune (grep-verified each time).
 - The icon-logo reversal: round-3 verdict "keep one round (uncertain)" → razor verdict "keep (canon-pinned: design.md 裁決樣本)" — same outcome, now with a reason that survives the next sweep.

@@ -6,7 +6,7 @@
 
 ## Context
 
-The TrackMate base setup (2026-06-10) was the **third manual run** of the same scaffold (afterhours-dj → crate → trackmate). Each run re-paid the same costs: tool-choice re-litigation, five recurring gotchas (pnpm postinstall blocking, pytest import paths, IPv6 proxy misses, tsconfig/vite.config, an audiorective type-trap), and — the expensive one — no enforced verification beyond "files written". The user converged the design across three same-day volleys: it's a skill · it must be archetype-driven with accumulating references · the cross-archetype stack principles deserve their own layer.
+The TrackMate base setup (2026-06-10) was the **third manual run** of the same scaffold (afterhours-dj → crate → trackmate). Each run re-paid the same costs: tool-choice re-litigation, five recurring gotchas (pnpm postinstall blocking, pytest import paths, IPv6 proxy misses, tsconfig/vite.config, a type trap in a web-audio library), and — the expensive one — no enforced verification beyond "files written". The user converged the design across three same-day volleys: it's a skill · it must be archetype-driven with accumulating references · the cross-archetype stack principles deserve their own layer.
 
 ## Decisions
 

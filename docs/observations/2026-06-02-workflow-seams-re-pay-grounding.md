@@ -10,12 +10,12 @@ status: raw
 
 ## What happened (concrete)
 
-One session drove a real feature through the whole chain: build a "Media card" kind → `/nav:audit` → `/nav:refactor` (extract a `hostOf` util; collapse 6 per-kind maps in `CardFrame.tsx` into one `KIND` config) → audit *again* → refactor *again* (fix a per-kind-size leak; extract `useAutoFocus` from `TrackCard`) → `/nav:sync` (headers + map) → browser-verify → commit → (later) a small seed edit → gate → commit → merge → a meta tail (extract a reference + observation). The work was good. But at **every seam between phases the next skill re-grounded** what the previous one already knew:
+One session drove a real feature through the whole chain: build a "Media card" kind → `/nav:audit` → `/nav:refactor` (extract a small utility function; collapse several per-kind maps in a shared frame component into one config object) → audit *again* → refactor *again* (fix a per-kind-size leak; extract a hook from a card component) → `/nav:sync` (headers + map) → browser-verify → commit → (later) a small seed edit → gate → commit → merge → a meta tail (extract a reference + observation). The work was good. But at **every seam between phases the next skill re-grounded** what the previous one already knew:
 
 | Seam | What the prior phase already had | What the next phase did instead |
 |---|---|---|
 | build → audit | build had `head -12`'d the load-bearing files | audit re-scanned domains + LOC from scratch |
-| audit → refactor | audit named findings in chat prose (`rule ① leak: CardFrame.KIND + useCiteBridges.panToCard`) | refactor re-opened those files and re-derived *where exactly + how to move* — the finding→move conversion lived only in chat |
+| audit → refactor | audit named findings in chat prose (a rule ① leak spanning the frame component's config and a citation-bridge helper) | refactor re-opened those files and re-derived *where exactly + how to move* — the finding→move conversion lived only in chat |
 | refactor → sync | refactor had **just moved the code** — it knew the exact files whose role/`Reads:` changed | sync ran a fresh whole-repo grounding pass to *rediscover* that changed-set |
 | work → meta | the friction happened live, mid-session | the observation was reconstructed post-hoc from memory/summary at session end ("capture before crystallize" lost) |
 | build → align → commit | align regenerates the board after each item | `plan.md`/`overview.html` were left as uncommitted WIP and drifted from shipped reality |

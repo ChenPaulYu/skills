@@ -13,17 +13,17 @@ distinct ways by the other session's git ops landing between my steps:
 
 1. **Staged work swept into someone else's commit.** I `git rm`'d the prune targets (staging
    deletions). Before I committed, the other session ran `git commit` — which picked up *my* staged
-   deletions into *their* commit `f5e35ce`. My deletions landed under a stranger's message.
+   deletions into *their* commit. My deletions landed under a stranger's message.
 2. **`git reset HEAD~1` scrambled my index mid-commit.** The other session then reset away
-   `f5e35ce`, dumping its changes (incl. my deletions) back into the working tree uncommitted. I
-   committed `5d3ff01` thinking it captured my reconcile content — but the reset had left the index
+   that commit, dumping its changes (incl. my deletions) back into the working tree uncommitted. I
+   committed, thinking it captured my reconcile content — but the reset had left the index
    holding only 3 stray files (an intermediate plan.md/overview.html + the other session's new
    thought). My actual reconcile content (decisions.md graduate, amends, deletions, salvage)
    **never reached HEAD**, despite a commit named "reconcile sweep" existing in the log.
 3. **The lie was only caught by verifying HEAD content.** `git status` looked plausible; the commit
    "succeeded". The miss surfaced only when I ran `git show HEAD:decisions.md | grep -c <section>`
-   → 0, and `git log` showed `f5e35ce`/`5d6dd22` had vanished (history rewritten under me). reflog
-   reconstructed the actual sequence; I re-landed the real content in a fresh commit `78aa457`.
+   → 0, and `git log` showed both prior commits had vanished (history rewritten under me). reflog
+   reconstructed the actual sequence; I re-landed the real content in a fresh commit.
 
 ## Why it matters
 

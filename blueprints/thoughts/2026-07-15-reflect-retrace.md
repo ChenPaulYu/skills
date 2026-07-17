@@ -6,7 +6,7 @@
 
 ## The gap is causal re-entry, not recap
 
-The motivating work moved through MIDI rendering, an overloaded Clip, note abstraction, Content × Voice identity, host selection, failed state restoration, parameter distrust, audio verification, and external plugin identity. The first outline accurately named those stages. It still failed to restore understanding because the reader could not see why the end of one stage made the next stage necessary.
+The motivating work moved through a sequence of major stages in a DAW-like audio project: a core rendering pipeline, an overloaded core data entity split into cleaner types, a note-level abstraction, an identity model split across two dimensions, host integration, failed state restoration, parameter-trust issues, audio verification, and external plugin identity. The first outline accurately named those stages. It still failed to restore understanding because the reader could not see why the end of one stage made the next stage necessary.
 
 The fix was not more chronology. It was a bridge after every stage:
 
@@ -24,7 +24,7 @@ That bridge changed a list of rooms into a route through the building. It also e
 | `reflect:observe` | Which durable learning is worth keeping? | It selects one reusable mechanism, not the complete causal path that produced the current design. |
 | Planned `reflect:retro` | Where did the process go in circles, and what should change? | Retro evaluates the process. Retrace explains the path neutrally, including decisions that were neither mistakes nor improvements. |
 
-Merging retrace into tour would recreate a mega-Clip at the skill layer: one door would carry both a spatial model of the current system and a temporal model of how work evolved. They may share visual language and provenance discipline, but they do not share an object or completion criterion.
+Merging retrace into tour would recreate the same overloaded-entity mistake at the skill layer: one door would carry both a spatial model of the current system and a temporal model of how work evolved. They may share visual language and provenance discipline, but they do not share an object or completion criterion.
 
 ## The causal stage is the irreducible unit
 
@@ -43,7 +43,7 @@ The sixth field is load-bearing. A stage with no supported next pressure may be 
 
 Abstract claims became understandable only when the artifact made them touchable:
 
-- the old mega-Clip was shown as its actual shared, audio-only, and MIDI-only fields;
+- the old overloaded core data entity was shown as its actual shared, audio-only, and MIDI-only fields;
 - stable identity was demonstrated by inserting a note before an index and watching the index hit the wrong event while the stable ID still found the intended one;
 - host-state restoration showed the expected and restored parameter values rather than saying only “restore failed”;
 - playable audio let the reader hear per-clip resets, continuous rendering, placeholder voices, and the later instrument result;
