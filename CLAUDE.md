@@ -156,6 +156,16 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
 - **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and document the rename in an ADR.
 - **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and write an ADR.
 - **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.
+- **Every plugin content change ships with a version bump** — installed plugins
+  are **version-pinned cache snapshots** (`~/.claude/plugins/cache/<mkt>/<plugin>/<version>/`),
+  not live reads of this directory; without a bump, `claude plugin update`
+  no-ops and every machine keeps serving the old snapshot silently. (Real
+  incident 2026-07-17: all six plugins were running month-old caches — nav
+  0.7.0 vs 0.10.0 — so a same-day 32-file fix reached zero sessions. Full
+  account: [`docs/observations/2026-07-17-plugin-cache-pins-version-stale-content.md`](docs/observations/2026-07-17-plugin-cache-pins-version-stale-content.md).)
+  After landing an edit: bump `plugins/<name>/.claude-plugin/plugin.json`
+  (the version owner, gate #1), regenerate manifests, then
+  `claude plugin update <name>@skills` on each machine (applies next session).
 
 ## Where things live
 
