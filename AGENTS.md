@@ -25,6 +25,30 @@ The 8 deep-module rules nav audits for govern **these meta-files too** — the C
 - **Rule ② — interface-first / progressive disclosure.** Every doc leads with its point and drills in only as needed (`head`-able); the validator + gates are the one door to "did I keep the repo consistent?".
 - **Rule ④ — right grain.** A `SKILL.md` or CLAUDE.md past ~500 lines, or enumerating many distinct responsibilities, gets split — the same bar nav applies to product code.
 
+## Anonymization — this repo is PUBLIC; write like it
+
+Everything committed here (ADRs, observations, findings, plans, design docs, fixtures)
+is world-readable. When writing evidence or narrative into any of them, **anonymize at
+write time** — a later sweep is damage control, not a workflow (two were needed,
+2026-07-17):
+
+- **No real third-party names or handles.** Collaborators appear as roles: "the
+  counterpart", "a team member". The repo owner naming *himself* is normal authorship
+  and fine; naming anyone else is not — they didn't consent to appearing in a public
+  tools repo.
+- **No private repo names, org paths, or internal project details.** Use placeholders
+  (`<relay-repo>`, "a private R&D project"). Unreleased-product feature/debt items are
+  described by shape ("a timing-grounding item"), never by internal name.
+- **No machine-specific paths.** `$HOME`, `<dev-root>`, `<session scratchpad>` — a
+  literal `/home/<user>/...` leaks the account name and 404s for everyone else.
+- **No confidential third-party material.** Papers under review, private conversations,
+  anything received under an expectation of confidence — keep the transferable lesson,
+  strip every identifying fingerprint.
+
+The test: **the evidence must keep its lesson after anonymization.** If it can't — if
+the doc is only meaningful with the real names and internals — it belongs in private
+notes, not in this repo.
+
 ## Concurrent editors — check before you write, not at push time
 
 This repo has more than one active editor (the owner + agent sessions) pushing to `main`

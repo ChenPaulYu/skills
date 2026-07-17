@@ -3,7 +3,7 @@
 This directory holds **Paul's own** Codex model-role mapping for this workspace. It is
 committed as *documentation of a personal choice*, not as marketplace policy — nothing
 under `platforms/codex/agents/` or any generated skill in `.agents/skills/` reads or
-references it. See [ADR-068](/home/worzpro/Desktop/dev/skills/docs/adr/068-codex-freeze-scoped-to-workstream.md)
+references it. See [ADR-068](../../../docs/adr/068-codex-freeze-scoped-to-workstream.md)
 and the plan's resolved-questions table
 (`blueprints/plans/2026-07-13-codex-compatibility.md`) for why the split exists: the
 public marketplace stays model-neutral (roles only — supervisor / executor / explorer /

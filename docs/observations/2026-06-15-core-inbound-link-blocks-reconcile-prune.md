@@ -12,8 +12,8 @@ fully shipped + their durable why already in `decisions.md` — textbook prune c
 the inbound-link check (run before every prune, as the skill says) surfaced a harder fact than
 "resolve the links first":
 
-- `dock-structure-viewer`, `dual-grip-single-timeline` ← linked from **position.md AND design.md**
-- `fork-tab-mechanism`, `human-propose`, `timeline-working-reviewer`, `right-pane-core` ← linked from **design.md**
+- two structural-design thoughts ← linked from **position.md AND design.md**
+- four more design thoughts ← linked from **design.md**
 - `timeline-stuck-point` ← linked only from `plan.md`
 
 The ones linked from `core/` **cannot be pruned by reconcile at all** — not "resolve the link
@@ -23,9 +23,9 @@ no write permission to core. So those 6 thoughts → forced **KEEP** (they're th
 trails core points to via `[[...]]` magnifier links; design.md even says "完整推導鏈見 thoughts").
 Only `timeline-stuck-point` (plan-only inbound) was cleanly prunable.
 
-The same wall hit graduation: Paul wanted `right-pane-core` + `dock-timeline-true-daw` graduated
-into `decisions.md` (which means prune the thought). `dock-timeline-true-daw` had NO core link →
-clean graduate+prune. `right-pane-core` was design.md-linked → graduate the why into decisions.md,
+The same wall hit graduation: Paul wanted two of them graduated
+into `decisions.md` (which means prune the thought). One had NO core link →
+clean graduate+prune. The other was design.md-linked → graduate the why into decisions.md,
 prune the thought, but the design.md link now dangles → had to **queue an amendment in
 `docs/core/amendments.md`** for the next `/shape:position` to re-point it. reconcile executes the
 graduate; the core re-point waits at the door.
@@ -62,8 +62,8 @@ Pairs with the existing "canon-grade → recommend /shape:position" routing — 
 ## Evidence so far
 
 - This session: 6 thoughts force-KEPT by core links; 1 (plan-only) cleanly pruned; 1 graduate
-  (`right-pane-core`) needed an `amendments.md` queue for the design.md re-point; 1 graduate
-  (`dock-timeline-true-daw`, no core link) was clean.
+  (design.md-linked) needed an `amendments.md` queue for the design.md re-point; 1 graduate
+  (no core link) was clean.
 - Related: [[2026-06-11-core-write-protocol]] (ADR-041, the door this observation leans on),
   [[2026-06-11-mockup-prune-razor-canon-pinned-or-inflight-or-parked]] (the mockup tier's
   parallel "canon-pinned → keep" clause this would mirror one tier up),

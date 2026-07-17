@@ -9,7 +9,7 @@ status: landed
 
 ## What prompted it
 
-Running `/relay:digest` with `$RELAY_REPO` unset and the working directory not the relay repo. Resolution required a multi-step filesystem hunt: a `find / -maxdepth 4` (too shallow, nothing), then `find /home/worzpro -maxdepth 6` (failed, exit 1, permission errors on unreadable subdirs), then a narrower `find /home/worzpro/Desktop/dev -iname relay.yml` that finally succeeded. Three round-trips spent on a fact that was already true the first time it was ever resolved.
+Running `/relay:digest` with `$RELAY_REPO` unset and the working directory not the relay repo. Resolution required a multi-step filesystem hunt: a `find / -maxdepth 4` (too shallow, nothing), then `find $HOME -maxdepth 6` (failed, exit 1, permission errors on unreadable subdirs), then a narrower `find $HOME/<dev-root> -iname relay.yml` that finally succeeded. Three round-trips spent on a fact that was already true the first time it was ever resolved.
 
 ## The signal
 

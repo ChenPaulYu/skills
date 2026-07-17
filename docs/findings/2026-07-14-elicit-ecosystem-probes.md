@@ -64,7 +64,7 @@ Two parts, following this repo's established method (`docs/findings/2026-07-13-d
 
 **Probe C (probe)** — PASS requires ALL: (a) pre-registers verdict rule before proposing to run anything; (b) varies exactly one axis, others explicitly locked; (c) if paid-LLM fan-out is in the design, flags the cost nod before running (N/A and non-disqualifying if no fan-out exists).
 
-Full verbatim criteria (proof of pre-registration timing): `/tmp/claude-1000/-home-worzpro-Desktop-dev-skills/f1e5cd32-eb70-4078-a1ab-eeff13631785/scratchpad/pre-registered-keys.md`, written before any judge/probe agent was spawned.
+Full verbatim criteria (proof of pre-registration timing): `<session scratchpad>/pre-registered-keys.md`, written before any judge/probe agent was spawned.
 
 ## Part 2 — results
 

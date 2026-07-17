@@ -7,7 +7,7 @@
 
 One session of dogfooding (2026-07-06) surfaced four v1 pains: the session-open hook reported already-answered mentions as waiting (a naive grep), digest re-read every thought per run, digest's ask-detection under-restated its own protocol (`@`-only, missing ❓-asks), and awareness had no out-of-band channel. The obvious question followed: GitHub ships threading, review verbs (Approve/Comment/Request-changes ≅ agree/comment/change), mention notifications with mobile push, stored open/closed state, computed backlinks, and even *enforces* "can't approve your own proposal" — why maintain a hand-built file protocol at all?
 
-A full GitHub-native redesign was drafted and **validated hands-on** (sandbox repo: FYI close-at-birth, close-with-conclusion, RFC-style proposal-file PRs, a 30-line `gh` digest) — see [`docs/design/relay-v2-github-native.md`](docs/design/relay-v2-github-native.md). It works. The question was never feasibility.
+A full GitHub-native redesign was drafted and **validated hands-on** (sandbox repo: FYI close-at-birth, close-with-conclusion, RFC-style proposal-file PRs, a 30-line `gh` digest) — the full design memo lives in private notes (moved out of this public repo 2026-07-17: it named internal collaborators and a private repo). It works. The question was never feasibility.
 
 ## Decision
 

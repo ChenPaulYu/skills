@@ -49,7 +49,7 @@ Bump `0.2.1 → 0.3.0` in `plugins/relay/.claude-plugin/plugin.json` **and** `.c
 Flip the "Pending → Implementation" note to done; keep Status accepted.
 
 **Phase 6 — `accord` data migration (separate commit, the content repo).**
-Run the new `settle` on `projects/music-agent-os/`: distil the already-agreed threads (the arch-bridge agreement, the naming-alignment review) into the first `decisions/log.md` entries; regenerate `active.md`; **delete** `index.md`, the legacy empty `decisions/` scaffold, and `archive/`; hard-delete settled thoughts; keep `core/` + `project.yml` + still-open thoughts. Gate the diff, commit + push (greented's dashboard pulls it).
+Run the new `settle` on `projects/<project>/`: distil the already-agreed threads (the arch-bridge agreement, the naming-alignment review) into the first `decisions/log.md` entries; regenerate `active.md`; **delete** `index.md`, the legacy empty `decisions/` scaffold, and `archive/`; hard-delete settled thoughts; keep `core/` + `project.yml` + still-open thoughts. Gate the diff, commit + push (the counterpart's dashboard pulls it).
 
 ## Critical files
 
@@ -61,7 +61,7 @@ Run the new `settle` on `projects/music-agent-os/`: distil the already-agreed th
 | `plugins/relay/skills/launch/SKILL.md` | Scaffold shape; stray `reply` fix | 3 |
 | `plugins/relay/.claude-plugin/plugin.json` · `.cursor-plugin/plugin.json` | Version + description (two mirrors) | 4 |
 | `docs/adr/054-relay-decision-ledger.md` | Mark implemented | 5 |
-| `rytho-ai/accord/projects/music-agent-os/**` | Live data migration to the new shape | 6 |
+| `<relay-repo>/projects/<project>/**` | Live data migration to the new shape | 6 |
 
 ## Single-source-of-truth owners
 
@@ -79,11 +79,11 @@ No new code-level owner is introduced (relay bundles no scripts for this; ADR-05
 3. **Phase 3** → described scaffold lists `decisions/{log,active}.md`, not `archive/`/`index.md`; `grep -n 'reply' plugins/relay/skills/launch/SKILL.md` is clean.
 4. **Phase 4** → `grep '"version"' plugins/relay/*/plugin.json` shows `0.3.0` in both; `node scripts/validate-codex-skills.mjs` exits green.
 5. **Cross-cutting** → `grep -rn 'index.md\|archive/\|reply' plugins/relay` → every remaining hit is intentional (zero stray `reply`; no `index.md`/`archive/` except in ADR history prose).
-6. **End-to-end (Phase 6)** → in `accord`, the new `settle` produces a readable `decisions/log.md` (the arch-bridge + naming decisions as self-contained entries) + `active.md`; `index.md`/`archive/`/legacy `decisions/` are gone; `git -C accord status` clean after commit; the FYI/decision files render in plain markdown (greented's dashboard can read them).
+6. **End-to-end (Phase 6)** → in the live relay repo, the new `settle` produces a readable `decisions/log.md` (the arch-bridge + naming decisions as self-contained entries) + `active.md`; `index.md`/`archive/`/legacy `decisions/` are gone; `git -C <relay-repo> status` clean after commit; the FYI/decision files render in plain markdown (the counterpart's dashboard can read them).
 
 ## Out of scope (deferred)
 
 - **Multi-party consensus** — still out (ADR-053 §Out of scope); this doesn't reintroduce an `@`-set gate.
 - **`register` skill** — unaffected (it manages people, not project structure).
 - **`core/` canon docs** — a separate concern (shape:position territory); untouched by the migration.
-- **greented's dashboard implementation** — his side; we only guarantee the new files are plain-markdown readable. Whether his dashboard honors the ask-vs-FYI termination convention is a separate cross-agent check.
+- **The counterpart's dashboard implementation** — their side; we only guarantee the new files are plain-markdown readable. Whether their dashboard honors the ask-vs-FYI termination convention is a separate cross-agent check.

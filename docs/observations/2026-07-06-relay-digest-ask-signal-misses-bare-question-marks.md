@@ -9,7 +9,7 @@ status: landed
 
 ## What prompted it
 
-A thought (`boyuchen-re-rytho-website-review`) closed with three ❓-marked open questions for a named counterpart, plus "the rest you can just agree, no need to reply point-by-point" — i.e. explicit, scoped asks, but expressed via ❓ instead of `@name`. digest's spec (strictly: unresolved `@`-flag = waiting) would count this thread as already closed/FYI, since the reply itself carries no `@` tag. Surfacing it as "waiting on others" required an ad hoc judgment call rather than following the documented rule.
+A thought (a member-to-member review thread) closed with three ❓-marked open questions for a named counterpart, plus "the rest you can just agree, no need to reply point-by-point" — i.e. explicit, scoped asks, but expressed via ❓ instead of `@name`. digest's spec (strictly: unresolved `@`-flag = waiting) would count this thread as already closed/FYI, since the reply itself carries no `@` tag. Surfacing it as "waiting on others" required an ad hoc judgment call rather than following the documented rule.
 
 ## The signal
 
@@ -22,7 +22,7 @@ Either resolves the ambiguity; right now neither is written down, so the behavio
 
 ## Evidence so far
 
-- **Only case (2026-07-06, rytho-ai / accord, music-agent-os project)**: `boyuchen-re-rytho-website-review` thread — 3 ❓-marked asks to `greented`, no `@greented` tag, required manual judgment to surface as open.
+- **Only case (2026-07-06, a private relay repo)**: a review thread closing with 3 ❓-marked asks to the counterpart, no `@` tag, required manual judgment to surface as open.
 
 (One case → would have stayed `raw`; landed same-session instead, see Update below.)
 

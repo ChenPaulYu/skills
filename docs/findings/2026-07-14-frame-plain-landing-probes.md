@@ -6,7 +6,7 @@
 
 ## Method
 
-Pre-registered *before* any probe agent was spawned: `/tmp/claude-1000/-home-worzpro-Desktop-dev-skills/f1e5cd32-eb70-4078-a1ab-eeff13631785/scratchpad/frame-landing-probe-keys.md` (criteria + trial questions, timestamped ahead of the runs).
+Pre-registered *before* any probe agent was spawned: `<session scratchpad>/frame-landing-probe-keys.md` (criteria + trial questions, timestamped ahead of the runs).
 
 For each of the four lenses, one fresh `sonnet` sub-agent was given **only**: that lens's current `SKILL.md` body verbatim (read live from `plugins/frame/skills/<lens>/SKILL.md`) + a realistic, stack-neutral trial question + "respond in character as the assistant, no tool calls." No scoring hints, no mention this was a test. 4 spawns, all succeeded (no retry needed).
 
@@ -91,5 +91,5 @@ Note: graft's own banned terms are "graft"/"primitive"/"donor" — none of those
 
 ## Files
 
-- Pre-registration: `/tmp/claude-1000/-home-worzpro-Desktop-dev-skills/f1e5cd32-eb70-4078-a1ab-eeff13631785/scratchpad/frame-landing-probe-keys.md`
+- Pre-registration: `<session scratchpad>/frame-landing-probe-keys.md`
 - Skills under test: `plugins/frame/skills/first-principles/SKILL.md`, `plugins/frame/skills/orthogonal/SKILL.md`, `plugins/frame/skills/dialectic/SKILL.md`, `plugins/frame/skills/graft/SKILL.md`

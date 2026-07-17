@@ -22,7 +22,7 @@ Cheap because the consumers are agents reading the YAML, not brittle code — bu
 
 ## Evidence so far
 
-- **Only case (2026-06-24, project setup)**: `boyuchen: [owner, developer]` written; safety inferred from "skills are agent-read," not from any documented rule.
+- **Only case (2026-06-24, project setup)**: `alice: [owner, developer]` written; safety inferred from "skills are agent-read," not from any documented rule.
 
 (One case → stays `raw`. Promote when a second project needs multi-role, or when a settle/routing run has to interpret a list.)
 
