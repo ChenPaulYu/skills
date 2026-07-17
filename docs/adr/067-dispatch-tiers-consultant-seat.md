@@ -4,6 +4,7 @@
 **Date**: 2026-07-13
 **Extends**: [ADR-058](docs/adr/058-shape-cost-tiers.md) · [ADR-059](docs/adr/059-cost-tier-marketplace-wide.md) (a skill's own declared cost tier) with a second dimension — who gets *dispatched* to do a piece of work, independent of any single skill's tier.
 **Source**: `blueprints/thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` (four forks, decided by Paul the same session); folds in `blueprints/thoughts/2026-07-13-rule7-second-door-advisor-escalation.md`'s advisor-escalation proposal as this ADR's consultant-seat resolution.
+**Amended**: [ADR-087](087-consultant-seat-drops-advisor-rung.md) (2026-07-17) removed the `advisor`-tool first rung from the resolution order — the seat's role-not-tool principle stands; the tool under it proved effectively never available.
 
 ## Context
 
