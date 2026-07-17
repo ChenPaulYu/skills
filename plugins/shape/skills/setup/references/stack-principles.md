@@ -11,7 +11,7 @@
 | Web audio | **a reactive web-audio lib** (maintainer's pick: `audiorective`) — audio logic lives on processor subclasses only; UI stays thin | scheduling in components |
 | Fullstack project | **monorepo: `backend/ + frontend/ + dev.sh`** | two repos |
 | Agent reasoning | **rented Claude** (claude-agent-sdk / anthropic), swappable via MCP | building an own reasoning engine (portfolio invariant) |
-| Communication | converse in **Traditional Chinese (Taiwanese phrasing)**, plain + analogy-led; code / identifiers / commit messages in English | monolingual-English chat by default |
+| Communication | converse in **the user's language**, plain + analogy-led; code / identifiers / commit messages in English | forcing chat into English when the user writes another language |
 | Blueprints human render | **`plan.md` alone is the maintained board, always — no standing HTML file, ever.** A visual view, when wanted, renders fresh via `/shape:mockup` (disposable, on-demand) — never a file `setup`/`align` scaffolds, maintains, or regenerates. | maintaining/regenerating a standing `overview.html`, or asking whether to |
 
 ## 慣例級 — twice-evidenced defaults (recurred across the maintainer's scaffolds)

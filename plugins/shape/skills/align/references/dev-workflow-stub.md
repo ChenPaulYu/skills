@@ -31,7 +31,7 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 
 **Standing pointers:** plan board = `docs/blueprints/plan.md` (agent AND human — a visual view renders on demand via `/shape:mockup`) · grounded plans = `docs/blueprints/plans/` · repo map = `docs/codebase-map/index.html`.
 
-**Communication:** converse with the user in **<project language — default per stack-principles, e.g. Traditional Chinese (Taiwanese phrasing)>**, plain and direct; keep code, identifiers, and commit messages in English.
+**Communication:** converse with the user in **<project language — default per stack-principles>**, plain and direct; keep code, identifiers, and commit messages in English.
 <!-- shape:dev-workflow end -->
 ```
 

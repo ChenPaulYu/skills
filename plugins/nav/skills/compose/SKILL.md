@@ -112,9 +112,8 @@ If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name 
 - **`/shape:elicit`** — where undecided content goes when a rule-⑧ signal shows the point isn't settled.
 - **Consumers** — `/shape`, `/reflect:observe`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).
 
-## Communication Style
-- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
-- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
-- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
-- Avoid academic jargon and unnecessary verbosity.
-- Keep explanations concise and actionable.
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.

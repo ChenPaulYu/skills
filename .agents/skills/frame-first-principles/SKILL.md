@@ -106,9 +106,8 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 - **`nav-plan`** — ground the rebuilt answer into a code-level plan once settled (bigger/ambiguous work `nav-do` doesn't fit).
 - **`frame-orthogonal`** — the separation lens (factor sideways into mutually-independent axes); first-principles is the depth lens. The two decomposition moves.
 
-## Communication Style
-- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
-- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
-- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
-- Avoid academic jargon and unnecessary verbosity.
-- Keep explanations concise and actionable.
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.

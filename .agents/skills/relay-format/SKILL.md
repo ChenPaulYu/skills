@@ -76,9 +76,8 @@ Now **read each thought** and use judgment the lint can't:
 ## Helper script (ADR-051)
 `scripts/lint.mjs` (node) is the **fast-path** checker — regex-based conformance (it catches the known break/shape issues, not full YAML validation). It is **not a hard dependency**: when node is absent the skill degrades to the Step-2 recipe. The script only **reports**; the **fixes** (and all judgment) are the skill's, under the gate.
 
-## Communication Style
-- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
-- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
-- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
-- Avoid academic jargon and unnecessary verbosity.
-- Keep explanations concise and actionable.
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.

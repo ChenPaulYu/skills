@@ -102,9 +102,8 @@ Write the behaviour-changing code, placed per the inject pass. Keep moves and ad
 - **`nav-sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and run **`nav-map`** if that role change is worth reflecting in the codebase map).
 - **`shape-elicit` · `shape-mockup`** — when the change isn't actually decided yet; converge first, then `do`.
 
-## Communication Style
-- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
-- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
-- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
-- Avoid academic jargon and unnecessary verbosity.
-- Keep explanations concise and actionable.
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.

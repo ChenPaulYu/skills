@@ -147,9 +147,8 @@ re-state the residual quarantine so the user sees what is still open.
   papers), mark the verdict "uncertain" and say what would resolve it — don't guess a chain
   into existence.
 
-## Communication Style
-- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
-- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
-- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
-- Avoid academic jargon and unnecessary verbosity.
-- Keep explanations concise and actionable.
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.

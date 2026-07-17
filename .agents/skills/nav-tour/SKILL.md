@@ -63,7 +63,7 @@ Walk top-down, in this fixed order, progressively disclosing detail:
 4. **Why it has this shape** — only load-bearing decisions, each marked Recorded / Inferred / Unknown, linked to durable evidence when available.
 5. **Constraints worth carrying** — boundaries a future change must not accidentally violate.
 
-Use plain Traditional Chinese for the user-facing explanation, keep code identifiers as-is, and use at most **one** deliberately chosen analogy for the hardest structural point — `tour` does not run `frame-analogize` or compare multiple analogy candidates; one analogy is style here, not the engine.
+Use the user's language, in plain wording, for the user-facing explanation, keep code identifiers as-is, and use at most **one** deliberately chosen analogy for the hardest structural point — `tour` does not run `frame-analogize` or compare multiple analogy candidates; one analogy is style here, not the engine.
 
 ### Step 4 — Expose the proposed shared model
 
@@ -132,9 +132,8 @@ If the user ends after the first response, report that the tour is grounded but 
 - **`frame-analogize`** — builds and stress-tests an analogy for one already-understood concept. `tour` uses at most one analogy as style; it is not `tour`'s engine.
 - **`nav-audit`** — assesses architectural health and reports findings. `tour` teaches the current system without grading or fixing it; smells noticed incidentally are marked, not investigated into an audit.
 
-## Communication Style
-- Always explain concepts using simple, direct, and plain language (請用簡單、白話的語言解釋).
-- Use analogies and metaphors frequently to explain complex programming or design concepts (請多使用易懂的比喻來解釋複雜的程式或設計概念).
-- Use Traditional Chinese (Taiwanese phrasing) for all user-facing explanations.
-- Avoid academic jargon and unnecessary verbosity.
-- Keep explanations concise and actionable.
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.
