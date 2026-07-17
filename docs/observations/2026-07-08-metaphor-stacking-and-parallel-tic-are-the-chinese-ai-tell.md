@@ -28,6 +28,6 @@ The fix was mechanical once these were named: keep ONE governing metaphor as the
 
 ## Evidence so far
 
-- **Only case (2026-07-08, grains `life/` letters)**: two files rewritten end-to-end using this diagnostic; user moved on to the next topic without further correction, implying the fix landed.
+- **Only case (2026-07-08, personal letters in a private notes repo)**: two files rewritten end-to-end using this diagnostic; user moved on to the next topic without further correction, implying the fix landed.
 
 (One case → stays `raw`. Would promote with a second independent case — e.g. this skill actually gets built and used on a different document, or the same two tics get spotted again in unrelated AI-generated Chinese output.)

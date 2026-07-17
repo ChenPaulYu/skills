@@ -21,7 +21,9 @@ write time** — a later sweep is damage control, not a workflow (two were neede
 - **No real third-party names or handles.** Collaborators appear as roles: "the
   counterpart", "a team member". The repo owner naming *himself* is normal authorship
   and fine; naming anyone else is not — they didn't consent to appearing in a public
-  tools repo.
+  tools repo. **Carve-out**: crediting the authors of *public* work (Ousterhout,
+  `mattpocock/skills`, a published paper's ideas) is attribution, not a leak — the
+  law protects non-consenting private collaborators, not public authorship.
 - **No private repo names, org paths, or internal project details.** Use placeholders
   (`<relay-repo>`, "a private R&D project"). Unreleased-product feature/debt items are
   described by shape ("a timing-grounding item"), never by internal name.

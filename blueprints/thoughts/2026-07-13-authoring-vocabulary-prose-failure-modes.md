@@ -16,7 +16,7 @@
 定義(轉述自 SKILL.md):模型因為後面步驟先進入視野而提早結束當前步驟;解法是把 Completion Criterion 磨得更銳利,若這一步本質模糊,就用拆分把後續步驟先藏起來。
 
 - **本 repo 一手實例**:`plugins/nav/skills/plan/SKILL.md` 的 Anti-patterns 表(L191–201)裡至少三行是同一失效模式的不同分身,已被獨立收斂,只是沒有共同名字——"I'll skip Stage 2 — I can guess what the user means"、"I'll execute step 1 while I'm here, the plan is obvious"、"I'll skip Stage 4 — the next step is obvious"。三句話都是「提早喊完工」的變體(跳步驟 / 混合驗收與執行 / 省略最後一步)。
-- **跨 repo 印證(假設,非本 repo 檔案內的一手實例,是消費端的野外案例)**:sibling 專案 tactus 的 `CLAUDE.md` 寫著「這條鐵律很容易被跳過(2026-07-10 連續兩次忘記,被使用者提醒才想起來)」——這條鐵律指的正是本 repo 輸出的 `/nav:do` / `/nav:plan` 路由判斷。同一份批次計畫 `blueprints/plans/2026-07-13-fable-rethink-skills-batch.md` 的 Context 也把它列為根因之一(痛點 #4)。
+- **跨 repo 印證(假設,非本 repo 檔案內的一手實例,是消費端的野外案例)**:一個 sibling 私有專案的 `CLAUDE.md` 寫著「這條鐵律很容易被跳過(2026-07-10 連續兩次忘記,被使用者提醒才想起來)」——這條鐵律指的正是本 repo 輸出的 `/nav:do` / `/nav:plan` 路由判斷。同一份批次計畫 `blueprints/plans/2026-07-13-fable-rethink-skills-batch.md` 的 Context 也把它列為根因之一(痛點 #4)。
 - **落點**:Completion Criterion 是解藥,本任務本身就是活教材——這篇 W2 文件受 plan.md「Verification — Fable review 清單」7 條把關,寫作過程等於在演練這個詞。
 
 ### Negation — 禁令反而喚起被禁行為

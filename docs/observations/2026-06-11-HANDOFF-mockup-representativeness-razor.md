@@ -14,7 +14,7 @@ status: ready — Paul 已核准方向,細節在本檔
 
 ## 前因後果(完整因果鏈,讀完即有全脈絡)
 
-1. **背景**:TrackMate(`~/Desktop/Github/01-project/rytho-ai/trackmate`)是本 marketplace 的 dogfood 試驗場。shape 的 mockups 儲存預設已翻成 **committed**(Paul 裁決,commit `4481b82`)→ 每個決策留下一個資料夾、沒有任何 verb 會回頭刪 → `mockups/` 單調增長。
+1. **背景**:一個私有產品 repo 是本 marketplace 的 dogfood 試驗場。shape 的 mockups 儲存預設已翻成 **committed**(Paul 裁決,commit `4481b82`)→ 每個決策留下一個資料夾、沒有任何 verb 會回頭刪 → `mockups/` 單調增長。
 2. **ADR-037**(commit `19c1324`,shape 0.5.0)為此建立 reconcile 的第三層 mockups tier:retire-on-ship、三前提(①決策 settled/shipped?②殘值已吸收?③inbound 引用已解?)、situation table。
 3. **2026-06-11 實戰**(TrackMate,16 個 mockup 夾、四輪 gated sweep、最終 16→8):ADR-037 整體成立,但 keep-clause「③ hits a **load-bearing** citation」**沒說死誰有授予 load-bearing 的資格** → 「被 thoughts 引用的推導考古」這類中間案例每夾都要人工判斷,三輪才裁完。
 4. **Paul 收斂出 razor**:「要不被釘在 core 文件(重要資產),或者正在執行,或者被 defer 到 future,其他可刪」——即 **KEEP iff canon-pinned ∨ in-flight ∨ parked**。銳點:**只有 canon(core 文件)的引用算釘子**;sibling blueprints 文件(thoughts/plan)的引用一律可改寫成 git-pointer(salvage 步本來就會做),永不阻擋退役。回測當日全部 16 個樣本,razor 重現每一個人工裁決,並把一個「keep 一輪(不確定)」的案例變成有規則的 keep。

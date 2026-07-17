@@ -9,7 +9,7 @@ status: promoted
 
 ## What happened (concrete)
 
-Doing doc hygiene on Crate (`rytho-ai/crate`), Paul asked twice "can I delete this thought doc?" about `2026-05-29-baseline-cards-cite-derive.md` and `2026-05-29-media-card-ontology.md`. Both are **shipped** (the feature exists in code) yet **un-prunable**: they hold decision rationale — the citation grammar, the referential-integrity invariant, and especially the *rejected alternatives* ("we tried one-primitive media/track, reversed it because video media ⊋ track"). reconcile's existing actions can't retire them:
+Doing doc hygiene on a private product repo, Paul asked twice "can I delete this thought doc?" about `2026-05-29-baseline-cards-cite-derive.md` and `2026-05-29-media-card-ontology.md`. Both are **shipped** (the feature exists in code) yet **un-prunable**: they hold decision rationale — the citation grammar, the referential-integrity invariant, and especially the *rejected alternatives* ("we tried one-primitive media/track, reversed it because video media ⊋ track"). reconcile's existing actions can't retire them:
 
 - **prune** would lose the rationale,
 - **consolidate** has no in-flight thought to merge *into* (the residue is decision-history, not active design),

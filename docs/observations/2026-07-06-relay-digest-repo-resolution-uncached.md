@@ -19,7 +19,7 @@ Secondary, smaller note: the "ask the user" fallback is the documented behavior 
 
 ## Evidence so far
 
-- **Only case (2026-07-06, rytho-ai / accord)**: `$RELAY_REPO` unset, cwd was a sibling repo (`rytho-ai`, not `accord`). Resolution cost 3 `find` invocations before landing on `accord/relay.yml`.
+- **Only case (2026-07-06, a private monorepo / its relay repo)**: `$RELAY_REPO` unset, cwd was a sibling repo (the monorepo, not the relay repo). Resolution cost 3 `find` invocations before landing on `<relay-repo>/relay.yml`.
 
 (One case → would have stayed `raw`; landed same-session instead, see Update below.)
 

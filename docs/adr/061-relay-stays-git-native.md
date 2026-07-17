@@ -13,14 +13,14 @@ A full GitHub-native redesign was drafted and **validated hands-on** (sandbox re
 
 **relay keeps the git-native file protocol.** The GitHub migration is rejected on two grounds, neither technical:
 
-1. **It reverses a standing product decision.** accord's ledger has `[relay-as-platform]` (agreed 2026-06-25): relay/accord is a core platform to *nurture*, not internal plumbing. Migrating its guts to GitHub is not a tooling swap — it abandons the platform bet. That reversal, if ever wanted, is a strategy decision for the accord parties, not a tooling ADR.
+1. **It reverses a standing product decision.** The live coordination repo's ledger has `[relay-as-platform]` (agreed 2026-06-25): relay is a core platform to *nurture*, not internal plumbing. Migrating its guts to GitHub is not a tooling swap — it abandons the platform bet. That reversal, if ever wanted, is a strategy decision for the relay's parties, not a tooling ADR.
 2. **It contradicts the substrate thesis.** The company's line (typed files, first-class links, agent-native repos) holds that truth lives in repo files an agent reads without API, auth, or network. Moving conversation into GitHub's metadata layer makes the coordination history platform-hosted — the exact dependency the thesis argues against.
 
 The dependency rule that falls out: **core data never depends on a platform; ephemeral edges may.** Notifications (transient by nature) may ride GitHub Actions/Discord/anything — losing them costs a re-wire, not history.
 
 What v1 takes from the evaluation instead:
 
-- **`digest/scripts/compute-state.mjs`** (this ADR's implementation) — the sandbox `digest.sh` logic ported to the file protocol, per ADR-051's split: set-logic (thread grouping, unanswered-ask computation, settled/open, image counts) is deterministic node; **judgment cases are `flags`, never silently decided** (e.g. `question-marks-no-mention`). Validated against accord's real stream: 7/7 threads correct, 0 false waits, 1 correct judgment flag, 24ms.
+- **`digest/scripts/compute-state.mjs`** (this ADR's implementation) — the sandbox `digest.sh` logic ported to the file protocol, per ADR-051's split: set-logic (thread grouping, unanswered-ask computation, settled/open, image counts) is deterministic node; **judgment cases are `flags`, never silently decided** (e.g. `question-marks-no-mention`). Validated against the live repo's real stream: 7/7 threads correct, 0 false waits, 1 correct judgment flag, 24ms.
 - **The session-open hook runs the script** (`--format hook`) instead of the mention-count grep — the hook stops lying because it now runs the same computation digest trusts.
 - **The v2 design doc stays as the feature bar**: native notifications, self-approve blocking, stored state — what relay-as-product must match to justify existing next to GitHub.
 
@@ -28,5 +28,5 @@ What v1 takes from the evaluation instead:
 
 - digest gains a fast path (SKILL.md Step 2): run the script, then read **only the flagged thoughts** — per-run cost stops scaling with stream length.
 - relay `0.5.0 → 0.6.0`: the script, the digest fast path, plus the same-day protocol fixes (repo-path caching in the resolution chain; digest's "waiting on others" aligned to the canonical ask definition — `@`-flag / `change` / real-question comment).
-- The out-of-band notification edge (accord push → Discord ping) is sanctioned but not built — it touches accord and the counterpart's setup, so it ships when the accord parties want it.
+- The out-of-band notification edge (relay-repo push → Discord ping) is sanctioned but not built — it touches the live repo and the counterpart's setup, so it ships when its parties want it.
 - Reversal path: if relay-as-platform is ever re-decided, the shelved design doc is the migration plan, already validated.

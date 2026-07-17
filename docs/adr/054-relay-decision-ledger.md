@@ -1,6 +1,6 @@
 # ADR 054 — relay: decisions are an append-only ledger, not pins in a regenerated snapshot
 
-**Status**: accepted — skills implemented 2026-06-25 (relay `0.3.0`); `accord` live-data migration is the last step (see plan)
+**Status**: accepted — skills implemented 2026-06-25 (relay `0.3.0`); the live coordination repo's data migration is the last step (see plan)
 **Date**: 2026-06-25
 **Refines**: [ADR-053](docs/adr/053-relay-thought-stream.md) — keeps "a decision is a thought that got an agreeing review"; changes only **where a decision durably lives**, and names the thought/decision ontology 053 left implicit. Not a revert: no `@`-set, no graduation ceremony, no consensus protocol returns.
 
@@ -54,4 +54,4 @@ History is append-only, so overturning a decision is **append a new decision** (
 ## Implementation
 
 - **Skills — done (2026-06-25).** Format contract (`plugins/relay/CLAUDE.md`) + `settle` (append-ledger; thoughts never move) + `digest` (drop `index.md` coupling) + `launch` (scaffold `decisions/`, no `archive/`/`index.md`) updated together; relay bumped `0.2.1 → 0.3.0`; manifests/codex regenerated; validator green. See [the plan](docs/plans/2026-06-25-relay-decision-ledger-impl.md).
-- **`accord` live-data migration — done (2026-06-25).** Distilled the already-agreed threads into `decisions/log.md` + `active.md`; retired `index.md`; thoughts stay in `thoughts/` (no `archive/`).
+- **Live coordination-repo data migration — done (2026-06-25).** Distilled the already-agreed threads into `decisions/log.md` + `active.md`; retired `index.md`; thoughts stay in `thoughts/` (no `archive/`).
