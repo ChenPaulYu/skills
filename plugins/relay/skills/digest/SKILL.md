@@ -15,6 +15,12 @@ Compute an actionable view from GitHub state without writing anything.
 Self-report which tier was used:
 
 1. **Helper available.** Use the bundled reducer only when it exposes the GitHub-native schema/interface. Trust its set logic, then inspect linked objects needed for presentation.
+
+   ```
+   node plugins/relay/skills/digest/scripts/compute-state.mjs --repo OWNER/REPO --for LOGIN
+   ```
+
+   `--repo` and `--for` are both optional — omitted, they resolve to the authenticated `gh` session's current repository and login. `--input FILE` replaces live collection with a fixture JSON file (`source: 'fixture'` in the output) for offline/deterministic runs. When `--for` names someone other than the authenticated `gh` account, the output carries `"caveat": "permissions-of-authenticated-viewer"` plus `authenticatedViewer` — that run's obligations were computed with the authenticated account's permissions, not the named viewer's; self-report this caveat rather than presenting the digest as that viewer's own. The `--for` login itself is not validated against GitHub — a mistyped handle silently returns a well-formed empty digest carrying that same caveat, so an unexpected empty cross-viewer digest warrants re-checking the handle before trusting the emptiness.
 2. **Readable GitHub state without helper.** Query authenticated GitHub primitives directly and apply the semantic contract below. This is valid but slower.
 3. **Unavailable or blocked.** If `gh`, authentication, permissions, or a required API surface is unavailable, report the exact blocked surface and what could not be determined. Never infer obligations from notification prose.
 
@@ -28,8 +34,8 @@ Include each obligation once:
 - a current-revision `Request changes` addressed back to the PR author until a new revision is pushed;
 - re-review when a changed revision invalidated approval or requires a new request;
 - an authorized final resolution waiting for `/relay:settle`;
-- an approved current-revision ordinary PR waiting for its author, or its single assignee when one names the merger, to merge;
-- an approved current-revision Core PR only when required review, stale-approval dismissal, and bypass enforcement are verified.
+- an approved current-revision ordinary PR waiting for its author, or its single assignee when one names the merger, to merge (`merge-pull-request` when mergeable now, `resolve-conflicts-then-merge` when conflicting, `prepare-branch-then-merge` for any other non-mergeable state — behind, blocked, unstable, or still being computed);
+- an approved current-revision Core PR only when required review, stale-approval dismissal, and bypass enforcement are verified (`merge-core` when mergeable now, otherwise the same `resolve-conflicts-then-merge`/`prepare-branch-then-merge` split as an ordinary PR).
 
 Exclude:
 

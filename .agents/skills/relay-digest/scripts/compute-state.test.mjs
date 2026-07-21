@@ -242,3 +242,192 @@ test('blocked gh authentication is machine-readable and never guesses obligation
   assert.match(result.blocked.message, /authentication required/);
   assert.deepEqual(result.obligations, []);
 });
+
+// --- normalizeLive coverage -------------------------------------------------
+// These fixtures mirror the shape of graphQlQuery()'s actual response (field names,
+// connection wrapping) and go through collectGitHubPrimitives -> normalizeLive ->
+// reduceObligations, the path the 18 tests above bypass by driving reduceObligations
+// directly with pre-normalized fixture flags.
+
+function pullFixture(pullOverrides = {}, repoOverrides = {}) {
+  return {
+    data: {
+      repository: {
+        viewerPermission: 'WRITE',
+        defaultBranchRef: { name: 'main', branchProtectionRule: null },
+        discussions: { pageInfo: { hasNextPage: false }, nodes: [] },
+        issues: { pageInfo: { hasNextPage: false }, nodes: [] },
+        pullRequests: {
+          pageInfo: { hasNextPage: false },
+          nodes: [{
+            id: 'PR_1',
+            number: 21,
+            title: 'Add feature',
+            body: '',
+            url: 'https://github.com/example/project/pull/21',
+            state: 'OPEN',
+            author: { login: 'author-one' },
+            headRefOid: 'sha-2',
+            mergeable: 'MERGEABLE',
+            mergeStateStatus: 'CLEAN',
+            reviewDecision: '',
+            viewerCanUpdate: true,
+            labels: { nodes: [] },
+            assignees: { nodes: [] },
+            files: { pageInfo: { hasNextPage: false }, nodes: [{ path: 'README.md' }] },
+            reviewRequests: { nodes: [{ requestedReviewer: { login: 'reviewer-one' } }] },
+            reviews: { nodes: [{ author: { login: 'reviewer-one' }, state: 'APPROVED', submittedAt: '2026-07-20T00:00:00Z', commit: { oid: 'sha-2' } }] },
+            timelineItems: { pageInfo: { hasNextPage: false }, nodes: [{ createdAt: '2026-07-19T00:00:00Z', requestedReviewer: { login: 'reviewer-one' } }] },
+            ...pullOverrides,
+          }],
+        },
+        ...repoOverrides,
+      },
+    },
+  };
+}
+
+test('normalizeLive: approved PR with empty reviewDecision on an unprotected repo settles for the author (B1)', () => {
+  const raw = () => JSON.stringify(pullFixture());
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.deepEqual(result.blockers, []);
+  const settle = result.obligations.find((entry) => entry.kind === 'SETTLE');
+  assert.ok(settle, 'expected a SETTLE obligation');
+  assert.equal(settle.action, 'merge-pull-request');
+});
+
+test('normalizeLive: a single PR assignee becomes the settlement owner instead of the author (B2)', () => {
+  const raw = () => JSON.stringify(pullFixture({ assignees: { nodes: [{ login: 'assignee-one' }] } }));
+  const asAssignee = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'assignee-one', runGh: raw }));
+  assert.equal(asAssignee.obligations.find((entry) => entry.kind === 'SETTLE')?.action, 'merge-pull-request');
+
+  const asAuthor = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.ok(!asAuthor.obligations.some((entry) => entry.kind === 'SETTLE'));
+});
+
+test('normalizeLive: two PR assignees do not transfer settlement, so it stays with the author (B2)', () => {
+  const raw = () => JSON.stringify(pullFixture({
+    assignees: { nodes: [{ login: 'assignee-one' }, { login: 'assignee-two' }] },
+  }));
+  const asAuthor = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.equal(asAuthor.obligations.find((entry) => entry.kind === 'SETTLE')?.action, 'merge-pull-request');
+
+  const asAssignee = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'assignee-one', runGh: raw }));
+  assert.ok(!asAssignee.obligations.some((entry) => entry.kind === 'SETTLE'));
+});
+
+test('normalizeLive: an approval-ready but conflicting PR still settles, with a resolve-conflicts action (B1)', () => {
+  const raw = () => JSON.stringify(pullFixture({ mergeable: 'CONFLICTING', mergeStateStatus: 'DIRTY' }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.deepEqual(result.blockers, []);
+  const settle = result.obligations.find((entry) => entry.kind === 'SETTLE');
+  assert.ok(settle, 'expected a SETTLE obligation');
+  assert.equal(settle.action, 'resolve-conflicts-then-merge');
+});
+
+test('normalizeLive: an approval-ready Core PR blocks on unverified enforcement instead of going silent (B1 reachability)', () => {
+  const raw = () => JSON.stringify(pullFixture({ files: { pageInfo: { hasNextPage: false }, nodes: [{ path: 'core/policy.md' }] } }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.ok(!result.obligations.some((entry) => entry.kind === 'SETTLE'));
+  assert.equal(result.blockers[0]?.code, 'core-enforcement-unverified');
+});
+
+test('normalizeLive: a stale CHANGES_REQUESTED review does not obligate the author after a new revision, but the reviewer still owes re-review (I1)', () => {
+  const raw = () => JSON.stringify(pullFixture({
+    reviewDecision: 'CHANGES_REQUESTED',
+    reviewRequests: { nodes: [] },
+    reviews: { nodes: [{ author: { login: 'reviewer-two' }, state: 'CHANGES_REQUESTED', submittedAt: '2026-07-18T00:00:00Z', commit: { oid: 'sha-1' } }] },
+    timelineItems: { pageInfo: { hasNextPage: false }, nodes: [{ createdAt: '2026-07-17T00:00:00Z', requestedReviewer: { login: 'reviewer-two' } }] },
+  }));
+  const authorView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.ok(!authorView.obligations.some((entry) => entry.action === 'address-requested-changes'));
+
+  const reviewerView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'reviewer-two', runGh: raw }));
+  const review = reviewerView.obligations.find((entry) => entry.kind === 'REVIEW');
+  assert.ok(review, 'expected a REVIEW obligation for the reviewer');
+  assert.equal(review.action, 're-review-current-revision');
+  assert.ok(review.reasons.includes('stale-verdict'));
+});
+
+test('normalizeLive: an approval-ready PR that is BEHIND its base branch still settles, with a prepare-branch action (R2-1)', () => {
+  const raw = () => JSON.stringify(pullFixture({ mergeable: 'MERGEABLE', mergeStateStatus: 'BEHIND' }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.deepEqual(result.blockers, []);
+  const settle = result.obligations.find((entry) => entry.kind === 'SETTLE');
+  assert.ok(settle, 'expected a SETTLE obligation');
+  assert.equal(settle.action, 'prepare-branch-then-merge');
+  assert.ok(settle.reasons.includes('approved-awaiting-mergeability'));
+});
+
+test('a leading-hyphen handle is never a valid GitHub login, so the first real @mention is designated (R2-4)', () => {
+  const pending = item('D22', 'discussion', { title: '[ACK] Read this', body: '@-junk then @alice', reactions: [] });
+  const aliceView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'alice', objects: [pending] });
+  assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
+
+  const junkView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: '-junk', objects: [pending] });
+  assert.equal(junkView.obligations.length, 0);
+});
+
+test('normalizeLive: a REVIEW_REQUIRED aggregate blocks settlement even with a current-revision approval present — the fallback must not override a non-empty aggregate (R2-5a)', () => {
+  const raw = () => JSON.stringify(pullFixture({ reviewDecision: 'REVIEW_REQUIRED' }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.ok(!result.obligations.some((entry) => entry.kind === 'SETTLE'));
+});
+
+test('normalizeLive: on an unprotected repo, one reviewer\'s outstanding review request blocks settlement despite another reviewer\'s current-revision approval (R2-5b)', () => {
+  const raw = () => JSON.stringify(pullFixture({
+    reviewRequests: { nodes: [
+      { requestedReviewer: { login: 'reviewer-one' } },
+      { requestedReviewer: { login: 'reviewer-two' } },
+    ] },
+  }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.ok(!result.obligations.some((entry) => entry.kind === 'SETTLE'));
+});
+
+test('normalizeLive: a --for run under a different authenticated account surfaces the permissions caveat (R2-3)', () => {
+  const raw = () => JSON.stringify({ ...pullFixture(), data: { ...pullFixture().data, viewer: { login: 'admin-account' } } });
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.equal(result.caveat, 'permissions-of-authenticated-viewer');
+  assert.equal(result.authenticatedViewer, 'admin-account');
+  assert.equal(result.viewer, 'author-one');
+});
+
+test('normalizeLive: a run under the matching authenticated account carries no caveat (R2-3)', () => {
+  const raw = () => JSON.stringify({ ...pullFixture(), data: { ...pullFixture().data, viewer: { login: 'author-one' } } });
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.equal(result.caveat, undefined);
+  assert.equal(result.authenticatedViewer, undefined);
+});
+
+test('normalizeLive: ACK routes to the first @mention, ignoring a later mention and an email address (I2)', () => {
+  const raw = () => JSON.stringify({
+    data: {
+      repository: {
+        viewerPermission: 'WRITE',
+        defaultBranchRef: { name: 'main', branchProtectionRule: null },
+        discussions: {
+          pageInfo: { hasNextPage: false },
+          nodes: [{
+            id: 'D_1',
+            number: 30,
+            title: '[ACK] Policy update',
+            url: 'https://github.com/example/project/discussions/30',
+            body: '@alice please read and ack. cc @bob for awareness. Contact team@example.com with questions.',
+            closed: false,
+            isAnswered: false,
+            labels: { nodes: [] },
+            reactions: { pageInfo: { hasNextPage: false }, nodes: [] },
+          }],
+        },
+        issues: { pageInfo: { hasNextPage: false }, nodes: [] },
+        pullRequests: { pageInfo: { hasNextPage: false }, nodes: [] },
+      },
+    },
+  });
+  const aliceView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'alice', runGh: raw }));
+  assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
+
+  const bobView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'bob', runGh: raw }));
+  assert.equal(bobView.obligations.length, 0);
+});

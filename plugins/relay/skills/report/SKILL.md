@@ -19,7 +19,7 @@ Use these refinements:
 
 - pure FYI -> Announcement Discussion, no assignment or ACK marker;
 - authoritative external source update -> FYI Announcement with source URL and immutable revision, commit, or content hash; update any reusable brief through a separate cited PR;
-- explicit awareness acknowledgment -> `[ACK]` Announcement naming one recipient; this records “I saw this notice,” not proof of comprehension, acceptance, or external work;
+- explicit awareness acknowledgment -> `[ACK]` Announcement naming one recipient; this records “I saw this notice,” not proof of comprehension, acceptance, or external work. When the recipient isn't given explicitly, the first `@mention` (title first, then body) designates it; later mentions are context, and an email address (e.g. `hello@rytho.ai`) is never read as a mention;
 - answerable question -> Q&A Discussion;
 - verifiable work -> Issue with one assignee, observable completion criteria, and the evidence the assignee must return;
 - one authorized decision -> Decision Issue with that person as the single assignee;

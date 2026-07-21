@@ -36,12 +36,18 @@ function obligation(kind, object, reason, action, extra = {}) {
   };
 }
 
+function firstMention(text) {
+  // The @ must not be preceded by a word character or a dot, so `hello@rytho.ai` never
+  // reads as a mention of `rytho`. Group 2 is the handle.
+  const match = /(^|[^\w.@])@([A-Za-z0-9][A-Za-z0-9-]*)/.exec(text || '');
+  return match ? match[2].toLowerCase() : null;
+}
+
 function designatedAckRecipient(object) {
   if (object.ackRecipient) return loginOf(object.ackRecipient);
   if (!/^\s*\[ACK\]/i.test(object.title || '') && !hasLabel(object, 'ack-required')) return null;
-  const recipients = unique((`${object.title || ''}\n${object.body || ''}`.match(/@[a-z\d](?:[a-z\d-]{0,37})/ig) || [])
-    .map((match) => match.slice(1).toLowerCase()));
-  return recipients.length === 1 ? recipients[0] : null;
+  // The first @mention (title first, then body) names the recipient; later mentions are context.
+  return firstMention(object.title) || firstMention(object.body);
 }
 
 function hasEyesFrom(object, viewer) {
@@ -96,16 +102,36 @@ function reviewNeed(object, viewer) {
   };
 }
 
+/** Latest verdict (APPROVED/CHANGES_REQUESTED) per reviewer login, on one specific revision.
+ * Shared by currentChangeRequest and approvalReadyFromReviews so both read the same
+ * per-reviewer, per-revision machinery reviewNeed already relies on above. */
+function verdictsOnRevision(object, revision) {
+  const byAuthor = new Map();
+  const sorted = (object.reviews || [])
+    .filter((review) => reviewRevision(review) === revision && ['APPROVED', 'CHANGES_REQUESTED'].includes(reviewState(review)))
+    .sort((a, b) => String(a.submittedAt || '').localeCompare(String(b.submittedAt || '')));
+  for (const review of sorted) {
+    const login = loginOf(review.author || review.user);
+    if (login) byAuthor.set(login.toLowerCase(), reviewState(review));
+  }
+  return byAuthor;
+}
+
 function currentChangeRequest(object) {
   const currentRevision = object.currentRevision || object.headSha || object.headRefOid || null;
-  const aggregate = String(object.reviewDecision || '').toUpperCase();
-  if (aggregate === 'APPROVED') return null;
-  if (aggregate === 'CHANGES_REQUESTED') return true;
-  const currentVerdict = (object.reviews || [])
-    .filter((review) => reviewRevision(review) === currentRevision && ['APPROVED', 'CHANGES_REQUESTED'].includes(reviewState(review)))
-    .sort((a, b) => String(a.submittedAt || '').localeCompare(String(b.submittedAt || '')))
-    .findLast(() => true);
-  return reviewState(currentVerdict || {}) === 'CHANGES_REQUESTED';
+  return [...verdictsOnRevision(object, currentRevision).values()].includes('CHANGES_REQUESTED');
+}
+
+/** Approval readiness derived from per-reviewer, per-revision verdicts — used when the
+ * aggregate reviewDecision is null/empty, which GitHub returns whenever the base branch
+ * has no branch-protection rule (e.g. private free-plan repos). */
+function approvalReadyFromReviews(object) {
+  const currentRevision = object.currentRevision || object.headSha || object.headRefOid || null;
+  const verdicts = verdictsOnRevision(object, currentRevision);
+  const states = [...verdicts.values()];
+  if (!states.includes('APPROVED')) return false;
+  if (states.includes('CHANGES_REQUESTED')) return false;
+  return requestedReviewers(object).every((login) => verdicts.has(String(login).toLowerCase()));
 }
 
 function authorizedResolution(object) {
@@ -179,20 +205,33 @@ export function reduceObligations(input) {
         String(typeof file === 'string' ? file : file?.path || '').startsWith('core/'));
       const mergeReady = object.mergeReady === true ||
         (String(object.mergeable).toUpperCase() === 'MERGEABLE' && String(object.mergeStateStatus).toUpperCase() === 'CLEAN');
+      const conflicting = String(object.mergeable).toUpperCase() === 'CONFLICTING';
       const settlementOwner = loginOf(object.settlementOwner) || loginOf(object.author);
       const viewerOwnsSettlement = sameLogin(settlementOwner, viewer);
-      const approvedReady = object.viewerCanSettle === true && viewerOwnsSettlement &&
-        object.requiredApprovalSatisfied === true && mergeReady;
-      if (approvedReady && touchesCore && object.coreGateEnforced !== true) {
+      // Approval-readiness itself never depends on mergeable state — a conflicting PR still
+      // has an owner, it just needs a different action than a clean merge (see below).
+      const approvalReady = object.viewerCanSettle === true && viewerOwnsSettlement &&
+        object.requiredApprovalSatisfied === true;
+      if (approvalReady && touchesCore && object.coreGateEnforced !== true) {
         blockers.push({
           code: 'core-enforcement-unverified',
           ...objectRef(object),
           message: 'Core approval exists, but required review, stale dismissal, and admin enforcement were not verified.',
         });
-      } else if (approvedReady) {
+      } else if (approvalReady && mergeReady) {
         const item = touchesCore
           ? obligation('SETTLE', object, 'core-approved-current-revision', 'merge-core')
           : obligation('SETTLE', object, 'pull-request-approved-current-revision', 'merge-pull-request');
+        byId.set(item.id, mergeObligation(byId.get(item.id), item));
+      } else if (approvalReady && conflicting) {
+        const item = obligation('SETTLE', object, 'approved-but-conflicting', 'resolve-conflicts-then-merge');
+        byId.set(item.id, mergeObligation(byId.get(item.id), item));
+      } else if (approvalReady) {
+        // Approval-ready always yields exactly one obligation for its settlement owner —
+        // BEHIND/BLOCKED/UNSTABLE mergeStateStatus, an UNKNOWN mergeable while GitHub still
+        // computes it, or any other non-CLEAN/non-CONFLICTING state all land here rather
+        // than going silent.
+        const item = obligation('SETTLE', object, 'approved-awaiting-mergeability', 'prepare-branch-then-merge');
         byId.set(item.id, mergeObligation(byId.get(item.id), item));
       }
     }
@@ -209,6 +248,7 @@ export function reduceObligations(input) {
     blocked: null,
     blockers,
     obligations,
+    ...(input.caveat ? { caveat: input.caveat, authenticatedViewer: input.authenticatedViewer } : {}),
   };
 }
 
@@ -221,6 +261,7 @@ function defaultRunGh(args) {
 
 export function graphQlQuery() {
   return `query($owner:String!,$name:String!){
+    viewer{login}
     repository(owner:$owner,name:$name){
       viewerPermission
       defaultBranchRef{name branchProtectionRule{pattern requiresApprovingReviews requiredApprovingReviewCount dismissesStaleReviews isAdminEnforced}}
@@ -247,6 +288,7 @@ function flattenConnection(connection) {
 function normalizeLive(data, repository, viewer) {
   const repo = data.data?.repository;
   if (!repo) throw new Error('repository was not returned by GitHub');
+  const authenticatedViewer = data.data?.viewer?.login || null;
   const truncated = ['discussions', 'issues', 'pullRequests'].filter((key) => repo[key]?.pageInfo?.hasNextPage);
   if (flattenConnection(repo.discussions).some((discussion) => discussion.reactions?.pageInfo?.hasNextPage)) {
     truncated.push('discussion reactions');
@@ -274,9 +316,6 @@ function normalizeLive(data, repository, viewer) {
       issueType: value.issueType?.name || null,
       labels: flattenConnection(value.labels),
       assignees: flattenConnection(value.assignees),
-      settlementOwner: flattenConnection(value.assignees).length === 1
-        ? loginOf(flattenConnection(value.assignees)[0])
-        : loginOf(value.author),
       finalResolution: resolutionComment && {
         author: resolutionComment.author,
         outcome: resolutionComment.body.match(/(?:^|\n)Outcome:\s*([^\n]+)/i)?.[1]?.trim(),
@@ -297,24 +336,49 @@ function normalizeLive(data, repository, viewer) {
       protection?.dismissesStaleReviews &&
       protection?.isAdminEnforced,
     );
+    const prAssignees = flattenConnection(value.assignees);
+    const reviews = flattenConnection(value.reviews).map((review) => ({ ...review, revision: review.commit?.oid }));
+    const currentRevision = value.headRefOid;
+    // GitHub returns reviewDecision null/empty whenever the base branch has no branch
+    // protection rule — that must not read as "not approved". Fall back to deriving
+    // readiness from the per-reviewer, per-revision verdicts (see B1).
+    const aggregateDecision = String(value.reviewDecision || '').toUpperCase();
+    const requiredApprovalSatisfied = aggregateDecision === 'APPROVED' || (
+      !aggregateDecision && approvalReadyFromReviews({
+        currentRevision,
+        reviews,
+        requestedReviewers: activeRequests,
+        reviewRequests: requestHistory,
+      })
+    );
     return {
       ...value,
       type: 'pull_request',
-      currentRevision: value.headRefOid,
+      currentRevision,
       labels: flattenConnection(value.labels),
-      assignees: flattenConnection(value.assignees),
+      assignees: prAssignees,
+      // Exactly one assignee explicitly transfers the settlement/merge obligation; zero or
+      // multiple assignees do not, so it falls back to the PR author (see B2).
+      settlementOwner: prAssignees.length === 1 ? loginOf(prAssignees[0]) : loginOf(value.author),
       files: flattenConnection(value.files),
       requestedReviewers: activeRequests,
       reviewRequests: requestHistory,
-      reviews: flattenConnection(value.reviews).map((review) => ({ ...review, revision: review.commit?.oid })),
+      reviews,
       isCore: flattenConnection(value.files).some((file) => file.path?.startsWith('core/')),
       viewerCanSettle: ['ADMIN', 'MAINTAIN', 'WRITE'].includes(repo.viewerPermission) && value.viewerCanUpdate === true,
-      requiredApprovalSatisfied: value.reviewDecision === 'APPROVED',
+      requiredApprovalSatisfied,
       coreGateEnforced,
       mergeReady: value.mergeable === 'MERGEABLE' && value.mergeStateStatus === 'CLEAN',
     };
   });
-  return { schemaVersion: SCHEMA_VERSION, source: 'github', repository, viewer, objects: [...discussions, ...issues, ...pullRequests] };
+  const result = { schemaVersion: SCHEMA_VERSION, source: 'github', repository, viewer, objects: [...discussions, ...issues, ...pullRequests] };
+  // A --for run answers with the GraphQL-authenticated account's permissions, not the
+  // named viewer's — self-report rather than attempt full impersonation (see R2-3).
+  if (authenticatedViewer && viewer && !sameLogin(authenticatedViewer, viewer)) {
+    result.caveat = 'permissions-of-authenticated-viewer';
+    result.authenticatedViewer = authenticatedViewer;
+  }
+  return result;
 }
 
 /** Collect live primitives, returning a machine-readable blocked result on any gap. */
