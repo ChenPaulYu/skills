@@ -1,6 +1,6 @@
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
 
 ## What Relay is
 
@@ -10,7 +10,7 @@ Six daily verbs form the interface:
 
 | Verb | Owns |
 |---|---|
-| `launch` | Audit or configure repository prerequisites and protection. |
+| `launch` | Audit or configure repository prerequisites, protection, and entry-point templates. |
 | `report` | Route a new human intent to a Discussion, Issue, or pull request. |
 | `digest` | Show only real obligations for the current viewer. |
 | `reply` | Leave the viewer's response on an existing object. |
@@ -30,6 +30,8 @@ Route a new intent with three questions:
 3. Is there an exact reviewable diff? If yes, use a pull request; otherwise use an Issue.
 
 Use Announcement Discussions for FYI and explicit ACK traffic, Q&A Discussions when an accepted answer is the completion condition, assigned Issues for verifiable work, Decision Issues when one named person must decide, and pull requests for exact changes. Split independently completable asks into linked objects.
+
+Router discipline governs only traffic created through `report`. Organic traffic — a human opening an Issue or Discussion directly on GitHub — is nudged toward the same explicit-recipient rule by entry-point templates (`.github/ISSUE_TEMPLATE/`, `.github/DISCUSSION_TEMPLATE/`, PR template) that `/relay:launch` installs and audits. Templates are a convention, not a contract: `digest`'s reducer never reads their fields, and a repository without them still works. See ADR-094.
 
 An ACK is only the named recipient's awareness attestation: “I saw this notice.” It cannot prove comprehension, acceptance, installation, execution, restart, test output, or any other external state. When exact material must be read and judged, put that material in a pull request and request a current-revision verdict. When external work must happen, use an assigned Issue with evidence-based completion criteria. Split mixed requests into linked objects.
 

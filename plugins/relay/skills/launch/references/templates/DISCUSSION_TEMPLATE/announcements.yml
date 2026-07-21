@@ -1,0 +1,22 @@
+title: "[Announcement] "
+body:
+  - type: input
+    id: recipients
+    attributes:
+      label: Recipients
+      description: >-
+        Name at least one @handle. Prefix the title with [ACK] and name
+        exactly one recipient if you need an explicit awareness
+        acknowledgment; otherwise this is FYI for the named recipients.
+      placeholder: "@handle, @handle"
+    validations:
+      required: true
+  - type: textarea
+    id: content
+    attributes:
+      label: Content
+      description: >-
+        The announcement itself. For a source update, include the source
+        URL and an immutable revision, commit, or content hash.
+    validations:
+      required: true

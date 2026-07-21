@@ -1,0 +1,20 @@
+title: "[Question] "
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: What do you need answered? Include relevant context or links.
+    validations:
+      required: true
+  - type: input
+    id: best-placed
+    attributes:
+      label: Who is best placed to answer (@handle)
+      description: >-
+        Optional. A mention here creates a notice, not an obligation — if
+        an answer is actually required rather than merely welcome, route
+        this to an assigned Issue instead (see /relay:digest semantics).
+      placeholder: "@handle"
+    validations:
+      required: false

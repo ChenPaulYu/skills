@@ -1,0 +1,30 @@
+name: Task
+description: Verifiable work with one accountable owner and evidence-based completion.
+title: "[Task] "
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What needs to be done, and what observable evidence completes it
+      description: >-
+        State the work and the evidence that proves it is done — a command's
+        output, a merged change, a verified state. "I did it" is not evidence.
+      placeholder: |
+        What needs to be done:
+        ...
+
+        Evidence that completes it:
+        ...
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Owner
+      description: >-
+        The @handle who will be assigned. Assignment — not this text field —
+        is what creates the digest obligation; the reporter assigns this
+        person to the Issue after creating it.
+      placeholder: "@handle"
+    validations:
+      required: true

@@ -97,7 +97,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 
 **`relay` — coordinate with a counterpart through GitHub** (six daily model-invoked skills; standalone):
 
-- `/relay:launch` — audit or configure the current repository's identity, Discussions, permissions, CODEOWNERS, and merge protection; every mutation is approved first and read back
+- `/relay:launch` — audit or configure the current repository's identity, Discussions, permissions, CODEOWNERS, merge protection, and GitHub entry-point templates (Issue Forms, Discussion category forms, PR template); every mutation is approved first and read back
 - `/relay:report` — route awareness into an optional ACK, evidenced work into an assigned Issue, and exact material into a requested-reviewer pull request; entry-owner discipline means an ask expecting a response must land in one of those native shapes or it's FYI; split independently completable asks and verify responsibility
 - `/relay:digest` — show real GitHub obligations: awareness ACKs, assigned work, native Q&A obligations, current-revision review rounds, author action after Request changes, a request-reviewer obligation for your own unreviewed non-draft PR, authorized PR merge, and lifecycle blockers — plus a separate, non-binding notices tier (prose mentions only) that is never presented as an obligation; an open non-draft PR is never obligation-free; read-only
 - `/relay:reply` — leave the native response on an existing object: awareness 👀, answer or accepted answer, comment, PR Comment, Approve, or Request changes; records a response without pretending awareness proves review or work

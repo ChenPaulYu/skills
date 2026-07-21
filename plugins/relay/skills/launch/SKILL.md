@@ -9,20 +9,52 @@ Audit the current repository, then configure only what the user approves. One Re
 
 ## Process
 
-1. **Resolve repository and viewer.** Use authenticated `gh` state to identify the repository URL, default branch, viewer account, and permission level. Missing authentication or insufficient admin access is a blocker, not a reason to guess.
+`OWNER/REPO` and `BRANCH` below are placeholders — resolve them from step 1 before running any later command.
+
+1. **Resolve repository and viewer.**
+   ```
+   gh repo view --json nameWithOwner,defaultBranchRef,viewerPermission
+   ```
+   Missing authentication or insufficient admin access is a blocker, not a reason to guess.
 2. **Audit prerequisites.** Read back:
-   - Discussions enabled, with usable Announcement and Q&A categories;
-   - token scopes and repository permissions needed by the requested operations;
-   - CODEOWNERS presence and coverage for `core/`;
-   - default-branch rulesets, one required approval in v1, stale-approval dismissal, and required-review enforcement;
-   - bypass actors, confirming no unauthorized actor can make the approval gate ceremonial.
-3. **Report audit-only findings.** Separate `ready`, `missing`, `blocked`, and `cannot verify`. Audit mode writes nothing.
-4. **Gate mutations.** Show the exact settings/files/API mutations and their effect. Wait for explicit approval before changing anything.
-5. **Apply and read back.** Use GitHub primitives or a normal protected PR for repository files. Re-query every setting. A write response without matching read-back state is failure.
+   - Discussions enabled, with usable Announcement and Q&A categories and each category's live slug:
+     ```
+     gh api graphql -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){hasDiscussionsEnabled discussionCategories(first:25){nodes{name slug isAnswerable}}}}' -f owner=OWNER -f name=REPO
+     ```
+   - token scopes and repository permissions needed by the requested operations:
+     ```
+     gh auth status
+     ```
+   - CODEOWNERS presence and coverage for `core/`:
+     ```
+     gh api repos/OWNER/REPO/contents/.github/CODEOWNERS
+     ```
+     (GitHub also accepts `CODEOWNERS` at the repo root or in `docs/`; check whichever the repo actually uses.)
+   - default-branch rulesets, one required approval in v1, stale-approval dismissal, required-review enforcement, and bypass actors — all surfaced in the same two calls, read `bypass_actors`/`bypass_pull_request_allowances` from either response:
+     ```
+     gh api repos/OWNER/REPO/branches/BRANCH/protection
+     gh api repos/OWNER/REPO/rulesets
+     ```
+     A `403` here with a body like `"Upgrade to GitHub Pro or make this repository public"` is not a missing setting — see **`blocked-by-plan`** below, a distinct finding from both `missing` and an auth-type `blocked`.
+   - entry-point templates, one call per file, content compared against this skill's `references/templates/`:
+     ```
+     gh api repos/OWNER/REPO/contents/.github/ISSUE_TEMPLATE/task.yml
+     gh api repos/OWNER/REPO/contents/.github/ISSUE_TEMPLATE/decision.yml
+     gh api repos/OWNER/REPO/contents/.github/ISSUE_TEMPLATE/config.yml
+     gh api repos/OWNER/REPO/contents/.github/pull_request_template.md
+     ```
+     `config.yml` must set `blank_issues_enabled: false`. For `.github/DISCUSSION_TEMPLATE/*.yml`, compare filenames against the live `discussionCategories` slugs already fetched above — a category form's filename must equal that category's actual slug or GitHub silently never serves it. This skill's `references/templates/` ships `announcements.yml` and `q-a.yml`, matching GitHub's own default slugs for the Announcements and Q&A categories; a repository that renamed a category, or never enabled Q&A, needs a different filename or no file at all. A `DISCUSSION_TEMPLATE` filename with no matching live slug is self-reported as `inert (slug mismatch)`, never as `ready` — GitHub renders no error for it, so this is the only signal that it's dead weight.
+3. **Report audit-only findings.** Separate `ready`, `missing`, `inert (slug mismatch)`, `blocked-by-plan`, `blocked`, and `cannot verify`. Audit mode writes nothing.
+   - `missing` — the setting or file is absent, and a `launch` mutation *can* create it (a template file, a repository setting the viewer's permission level can change).
+   - `inert (slug mismatch)` — the file exists but GitHub will never serve it (see above); the fix is renaming or removing the file, not writing a new one.
+   - `blocked-by-plan` — the feature is structurally unreachable on the repository's current GitHub plan/visibility tier, evidenced by the platform's own error (e.g. branch-protection/rulesets APIs returning `403 Upgrade to GitHub Pro or make this repository public` on a private free-plan repo). No mutation `launch` could ever write fixes this. Report the exact platform message verbatim, name the only two unblock paths that exist (upgrade the plan, or change repository visibility), and note plainly that the repository owner's own policy may rule either out — that is their call, not `launch`'s. The mutation plan in step 4 must **exclude** any item found `blocked-by-plan`, never propose it as if it were `missing`.
+   - `blocked` — reserved for auth/permission-type blockers (missing scope, insufficient admin access) where a *different* credential could unblock it.
+4. **Gate mutations.** Show the exact settings/files/API mutations and their effect, for every `ready`-adjacent `missing` or `inert` finding only — never for anything found `blocked-by-plan`. Wait for explicit approval before changing anything. Missing or divergent entry-point templates are part of this plan: copy the file from `references/templates/` verbatim (or show the diff, if it already exists but drifted), and show its full contents before writing — same write-gate as any other mutation here.
+5. **Apply and read back.** Use GitHub primitives or a normal protected PR for repository files. Re-query every setting with the same commands from step 2. A write response without matching read-back state is failure. For templates, read the committed file content back and confirm it matches what was shown.
 
 ## Completion
 
-Done means the real repository state satisfies the contract. Return the repository URL, verified settings, remaining blockers, and any manual-only step.
+Done means the real repository state satisfies the contract. Return the repository URL, verified settings, remaining blockers (auth-type `blocked` and structural `blocked-by-plan` reported separately, the latter with its named unblock paths), and any manual-only step.
 
 ## Discipline
 
@@ -30,6 +62,14 @@ Done means the real repository state satisfies the contract. Return the reposito
 - Do not weaken existing protection to make setup easier.
 - Do not claim a reviewer/approval gate works unless the ruleset and bypass state were read back.
 - Repository mutations are always shown before execution.
+
+## Entry-point templates
+
+`launch` installs and audits GitHub's own Issue Forms and Discussion category forms (`references/templates/`) so organic traffic — a human opening an Issue or Discussion directly, never through `/relay:report` — is nudged toward the same explicit-recipient rule `report` enforces at the router. Templates are a **convention, not a contract**: the digest reducer never reads a template's fields, and a repository without them still works with Relay exactly as before — `launch` self-reports their absence as a `missing` finding, never a blocker. See ADR-094.
+
+Discussion category **slugs are per-repository**, derived by GitHub from each category's name at creation time, and repositories rename, add, or remove categories independently. The reference filenames (`announcements.yml`, `q-a.yml`) assume GitHub's own default category names ("Announcements", "Q&A") — adapt the filename to the repository's actual live slug at install time, never assume the default matches. GitHub serves a category form only when the filename equals a real slug; a mismatch is not an error, just silent non-delivery, which is why the audit step reads live slugs and reports a mismatched file as `inert (slug mismatch)` rather than letting it read as `ready`.
+
+These forms bind GitHub's **web-UI creation path only**: creation through the CLI or API — including a human typing `gh issue create` themselves, not only an agent — gets zero nudge from any of this, the same way `blank_issues_enabled: false` locks nobody on a repository where every collaborator already holds Write or above (the "Maintainers only" blank-issue option remains available to exactly that population). The layer is a default-path prompt for the common case, not a gate against any determined bypass — which is precisely what keeps it a convention rather than a contract.
 
 ## Companion skills
 

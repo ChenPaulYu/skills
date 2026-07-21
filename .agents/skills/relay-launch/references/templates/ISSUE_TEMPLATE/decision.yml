@@ -1,0 +1,31 @@
+name: Decision
+description: One question that needs a single named person to decide.
+title: "[Decision] "
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: The question to decide, plus context links
+      description: >-
+        State the question precisely enough that "Outcome: ..." and
+        "Decision: ..." can answer it directly. Link the objects/sources
+        that inform the decision.
+      placeholder: |
+        Question:
+        ...
+
+        Context / links:
+        ...
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Decision owner (@handle to assign)
+      description: >-
+        The single person authorized to decide. Assigning them to this
+        Issue — not this text field — is what creates the digest
+        obligation; the reporter assigns them after creating it.
+      placeholder: "@handle"
+    validations:
+      required: true
