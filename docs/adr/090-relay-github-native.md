@@ -42,7 +42,7 @@ The older ADRs remain unchanged as historical evidence. This ADR replaces only t
 - One required approver is supported in v1. Multiple simultaneous required approvers need a later design.
 - A failed multi-step write reports the created URL and missing mutations. Retry repairs that object instead of creating another.
 - Legacy evidence is preserved through immutable git references and GitHub permalinks; migration promotes only current reusable knowledge and live obligations.
-- Plugin release surfaces, generated adapters, the reducer, and hook retirement land in later phases of the implementation plan.
+- Plugin release surfaces, generated adapters, the reducer, and hook retirement ship together so no installed host retains a half-old protocol.
 
 ## Out of scope
 

@@ -39,8 +39,9 @@ function obligation(kind, object, reason, action, extra = {}) {
 function designatedAckRecipient(object) {
   if (object.ackRecipient) return loginOf(object.ackRecipient);
   if (!/^\s*\[ACK\]/i.test(object.title || '') && !hasLabel(object, 'ack-required')) return null;
-  const matches = `${object.title || ''}\n${object.body || ''}`.match(/@[a-z\d](?:[a-z\d-]{0,37})/ig) || [];
-  return matches.length === 1 ? matches[0].slice(1) : null;
+  const recipients = unique((`${object.title || ''}\n${object.body || ''}`.match(/@[a-z\d](?:[a-z\d-]{0,37})/ig) || [])
+    .map((match) => match.slice(1).toLowerCase()));
+  return recipients.length === 1 ? recipients[0] : null;
 }
 
 function hasEyesFrom(object, viewer) {
@@ -187,12 +188,22 @@ function defaultRunGh(args) {
   return result.stdout;
 }
 
-function graphQlQuery() {
+export function graphQlQuery() {
   return `query($owner:String!,$name:String!){
-    repository(owner:$owner,name:$name){viewerPermission
-      discussions(first:100){pageInfo{hasNextPage} nodes{id number title body url isAnswered labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}}}}
-      issues(first:100,states:OPEN){pageInfo{hasNextPage} nodes{id number title body url state issueType{name} labels(first:20){nodes{name}} assignees(first:10){nodes{login}} comments(last:50){nodes{author{login} body createdAt}}}
-      pullRequests(first:100,states:OPEN){pageInfo{hasNextPage} nodes{id number title body url state headRefOid mergeable mergeStateStatus reviewDecision viewerCanUpdate labels(first:20){nodes{name}} assignees(first:10){nodes{login}} files(first:100){pageInfo{hasNextPage} nodes{path}} reviewRequests(first:50){nodes{requestedReviewer{... on User{login} ... on Team{slug}}}} reviews(last:100){nodes{author{login} state submittedAt commit{oid}}} timelineItems(first:100,itemTypes:[REVIEW_REQUESTED_EVENT]){pageInfo{hasNextPage} nodes{... on ReviewRequestedEvent{createdAt requestedReviewer{... on User{login} ... on Team{slug}}}}}}}
+    repository(owner:$owner,name:$name){
+      viewerPermission
+      discussions(first:100){
+        pageInfo{hasNextPage}
+        nodes{id number title body url isAnswered labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}}}
+      }
+      issues(first:100,states:OPEN){
+        pageInfo{hasNextPage}
+        nodes{id number title body url state issueType{name} labels(first:20){nodes{name}} assignees(first:10){nodes{login}} comments(last:50){nodes{author{login} body createdAt}}}
+      }
+      pullRequests(first:100,states:OPEN){
+        pageInfo{hasNextPage}
+        nodes{id number title body url state headRefOid mergeable mergeStateStatus reviewDecision viewerCanUpdate labels(first:20){nodes{name}} assignees(first:10){nodes{login}} files(first:100){pageInfo{hasNextPage} nodes{path}} reviewRequests(first:50){nodes{requestedReviewer{... on User{login} ... on Team{slug}}}} reviews(last:100){nodes{author{login} state submittedAt commit{oid}}} timelineItems(first:100,itemTypes:[REVIEW_REQUESTED_EVENT]){pageInfo{hasNextPage} nodes{... on ReviewRequestedEvent{createdAt requestedReviewer{... on User{login} ... on Team{slug}}}}}}
+      }
     }
   }`;
 }

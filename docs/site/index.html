@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-21 (rev 83)
+  Last audit: 2026-07-21 (rev 84)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -109,7 +109,7 @@
       explicit-only migrate (preserve legacy provenance while crossing into the
       GitHub-native model). GitHub owns objects and state; Relay owns routing,
       obligation semantics, authority checks, synthesis policy, and read-back
-      verification. relay v1.0.0; standalone (ADR-090).
+      verification. relay v1.0.1; standalone (ADR-090).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
     • 90 ADRs in docs/adr/ — 001..090 with cross-supersede / refine links
@@ -143,7 +143,14 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 83)
+  ⚠ FIXED in this revision (rev 84)
+    1. Relay 1.0.1 fixes two live-only digest failures found during the Accord
+       migration: the GraphQL collector now closes every selection set, and an
+       `[ACK]` may repeat the same designated recipient without becoming
+       ambiguous. A structural query test and the real GitHub read-back both
+       gate the hotfix; no skill or protocol boundary changed.
+
+  ⚠ FIXED in rev 83 (kept for history)
     1. `relay` becomes GitHub-native (ADR-090; relay 0.8.1 → 1.0.0). GitHub
        Discussions, Issues, pull requests, reviews, reactions, assignments, and
        protected merges now own collaboration state; Relay retains routing,
@@ -152,8 +159,8 @@
        (launch · report · digest · reply · brief · settle) plus explicit-only
        migrate for legacy provenance. Marketplace total 37 → 38 skills. Updated:
        Relay source skills and contract, plugin/marketplace/Codex descriptions,
-       README, this bilingual map, and ADR-090. The generated Codex mirror waits
-       for the same release's hook-retirement work before regeneration. ADR count
+       README, this bilingual map, and ADR-090. The Codex mirror was regenerated
+       and the old Relay SessionStart hook retired in the same release. ADR count
        86 → 90.
 
   ⚠ FIXED in rev 82 (kept for history)
@@ -2093,7 +2100,7 @@ const DOMAINS = {
   relay: {
     layer: 'foundation',
     path: 'plugins/relay/',
-    blurb: {en:'GitHub-native asynchronous coordination: GitHub owns Discussions, Issues, pull requests, reviews, reactions, assignments, and protected merge state; Relay owns routing, real-obligation semantics, authority checks, cited synthesis, settlement, and read-back verification. 7 installed skills: six daily verbs (launch · report · digest · reply · brief · settle) plus explicit-only migrate. Standalone. v1.0.0; see relay/CLAUDE.md + ADR-090 + docs/design/relay.md.', zh:'GitHub-native 非同步協調：GitHub 擁有 Discussion、Issue、PR、review、reaction、assignment 與受保護的 merge 狀態；Relay 擁有路由、真實義務語意、權限檢查、帶引用的整理、結案與寫後讀回驗證。共安裝 7 個 skill：6 個日常 verb（launch · report · digest · reply · brief · settle）加上 explicit-only 的 migrate。獨立。v1.0.0；見 relay/CLAUDE.md、ADR-090 與 docs/design/relay.md。'},
+    blurb: {en:'GitHub-native asynchronous coordination: GitHub owns Discussions, Issues, pull requests, reviews, reactions, assignments, and protected merge state; Relay owns routing, real-obligation semantics, authority checks, cited synthesis, settlement, and read-back verification. 7 installed skills: six daily verbs (launch · report · digest · reply · brief · settle) plus explicit-only migrate. Standalone. v1.0.1; see relay/CLAUDE.md + ADR-090 + docs/design/relay.md.', zh:'GitHub-native 非同步協調：GitHub 擁有 Discussion、Issue、PR、review、reaction、assignment 與受保護的 merge 狀態；Relay 擁有路由、真實義務語意、權限檢查、帶引用的整理、結案與寫後讀回驗證。共安裝 7 個 skill：6 個日常 verb（launch · report · digest · reply · brief · settle）加上 explicit-only 的 migrate。獨立。v1.0.1；見 relay/CLAUDE.md、ADR-090 與 docs/design/relay.md。'},
     files: [
       ['/relay:launch', '', {en:'Audit or configure the current GitHub repository for Relay: authenticated identity, Discussions and categories, permissions, CODEOWNERS, required review, stale-approval dismissal, and bypass safety. Preview mutations, then read them back. ADR-090.', zh:'稽核或設定目前 GitHub repository 的 Relay 條件：登入身分、Discussion 與 category、權限、CODEOWNERS、required review、舊 approval 失效與 bypass 安全。變更前預覽，完成後讀回驗證。ADR-090。'}],
       ['/relay:report', '', {en:'Route a new FYI, explicit ACK, question, decision, task, or exact change to the smallest correct GitHub Discussion, Issue, or pull request. Make ownership/review responsibility visible and verify the written object. ADR-090.', zh:'把新的 FYI、明示 ACK、問題、決策、任務或精確變更，路由到最小且正確的 GitHub Discussion、Issue 或 PR。讓 owner/reviewer 責任可見，並讀回驗證。ADR-090。'}],
@@ -2112,7 +2119,7 @@ const CB_NODES = [
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.6.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.6.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},
   {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 4 summoned skills: catchup · park (the single-use cursor — catchup clears it once consumed, ADR-085), observe (selected durable learning), and retrace (a corrected causal development path + interactive alignment artifact); planned 5th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.7.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。4 個召喚式 skill:catchup · park(一次性游標——catchup 讀完即清,ADR-085)、observe(挑選後的耐久學習)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 5 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.7.0;retrace 見 ADR-084。'}},
-  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination: GitHub owns collaboration objects and enforced state; Relay owns routing, obligation semantics, authority checks, cited briefs, settlement, and verification. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v1.0.0; ADR-090.', zh:'GitHub-native 協調：GitHub 擁有協作 object 與強制狀態；Relay 擁有路由、義務語意、權限檢查、帶引用 brief、結案與驗證。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v1.0.0；ADR-090。'}},
+  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination: GitHub owns collaboration objects and enforced state; Relay owns routing, obligation semantics, authority checks, cited briefs, settlement, and verification. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v1.0.1; ADR-090.', zh:'GitHub-native 協調：GitHub 擁有協作 object 與強制狀態；Relay 擁有路由、義務語意、權限檢查、帶引用 brief、結案與驗證。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v1.0.1；ADR-090。'}},
 ];
 const CB_EDGES = [['shape','nav']];
 

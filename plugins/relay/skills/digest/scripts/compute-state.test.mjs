@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { collectGitHubPrimitives, reduceObligations } from './compute-state.mjs';
+import { collectGitHubPrimitives, graphQlQuery, reduceObligations } from './compute-state.mjs';
 
 const viewer = 'reviewer-one';
 const base = (objects) => ({ source: 'fixture', repository: 'example/project', viewer, objects });
@@ -15,8 +15,18 @@ const item = (id, type, extra = {}) => ({
   ...extra,
 });
 
+test('live GraphQL query closes every selection set', () => {
+  let depth = 0;
+  for (const token of graphQlQuery()) {
+    if (token === '{') depth += 1;
+    if (token === '}') depth -= 1;
+    assert.ok(depth >= 0, 'a selection set closed before it opened');
+  }
+  assert.equal(depth, 0);
+});
+
 test('designated ACK remains until that account adds eyes', () => {
-  const pending = item('D1', 'discussion', { title: '[ACK] Read this', body: '@reviewer-one', reactions: [] });
+  const pending = item('D1', 'discussion', { title: '[ACK] Read this', body: '@reviewer-one read this; only @reviewer-one completes it', reactions: [] });
   assert.deepEqual(reduceObligations(base([pending])).obligations.map((entry) => entry.kind), ['ACK']);
 
   pending.reactions.push({ content: 'EYES', user: { login: viewer } });

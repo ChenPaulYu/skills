@@ -60,7 +60,7 @@ If an early step creates an object and a later mutation fails, return the existi
 
 Use GitHub primitives directly through authenticated `gh`/API operations and ordinary branches/PRs. There is no Relay database, status frontmatter, roster file, project file, thought stream, or decision ledger. A brief is Markdown plus citations plus git history. GitHub URLs are recovery handles.
 
-The deterministic obligation reducer belongs to `digest`; its GitHub-native rewrite is a later implementation phase. The legacy linter remains under `migrate/scripts/` temporarily as migration input and is not a v1 state owner.
+The deterministic GitHub obligation reducer belongs to `digest`. It collects native GitHub primitives, reduces them without inventing state, and returns a machine-readable blocker when collection is incomplete. `migrate` performs semantic inventory directly; the legacy frontmatter linter is retired.
 
 ## Cost and invocation
 
@@ -68,4 +68,4 @@ The deterministic obligation reducer belongs to `digest`; its GitHub-native rewr
 
 ## When editing
 
-Change this owner and every affected self-contained skill together. New/renamed skills also require the marketplace release gates, but those surfaces are handled in the release phase rather than this partial implementation phase.
+Change this owner and every affected self-contained skill together. New or renamed skills require the marketplace release gates, regenerated projections, and both human-facing surfaces in the same commit.
