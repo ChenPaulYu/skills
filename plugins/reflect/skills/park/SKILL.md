@@ -80,6 +80,7 @@ Write `HANDOFF.md` at the project root. No further action — `park` doesn't com
 
 - **`/reflect:catchup`** — the read side; on return, it checks `HANDOFF.md`'s SHA against the current one, downgrades a mismatch to "possibly stale," and **clears the cursor once consumed** (done or stale-and-absorbed) — so a parked cursor is single-use by design: park writes it, the next catchup that drains it removes it.
 - **`/reflect:observe`** — distills a durable, reusable *learning*; `park` writes the *cursor* (where/why), a different object entirely (see the family-fit check in ADR-070).
+- **`/shape:align`** — the *durable* counterpart, and the boundary to get right: `park` is the **ephemeral** session cursor (where/why *right now*, one overwritten `HANDOFF.md`, local by default). When what you're recording is **roadmap-level parked work that outlives the session** — a deferred feature plus a resume plan — that's a **⏸ entry on shape's `plan.md` board + a grounded `plans/<date>-<slug>.md`**, not a `HANDOFF.md`. Never invent an ad-hoc `handoff.md` for durable parked work; if the repo has no `blueprints/` yet, `align` scaffolds one from the family convention.
 
 ## Communication style
 

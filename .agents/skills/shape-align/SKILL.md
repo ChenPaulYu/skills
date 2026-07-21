@@ -102,6 +102,7 @@ align is **pre-build** (intent side). It ends at "decided + recorded in blueprin
 - **`shape-mockup`** — converge a *visual / structural* decision into a disposable interactive artifact (lands in `mockups/`); also renders an on-demand board snapshot from `plan.md` + `decisions.md` when a human wants to see one.
 - **`shape-reconcile`** — check `thoughts/` against current reality and clean out what's stale (the cleanup align defers to).
 - **`nav-plan`** — the build-side sibling: ground one blueprint item into a code-level implementation plan.
+- **`reflect-park`** — the *ephemeral* counterpart, and the boundary to get right: a "stepping away *right now*, here's where I am and why" session cursor is park's `HANDOFF.md` (single overwritten file, local by default), **not** a blueprints entry. align owns **durable** status — the roadmap board + grounded plans that outlive the session. Don't file a momentary cursor as a plan; and don't let an ad-hoc `handoff.md` stand in for either — a durable parked feature is a ⏸ board entry + a `plans/` doc.
 
 ## Communication style
 
