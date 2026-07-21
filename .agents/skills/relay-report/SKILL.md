@@ -37,7 +37,7 @@ An FYI completes when the Announcement and its provenance read back; it creates 
 
 1. Resolve the current repository and authenticated viewer. If the user supplied an existing object URL, inspect and resume it instead of creating anything.
 2. Distill title, body, object type, completion condition, recipient/owner/reviewer, required verdict or evidence, and provenance links. State whether the traffic is FYI, awareness ACK, action, decision, or exact review. If it mixes awareness, review, and execution, show the linked objects separately.
-3. Show the proposed object and follow-up mutations. Wait for approval.
+3. **Author sign-off.** Show the exact title and body that will be posted, verbatim — this speaks in the user's voice on GitHub — and ask: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Show the follow-up mutations (assignment, review request, labels, links) alongside it. Wait for approval.
 4. Create the object, then apply assignment, review request, labels/category, and links as separate observable steps.
 5. Read the object back. Verify URL, type/category, assignee or requested reviewer, current revision, and requested obligation.
 

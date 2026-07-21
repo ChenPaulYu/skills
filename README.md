@@ -95,7 +95,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/reflect:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
 - `/reflect:retrace` — reconstruct why a long development arc moved from stage to stage (prior state · pressure · evidence · decision · status · next pressure), put the causal outline in front of you for correction, then render a browser-verified interactive alignment artifact with concrete witnesses; not a catchup, codebase tour, recap, or process retro
 
-**`relay` — coordinate with a counterpart through GitHub** (six daily model-invoked skills; standalone):
+**`relay` — coordinate with a counterpart through GitHub** (six daily model-invoked skills; standalone; `report`/`reply`/`settle`/`brief` show any outbound object text verbatim and ask "Is this what you mean?" before posting, ADR-095):
 
 - `/relay:launch` — audit or configure the current repository's identity, Discussions, permissions, CODEOWNERS, merge protection, and GitHub entry-point templates (Issue Forms, Discussion category forms, PR template); every mutation is approved first and read back
 - `/relay:report` — route awareness into an optional ACK, evidenced work into an assigned Issue, and exact material into a requested-reviewer pull request; entry-owner discipline means an ask expecting a response must land in one of those native shapes or it's FYI; split independently completable asks and verify responsibility

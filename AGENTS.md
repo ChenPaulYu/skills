@@ -392,7 +392,7 @@ Repo-wide layout + all editing rules (new-skill → ADR, the ★ authoring check
 
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
 
 ## What Relay is
 
@@ -474,6 +474,10 @@ A brief never closes an object, represents consensus, or changes Core. It is not
 Every writing verb presents the intended mutation or diff before applying it. After writing, read the resulting GitHub or git state back. A silent assignment, reviewer, reaction, verdict, close, or merge failure blocks completion.
 
 If an early step creates an object and a later mutation fails, return the existing URL and the exact missing steps. Retry from that URL; never create a duplicate to obtain a clean run.
+
+## Author sign-off (outbound prose)
+
+Every writing verb that posts prose into a GitHub object in the user's voice — `report`'s object body, `reply`'s answer/comment/verdict text, `settle`'s final resolution, `brief`'s synthesis — shows the user the exact text that will be posted, verbatim, and asks: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Mechanical mutations with no authored text — labels, assignment, reactions, read-backs — follow the normal write-gate above, not this one. Correctness is checkable by the agent; whether the text is what the user meant to say, in the voice they want, only the user can judge — and a posted GitHub object is seen immediately, with edits leaving history. See ADR-095.
 
 ## Minimal implementation
 

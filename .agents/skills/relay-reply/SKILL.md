@@ -24,7 +24,7 @@ Map the human's intended response to one GitHub-native action. `reply` leaves **
 
 1. Open the supplied object URL and read its current state. Ask if the target or intended action is ambiguous.
 2. For PR verdicts, resolve the current head revision immediately before acting. Never carry a verdict across a changed revision.
-3. Show the exact response/action and target. Wait for approval before writing.
+3. **Author sign-off.** A `👀` reaction is mechanical — no authored text — so it follows the normal write-gate: show the target and wait for approval. Any response that carries prose (an answer, a comment, a PR Comment, or verdict text on Approve/Request changes) shows the exact text that will be posted, verbatim, and asks: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Wait for approval before writing.
 4. Apply one native action.
 5. Read the object back and verify the actor, action type, object, and revision where applicable.
 

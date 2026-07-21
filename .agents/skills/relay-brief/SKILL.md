@@ -25,7 +25,7 @@ A one-off summary, meeting note, or settled answer that reads well in its object
 1. Read the Raw objects and existing `briefs/README.md` plus related briefs. Choose exactly one lifecycle action: create, update, or retire.
 2. Draft a short topic-based Markdown file. Lead with the current synthesis; cite every load-bearing claim with stable GitHub URLs; distinguish fact, interpretation, and open question.
 3. Maintain `briefs/README.md` as the navigation and organization-rule owner. Retirement removes the stale brief and its links in the same PR; git history preserves it.
-4. Show the diff, citations, and lifecycle action. Wait for approval.
+4. Show the diff, citations, and lifecycle action. **Author sign-off**: the diff already shows the exact brief text verbatim — since a brief speaks in the user's voice, ask the same question: "Is this what you mean?" Commit and open the change only after they confirm; a rewrite goes through the same gate. Wait for approval.
 5. Use a normal branch/pull request. After merge, verify the brief, README entries, and relative links.
 
 ## Organization rules

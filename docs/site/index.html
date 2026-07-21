@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-21 (rev 91)
+  Last audit: 2026-07-21 (rev 92)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -122,12 +122,16 @@
       obligation-free. GitHub's own Issue/Discussion templates now extend
       recipient-tagging to organic traffic that never passes through report's
       router — a convention launch installs and audits, not a new digest
-      contract. GitHub owns objects and state; Relay owns routing,
+      contract. Every writing verb (report, reply, settle, brief) now gates
+      outbound GitHub-object prose behind author sign-off: show the exact
+      text verbatim and ask "Is this what you mean?" before posting —
+      mechanical mutations (reactions, labels, assignment, read-backs) are
+      exempt, per ADR-095. GitHub owns objects and state; Relay owns routing,
       obligation semantics, authority checks, synthesis policy, and read-back
-      verification. relay v1.2.1; standalone (ADR-090/091/092/093/094).
+      verification. relay v1.3.0; standalone (ADR-090/091/092/093/094/095).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 94 ADRs in docs/adr/ — 001..094 with cross-supersede / refine links
+    • 95 ADRs in docs/adr/ — 001..095 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay digest;
@@ -158,7 +162,25 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 91)
+  ⚠ FIXED in this revision (rev 92)
+    1. Relay 1.3.0 (ADR-095) adds an author sign-off gate for outbound
+       GitHub prose: any text a writing verb posts into a GitHub object in
+       the user's voice — report's title/body, reply's answer/comment/
+       verdict text, settle's closing resolution, brief's synthesis — must
+       be shown to the user verbatim with the exact question "Is this what
+       you mean?" before it posts; a rewrite goes through the same gate.
+       Correctness is checkable by the agent, but whether the text is what
+       the user meant to say, in the voice they want, only the user can
+       judge — and a posted GitHub object is seen immediately, with edits
+       leaving history. Mechanical mutations with no authored text
+       (reactions, labels, assignment, read-back verification) are exempt
+       and keep the ordinary write-gate. report/SKILL.md, reply/SKILL.md,
+       settle/SKILL.md, and brief/SKILL.md each restate the gate at their
+       existing preview step; plugins/relay/CLAUDE.md states it once as
+       plugin-wide law. No reducer/schema change — SKILL.md/CLAUDE.md
+       process gate only. relay 1.2.1 → 1.3.0. ADR count 94 → 95.
+
+  ⚠ FIXED in rev 91 (kept for history)
     1. relay's v1 team-review boundary is now documented, not silent: a
        review requested from a GitHub TEAM, not an individual, was
        previously an unrecorded hole — compute-state.mjs's reducer matches
@@ -2306,7 +2328,7 @@ const DOMAINS = {
   relay: {
     layer: 'foundation',
     path: 'plugins/relay/',
-    blurb: {en:'GitHub-native asynchronous coordination: GitHub owns Discussions, Issues, pull requests, reviews, reactions, assignments, and protected merge state; Relay owns routing, real-obligation semantics, authority checks, cited synthesis, settlement, and read-back verification. Awareness ACK, exact review, and evidenced work are separate events with explicit native completion rules. digest now returns a separate non-binding notices tier (prose mentions only) alongside native Q&A obligations; two ratified hard rules: every report tags an explicit recipient (FYI included), and an open non-draft PR is never obligation-free — an unreviewed own PR is a request-reviewer obligation, not a notice. launch now also installs and audits GitHub-native entry-point templates (Issue Forms, Discussion category forms, PR template) that extend recipient-tagging to organic traffic bypassing report's router — a convention, not a new digest contract. 7 installed skills: six daily verbs (launch · report · digest · reply · brief · settle) plus explicit-only migrate. Standalone. v1.2.1; see relay/CLAUDE.md + ADR-090/091/092/093/094 + docs/design/relay.md.', zh:'GitHub-native 非同步協調：GitHub 擁有 Discussion、Issue、PR、review、reaction、assignment 與受保護的 merge 狀態；Relay 擁有路由、真實義務語意、權限檢查、帶引用的整理、結案與寫後讀回驗證。awareness ACK、exact review 與 evidenced work 是三種事件，各有明確的 GitHub 原生完成規則。digest 現在多回傳一個獨立、不具約束力的 notices 層(僅 prose mention),並加入原生 Q&A obligation；兩條拍板的硬規則：每個 report 都要標明一個明確的 recipient(FYI 也不例外),而且開著的 non-draft PR 絕不會沒有 obligation——沒人被要求 review 的自己的 PR 是 request-reviewer obligation,不是 notice。launch 現在還會安裝並稽核 GitHub 原生的 entry-point 範本(Issue Forms、Discussion category forms、PR template),把標記 recipient 的規則延伸到繞過 report 路由器的自發流量——這是慣例,不是新的 digest contract。共安裝 7 個 skill：6 個日常 verb（launch · report · digest · reply · brief · settle）加上 explicit-only 的 migrate。獨立。v1.2.1；見 relay/CLAUDE.md、ADR-090/091/092/093/094 與 docs/design/relay.md。'},
+    blurb: {en:'GitHub-native asynchronous coordination: GitHub owns Discussions, Issues, pull requests, reviews, reactions, assignments, and protected merge state; Relay owns routing, real-obligation semantics, authority checks, cited synthesis, settlement, and read-back verification. Awareness ACK, exact review, and evidenced work are separate events with explicit native completion rules. digest now returns a separate non-binding notices tier (prose mentions only) alongside native Q&A obligations; two ratified hard rules: every report tags an explicit recipient (FYI included), and an open non-draft PR is never obligation-free — an unreviewed own PR is a request-reviewer obligation, not a notice. launch now also installs and audits GitHub-native entry-point templates (Issue Forms, Discussion category forms, PR template) that extend recipient-tagging to organic traffic bypassing report's router — a convention, not a new digest contract. Every writing verb (report, reply, settle, brief) now gates outbound GitHub-object prose behind author sign-off: show the exact text verbatim and ask "Is this what you mean?" before posting; mechanical mutations (reactions, labels, assignment) are exempt. 7 installed skills: six daily verbs (launch · report · digest · reply · brief · settle) plus explicit-only migrate. Standalone. v1.3.0; see relay/CLAUDE.md + ADR-090/091/092/093/094/095 + docs/design/relay.md.', zh:'GitHub-native 非同步協調：GitHub 擁有 Discussion、Issue、PR、review、reaction、assignment 與受保護的 merge 狀態；Relay 擁有路由、真實義務語意、權限檢查、帶引用的整理、結案與寫後讀回驗證。awareness ACK、exact review 與 evidenced work 是三種事件，各有明確的 GitHub 原生完成規則。digest 現在多回傳一個獨立、不具約束力的 notices 層(僅 prose mention),並加入原生 Q&A obligation；兩條拍板的硬規則：每個 report 都要標明一個明確的 recipient(FYI 也不例外),而且開著的 non-draft PR 絕不會沒有 obligation——沒人被要求 review 的自己的 PR 是 request-reviewer obligation,不是 notice。launch 現在還會安裝並稽核 GitHub 原生的 entry-point 範本(Issue Forms、Discussion category forms、PR template),把標記 recipient 的規則延伸到繞過 report 路由器的自發流量——這是慣例,不是新的 digest contract。每個寫入類 verb(report、reply、settle、brief)現在都會在貼出 GitHub object 的 prose 前設 author sign-off 關卡：把要貼出的文字逐字show給使用者,問「這是你的意思嗎?」,才能貼出;純機械操作(reaction、label、assignment)不受此限。共安裝 7 個 skill：6 個日常 verb（launch · report · digest · reply · brief · settle）加上 explicit-only 的 migrate。獨立。v1.3.0；見 relay/CLAUDE.md、ADR-090/091/092/093/094/095 與 docs/design/relay.md。'},
     files: [
       ['/relay:launch', '', {en:'Audit or configure the current GitHub repository for Relay: authenticated identity, Discussions and categories, permissions, CODEOWNERS, required review, stale-approval dismissal, bypass safety, and entry-point templates (Issue Forms, Discussion category forms, PR template — a convention extending recipient-tagging to organic traffic, not a digest contract). Preview mutations, then read them back. ADR-090/094.', zh:'稽核或設定目前 GitHub repository 的 Relay 條件：登入身分、Discussion 與 category、權限、CODEOWNERS、required review、舊 approval 失效、bypass 安全，以及 entry-point 範本(Issue Forms、Discussion category forms、PR template——把 recipient 標記規則延伸到自發流量的慣例，不是 digest contract)。變更前預覽，完成後讀回驗證。ADR-090/094。'}],
       ['/relay:report', '', {en:'Route awareness to an optional ACK, evidenced work to an assigned Issue, and exact material to a requested-reviewer pull request. Entry-owner discipline: an ask expecting a response must land in one of those three natively-owned shapes, or it is FYI by definition — a prose @mention is never itself an entry point. Split independently completable asks, expose responsibility, and verify the written object. ADR-090/091/092/093.', zh:'把 awareness 路由到 optional ACK、要交證據的工作路由到 assigned Issue、要逐版確認的精確內容路由到 requested-reviewer PR。entry-owner 紀律：期待回應的請求必須落在這三種原生擁有的形狀之一，否則就是 FYI——單純 prose @mention 本身從來不是入口。拆開可獨立完成的要求、顯示責任並讀回驗證。ADR-090/091/092/093。'}],
@@ -2325,7 +2347,7 @@ const CB_NODES = [
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.6.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.6.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},
   {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 4 summoned skills: catchup · park (the single-use cursor — catchup clears it once consumed, ADR-085), observe (selected durable learning), and retrace (a corrected causal development path + interactive alignment artifact); planned 5th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.7.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。4 個召喚式 skill:catchup · park(一次性游標——catchup 讀完即清,ADR-085)、observe(挑選後的耐久學習)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 5 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.7.0;retrace 見 ADR-084。'}},
-  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination: GitHub owns collaboration objects and enforced state; Relay owns routing, obligation semantics, authority checks, cited briefs, settlement, and verification. Awareness, exact review, and evidenced work stay separate through native completion. digest adds a separate non-binding notices tier plus native Q&A obligations. launch installs/audits GitHub-native entry-point templates extending recipient-tagging to organic traffic. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v1.2.1; ADR-090/091/092/093/094.', zh:'GitHub-native 協調：GitHub 擁有協作 object 與強制狀態；Relay 擁有路由、義務語意、權限檢查、帶引用 brief、結案與驗證。awareness、exact review 與 evidenced work 依各自原生完成狀態分開。digest 新增一個獨立、不具約束力的 notices 層與原生 Q&A obligation。launch 安裝/稽核 GitHub 原生 entry-point 範本，把 recipient 標記規則延伸到自發流量。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v1.2.1；ADR-090/091/092/093/094。'}},
+  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination: GitHub owns collaboration objects and enforced state; Relay owns routing, obligation semantics, authority checks, cited briefs, settlement, and verification. Awareness, exact review, and evidenced work stay separate through native completion. digest adds a separate non-binding notices tier plus native Q&A obligations. launch installs/audits GitHub-native entry-point templates extending recipient-tagging to organic traffic. Every writing verb gates outbound GitHub-object prose behind author sign-off (verbatim text + "Is this what you mean?"); mechanical mutations are exempt. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v1.3.0; ADR-090/091/092/093/094/095.', zh:'GitHub-native 協調：GitHub 擁有協作 object 與強制狀態；Relay 擁有路由、義務語意、權限檢查、帶引用 brief、結案與驗證。awareness、exact review 與 evidenced work 依各自原生完成狀態分開。digest 新增一個獨立、不具約束力的 notices 層與原生 Q&A obligation。launch 安裝/稽核 GitHub 原生 entry-point 範本，把 recipient 標記規則延伸到自發流量。每個寫入類 verb 都在貼出 GitHub object 的 prose 前設 author sign-off 關卡(逐字show文字+問「這是你的意思嗎?」)；純機械操作不受此限。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v1.3.0；ADR-090/091/092/093/094/095。'}},
 ];
 const CB_EDGES = [['shape','nav']];
 
