@@ -1,6 +1,6 @@
 {
   "name": "relay",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and merge protection. Six daily verbs route intent, surface real obligations plus a separate non-binding notices tier, reply, preserve reusable understanding, and settle with authority; an explicit migration bridge preserves legacy provenance. GitHub owns collaboration state, Relay owns semantics and verification. Language-agnostic.",
   "author": {
     "name": "Paul",

@@ -41,11 +41,12 @@ Include each obligation once:
 - an approved current-revision ordinary PR waiting for its author, or its single assignee when one names the merger, to merge (`merge-pull-request` when mergeable now, `resolve-conflicts-then-merge` when conflicting, `prepare-branch-then-merge` for any other non-mergeable state — behind, blocked, unstable, or still being computed);
 - an approved current-revision Core PR only when required review, stale-approval dismissal, and bypass enforcement are verified (`merge-core` when mergeable now, otherwise the same `resolve-conflicts-then-merge`/`prepare-branch-then-merge` split as an ordinary PR).
 
-**Ratified invariant:** an open, non-draft PR is never obligation-free. At every moment, either a reviewer owes a verdict, the author owes changes, the settlement owner owes a merge, the author owes a reviewer request, or a `settlement-owner-cannot-merge` blocker is visible (below). Three carve-outs are named, not silently swallowed:
+**Ratified invariant:** an open, non-draft PR is never obligation-free. At every moment, either a reviewer owes a verdict, the author owes changes, the settlement owner owes a merge, the author owes a reviewer request, or a `settlement-owner-cannot-merge` blocker is visible (below). Four carve-outs are named, not silently swallowed:
 
 - an `fyi`-labeled PR is a deliberate opt-out — the whole obligation block is skipped for it, same as any other FYI object;
 - a ghost/deleted author has no native owner to route to, so a PR in that state sits outside the invariant — a rare edge, not a bug;
-- per-viewer data cannot reveal another account's merge authority. When the viewer *is* the settlement owner and approval is satisfied but they personally lack merge authority (`viewerCanSettle` is false), that closes the author side honestly as a **blocker** (`settlement-owner-cannot-merge`), not a silent zero — see Blockers below. Some other account may still be able to merge it; this run cannot see that.
+- per-viewer data cannot reveal another account's merge authority. When the viewer *is* the settlement owner and approval is satisfied but they personally lack merge authority (`viewerCanSettle` is false), that closes the author side honestly as a **blocker** (`settlement-owner-cannot-merge`), not a silent zero — see Blockers below. Some other account may still be able to merge it; this run cannot see that;
+- a review requested from a **team**, not an individual, is outside v1: the reducer matches a requested reviewer against individual viewer logins, so a team-only request never resolves to a REVIEW obligation for any member, and no request-reviewer obligation fires for the author either (an active request already exists, just not to a person) — the PR is invisible to everyone's digest until an individual reviewer is added. `relay-report` is the place this is prevented, not here.
 
 Exclude:
 
