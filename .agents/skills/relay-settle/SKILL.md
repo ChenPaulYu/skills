@@ -16,6 +16,8 @@ description: "Close a Discussion or Issue with an authorized resolution, or merg
 4. **Show the exact resolution and close/merge action.** Wait for approval.
 5. **Apply and read back.** Post the resolution, then close the Discussion/Issue, merge the approved PR, or close the explicitly abandoned PR. Verify closed/merged state, actor, current revision, and merge commit/effective time where applicable.
 
+A closure that supersedes an earlier object names its successor in the closing comment, so a reader lands on the current object instead of a dead end.
+
 ## Accepted versus effective
 
 A decision may be accepted before it is effective. An ordinary change applies when its PR merges; a Core rule becomes binding only when its enforced PR merges. Closing an unmerged PR means abandonment, not successful completion. Closing an Issue without an authorized final resolution is not settlement.

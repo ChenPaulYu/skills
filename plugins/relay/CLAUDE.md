@@ -1,6 +1,6 @@
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
 
 ## What Relay is
 
@@ -41,7 +41,7 @@ An authoritative external source update is its own FYI event: record the source 
 |---|---|---|---|
 | FYI / source event | None | Announcement exists with provenance | No closure obligation |
 | Awareness ACK | One recipient | That account adds `👀` | Round complete; closure is optional housekeeping |
-| Open question | Discussion author accepts an answer | GitHub accepted answer | Answered; close only if the author wants the thread locked |
+| Open question | Discussion author accepts an answer | GitHub accepted answer | Answered; `/relay:settle` closes once accepted (SETTLE `close-answered-question`); until an answer is accepted with a stranger's comment present, the author owes DECIDE/ACT `accept-answer-or-follow-up` |
 | Verifiable task | Single Issue assignee | Stated evidence meets the completion criteria | Assignee records the result; `/relay:settle` closes |
 | Decision | Single Issue assignee as decision owner | Authorized `Outcome:` + `Decision:` | `/relay:settle` closes |
 | Exact change | Requested reviewer, then PR author or single PR assignee as named merger | Current-revision verdict | `Request changes` returns ACT to author; new revision returns REVIEW; approval permits merge; author may explicitly abandon |
@@ -58,11 +58,14 @@ Migration has intermediate states, not alternate definitions of done: inventory 
 - `[ACK]` plus a designated recipient creates an awareness obligation completed only by that account's `👀` reaction. It records who attested that they saw the notice, not proof of comprehension, acceptance, or external work. Read/unread state and another person's reaction do not count.
 - Assignment creates an obligation. On a Decision Issue, the single assignee is the v1 decision owner.
 - A requested reviewer owes a current-revision verdict. PR Comment is feedback, not Approve or Request changes.
+- An open, non-draft PR obligates its author to request a reviewer whenever nobody has a live claim on review: no active request, no current-revision verdict that either satisfies required approval or comes from a designated reviewer, and no historically-designated reviewer's verdict on any other revision (that reviewer owes a re-review instead). A `COMMENTED` review from an undesignated party is not a claim, and neither is a never-requested volunteer's current-revision approval on a protected repo where required approval isn't actually satisfied. Carve-outs: an `fyi`-labeled PR opts out entirely; a ghost/deleted author has no native owner to route to; when the viewer owns settlement with satisfied approval but personally lacks merge authority, that surfaces as a `settlement-owner-cannot-merge` blocker rather than silence — per-viewer data can't reveal whether some other account could merge it.
 - The PR author owns settlement by default. One PR assignee explicitly transfers that merge obligation; multiple assignees do not.
 - V1 supports one required approver. Required-review rules and stale-approval dismissal must be active, and unauthorized bypass must not make the gate ceremonial.
 - `reply` leaves my response. `settle` uses authority to declare the whole object finished or effective.
 
 An accepted decision is not automatically effective. A Discussion answer or Decision Issue resolution records an accepted conclusion; binding repository truth changes only when its protected Core PR merges.
+
+**Obligations versus notices.** `digest` returns two separate tiers. Obligations are work owed with a named owner and a native completion signal — the bullets above. Notices are awareness only: a prose `@mention` with no formal signal. A notice is never presented as, sorted with, or counted toward an obligation, and it is suppressed on an object that already carries an obligation *or a blocker* for the viewer, or that carries a formal signal for the viewer regardless of completion state (designated ACK recipient, requested reviewer active-or-history, or assignee) — a completed round must never resurface as standing notice noise for exactly the person who completed it. A mention is also never counted from text the viewer authored themselves. The notices tier exists because organic GitHub traffic — someone typing "@person please respond" straight into a thread — bypasses `report`'s router entirely; router discipline alone cannot catch what never went through the router. Anything needing review stays an obligation, never a notice: an open non-draft PR is never obligation-free (ratified invariant, with named carve-outs for FYI-labeled PRs, ghost authors, and undetectable third-party merge authority — see `digest/SKILL.md`). Every created object, FYI included, names at least one explicit `@recipient`; for FYI, the notices tier is what guarantees a tagged mention still reaches that person even though FYI itself carries no obligation. See ADR-093.
 
 ## Raw, briefs, and Core
 

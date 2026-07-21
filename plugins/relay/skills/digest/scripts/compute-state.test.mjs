@@ -105,6 +105,10 @@ test('Request changes hands the round to the PR author until a new revision is p
   const pull = item('P18', 'pull_request', {
     author: { login: viewer },
     currentRevision: 'rev-a',
+    // reviewer-two is a designated reviewer (B2): their Request changes is a claim on the
+    // PR, so once it goes stale it routes THEM a re-review obligation rather than leaving
+    // the author's no-reviewer-requested guard to fire.
+    reviewRequests: [{ reviewer: 'reviewer-two', revision: 'rev-a', active: true }],
     reviews: [{ author: { login: 'reviewer-two' }, state: 'CHANGES_REQUESTED', revision: 'rev-a' }],
   });
   const [authorAction] = reduceObligations(base([pull])).obligations;
@@ -113,12 +117,22 @@ test('Request changes hands the round to the PR author until a new revision is p
 
   pull.currentRevision = 'rev-b';
   assert.equal(reduceObligations(base([pull])).obligations.length, 0);
+
+  const reviewerView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [pull] });
+  const review = reviewerView.obligations.find((entry) => entry.kind === 'REVIEW');
+  assert.ok(review, 'expected reviewer-two to owe a re-review once their verdict went stale');
+  assert.ok(review.reasons.includes('stale-verdict'));
 });
 
 test('a later approval on the same revision clears the author change request', () => {
   const pull = item('P19', 'pull_request', {
     author: { login: viewer },
     currentRevision: 'rev-a',
+    // reviewer-two's final verdict is a real, gate-satisfying APPROVED (matches what
+    // normalizeLive's approvalReadyFromReviews fallback would compute here, since
+    // there are zero outstanding requests to check against) — not an undesignated
+    // drive-by that the fable-follow-up-1 fix now correctly treats as no claim.
+    requiredApprovalSatisfied: true,
     reviews: [
       { author: { login: 'reviewer-two' }, state: 'CHANGES_REQUESTED', revision: 'rev-a', submittedAt: '2026-07-21T01:00:00Z' },
       { author: { login: 'reviewer-two' }, state: 'APPROVED', revision: 'rev-a', submittedAt: '2026-07-21T02:00:00Z' },
@@ -160,6 +174,7 @@ test('ordinary approved pull request becomes a settlement obligation for its aut
     viewerCanSettle: true,
     requiredApprovalSatisfied: true,
     mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
   });
   const [result] = reduceObligations(base([ordinary])).obligations;
   assert.equal(result.kind, 'SETTLE');
@@ -186,6 +201,7 @@ test('Core settlement excludes unauthorized viewers and unsatisfied approval gat
     requiredApprovalSatisfied: true,
     coreGateEnforced: true,
     mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
   });
   const approvalMissing = item('P10', 'pull_request', {
     author: { login: viewer },
@@ -194,6 +210,7 @@ test('Core settlement excludes unauthorized viewers and unsatisfied approval gat
     requiredApprovalSatisfied: false,
     coreGateEnforced: true,
     mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
   });
   assert.equal(reduceObligations(base([unauthorized, approvalMissing])).obligations.length, 0);
 });
@@ -206,6 +223,7 @@ test('otherwise-ready Core stays blocked when enforcement is unverified', () => 
     requiredApprovalSatisfied: true,
     coreGateEnforced: false,
     mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
   });
   const result = reduceObligations(base([policyOnly]));
   assert.equal(result.obligations.length, 0);
@@ -220,6 +238,7 @@ test('Core settlement appears only for an authorized viewer with satisfied curre
     requiredApprovalSatisfied: true,
     coreGateEnforced: true,
     mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
   });
   const [result] = reduceObligations(base([ready])).obligations;
   assert.equal(result.kind, 'SETTLE');
@@ -241,6 +260,18 @@ test('blocked gh authentication is machine-readable and never guesses obligation
   assert.equal(result.blocked.code, 'github-collection-blocked');
   assert.match(result.blocked.message, /authentication required/);
   assert.deepEqual(result.obligations, []);
+});
+
+test('blocked output matches the declared schema exactly — no leaked collector-internal fields', () => {
+  const collected = collectGitHubPrimitives({
+    repository: 'example/project',
+    runGh: () => { throw new Error('authentication required'); },
+  });
+  const result = reduceObligations(collected);
+  assert.deepEqual(Object.keys(result).sort(), [
+    'blocked', 'blockers', 'notices', 'obligations', 'repository', 'schemaVersion', 'source', 'viewer',
+  ].sort());
+  assert.equal('objects' in result, false);
 });
 
 // --- normalizeLive coverage -------------------------------------------------
@@ -374,6 +405,41 @@ test('normalizeLive: a REVIEW_REQUIRED aggregate blocks settlement even with a c
   assert.ok(!result.obligations.some((entry) => entry.kind === 'SETTLE'));
 });
 
+// Fable follow-up 1: on a protected repo (aggregate REVIEW_REQUIRED, so
+// requiredApprovalSatisfied is false), a never-requested volunteer's current-revision
+// APPROVED must NOT read as "someone has a claim" — GitHub itself doesn't recognize it
+// as sufficient, so noReviewerHasBeenAsked's check #2 must ignore it and still obligate
+// the author to request a reviewer, rather than going obligation-free for everyone.
+
+test('normalizeLive: protected repo (REVIEW_REQUIRED), undesignated current-revision APPROVED, no requests -> author owes request-reviewer (fable follow-up 1)', () => {
+  const raw = () => JSON.stringify(pullFixture({
+    reviewDecision: 'REVIEW_REQUIRED',
+    reviewRequests: { nodes: [] },
+    reviews: { nodes: [{ author: { login: 'volunteer' }, state: 'APPROVED', submittedAt: '2026-07-21T00:00:00Z', commit: { oid: 'sha-2' } }] },
+    timelineItems: { pageInfo: { hasNextPage: false }, nodes: [] },
+  }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  const requestReviewer = result.obligations.find((entry) => entry.action === 'request-reviewer');
+  assert.ok(requestReviewer, 'expected the author to owe request-reviewer');
+  assert.equal(requestReviewer.kind, 'DECIDE/ACT');
+  assert.ok(!result.obligations.some((entry) => entry.kind === 'SETTLE'));
+  assert.equal(result.blockers.length, 0);
+});
+
+test('normalizeLive: on an unprotected repo (no aggregate), the SAME undesignated volunteer\'s current-revision APPROVED DOES satisfy readiness, so settlement fires instead of request-reviewer (fable follow-up 1, control)', () => {
+  const raw = () => JSON.stringify(pullFixture({
+    reviewDecision: '',
+    reviewRequests: { nodes: [] },
+    reviews: { nodes: [{ author: { login: 'volunteer' }, state: 'APPROVED', submittedAt: '2026-07-21T00:00:00Z', commit: { oid: 'sha-2' } }] },
+    timelineItems: { pageInfo: { hasNextPage: false }, nodes: [] },
+  }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.ok(!result.obligations.some((entry) => entry.action === 'request-reviewer'));
+  const settle = result.obligations.find((entry) => entry.kind === 'SETTLE');
+  assert.ok(settle, 'expected a SETTLE obligation for the author once the fallback readiness check passes');
+  assert.equal(settle.action, 'merge-pull-request');
+});
+
 test('normalizeLive: on an unprotected repo, one reviewer\'s outstanding review request blocks settlement despite another reviewer\'s current-revision approval (R2-5b)', () => {
   const raw = () => JSON.stringify(pullFixture({
     reviewRequests: { nodes: [
@@ -398,6 +464,379 @@ test('normalizeLive: a run under the matching authenticated account carries no c
   const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
   assert.equal(result.caveat, undefined);
   assert.equal(result.authenticatedViewer, undefined);
+});
+
+// --- notices tier + native Q&A obligations ----------------------------------
+
+test('a mention in a comment produces a notice and no obligation', () => {
+  const mentioned = item('D23', 'discussion', {
+    body: 'just some context',
+    comments: [{ author: { login: 'someone-else' }, body: 'hey @reviewer-one can you take a look?' }],
+  });
+  const result = reduceObligations(base([mentioned]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.equal(result.notices[0].kind, 'NOTICE');
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+  assert.equal(result.notices[0].url, mentioned.url);
+});
+
+test('a mention on an object where the viewer already has an obligation does not also produce a notice', () => {
+  const assignedAndMentioned = item('I24', 'issue', {
+    body: '@reviewer-one please handle this',
+    assignees: [{ login: viewer }],
+  });
+  const result = reduceObligations(base([assignedAndMentioned]));
+  assert.equal(result.obligations.length, 1);
+  assert.equal(result.notices.length, 0);
+});
+
+// F1: a completed round must not resurface as a standing notice for the person who
+// completed it — the formal signal (ACK recipient / requested reviewer / assignee)
+// suppresses the mention regardless of whether the round is still open.
+
+test('F1: a completed ACK (eyes already added) that also mentions the recipient produces no notice', () => {
+  const completedAck = item('D50', 'discussion', {
+    title: '[ACK] Read this',
+    body: '@reviewer-one please read and ack',
+    reactions: [{ content: 'EYES', user: { login: viewer } }],
+  });
+  const result = reduceObligations(base([completedAck]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('F1: a reviewer who already submitted their current-revision verdict and is also mentioned produces no notice', () => {
+  const verdictedAndMentioned = item('P51', 'pull_request', {
+    title: 'Please look, @reviewer-one',
+    currentRevision: 'rev-a',
+    reviewRequests: [{ reviewer: viewer, revision: 'rev-a', active: true }],
+    reviews: [{ author: { login: viewer }, state: 'APPROVED', revision: 'rev-a' }],
+  });
+  const result = reduceObligations(base([verdictedAndMentioned]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('F1: an uninvolved mentioned third party still gets a notice — the formal-signal carve-out is not a blanket suppression', () => {
+  const mentionedStranger = item('D52', 'discussion', {
+    body: 'cc @reviewer-one for visibility',
+  });
+  const result = reduceObligations(base([mentionedStranger]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+// F2(b): a viewer who owns settlement with satisfied approval but lacks merge authority
+// gets a visible blocker instead of silence — per-viewer data can't reveal whether some
+// OTHER account could merge it.
+
+test('F2(b): settlement owner with satisfied approval but no merge authority gets a settlement-owner-cannot-merge blocker, not silence', () => {
+  const lockedOut = item('P53', 'pull_request', {
+    author: { login: viewer },
+    files: [{ path: 'briefs/current.md' }],
+    viewerCanSettle: false,
+    requiredApprovalSatisfied: true,
+    mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
+  });
+  const result = reduceObligations(base([lockedOut]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.blockers.length, 1);
+  assert.equal(result.blockers[0].code, 'settlement-owner-cannot-merge');
+  assert.equal(result.blockers[0].url, lockedOut.url);
+});
+
+// F3: a blocker on the object suppresses its mention notice too, the same way an
+// obligation does — otherwise a mentioned author of a blocked Core PR sees both.
+
+test('F3: a blocker on the object suppresses its mention notice — a mentioned author of a blocked Core PR sees only the blocker', () => {
+  const blockedCore = item('P54', 'pull_request', {
+    title: 'Core change, @reviewer-one please note',
+    author: { login: viewer },
+    files: [{ path: 'core/policy.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    coreGateEnforced: false,
+    mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
+  });
+  const result = reduceObligations(base([blockedCore]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.blockers.length, 1);
+  assert.equal(result.blockers[0].code, 'core-enforcement-unverified');
+  assert.equal(result.notices.length, 0);
+});
+
+// F4: text the viewer authored themselves that happens to @mention them is not a notice
+// — naming yourself in your own comment is not someone pinging you.
+
+test('F4: a self-authored comment naming the viewer produces no self-notice', () => {
+  const selfMention = item('D55', 'discussion', {
+    body: 'unrelated context',
+    comments: [{ author: { login: viewer }, body: 'noting for the record, @reviewer-one will follow up' }],
+  });
+  const result = reduceObligations(base([selfMention]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('F4: a stranger mentioning the viewer in the same thread the viewer also commented in still notices', () => {
+  const mixedThread = item('D56', 'discussion', {
+    body: 'unrelated context',
+    comments: [
+      { author: { login: viewer }, body: 'my own note, no mention here' },
+      { author: { login: 'someone-else' }, body: '@reviewer-one can you weigh in?' },
+    ],
+  });
+  const result = reduceObligations(base([mixedThread]));
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+// The tests below drive reduceObligations directly with a pre-normalized fixture — the
+// same post-normalize flat `isAnswerable` shape normalizeLive produces from the real
+// GraphQL `category { isAnswerable }` field (see the normalizeLive-level test further
+// down, which exercises the actual nested wire shape and the query fix for B1).
+
+test('Q&A authored by the viewer, unanswered, with a stranger comment: DECIDE/ACT accept-answer-or-follow-up', () => {
+  const question = item('D25', 'discussion', {
+    isAnswerable: true,
+    isAnswered: false,
+    author: { login: viewer },
+    comments: [{ author: { login: 'someone-else' }, body: 'here is an answer' }],
+  });
+  const [result] = reduceObligations(base([question])).obligations;
+  assert.equal(result.kind, 'DECIDE/ACT');
+  assert.equal(result.action, 'accept-answer-or-follow-up');
+  assert.ok(result.reasons.includes('question-has-unaccepted-answers'));
+});
+
+test('F5(a): a comment from a deleted/ghost account (null author) never counts as a stranger for Q&A', () => {
+  const question = item('D57', 'discussion', {
+    isAnswerable: true,
+    isAnswered: false,
+    author: { login: viewer },
+    comments: [{ author: null, body: 'ghost comment from a deleted account' }],
+  });
+  const result = reduceObligations(base([question]));
+  assert.equal(result.obligations.length, 0);
+});
+
+test('Q&A authored by the viewer, unanswered, with no other comments: no obligation, no notice', () => {
+  const question = item('D29', 'discussion', {
+    isAnswerable: true,
+    isAnswered: false,
+    author: { login: viewer },
+    comments: [],
+  });
+  const result = reduceObligations(base([question]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('Q&A authored by the viewer, answered and still open: SETTLE close-answered-question', () => {
+  const answered = item('D26', 'discussion', {
+    isAnswerable: true,
+    isAnswered: true,
+    author: { login: viewer },
+    comments: [{ author: { login: 'someone-else' }, body: 'accepted answer' }],
+  });
+  const [result] = reduceObligations(base([answered])).obligations;
+  assert.equal(result.kind, 'SETTLE');
+  assert.equal(result.action, 'close-answered-question');
+});
+
+test('Q&A where the viewer is only mentioned, not the author: notice only, no obligation', () => {
+  const question = item('D27', 'discussion', {
+    isAnswerable: true,
+    isAnswered: false,
+    author: { login: 'someone-else' },
+    body: '@reviewer-one any thoughts?',
+    comments: [],
+  });
+  const result = reduceObligations(base([question]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+test('own non-draft PR with no review requests and no reviews: DECIDE/ACT request-reviewer obligation, not a notice', () => {
+  const lonely = item('P28', 'pull_request', {
+    author: { login: viewer },
+    isDraft: false,
+    reviewRequests: [],
+    reviews: [],
+  });
+  const result = reduceObligations(base([lonely]));
+  assert.equal(result.notices.length, 0);
+  const [obligation] = result.obligations;
+  assert.equal(obligation.kind, 'DECIDE/ACT');
+  assert.equal(obligation.action, 'request-reviewer');
+  assert.ok(obligation.reasons.includes('no-reviewer-requested'));
+});
+
+test('own draft PR with no review requests and no reviews: nothing at all — drafts stay exempt', () => {
+  const draft = item('P30', 'pull_request', {
+    author: { login: viewer },
+    isDraft: true,
+    reviewRequests: [],
+    reviews: [],
+  });
+  const result = reduceObligations(base([draft]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('invariant: an open non-draft PR always yields at least one obligation for the right party', () => {
+  const author = 'pr-author';
+  const noReviewer = item('P40', 'pull_request', {
+    author: { login: author },
+    isDraft: false,
+    reviewRequests: [],
+    reviews: [],
+  });
+  const requested = item('P41', 'pull_request', {
+    author: { login: author },
+    currentRevision: 'rev-a',
+    reviewRequests: [{ reviewer: viewer, revision: 'rev-a', active: true }],
+  });
+  const changesRequested = item('P42', 'pull_request', {
+    author: { login: author },
+    currentRevision: 'rev-a',
+    reviews: [{ author: { login: 'reviewer-two' }, state: 'CHANGES_REQUESTED', revision: 'rev-a' }],
+  });
+  const approvedClean = item('P43', 'pull_request', {
+    author: { login: author },
+    files: [{ path: 'briefs/current.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    mergeReady: true,
+    requestedReviewers: ['reviewer-two'],
+  });
+  const approvedConflicting = item('P44', 'pull_request', {
+    author: { login: author },
+    files: [{ path: 'briefs/current.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    mergeable: 'CONFLICTING',
+    requestedReviewers: ['reviewer-two'],
+  });
+  const approvedBehind = item('P45', 'pull_request', {
+    author: { login: author },
+    files: [{ path: 'briefs/current.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    mergeable: 'MERGEABLE',
+    mergeStateStatus: 'BEHIND',
+    requestedReviewers: ['reviewer-two'],
+  });
+  // Counter-state (a) — B2: a drive-by COMMENTED review from a never-requested party is
+  // not a claim on the PR. COMMENTED never counts as a verdict, from anyone.
+  const nonDesignatedCommentOnly = item('P46', 'pull_request', {
+    author: { login: author },
+    currentRevision: 'rev-a',
+    reviewRequests: [],
+    reviews: [{ author: { login: 'drive-by-commenter' }, state: 'COMMENTED', revision: 'rev-a' }],
+  });
+  // Counter-state (b) — B2: an old-revision APPROVED from a party who was never
+  // requested is not a historically-designated reviewer's stale verdict; it doesn't
+  // block the author's obligation either.
+  const nonDesignatedStaleApproval = item('P47', 'pull_request', {
+    author: { login: author },
+    currentRevision: 'rev-b',
+    reviewRequests: [],
+    reviews: [{ author: { login: 'drive-by-approver' }, state: 'APPROVED', revision: 'rev-a' }],
+  });
+
+  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: author, objects: [noReviewer, changesRequested, approvedClean, approvedConflicting, approvedBehind, nonDesignatedCommentOnly, nonDesignatedStaleApproval] });
+  assert.equal(authorView.obligations.find((o) => o.url === noReviewer.url)?.action, 'request-reviewer');
+  assert.equal(authorView.obligations.find((o) => o.url === changesRequested.url)?.action, 'address-requested-changes');
+  assert.equal(authorView.obligations.find((o) => o.url === approvedClean.url)?.action, 'merge-pull-request');
+  assert.equal(authorView.obligations.find((o) => o.url === approvedConflicting.url)?.action, 'resolve-conflicts-then-merge');
+  assert.equal(authorView.obligations.find((o) => o.url === approvedBehind.url)?.action, 'prepare-branch-then-merge');
+  assert.equal(authorView.obligations.find((o) => o.url === nonDesignatedCommentOnly.url)?.action, 'request-reviewer');
+  assert.equal(authorView.obligations.find((o) => o.url === nonDesignatedStaleApproval.url)?.action, 'request-reviewer');
+
+  const reviewerView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer, objects: [requested] });
+  assert.equal(reviewerView.obligations.find((o) => o.url === requested.url)?.kind, 'REVIEW');
+});
+
+test('B2: a historically-designated reviewer\'s stale verdict blocks the author\'s request-reviewer obligation — it routes a re-review obligation to that reviewer instead', () => {
+  const author = 'pr-author';
+  const designatedReviewer = 'designated-reviewer';
+  const staleApprovalFromDesignated = item('P48', 'pull_request', {
+    author: { login: author },
+    currentRevision: 'rev-b',
+    // The request is no longer active (withdrawn/superseded), but the reviewer was
+    // historically designated — their stale APPROVED still means someone has a claim.
+    reviewRequests: [{ reviewer: designatedReviewer, revision: 'rev-a', active: false }],
+    reviews: [{ author: { login: designatedReviewer }, state: 'APPROVED', revision: 'rev-a' }],
+  });
+  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: author, objects: [staleApprovalFromDesignated] });
+  assert.ok(!authorView.obligations.some((o) => o.action === 'request-reviewer'));
+
+  const reviewerView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: designatedReviewer, objects: [staleApprovalFromDesignated] });
+  const review = reviewerView.obligations.find((o) => o.kind === 'REVIEW');
+  assert.ok(review, 'expected the designated reviewer to owe a re-review');
+  assert.ok(review.reasons.includes('stale-verdict'));
+});
+
+test('a closed Discussion with a mention produces neither an obligation nor a notice', () => {
+  const closed = item('D31', 'discussion', {
+    body: '@reviewer-one closing thought',
+    closed: true,
+  });
+  const result = reduceObligations(base([closed]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('normalizeLive: the comment scan self-reports commentScanTruncated when a fixture hits the cap', () => {
+  const raw = () => JSON.stringify({
+    data: {
+      repository: {
+        viewerPermission: 'WRITE',
+        defaultBranchRef: { name: 'main', branchProtectionRule: null },
+        discussions: {
+          pageInfo: { hasNextPage: false },
+          nodes: [{
+            id: 'D_2',
+            number: 32,
+            title: 'Busy thread',
+            url: 'https://github.com/example/project/discussions/32',
+            body: '',
+            closed: false,
+            isAnswered: false,
+            category: { isAnswerable: false },
+            labels: { nodes: [] },
+            reactions: { pageInfo: { hasNextPage: false }, nodes: [] },
+            comments: { pageInfo: { hasNextPage: true }, nodes: [{ author: { login: 'someone-else' }, body: 'part of a long thread' }] },
+          }, {
+            // F5(b): a CLOSED thread that also exceeds the comment cap must not appear in
+            // commentScanTruncated — the self-report is scoped to objects still in play.
+            id: 'D_4',
+            number: 34,
+            title: 'Old busy thread, now closed',
+            url: 'https://github.com/example/project/discussions/34',
+            body: '',
+            closed: true,
+            isAnswered: false,
+            category: { isAnswerable: false },
+            labels: { nodes: [] },
+            reactions: { pageInfo: { hasNextPage: false }, nodes: [] },
+            comments: { pageInfo: { hasNextPage: true }, nodes: [{ author: { login: 'someone-else' }, body: 'part of a long closed thread' }] },
+          }],
+        },
+        issues: { pageInfo: { hasNextPage: false }, nodes: [] },
+        pullRequests: { pageInfo: { hasNextPage: false }, nodes: [] },
+      },
+    },
+  });
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'author-one', runGh: raw }));
+  assert.equal(result.commentScanTruncated.length, 1);
+  assert.equal(result.commentScanTruncated[0].url, 'https://github.com/example/project/discussions/32');
 });
 
 test('normalizeLive: ACK routes to the first @mention, ignoring a later mention and an email address (I2)', () => {
@@ -430,4 +869,115 @@ test('normalizeLive: ACK routes to the first @mention, ignoring a later mention 
 
   const bobView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'bob', runGh: raw }));
   assert.equal(bobView.obligations.length, 0);
+});
+
+// B1 regression: isAnswerable lives on DiscussionCategory in the real GraphQL schema, not
+// on Discussion itself — a flat `isAnswerable` field on the Discussion node (what the
+// fixture-tier Q&A tests above use, correctly, since that's the POST-normalize shape) is
+// not a real `gh api graphql` response and would fail on every live repo. This test drives
+// the actual wire shape (`category { isAnswerable }`) through normalizeLive to prove the
+// query fix works and to close the coverage gap that let the wrong shape ship.
+
+function discussionFixture(discussionOverrides = {}) {
+  return {
+    data: {
+      repository: {
+        viewerPermission: 'WRITE',
+        defaultBranchRef: { name: 'main', branchProtectionRule: null },
+        discussions: {
+          pageInfo: { hasNextPage: false },
+          nodes: [{
+            id: 'D_3',
+            number: 33,
+            title: 'Does this approach work?',
+            url: 'https://github.com/example/project/discussions/33',
+            body: '',
+            closed: false,
+            isAnswered: false,
+            category: { isAnswerable: true },
+            author: { login: 'question-author' },
+            labels: { nodes: [] },
+            reactions: { pageInfo: { hasNextPage: false }, nodes: [] },
+            comments: { pageInfo: { hasNextPage: false }, nodes: [{ author: { login: 'someone-else' }, body: 'here is an answer' }] },
+            ...discussionOverrides,
+          }],
+        },
+        issues: { pageInfo: { hasNextPage: false }, nodes: [] },
+        pullRequests: { pageInfo: { hasNextPage: false }, nodes: [] },
+      },
+    },
+  };
+}
+
+test('normalizeLive: the real category{isAnswerable} shape drives a native Q&A obligation (B1)', () => {
+  const raw = () => JSON.stringify(discussionFixture());
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'question-author', runGh: raw }));
+  const [obligation] = result.obligations;
+  assert.equal(obligation.kind, 'DECIDE/ACT');
+  assert.equal(obligation.action, 'accept-answer-or-follow-up');
+});
+
+test('normalizeLive: a Discussion whose category is not answerable never produces a Q&A obligation, even with a stranger comment (B1)', () => {
+  const raw = () => JSON.stringify(discussionFixture({ category: { isAnswerable: false } }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'question-author', runGh: raw }));
+  assert.equal(result.obligations.length, 0);
+});
+
+test('normalizeLive: a Discussion with no category at all (e.g. General) is treated as not answerable, not as a crash (B1)', () => {
+  const raw = () => JSON.stringify(discussionFixture({ category: null }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'question-author', runGh: raw }));
+  assert.equal(result.obligations.length, 0);
+});
+
+// Fable follow-up 2: the issues selection previously fetched no author{login}, so
+// mentionsOfOthers had nothing to attribute an issue's title/body to and a self-mention
+// in one's own issue body still self-noticed. author{login} now flows through the
+// existing `...value` spread with no further transform needed.
+
+function issueFixture(issueOverrides = {}) {
+  return {
+    data: {
+      repository: {
+        viewerPermission: 'WRITE',
+        defaultBranchRef: { name: 'main', branchProtectionRule: null },
+        discussions: { pageInfo: { hasNextPage: false }, nodes: [] },
+        issues: {
+          pageInfo: { hasNextPage: false },
+          nodes: [{
+            id: 'I_1',
+            number: 40,
+            title: 'Some task',
+            url: 'https://github.com/example/project/issues/40',
+            body: 'noting for the record, @issue-author will follow up',
+            state: 'OPEN',
+            author: { login: 'issue-author' },
+            issueType: null,
+            labels: { nodes: [] },
+            assignees: { nodes: [] },
+            comments: { pageInfo: { hasNextPage: false }, nodes: [] },
+            ...issueOverrides,
+          }],
+        },
+        pullRequests: { pageInfo: { hasNextPage: false }, nodes: [] },
+      },
+    },
+  };
+}
+
+test('normalizeLive: a self-mention in the viewer\'s own issue body produces no notice (fable follow-up 2)', () => {
+  const raw = () => JSON.stringify(issueFixture());
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'issue-author', runGh: raw }));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('normalizeLive: someone else\'s issue body mentioning the viewer still produces a notice (fable follow-up 2)', () => {
+  const raw = () => JSON.stringify(issueFixture({
+    body: 'noting for the record, @reviewer-one will follow up',
+    author: { login: 'someone-else' },
+  }));
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'reviewer-one', runGh: raw }));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
 });

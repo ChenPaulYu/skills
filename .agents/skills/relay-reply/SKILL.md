@@ -43,8 +43,8 @@ Done means the selected response exists on the correct object/current revision. 
 
 ## Companion skills
 
-- `relay-digest` finds the obligation.
-- `relay-settle` handles authorized closure/effectivity after the response round.
+- `relay-digest` finds the obligation — including the native Q&A obligations on a Discussion the viewer authored: `accept-answer-or-follow-up` while unanswered with a stranger's comment (answered here by "This answer resolves my question", or by "Here is context or feedback" as a follow-up comment), and `close-answered-question` once accepted and still open.
+- `relay-settle` handles authorized closure/effectivity after the response round — including closing an answered Q&A Discussion.
 
 ## Communication style
 

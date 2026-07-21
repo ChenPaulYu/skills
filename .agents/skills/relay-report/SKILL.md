@@ -18,7 +18,7 @@ Ask in order:
 
 Use these refinements:
 
-- pure FYI -> Announcement Discussion, no assignment or ACK marker;
+- pure FYI -> Announcement Discussion naming at least one explicit `@recipient` in the title or body, no assignment or ACK marker; every report tags a recipient, FYI included — an untagged FYI is a broadcast into the void, and `relay-digest`'s `mentioned-in-prose` notice is what guarantees a tagged FYI still reaches that person, even though FYI itself carries no obligation;
 - authoritative external source update -> FYI Announcement with source URL and immutable revision, commit, or content hash; update any reusable brief through a separate cited PR;
 - explicit awareness acknowledgment -> `[ACK]` Announcement naming one recipient; this records “I saw this notice,” not proof of comprehension, acceptance, or external work. When the recipient isn't given explicitly, the first `@mention` (title first, then body) designates it; later mentions are context, and an email address (e.g. `hello@rytho.ai`) is never read as a mention;
 - answerable question -> Q&A Discussion;
@@ -28,6 +28,8 @@ Use these refinements:
 - exact change -> the same pull request path; merge, not manual close, is the accepted change's effective point.
 
 Split independently completable asks into linked objects. Three phrases that sound similar are different events: “I saw this notice” uses ACK; “review this exact material” uses a requested PR verdict; “install, restart, run, or verify this” uses an assigned Issue with evidence. Never let `👀` stand in for a verdict, command output, version, test, or changed external state. Do not let a partial child object close a broader parent.
+
+**Entry-owner discipline.** Any ask that expects a response must land in a natively-owned shape: an assigned Issue, a requested-reviewer PR, or a `[ACK]` Announcement naming one recipient. A prose `@mention` typed directly into a title, body, or comment is never itself an entry point — it reaches only `relay-digest`'s non-binding notices tier, not anyone's obligations, so an ask that only ever exists as prose can go unanswered indefinitely. If it doesn't fit one of the three owned shapes, it is FYI by definition — route it there instead of leaving it as an unowned mention and hoping. The PR route requires naming a requested reviewer at creation, not leaving it to be added later.
 
 An FYI completes when the Announcement and its provenance read back; it creates no response or settlement obligation. An ACK needs no settlement after the designated awareness signal. A requested reviewer completes only their review round; approval hands the PR to its author or named merger, and merge auto-closes the accepted change. Manually closing it unmerged records abandonment. A task Issue completes only when its stated evidence exists and the result is settled, not when a progress comment appears.
 
