@@ -527,6 +527,7 @@ function runLegacyHookUpgradeFixture(root, fixture) {
 
     const legacyScriptRel = "hooks/relay-digest-session-start.mjs";
     const legacyCommand = "node .codex/hooks/relay-digest-session-start.mjs";
+    const installedLegacyCommand = `node ${join(tempHome, ".codex", legacyScriptRel)}`;
     const legacyEntry = {
       matcher: "startup|resume",
       hooks: [{ type: "command", command: legacyCommand, timeout: 5 }],
@@ -534,7 +535,7 @@ function runLegacyHookUpgradeFixture(root, fixture) {
     const mixedEntry = {
       ...legacyEntry,
       hooks: [
-        ...legacyEntry.hooks,
+        { ...legacyEntry.hooks[0], command: installedLegacyCommand },
         { type: "command", command: "node .codex/hooks/custom-session-start.mjs", timeout: 7 },
       ],
     };
@@ -583,7 +584,7 @@ function runLegacyHookUpgradeFixture(root, fixture) {
     }
     const nextConfig = readJson(join(tempHome, ".codex", "hooks.json"));
     const sessionHooks = nextConfig?.hooks?.SessionStart?.[0]?.hooks || [];
-    if (sessionHooks.some((hook) => hook?.command === legacyCommand)) {
+    if (sessionHooks.some((hook) => hook?.command === legacyCommand || hook?.command === installedLegacyCommand)) {
       errors.push("legacy hook upgrade kept the retired Relay command");
     }
     if (!sessionHooks.some((hook) => hook?.command === "node .codex/hooks/custom-session-start.mjs")) {

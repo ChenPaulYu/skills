@@ -428,19 +428,23 @@ function cleanupLegacyRelayHook(homeCodexDir, previousPlan, ownership = {}) {
   if (!existsSync(configPath)) return;
   const config = JSON.parse(readFileSync(configPath, "utf8"));
   const entries = Array.isArray(config?.hooks?.SessionStart) ? config.hooks.SessionStart : [];
+  const isLegacyHook = (hook) => {
+    if (hook?.type !== "command" || typeof hook.command !== "string") return false;
+    if (hook.command === LEGACY_RELAY_HOOK_COMMAND) return true;
+    return hook.command === `node ${join(homeCodexDir, LEGACY_RELAY_HOOK_REL)}`;
+  };
   let changed = false;
   const keptEntries = entries.flatMap((entry) => {
     if (!entry || typeof entry !== "object" || !Array.isArray(entry.hooks)) return [entry];
-    const legacyHooks = entry.hooks.filter(
-      (hook) => hook?.type === "command" && hook?.command === LEGACY_RELAY_HOOK_COMMAND,
-    );
+    const legacyHooks = entry.hooks.filter(isLegacyHook);
     if (!legacyHooks.length) return [entry];
-    const receiptCandidate = { ...entry, hooks: legacyHooks };
+    const receiptCandidate = {
+      ...entry,
+      hooks: legacyHooks.map((hook) => ({ ...hook, command: LEGACY_RELAY_HOOK_COMMAND })),
+    };
     if (sha256(canonicalJson(receiptCandidate)) !== ownership.sessionStartEntry) return [entry];
     changed = true;
-    const customHooks = entry.hooks.filter(
-      (hook) => !(hook?.type === "command" && hook?.command === LEGACY_RELAY_HOOK_COMMAND),
-    );
+    const customHooks = entry.hooks.filter((hook) => !isLegacyHook(hook));
     return customHooks.length ? [{ ...entry, hooks: customHooks }] : [];
   });
   if (!changed) return;
