@@ -27,11 +27,6 @@
  *   injectBrowserVerifyContract()  — Phase 4: injects one executable browser-verify contract
  *                                  before each browser-verify consumer section, using the source
  *                                  heading verbatim as the exact unique anchor.
- *   lowerSessionOpenProse()       — Phase 4: replaces exact legacy session-open / runs-on-open /
- *                                  every-open claims with Codex lifecycle-hook wording, and
- *                                  renames "session-open summary" to "hook-summary format".
- *   injectSessionOpenContract()   — Phase 4: injects the compact lifecycle-awareness contract for
- *                                  relay-digest only, at its unique top heading anchor.
  *   injectWorkerDispatchContract() — Phase 2: for the dispatch-heavy skills only, appends a
  *                                  concrete "Worker dispatch contract" section (the canonical
  *                                  work-packet / worker-return contracts below) right after that
@@ -49,8 +44,6 @@
  *                                                       injectInteractiveChoiceContract
  *   browser_verify                                   → injectBrowserVerifyContract
  *   project_guidance (CLAUDE.md→AGENTS.md, /init)    → createProjectGuidanceLowerer
- *   session_open_awareness                           → lowerSessionOpenProse +
- *                                                       injectSessionOpenContract
  */
 import { scanTextForDenylist } from "./codex-compat-audit.mjs";
 
@@ -312,66 +305,6 @@ export function injectBrowserVerifyContract(text, flat) {
 }
 
 // ---------------------------------------------------------------------------
-// lowerSessionOpenProse + injectSessionOpenContract — Phase 4 lifecycle hooks
-// ---------------------------------------------------------------------------
-
-const SESSION_OPEN_PROSE_RULES = [
-  {
-    find: 'Also the awareness entry — an agent runs it on open.',
-    replace:
-      "Also the awareness entry — a trusted startup/resume hook may surface a compact relay-aware note before you invoke this on demand.",
-  },
-  {
-    find: 'The read side of relay — and its **awareness** mechanism: an agent auto-runs this on open so nothing rots unseen.',
-    replace:
-      "The read side of relay — and its **awareness** mechanism: a trusted startup/resume hook may surface a compact relay-aware note so nothing rots unseen before you run the full digest on demand.",
-  },
-  {
-    find: 'a read-only scan of the stream is mechanical (and runs often, on every open),',
-    replace: "a read-only scan of the stream is mechanical (and may run often via startup/resume hooks),",
-  },
-  {
-    find: "runs on every open",
-    replace: "may run via startup/resume hooks",
-  },
-  {
-    find: "for the session-open hook,",
-    replace: "for the startup/resume hook,",
-  },
-  {
-    find: "hook = one-line session-open summary",
-    replace: "hook = one-line hook-summary format",
-  },
-];
-
-export function lowerSessionOpenProse(text) {
-  let out = text;
-  for (const rule of SESSION_OPEN_PROSE_RULES) out = out.split(rule.find).join(rule.replace);
-  return out;
-}
-
-export const CODEX_SESSION_OPEN_CONTRACT = `> **Lifecycle awareness contract (Codex).** Default to invoking \`relay-digest\` on demand. A trusted \`SessionStart\` startup/resume hook may add a compact relay-aware note when a relay repo is detectable, but that hook is optional and never required for correctness. Missing hook runtime, missing helper, non-relay cwd, parse failure, or empty state all degrade to a safe no-op; the manual \`relay-digest\` path remains the source of truth.`;
-
-const SESSION_OPEN_CONSUMERS = {
-  "relay-digest": "# digest — what's waiting for my review",
-};
-
-export function injectSessionOpenContract(text, flat) {
-  const anchor = SESSION_OPEN_CONSUMERS[flat];
-  if (!anchor) return text;
-
-  const first = text.indexOf(anchor);
-  const second = first === -1 ? -1 : text.indexOf(anchor, first + anchor.length);
-  if (first === -1 || second !== -1) {
-    const state = first === -1 ? "missing" : "not unique";
-    throw new Error(`session-open anchor ${state} for ${flat}: ${JSON.stringify(anchor)}`);
-  }
-
-  const insertAt = first + anchor.length;
-  return `${text.slice(0, insertAt)}\n\n${CODEX_SESSION_OPEN_CONTRACT}${text.slice(insertAt)}`;
-}
-
-// ---------------------------------------------------------------------------
 // createProjectGuidanceLowerer — the NS/REF_PATH/CLAUDE.md rewrites (moved from
 // build-codex.mjs) + project_guidance's /init-assumption softening.
 // ---------------------------------------------------------------------------
@@ -572,9 +505,8 @@ export function injectWorkerDispatchContract(text, flat) {
 // detectUnsupported — reuses the manifest-driven denylist rule list, never duplicates it.
 // ---------------------------------------------------------------------------
 
-/** Given a compiled Codex file's text, returns any remaining denylisted Claude-only tokens
- * (e.g. still-unlowered browser_verify / ask_user_question / session_open_awareness categories
- * that later phases own). `root` locates platforms/codex/manifest.json, the rules' single owner. */
+/** Given a compiled Codex file's text, returns any remaining denylisted Claude-only tokens.
+ * `root` locates platforms/codex/manifest.json, the rules' single owner. */
 export function detectUnsupported(root, file, text) {
   return scanTextForDenylist(root, file, text);
 }

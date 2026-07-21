@@ -1,85 +1,53 @@
 ---
 name: digest
 model: sonnet
-description: "Show the live \"what's waiting for my review\" in a relay coordination repo: every thought that @-mentions you, unanswered. Read-only, writes nothing. Fires on \"digest the relay\" or \"what needs me\". Also the awareness entry — an agent runs it on open. Content verb; write side /relay:report, response side /relay:review."
+description: "Show the current viewer's real Relay obligations from GitHub. Use for 'what needs me?' or a reliable actionable view. Read-only: excludes FYI, prose mentions, completed rounds, and ordinary notifications."
 ---
 
-# digest — what's waiting for my review
+# digest — show only what genuinely needs this viewer
 
-Compute "what's waiting on **you**" from the thought-stream, right now. The read side of relay — and its **awareness** mechanism: an agent auto-runs this on open so nothing rots unseen.
+Compute an actionable view from GitHub state without writing anything.
 
-> **Cost tier (ADR-059):** this skill declares `model: sonnet` in its frontmatter — a read-only scan of the stream is mechanical (and runs often, on every open), so it runs on the cheaper model for that turn; the session model resumes on the next prompt.
+> **Cost tier:** this is a mechanical read-only scan, so it uses the mechanical-tier model for this turn.
 
-## Scope
+## Consumption tiers
 
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see CLAUDE.md) — one project (or all). **Read-only — writes nothing.** The durable output of `/relay:settle` is the decision ledger (`decisions/log.md` + `active.md`); `digest` is the **live** view of *progress* — what needs you now — computed from the thoughts. Progress has no stored snapshot; `digest` is its only home.
+Self-report which tier was used:
 
-## Process
+1. **Helper available.** Use the bundled reducer only when it exposes the GitHub-native schema/interface. Trust its set logic, then inspect linked objects needed for presentation.
+2. **Readable GitHub state without helper.** Query authenticated GitHub primitives directly and apply the semantic contract below. This is valid but slower.
+3. **Unavailable or blocked.** If `gh`, authentication, permissions, or a required API surface is unavailable, report the exact blocked surface and what could not be determined. Never infer obligations from notification prose.
 
-### Step 1 — Resolve + pull
-- **Resolve who's running** (git author email → `git:` in `relay.yml` → your handle), then **pull** to get the latest.
+## Obligation contract
 
-### Step 2 — Compute the mechanical state (script-first, ADR-051)
+Include each obligation once:
 
-Run the bundled state computer — this IS the computation, not an optimization of it:
-```bash
-node <this-skill>/scripts/compute-state.mjs <relay-repo> [--project <name>] [--for <handle>]
-```
-It emits the full mechanical layer as JSON: thread grouping by the `thread` anchor, unanswered `@`-asks (`waitingFor` / `waitingOn`), settled/open per thread, image counts per thought, settle's `agreed` harvest — plus **`flags`** for what set-logic must not decide. **Trust its set-logic; don't re-derive by hand what it already computed.** (No node in this environment → apply the semantic contract below as a manual recipe over `thoughts/`.)
+- `[ACK]` addressed to the viewer until that account adds `👀`;
+- an Issue assigned to the viewer, including a Decision Issue where the assignee is the v1 decision owner;
+- a requested PR verdict on the current revision;
+- re-review when a changed revision invalidated approval or requires a new request;
+- an authorized final resolution waiting for `/relay:settle`, or an approved current-revision Core PR ready to become effective.
 
-### Step 2b — Judge what the script can't
+Exclude:
 
-The script never silently decides a judgment call — it flags it. Your job is the residue:
-- **Read ONLY the flagged thoughts** (e.g. `question-marks-no-mention`: a latest-in-thread entry with real ❓s but no `@`) and decide each: a genuine open ask → surface it under Waiting; rhetorical / already-absorbed → Recent.
-- Read the thoughts you're about to surface just enough to write their **one-line ask summary** for Step 3 — the JSON has subjects, not distilled asks.
+- pure FYI and ordinary notifications;
+- prose mentions without assignment, review request, or explicit ACK;
+- ACK completed by the designated account;
+- Comment-only PR rounds presented as verdict completion;
+- closed/resolved items and obligations completed on the current revision.
 
-### The semantic contract (what both paths — script and manual — must satisfy)
+## Present
 
-- **Grouping**: discussions group by the `thread` anchor (`re` = the reply chain within; `relate` = cross-discussion "see also"). Links are stored outgoing-only — backlinks ("who points at me") are **computed** by scanning. "Settled" is computed the same way: a discussion whose latest reply is an `agree`/FYI-closer is settled; an ask with no answering `agree` is open — there is no stored status field.
-- **The `@<you>` sweep**: every thought, every run. A thought that `@`-flags you **and you haven't answered** (no `/relay:review` from you on that id) = waiting for your review. No `@<you>` where someone flagged you is ever missed.
-- **"Names you" ≠ "needs you" — FYI is not waiting.** A prose mention (no `@`-flag), or a thread whose latest state is a **closer** (an `agree`, or a review that says it needs no reply), is **self-closed** → **Recent (FYI)**, never "Waiting." (Termination contract: `relay/CLAUDE.md` → *Resolution & decisions*.)
-- **"Waiting on others" uses the full ask definition, not just the `@`-glyph.** The canonical ask is **an `@`-flag, a `change`, OR a `comment` carrying a real question** — so your thought counts as "waiting on them" when it's the latest, non-closing entry in its thread and matches any of the three, even with no literal `@name`. This is exactly the case the script surfaces as a flag rather than deciding. An ask answered by an `agree`/FYI-closer is **answered** — drop it.
-- **Image-bearing thoughts are flagged, never paraphrased away.** digest is a *text* triage that can't render a picture — a thought with images gets `📎 N` **wherever it surfaces**, and the acting agent later renders them to the human (see Present + Discipline).
-
-### Step 3 — Present, filtered for the viewer
-```
-relay · <project> · for @<you> (live, <date>)
-
-Waiting for your review (n)        # thoughts @you you haven't answered
-  • [<id>] <one line — what's wanted (a look / a call / unblock)> — @<by>, from “<subject>” [📎 N] → /relay:review
-Waiting on others (n)              # YOUR open asks (@-flag, change, or a real question) with no review back yet
-  • [<id>] <what you asked> — @<who>, “<subject>” (since <date>)
-Recent (FYI)                       # latest thoughts, brief — flow you don't need to act on
-  • “<subject>” — @<by>, <date> [📎 N]
-```
-- **"Waiting for your review"** = every thought that **`@`-flags you** and you haven't answered — a progress note wanting a look, or an alignment wanting your agreement / pushback. **Excludes** FYI (no `@`-flag) and already-closed threads (an `agree`/no-reply-needed closer). Sorted first; this is the whole point.
-- **"Waiting on others"** = your own thoughts that are the latest, non-closing entry in their thread and carry a real ask — an `@`-flag, a `change`, **or** a `comment` posing a genuine open question even without a literal `@` — and have no review back yet. Don't under-scan to "literal `@` only": a long comment that ends "these three I really want your take on" is just as much an open ask as a tagged one. So a stalled ask is visible to *you*, the asker, not silently rotting (the asker-liveness lens).
-- **"Recent"** = the latest thoughts by subject, brief — so you see what's flowing even when it doesn't need you.
-- **`📎 N` = images, flag then surface.** The marker means the thought carries N images digest can't show. digest only *flags* (read-only); when you then **act on** that thought (open it to review or relay it to the human), **render its images to the human, or hand them the file path** — never paraphrase the picture away. The visual is part of the payload (owner: `relay/CLAUDE.md` → *Format contract*).
-- Two-person: the same computation, the other lens — filter by `@<you>`.
+Group by `ACK`, `DECIDE/ACT`, `REVIEW`, and `SETTLE`. For each item show object type, title, URL, why it needs the viewer, and the native action that completes this round. Collapse duplicate signals to one item.
 
 ## Discipline
-- **Read-only** — never write a file (the ledger is `settle`'s job). No churn, no conflict.
-- **Recompute from source** — read the thoughts every run; `digest` is the authoritative live view of what needs you.
-- **Pull first** — a digest of stale data misroutes attention.
-- **Lead with what needs them** — the whole point is 3-second triage.
 
-## Anti-patterns (refuse these)
-| Temptation | Instead — and the tell |
-|---|---|
-| Write / refresh a stored snapshot here | Stay read-only + computed — the durable ledger is `settle`'s job. Tell: about to write a file inside `thoughts/` or `decisions/` during what started as a digest run. |
-| Miss the `@you` flag | Sweep every thought, every run — the `@<you>` tag is the ask signal and a real ask must never drop. Tell: the digest was assembled without a dedicated pass over every open thought's mentions. |
-| Nag about an FYI / already-agreed thread | Bucket a prose mention, an `agree`, or a no-reply-needed closer as **Recent**, not "Waiting" — "names you" ≠ "needs you". Tell: the "Waiting" list contains a thread that already ended in agreement. |
-| Bury a real question in "Waiting on others" scan because it has no literal `@` | Check for closer-or-not, not just the `@` glyph — a `comment` posing a genuine open question is an ask too. Tell: a thought ends with a question mark and no reply, but it's missing from "Waiting". |
-| Dump the full body of a long thought | Surface its subject + the one-line ask as a pointer; the body is read on open. Tell: the digest reproduces a whole paragraph instead of a one-line pointer. |
-| Paraphrase away an image-bearing thought's visuals | Flag it `📎 N` and render the images (or hand over the file path) when you act on it — digest can't render. Tell: an image-bearing thought's payload got reduced to a text description with no `📎` marker. |
-
-## Companion skills
-- **`/relay:report`** / **`/relay:review`** — the write + response sides whose thoughts `digest` reads.
-- **`/relay:settle`** — appends agreed decisions to the ledger (`decisions/log.md` + `active.md`); `digest` is its live, progress-side complement.
+- Read-only; never react, comment, assign, close, or merge.
+- Current revision matters: stale approval is not a valid verdict.
+- GitHub notifications are ambient awareness, not the authoritative digest.
+- Lead with blockers/degradation, then obligations, then an explicit `nothing needs you` when empty.
 
 ## Communication style
 
 - Explain in the user's language with simple, direct wording.
-- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
-- Put precise technical detail after the plain explanation and only where it's needed.
+- Lead with the result; put technical details after it.

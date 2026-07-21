@@ -31,7 +31,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | [`research`](plugins/research/) | **Rigorous reading and auditing of argument documents** — papers, RFCs, design proposals, ADRs, whitepapers, blog posts (a paper is the most common instance, not the definition). Dissect any argument document into its structural skeleton, untangle how a set of documents relate, critique one adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Four reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it), `graft` (borrow a mature model's structure and adapt it to your domain — map every primitive; the adapt list is the payload); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
 | [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), `observe` distills selected durable learning, and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
-| [`relay`](plugins/relay/) | **Coordinate with a counterpart** — async, through your agents, over a shared git repo: `launch` sets up the project + people (create a project, or add a person / assign a role); `report`/`review` exchange standup-shaped updates that converge decisions to explicit consensus; `digest` shows the live "what needs you"; `settle` keeps it tidy; `format` keeps the frontmatter conformant. Structured updates, not chat. Independent. |
+| [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub** — `launch` audits repository readiness; `report` routes intent into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records the native response; `brief` preserves reusable cited understanding; `settle` closes with authority or makes approved Core effective. GitHub owns state; Relay owns semantics and verification. Independent. |
 
 `nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
@@ -95,14 +95,18 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/reflect:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
 - `/reflect:retrace` — reconstruct why a long development arc moved from stage to stage (prior state · pressure · evidence · decision · status · next pressure), put the causal outline in front of you for correction, then render a browser-verified interactive alignment artifact with concrete witnesses; not a catchup, codebase tour, recap, or process retro
 
-**`relay` — coordinate with a counterpart** (async, over a shared git repo; standalone):
+**`relay` — coordinate with a counterpart through GitHub** (six daily model-invoked skills; standalone):
 
-- `/relay:launch` — create a project (scaffold its space + frame; bootstraps the repo on first run), or add a person (name · git · github · title) + assign a per-project role
-- `/relay:report` — write a thought (progress or alignment; subject + body, `@`-route what needs the counterpart)
-- `/relay:review` — respond to a thought — agree / comment / change (your review resolves it; no @-set protocol)
-- `/relay:digest` — the live "what's waiting for my review" (read-only; the awareness entry)
-- `/relay:settle` — append agreed decisions to the ledger (`decisions/log.md`) + regenerate `active.md`; thoughts never move
-- `/relay:format` — sweep one project's thoughts to the current frontmatter spec (lint + fix, gated) — the `/nav:sync` of relay
+- `/relay:launch` — audit or configure the current repository's identity, Discussions, permissions, CODEOWNERS, and merge protection; every mutation is approved first and read back
+- `/relay:report` — route a new FYI, explicit ACK, question, decision, task, or exact change into the right Discussion, Issue, or pull request, with responsibility verified
+- `/relay:digest` — show only real GitHub obligations: designated ACKs, assignments, current-revision reviews, re-reviews, and authorized settlement; read-only
+- `/relay:reply` — leave the native response on an existing object: 👀, answer, comment, PR Comment, Approve, or Request changes; never declares the whole object finished
+- `/relay:brief` — create, update, or retire one cited Markdown synthesis when understanding from GitHub must stay current across contexts; never consensus or Core
+- `/relay:settle` — close a Discussion or Issue with an authorized resolution, or merge an approved Core pull request so it becomes effective
+
+*User-invoked:*
+
+- `/relay:migrate` — inventory and migrate a legacy file-based Relay repository into the GitHub-native model while preserving immutable provenance; mapping-first, idempotent, and write-gated
 
 ## Install
 

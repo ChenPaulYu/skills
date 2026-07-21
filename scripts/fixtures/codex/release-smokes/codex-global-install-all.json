@@ -13,7 +13,7 @@
     "nav-plan",
     "relay-digest"
   ],
-  "expect_skill_count": 37,
+  "expect_skill_count": 38,
   "expect_skills": [
     "nav-plan",
     "research-dissect",
@@ -26,9 +26,6 @@
     ".codex/agents/executor.toml",
     ".codex/agents/explorer.toml",
     ".codex/agents/reviewer.toml",
-    ".codex/agents/browser-verifier.toml",
-    ".codex/hooks.json",
-    ".codex/hooks/relay-digest-session-start.mjs"
-  ],
-  "expect_hook_command": "node .codex/hooks/relay-digest-session-start.mjs"
+    ".codex/agents/browser-verifier.toml"
+  ]
 }

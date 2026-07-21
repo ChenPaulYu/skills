@@ -169,6 +169,7 @@
         ".agents/skills/reflect-observe/SKILL.md",
         ".agents/skills/reflect-park/SKILL.md",
         ".agents/skills/reflect-retrace/SKILL.md",
+        ".agents/skills/relay-migrate/SKILL.md",
         ".agents/skills/shape-build/SKILL.md",
         ".agents/skills/shape-setup/SKILL.md"
       ]
@@ -191,7 +192,6 @@
       "contract_consumers": [
         ".agents/skills/nav-map/SKILL.md",
         ".agents/skills/relay-digest/SKILL.md",
-        ".agents/skills/relay-format/SKILL.md",
         ".agents/skills/shape-align/SKILL.md",
         ".agents/skills/shape-reconcile/SKILL.md"
       ]
@@ -263,58 +263,11 @@
       "contract_consumers": [
         ".agents/skills/shape-setup/SKILL.md"
       ]
-    },
-    {
-      "id": "session_open_awareness",
-      "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerSessionOpenProse lowers the precise legacy session-open / runs-on-open prose before contract injection while preserving the hook-summary format phrase for the runtime helper. scripts/lib/codex-compat.mjs#injectSessionOpenContract inserts the canonical lifecycle-awareness contract for relay-digest: default to invoking it on demand; a trusted SessionStart startup/resume hook may add a compact note when a relay repo is detectable, but runtime/helper absence and non-relay contexts degrade to a safe no-op. platforms/codex/hooks/hooks.json plus platforms/codex/hooks/relay-digest-session-start.mjs are the single-source templates, and scripts/build-codex.mjs#buildHooks compiles them into the project runtime artifacts. Legacy session-open / runs-on-open claims ratchet to zero across generated output (codex-compatibility Phase 4).",
-      "source_signals": [
-        {
-          "id": "runs_it_on_open",
-          "kind": "literal",
-          "pattern": "runs it on open"
-        },
-        {
-          "id": "auto_runs_on_open",
-          "kind": "literal",
-          "pattern": "auto-runs this on open"
-        },
-        {
-          "id": "on_every_open",
-          "kind": "literal",
-          "pattern": "on every open"
-        }
-      ],
-      "generated_contract_markers": [
-        "> **Lifecycle awareness contract (Codex).**"
-      ],
-      "compiler_owners": [
-        "scripts/lib/codex-compat.mjs#lowerSessionOpenProse",
-        "scripts/lib/codex-compat.mjs#injectSessionOpenContract",
-        "scripts/build-codex.mjs#buildHooks"
-      ],
-      "template_sources": [
-        "platforms/codex/hooks/hooks.json",
-        "platforms/codex/hooks/relay-digest-session-start.mjs"
-      ],
-      "runtime_artifacts": [
-        ".codex/hooks.json",
-        ".codex/hooks/relay-digest-session-start.mjs"
-      ],
-      "contract_consumers": [
-        ".agents/skills/relay-digest/SKILL.md"
-      ],
-      "matcher": "startup|resume",
-      "project_trust_required": true,
-      "default_behavior": "on-demand",
-      "missing_behavior": "Missing hook runtime, missing helper, untrusted project, non-relay cwd, parse failure, and empty helper output all degrade to a safe no-op; relay-digest remains the source-of-truth manual path."
     }
   ],
   "generated_destinations": [
     ".agents/skills",
     ".codex/agents/browser-verifier.toml",
-    ".codex/hooks/relay-digest-session-start.mjs",
-    ".codex/hooks.json",
     "AGENTS.md"
   ],
   "frozen_contract_paths": [
@@ -381,13 +334,6 @@
       "kind": "regex",
       "pattern": "browser-verifier subagent|\\[`agents/browser-verifier\\.md`\\]\\(plugins/shape/agents/browser-verifier\\.md\\)|Ships with the plugin",
       "flags": "g"
-    },
-    {
-      "id": "session_open_claim",
-      "label": "session_open_awareness / session-open claim",
-      "kind": "regex",
-      "pattern": "session-open|runs-on-open|runs on every open",
-      "flags": "gi"
     }
   ]
 }

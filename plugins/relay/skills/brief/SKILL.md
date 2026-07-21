@@ -1,0 +1,43 @@
+---
+name: brief
+description: "Create, update, or retire a cited brief when understanding from GitHub must stay current across contexts and one object's final resolution is insufficient. Does not close objects, represent consensus, or change Core."
+---
+
+# brief — maintain reusable cited understanding
+
+Turn one or more Raw GitHub objects into one small, current Markdown synthesis only when the understanding must be reused across contexts.
+
+Generic document authoring can write prose; `brief` uniquely owns currentness, citations, `briefs/README.md`, safe organization, and retirement.
+
+## Trigger gate
+
+All must hold:
+
+- one or more Discussions, Issues, pull requests, comments, or reviews contain the source understanding;
+- future readers will need the synthesis in more than the source object's immediate context;
+- one object's self-contained final resolution is not a sufficient home.
+
+A one-off summary, meeting note, or settled answer that reads well in its object does not earn a brief.
+
+## Process
+
+1. Read the Raw objects and existing `briefs/README.md` plus related briefs. Choose exactly one lifecycle action: create, update, or retire.
+2. Draft a short topic-based Markdown file. Lead with the current synthesis; cite every load-bearing claim with stable GitHub URLs; distinguish fact, interpretation, and open question.
+3. Maintain `briefs/README.md` as the navigation and organization-rule owner. Retirement removes the stale brief and its links in the same PR; git history preserves it.
+4. Show the diff, citations, and lifecycle action. Wait for approval.
+5. Use a normal branch/pull request. After merge, verify the brief, README entries, and relative links.
+
+## Organization rules
+
+Keep `briefs/` flat by default. Create a topic folder only when at least three stable, usually co-read briefs form a domain group. Never group by month, quarter, year, or temporary status; never create one-file or empty folders. Move with `git mv`, update README and every relative link in the same PR, and run a link check. If the benefit is unclear, stay flat.
+
+## Boundaries
+
+- Ordinary Markdown plus citations and git history; no status metadata, time buckets, `archive/`, or parallel database.
+- Never close a GitHub object, claim consensus, modify `core/`, or treat a brief as a Core prerequisite.
+- `/relay:settle` owns authorized closure/effectivity; `/nav:compose` remains the general prose tool.
+
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead with the result; put technical details after it.

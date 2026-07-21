@@ -1,171 +1,71 @@
-# relay — plugin-level CLAUDE.md
+# relay — GitHub-native coordination semantics
 
-> Context for any agent (or human) editing **this plugin itself**.
-> For executing one of the skills, read its `SKILL.md` — each is self-contained.
-> Design rationale (why each decision, the holes found + resolved) lives in [`docs/design/relay.md`](docs/design/relay.md); this file owns the **operative contract** the skills cite. The landing ADR is [ADR-050](docs/adr/050-relay-plugin.md).
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md) and [the design](docs/design/relay.md). Each skill restates the rules it needs.
 
-## What this plugin is
+## What Relay is
 
-A toolkit for **coordinating with a counterpart asynchronously, through your agents**, over a **shared git repo** — not your own work (`reflect`) or your code (`nav`). You and others stay in sync **without live conversation**: each side's agent writes a **thought**, the other's agent reads + responds — all git-diffable, human-gated, zero chat. The main pattern is **report → review**: one side posts a thought (progress, or an alignment briefing on how they're now framing something), the other reviews it (agree / comment / change). Descends from `reflect:observe` (structured artifact + git transport + human gate) but is **two-way · recurring · threaded**. Tuned for **1–2 people, progress-centric** — no multi-party consensus protocol.
+Relay is a thin semantic layer over one GitHub repository. GitHub owns collaboration objects and state; Relay supplies routing, obligation semantics, authority checks, read-after-write verification, reusable synthesis policy, and authorized settlement. It does not maintain a parallel coordination database.
 
-**Six verbs, split structure vs content:**
+Six daily verbs form the interface:
 
-| verb | does | layer |
-|---|---|---|
-| `launch` | create a project (scaffold the space + its frame), or add a person (name · git · github · title) + assign a per-project role | structure |
-| `report` | write a thought — progress or alignment | content |
-| `review` | respond to a thought — agree / comment / change | content |
-| `digest` | the live "what's waiting for my review" (read-only) | content |
-| `settle` | append agreed decisions to the ledger (`decisions/log.md`) + regenerate `active.md`; thoughts never move | content |
-| `format` | sweep one project's thoughts to the current frontmatter spec (lint + fix, gated) — the `/nav:sync` of relay | content |
+| Verb | Owns |
+|---|---|
+| `launch` | Audit or configure repository prerequisites and protection. |
+| `report` | Route a new human intent to a Discussion, Issue, or pull request. |
+| `digest` | Show only real obligations for the current viewer. |
+| `reply` | Leave the viewer's response on an existing object. |
+| `brief` | Keep reusable cited understanding current across contexts. |
+| `settle` | Use authority to declare an object finished or make approved Core effective. |
 
-`register` (enroll a person + assign a role) was merged into `launch` as its second branch — at relay's 1-2-person tuning it never earned a standalone door once `launch` already half-did the job on first run; see [ADR-078](docs/adr/078-relay-register-merged-into-launch.md).
+`migrate` is an explicit-only v0-to-v1 compatibility bridge, not a seventh daily verb.
 
-## Two-repo split (load-bearing)
+## Workspace and object router
 
-- **Tool repo** = this marketplace (the `relay` plugin) — the protocol, universal.
-- **Content repo** = the org's actual relay repo — the real data (people, projects, reports, decisions). One company = one content repo, many projects.
+One Relay workspace equals the current GitHub repository in v1. Cross-repository aggregation is out of scope.
 
-**Locating the content repo (every skill's first step).** The content repo is a **separate** repo (the coordination repo) — it is **almost never the current working directory** (you're usually in some other project). Resolve it in order, and **never silently assume cwd**:
+Route a new intent with three questions:
 
-1. **`$RELAY_REPO`** env var, if set (mirrors reflect's `$SKILLS_REPO`) — the default content repo.
-2. else the **cached path** at `~/.cache/relay/repo-path` (one line, the resolved repo's absolute path), if it exists **and** a `relay.yml` still lives at its root (a stale/moved repo falls through to the next step, not a hard error).
-3. else the **current dir**, only if it actually has a `relay.yml` at its root (you're already inside a relay repo).
-4. else **ASK the user** for the content-repo path — or offer `/relay:launch` to create one.
+1. Is there a clear completion condition? If no, use a Discussion.
+2. Is one person accountable for advancing or deciding it? If no, use a Discussion.
+3. Is there an exact reviewable diff? If yes, use a pull request; otherwise use an Issue.
 
-**Whichever step resolves it (2–4), write the result to `~/.cache/relay/repo-path`** (create the dir if needed) before moving on — so the *next* invocation, on this machine, skips straight to a warm cache hit instead of re-walking the fallback chain. This is a plain cache, not config: fine to `rm` it, fine for it to go stale (step 2 self-heals by falling through). Don't cache step 1 (`$RELAY_REPO` is already O(1)).
+Use Announcement Discussions for FYI and explicit ACK traffic, Q&A Discussions when an accepted answer is the completion condition, Decision Issues when one named person must decide, and pull requests for exact changes. Split independently completable asks into linked objects.
 
-Then read its `relay.yml` first; never hard-code paths.
+## Obligations and authority
 
-## The three axes (never tangle them)
+- A prose mention is notification, not obligation.
+- `[ACK]` plus a designated recipient creates an obligation completed only by that account's `👀` reaction. Read/unread state and another person's reaction do not count.
+- Assignment creates an obligation. On a Decision Issue, the single assignee is the v1 decision owner.
+- A requested reviewer owes a current-revision verdict. PR Comment is feedback, not Approve or Request changes.
+- V1 supports one required approver. Required-review rules and stale-approval dismissal must be active, and unauthorized bypass must not make the gate ceremonial.
+- `reply` leaves my response. `settle` uses authority to declare the whole object finished or effective.
 
-- **Identity** (who you are) → global `relay.yml`; one source; **auto-resolved** (running git author email → a person's `git:` field). Carries name · git · github · optional title.
-- **Role** (owner / developer / reviewer) → per-project `project.yml`; **descriptive defaults, not locks**; optional.
-- **Action** (any verb) → anyone may do any action; not gated by identity or role (`settle` is **owner by convention** — one writer keeps the ledger appends + `active.md` regeneration conflict-free — but it's non-critical).
+An accepted decision is not automatically effective. A Discussion answer or Decision Issue resolution records an accepted conclusion; binding repository truth changes only when its protected Core PR merges.
 
-`title` (org position, e.g. "CTO") is identity-level + global; `role` is per-project + functional — keep them apart.
+## Raw, briefs, and Core
 
-## Resolution & decisions (the core mechanic)
+- **Raw GitHub** is the complete evidence layer: Discussions, Issues, pull requests, comments, answers, reactions, reviews, and timelines. Do not create `raw/`, `thoughts/`, or `logs/` mirrors.
+- **`briefs/`** contains ordinary Markdown syntheses for understanding that must stay current across future contexts and does not fit in one object's final resolution. Each important claim cites stable GitHub URLs. `briefs/README.md` owns navigation and organization. Keep it flat unless at least three stable, usually co-read briefs form a domain-based group; never group by time/status or create one-file/empty folders. Moves use `git mv` and update README and links in the same PR. If value is unclear, stay flat.
+- **`core/`** contains the minimum binding truth people and agents may rely on now. Change it only through an exact protected PR with a valid current-revision approval; merge is the effective point.
 
-- **A review resolves it** — with 1–2 people there is **no `@`-set protocol**. You `report`; the other `review`s (`agree` / `comment` / `change`). An explicit **`agree` settles it**. Silence ≠ agreement.
-- **Termination is built in — not every thought wants a reply.** Two kinds of traffic: an **ask** (a thought carrying an `@<handle>` flag, a `change`, or a `comment` with a real question) keeps the thread **open**; an **FYI** (a thought with no `@`-flag, or a review that only informs — an `agree`, or a `comment` that just tells you something) is **self-closing**. The rule: **respond only to move an open question — never reply just to acknowledge** (don't ack an ack). After an `agree` or an FYI, **silence = closed, not rudeness**; a settled-looking thread re-opens *only* on a `change` or genuine disagreement. (Distinguish from the bullet above: silence ≠ agreement on an *open ask* — you can't read consent into no answer; but silence *after* an explicit `agree`/FYI = done.) A writer who wants this unmistakable says so in-line ("FYI, no reply needed unless you disagree"). `digest` must honor this — an FYI / already-agreed thread is **not** "waiting" on anyone.
-- **Thoughts link, not match** — a `review` references the thought it answers with a **markdown link to that thought's file** (`[<id>](<date>-<id>.md)`), so a thread is clickable, not reconstructed by scanning ids.
-- **Decisions are an append-only ledger, pinned not graduated** — a "decision" is just *a thought that got an agreeing review*. `/relay:settle` distils each into a **self-contained ruling** and **appends** it to `decisions/log.md` (append-only, never rewritten); `decisions/active.md` is the regenerated in-force view. No graduation gate, no `@`-set — the agreeing review *is* the decision; `settle` records it. The deliberation thought **stays in `thoughts/`** — never moved or deleted (the immutable log); the ledger entry is still **self-contained** (`log.md` is the primary read, the thought the raw source). **"Open vs settled" is computed by `digest`, not stored as a folder location** — relay never moves a thought. See [ADR-054](docs/adr/054-relay-decision-ledger.md).
-- **Change one** — a new `report` + `review` supersedes the old; settle re-pins on its next run.
-- **Authenticity** — a git author is spoofable, so baseline defense is **a private repo + the stated assumption colleagues don't forge each other**; **signed-commit reviews** are opt-in hardening (host-agnostic). Not coupled to GitHub's API.
+A brief never closes an object, represents consensus, or changes Core. It is not a Core prerequisite; a Core PR may cite a Decision Issue directly.
 
-## Git protocol (canonical — skills restate the reflex inline)
+## Mutation and recovery contract
 
-Paired with the append-only / shared-repo model. Each skill restates the lines it needs (self-contained at runtime); this is the owner.
+Every writing verb presents the intended mutation or diff before applying it. After writing, read the resulting GitHub or git state back. A silent assignment, reviewer, reaction, verdict, close, or merge failure blocks completion.
 
-- **Pull before you act** (read or write) — get everyone's latest.
-- **Append-only — the authorship rule (who may edit what).** You write your OWN files (`thoughts/<date>-<handle>-<slug>.md`, one thought per file). **You MAY revise your own thought's content** — it's yours (mind that editing one a counterpart already *replied to* can desync their reply; the immutable record is git history, which keeps every version). **Never edit someone else's thought's content** → conflict-free. **The sole exception is `format`**: it may touch *anyone's* thought, but **only the frontmatter shape, never the meaning**. A `review` **links** to the thought it answers, never edits it.
-- **Coordination lives in the append-only stream — never a co-edited "whiteboard."** A single mutable doc everyone edits would (a) **collide** under async agents (merge conflicts — the one thing append-only buys you) and (b) **overwrite the *why*** on every change (losing the decision trail). The "current state at a glance" need is met by a **computed** view (`digest`) and a **single-writer** projection (`decisions/active.md`, regenerated by `settle`) — never a shared-mutable free-for-all. (Event-sourcing framing: the immutable **log** is git history — every version kept — plus the append-only `decisions/log.md`; `thoughts/` shows the *current* text (the system never relocates or rewrites a thought to fake state — an author revising their own is fine, per the authorship rule); `active.md` is a **projection** and "open vs settled" is `digest`'s computed view — don't hand-mutate or relocate to fake a projection.) The only file a non-`settle` verb may co-produce is a **work artifact** (a spec, copy) that is the *object* of the work, not the coordination medium — and even then via single-owner edits or report/review, not free editing.
-- **Commit + push after writing** — so others' agents can pull it.
-- **Gate before commit** — show the user first (the marketplace-wide write-gate).
-- **Shared files in the decision path are single-writer** (the owner runs `settle`): `decisions/active.md` is **regenerated** by settle; `decisions/log.md` is **append-only** (settle appends, never rewrites). `settle` **never moves or deletes thoughts** — they stay in `thoughts/` (the immutable log); "open vs settled" is computed by `digest`, not stored.
-- **Conflicts** (rare, only on shared files) → **regenerate via `settle`, don't hand-merge** (`active.md` is derived; `log.md` conflicts resolve by keeping both appended lines).
-- Direct to `main`, no PR ceremony (it's a coordination repo).
+If an early step creates an object and a later mutation fails, return the existing URL and the exact missing steps. Retry from that URL; never create a duplicate to obtain a clean run.
 
-## Format contract (canonical — the shared shapes all seven verbs read/write)
+## Minimal implementation
 
-The **single owner** of the file formats. A skill that reads or writes one of these restates the shape it touches; change a shape → update it here + every skill that touches it, in the same commit.
+Use GitHub primitives directly through authenticated `gh`/API operations and ordinary branches/PRs. There is no Relay database, status frontmatter, roster file, project file, thought stream, or decision ledger. A brief is Markdown plus citations plus git history. GitHub URLs are recovery handles.
 
-**`relay.yml`** (content-repo root — global roster):
-```yaml
-people:
-  <handle>:               # frozen relay handle — id prefix + @routing; seeded from github at register
-    name: <display name>
-    git: <email>          # resolution key (running git author email → this person; may be a list)
-    github: <account>     # display + link + handle seed (NOT the resolver)
-    title: <org position> # optional — NOT a per-project role
-```
+The deterministic obligation reducer belongs to `digest`; its GitHub-native rewrite is a later implementation phase. The legacy linter remains under `migrate/scripts/` temporarily as migration input and is not a v1 state owner.
 
-**`projects/<name>/project.yml`** (per-project membership):
-```yaml
-members:
-  <handle>: <role>        # owner | reviewer | developer | … (descriptive default, not a lock)
-  <handle2>: [<role>, …]  # a member may hold several roles; consumers read list-aware
-```
+## Cost and invocation
 
-**`thoughts/<date>-<handle>-<slug>.md`** (the only entry type — append-only; a `report` opens, a `review` answers):
-```markdown
----
-date: <ISO>
-by: <handle>
-subject: "<one line — the headline; read first>"   # quote it — a colon (e.g. "re:", "ADR-054:") breaks unquoted YAML
-thread: "[<root-id>](<date>-<root-id>.md)"   # REQUIRED on EVERY thought — which discussion (its opening thought); a new topic's opener points to itself. Quote it ([ starts a YAML sequence)
-re: "[<id>](<date>-<id>.md)"                 # optional — the exact thought you directly answer (omit if none, or when it == thread)
-relate:                                       # optional — cross-discussion "see also" links; may be several
-  - "[<id>](<date>-<id>.md)"
----
-<body — lead with the point, head-able>
-```
-- **report body** — *progress* (done · in progress · next · `@`-flag anything needing the counterpart) **or** *alignment* (a briefing: TL;DR → explanation → example). Flex length to the job; never a chronological work-log (that lives in the project repo — link to it).
-- **review body** — `## Review`, one line per answered id: `agree` / `comment` / `change` + why; each line **links** to the answered thought (`[<id>](<date>-<id>.md)`).
-- **conclusion body** — a **tone, not a `kind`**. When a discussion is too long / iterated for a one-line `log.md` entry, write a thought that **synthesizes** it (the outcome + why); `settle` then points `log.md` at this thought instead of inlining a line. Write one **only when the thread doesn't read linearly into the conclusion** — never to restate the thread. It doubles as the discussion's **navigation hub**: **link the related thoughts inline** so a reader grasps the whole arc and can jump to any piece in one place (the human-readable map), while naming the **`thread`** keeps the set machine-complete (a later thought is still grouped even if not hand-linked).
-- **id = `<handle>-<slug>`**, author-namespaced (collision-free, no central allocator); permanent. The file is `thoughts/<date>-<id>.md`, so a link by id resolves to the file.
-- **Three link levels — `thread` · `re` · `relate`.**
-  - **`thread`** (grouping, *within* a discussion) — links the discussion's **opening thought** (the root); the **grouping anchor**, read in O(1) so `digest`/a dashboard groups *without walking a chain*. **Required on EVERY thought** — a new topic's opener points to **itself** (no orphans; every thought belongs to exactly one discussion).
-  - **`re`** (reply, *within*) — links the **exact thought you directly answer** (the immediate parent). Optional; omit when there's none or it would equal `thread`.
-  - **`relate`** (association, *cross-discussion*) — "see also" links to thoughts in **other** discussions. Optional; **may be several**.
-- **All links are stored ONE-WAY; backlinks are COMPUTED (Obsidian model).** You write only the **outgoing** link (in *your* thought); "who points at me" is **never stored** — `digest` (or a script / Obsidian) computes it. Storing a backlink would mean **editing the target thought**, which immutability forbids. So a plain GitHub viewer sees only outgoing links; a computing reader sees both directions. `thread` · `re` · `relate` are **inherent + immutable** → legitimate stored fields.
-- **`@<handle>`** marks what needs the counterpart — that's what `digest` surfaces and `review` answers. There is **no `kind` field** — tone (progress / alignment) is how you write it; decisions are appended to `decisions/log.md` by `settle`.
-- **No `status` field — "open vs settled" is computed, not stored.** A thought is *settled* when `digest` can derive it from the immutable stream: it's an FYI (no `@`-flag), or its ask got an answering `agree` (found by following `re:` backlinks), or it's superseded. Storing a `status` would mean **editing an immutable thought** when it closes — forbidden. Frontmatter holds only the **inherent, unchanging** facts (`date` · `by` · `subject` · `thread` · `re` · `relate`); the **derived, changing** state (open/settled, who-waits-on-whom, progress, **backlinks**) is `digest`'s computed view. This is why the links (`thread` always, `re`/`relate` as needed) are stored outgoing-only — they're the edges that make grouping, "settled?", and backlinks computable.
-- **Images in a thought — surfaced, never silently dropped.** A thought body may embed images (a screenshot, a mockup, a diagram) as standard markdown images pointing at a **relative** path; the *content repo* owns the asset layout (e.g. a per-thought assets folder) and the small-in-git / large-linked split (see its `CLAUDE.md`). **Any image that enters git is compressed first** — as small as possible *without visible quality loss* (visually-lossless); the content repo's `CLAUDE.md` owns the *how* (tooling + target size). Because an image carries meaning a **text triage can't** — `digest` reads subjects + asks, not pictures — an image-bearing thought is **flagged + surfaced**, not paraphrased away: `digest` marks it as carrying images, and an agent acting on it **renders the images to the human (or points them at the original file)** rather than describing the picture away. The image is part of the payload; dropping it silently in triage is the failure this guards. (Authoring layout = the content repo's `CLAUDE.md`; the flag + surface duty = here, `report`, and `digest`.)
+`digest` is the mechanical-tier read-only scan. The other daily verbs require judgment. `migrate` is explicit-only because legacy conversion is exceptional, destructive-adjacent compatibility work.
 
-**`decisions/log.md`** (per-project — the append-only decision History; `settle` **appends**, never rewrites):
-```markdown
-# <project> — decision log (append-only)
-- [<id>] <decision + one-line why> — agreed <date> by <who>, from <thought-link>[, supersedes <id>]
-```
-- **`log.md` is the single index of conclusions** — every conclusion is findable here. **Default: a self-contained line** (the distilled ruling + why, reading on its own), citing the source as a markdown link (`<thought-link>` resolves from `decisions/` as `../thoughts/<date>-<thought-id>.md` — the proposal + agreeing review). **When a conclusion is too rich for a line** (a long / iterated discussion), the entry is instead a **pointer to a `conclusion` thought** that carries the full synthesis — direction is always **`log.md` → the thought**, never the reverse, so the index stays complete and you never hunt `thoughts/` for conclusions. Links are stable (thoughts never move). Newest appended at the end; superseded entries **stay** (a later entry marks `supersedes <id>`) — the "we changed our mind" trail is itself the record.
+## When editing
 
-**`decisions/active.md`** (per-project — the current in-force view, **regenerated** by `settle` from `log.md`):
-```markdown
-# <project> — decisions in force (regenerated @ <date>)
-- [<id>] <decision> — agreed <date>
-```
-- The in-force subset of `log.md` (superseded ones dropped). **Regenerable** — derived from `log.md`, safe to discard and rebuild.
-- "Where things stand" (progress) has **no stored file** — `digest` computes it live from the thoughts, and is authoritative for "what needs me now".
-- `settle` runs **lazily** (the stream got cluttered, or you want the ledger current) — clean when it's worth cleaning, not eagerly. Between runs, an agreed-but-not-yet-settled decision still lives in its `thoughts/` file.
-
-## Awareness
-
-**In-band**: an agent **auto-pulls + runs `digest` when opened**, surfacing "what's waiting on you". No external infra. Known limit (accepted): reaches only people who show up. Out-of-band (cron / notification) is an optional adapter later, not v1.
-
-## Conventions
-
-relay docs (reports, the decision ledger `decisions/log.md` · `active.md`) are authored to **`/nav:compose`** discipline (lead with the point, one fact one owner, right grain). Repo-wide authoring + maintenance rules (naming, skills-root-relative paths, frontmatter, the gates) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
-
-**Cost tier (ADR-059)**: the criterion (mechanical verbs declare `model: sonnet` in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). relay's tiered verbs: **`format`** (syntactic conformance sweep) and **`digest`** (read-only scan, runs on every open). The judgment verbs (`report`, `review`, `settle` — they write or distill *meaning*) stay on the session model.
-
-## Helper scripts (ADR-051)
-
-relay is a structured-data protocol, so unlike the analysis plugins it **bundles helper scripts** for its deterministic / correctness-critical work, split from the LLM's judgment work:
-
-- **Code (a bundled `scripts/` in the owning skill)** — mechanical + correctness-critical: set-comparison, structured parsing, signature checks.
-- **The LLM (SKILL.md prose)** — judgment: distilling a report into buckets, writing a decision's rationale.
-
-**Language by task:** parsing / set-logic → **node (`.mjs`)** (bash parses structured text fragilely; a fragile gate is the wrong risk); git / verification → **bash** (it's git commands).
-
-**node is a fast-path, not a hard dependency** — it runs in the *agent's* environment (Claude Code / Cursor / Codex hosts almost always have it), **not** the coordinated project's toolchain (so "any async project" holds). When node is absent, the skill **degrades to a precise SKILL.md recipe** — the script raises reliability where node exists, it never gates the skill (ADR-051).
-
-**Bundling constraint:** the Codex/Cursor mirror copies each skill's `scripts/` **independently** — no shared-across-skills location. So a helper used by one skill lives in that skill's `scripts/` (single owner); trivial cross-skill logic (identity resolution = `git config user.email` + a roster lookup) stays a **SKILL.md recipe**, not a 4×-duplicated script.
-
-Current: **`format/scripts/lint.mjs`** (node, regex-based frontmatter linter — Layer 1 of `relay:format`; the consensus gate `check-acceptance.mjs` was retired with the `@`-set protocol, ADR-053) and **`digest/scripts/compute-state.mjs`** (node — THE state computer, ADR-061; single owner = digest, borrowed cross-skill): for `digest`, thread grouping, unanswered-ask set-logic, settled/open, judgment `flags` for what set-logic must not decide; for `settle`, the `agreed` harvest (proposal ← agreeing-review pairs, pre-checked against `decisions/log.md`); for the session-open hook, `--format hook` (replacing the naive grep that counted already-answered mentions). Cross-skill borrowing is the sanctioned exception to per-skill bundling: the borrower states a fallback recipe for mirrors that copy skills independently. Sanctioned-but-not-built: signature / github verification (bash) and a **backlink / nav generator** (node, owned by `settle`) — scans `thoughts/` for `thread`/`re`/`relate`, computes the backlink graph, and **regenerates a separate `nav` artifact** (never writes back into a thought — that would mutate an immutable file). Deferred until a non-Obsidian, non-agent reader (raw GitHub browsing) actually needs backlinks; agents use `digest`, humans use Obsidian meanwhile.
-
-## Where things live
-
-```
-.claude-plugin/plugin.json   → relay's manifest (version + metadata owner)
-CLAUDE.md                    → ← you are here (identity · protocol · format contract)
-skills/<name>/SKILL.md       → the six skills, each self-contained
-```
-
-The **content repo** layout (`relay.yml`, `projects/<name>/…`) is the format contract above — it lives in the user's coordination repo, not here.
-
-## When editing this plugin
-
-- **Changing the git protocol or a file format**: update it here (the owner) **and** every `SKILL.md` that restates it, in the **same commit** (stale restatement = a lie). Write an ADR if the contract changes materially.
-- **New skill / rename**: follow the repo-root [`CLAUDE.md`](CLAUDE.md) gates (ADR · version bump · README + site map registration · regenerate manifests + codex · validator green).
+Change this owner and every affected self-contained skill together. New/renamed skills also require the marketplace release gates, but those surfaces are handled in the release phase rather than this partial implementation phase.

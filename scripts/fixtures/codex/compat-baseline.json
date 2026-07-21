@@ -2,8 +2,6 @@
   "scanner_roots": [
     ".agents/skills",
     ".codex/agents/browser-verifier.toml",
-    ".codex/hooks/relay-digest-session-start.mjs",
-    ".codex/hooks.json",
     "AGENTS.md"
   ],
   "rules": [
@@ -42,10 +40,6 @@
     {
       "id": "legacy_browser_subagent",
       "fingerprint": "0c0b5a1b1a271ed9"
-    },
-    {
-      "id": "session_open_claim",
-      "fingerprint": "2d128ab83bdf96d7"
     }
   ],
   "per_file_max_counts": {
@@ -57,8 +51,7 @@
     "model_sonnet": {},
     "claude_built_in": {},
     "claude_init": {},
-    "legacy_browser_subagent": {},
-    "session_open_claim": {}
+    "legacy_browser_subagent": {}
   },
   "ratchet_ledger": [
     {
@@ -112,7 +105,7 @@
     },
     {
       "date": "2026-07-14",
-      "reason": "codex-compatibility Phase 1 (blueprints/plans/2026-07-13-codex-compatibility.md): scripts/lib/codex-compat.mjs extracts a real Codex compiler from build-codex.mjs and lowers four capabilities out of generated output entirely. lowerFrontmatter strips `model: sonnet` / `disable-model-invocation: true` from frontmatter and injects an equivalent Codex-side body instruction (an explicit-invocation-only paragraph / a mechanical-tier delegation note) so the intent survives. lowerWorkerProse replaces the exact worker-dispatch constructs (`Agent` calls, `subagent_type=Explore`, `subagent_type=general-purpose`, hyphenated `sub-agent(s)`) with Codex worker vocabulary (explorer/executor worker), plus the remaining prose mentions of the two stripped frontmatter fields. lowerProjectGuidance softens the `/init`-assumption (`Claude Code's built-in /init` -> generic 'host's built-in architecture-enrichment command' phrasing) so project_guidance carries no Claude-only command claim. All four categories ratchet to zero across every generated file (skills + AGENTS.md) — ZERO, not just lower, because both frontmatter fields are structurally removed and every prose mention found by grep was covered by a named rule. browser_verify, ask_user_question, and session_open_awareness are untouched (Phases 3-4) and keep their prior baselines unchanged.",
+      "reason": "codex-compatibility Phase 1 (blueprints/plans/2026-07-13-codex-compatibility.md): scripts/lib/codex-compat.mjs extracts a real Codex compiler from build-codex.mjs and lowers four capabilities out of generated output entirely. lowerFrontmatter strips `model: sonnet` / `disable-model-invocation: true` from frontmatter and injects an equivalent Codex-side body instruction (an explicit-invocation-only paragraph / a mechanical-tier delegation note) so the intent survives. lowerWorkerProse replaces the exact worker-dispatch constructs (`Agent` calls, `subagent_type=Explore`, `subagent_type=general-purpose`, hyphenated `sub-agent(s)`) with Codex worker vocabulary (explorer/executor worker), plus the remaining prose mentions of the two stripped frontmatter fields. lowerProjectGuidance softens the `/init`-assumption (`Claude Code's built-in /init` -> generic 'host's built-in architecture-enrichment command' phrasing) so project_guidance carries no Claude-only command claim. All four categories ratchet to zero across every generated file (skills + AGENTS.md) — ZERO, not just lower, because both frontmatter fields are structurally removed and every prose mention found by grep was covered by a named rule. browser_verify and ask_user_question are untouched (Phases 3-4) and keep their prior baselines unchanged.",
       "drops": {
         "agent_call": {
           ".agents/skills/nav-audit/SKILL.md": "1->0",
@@ -187,7 +180,7 @@
     },
     {
       "date": "2026-07-14",
-      "reason": "codex-compatibility Phase 4 lowers the browser runtime contract without changing frozen Claude sources. lowerBrowserVerifyProse replaces only the legacy runtime-ownership/path claims (`browser-verifier` subagent wording, plugin source-agent path, bundled-runtime claim, and the remaining shape-specific dispatch/context phrases) with the Codex custom-agent/project-artifact wording before injectBrowserVerifyContract adds the canonical `.codex/agents/browser-verifier.toml` contract to the three shape consumers. That contract dispatches only when custom-agent runtime is available and the generated artifact exists; artifact/runtime absence falls back inline, while `MISSING-TOOL` is reserved for a missing selected browser helper/override. build-codex now generates `.codex/agents/browser-verifier.toml`, generated drift compares that exact owned file, and the audit validates the runtime artifact plus every generated `.codex/agents/*.toml` reference. The broad `browser_verifier` / `agent_browser` denylist categories retire; the precise `legacy_browser_subagent` regression check ratchets to zero; session-open remains unchanged.",
+      "reason": "codex-compatibility Phase 4 lowers the browser runtime contract without changing frozen Claude sources. lowerBrowserVerifyProse replaces only the legacy runtime-ownership/path claims (`browser-verifier` subagent wording, plugin source-agent path, bundled-runtime claim, and the remaining shape-specific dispatch/context phrases) with the Codex custom-agent/project-artifact wording before injectBrowserVerifyContract adds the canonical `.codex/agents/browser-verifier.toml` contract to the three shape consumers. That contract dispatches only when custom-agent runtime is available and the generated artifact exists; artifact/runtime absence falls back inline, while `MISSING-TOOL` is reserved for a missing selected browser helper/override. build-codex now generates `.codex/agents/browser-verifier.toml`, generated drift compares that exact owned file, and the audit validates the runtime artifact plus every generated `.codex/agents/*.toml` reference. The broad `browser_verifier` / `agent_browser` denylist categories retire; the precise `legacy_browser_subagent` regression check ratchets to zero.",
       "drops": {
         "browser_verifier": {
           ".agents/skills/shape-build/SKILL.md": "2->0",
@@ -207,13 +200,6 @@
           "AGENTS.md": "13->retired"
         },
         "legacy_browser_subagent": {}
-      }
-    },
-    {
-      "date": "2026-07-14",
-      "reason": "codex-compatibility Phase 4 lowers lifecycle-awareness claims without changing frozen Claude sources. lowerSessionOpenProse replaces only the legacy session-open / runs-on-open wording, preserving the relay helper's `hook-summary format` phrase while removing future-regression patterns from generated prose. injectSessionOpenContract adds the canonical relay-digest lifecycle contract: default to on-demand invocation, allow a trusted SessionStart startup/resume hook to add a compact note, and degrade safely to a no-op on any missing runtime/helper/non-relay path. build-codex now generates `.codex/hooks.json` plus `.codex/hooks/relay-digest-session-start.mjs`, generated drift compares the exact owned config/script files, the audit validates the exact config shape and all `.codex/hooks/*` references, and executable hook smokes cover no-relay, empty-summary, and success flows. The precise `session_open_claim` regression check ratchets to zero.",
-      "drops": {
-        "session_open_claim": {}
       }
     }
   ]

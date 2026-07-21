@@ -18,9 +18,7 @@ const MANIFEST_PATH = join("platforms", "codex", "manifest.json");
 const BASELINE_PATH = join("scripts", "fixtures", "codex", "compat-baseline.json");
 const CANARY_DIR = join("scripts", "fixtures", "codex", "canaries");
 const NEGATIVE_DIR = join("scripts", "fixtures", "codex", "negative");
-const HOOK_SMOKE_DIR = join("scripts", "fixtures", "codex", "hook-smokes");
 const PRESERVATION_SMOKE_DIR = join("scripts", "fixtures", "codex", "preservation-smokes");
-const SESSION_START_HOOK_COMMAND = "node .codex/hooks/relay-digest-session-start.mjs";
 const GIT_LOCAL_ENV_VARS = [
   "GIT_ALTERNATE_OBJECT_DIRECTORIES",
   "GIT_CONFIG",
@@ -88,12 +86,6 @@ export function validateCodexCompatPhase0(root, options = {}) {
   const browserRuntime = validateBrowserRuntimeContract(root, audit.manifest);
   errors.push(...browserRuntime.errors);
 
-  const lifecycleHook = validateSessionOpenContract(root, audit.manifest);
-  errors.push(...lifecycleHook.errors);
-
-  const hookSmokes = validateHookSmokes(root);
-  errors.push(...hookSmokes.errors);
-
   const preservationSmokes = validatePreservationSmokes(root);
   errors.push(...preservationSmokes.errors);
 
@@ -106,7 +98,7 @@ export function validateCodexCompatPhase0(root, options = {}) {
   const frozen = validateFrozenContract(root, audit.manifest, worktreeFreeze);
   errors.push(...frozen.errors);
 
-  return { root, audit, baseline, canaries, negativeTests, browserRuntime, lifecycleHook, hookSmokes, preservationSmokes, releaseSmokes, coverage, frozen, errors };
+  return { root, audit, baseline, canaries, negativeTests, browserRuntime, preservationSmokes, releaseSmokes, coverage, frozen, errors };
 }
 
 export function formatCodexCompatAudit(result) {
@@ -142,8 +134,6 @@ export function formatCodexCompatAudit(result) {
   lines.push(`Canary fixtures: ${result.canaries.passed}/${result.canaries.total} ok`);
   lines.push(`Negative fixtures: ${result.negativeTests.passed}/${result.negativeTests.total} ok`);
   lines.push(`Browser runtime contract: ${result.browserRuntime.errors.length ? "FAIL" : "OK"}`);
-  lines.push(`Lifecycle hook contract: ${result.lifecycleHook.errors.length ? "FAIL" : "OK"}`);
-  lines.push(`Lifecycle hook smokes: ${result.hookSmokes.passed}/${result.hookSmokes.total} ok`);
   lines.push(`Preservation smokes: ${result.preservationSmokes.passed}/${result.preservationSmokes.total} ok`);
   lines.push(`Release smokes: ${result.releaseSmokes.passed}/${result.releaseSmokes.total} ok`);
   if (result.coverage) {
@@ -267,7 +257,7 @@ function validateCanaries(root, audit) {
 
 /**
  * `expect` proves an OLD (still-unlowered) token remains — used for capabilities Phase 1 doesn't
- * touch (browser_verify, ask_user_question, session_open_awareness).
+ * touch (browser_verify, ask_user_question).
  * `reject` proves a token Phase 1 DOES lower no longer appears — the negative-space half of "the
  * compiler actually changed the output" (not just "the old fixture still passes by accident").
  * `expect_text` proves the NEW Codex-side instruction text is actually present (not just that the
@@ -429,12 +419,6 @@ function buildNegativeFixtureErrors(fixture) {
     return errors;
   }
 
-  if (fixture.scenario === "session_start_hook_contract") {
-    const result = validateSessionOpenContractFixture(fixture);
-    errors.push(...result.errors);
-    return errors;
-  }
-
   if (fixture.scenario === "coverage_contract") {
     const result = validateCoverageFixture(fixture);
     errors.push(...result.errors);
@@ -502,127 +486,6 @@ function validateBrowserRuntimeContractFixture(fixture) {
   }
 }
 
-function validateSessionOpenContract(root, manifest) {
-  const errors = [];
-  const capability = manifest.capabilities?.find((item) => item.id === "session_open_awareness");
-  if (!capability) {
-    errors.push("session_open_awareness capability is missing from platforms/codex/manifest.json");
-    return { errors, hookRefs: [] };
-  }
-
-  if (capability.status !== "lowered") {
-    errors.push(`session_open_awareness capability must be lowered, got ${JSON.stringify(capability.status)}`);
-  }
-  if (capability.matcher !== "startup|resume") {
-    errors.push(`session_open_awareness matcher must be "startup|resume", got ${JSON.stringify(capability.matcher)}`);
-  }
-  if (capability.project_trust_required !== true) {
-    errors.push("session_open_awareness capability must require project trust");
-  }
-  if (capability.default_behavior !== "on-demand") {
-    errors.push(`session_open_awareness default_behavior must be "on-demand", got ${JSON.stringify(capability.default_behavior)}`);
-  }
-
-  const runtimeArtifacts = capability.runtime_artifacts || [];
-  for (const artifact of runtimeArtifacts) {
-    if (!existsSync(join(root, artifact))) {
-      errors.push(`session-open runtime artifact is missing: ${artifact}`);
-    }
-  }
-
-  const consumerChecks = [
-    { needle: "Lifecycle awareness contract (Codex).", label: "lifecycle contract" },
-    { needle: "on demand", label: "on-demand language" },
-    { needle: "trusted", label: "trust language" },
-  ];
-  for (const consumer of capability.contract_consumers || []) {
-    const consumerPath = join(root, consumer);
-    if (!existsSync(consumerPath)) {
-      errors.push(`session-open contract consumer is missing: ${consumer}`);
-      continue;
-    }
-    const content = readFileSync(consumerPath, "utf8");
-    for (const check of consumerChecks) {
-      if (!content.includes(check.needle)) {
-        errors.push(`session-open contract consumer is missing ${check.label} "${check.needle}": ${consumer}`);
-      }
-    }
-  }
-
-  const configPath = join(root, ".codex", "hooks.json");
-  if (!existsSync(configPath)) {
-    errors.push("session-open hooks config is missing: .codex/hooks.json");
-  } else {
-    errors.push(...validateSessionStartHooksConfig(readJson(configPath)));
-  }
-
-  const hookRefs = collectGeneratedHookReferences(root, manifest.generated_destinations || []);
-  for (const ref of hookRefs) {
-    if (!existsSync(join(root, ref.target))) {
-      errors.push(`generated .codex/hooks reference does not resolve: ${ref.file} -> ${ref.target}`);
-    }
-  }
-
-  return { errors, hookRefs };
-}
-
-function validateSessionStartHooksConfig(config) {
-  const errors = [];
-  const entries = config?.hooks?.SessionStart;
-  if (!Array.isArray(entries) || entries.length === 0) {
-    errors.push("session-open hooks config must contain at least one hooks.SessionStart entry");
-    return errors;
-  }
-
-  const ownedEntries = entries.filter((entry) =>
-    Array.isArray(entry?.hooks) &&
-    entry.hooks.some((hook) => hook?.type === "command" && hook?.command === SESSION_START_HOOK_COMMAND),
-  );
-  if (ownedEntries.length !== 1) {
-    errors.push(`session-open hooks config must contain exactly one owned SessionStart command entry for ${JSON.stringify(SESSION_START_HOOK_COMMAND)}`);
-    return errors;
-  }
-
-  const [entry] = ownedEntries;
-  if (entry?.matcher !== "startup|resume") {
-    errors.push(`session-open hooks matcher must be exactly "startup|resume", got ${JSON.stringify(entry?.matcher)}`);
-  }
-  if (!Array.isArray(entry?.hooks) || entry.hooks.length !== 1) {
-    errors.push("session-open owned SessionStart entry must contain exactly one command hook");
-    return errors;
-  }
-
-  const [hook] = entry.hooks;
-  if (hook?.type !== "command") {
-    errors.push(`session-open hook type must be "command", got ${JSON.stringify(hook?.type)}`);
-  }
-  if (hook?.command !== SESSION_START_HOOK_COMMAND) {
-    errors.push(`session-open hook command must be exactly ${JSON.stringify(SESSION_START_HOOK_COMMAND)}, got ${JSON.stringify(hook?.command)}`);
-  }
-  if (hook?.timeout !== 5) {
-    errors.push(`session-open hook timeout must be exactly 5, got ${JSON.stringify(hook?.timeout)}`);
-  }
-  return errors;
-}
-
-function validateSessionOpenContractFixture(fixture) {
-  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-session-open-"));
-  const errors = [];
-  try {
-    mkdirSync(tempRoot, { recursive: true });
-    for (const [file, content] of Object.entries(fixture.files || {})) {
-      const full = join(tempRoot, file);
-      mkdirSync(dirname(full), { recursive: true });
-      writeFileSync(full, content);
-    }
-    const result = validateSessionOpenContract(tempRoot, fixture.manifest || {});
-    errors.push(...result.errors);
-    return { errors };
-  } finally {
-    rmSync(tempRoot, { recursive: true, force: true });
-  }
-}
-
 function validateCoverageFixture(fixture) {
   const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-coverage-"));
   const errors = [];
@@ -640,24 +503,115 @@ function validateCoverageFixture(fixture) {
   }
 }
 
-function validateHookSmokes(root) {
-  const results = [];
-  for (const fixtureFile of listFixtureJsonFiles(root, HOOK_SMOKE_DIR)) {
-    const fixture = readJson(fixtureFile);
-    const result = runHookSmokeFixture(root, fixture);
-    results.push({ id: fixture.id || basename(fixtureFile), errors: result.errors });
-  }
-  return summarizeFixtureResults("hook smoke", results);
-}
-
 function validatePreservationSmokes(root) {
   const results = [];
   for (const fixtureFile of listFixtureJsonFiles(root, PRESERVATION_SMOKE_DIR)) {
     const fixture = readJson(fixtureFile);
-    const result = runPreservationSmokeFixture(root, fixture);
+    const result = fixture.scenario === "legacy_global_hook_upgrade"
+      ? runLegacyHookUpgradeFixture(root, fixture)
+      : runPreservationSmokeFixture(root, fixture);
     results.push({ id: fixture.id || basename(fixtureFile), errors: result.errors });
   }
   return summarizeFixtureResults("preservation smoke", results);
+}
+
+function runLegacyHookUpgradeFixture(root, fixture) {
+  const errors = [];
+  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-legacy-hook-upgrade-"));
+  const tempHome = join(tempRoot, "home");
+  try {
+    cpSync(root, tempRoot, {
+      recursive: true,
+      filter: (source) => shouldCopyIntoTempRoot(root, source),
+    });
+
+    const legacyScriptRel = "hooks/relay-digest-session-start.mjs";
+    const legacyCommand = "node .codex/hooks/relay-digest-session-start.mjs";
+    const legacyEntry = {
+      matcher: "startup|resume",
+      hooks: [{ type: "command", command: legacyCommand, timeout: 5 }],
+    };
+    const mixedEntry = {
+      ...legacyEntry,
+      hooks: [
+        ...legacyEntry.hooks,
+        { type: "command", command: "node .codex/hooks/custom-session-start.mjs", timeout: 7 },
+      ],
+    };
+    const config = {
+      hooks: {
+        SessionStart: [mixedEntry],
+        PostToolUse: [{
+          matcher: ".*",
+          hooks: [{ type: "command", command: "node .codex/hooks/custom-post-tool.mjs", timeout: 3 }],
+        }],
+      },
+    };
+    const legacyScript = fixture.legacy_script;
+    const customScript = fixture.custom_script;
+    writeTextFile(join(tempHome, ".codex", legacyScriptRel), legacyScript);
+    writeTextFile(join(tempHome, ".codex", "hooks", "custom-session-start.mjs"), customScript);
+    writeTextFile(join(tempHome, ".codex", "hooks.json"), `${JSON.stringify(config, null, 2)}\n`);
+    writeTextFile(
+      join(tempHome, ".agents", "skills", ".skills-marketplace-codex.json"),
+      `${JSON.stringify({
+        profile: "all",
+        skills: [],
+        runtime: { portableAgents: [], generatedAgents: [], hookFiles: ["hooks.json", legacyScriptRel] },
+        runtimeOwnership: {
+          files: { [legacyScriptRel]: sha256Fixture(legacyScript) },
+          sessionStartEntry: sha256Fixture(canonicalFixtureJson(legacyEntry)),
+        },
+      }, null, 2)}\n`,
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      ["scripts/build-codex.mjs", "--sync-global", "--profile", "project-only"],
+      { cwd: tempRoot, encoding: "utf8", env: { ...process.env, HOME: tempHome, USERPROFILE: tempHome } },
+    );
+    if (result.error || result.status !== 0) {
+      errors.push(`legacy hook upgrade failed: ${summarizeSpawnFailure(result)}`);
+      return { errors };
+    }
+
+    if (existsSync(join(tempHome, ".codex", legacyScriptRel))) {
+      errors.push("legacy hook upgrade kept the receipt-owned Relay hook script");
+    }
+    if (readFileSync(join(tempHome, ".codex", "hooks", "custom-session-start.mjs"), "utf8") !== customScript) {
+      errors.push("legacy hook upgrade changed the custom hook script");
+    }
+    const nextConfig = readJson(join(tempHome, ".codex", "hooks.json"));
+    const sessionHooks = nextConfig?.hooks?.SessionStart?.[0]?.hooks || [];
+    if (sessionHooks.some((hook) => hook?.command === legacyCommand)) {
+      errors.push("legacy hook upgrade kept the retired Relay command");
+    }
+    if (!sessionHooks.some((hook) => hook?.command === "node .codex/hooks/custom-session-start.mjs")) {
+      errors.push("legacy hook upgrade removed the custom SessionStart command");
+    }
+    if (!nextConfig?.hooks?.PostToolUse?.length) {
+      errors.push("legacy hook upgrade removed an unrelated hook event");
+    }
+    const nextReceipt = readJson(join(tempHome, ".agents", "skills", ".skills-marketplace-codex.json"));
+    if ("hookFiles" in (nextReceipt.runtime || {}) || "sessionStartEntry" in (nextReceipt.runtimeOwnership || {})) {
+      errors.push("legacy hook upgrade carried retired ownership into the current receipt");
+    }
+    return { errors };
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function canonicalFixtureJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalFixtureJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalFixtureJson(value[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function sha256Fixture(value) {
+  return createHash("sha256").update(value).digest("hex");
 }
 
 function validateReleaseSmokes(root, manifest) {
@@ -732,7 +686,7 @@ function validateCodexGlobalInstallSmoke(root, fixture) {
       errors.push(`global install smoke receipt skill count drifted: ${receipt.skills?.length ?? "missing"} !== ${fixture.expect_skill_count}`);
     }
     if (fixture.verify_runtime_ownership_conflicts === true) {
-      if (!receipt.runtimeOwnership?.files || !receipt.runtimeOwnership?.sessionStartEntry) {
+      if (!receipt.runtimeOwnership?.files) {
         errors.push("global install smoke receipt is missing runtime ownership hashes");
       }
       errors.push(...validateRuntimeOwnershipConflictSmokes(root));
@@ -766,18 +720,6 @@ function validateCodexGlobalInstallSmoke(root, fixture) {
       }
     }
 
-    const hookConfigPath = join(tempHome, ".codex", "hooks.json");
-    if (fixture.expect_hook_command && existsSync(hookConfigPath)) {
-      const config = readJson(hookConfigPath);
-      const entries = config?.hooks?.SessionStart || [];
-      const hasCommand = entries.some((entry) =>
-        Array.isArray(entry?.hooks) &&
-        entry.hooks.some((hook) => hook?.command === fixture.expect_hook_command),
-      );
-      if (!hasCommand) {
-        errors.push(`global install smoke missing SessionStart hook command ${JSON.stringify(fixture.expect_hook_command)}`);
-      }
-    }
   } finally {
     rmSync(tempHome, { recursive: true, force: true });
   }
@@ -797,12 +739,12 @@ function validateRuntimeOwnershipConflictSmokes(root) {
       hooks: {
         SessionStart: [{
           matcher: "user-owned",
-          hooks: [{ type: "command", command: SESSION_START_HOOK_COMMAND, timeout: 99 }],
+          hooks: [{ type: "command", command: "node .codex/hooks/custom-session-start.mjs", timeout: 99 }],
         }],
       },
     }, null, 2)}\n`;
     writeTextFile(join(firstHome, ".codex", "agents", "executor.toml"), userAgent);
-    writeTextFile(join(firstHome, ".codex", "hooks", "relay-digest-session-start.mjs"), userHookScript);
+    writeTextFile(join(firstHome, ".codex", "hooks", "custom-session-start.mjs"), userHookScript);
     writeTextFile(join(firstHome, ".codex", "hooks.json"), userHookConfig);
 
     const first = spawnSync(process.execPath, ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"], {
@@ -814,7 +756,7 @@ function validateRuntimeOwnershipConflictSmokes(root) {
     if (readFileSync(join(firstHome, ".codex", "agents", "executor.toml"), "utf8") !== userAgent) {
       errors.push("runtime ownership smoke overwrote first-install user executor.toml");
     }
-    if (readFileSync(join(firstHome, ".codex", "hooks", "relay-digest-session-start.mjs"), "utf8") !== userHookScript) {
+    if (readFileSync(join(firstHome, ".codex", "hooks", "custom-session-start.mjs"), "utf8") !== userHookScript) {
       errors.push("runtime ownership smoke overwrote first-install user hook script");
     }
     if (readFileSync(join(firstHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
@@ -825,6 +767,8 @@ function validateRuntimeOwnershipConflictSmokes(root) {
     }
 
     const editedEnv = { ...process.env, HOME: editedHome, USERPROFILE: editedHome };
+    writeTextFile(join(editedHome, ".codex", "hooks", "custom-session-start.mjs"), userHookScript);
+    writeTextFile(join(editedHome, ".codex", "hooks.json"), userHookConfig);
     const install = spawnSync(
       process.execPath,
       ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"],
@@ -833,6 +777,12 @@ function validateRuntimeOwnershipConflictSmokes(root) {
     if (install.status !== 0) {
       errors.push(`runtime ownership smoke setup install failed: ${summarizeSpawnFailure(install)}`);
       return errors;
+    }
+    if (readFileSync(join(editedHome, ".codex", "hooks", "custom-session-start.mjs"), "utf8") !== userHookScript) {
+      errors.push("runtime ownership smoke changed a user hook script during successful install");
+    }
+    if (readFileSync(join(editedHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
+      errors.push("runtime ownership smoke changed user hooks.json during successful install");
     }
     const explorerPath = join(editedHome, ".codex", "agents", "explorer.toml");
     const receiptPath = join(editedHome, ".agents", "skills", ".skills-marketplace-codex.json");
@@ -850,6 +800,12 @@ function validateRuntimeOwnershipConflictSmokes(root) {
     }
     if (readFileSync(receiptPath, "utf8") !== receiptBefore) {
       errors.push("runtime ownership smoke changed the receipt during failed prune");
+    }
+    if (readFileSync(join(editedHome, ".codex", "hooks", "custom-session-start.mjs"), "utf8") !== userHookScript) {
+      errors.push("runtime ownership smoke changed a user hook script during failed prune");
+    }
+    if (readFileSync(join(editedHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
+      errors.push("runtime ownership smoke changed user hooks.json during failed prune");
     }
   } finally {
     rmSync(firstHome, { recursive: true, force: true });
@@ -1058,93 +1014,6 @@ function validateCodexCoverage(root, manifest) {
   };
 }
 
-function runHookSmokeFixture(root, fixture) {
-  const errors = [];
-  const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-hook-smoke-"));
-  const tempHome = join(tempRoot, "home");
-  const workspace = join(tempRoot, "workspace");
-  try {
-    mkdirSync(tempHome, { recursive: true });
-    mkdirSync(join(tempRoot, ".codex", "hooks"), { recursive: true });
-    mkdirSync(workspace, { recursive: true });
-    cpSync(
-      join(root, ".codex", "hooks", "relay-digest-session-start.mjs"),
-      join(tempRoot, ".codex", "hooks", "relay-digest-session-start.mjs"),
-    );
-
-    if (fixture.relay_repo?.enabled) {
-      writeTextFile(join(workspace, "relay.yml"), fixture.relay_repo.relay_yml || "people:\n");
-    }
-
-    if (fixture.relay_repo?.files) {
-      for (const [file, content] of Object.entries(fixture.relay_repo.files)) {
-        writeTextFile(join(workspace, file), content);
-      }
-    }
-
-    if (fixture.helper?.enabled) {
-      const helperPath = resolveHookHelperPath(tempRoot, tempHome, fixture.helper.location);
-      writeTextFile(helperPath, buildFixtureHelperScript(fixture.helper));
-    }
-
-    const payload = JSON.stringify({
-      hook_event_name: "SessionStart",
-      cwd: workspace,
-      source: "startup",
-      ...(fixture.payload || {}),
-    });
-
-    const result = spawnSync(process.execPath, [join(tempRoot, ".codex", "hooks", "relay-digest-session-start.mjs")], {
-      cwd: tempRoot,
-      encoding: "utf8",
-      env: {
-        ...process.env,
-        HOME: tempHome,
-      },
-      input: payload,
-    });
-
-    if (result.error || result.status !== 0) {
-      errors.push(`hook smoke ${fixture.id} execution failed: ${summarizeSpawnFailure(result)}`);
-      return { errors };
-    }
-
-    const stdout = typeof result.stdout === "string" ? result.stdout.trim() : "";
-    if (fixture.expect_output === "empty") {
-      if (stdout !== "") {
-        errors.push(`hook smoke ${fixture.id} expected no output, got ${JSON.stringify(stdout)}`);
-      }
-      return { errors };
-    }
-
-    if (!stdout) {
-      errors.push(`hook smoke ${fixture.id} expected JSON output, got empty stdout`);
-      return { errors };
-    }
-
-    const output = safeJsonParse(stdout);
-    if (!output) {
-      errors.push(`hook smoke ${fixture.id} emitted invalid JSON`);
-      return { errors };
-    }
-
-    const additionalContext = output?.hookSpecificOutput?.additionalContext;
-    if (typeof additionalContext !== "string" || !additionalContext.trim()) {
-      errors.push(`hook smoke ${fixture.id} is missing hookSpecificOutput.additionalContext`);
-      return { errors };
-    }
-
-    for (const text of fixture.expect_output_contains || []) {
-      if (!additionalContext.includes(text)) {
-        errors.push(`hook smoke ${fixture.id} missing output text "${text}"`);
-      }
-    }
-    return { errors };
-  } finally {
-    rmSync(tempRoot, { recursive: true, force: true });
-  }
-}
-
 function runPreservationSmokeFixture(root, fixture) {
   const errors = [];
   const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-preserve-"));
@@ -1157,6 +1026,9 @@ function runPreservationSmokeFixture(root, fixture) {
     for (const [file, content] of Object.entries(fixture.seed_files || {})) {
       writeTextFile(join(tempRoot, file), content);
     }
+    const unchangedFiles = new Map(
+      (fixture.expect_unchanged || []).map((file) => [file, readFileSync(join(tempRoot, file), "utf8")]),
+    );
 
     for (let run = 0; run < (fixture.runs || 1); run++) {
       const result = spawnSync(process.execPath, ["scripts/build-codex.mjs"], {
@@ -1172,6 +1044,13 @@ function runPreservationSmokeFixture(root, fixture) {
     for (const file of fixture.expect_files || []) {
       if (!existsSync(join(tempRoot, file))) {
         errors.push(`preservation smoke ${fixture.id} expected file to survive rebuild: ${file}`);
+      }
+    }
+
+    for (const [file, content] of unchangedFiles) {
+      const full = join(tempRoot, file);
+      if (!existsSync(full) || readFileSync(full, "utf8") !== content) {
+        errors.push(`preservation smoke ${fixture.id} changed user-owned file during rebuild: ${file}`);
       }
     }
 
@@ -1204,19 +1083,6 @@ function runPreservationSmokeFixture(root, fixture) {
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
   }
-}
-
-function buildFixtureHelperScript(helper) {
-  const status = Number.isInteger(helper.status) ? helper.status : 0;
-  const stdout = JSON.stringify(helper.stdout || "");
-  const stderr = JSON.stringify(helper.stderr || "");
-  return [
-    "#!/usr/bin/env node",
-    `if (${stderr} !== \"\") process.stderr.write(${stderr});`,
-    `if (${stdout} !== \"\") process.stdout.write(${stdout});`,
-    `process.exit(${status});`,
-    "",
-  ].join("\n");
 }
 
 function discoverSkillFiles(root, startDir, kind, errors) {
@@ -1339,7 +1205,6 @@ function validateGeneratedContractMarkers(generated, capabilitiesForSkill, error
     "## Worker dispatch contract (Codex)",
     "> **Browser-verify contract (Codex).**",
     "architecture enrichment adds detail once code exists.",
-    "> **Lifecycle awareness contract (Codex).**",
   ]) {
     if (generated.content.includes(marker) && !activeMarkers.has(marker)) {
       errors.push(`Phase 5: unexpected generated contract marker ${JSON.stringify(marker)} in ${generated.path}`);
@@ -1431,7 +1296,6 @@ function collectInlineBacktickPaths(content) {
     if (value.endsWith("/")) continue;
     if (
       value.startsWith(".codex/agents/") ||
-      value.startsWith(".codex/hooks/") ||
       value.startsWith("references/") ||
       value.startsWith("scripts/")
     ) {
@@ -1490,16 +1354,6 @@ function formatCodexCoverageSummaryLines(result) {
     `Capability rows: ${formatCountMap(result.capabilityCounts)}`,
     `Capability statuses: ${formatCountMap(result.statusCounts)}`,
   ];
-}
-
-function resolveHookHelperPath(tempRoot, tempHome, location = "project") {
-  if (location === "home-agents") {
-    return join(tempHome, ".agents", "skills", "relay-digest", "scripts", "compute-state.mjs");
-  }
-  if (location === "home-codex") {
-    return join(tempHome, ".codex", "skills", "relay-digest", "scripts", "compute-state.mjs");
-  }
-  return join(tempRoot, ".agents", "skills", "relay-digest", "scripts", "compute-state.mjs");
 }
 
 function validateFrozenContract(root, manifest, includeWorktreeFreeze = true) {
@@ -1646,14 +1500,6 @@ function collectGeneratedTomlReferences(root, destinations) {
     root,
     destinations,
     /(?:^|[^A-Za-z0-9._-])(\.codex\/agents\/[A-Za-z0-9._-]+\.toml)\b/g,
-  );
-}
-
-function collectGeneratedHookReferences(root, destinations) {
-  return collectGeneratedPathReferences(
-    root,
-    destinations,
-    /(?:^|[^A-Za-z0-9._-])(\.codex\/hooks\/[A-Za-z0-9._/-]+\.(?:mjs|js|json))\b/g,
   );
 }
 
@@ -1961,14 +1807,6 @@ function writeTextFile(file, content) {
 
 function readExistingText(file) {
   return existsSync(file) ? readFileSync(file, "utf8") : "";
-}
-
-function safeJsonParse(value) {
-  try {
-    return JSON.parse(value);
-  } catch {
-    return null;
-  }
 }
 
 function* walkFiles(dir) {

@@ -1,71 +1,36 @@
 ---
 name: settle
-description: "Settle a relay project's thought-stream into the decision ledger — distil each agreed thought into a self-contained ruling, append it to decisions/log.md, and regenerate decisions/active.md. Thoughts are NEVER moved or deleted — open-vs-settled is digest's computed view. Fires on \"settle the relay\" or \"pin the decisions\". Content verb; appends to the ledger, regenerates active, gated by a diff. (ADR-054)"
+description: "Close a Discussion or Issue with an authorized final resolution, or merge an approved Core pull request so it becomes effective. Never authors a brief, substitutes for approval, or re-decides the matter."
 ---
 
-# settle — crystallize agreed thoughts into the decision ledger
+# settle — declare the whole matter finished or effective
 
-A thought-stream (`/relay:report` + `/relay:review`) is a running log of **disposable drafts** — it grows and nobody wants to re-read it. **settle is the periodic「沉澱」pass**: take the thoughts that got an agreeing review, distil each into a **self-contained ruling** and **append** it to the decision ledger. **Thoughts are never moved or deleted** — they stay in `thoughts/` (the immutable log); open-vs-settled is `digest`'s computed view. Read the ledger to orient without reading every thought.
-
-## Scope
-
-Operates on the **content repo** — a *separate* coordination repo located via `$RELAY_REPO`, else a cached prior resolution, else the current dir if it has `relay.yml`, else **ask the user** and cache the answer (never assume cwd; see CLAUDE.md) — one project. **Appends** to `decisions/log.md` and **regenerates** `decisions/active.md` — that is all it writes; it **never moves or deletes a thought** (they stay in `thoughts/`, the immutable log). Shows a diff and is gated. By convention the project **owner** runs it (one writer keeps the ledger appends + `active.md` regeneration conflict-free); non-critical and re-runnable. Both "where things stand" (progress) **and** "open vs settled" are **not** stored — `digest` computes them live.
+`reply` leaves my response. `settle` verifies authority, records the final resolution, and closes the object or makes approved Core effective.
 
 ## Process
 
-### Step 1 — Resolve + pull
-- **Resolve who's running** (git author email → `git:` in `relay.yml`). **Pull.** (Owner by convention; see Scope.)
+1. **Read the whole current state.** Open the object, linked decisions, assignments, latest revision, reviews, and repository protection. Identify the claimed authority.
+2. **Validate authority.** For a Decision Issue, the v1 decision owner is the single assignee unless the repository's explicit guidance names another authority. For Q&A, respect the accepted-answer owner. For Core, require the configured approver's valid approval on the current revision and meaningful protection/bypass rules.
+3. **Draft the final resolution.** Make it self-contained: outcome, decision, concise reason, effective point, and follow-up link where work continues elsewhere.
+4. **Show the exact resolution and close/merge action.** Wait for approval.
+5. **Apply and read back.** Post the resolution, then close the Discussion/Issue; or merge the approved Core PR. Verify closed/merged state, actor, current revision, and merge commit/effective time.
 
-### Step 2 — Harvest the agreed decisions
+## Accepted versus effective
 
-**Fast path (node available — ADR-051):** run digest's state computer (single owner = digest; settle borrows it cross-skill):
-```bash
-node <relay plugin>/skills/digest/scripts/compute-state.mjs <relay-repo> --project <name>
-```
-Its `agreed` array is your harvest, pre-checked against the ledger: every (proposal ← agreeing review) pair, with `settledInLedger: false` marking what still needs pinning and `reopenedByChange: true` marking a mixed agree+change review (judge which points were agreed before pinning). **Read only the unsettled pairs' thoughts** to distil — not the whole stream. When the script isn't present (a mirror that copies skills independently) or node is missing, harvest manually per the next paragraph.
+A decision may be accepted before it is effective. A Core rule becomes binding only when the protected PR merges. Closing an Issue without an authorized final resolution is not settlement.
 
-Read `thoughts/` and find every thought a `review` **agreed** to (a decision = *a thought that got an agreeing review*; no separate consensus protocol). For each, **default to a self-contained ruling**: the decision + a one-line why + provenance, written so the ledger reads on its own (the thought stays in `thoughts/` as the raw source). If it overrides an earlier decision, note `supersedes <id>`. Progress-only thoughts (no decision) just stay in `thoughts/` — nothing to log; `digest` stops surfacing them once they're done.
+## Completion
 
-**When a conclusion is too rich for a line** (a long / iterated discussion a one-liner would undersell): the `log.md` entry becomes a **pointer to a `conclusion` thought** (a synthesis someone wrote — outcome + why, referencing the `thread`) instead of an inlined ruling. Direction is always `log.md` → the thought. `log.md` stays the single index either way — reach for the pointer only when a line genuinely can't carry it, never by default.
-
-### Step 3 — Append to the ledger, regenerate active
-1. **Append** each ruling to `decisions/log.md` (create it if absent) — **append-only, never rewrite** existing lines:
-   ```markdown
-   - [<id>] <decision + one-line why> — agreed <date> by <who>, from <thought-link>[, supersedes <id>]
-   ```
-   `<thought-link>` is a markdown link whose text is the source thought's id and whose target is the thought file — from `decisions/` that target is `../thoughts/<date>-<thought-id>.md`. Cite the proposal + the agreeing review; stable since thoughts never move, so the link is the drill-in and the prose stays self-contained.
-2. **Regenerate** `decisions/active.md` from `log.md` — the in-force subset (drop any entry a later one `supersedes`):
-   ```markdown
-   # <project> — decisions in force (regenerated @ <date>)
-   - [<id>] <decision> — agreed <date>
-   ```
-**Thoughts stay put** — relay **never moves or deletes a thought**; `thoughts/` is the immutable log, and `digest` computes which are still open. settle writes only the ledger (steps 1–2), nothing else.
-
-**Show the diff. Wait for OK**, then commit + push.
+Done means a reader can understand who decided, what was decided, and when it became effective without rereading the thread.
 
 ## Discipline
-- **Settle, don't re-decide** — log what review already agreed; never change a decision here (a changed decision is a new `report` + `review`, appended later with `supersedes`).
-- **Append, never rewrite `log.md`** — old entries (including superseded ones) stay forever; you only add lines. `active.md` is the one you regenerate.
-- **Self-contained rulings** — `log.md` is the primary read, so each line must stand on its own (the thought in `thoughts/` is the raw source, not the ledger). Distil, don't bare-pointer.
-- **Never move or delete a thought** — `thoughts/` is the immutable log; settle only writes the ledger. "Open vs settled" is `digest`'s computed view, not a folder location.
-- **Re-runnable** — `active.md` is derived from `log.md`; on a conflict, regenerate, don't hand-merge.
-- **Pull before, push after; gate before commit.**
 
-## Anti-patterns (refuse these)
-| Temptation | Instead — and the tell |
-|---|---|
-| Re-litigate a decision while settling | Record only what review already agreed — re-deciding is a new report + review, not a settle. Tell: about to change the substance of a ruling instead of transcribing what was agreed. |
-| Rewrite / reorder `log.md` to "tidy" | Leave it append-only — superseded entries stay; only `active.md` is regenerated. Tell: about to delete or reorder an existing entry in `log.md`. |
-| Write a bare pointer (`[id] see thought`) instead of distilling | Distil the ruling + why — `log.md` is the primary read, not an index into `thoughts/`. Tell: the entry has no content of its own, only a reference. |
-| Move or delete a settled thought | Leave it in place — `thoughts/` is the immutable log; "open vs settled" is `digest`'s computed view. Tell: about to move or remove a file out of `thoughts/`. |
-| Store a "where things stand" snapshot | Leave live progress to `digest` — settle only touches the decision ledger. Tell: about to write a status summary that isn't a ruling into `log.md` or `active.md`. |
-
-## Companion skills
-- **`/relay:report`** / **`/relay:review`** — the stream settle crystallizes.
-- **`/relay:digest`** — the live "what needs me" view; settle is its periodic durable complement.
+- Settle; do not re-decide. Disagreement returns to the object or a new linked object.
+- Never treat Comment as approval or reuse stale approval after a revision changes.
+- Never author/update a brief or substitute for the required approver.
+- If resolution posting succeeds but close/merge fails, return the existing URL and missing action; resume it rather than duplicating.
 
 ## Communication style
 
 - Explain in the user's language with simple, direct wording.
-- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
-- Put precise technical detail after the plain explanation and only where it's needed.
+- Lead with the result; put technical details after it.

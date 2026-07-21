@@ -38,8 +38,8 @@
     {
       "name": "relay",
       "source": "./plugins/relay",
-      "description": "Coordinate asynchronously with a counterpart through your agents over a shared git repo — structured updates, not chat; decisions reach explicit consensus; threads continue across cycles. Six verbs: launch (create a project, or enrol a person + role), report (a standup-shaped update), review (respond — agree / comment / change), digest (the live 'what's waiting for my review'), settle (append agreed thoughts to the decision ledger), format (sweep thought frontmatter to the current spec). git-native, human-gated, designed for multi-person. Language-agnostic.",
-      "version": "0.8.1"
+      "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and protected merges. Six daily verbs — launch, report, digest, reply, brief, settle — route intent, expose obligations, preserve reusable understanding, and close work with authority. An explicit migrate bridge preserves legacy provenance. GitHub owns collaboration state; Relay owns semantics and verification. Language-agnostic.",
+      "version": "1.0.0"
     }
   ]
 }

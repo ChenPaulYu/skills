@@ -4,12 +4,18 @@
   "seed_files": {
     ".codex/agents/custom-agent.toml": "name = \"custom-agent\"\ndescription = \"keep me\"\n",
     ".codex/hooks/custom-hook.mjs": "#!/usr/bin/env node\nprocess.stdout.write(\"custom\\n\");\n",
-    ".codex/hooks.json": "{\n  \"hooks\": {\n    \"SessionStart\": [\n      {\n        \"matcher\": \"startup\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/custom-session-start.mjs\",\n            \"timeout\": 7\n          }\n        ]\n      },\n      {\n        \"matcher\": \"mixed\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/relay-digest-session-start.mjs\",\n            \"timeout\": 99\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/mixed-custom-session-start.mjs\",\n            \"timeout\": 11\n          }\n        ]\n      }\n    ],\n    \"PostToolUse\": [\n      {\n        \"matcher\": \".*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/post-tool.mjs\",\n            \"timeout\": 3\n          }\n        ]\n      }\n    ]\n  }\n}\n"
+    ".codex/hooks/custom-session-start.mjs": "#!/usr/bin/env node\nprocess.stdout.write(\"session started\\n\");\n",
+    ".codex/hooks.json": "{\n  \"hooks\": {\n    \"SessionStart\": [\n      {\n        \"matcher\": \"startup\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/custom-session-start.mjs\",\n            \"timeout\": 7\n          }\n        ]\n      }\n    ],\n    \"PostToolUse\": [\n      {\n        \"matcher\": \".*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node .codex/hooks/post-tool.mjs\",\n            \"timeout\": 3\n          }\n        ]\n      }\n    ]\n  }\n}\n"
   },
   "expect_files": [
     ".codex/agents/custom-agent.toml",
     ".codex/hooks/custom-hook.mjs",
-    ".codex/hooks/relay-digest-session-start.mjs",
+    ".codex/hooks/custom-session-start.mjs",
+    ".codex/hooks.json"
+  ],
+  "expect_unchanged": [
+    ".codex/hooks/custom-hook.mjs",
+    ".codex/hooks/custom-session-start.mjs",
     ".codex/hooks.json"
   ],
   "expect_text": {
@@ -20,22 +26,15 @@
     ".codex/hooks/custom-hook.mjs": [
       "custom"
     ],
+    ".codex/hooks/custom-session-start.mjs": [
+      "session started"
+    ],
     ".codex/hooks.json": [
       "\"PostToolUse\"",
       "\"command\": \"node .codex/hooks/post-tool.mjs\"",
       "\"command\": \"node .codex/hooks/custom-session-start.mjs\"",
-      "\"command\": \"node .codex/hooks/mixed-custom-session-start.mjs\"",
-      "\"command\": \"node .codex/hooks/relay-digest-session-start.mjs\"",
-      "\"matcher\": \"mixed\"",
-      "\"matcher\": \"startup|resume\"",
-      "\"timeout\": 11",
-      "\"timeout\": 5"
-    ]
-  },
-  "reject_text": {
-    ".codex/hooks.json": [
-      "\"matcher\": \"stale\"",
-      "\"timeout\": 99"
+      "\"matcher\": \"startup\"",
+      "\"timeout\": 7"
     ]
   }
 }
