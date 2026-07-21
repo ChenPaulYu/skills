@@ -14,7 +14,7 @@ const sameLogin = (left, right) => Boolean(left && right && left.toLowerCase() =
 const unique = (values) => [...new Set(values.filter(Boolean))];
 const hasLabel = (object, label) => (object.labels || []).some((value) =>
   (typeof value === 'string' ? value : value?.name)?.toLowerCase() === label.toLowerCase());
-const isOpen = (object) => !object.state || object.state.toUpperCase() === 'OPEN';
+const isOpen = (object) => object.closed !== true && (!object.state || object.state.toUpperCase() === 'OPEN');
 
 function objectRef(object) {
   return {
@@ -226,7 +226,7 @@ export function graphQlQuery() {
       defaultBranchRef{name branchProtectionRule{pattern requiresApprovingReviews requiredApprovingReviewCount dismissesStaleReviews isAdminEnforced}}
       discussions(first:100){
         pageInfo{hasNextPage}
-        nodes{id number title body url isAnswered labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}}}
+        nodes{id number title body url closed isAnswered labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}}}
       }
       issues(first:100,states:OPEN){
         pageInfo{hasNextPage}

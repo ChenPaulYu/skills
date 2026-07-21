@@ -33,6 +33,16 @@ test('designated ACK remains until that account adds eyes', () => {
   assert.equal(reduceObligations(base([pending])).obligations.length, 0);
 });
 
+test('a closed Discussion no longer creates an ACK obligation', () => {
+  const closed = item('D21', 'discussion', {
+    title: '[ACK] Superseded notice',
+    body: '@reviewer-one acknowledge',
+    closed: true,
+    reactions: [],
+  });
+  assert.equal(reduceObligations(base([closed])).obligations.length, 0);
+});
+
 test('awareness ACK, exact review, and assigned evidenced work remain separate obligations', () => {
   const acknowledgment = item('D14', 'discussion', {
     title: '[ACK] Read the new rules',
