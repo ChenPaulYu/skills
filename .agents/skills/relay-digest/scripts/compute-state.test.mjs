@@ -33,6 +33,33 @@ test('designated ACK remains until that account adds eyes', () => {
   assert.equal(reduceObligations(base([pending])).obligations.length, 0);
 });
 
+test('awareness ACK, exact review, and assigned evidenced work remain separate obligations', () => {
+  const acknowledgment = item('D14', 'discussion', {
+    title: '[ACK] Read the new rules',
+    body: '@reviewer-one attest after reading; only @reviewer-one completes it',
+    reactions: [],
+  });
+  const updateTask = item('I15', 'issue', {
+    title: 'Install and verify the new tools',
+    assignees: [{ login: viewer }],
+  });
+  const exactReview = item('P16', 'pull_request', {
+    title: 'Review the exact new rules',
+    currentRevision: 'rev-a',
+    requestedReviewers: [viewer],
+  });
+
+  assert.deepEqual(
+    reduceObligations(base([acknowledgment, updateTask, exactReview])).obligations.map((entry) => entry.kind),
+    ['ACK', 'DECIDE/ACT', 'REVIEW'],
+  );
+
+  acknowledgment.reactions.push({ content: 'EYES', user: { login: viewer } });
+  const remaining = reduceObligations(base([acknowledgment, updateTask, exactReview])).obligations;
+  assert.deepEqual(remaining.map((entry) => entry.kind), ['DECIDE/ACT', 'REVIEW']);
+  assert.equal(remaining[0].url, updateTask.url);
+});
+
 test('assignment belongs only to the assigned viewer', () => {
   const assigned = item('I2', 'issue', { assignees: [{ login: viewer }] });
   const other = item('I3', 'issue', { assignees: [{ login: 'someone-else' }] });
@@ -64,6 +91,32 @@ test('stale verdict requires re-review while a current verdict completes the rou
   assert.equal(reduceObligations(base([pull])).obligations.length, 0);
 });
 
+test('Request changes hands the round to the PR author until a new revision is pushed', () => {
+  const pull = item('P18', 'pull_request', {
+    author: { login: viewer },
+    currentRevision: 'rev-a',
+    reviews: [{ author: { login: 'reviewer-two' }, state: 'CHANGES_REQUESTED', revision: 'rev-a' }],
+  });
+  const [authorAction] = reduceObligations(base([pull])).obligations;
+  assert.equal(authorAction.kind, 'DECIDE/ACT');
+  assert.equal(authorAction.action, 'address-requested-changes');
+
+  pull.currentRevision = 'rev-b';
+  assert.equal(reduceObligations(base([pull])).obligations.length, 0);
+});
+
+test('a later approval on the same revision clears the author change request', () => {
+  const pull = item('P19', 'pull_request', {
+    author: { login: viewer },
+    currentRevision: 'rev-a',
+    reviews: [
+      { author: { login: 'reviewer-two' }, state: 'CHANGES_REQUESTED', revision: 'rev-a', submittedAt: '2026-07-21T01:00:00Z' },
+      { author: { login: 'reviewer-two' }, state: 'APPROVED', revision: 'rev-a', submittedAt: '2026-07-21T02:00:00Z' },
+    ],
+  });
+  assert.equal(reduceObligations(base([pull])).obligations.length, 0);
+});
+
 test('authorized Decision Issue resolution advances assignment to settlement', () => {
   const decision = item('I6', 'issue', {
     issueType: 'Decision',
@@ -90,33 +143,72 @@ test('duplicate review signals collapse to one obligation', () => {
   assert.deepEqual(result[0].reasons.sort(), ['review-requested', 'stale-verdict']);
 });
 
-test('Core settlement excludes unauthorized viewers, ordinary PRs, and unsatisfied approval gates', () => {
+test('ordinary approved pull request becomes a settlement obligation for its author', () => {
+  const ordinary = item('P9', 'pull_request', {
+    author: { login: viewer },
+    files: [{ path: 'briefs/current.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    mergeReady: true,
+  });
+  const [result] = reduceObligations(base([ordinary])).obligations;
+  assert.equal(result.kind, 'SETTLE');
+  assert.equal(result.action, 'merge-pull-request');
+});
+
+test('a single PR assignee becomes its named settlement owner', () => {
+  const ordinary = item('P20', 'pull_request', {
+    author: { login: 'pr-author' },
+    settlementOwner: viewer,
+    files: [{ path: 'briefs/current.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    mergeReady: true,
+  });
+  assert.equal(reduceObligations(base([ordinary])).obligations[0].action, 'merge-pull-request');
+});
+
+test('Core settlement excludes unauthorized viewers and unsatisfied approval gates', () => {
   const unauthorized = item('P8', 'pull_request', {
+    author: { login: viewer },
     files: [{ path: 'core/policy.md' }],
     viewerCanSettle: false,
     requiredApprovalSatisfied: true,
-    mergeReady: true,
-  });
-  const ordinary = item('P9', 'pull_request', {
-    files: [{ path: 'src/index.js' }],
-    viewerCanSettle: true,
-    requiredApprovalSatisfied: true,
+    coreGateEnforced: true,
     mergeReady: true,
   });
   const approvalMissing = item('P10', 'pull_request', {
+    author: { login: viewer },
     files: [{ path: 'core/policy.md' }],
     viewerCanSettle: true,
     requiredApprovalSatisfied: false,
+    coreGateEnforced: true,
     mergeReady: true,
   });
-  assert.equal(reduceObligations(base([unauthorized, ordinary, approvalMissing])).obligations.length, 0);
+  assert.equal(reduceObligations(base([unauthorized, approvalMissing])).obligations.length, 0);
+});
+
+test('otherwise-ready Core stays blocked when enforcement is unverified', () => {
+  const policyOnly = item('P17', 'pull_request', {
+    author: { login: viewer },
+    files: [{ path: 'core/policy.md' }],
+    viewerCanSettle: true,
+    requiredApprovalSatisfied: true,
+    coreGateEnforced: false,
+    mergeReady: true,
+  });
+  const result = reduceObligations(base([policyOnly]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.blockers[0].code, 'core-enforcement-unverified');
 });
 
 test('Core settlement appears only for an authorized viewer with satisfied current gates', () => {
   const ready = item('P11', 'pull_request', {
+    author: { login: viewer },
     files: [{ path: 'core/policy.md' }],
     viewerCanSettle: true,
     requiredApprovalSatisfied: true,
+    coreGateEnforced: true,
     mergeReady: true,
   });
   const [result] = reduceObligations(base([ready])).obligations;

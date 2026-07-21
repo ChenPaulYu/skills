@@ -1,6 +1,6 @@
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md) and [the design](docs/design/relay.md). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), and [the design](docs/design/relay.md). Each skill restates the rules it needs.
 
 ## What Relay is
 
@@ -29,14 +29,36 @@ Route a new intent with three questions:
 2. Is one person accountable for advancing or deciding it? If no, use a Discussion.
 3. Is there an exact reviewable diff? If yes, use a pull request; otherwise use an Issue.
 
-Use Announcement Discussions for FYI and explicit ACK traffic, Q&A Discussions when an accepted answer is the completion condition, Decision Issues when one named person must decide, and pull requests for exact changes. Split independently completable asks into linked objects.
+Use Announcement Discussions for FYI and explicit ACK traffic, Q&A Discussions when an accepted answer is the completion condition, assigned Issues for verifiable work, Decision Issues when one named person must decide, and pull requests for exact changes. Split independently completable asks into linked objects.
+
+An ACK is only the named recipient's awareness attestation: “I saw this notice.” It cannot prove comprehension, acceptance, installation, execution, restart, test output, or any other external state. When exact material must be read and judged, put that material in a pull request and request a current-revision verdict. When external work must happen, use an assigned Issue with evidence-based completion criteria. Split mixed requests into linked objects.
+
+An authoritative external source update is its own FYI event: record the source URL plus an immutable revision, commit, or content hash in an Announcement. Updating a reusable brief is a separate exact-diff PR that cites that source event. Do not copy the raw source into Relay or let the brief PR substitute for announcing which revision became current.
+
+## Lifecycle matrix
+
+| Event | Owner | Native completion | Closure or effect |
+|---|---|---|---|
+| FYI / source event | None | Announcement exists with provenance | No closure obligation |
+| Awareness ACK | One recipient | That account adds `👀` | Round complete; closure is optional housekeeping |
+| Open question | Discussion author accepts an answer | GitHub accepted answer | Answered; close only if the author wants the thread locked |
+| Verifiable task | Single Issue assignee | Stated evidence meets the completion criteria | Assignee records the result; `/relay:settle` closes |
+| Decision | Single Issue assignee as decision owner | Authorized `Outcome:` + `Decision:` | `/relay:settle` closes |
+| Exact change | Requested reviewer, then PR author or single PR assignee as named merger | Current-revision verdict | `Request changes` returns ACT to author; new revision returns REVIEW; approval permits merge; author may explicitly abandon |
+| Core change | Configured approver and settlement authority | Current approval plus verified enforcement | Merge makes Core binding |
+| Legacy migration | Requested reviewer, then PR author or named merger | Current approval plus verified destination mapping | Migration/cleanup PR merge followed by destination read-back makes migration complete |
+
+A state transition in one row never completes another row. In particular, `👀` does not complete a linked Issue or PR, an Issue comment is not a review verdict, and approval without merge does not apply a change.
+
+Migration has intermediate states, not alternate definitions of done: inventory and mapping make it *planned*; created destination objects and an open PR make it *staged*; only merge into the default branch plus successful destination read-back make it *complete*.
 
 ## Obligations and authority
 
 - A prose mention is notification, not obligation.
-- `[ACK]` plus a designated recipient creates an obligation completed only by that account's `👀` reaction. Read/unread state and another person's reaction do not count.
+- `[ACK]` plus a designated recipient creates an awareness obligation completed only by that account's `👀` reaction. It records who attested that they saw the notice, not proof of comprehension, acceptance, or external work. Read/unread state and another person's reaction do not count.
 - Assignment creates an obligation. On a Decision Issue, the single assignee is the v1 decision owner.
 - A requested reviewer owes a current-revision verdict. PR Comment is feedback, not Approve or Request changes.
+- The PR author owns settlement by default. One PR assignee explicitly transfers that merge obligation; multiple assignees do not.
 - V1 supports one required approver. Required-review rules and stale-approval dismissal must be active, and unauthorized bypass must not make the gate ceremonial.
 - `reply` leaves my response. `settle` uses authority to declare the whole object finished or effective.
 

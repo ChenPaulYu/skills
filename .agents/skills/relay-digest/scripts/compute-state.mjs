@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 const loginOf = (actor) => typeof actor === 'string' ? actor : actor?.login || actor?.slug || null;
 const sameLogin = (left, right) => Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -96,6 +96,18 @@ function reviewNeed(object, viewer) {
   };
 }
 
+function currentChangeRequest(object) {
+  const currentRevision = object.currentRevision || object.headSha || object.headRefOid || null;
+  const aggregate = String(object.reviewDecision || '').toUpperCase();
+  if (aggregate === 'APPROVED') return null;
+  if (aggregate === 'CHANGES_REQUESTED') return true;
+  const currentVerdict = (object.reviews || [])
+    .filter((review) => reviewRevision(review) === currentRevision && ['APPROVED', 'CHANGES_REQUESTED'].includes(reviewState(review)))
+    .sort((a, b) => String(a.submittedAt || '').localeCompare(String(b.submittedAt || '')))
+    .findLast(() => true);
+  return reviewState(currentVerdict || {}) === 'CHANGES_REQUESTED';
+}
+
 function authorizedResolution(object) {
   if (!object.finalResolution) return null;
   const owner = loginOf(object.decisionOwner) || (object.assignees || []).map(loginOf)[0];
@@ -114,7 +126,7 @@ function mergeObligation(existing, incoming) {
 
 /** Reduce normalized GitHub primitives to one actionable item per object. */
 export function reduceObligations(input) {
-  if (input.blocked) return { ...input, schemaVersion: SCHEMA_VERSION, obligations: [] };
+  if (input.blocked) return { ...input, schemaVersion: SCHEMA_VERSION, blockers: [], obligations: [] };
   const viewer = input.viewer;
   if (!viewer) {
     return {
@@ -123,11 +135,13 @@ export function reduceObligations(input) {
       repository: input.repository || null,
       viewer: null,
       blocked: { code: 'viewer-unresolved', message: 'Could not resolve the authenticated GitHub viewer.' },
+      blockers: [],
       obligations: [],
     };
   }
 
   const byId = new Map();
+  const blockers = [];
   for (const object of input.objects || []) {
     if (!isOpen(object) || object.isFYI || hasLabel(object, 'fyi')) continue;
 
@@ -157,12 +171,28 @@ export function reduceObligations(input) {
         });
         byId.set(item.id, mergeObligation(byId.get(item.id), item));
       }
+      if (sameLogin(loginOf(object.author), viewer) && currentChangeRequest(object)) {
+        const item = obligation('DECIDE/ACT', object, 'current-revision-changes-requested', 'address-requested-changes');
+        byId.set(item.id, mergeObligation(byId.get(item.id), item));
+      }
       const touchesCore = object.isCore === true || (object.files || []).some((file) =>
         String(typeof file === 'string' ? file : file?.path || '').startsWith('core/'));
       const mergeReady = object.mergeReady === true ||
         (String(object.mergeable).toUpperCase() === 'MERGEABLE' && String(object.mergeStateStatus).toUpperCase() === 'CLEAN');
-      if (touchesCore && object.viewerCanSettle === true && object.requiredApprovalSatisfied === true && mergeReady) {
-        const item = obligation('SETTLE', object, 'core-approved-current-revision', 'merge-core');
+      const settlementOwner = loginOf(object.settlementOwner) || loginOf(object.author);
+      const viewerOwnsSettlement = sameLogin(settlementOwner, viewer);
+      const approvedReady = object.viewerCanSettle === true && viewerOwnsSettlement &&
+        object.requiredApprovalSatisfied === true && mergeReady;
+      if (approvedReady && touchesCore && object.coreGateEnforced !== true) {
+        blockers.push({
+          code: 'core-enforcement-unverified',
+          ...objectRef(object),
+          message: 'Core approval exists, but required review, stale dismissal, and admin enforcement were not verified.',
+        });
+      } else if (approvedReady) {
+        const item = touchesCore
+          ? obligation('SETTLE', object, 'core-approved-current-revision', 'merge-core')
+          : obligation('SETTLE', object, 'pull-request-approved-current-revision', 'merge-pull-request');
         byId.set(item.id, mergeObligation(byId.get(item.id), item));
       }
     }
@@ -177,6 +207,7 @@ export function reduceObligations(input) {
     repository: input.repository || null,
     viewer,
     blocked: null,
+    blockers,
     obligations,
   };
 }
@@ -192,6 +223,7 @@ export function graphQlQuery() {
   return `query($owner:String!,$name:String!){
     repository(owner:$owner,name:$name){
       viewerPermission
+      defaultBranchRef{name branchProtectionRule{pattern requiresApprovingReviews requiredApprovingReviewCount dismissesStaleReviews isAdminEnforced}}
       discussions(first:100){
         pageInfo{hasNextPage}
         nodes{id number title body url isAnswered labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}}}
@@ -202,7 +234,7 @@ export function graphQlQuery() {
       }
       pullRequests(first:100,states:OPEN){
         pageInfo{hasNextPage}
-        nodes{id number title body url state headRefOid mergeable mergeStateStatus reviewDecision viewerCanUpdate labels(first:20){nodes{name}} assignees(first:10){nodes{login}} files(first:100){pageInfo{hasNextPage} nodes{path}} reviewRequests(first:50){nodes{requestedReviewer{... on User{login} ... on Team{slug}}}} reviews(last:100){nodes{author{login} state submittedAt commit{oid}}} timelineItems(first:100,itemTypes:[REVIEW_REQUESTED_EVENT]){pageInfo{hasNextPage} nodes{... on ReviewRequestedEvent{createdAt requestedReviewer{... on User{login} ... on Team{slug}}}}}}
+        nodes{id number title body url state author{login} headRefOid mergeable mergeStateStatus reviewDecision viewerCanUpdate labels(first:20){nodes{name}} assignees(first:10){nodes{login}} files(first:100){pageInfo{hasNextPage} nodes{path}} reviewRequests(first:50){nodes{requestedReviewer{... on User{login} ... on Team{slug}}}} reviews(last:100){nodes{author{login} state submittedAt commit{oid}}} timelineItems(first:100,itemTypes:[REVIEW_REQUESTED_EVENT]){pageInfo{hasNextPage} nodes{... on ReviewRequestedEvent{createdAt requestedReviewer{... on User{login} ... on Team{slug}}}}}}
       }
     }
   }`;
@@ -242,6 +274,9 @@ function normalizeLive(data, repository, viewer) {
       issueType: value.issueType?.name || null,
       labels: flattenConnection(value.labels),
       assignees: flattenConnection(value.assignees),
+      settlementOwner: flattenConnection(value.assignees).length === 1
+        ? loginOf(flattenConnection(value.assignees)[0])
+        : loginOf(value.author),
       finalResolution: resolutionComment && {
         author: resolutionComment.author,
         outcome: resolutionComment.body.match(/(?:^|\n)Outcome:\s*([^\n]+)/i)?.[1]?.trim(),
@@ -255,6 +290,13 @@ function normalizeLive(data, repository, viewer) {
       requestedAt: event.createdAt,
       active: activeRequests.some((actor) => sameLogin(loginOf(actor), loginOf(event.requestedReviewer))),
     }));
+    const protection = repo.defaultBranchRef?.branchProtectionRule;
+    const coreGateEnforced = Boolean(
+      protection?.requiresApprovingReviews &&
+      protection?.requiredApprovingReviewCount >= 1 &&
+      protection?.dismissesStaleReviews &&
+      protection?.isAdminEnforced,
+    );
     return {
       ...value,
       type: 'pull_request',
@@ -268,6 +310,7 @@ function normalizeLive(data, repository, viewer) {
       isCore: flattenConnection(value.files).some((file) => file.path?.startsWith('core/')),
       viewerCanSettle: ['ADMIN', 'MAINTAIN', 'WRITE'].includes(repo.viewerPermission) && value.viewerCanUpdate === true,
       requiredApprovalSatisfied: value.reviewDecision === 'APPROVED',
+      coreGateEnforced,
       mergeReady: value.mergeable === 'MERGEABLE' && value.mergeStateStatus === 'CLEAN',
     };
   });
@@ -314,6 +357,7 @@ export function runCli(args = process.argv.slice(2)) {
       schemaVersion: SCHEMA_VERSION,
       source: inputPath ? 'fixture' : 'github',
       blocked: { code: 'input-unreadable', message: error.message },
+      blockers: [],
       obligations: [],
     }, null, 2)}\n`);
     return 2;

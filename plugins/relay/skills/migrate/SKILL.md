@@ -22,7 +22,8 @@ This is exceptional compatibility work, not a daily Relay verb. Preserve the com
    - create a live PR for an exact diff.
 5. **Show the complete mapping.** Include source permalink, destination/title, citations, assignee/reviewer, and planned legacy-path removal. Wait for explicit approval before any live mutation.
 6. **Execute idempotently.** Record each created GitHub URL in the mapping. Before creating, check for an existing recorded destination. Partial failure resumes that URL and repairs missing steps.
-7. **Verify before cleanup.** Every retained citation resolves; Core contains only effective-now truth; briefs are current and indexed; only live obligations became objects. Cleanup is a separate protected change after verification.
+7. **Verify before cleanup.** Every retained citation resolves; proposed Core contains only effective-now truth; proposed briefs are current and indexed; only live obligations became objects. Cleanup is a separate reviewed change after verification.
+8. **Cross the effective point.** Request a current-revision verdict on the migration/cleanup PR. Migration remains in progress while that PR is open, awaiting review, or approved but unmerged. After merge, read back the default branch and every destination URL; only then call the migration complete.
 
 ## Rules
 
@@ -34,7 +35,7 @@ This is exceptional compatibility work, not a daily Relay verb. Preserve the com
 
 ## Completion
 
-Done means every legacy source has one disposition, provenance is durable, every live mutation has one verified URL, and retries are safe. Pending human ACK or approval is reported truthfully rather than fabricated.
+Done means every legacy source has one disposition, provenance is durable, every live mutation has one verified URL, the reviewed migration/cleanup PR is merged into the default branch, every destination reads back correctly, and retries are safe. Pending review, merge, assigned work, or blocked verification means migration is still in progress; report the exact remaining object instead of fabricating completion.
 
 ## Communication style
 

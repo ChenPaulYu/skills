@@ -19,17 +19,22 @@ Ask in order:
 Use these refinements:
 
 - pure FYI -> Announcement Discussion, no assignment or ACK marker;
-- explicit acknowledgment -> `[ACK]` Announcement naming one recipient;
+- authoritative external source update -> FYI Announcement with source URL and immutable revision, commit, or content hash; update any reusable brief through a separate cited PR;
+- explicit awareness acknowledgment -> `[ACK]` Announcement naming one recipient; this records “I saw this notice,” not proof of comprehension, acceptance, or external work;
 - answerable question -> Q&A Discussion;
+- verifiable work -> Issue with one assignee, observable completion criteria, and the evidence the assignee must return;
 - one authorized decision -> Decision Issue with that person as the single assignee;
-- exact change -> pull request with the one required reviewer where applicable.
+- exact material that must be read and judged -> pull request with the required reviewer and a current-revision verdict; the author owns merge by default, or one PR assignee explicitly names a different merger;
+- exact change -> the same pull request path; merge, not manual close, is the accepted change's effective point.
 
-Split independently completable asks into linked objects. Do not let a partial child object close a broader parent.
+Split independently completable asks into linked objects. Three phrases that sound similar are different events: “I saw this notice” uses ACK; “review this exact material” uses a requested PR verdict; “install, restart, run, or verify this” uses an assigned Issue with evidence. Never let `👀` stand in for a verdict, command output, version, test, or changed external state. Do not let a partial child object close a broader parent.
+
+An FYI completes when the Announcement and its provenance read back; it creates no response or settlement obligation. An ACK needs no settlement after the designated awareness signal. A requested reviewer completes only their review round; approval hands the PR to its author or named merger, and merge auto-closes the accepted change. Manually closing it unmerged records abandonment. A task Issue completes only when its stated evidence exists and the result is settled, not when a progress comment appears.
 
 ## Process
 
 1. Resolve the current repository and authenticated viewer. If the user supplied an existing object URL, inspect and resume it instead of creating anything.
-2. Distill title, body, object type, completion condition, recipient/owner/reviewer, and provenance links. State whether the traffic is FYI, ACK, action, decision, or exact review.
+2. Distill title, body, object type, completion condition, recipient/owner/reviewer, required verdict or evidence, and provenance links. State whether the traffic is FYI, awareness ACK, action, decision, or exact review. If it mixes awareness, review, and execution, show the linked objects separately.
 3. Show the proposed object and follow-up mutations. Wait for approval.
 4. Create the object, then apply assignment, review request, labels/category, and links as separate observable steps.
 5. Read the object back. Verify URL, type/category, assignee or requested reviewer, current revision, and requested obligation.

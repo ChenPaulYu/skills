@@ -11,8 +11,9 @@ Map the human's intended response to one GitHub-native action. `reply` leaves **
 
 | Human intent | GitHub action |
 |---|---|
-| “I read the explicit ACK request” | Add `👀` as the designated account |
-| “This answers the question” | Post/select a Discussion answer as appropriate |
+| “I attest that I saw the awareness-only ACK notice” | Add `👀` as the designated account |
+| “Here is my answer” | Post an answer to the Q&A Discussion |
+| “This answer resolves my question” | Accept the answer as the Discussion author |
 | “Here is context or feedback” | Discussion or Issue comment |
 | “Feedback, not a verdict” | PR Comment |
 | “This revision is acceptable” | PR Approve |
@@ -33,7 +34,9 @@ Done means the selected response exists on the correct object/current revision. 
 ## Discipline
 
 - A Comment is never upgraded to Approve or Request changes by interpretation.
-- Only the designated account's `👀` completes an ACK.
+- A Q&A answer and the author's acceptance are different actions; never let the answerer accept on the author's behalf.
+- Only the designated account's `👀` completes an ACK. It verifies the actor's awareness attestation, not comprehension, acceptance, or external work.
+- Never use an ACK reaction to claim that exact material was reviewed; request a PR verdict on that revision. Never use it to claim software was installed, a session restarted, a command ran, or state changed; those belong to an assigned Issue with evidence.
 - Do not close objects, write final resolutions, merge, author briefs, or infer consensus.
 - If the write succeeds but verification is blocked, return the URL and say verification is incomplete.
 

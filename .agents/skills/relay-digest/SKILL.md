@@ -24,11 +24,14 @@ Self-report which tier was used:
 
 Include each obligation once:
 
-- `[ACK]` addressed to the viewer until that account adds `👀`;
+- `[ACK]` addressed to the viewer until that account adds `👀`; this is an awareness obligation, never a verdict or evidence that an external task ran;
 - an Issue assigned to the viewer, including a Decision Issue where the assignee is the v1 decision owner;
 - a requested PR verdict on the current revision;
+- a current-revision `Request changes` addressed back to the PR author until a new revision is pushed;
 - re-review when a changed revision invalidated approval or requires a new request;
-- an authorized final resolution waiting for `relay-settle`, or an approved current-revision Core PR ready to become effective.
+- an authorized final resolution waiting for `relay-settle`;
+- an approved current-revision ordinary PR waiting for its author, or its single assignee when one names the merger, to merge;
+- an approved current-revision Core PR only when required review, stale-approval dismissal, and bypass enforcement are verified.
 
 Exclude:
 
@@ -38,9 +41,11 @@ Exclude:
 - Comment-only PR rounds presented as verdict completion;
 - closed/resolved items and obligations completed on the current revision.
 
+If an otherwise-ready Core PR lacks verified enforcement, report it as blocked, not `SETTLE`. Policy-only review history is evidence but not a platform gate.
+
 ## Present
 
-Group by `ACK`, `DECIDE/ACT`, `REVIEW`, and `SETTLE`. For each item show object type, title, URL, why it needs the viewer, and the native action that completes this round. Collapse duplicate signals to one item.
+Group by `ACK`, `DECIDE/ACT`, `REVIEW`, and `SETTLE`. For each item show object type, title, URL, why it needs the viewer, and the native action that completes this round. Describe `👀` as awareness attestation, not exact-content review or task verification; any linked PR or Issue remains a separate obligation. A current `Request changes` belongs to the PR author; pushing a new revision hands the round back to the reviewer. Collapse duplicate signals to one item.
 
 ## Discipline
 

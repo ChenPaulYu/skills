@@ -36,6 +36,7 @@ Keep `briefs/` flat by default. Create a topic folder only when at least three s
 - Ordinary Markdown plus citations and git history; no status metadata, time buckets, `archive/`, or parallel database.
 - Never close a GitHub object, claim consensus, modify `core/`, or treat a brief as a Core prerequisite.
 - `/relay:settle` owns authorized closure/effectivity; `/nav:compose` remains the general prose tool.
+- A requested reviewer supplies the current-revision verdict; `/relay:settle` merges the approved brief PR. Closing it unmerged retires the proposal, not the prior brief.
 
 ## Communication style
 

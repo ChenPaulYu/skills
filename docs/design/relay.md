@@ -16,7 +16,7 @@ The daily path is six verbs: `launch · report · digest · reply · brief · se
 | Completion and one accountable owner/decider are clear | Issue |
 | An exact reviewable diff exists | Pull request |
 
-FYI is an Announcement with no obligation. Explicit ACK is an `[ACK]` Announcement naming one recipient and completes only on that person's `👀`. Q&A uses the accepted-answer affordance. A Decision Issue uses one assignee as decision owner. A Core change uses a protected PR and one required approver.
+FYI is an Announcement with no obligation. Explicit ACK is an `[ACK]` Announcement naming one recipient and completes only on that person's `👀`; it means “I saw this notice.” Exact material that must be read and judged uses a pull request with a requested current-revision verdict. Verifiable external work uses an assigned Issue with observable evidence. When a request contains more than one, Relay creates linked objects rather than letting ACK, review, and execution impersonate one another. Q&A uses the accepted-answer affordance. A Decision Issue uses one assignee as decision owner. A Core change uses a protected PR and one required approver. See [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md).
 
 ## Six boundaries
 
@@ -26,12 +26,27 @@ FYI is an Announcement with no obligation. Explicit ACK is an `[ACK]` Announceme
 | `report` | A new human intent | Object and responsibility exist and verify | Response or closure |
 | `digest` | “What needs me?” | Every real obligation appears once | Mutation |
 | `reply` | An existing object | My selected native response exists | Whole-object completion |
-| `brief` | Reusable understanding from one or more Raw objects | Current cited Markdown and index agree | Consensus, closure, Core |
-| `settle` | Authorized conclusion or approved Core PR | Resolution/close/merge and effective point verify | Brief authoring or approval substitution |
+| `brief` | Reusable understanding from one or more Raw objects | Merged cited Markdown and index read back correctly | Consensus, closure, Core |
+| `settle` | Authorized conclusion or approved current-revision PR | Resolution/close/merge and effective point verify | Brief authoring or approval substitution |
 
 ## Authority model
 
-Mention is not obligation; Comment is not approval; Closed is not decided; Core is true only after merge. Assignment, explicit ACK, and requested review are the v1 obligation signals. Formal verdicts bind to the current PR revision, and stale approval dismissal prevents a changed diff from inheriting old consent.
+Mention is not obligation; ACK is awareness, not review; Comment is not approval; task claims need evidence; Closed is not decided; Core is true only after merge. Assignment, explicit ACK, and requested review are the v1 obligation signals. Formal verdicts bind to the current PR revision, and stale approval dismissal prevents a changed diff from inheriting old consent.
+
+## Lifecycle matrix
+
+| Event | Native completion | What happens next |
+|---|---|---|
+| FYI or versioned external-source event | Announcement exists | Nothing to settle |
+| Awareness ACK | Designated account adds `👀` | Obligation ends; closure optional |
+| Open question | Author accepts an answer | Discussion is answered |
+| Verifiable task | Assignee returns the stated evidence | Authorized result closes the Issue |
+| Decision | Decision owner records `Outcome:` and `Decision:` | Authorized settlement closes the Issue |
+| Exact change or brief | Requested reviewer gives a current-revision verdict | `Request changes` returns ACT to author; a new revision returns REVIEW; approval hands merge to the author or one named PR assignee |
+| Core change | Current approval plus verified enforcement | Merge makes the rule binding |
+| Legacy migration | Current approval of the migration/cleanup PR | Merge into the default branch, then read back every retained destination |
+
+An unmerged PR closed after review is abandoned, not completed. An otherwise-ready Core PR with policy-only review remains blocked from Relay settlement because history is not enforcement. A migration remains planned or staged until its reviewed cleanup lands and every destination reads back. ADR-092 records the lifecycle sweep that made these end states explicit.
 
 ## Two optional knowledge routes
 
@@ -51,3 +66,5 @@ Relay performs read-after-write verification. When creation succeeds and a later
 - **2026-07-06** — ADR-061 retained the git-native substrate after validating a GitHub-native alternative, and added a deterministic state helper plus startup awareness.
 - **2026-07-14** — `register` merged into `launch` because the separate structural door was too thin.
 - **2026-07-21** — The product assumption reversed. ADR-090 made GitHub authoritative, restored the broader `reply` verb, added independent `brief`, narrowed `settle`, and demoted legacy conversion to explicit-only `migrate`.
+- **2026-07-21** — ADR-091 separated awareness ACK, exact-content review, and evidenced assigned work after a real onboarding request exposed that one `👀` could not prove reading, acceptance, installation, restart, or roster state.
+- **2026-07-21** — ADR-092 completed the lifecycle matrix: ordinary PR merge and task settlement gained explicit owners, external source changes became separate FYI events, and Core settlement now requires verified enforcement rather than policy-only review.

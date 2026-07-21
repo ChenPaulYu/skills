@@ -98,15 +98,15 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 **`relay` — coordinate with a counterpart through GitHub** (six daily model-invoked skills; standalone):
 
 - `/relay:launch` — audit or configure the current repository's identity, Discussions, permissions, CODEOWNERS, and merge protection; every mutation is approved first and read back
-- `/relay:report` — route a new FYI, explicit ACK, question, decision, task, or exact change into the right Discussion, Issue, or pull request, with responsibility verified
-- `/relay:digest` — show only real GitHub obligations: designated ACKs, assignments, current-revision reviews, re-reviews, and authorized settlement; read-only
-- `/relay:reply` — leave the native response on an existing object: 👀, answer, comment, PR Comment, Approve, or Request changes; never declares the whole object finished
+- `/relay:report` — route awareness into an optional ACK, evidenced work into an assigned Issue, and exact material into a requested-reviewer pull request; split independently completable asks and verify responsibility
+- `/relay:digest` — show only real GitHub obligations: awareness ACKs, assigned work, current-revision review rounds, author action after Request changes, authorized PR merge, and lifecycle blockers; read-only
+- `/relay:reply` — leave the native response on an existing object: awareness 👀, answer or accepted answer, comment, PR Comment, Approve, or Request changes; records a response without pretending awareness proves review or work
 - `/relay:brief` — create, update, or retire one cited Markdown synthesis when understanding from GitHub must stay current across contexts; never consensus or Core
-- `/relay:settle` — close a Discussion or Issue with an authorized resolution, or merge an approved Core pull request so it becomes effective
+- `/relay:settle` — close a Discussion or Issue with an authorized resolution, merge an approved current-revision PR, or close an explicitly abandoned PR with a reason; Core additionally requires verified enforcement
 
 *User-invoked:*
 
-- `/relay:migrate` — inventory and migrate a legacy file-based Relay repository into the GitHub-native model while preserving immutable provenance; mapping-first, idempotent, and write-gated
+- `/relay:migrate` — inventory and migrate a legacy file-based Relay repository while preserving immutable provenance; completion requires the reviewed migration/cleanup PR to merge and every retained destination to read back
 
 ## Install
 
