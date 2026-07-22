@@ -145,7 +145,87 @@ receipted tells → Issues; Discussions only when two heads are genuinely needed
 6. **Recorder = initiator at n=2** (settle and record in one pair of hands) —
    accepted; the Brief/Core PR layer is the downstream safety net.
 
-## 8. Implementation consequences (next wave, separate ratification)
+## 8. Notification is recoverable responsibility, and metadata has three tiers
+
+Notifications are events ("at some point, a ping happened"); Relay needs state
+("something is still waiting on you, now"). The digest therefore never reads
+notification inboxes — it rescans current GitHub state and recomputes
+obligations, so a deleted email, a read-away notification, or an agent offline
+for three days loses nothing. Attention signals (mentions, new comments,
+reactions) may notify but never obligate; obligation signals (assignment,
+review request, approved-awaiting-merge) mean it is someone's turn.
+
+The minimum rule: **a message that needs action never rides on an @mention
+alone.** A question with a stateable owner and completion rule graduates out
+of prose into a needs-input Issue — that is the same graduation moment as
+section 1's boundary test. Its form fields carry the three computable facts:
+
+```
+Question:    API — option A or B?
+Done when:   one option chosen, or a third proposed with reasons
+After reply: the asker settles and records
+```
+
+Current actor = the assignee (a native, typo-proof signal); completion = the
+form field; next actor = the settle seat.
+
+**The three tiers of machine readability:**
+
+1. **Responsibility lives in native fields** — assignment, review request,
+   close state, labels. GitHub enforces them; they cannot be misspelled.
+   The digest computes who-owes-what from this tier ONLY: however malformed
+   the prose, responsibility never silently vanishes.
+2. **Record semantics live in structured prose, formatted at write time.**
+   The writing verbs (report/reply/settle) emit these blocks by template;
+   the digest reads them as enrichment under tolerant-reader rules
+   (standard shape → consume; ad-hoc → best effort; absent → degrade and
+   self-report), never as a dependency. The vocabulary:
+
+   ```
+   any close:            Resolution: <why this may close>
+   promoted close:       Outcome: decided
+                         Decision: <one-sentence conclusion>
+                         Follow-ups: #42, #43
+                         Canonical record: decisions/D-0002-<slug>.md
+   Decision frontmatter: id · status: active|superseded · superseded-by ·
+                         Source · Settled by · Date
+   ```
+
+3. **Format health lives in the conformance sweep**, not in digest failure
+   paths: does `Canonical record:` point at a file that exists? were the
+   `Follow-ups:` issues opened? does every closed object carry a
+   `Resolution:`? does each Decision's `Source:` resolve? Format drift
+   becomes a line on the report board instead of silent information loss.
+
+One line: responsibility lives where typos are impossible; semantics live
+where writing is templated; health lives where sweeps are scheduled. The
+digest depends on tier 1, reads tier 2, and never fails on either.
+
+There is no separate formatter verb: formatting is embedded in each writing
+skill's templates (deepening existing doors, not adding one).
+
+## 9. Indexes and navigability
+
+Formal memory must be navigable the way well-kept code is: any reader — human
+or agent — answers "what is this file, is it current?" from the top lines, and
+"what exists?" from one index, without opening everything.
+
+- **Headers are the index rows.** A Decision's frontmatter (id · status ·
+  superseded-by · Source · Settled by · Date + title) IS its header — the
+  first lines answer "what was decided, does it still hold?" Briefs and Core
+  files carry a one-line role header (topic · derived-from · last-integrated
+  Decision) in the same spirit as code file-top headers.
+- **Indexes are derived, never hand-edited.** `decisions/README.md` (id ·
+  title · status · date, newest first) and the briefs/core index rows are
+  regenerated from the files' own headers — the files are the single owner;
+  the index is a projection. The conformance sweep regenerates and compares:
+  drift becomes a bot commit or a report-board line, never a manual chore and
+  never a lie.
+- **The active view is a filter, not a document**: "currently effective
+  decisions" = index rows where `status: active`. No one maintains a separate
+  current-state file that can rot.
+
+## 10. Implementation consequences (next wave, separate ratification)
 
 - Relay: report's routing table rewritten (Issue-default; Discussion demoted to
   the convergence branch; announcement machinery removed), settle encodes
