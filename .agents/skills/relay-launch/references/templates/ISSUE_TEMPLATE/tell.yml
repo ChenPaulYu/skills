@@ -1,0 +1,23 @@
+name: Tell
+description: A standalone tell that needs a receipt — the assignee's confirmation completes it. There is no Announcement object (ADR-100); this is its replacement.
+title: "[Tell] "
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What to take note of
+      description: State the fact or instruction the recipient needs to receive.
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Owner-to-assign (@handle)
+      description: >-
+        The @handle who will be assigned. Assignment — not this text field —
+        is what creates the digest obligation; the reporter assigns this
+        person after creating it. Their comment or the close itself is the
+        receipt.
+      placeholder: "@handle"
+    validations:
+      required: true

@@ -1,11 +1,11 @@
 ---
 name: brief
-description: "Create, update, or retire a cited brief when understanding from GitHub must stay current across contexts and one object's final resolution is insufficient. Does not close objects, represent consensus, or change Core."
+description: "Create, update, or retire a cited Brief that integrates only active Decision files — never restating their authoritative wording — when understanding must stay current across contexts. Always a pull request. Does not close objects, represent consensus, or change Core."
 ---
 
 # brief — maintain reusable cited understanding
 
-Turn one or more Raw GitHub objects into one small, current Markdown synthesis only when the understanding must be reused across contexts.
+A Brief is a topic projection (blueprint section 3): "without rereading history, how should I understand this topic now?" It integrates the currently-**active** `decisions/` files — may merge, dedupe, order, and resolve supersession — but **may not introduce a conclusion no Decision states**.
 
 Generic document authoring can write prose; `brief` uniquely owns currentness, citations, `briefs/README.md`, safe organization, and retirement.
 
@@ -13,30 +13,37 @@ Generic document authoring can write prose; `brief` uniquely owns currentness, c
 
 All must hold:
 
-- one or more Discussions, Issues, pull requests, comments, or reviews contain the source understanding;
-- future readers will need the synthesis in more than the source object's immediate context;
-- one object's self-contained final resolution is not a sufficient home.
+- one or more Decision files (`decisions/D-0xx-*.md`) contain the source understanding — a Brief that has nothing to cite is not a Brief, it is speculation;
+- future readers will need the synthesis in more than one Decision file's own scope;
+- no single Decision's own text is a sufficient home.
 
-A one-off summary, meeting note, or settled answer that reads well in its object does not earn a brief.
+A one-off summary, meeting note, or a topic backed by exactly one still-current Decision usually reads fine cited directly (`[D-0xx]`) from wherever it's needed, and does not earn a Brief.
+
+## The citation law (never restates)
+
+Every load-bearing claim in a Brief carries its supporting citation — `[D-021]` — and the **authoritative wording lives only in the Decision file**. A Brief may integrate, rephrase, and order Decision material into a readable current picture (that is its whole job), but it never copies a Decision's `## Conclusion` text verbatim as if the Brief itself were now the source. A second copy of a Decision's wording is a fact with two owners, and it will drift.
+
+**Only `status: active` Decisions integrate.** A Brief citing a Decision now marked `status: superseded` is **stale by definition** — this is what makes staleness mechanical rather than a judgment call: the conformance sweep flags exactly this (a citation resolving to a `superseded` Decision) as needing re-integration, no separate staleness heuristic required. When a cited Decision is superseded, the Brief update replaces that citation with the Decision that superseded it (or removes the claim, if nothing valid replaces it) — never leaves the old citation standing.
 
 ## Process
 
-1. Read the Raw objects and existing `briefs/README.md` plus related briefs. Choose exactly one lifecycle action: create, update, or retire.
-2. Draft a short topic-based Markdown file. Lead with the current synthesis; cite every load-bearing claim with stable GitHub URLs; distinguish fact, interpretation, and open question.
-3. Maintain `briefs/README.md` as the navigation and organization-rule owner. Retirement removes the stale brief and its links in the same PR; git history preserves it.
-4. Show the diff, citations, and lifecycle action. **Author sign-off**: the diff already shows the exact brief text verbatim — since a brief speaks in the user's voice, ask the same question: "Is this what you mean?" Commit and open the change only after they confirm; a rewrite goes through the same gate. Wait for approval.
-5. Use a normal branch/pull request. After merge, verify the brief, README entries, and relative links.
+1. Read the current `decisions/README.md` index (filtered to `status: active`), the relevant Decision files, and the existing `briefs/README.md` plus related Briefs. Choose exactly one lifecycle action: create, update, or retire.
+2. Draft a short topic-based Markdown file. Lead with the current synthesis; cite every load-bearing claim as `[D-0xx]`; distinguish fact (cited), interpretation (yours, flagged as such), and open question (uncited, named as open).
+3. Give the file a one-line role header in the same spirit as a code file-top header: topic · derived-from (which Decisions) · last-integrated Decision.
+4. Maintain `briefs/README.md` as the navigation and organization-rule owner. Retirement removes the stale Brief and its links in the same PR; git history preserves it.
+5. Show the diff, citations, and lifecycle action. **Author sign-off**: the diff already shows the exact Brief text verbatim — since a Brief speaks in the user's voice, ask the same question: "Is this what you mean?" Commit and open the change only after they confirm; a rewrite goes through the same gate. Wait for approval.
+6. **Always a pull request** — never a direct commit. Integration involves choices and interpretation another person should review, unlike a Decision's direct-commit recording (`settle/SKILL.md`'s five fuses exist precisely because recording must NOT involve this kind of judgment; a Brief is where that judgment belongs, reviewed). After merge, verify the Brief, README entries, header, and relative links.
 
 ## Organization rules
 
-Keep `briefs/` flat by default. Create a topic folder only when at least three stable, usually co-read briefs form a domain group. Never group by month, quarter, year, or temporary status; never create one-file or empty folders. Move with `git mv`, update README and every relative link in the same PR, and run a link check. If the benefit is unclear, stay flat.
+Keep `briefs/` flat by default. Create a topic folder only when at least three stable, usually co-read Briefs form a domain group. Never group by month, quarter, year, or temporary status; never create one-file or empty folders. Move with `git mv`, update README and every relative link in the same PR, and run a link check. If the benefit is unclear, stay flat.
 
 ## Boundaries
 
-- Ordinary Markdown plus citations and git history; no status metadata, time buckets, `archive/`, or parallel database.
-- Never close a GitHub object, claim consensus, modify `core/`, or treat a brief as a Core prerequisite.
-- `/relay:settle` owns authorized closure/effectivity; `/nav:compose` remains the general prose tool.
-- A requested reviewer supplies the current-revision verdict; `/relay:settle` merges the approved brief PR. Closing it unmerged retires the proposal, not the prior brief.
+- Ordinary Markdown plus `[D-0xx]` citations, a role header, and git history; no status metadata beyond the header, time buckets, `archive/`, or a parallel database.
+- Never close a GitHub object, claim consensus, modify `core/`, or treat a Brief as a Core prerequisite — a Core PR may cite a Decision file directly.
+- `/relay:settle` owns Decision recording and object closure; `/nav:compose` remains the general prose tool for anything that isn't a Decision-citing Brief.
+- A requested reviewer supplies the current-revision verdict; `/relay:settle` merges the approved Brief PR. Closing it unmerged retires the proposal, not the prior Brief.
 
 ## Communication style
 

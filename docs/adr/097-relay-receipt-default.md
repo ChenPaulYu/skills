@@ -1,6 +1,6 @@
 # ADR 097 — Relay flips the awareness tier from optional to receipt-default
 
-**Status**: accepted
+**Status**: superseded by [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md). The Accord memory model retires the Announcement object entirely — a tell needing a receipt is now an Issue, and this ADR's whole receipt-default apparatus (multi-recipient obligations, the close-nudge) is removed from the reducer. The original pre-097 single-recipient `[ACK]` semantics this ADR replaced are themselves restored, scoped to a LEGACY `[ACK]`-titled-Discussion compatibility path expected to retire after migration. Kept below as history — accepted at the time, fully replaced now.
 **Date**: 2026-07-22
 **Refines**: [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-096](docs/adr/096-relay-closure-semantics.md)
 

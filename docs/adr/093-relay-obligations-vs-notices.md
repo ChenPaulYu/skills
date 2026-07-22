@@ -1,6 +1,6 @@
 # ADR 093 — Relay separates obligations from notices, and gives Q&A native obligations
 
-**Status**: accepted
+**Status**: accepted. **Amended by [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md)**: the hard rule "every report tags an explicit recipient, FYI included" presumed an Announcement object to tag, which the Accord memory model retires — there is no Announcement object. The obligations/notices two-tier split itself, the ratified open-non-draft-PR-never-obligation-free invariant, and the native Q&A obligations are all unaffected and remain in force exactly as stated.
 **Date**: 2026-07-21
 **Refines**: [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), and [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md)
 

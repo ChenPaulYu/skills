@@ -6,46 +6,60 @@ description: "Respond on an existing GitHub object with ACK, answer, comment, PR
 
 # reply — leave my response on an existing object
 
-Map the human's intended response to one GitHub-native action. `reply` leaves **my response**; `relay-settle` uses authority to declare the whole matter finished or effective.
+Map the human's intended response to one GitHub-native action. `reply` leaves **my response**; `relay-settle` uses authority to declare the whole matter finished.
 
 ## Action map
 
 | Human intent | GitHub action |
 |---|---|
-| “I attest that I saw this receipt-bearing notice” | Add your own `👀` — clears only your own receipt, never anyone else named alongside you |
-| “Here is my answer” | Post an answer to the Q&A Discussion |
-| “This answer resolves my question” | Accept the answer as the Discussion author |
-| “Here is context or feedback” | Discussion or Issue comment |
-| “Feedback, not a verdict” | PR Comment |
-| “This revision is acceptable” | PR Approve |
-| “This revision must change” | PR Request changes |
+| "Here is the input you asked for" | Post the answer as a comment on the `needs-input` Issue — this flips the baton (see below) |
+| "This resolves it" / "I need more" | The acceptor's disposition comment on an `awaiting-acceptance` Issue — accept it, or send it back |
+| "Here is my answer to your Q&A question" | Comment on the answerable Discussion — only the question's AUTHOR may mark it as the accepted answer; never accept on their behalf |
+| "This answer resolves my question" (as the author) | Mark the answer accepted, then close via `relay-settle` |
+| "Here is context or feedback, not a formal response" | Discussion or Issue comment |
+| "Feedback, not a verdict" | PR Comment |
+| "This revision is acceptable" | PR Approve |
+| "This revision must change" | PR Request changes |
+| LEGACY: "I attest that I saw this [ACK] Discussion's notice" | Add your own `👀` — see the legacy note below |
+
+## The baton flip (blueprint section 10)
+
+`report`'s `needs-input` Issue names an owner and a completion rule. Delivering the requested input is not a comment that happens to exist alongside an unchanged label — it is a **native state transition**, and `reply` is the verb that performs it:
+
+1. Post the answer as a comment on the Issue.
+2. Remove the `needs-input` label and apply `awaiting-acceptance`.
+3. Reassign the Issue to the acceptor (usually the original asker).
+
+Both the label swap and the reassignment are native GitHub fields — `relay-digest` computes "the acceptor now owes a disposition" from them alone, no prose parsing, typo-proof. The baton has flipped: A asked B, B owed the input, B replied, now A owes the disposition (accept, dispose, or send back with `needs-input` re-applied and reassigned to B again if the answer wasn't sufficient). A reply never implies consensus, closure, or a change to formal memory on its own — the acceptor's own subsequent disposition is what determines what happens next.
 
 ## Process
 
 1. Open the supplied object URL and read its current state. Ask if the target or intended action is ambiguous.
 2. For PR verdicts, resolve the current head revision immediately before acting. Never carry a verdict across a changed revision.
-3. **Author sign-off.** A `👀` reaction is mechanical — no authored text — so it follows the normal write-gate: show the target and wait for approval. Any response that carries prose (an answer, a comment, a PR Comment, or verdict text on Approve/Request changes) shows the exact text that will be posted, verbatim, and asks: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Wait for approval before writing.
-4. Apply one native action.
-5. Read the object back and verify the actor, action type, object, and revision where applicable.
+3. **Author sign-off.** Any response that carries prose (an answer, a comment, a PR Comment, or verdict text on Approve/Request changes) shows the exact text that will be posted, verbatim, and asks: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. A `👀` reaction (legacy only) carries no authored text, so it follows the normal write-gate: show the target and wait for approval. Wait for approval before writing.
+4. Apply the native action — including the label swap and reassignment for a baton flip, as one observable set of steps.
+5. Read the object back and verify the actor, action type, object, label state, assignee, and revision where applicable.
 
 ## Completion
 
-Done means the selected response exists on the correct object/current revision. It does **not** mean the Discussion, Issue, or pull request is complete.
+Done means the selected response exists on the correct object/current revision, with the baton-flip label and assignment correctly transitioned where applicable. It does **not** mean the Issue, Discussion, or pull request is complete.
 
 ## Discipline
 
 - A Comment is never upgraded to Approve or Request changes by interpretation.
-- A Q&A answer and the author's acceptance are different actions; never let the answerer accept on the author's behalf.
-- Your own `👀` completes YOUR receipt, and only yours (ADR-097 receipt-default) — a Discussion naming several accounts gives each one its own independently-clearing receipt, not one shared obligation; another named recipient's own `👀` does not touch yours, and yours does not touch theirs. It verifies the actor's awareness attestation, not comprehension, acceptance, or external work.
-- On an FYI, `👀` is a different signal from the ACK-notice attestation above: each recipient's own seen-mark — a comment is welcome when a recipient has something to say, but is never required. The initiator checks the reaction list, then closes the FYI as housekeeping (ADR-096).
-- Never use an ACK reaction to claim that exact material was reviewed; request a PR verdict on that revision. Never use it to claim software was installed, a session restarted, a command ran, or state changed; those belong to an assigned Issue with evidence.
+- Delivering input and accepting it are different actions on different sides of the baton flip; never let the same reply that delivers input also record its own acceptance.
+- Never use a comment to claim exact material was reviewed; request a PR verdict on that revision. Never use it to claim software was installed, a session restarted, a command ran, or state changed; those belong to an assigned Issue with stated evidence.
 - Do not close objects, write final resolutions, merge, author briefs, or infer consensus.
 - If the write succeeds but verification is blocked, return the URL and say verification is incomplete.
 
+## LEGACY: `[ACK]` Discussion `👀` (ADR-100)
+
+There is no Announcement object under the Accord memory model, and new traffic should never create a fresh `[ACK]`-titled Discussion — see `report/SKILL.md`. An open `[ACK]`-titled Discussion created before this model keeps its original single-recipient semantics: the account named as the FIRST mention in its title/body clears its own receipt with `👀`, an awareness attestation only — it verifies that the recipient saw the notice, never comprehension, acceptance, or external work, and it is never read as consent (a reversal or amendment still needs the Issue-based consent path, ADR-099). This path retires once legacy `[ACK]` Discussions have been migrated off.
+
 ## Companion skills
 
-- `relay-digest` finds the obligation — including the native Q&A obligations on a Discussion the viewer authored: `accept-answer-or-follow-up` while unanswered with a stranger's comment (answered here by "This answer resolves my question", or by "Here is context or feedback" as a follow-up comment), and `close-answered-question` once accepted and still open. It also surfaces each named recipient's own receipt obligation on a receipt-bearing Announcement (ADR-097), completed here one `👀` at a time, and a `close-announcement` SETTLE obligation for the announcement's author once every recipient has reacted.
-- `relay-settle` handles authorized closure/effectivity after the response round — including closing an answered Q&A Discussion.
+- `relay-digest` finds the obligation: an assigned `needs-input`/`awaiting-acceptance`/`awaiting-record` Issue, a native Q&A obligation on a Discussion the viewer authored (`accept-answer-or-follow-up` while unanswered with a stranger's comment, answered here by "This answer resolves my question" or by a follow-up comment; `close-answered-question` once accepted and still open), a requested PR verdict, and — LEGACY only — an `[ACK]` Discussion's single-recipient receipt.
+- `relay-settle` handles authorized closure after the response round — including closing an answered Q&A Discussion, and applying `awaiting-record` when a Decision must be committed.
 
 ## Communication style
 

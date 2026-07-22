@@ -1,6 +1,6 @@
 # ADR 091 — Relay separates awareness, review, and task evidence
 
-**Status**: accepted
+**Status**: accepted. **Amended by [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md)**: the awareness leg of this three-way split (the `[ACK]` Announcement and its `👀`) no longer has a home in the Accord memory model's four-object design — there is no Announcement object. It survives only inside a LEGACY `[ACK]`-titled-Discussion compatibility path, expected to retire after migration. The review leg (exact-content PR review) and the task-evidence leg (an assigned Issue's stated evidence) are unaffected and fold unchanged into the new model.
 **Date**: 2026-07-21
 **Refines**: [ADR-090](docs/adr/090-relay-github-native.md)
 

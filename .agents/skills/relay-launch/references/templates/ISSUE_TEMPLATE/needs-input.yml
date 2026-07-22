@@ -1,0 +1,48 @@
+name: Needs input
+description: A question with a stated owner and a completion rule — the graduation point out of prose (blueprint section 8).
+title: "[Needs input] "
+labels: ["needs-input"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: State exactly what you need answered.
+      placeholder: |
+        Question:
+        ...
+    validations:
+      required: true
+  - type: textarea
+    id: done-when
+    attributes:
+      label: Done when
+      description: What does a complete answer look like?
+      placeholder: |
+        Done when:
+        ...
+    validations:
+      required: true
+  - type: textarea
+    id: after-reply
+    attributes:
+      label: After reply
+      description: >-
+        Who acts once the answer arrives — usually the asker, who settles
+        and records.
+      placeholder: |
+        After reply:
+        ...
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Owner (@handle to assign)
+      description: >-
+        The person who can answer this. Assignment — not this text field —
+        is what creates the digest obligation; the reporter assigns them
+        after creating it, and applies the `needs-input` label.
+      placeholder: "@handle"
+    validations:
+      required: true

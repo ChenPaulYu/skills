@@ -2,12 +2,23 @@
 // relay:digest — collect GitHub primitives, then reduce them to viewer obligations.
 // Collection is intentionally separate from the deterministic reducer: fixture JSON
 // exercises semantics without network access, while live use shells out only to `gh`.
+//
+// SCHEMA_VERSION 4 (ADR-100): the reducer follows the Accord memory model
+// (blueprints/plans/2026-07-22-accord-memory-model.md). Announcement receipt-default
+// (ADR-097) and the close-announcement nudge retired entirely — there is no Announcement
+// object any more; a passing heads-up is a plain @mention, caught only by the notices
+// tier below. A legacy [ACK]-titled Discussion keeps its pre-097 single-recipient 👀
+// semantics for backward compatibility during migration (LEGACY, see
+// isLegacyAckDiscussion/legacyAckRecipient) — that path retires once legacy [ACK]
+// Discussions have been migrated off. Issue obligations now derive from stage labels
+// (needs-input / awaiting-acceptance / awaiting-record) rather than an issueType-based
+// Decision path — see issueStage below.
 
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 const loginOf = (actor) => typeof actor === 'string' ? actor : actor?.login || actor?.slug || null;
 const sameLogin = (left, right) => Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -42,11 +53,12 @@ function obligation(kind, object, reason, action, extra = {}) {
  * and the handle itself must start alnum, so `@-junk` is never a valid GitHub login.
  * A handle immediately followed by `/` (e.g. `@org/team-name`) is a GitHub team/org path,
  * never a user mention — it is dropped entirely, along with the `/segment` after it, so it
- * never surfaces as a mention anywhere (notices or receipts). A team/org can't react `👀`,
- * so counting one as a receipt recipient would deadlock `receipts-collected` forever
- * (fable B1). A BARE `@org` mention (no trailing `/`) is not distinguishable from a real
- * user login here and is deliberately left as one — see `announcementRecipients` and
- * digest/SKILL.md for the honest limit that documents. */
+ * never surfaces as a mention anywhere (notices or the LEGACY ack path). A team/org can't
+ * react `👀`, so letting one become the LEGACY path's designated recipient would strand
+ * that recipient's obligation forever (carried over from fable B1, pre-ADR-100). A BARE
+ * `@org` mention (no trailing `/`) is not distinguishable from a real user login here and
+ * is deliberately left as one — see `legacyAckRecipient` and digest/SKILL.md for the
+ * honest limit that documents. */
 function findAllMentions(text) {
   const regex = /(^|[^\w.@])@([A-Za-z0-9][A-Za-z0-9-]*)(\/)?/g;
   const handles = [];
@@ -92,38 +104,38 @@ function mentionsWithSource(object, viewer) {
   return mentions;
 }
 
-/** True when this Discussion is Announcements-tier and therefore receipt-bearing under
- * ADR-097's receipt-default rule. Two ways in: the pre-097 explicit markers — an [ACK]
- * title prefix or an `ack-required` label — which stay valid but are no longer required;
- * or, new, ANY open, non-answerable, non-fyi Discussion whose title or body names at
- * least one @mention. Q&A (isAnswerable) is excluded — it has its own native obligation
- * path. `fyi`-labeled is excluded — that label is the explicit broadcast opt-out (ADR-097):
- * mentioned accounts there get a notice, never a receipt obligation. */
-function isAnnouncementDiscussion(object) {
+/** LEGACY (pre-ADR-097, retained only for backward compatibility during migration — see
+ * ADR-100). Under the Accord memory model there is no Announcement object any more: a
+ * passing heads-up is a plain @mention, caught only by the notices tier below. An
+ * [ACK]-titled open Discussion keeps its ORIGINAL single-recipient 👀 semantics so a
+ * repository mid-migration doesn't silently lose in-flight legacy obligations. `fyi`
+ * stays the explicit opt-out here too — a legacy [ACK] Discussion downgraded to `fyi`
+ * carries no obligation, same as any other fyi-labeled object. Q&A (isAnswerable) is
+ * excluded — it has its own native obligation path, unrelated to this legacy one. This
+ * path is expected to retire once legacy [ACK] Discussions have been migrated off. */
+function isLegacyAckDiscussion(object) {
   if (object.type !== 'discussion') return false;
   if (object.isFYI || hasLabel(object, 'fyi')) return false;
   if (object.isAnswerable === true) return false;
-  if (/^\s*\[ACK\]/i.test(object.title || '') || hasLabel(object, 'ack-required')) return true;
-  return findAllMentions(object.title).length > 0 || findAllMentions(object.body).length > 0;
+  // Both legacy triggers carry over: the [ACK] title marker AND the ack-required label —
+  // an in-flight label-only legacy receipt must not vanish on deploy (ADR-100's guarantee).
+  return /^\s*\[ACK\]/i.test(object.title || '') || hasLabel(object, 'ack-required');
 }
 
-/** Every distinct account @mentioned in an Announcement Discussion's title or body,
- * EXCLUDING the object's own author. ADR-097 makes every one of them a receipt-owing
- * recipient — this replaces the pre-097 "first mention wins, later mentions are just
- * context" design (`designatedAckRecipient`, removed). Comment-borne mentions never feed
- * this list: a receipt obligation is scoped to the announcement's own text, not to wild
- * conversation under it (that stays notice-tier — see mentionsWithSource / the temporal
- * notice rule below). Returns [] for any Discussion that isn't Announcements-tier (see
- * isAnnouncementDiscussion). Author self-exclusion (fable B1): "questions? ping @me" in
- * an announcement's own body must not make its author owe a receipt on their own post, and
- * must not block the close-nudge on their own 👀 — the close-nudge only ever waits on
- * OTHER named recipients. A self-mention-only announcement therefore has zero recipients:
- * no obligation, no close-nudge, exactly like naming nobody at all. */
-function announcementRecipients(object) {
-  if (!isAnnouncementDiscussion(object)) return [];
+/** LEGACY. The single designated recipient of a legacy [ACK] Discussion: the FIRST
+ * @mention in the title or body, excluding the object's own author (self-mentioning in
+ * your own announcement never creates a receipt for yourself) — the original pre-097
+ * "first mention wins, later mentions are context" design. Returns `null` for any
+ * Discussion that isn't legacy-ACK (see isLegacyAckDiscussion) or that names nobody but
+ * its own author. Comment-borne mentions never feed this: the legacy receipt is scoped to
+ * the announcement's own title/body text, not to wild conversation under it (that stays
+ * notice-tier — see mentionsWithSource / the temporal notice rule below). */
+function legacyAckRecipient(object) {
+  if (!isLegacyAckDiscussion(object)) return null;
   const author = loginOf(object.author);
-  return unique([...findAllMentions(object.title), ...findAllMentions(object.body)])
+  const mentions = unique([...findAllMentions(object.title), ...findAllMentions(object.body)])
     .filter((handle) => !sameLogin(handle, author));
+  return mentions[0] || null;
 }
 
 function hasEyesFrom(object, viewer) {
@@ -151,14 +163,15 @@ function wasDesignatedReviewer(object, viewer) {
     (object.reviewRequests || []).some((request) => sameLogin(loginOf(request.reviewer || request.requestedReviewer), viewer));
 }
 
-/** True when this object already carries a FORMAL signal for the viewer — designated ACK
- * recipient, requested reviewer (active or withdrawn history), or assignee — regardless of
- * whether that round is already complete. A completed round (eyes added, verdict given)
- * must not resurface as a standing mentioned-in-prose notice forever (F1): the object still
- * names the viewer, so the mention scan would otherwise keep firing after the work is done,
- * exactly the noise ADR-090 retired the old startup-digest hook to avoid. */
+/** True when this object already carries a FORMAL signal for the viewer — LEGACY
+ * designated ACK recipient, requested reviewer (active or withdrawn history), or assignee
+ * — regardless of whether that round is already complete. A completed round (eyes added,
+ * verdict given) must not resurface as a standing mentioned-in-prose notice forever (F1):
+ * the object still names the viewer, so the mention scan would otherwise keep firing after
+ * the work is done, exactly the noise ADR-090 retired the old startup-digest hook to
+ * avoid. */
 function hasFormalSignal(object, viewer) {
-  if (announcementRecipients(object).some((login) => sameLogin(login, viewer))) return true;
+  if (sameLogin(legacyAckRecipient(object), viewer)) return true;
   if (wasDesignatedReviewer(object, viewer)) return true;
   if ((object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer))) return true;
   return false;
@@ -295,13 +308,34 @@ function noReviewerHasBeenAsked(object) {
   return !designatedHasAnyVerdict;
 }
 
-function authorizedResolution(object) {
-  if (!object.finalResolution) return null;
-  const owner = loginOf(object.decisionOwner) || (object.assignees || []).map(loginOf)[0];
-  const author = loginOf(object.finalResolution.author);
-  return owner && sameLogin(owner, author) && object.finalResolution.outcome
-    ? object.finalResolution
-    : null;
+/** An OPEN Issue's obligation action is derived from its stage labels (Accord memory
+ * model, blueprint section 8/10 — ADR-100). Exactly one obligation per Issue per viewer:
+ * labels are STAGES, not stacking claims. `awaiting-record` is the native promotion
+ * signal `settle` leaves for the recorder (blueprint section 10) — the digest computes
+ * "the recorder owes the Decision commit" from this label plus the (reassigned) assignee
+ * alone, no prose parsing. No stage label present is the unchanged default: plain
+ * assignment obligates `act`. */
+const ISSUE_STAGES = [
+  { label: 'needs-input', kind: 'DECIDE/ACT', action: 'provide-requested-input' },
+  { label: 'awaiting-acceptance', kind: 'DECIDE/ACT', action: 'accept-or-dispose' },
+  { label: 'awaiting-record', kind: 'SETTLE', action: 'record-decision' },
+];
+
+/** Resolve one Issue's stage. Multiple stage labels present at once is malformed — stage
+ * labels are meant to be mutually exclusive (an Issue is in exactly one stage), so this
+ * picks the LATEST stage in the canonical order (needs-input < awaiting-acceptance <
+ * awaiting-record) for a deterministic obligation, and flags the object with
+ * `malformed: ['conflicting-stage-labels']` rather than silently choosing with no signal —
+ * a conformance-tier concern, not something the digest hides. */
+function issueStage(object) {
+  const present = ISSUE_STAGES.filter((stage) => hasLabel(object, stage.label));
+  if (present.length === 0) return { kind: 'DECIDE/ACT', reason: 'issue-assigned', action: 'act', malformed: null };
+  if (present.length === 1) {
+    const stage = present[0];
+    return { kind: stage.kind, reason: stage.label, action: stage.action, malformed: null };
+  }
+  const latest = present.reduce((a, b) => (ISSUE_STAGES.indexOf(b) > ISSUE_STAGES.indexOf(a) ? b : a));
+  return { kind: latest.kind, reason: latest.label, action: latest.action, malformed: ['conflicting-stage-labels'] };
 }
 
 function mergeObligation(existing, incoming) {
@@ -371,34 +405,22 @@ export function reduceObligations(input) {
 
     const isFyiObject = object.isFYI || hasLabel(object, 'fyi');
     if (!isFyiObject) {
-      // ADR-097 receipt-default: EVERY account named in an Announcement Discussion's
-      // title/body owes its own ACK, completed only by that account's own 👀 — no more
-      // single designated recipient. fyi-labeled Discussions are excluded above (the
-      // explicit broadcast opt-out), so this block only ever runs for receipt-bearing
-      // announcements.
-      const recipients = announcementRecipients(object);
-      if (recipients.some((login) => sameLogin(login, viewer)) && !hasEyesFrom(object, viewer)) {
-        record(obligation('ACK', object, 'announcement-receipt-missing', 'add-eyes-reaction'), object);
-      }
-      // Close-nudge: symmetric with Q&A's answered -> close-answered-question. Once every
-      // named recipient has left their OWN 👀, the announcement's author owes closing it —
-      // digest turns "has everyone seen this?" into a machine-answered SETTLE rather than
-      // requiring the author to manually poll the reaction list. Requires at least one
-      // recipient; an announcement naming nobody has no receipts to collect.
-      if (recipients.length > 0 && sameLogin(loginOf(object.author), viewer) &&
-          recipients.every((login) => hasEyesFrom(object, login))) {
-        record(obligation('SETTLE', object, 'receipts-collected', 'close-announcement'), object);
+      // LEGACY (ADR-100): only an [ACK]-titled Discussion still owes a receipt, and only
+      // its single first-mentioned recipient — the Accord memory model has no Announcement
+      // object any more (see isLegacyAckDiscussion). No close-nudge exists in this model:
+      // every Discussion is closed by its initiator on their own judgment (ADR-096,
+      // unchanged), never by a machine-computed "everyone has reacted" signal.
+      const legacyRecipient = legacyAckRecipient(object);
+      if (sameLogin(legacyRecipient, viewer) && !hasEyesFrom(object, viewer)) {
+        record(obligation('ACK', object, 'legacy-ack-receipt-missing', 'add-eyes-reaction'), object);
       }
 
       if (object.type === 'issue') {
         const assigned = (object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer));
         if (assigned) {
-          const isDecision = object.issueType?.toLowerCase() === 'decision' || hasLabel(object, 'decision');
-          const resolution = isDecision ? authorizedResolution(object) : null;
-          const item = resolution
-            ? obligation('SETTLE', object, 'authorized-resolution-ready', 'settle-decision', { outcome: resolution.outcome })
-            : obligation('DECIDE/ACT', object, isDecision ? 'decision-assigned' : 'issue-assigned', isDecision ? 'decide' : 'act');
-          record(item, object);
+          const stage = issueStage(object);
+          const extra = stage.malformed ? { malformed: stage.malformed } : {};
+          record(obligation(stage.kind, object, stage.reason, stage.action, extra), object);
         }
       }
 
@@ -483,8 +505,11 @@ export function reduceObligations(input) {
       }
     }
 
-    // Notices: awareness only. Never suppressed by isFyiObject — a prose ping inside an
-    // Announcement is exactly the gap this tier exists to catch.
+    // Notices: awareness only (ADR-100). Under the Accord memory model this is the ONLY
+    // path a plain @mention takes — there is no Announcement/receipt-default obligation
+    // any more (blueprint section 1: "a passing heads-up is an @mention on the relevant
+    // object"). Never suppressed by isFyiObject — a prose ping on an fyi-labeled object is
+    // exactly the gap this tier exists to catch.
     const viewerMentions = mentionsWithSource(object, viewer).filter((mention) => sameLogin(mention.handle, viewer));
     if (viewerMentions.length &&
         !objectsWithObligations.has(objectKey(object)) &&
@@ -499,7 +524,7 @@ export function reduceObligations(input) {
       //   - title/body: no per-mention timestamp exists (an edit doesn't record which
       //     mention was added when), so EITHER prior engagement (a comment, or on a
       //     Discussion an 👀 — viewerEngaged()) OR a formal signal regardless of
-      //     completion state (hasFormalSignal() — a named receipt recipient, requested
+      //     completion state (hasFormalSignal() — the LEGACY ack recipient, requested
       //     reviewer active-or-history, or assignee) suppresses it for good. A completed
       //     receipt/ACK/review/assignment must not resurface as standing notice noise for
       //     exactly the person who completed it.
@@ -572,7 +597,7 @@ export function graphQlQuery() {
       }
       issues(first:100,states:OPEN){
         pageInfo{hasNextPage}
-        nodes{id number title body url state author{login} issueType{name} labels(first:20){nodes{name}} assignees(first:10){nodes{login}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body createdAt}}}
+        nodes{id number title body url state author{login} labels(first:20){nodes{name}} assignees(first:10){nodes{login}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body createdAt}}}
       }
       pullRequests(first:100,states:OPEN){
         pageInfo{hasNextPage}
@@ -617,19 +642,16 @@ function normalizeLive(data, repository, viewer) {
   }));
   const issues = flattenConnection(repo.issues).map((value) => {
     const comments = flattenConnection(value.comments);
-    const resolutionComment = comments.findLast((comment) => /(?:^|\n)Outcome:\s*\S/i.test(comment.body || '') && /(?:^|\n)Decision:\s*\S/i.test(comment.body || ''));
     return {
       ...value,
       type: 'issue',
-      issueType: value.issueType?.name || null,
+      // Obligation action derives from stage labels (issueStage, ADR-100) — a
+      // Resolution:/Outcome: comment is tier-2 record semantics for humans and the
+      // conformance sweep (blueprint section 8), never a signal the digest reducer parses.
       labels: flattenConnection(value.labels),
       assignees: flattenConnection(value.assignees),
       comments,
       commentsTruncated: value.comments?.pageInfo?.hasNextPage === true,
-      finalResolution: resolutionComment && {
-        author: resolutionComment.author,
-        outcome: resolutionComment.body.match(/(?:^|\n)Outcome:\s*([^\n]+)/i)?.[1]?.trim(),
-      },
     };
   });
   const pullRequests = flattenConnection(repo.pullRequests).map((value) => {

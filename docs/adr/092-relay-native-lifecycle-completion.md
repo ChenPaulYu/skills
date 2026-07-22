@@ -1,6 +1,6 @@
 # ADR 092 — Relay makes native lifecycle completion explicit
 
-**Status**: accepted
+**Status**: accepted. **Amended by [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md)**: the "Awareness ACK completes on the designated account's `👀`" bullet below no longer describes the default model — there is no Announcement object under the Accord memory model. It survives only inside a LEGACY `[ACK]`-titled-Discussion compatibility path. The task-Issue, Q&A, ordinary-PR, Core-PR, and migration bullets are unaffected; Decision Issue completion is superseded by the native `awaiting-record` stage-label chain (see `settle/SKILL.md`).
 **Date**: 2026-07-21
 **Refines**: [ADR-090](docs/adr/090-relay-github-native.md) and [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md)
 
