@@ -53,6 +53,7 @@ Audit the current repository, then configure only what the user approves. One Re
      ```
      A missing label is `missing`, not `blocked` — `launch` can create it directly.
    - the `decisions/` formal-memory scaffold: the directory exists, `decisions/README.md` states it is the index (id · title · status · date, newest first, regenerated — never hand-edited) and names the frontmatter spec (`id · status: active|superseded · superseded-by · source · settled-by · date`, `settle/SKILL.md`'s Decision file format). Its absence is `missing`, not a blocker — a repository with no Decisions yet still works, `launch` just cannot confirm the scaffold is ready for the first one.
+   - the roster (`relay.yml`, attested reference data — AGENTS.md, ADR-101), **optional, convention-tier**: if present, check it parses as YAML and that its GitHub-account handles resolve (`gh api users/<handle>`, read-only). If absent, self-report `missing (optional)` — never a blocker, and never part of the mutation plan in step 4 (`launch` audits the roster; it never authors or edits one, since a change is PR-gated counterpart attestation, not a setup mutation).
 3. **Report audit-only findings.** Separate `ready`, `missing`, `inert (slug mismatch)`, `blocked-by-plan`, `blocked`, and `cannot verify`. Audit mode writes nothing.
    - `missing` — the setting or file is absent, and a `launch` mutation *can* create it (a template file, a repository setting the viewer's permission level can change).
    - `inert (slug mismatch)` — the file exists but GitHub will never serve it (see above); the fix is renaming or removing the file, not writing a new one.
@@ -67,7 +68,7 @@ Done means the real repository state satisfies the contract. Return the reposito
 
 ## Discipline
 
-- Do not create a parallel Relay database, roster, frontmatter schema, or separate content repository.
+- Do not create a parallel Relay database, status frontmatter schema, or separate content repository. A jointly attested reference file (`relay.yml`, PR-gated changes) is formal memory, not a parallel state store (ADR-101) — `launch` audits it read-only and never writes or edits it.
 - Do not weaken existing protection to make setup easier.
 - Do not claim a reviewer/approval gate works unless the ruleset and bypass state were read back.
 - Repository mutations are always shown before execution.

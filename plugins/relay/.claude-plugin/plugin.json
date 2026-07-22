@@ -1,6 +1,6 @@
 {
   "name": "relay",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and merge protection, following the Accord memory model (ADR-100). Six daily verbs route intent Issue-default, surface real obligations plus a separate non-binding notices tier, reply with native baton flips, record cited Decisions and preserve reusable understanding derived from them, and settle with authority; an explicit migration bridge preserves legacy provenance. GitHub owns collaboration state, Relay owns semantics and verification. Language-agnostic.",
   "author": {
     "name": "Paul",
