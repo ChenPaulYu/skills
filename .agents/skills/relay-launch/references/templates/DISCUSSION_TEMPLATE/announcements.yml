@@ -5,9 +5,11 @@ body:
     attributes:
       label: Recipients
       description: >-
-        Name at least one @handle. Prefix the title with [ACK] and name
-        exactly one recipient if you need an explicit awareness
-        acknowledgment; otherwise this is FYI for the named recipients.
+        Name at least one @handle. Every named recipient will owe its own
+        awareness receipt (a 👀 reaction) by default — the [ACK] title
+        prefix still works but is no longer required to trigger it. Add
+        the `fyi` label instead if this is a pure broadcast where no
+        receipt is expected from anyone.
       placeholder: "@handle, @handle"
     validations:
       required: true

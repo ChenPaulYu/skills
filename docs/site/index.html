@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-21 (rev 92)
+  Last audit: 2026-07-22 (rev 93)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -106,32 +106,67 @@
       Discussion category forms, PR template), report (route intent into a
       Discussion, Issue, or PR;
       entry-owner discipline states an ask expecting a response must land in
-      an assigned Issue, a requested-reviewer PR, or a named-recipient [ACK]
-      Announcement; every report tags an explicit recipient, FYI included),
-      digest (show real obligations — including a request-reviewer obligation
-      for your own unreviewed non-draft PR — plus a separate, explicitly
-      non-binding notices tier of prose mentions only; read-only), reply (ACK,
-      answer, comment, Approve, or Request changes), brief (maintain cited
-      reusable understanding), settle (authorized close or protected Core
-      merge) — plus explicit-only migrate (preserve legacy provenance while
-      crossing into the GitHub-native model). Awareness ACK, exact-review
-      verdict, and evidenced task completion are separate events; every
-      object now has an explicit native completion and closure/effect rule;
-      Q&A gained native obligations from GitHub's own isAnswerable/isAnswered
-      fields; a ratified invariant makes an open non-draft PR never
-      obligation-free. GitHub's own Issue/Discussion templates now extend
-      recipient-tagging to organic traffic that never passes through report's
-      router — a convention launch installs and audits, not a new digest
-      contract. Every writing verb (report, reply, settle, brief) now gates
-      outbound GitHub-object prose behind author sign-off: show the exact
-      text verbatim and ask "Is this what you mean?" before posting —
-      mechanical mutations (reactions, labels, assignment, read-backs) are
-      exempt, per ADR-095. GitHub owns objects and state; Relay owns routing,
-      obligation semantics, authority checks, synthesis policy, and read-back
-      verification. relay v1.3.0; standalone (ADR-090/091/092/093/094/095).
+      an assigned Issue, a requested-reviewer PR, or a receipt-default
+      Announcement naming its recipient(s); every report tags an explicit
+      recipient, FYI included; wanting response CONTENT rather than just a
+      receipt routes to Q&A instead), digest (show real obligations —
+      including a request-reviewer obligation for your own unreviewed
+      non-draft PR, per-recipient receipt obligations, and an
+      announcement's close-nudge once every recipient has reacted — plus a
+      separate, explicitly non-binding notices tier now scoped to wild
+      traffic only; read-only), reply (ACK, answer, comment, Approve, or
+      Request changes — your own 👀 clears only your own receipt), brief
+      (maintain cited reusable understanding), settle (authorized close or
+      protected Core merge) — plus explicit-only migrate (preserve legacy
+      provenance while crossing into the GitHub-native model). Awareness
+      ACK, exact-review verdict, and evidenced task completion are separate
+      events; every object now has an explicit native completion and
+      closure/effect rule; Q&A gained native obligations from GitHub's own
+      isAnswerable/isAnswered fields; a ratified invariant makes an open
+      non-draft PR never obligation-free. GitHub's own Issue/Discussion
+      templates now extend recipient-tagging to organic traffic that never
+      passes through report's router — a convention launch installs and
+      audits, not a new digest contract. Every writing verb (report, reply,
+      settle, brief) now gates outbound GitHub-object prose behind author
+      sign-off: show the exact text verbatim and ask "Is this what you
+      mean?" before posting — mechanical mutations (reactions, labels,
+      assignment, read-backs) are exempt, per ADR-095. Closure semantics are
+      ratified (ADR-096): every Discussion is closed by its initiator, one
+      closure-owner class, no split by category; a Discussion opened to
+      converge something needs a summarizing final comment first, Q&A's
+      accepted-answer path being the reducer-visible special case of that
+      same rule. digest's mentioned-in-prose suppression is TEMPORAL for a
+      comment-borne mention (suppressed only up to the viewer's own last
+      comment; one arriving later still fires) and atemporal only for a
+      title/body mention; 👀 never covers a comment-borne mention — a
+      deliberate asymmetry versus Issues/PRs, which carry no reaction query
+      at all. Receipt obligations are now the DEFAULT, not opt-in (ADR-097):
+      any non-fyi, non-Q&A Discussion naming one or more @recipients is
+      Announcements-tier by construction, and EVERY named account owes its
+      own receipt (👀), replacing the old first-mention-wins single-recipient
+      design; fyi label is the explicit broadcast opt-out (no obligation,
+      ever); a close-nudge machine-answers "has everyone seen this?" for the
+      author once every recipient has reacted; the notices tier narrows to
+      genuinely wild traffic (comment-borne mentions, objects with no
+      receipt semantics) since a title/body mention is now a formal
+      obligation, not a bare notice. report also names Discussions as
+      Relay's upstream nursery (ADR-098): while an ask can't yet state an
+      owner and a completion rule, it stays a Discussion (Ideas/Q&A) — a
+      Discussion where nobody owes work is a feature, not a gap; once both
+      can be named, graduate to a linked Issue (a born-crisp ask may open
+      the Issue directly, no mandatory two-stage ceremony); the named
+      smell is an Issue where nobody can say what "done" looks like.
+      Reversing or materially amending an already-agreed decision now
+      routes through the same Decision Issue assignee-consent path as
+      making one (ADR-099) — an accompanying Announcement's 👀 is never
+      read as consent, only awareness, closing a live gap where a
+      unilateral reversal shipped with no consent record at all. GitHub
+      owns objects and state; Relay owns routing, obligation semantics,
+      authority checks, synthesis policy, and read-back verification.
+      relay v1.4.0; standalone (ADR-090/091/092/093/094/095/096/097/098/099).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 95 ADRs in docs/adr/ — 001..095 with cross-supersede / refine links
+    • 99 ADRs in docs/adr/ — 001..099 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay digest;
@@ -162,7 +197,236 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 92)
+  ⚠ FIXED in this revision (rev 93)
+    1. Relay 1.4.0 (ADR-096) ratifies closure semantics: EVERY Discussion is
+       closed by its initiator — one closure-owner class, no split by
+       category or recipient count. An FYI recipient's seen-signal is 👀,
+       the same reaction primitive [ACK] already uses (a comment is welcome
+       when a recipient has something to say, but is never required); the
+       initiator reads the reaction list, then closes as ordinary
+       housekeeping, no resolution comment needed. A Discussion opened to
+       converge something — Q&A or otherwise — is concluded and closed by
+       its initiator too, but needs a summarizing final comment first;
+       GitHub's native accepted-answer/close-answered-question path is the
+       reducer-visible special case of this same rule, not a separate one.
+       Trigger: a downstream conformance-style consumer that treats
+       open/closed state as itself meaningful surfaced that closure
+       previously had no unambiguous owner for FYI and non-Q&A Discussions.
+       Three variants were considered and rejected (recorded in the ADR):
+       recipient-closes-FYI (split into single/multi-recipient rules; a
+       first closer could hide the notice from other recipients),
+       comment-as-required-seen-signal (duplicates the existing 👀 primitive;
+       raises per-recipient cost, lowers compliance), and — caught on
+       judgment-seat review before landing — atemporal engagement
+       suppression, this revision's own first draft: it silenced a
+       mentioned-in-prose notice on ANY prior viewer engagement, with no
+       notion of when, which re-opens ADR-093's founding scenario (a later
+       "@person please respond" would go silent forever in any thread the
+       person had ever once touched). The shipped reducer change is
+       TEMPORAL for a comment-borne mention and atemporal only for a
+       title/body one: compute-state.mjs's graphQlQuery() gains createdAt on
+       the Discussion and pull-request comment selections (Issues already
+       had it); a comment-borne mention is suppressed only up to the
+       viewer's own last comment on the object (viewerLastCommentAt, string-
+       compared as ISO-8601) — one arriving AFTER still fires; a title/body
+       mention has no per-mention timestamp, so it stays suppressed by any
+       prior engagement at all (viewerEngaged, unchanged). 👀 carries no
+       timestamp in the collected data, so it never covers a comment-borne
+       mention, only a title/body one. A comment missing createdAt (legacy
+       fixture) sorts as older-than-everything, so it stays suppressed once
+       the viewer has commented at all. Deliberate asymmetry, unrelated to
+       the temporal split: Issues/PRs carry no reaction query at all, so
+       comment-engagement alone covers suppression for those two types.
+       compute-state.test.mjs: 59 → 63 (this revision's first pass, now
+       superseded) → 66 (this pass): three tests added for the temporal
+       split (later comment-mention still fires after an earlier viewer
+       comment; a viewer's later comment suppresses an earlier stranger
+       mention; 👀 never covers a comment mention) and one pre-existing test
+       RESTORED to its original pre-ADR-096 expectation, with an updated
+       comment explaining why the atemporal interim answer was wrong — all
+       66 green. Updated: report/SKILL.md (FYI closure at the
+       recipient-tagging bullet), settle/SKILL.md (initiator as closure
+       owner for every Discussion, FYI branch needs no resolution comment),
+       reply/SKILL.md (FYI 👀 distinguished from ACK 👀), digest/SKILL.md
+       (the atemporal/temporal split stated plainly, the reaction-query
+       asymmetry, four suppression cases, and fable's tier-2 honesty
+       sentence — a mention after your last engagement fires, one before it
+       does not), plugins/relay/CLAUDE.md (lifecycle matrix FYI row keeps
+       Owner = None, obligation-owner meaning, with closure ownership moved
+       into the completion/closure column so that column stays single-
+       meaning; closure-semantics and obligations-versus-notices paragraphs
+       both rewritten for the temporal split), docs/design/relay.md
+       (closure-semantics paragraph and changelog line revised in place for
+       the temporal rule and the third rejected variant — nothing here was
+       ever committed, so no separate superseding entry). relay 1.3.0 →
+       1.4.0. ADR count 95 → 96.
+    2. Relay 1.4.0 (ADR-097) flips the awareness tier from optional to
+       RECEIPT-DEFAULT: any open, non-fyi, non-Q&A Discussion naming one or
+       more @recipients in its title/body is now Announcements-tier by
+       construction, and EVERY named account owes its own receipt (👀) —
+       replacing the pre-097 design where only an explicit [ACK]
+       title/ack-required label triggered an obligation at all, and even
+       then only the FIRST @mention was the designated recipient (later
+       mentions were mere context, invisible to digest). [ACK] and
+       ack-required still work as explicit markers but neither is required
+       any more. fyi-labeled stays the explicit broadcast opt-out: no
+       obligation for anyone, ever — mentioned accounts there get a notice,
+       exactly the pre-097 experience. Close-nudge: once every named
+       recipient has left their own 👀, the announcement's author owes
+       SETTLE close-announcement (reason receipts-collected) — symmetric
+       with Q&A's answered → close-answered-question, so nobody has to
+       manually poll the reaction list. Trigger: the user ratified
+       "receipt obligations by default" after asking why not force
+       replies — the pre-097 optional-ACK tier consumed disproportionate
+       machinery (two overlapping awareness mechanisms, one silent by
+       default) for what it delivered. Considered and rejected: (i) full
+       compulsion with no fyi opt-out — kills the cheap weekly-share
+       broadcast; (ii) content-required ACK via length gates — a Goodhart
+       failure, buys characters not substance, the content-wanting case
+       routes to Q&A instead (report/SKILL.md now states this routing rule
+       directly); (iii) the pre-097 status quo itself — left the gap open,
+       an initiator got no completion signal without manually reading the
+       reaction list. Accepted limit, stated plainly rather than hidden:
+       forcing 👀 by default can debase it toward reflex over time; ACK
+       still only ever attests awareness, never comprehension or
+       acceptance (ADR-091 unchanged). Reducer: designatedAckRecipient
+       (first-mention-wins) removed; isAnnouncementDiscussion +
+       announcementRecipients added; hasFormalSignal and the obligation
+       loop both updated; a comment-borne mention still never triggers a
+       receipt (announcementRecipients only reads title/body) — wild
+       conversation under an announcement stays notice-tier. Notices tier
+       narrows correspondingly: what is left is genuinely wild traffic
+       (comment-borne mentions, objects with no receipt semantics at all)
+       now that a title/body mention on a receipt-bearing Discussion is a
+       formal obligation, not a notice. compute-state.test.mjs: 66 → 69 —
+       three pre-existing tests updated in place because their premise
+       ("mention-only, no obligation"; "first mention wins, later mentions
+       ignored"; "an uninvolved mentioned Discussion party gets only a
+       notice") is now literally false for a plain Discussion mention (one
+       moved onto an Issue fixture to keep testing the underlying
+       formal-signal-isn't-blanket principle it was written for, since that
+       object type is untouched by receipt-default), three added (per-
+       recipient clearing; the close-nudge firing once everyone has
+       reacted; a comment-borne mention still creating no obligation) — all
+       69 green. Updated: report/SKILL.md (Announcement route restated as
+       receipt-default plus the close-nudge; new "content wanted, not just
+       receipt → Q&A" routing rule), digest/SKILL.md (multi-recipient
+       obligation contract, close-nudge, notices-tier scope narrowed to
+       wild traffic), reply/SKILL.md (your own 👀 clears only your own
+       receipt), settle/SKILL.md (announcement closes when receipts
+       collected, no resolution comment needed), plugins/relay/CLAUDE.md
+       (lifecycle matrix's old FYI/Awareness-ACK rows replaced by a
+       receipt-default Announcement row and a narrower FYI opt-out row,
+       Owner column kept single-meaning per ADR-096's fable-flagged fix),
+       plugins/relay/skills/launch/references/templates/
+       DISCUSSION_TEMPLATE/announcements.yml (recipients field states the
+       receipt-default rule + fyi opt-out), docs/adr/096 (amended, not
+       rewritten — its FYI-closure description now scoped to the narrower
+       fyi-labeled case; its "no ACK lifecycle change" consequence marked
+       superseded), docs/design/relay.md (closure-semantics paragraph,
+       lifecycle matrix, and changelog all updated). NEW
+       docs/adr/097-relay-receipt-default.md. relay stays 1.4.0 — this
+       ships in the same shipping unit as ADR-096, no separate version
+       bump. ADR count 96 → 97.
+    3. Relay 1.4.0 (ADR-098) names Discussions as Relay's UPSTREAM NURSERY
+       after the user observed a routing inversion: convergence-talk had
+       been pulled almost entirely into Issues, because Relay's obligation
+       model needs a stated assignee and completion rule to produce any
+       digest signal at all — leaving Discussions' official upstream role
+       (GitHub's own stated purpose: developing/prioritizing ideas BEFORE
+       an Issue exists) vacant. Ratified boundary: can you state an owner
+       AND a completion rule yet? Not yet → Discussion (Ideas for
+       exploration, Q&A for a specific question) — nobody owing work there
+       is a feature, not a gap. Once both can be named → open the Issue and
+       link back to the originating Discussion (GitHub's native
+       create-issue-from-discussion preserves lineage, no Relay bookkeeping
+       needed). Born-crisp exemption: an ask that already knows its owner
+       and completion rule may open the Issue directly — the two-stage
+       path is never mandatory ceremony. Named smell: an Issue where
+       nobody can say what "done" looks like should have been a
+       Discussion. Rejected: mandatory two-stage routing for everything —
+       ceremony at n=1, since most asks already know their owner/completion
+       rule the moment they're written down. Routing-guidance only — no
+       reducer/schema change, compute-state.test.mjs untouched at 69/69.
+       Updated: report/SKILL.md (new router paragraph stating the boundary,
+       graduation link-back, born-crisp exemption, and the smell),
+       plugins/relay/CLAUDE.md (same paragraph stated once as plugin law;
+       the "Discussion needing a conclusion" lifecycle-matrix row gains the
+       graduation clause), docs/design/relay.md (one clause in Object
+       routing). NEW docs/adr/098-relay-upstream-nursery-routing.md. ADR
+       count 97 → 98.
+    4. Relay 1.4.0 (ADR-099) closes a live consent gap: a decision
+       originally agreed by both collaborators was reversed unilaterally
+       in practice, and the reversal was announced through an [ACK]
+       Discussion — but 👀 attests awareness only, never consent (ADR-091),
+       so the reversal shipped with no consent record at all, an
+       overloaded-ACK failure in a new guise. Ratified rule: reversing or
+       materially amending a previously agreed decision routes as a
+       Decision Issue assigned to the counterpart; their authored Outcome:
+       resolution is the consent record — the same native completion
+       signal ADR-092 already defined for MAKING a decision, now stated
+       explicitly to also govern CHANGING one. An accompanying Announcement
+       may inform but never substitutes. Rejected: reading tacit consent
+       from 👀 plus silence — exactly the overloaded-ACK fallacy ADR-091
+       already named; treating non-objection as agreement also inverts the
+       burden, making silence the cheapest way to be recorded as having
+       agreed. Routing/authority-guidance only — no reducer/schema change,
+       compute-state.test.mjs untouched at 69/69 (digest already surfaces
+       a Decision Issue's assignee obligation and SETTLE settle-decision
+       identically regardless of whether the decision is new or a
+       reversal). Updated: report/SKILL.md (decision route gains one
+       sentence), settle/SKILL.md (Decision Issue authority clause extended
+       to reversal/amendment), plugins/relay/CLAUDE.md (new paragraph next
+       to "accepted decision is not automatically effective"),
+       docs/design/relay.md (one clause in Object routing). NEW
+       docs/adr/099-relay-decision-reversal-consent.md. ADR count 98 → 99.
+    5. Fable full-unit review of the whole 1.4.0 shipping unit (ADR-096–099)
+       found two reducer defects in what item 2 shipped, fixed in code (not
+       weakened in docs) — the ratified instruction: B1 (BLOCKING) —
+       announcementRecipients over-collected two kinds of non-recipients.
+       (a) The announcement's own self-mentioning author ("questions? ping
+       @me") owed a receipt on their own post and could block their own
+       close-nudge — fixed by excluding the author from recipients; a
+       self-mention-only announcement now has ZERO recipients (no
+       obligation, no close-nudge, same as naming nobody). (b) A GitHub
+       team/org path (@org/team-name) was counted as a recipient despite a
+       team never being able to react 👀, permanently deadlocking
+       receipts-collected — fixed by recognizing and skipping the
+       /-suffixed path in findAllMentions; a BARE @org mention (no
+       trailing /) stays indistinguishable from a real user login and is
+       deliberately left as a recipient — now documented as an honest
+       limit in report/SKILL.md and digest/SKILL.md (name real, reachable
+       accounts; a typo/nonexistent/unreactable handle silently blocks the
+       close-nudge, no self-report). I2 (IMPORTANT) — formal-signal/
+       completed-receipt suppression was gating comment-borne mentions
+       too, contradicting CLAUDE.md's and digest/SKILL.md's own "never
+       silenced" promise: a recipient who already gave their 👀 was deaf
+       to a LATER "@them please respond" comment. Fixed by scoping
+       formal-signal and atemporal-engagement suppression to TITLE/BODY
+       mentions only; a comment-borne mention is now governed solely by
+       the temporal rule regardless of any formal signal — except an OPEN
+       obligation on the object still suppresses everything, comment-borne
+       included (unchanged, verified by interaction test: no duplicate
+       nag while work is already owed). compute-state.test.mjs: 69 → 76
+       (four new tests for B1, three for I2), all green. O3 (optional,
+       done): ADR-097's accepted-limits section gained one sentence naming
+       third-party obligation-spam — any title/body mention on a wild
+       non-fyi Discussion mints a real per-person receipt, so authors must
+       mention deliberately. Updated: compute-state.mjs (findAllMentions
+       team-path skip, announcementRecipients author exclusion, the
+       notice-suppression block restructured to split formal-signal
+       scope from the temporal comment rule), compute-state.test.mjs
+       (+7), report/SKILL.md + digest/SKILL.md (honest-limit sentences,
+       B1 exclusions documented), plugins/relay/CLAUDE.md (the
+       obligations-versus-notices paragraph corrected to state the
+       title/body-only scope of formal-signal suppression — this is the
+       exact sentence fable cited as contradicting the "never silenced"
+       claim), docs/design/relay.md (Two-tier digest paragraph corrected
+       + changelog line), docs/adr/097-relay-receipt-default.md (accepted-
+       limits addition). No new ADR; no schema change; relay stays 1.4.0.
+       ADR count unchanged at 99.
+
+  ⚠ FIXED in rev 92 (kept for history)
     1. Relay 1.3.0 (ADR-095) adds an author sign-off gate for outbound
        GitHub prose: any text a writing verb posts into a GitHub object in
        the user's voice — report's title/body, reply's answer/comment/
@@ -2328,7 +2592,7 @@ const DOMAINS = {
   relay: {
     layer: 'foundation',
     path: 'plugins/relay/',
-    blurb: {en:'GitHub-native asynchronous coordination: GitHub owns Discussions, Issues, pull requests, reviews, reactions, assignments, and protected merge state; Relay owns routing, real-obligation semantics, authority checks, cited synthesis, settlement, and read-back verification. Awareness ACK, exact review, and evidenced work are separate events with explicit native completion rules. digest now returns a separate non-binding notices tier (prose mentions only) alongside native Q&A obligations; two ratified hard rules: every report tags an explicit recipient (FYI included), and an open non-draft PR is never obligation-free — an unreviewed own PR is a request-reviewer obligation, not a notice. launch now also installs and audits GitHub-native entry-point templates (Issue Forms, Discussion category forms, PR template) that extend recipient-tagging to organic traffic bypassing report's router — a convention, not a new digest contract. Every writing verb (report, reply, settle, brief) now gates outbound GitHub-object prose behind author sign-off: show the exact text verbatim and ask "Is this what you mean?" before posting; mechanical mutations (reactions, labels, assignment) are exempt. 7 installed skills: six daily verbs (launch · report · digest · reply · brief · settle) plus explicit-only migrate. Standalone. v1.3.0; see relay/CLAUDE.md + ADR-090/091/092/093/094/095 + docs/design/relay.md.', zh:'GitHub-native 非同步協調：GitHub 擁有 Discussion、Issue、PR、review、reaction、assignment 與受保護的 merge 狀態；Relay 擁有路由、真實義務語意、權限檢查、帶引用的整理、結案與寫後讀回驗證。awareness ACK、exact review 與 evidenced work 是三種事件，各有明確的 GitHub 原生完成規則。digest 現在多回傳一個獨立、不具約束力的 notices 層(僅 prose mention),並加入原生 Q&A obligation；兩條拍板的硬規則：每個 report 都要標明一個明確的 recipient(FYI 也不例外),而且開著的 non-draft PR 絕不會沒有 obligation——沒人被要求 review 的自己的 PR 是 request-reviewer obligation,不是 notice。launch 現在還會安裝並稽核 GitHub 原生的 entry-point 範本(Issue Forms、Discussion category forms、PR template),把標記 recipient 的規則延伸到繞過 report 路由器的自發流量——這是慣例,不是新的 digest contract。每個寫入類 verb(report、reply、settle、brief)現在都會在貼出 GitHub object 的 prose 前設 author sign-off 關卡：把要貼出的文字逐字show給使用者,問「這是你的意思嗎?」,才能貼出;純機械操作(reaction、label、assignment)不受此限。共安裝 7 個 skill：6 個日常 verb（launch · report · digest · reply · brief · settle）加上 explicit-only 的 migrate。獨立。v1.3.0；見 relay/CLAUDE.md、ADR-090/091/092/093/094/095 與 docs/design/relay.md。'},
+    blurb: {en:'GitHub-native asynchronous coordination: GitHub owns Discussions, Issues, pull requests, reviews, reactions, assignments, and protected merge state; Relay owns routing, real-obligation semantics, authority checks, cited synthesis, settlement, and read-back verification. Awareness ACK, exact review, and evidenced work are separate events with explicit native completion rules. digest now returns a separate non-binding notices tier (prose mentions only) alongside native Q&A obligations; two ratified hard rules: every report tags an explicit recipient (FYI included), and an open non-draft PR is never obligation-free — an unreviewed own PR is a request-reviewer obligation, not a notice. launch now also installs and audits GitHub-native entry-point templates (Issue Forms, Discussion category forms, PR template) that extend recipient-tagging to organic traffic bypassing report's router — a convention, not a new digest contract. Every writing verb (report, reply, settle, brief) now gates outbound GitHub-object prose behind author sign-off: show the exact text verbatim and ask "Is this what you mean?" before posting; mechanical mutations (reactions, labels, assignment) are exempt. Closure semantics are now ratified (ADR-096): every Discussion is closed by its initiator — one closure-owner class, no split by category. An FYI recipient's seen-signal is 👀 (comment welcome, never required), the same reaction primitive ACK already uses; the initiator reads the reaction list, then closes as housekeeping. A Discussion opened to converge something is concluded and closed by its initiator too, but needs a summarizing final comment first (Q&A\'s accepted-answer path is the reducer-visible special case, not a separate rule). digest\'s reducer gained one change, TEMPORAL for a comment-borne mention (suppressed only up to the viewer\'s own last comment on the object — createdAt now collected on Discussion/PR comments — so a mention arriving later still fires, fixing an atemporal interim draft that re-opened ADR-093\'s founding "@person please respond" scenario) and atemporal only for a title/body mention, which carries no per-mention timestamp; 👀 never covers a comment-borne mention. Receipt obligations are now the DEFAULT, not opt-in (ADR-097): any open, non-fyi, non-Q&A Discussion naming one or more @recipients is Announcements-tier by construction, and EVERY named account owes its own receipt (👀) — replacing the old first-mention-wins single-recipient design; fyi label stays the explicit broadcast opt-out (no obligation, ever, mentioned accounts get a notice); a close-nudge gives the author a machine-answered SETTLE close-announcement once every recipient has reacted (reason receipts-collected), symmetric with Q&A's answered → close; wanting response CONTENT rather than a bare receipt routes to Q&A instead; the notices tier narrows to genuinely wild traffic (comment-borne mentions, objects with no receipt semantics) now that a title/body mention is a formal obligation. report now also names Discussions as Relay's upstream nursery (ADR-098): an ask that can't yet state an owner and a completion rule stays a Discussion (Ideas/Q&A, matching GitHub's own stated purpose) and graduates to a linked Issue once both can be named — a born-crisp ask may open the Issue directly, never mandatory ceremony; the named smell is an Issue where nobody can say what "done" looks like. Reversing or materially amending an already-agreed decision now routes through the same Decision Issue assignee-consent path as making one (ADR-099), closing a live gap where a unilateral reversal shipped via an ACK Discussion with no consent record — 👀 is never read as consent, only awareness. 7 installed skills: six daily verbs (launch · report · digest · reply · brief · settle) plus explicit-only migrate. Standalone. v1.4.0; see relay/CLAUDE.md + ADR-090/091/092/093/094/095/096/097/098/099 + docs/design/relay.md.', zh:'GitHub-native 非同步協調：GitHub 擁有 Discussion、Issue、PR、review、reaction、assignment 與受保護的 merge 狀態；Relay 擁有路由、真實義務語意、權限檢查、帶引用的整理、結案與寫後讀回驗證。awareness ACK、exact review 與 evidenced work 是三種事件，各有明確的 GitHub 原生完成規則。digest 現在多回傳一個獨立、不具約束力的 notices 層(僅 prose mention),並加入原生 Q&A obligation；兩條拍板的硬規則：每個 report 都要標明一個明確的 recipient(FYI 也不例外),而且開著的 non-draft PR 絕不會沒有 obligation——沒人被要求 review 的自己的 PR 是 request-reviewer obligation,不是 notice。launch 現在還會安裝並稽核 GitHub 原生的 entry-point 範本(Issue Forms、Discussion category forms、PR template),把標記 recipient 的規則延伸到繞過 report 路由器的自發流量——這是慣例,不是新的 digest contract。每個寫入類 verb(report、reply、settle、brief)現在都會在貼出 GitHub object 的 prose 前設 author sign-off 關卡：把要貼出的文字逐字show給使用者,問「這是你的意思嗎?」,才能貼出;純機械操作(reaction、label、assignment)不受此限。結案語意現已拍板(ADR-096)：每個 Discussion 都由 initiator 結案——單一結案擁有者類別，不按類別分裂。FYI recipient 的已讀訊號是 👀(歡迎留言，但不強制)，沿用 ACK 已經在用的同一個 reaction 原語；initiator 讀 reaction 清單，再以例行整理方式結案。為收斂而開的 Discussion 一樣由 initiator 判斷收斂並結案，但要先留下總結留言(Q&A 的 accepted-answer 是這條規則在 reducer 可見的特例，不是另一條規則)。digest 的 reducer 多了一個變動：對留言裡出現的 mention 是「時序性」的——只有到 viewer 自己最後一則留言的時間點為止才會被抑制(留言的 createdAt 現已收集)，晚於這個時間點的 mention 仍會觸發(修正了先前一版「不分時序」的草案——那版會重新打開 ADR-093 最初要解決的「@某人 麻煩回覆一下」場景);只有 title/body 裡的 mention 才是不分時序(因為沒有逐則 mention 的時間戳記可比對)；👀 從不覆蓋留言裡的 mention。已讀 obligation 現在預設就有，不再是 opt-in(ADR-097)：任何未標 fyi、非 Q&A 的 Discussion，只要 title/body 點名了一或多個 @recipient，就自動算 Announcements 層——每一個被點名的帳號都各自欠一份已讀回條(👀)——取代舊版「第一個 mention 才算數」的單一 recipient 設計；fyi 標籤仍是明確的廣播 opt-out(永遠沒有 obligation，被點名的人只拿到 notice)；等所有 recipient 都按了 👀，作者就會拿到一個機器判定的 SETTLE close-announcement(理由 receipts-collected)，不用再自己盯著 reaction 清單看，跟 Q&A 的「已回答→結案」對稱；如果要的是「內容」而不只是「已讀回條」，該走 Q&A 而不是 ACK；notices 層現在收斂到真正的「野生」流量(留言裡的 mention、沒有已讀語意的 object)，因為 title/body 裡的 mention 現在是正式 obligation，不再只是 notice。report 現在還把 Discussion 定位為 Relay 的「育成」上游(ADR-098)：一個還說不出 owner 與完成規則的 ask 就留在 Discussion(Ideas/Q&A，對應 GitHub 官方對 Discussion 的定位)，等兩者都能講清楚了再畢業成連結回去的 Issue——一開始就講清楚的 ask 可以直接開 Issue，不強制兩段式儀式；這條規則要抓的臭味是：一個沒人講得出「done」長怎樣的 Issue。撤回或實質修改一個已經談定的決定，現在也走跟做決定一樣的 Decision Issue + assignee 同意路徑(ADR-099)——修補一個真實事件留下的缺口：一次單方面的撤回透過 ACK Discussion 宣布，卻沒有任何同意紀錄，因為 👀 從不代表同意，只代表已讀。共安裝 7 個 skill：6 個日常 verb（launch · report · digest · reply · brief · settle）加上 explicit-only 的 migrate。獨立。v1.4.0；見 relay/CLAUDE.md、ADR-090/091/092/093/094/095/096/097/098/099 與 docs/design/relay.md。'},
     files: [
       ['/relay:launch', '', {en:'Audit or configure the current GitHub repository for Relay: authenticated identity, Discussions and categories, permissions, CODEOWNERS, required review, stale-approval dismissal, bypass safety, and entry-point templates (Issue Forms, Discussion category forms, PR template — a convention extending recipient-tagging to organic traffic, not a digest contract). Preview mutations, then read them back. ADR-090/094.', zh:'稽核或設定目前 GitHub repository 的 Relay 條件：登入身分、Discussion 與 category、權限、CODEOWNERS、required review、舊 approval 失效、bypass 安全，以及 entry-point 範本(Issue Forms、Discussion category forms、PR template——把 recipient 標記規則延伸到自發流量的慣例，不是 digest contract)。變更前預覽，完成後讀回驗證。ADR-090/094。'}],
       ['/relay:report', '', {en:'Route awareness to an optional ACK, evidenced work to an assigned Issue, and exact material to a requested-reviewer pull request. Entry-owner discipline: an ask expecting a response must land in one of those three natively-owned shapes, or it is FYI by definition — a prose @mention is never itself an entry point. Split independently completable asks, expose responsibility, and verify the written object. ADR-090/091/092/093.', zh:'把 awareness 路由到 optional ACK、要交證據的工作路由到 assigned Issue、要逐版確認的精確內容路由到 requested-reviewer PR。entry-owner 紀律：期待回應的請求必須落在這三種原生擁有的形狀之一，否則就是 FYI——單純 prose @mention 本身從來不是入口。拆開可獨立完成的要求、顯示責任並讀回驗證。ADR-090/091/092/093。'}],
@@ -2347,7 +2611,7 @@ const CB_NODES = [
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.6.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.6.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},
   {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 4 summoned skills: catchup · park (the single-use cursor — catchup clears it once consumed, ADR-085), observe (selected durable learning), and retrace (a corrected causal development path + interactive alignment artifact); planned 5th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.7.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。4 個召喚式 skill:catchup · park(一次性游標——catchup 讀完即清,ADR-085)、observe(挑選後的耐久學習)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 5 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.7.0;retrace 見 ADR-084。'}},
-  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination: GitHub owns collaboration objects and enforced state; Relay owns routing, obligation semantics, authority checks, cited briefs, settlement, and verification. Awareness, exact review, and evidenced work stay separate through native completion. digest adds a separate non-binding notices tier plus native Q&A obligations. launch installs/audits GitHub-native entry-point templates extending recipient-tagging to organic traffic. Every writing verb gates outbound GitHub-object prose behind author sign-off (verbatim text + "Is this what you mean?"); mechanical mutations are exempt. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v1.3.0; ADR-090/091/092/093/094/095.', zh:'GitHub-native 協調：GitHub 擁有協作 object 與強制狀態；Relay 擁有路由、義務語意、權限檢查、帶引用 brief、結案與驗證。awareness、exact review 與 evidenced work 依各自原生完成狀態分開。digest 新增一個獨立、不具約束力的 notices 層與原生 Q&A obligation。launch 安裝/稽核 GitHub 原生 entry-point 範本，把 recipient 標記規則延伸到自發流量。每個寫入類 verb 都在貼出 GitHub object 的 prose 前設 author sign-off 關卡(逐字show文字+問「這是你的意思嗎?」)；純機械操作不受此限。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v1.3.0；ADR-090/091/092/093/094/095。'}},
+  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination: GitHub owns collaboration objects and enforced state; Relay owns routing, obligation semantics, authority checks, cited briefs, settlement, and verification. Awareness, exact review, and evidenced work stay separate through native completion. Receipt obligations are now the DEFAULT (ADR-097): any non-fyi, non-Q&A Discussion naming @recipients makes EVERY one of them owe its own 👀 receipt — replacing the old first-mention-only design; fyi stays the explicit no-obligation broadcast opt-out; a close-nudge SETTLEs the author once every recipient has reacted. digest\'s notices tier now narrows to genuinely wild traffic (comment-borne mentions, no-receipt objects). launch installs/audits GitHub-native entry-point templates extending recipient-tagging to organic traffic. Every writing verb gates outbound GitHub-object prose behind author sign-off (verbatim text + "Is this what you mean?"); mechanical mutations are exempt. Closure semantics: every Discussion is closed by its initiator (ADR-096); a converging Discussion needs a summarizing final comment first (Q&A\'s accepted-answer is the special case). Notice-suppression is temporal for a comment-borne mention, atemporal only for title/body; 👀 never covers a comment-borne mention. Discussions are Relay's upstream nursery (ADR-098): no owner/completion rule yet → Discussion; both nameable → graduate to a linked Issue (born-crisp asks skip straight there). Reversing an already-agreed decision routes through the same Decision Issue assignee-consent path as making one (ADR-099) — 👀 is never consent. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v1.4.0; ADR-090/091/092/093/094/095/096/097/098/099.', zh:'GitHub-native 協調：GitHub 擁有協作 object 與強制狀態；Relay 擁有路由、義務語意、權限檢查、帶引用 brief、結案與驗證。awareness、exact review 與 evidenced work 依各自原生完成狀態分開。已讀 obligation 現在預設就有(ADR-097)：任何未標 fyi、非 Q&A 的 Discussion 只要點名了 @recipient，每一個被點名的帳號都各自欠一份 👀 已讀回條——取代舊版「只認第一個 mention」的設計；fyi 仍是明確的無 obligation 廣播 opt-out；等所有 recipient 都已讀，作者會拿到一個機器判定的 SETTLE close-nudge。digest 的 notices 層現在收斂到真正的「野生」流量(留言裡的 mention、沒有已讀語意的 object)。launch 安裝/稽核 GitHub 原生 entry-point 範本，把 recipient 標記規則延伸到自發流量。每個寫入類 verb 都在貼出 GitHub object 的 prose 前設 author sign-off 關卡(逐字show文字+問「這是你的意思嗎?」)；純機械操作不受此限。結案語意：每個 Discussion 都由 initiator 結案(ADR-096)；為收斂而開的 Discussion 要先留總結留言(Q&A 的 accepted-answer 是特例)。notice 抑制對留言裡的 mention 是時序性的，對 title/body 的 mention 才是不分時序；👀 從不覆蓋留言裡的 mention。Discussion 是 Relay 的育成上游(ADR-098)：還沒 owner/完成規則 → Discussion；兩者都講得出來 → 畢業成連結回去的 Issue(一開始就講清楚可以直接開 Issue)。撤回已談定的決定走跟做決定一樣的 Decision Issue + assignee 同意路徑(ADR-099)——👀 從不算同意。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v1.4.0；ADR-090/091/092/093/094/095/096/097/098/099。'}},
 ];
 const CB_EDGES = [['shape','nav']];
 

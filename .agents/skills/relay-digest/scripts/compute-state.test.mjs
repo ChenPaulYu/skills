@@ -245,10 +245,155 @@ test('Core settlement appears only for an authorized viewer with satisfied curre
   assert.equal(result.action, 'merge-core');
 });
 
-test('mention-only and FYI traffic produce no obligation', () => {
+// Superseded by ADR-097 (receipt-default): a plain body @mention on a non-fyi,
+// non-answerable Discussion used to be "mention-only, no obligation" — it now IS the
+// Announcements-tier receipt trigger by design, so `mention` now owes an ACK. `fyi`
+// stays the explicit broadcast opt-out and remains obligation-free.
+test('ADR-097: a plain body mention on a non-fyi Discussion now owes a receipt (ACK) obligation by default; fyi-labeled traffic stays obligation-free and produces only a notice', () => {
   const mention = item('D12', 'discussion', { body: '@reviewer-one can you look?', reactions: [] });
   const fyi = item('D13', 'discussion', { title: '[FYI] Status', body: '@reviewer-one', isFYI: true });
-  assert.equal(reduceObligations(base([mention, fyi])).obligations.length, 0);
+  const result = reduceObligations(base([mention, fyi]));
+  assert.deepEqual(result.obligations.map((entry) => entry.kind), ['ACK']);
+  assert.equal(result.obligations[0].url, mention.url);
+  assert.equal(result.obligations[0].action, 'add-eyes-reaction');
+  // fyi is the explicit broadcast opt-out (ADR-097): its own mention stays a bare notice —
+  // it never competes with mention's obligation above, one entry per object.
+  assert.equal(result.notices.length, 1);
+  assert.equal(result.notices[0].url, fyi.url);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+test('ADR-097: a multi-recipient announcement gives each named account its OWN ACK obligation, clearing individually — one recipient\'s 👀 does not clear the other\'s', () => {
+  const announcement = item('D70', 'discussion', {
+    title: '[ACK] Policy update',
+    body: '@reviewer-one and @reviewer-two please both read this',
+    reactions: [],
+  });
+  const oneView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
+  assert.deepEqual(oneView.obligations.map((entry) => entry.kind), ['ACK']);
+  const twoView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [announcement] });
+  assert.deepEqual(twoView.obligations.map((entry) => entry.kind), ['ACK']);
+
+  // reviewer-one alone reacts.
+  announcement.reactions.push({ content: 'EYES', user: { login: 'reviewer-one' } });
+  const oneAfter = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
+  assert.equal(oneAfter.obligations.length, 0, 'reviewer-one\'s own 👀 clears their own receipt');
+  const twoAfter = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [announcement] });
+  assert.deepEqual(twoAfter.obligations.map((entry) => entry.kind), ['ACK'], 'reviewer-two\'s receipt is untouched by reviewer-one\'s reaction');
+});
+
+test('ADR-097: once every named recipient has left their own 👀, the announcement\'s author owes a close-announcement SETTLE — symmetric with Q&A\'s answered -> close', () => {
+  const announcement = item('D71', 'discussion', {
+    title: '[ACK] Policy update',
+    body: '@reviewer-two and @reviewer-three please both read this',
+    author: { login: 'reviewer-one' },
+    reactions: [{ content: 'EYES', user: { login: 'reviewer-two' } }],
+  });
+  // Only one of the two recipients has reacted so far — no close-nudge yet.
+  const partial = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
+  assert.equal(partial.obligations.length, 0);
+
+  announcement.reactions.push({ content: 'EYES', user: { login: 'reviewer-three' } });
+  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
+  const [settle] = authorView.obligations;
+  assert.equal(settle.kind, 'SETTLE');
+  assert.equal(settle.action, 'close-announcement');
+  assert.ok(settle.reasons.includes('receipts-collected'));
+
+  // Neither recipient owes anything further once they've each reacted.
+  const recipientView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [announcement] });
+  assert.equal(recipientView.obligations.length, 0);
+});
+
+// Comment-borne mentions never feed announcementRecipients — a receipt obligation is
+// scoped to the announcement's own title/body, not to wild conversation under it. This
+// is the ADR-097 instance of the wild-traffic/notice-tier distinction already exercised
+// above for other reasons (e.g. 'a mention in a comment produces a notice and no
+// obligation'), named here explicitly for the receipt-default feature.
+test('ADR-097: a mention that appears only in a COMMENT never creates a receipt obligation — it stays wild traffic on the notice tier', () => {
+  const threadWithCommentMention = item('D72', 'discussion', {
+    body: 'no mention in the body itself',
+    comments: [{ author: { login: 'someone-else' }, body: '@reviewer-one what do you think?', createdAt: '2026-07-22T00:00:00Z' }],
+  });
+  const result = reduceObligations(base([threadWithCommentMention]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+// Fable full-unit review, B1 (Blocking): announcementRecipients over-collected two kinds
+// of non-recipients. (a) The object's own author, self-mentioned in their own text ("ping
+// @me"), must not owe a receipt on their own post and must not block the close-nudge on
+// their own reaction. (b) A GitHub team/org path (@org/team-name) is not a user mention at
+// all — a team can't react 👀, so counting one as a recipient would deadlock
+// receipts-collected forever. A bare @org mention (no trailing /) is indistinguishable
+// from a real user login and is deliberately left as a recipient; digest/SKILL.md and
+// report/SKILL.md now document that a nonexistent/typo/unreactable handle silently blocks
+// the close-nudge, with no self-report — an accepted, honestly-stated limit.
+
+test('B1(a): the author\'s own self-mention in an announcement creates no receipt for the author and never blocks the close-nudge — only OTHER named recipients govern it', () => {
+  const announcement = item('D80', 'discussion', {
+    title: '[ACK] Status update',
+    author: { login: 'me' },
+    body: 'questions? ping @me. Also cc @reviewer-two.',
+    reactions: [],
+  });
+  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'me', objects: [announcement] });
+  assert.equal(authorView.obligations.length, 0, 'the author owes no receipt on their own self-mention');
+
+  const otherView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [announcement] });
+  assert.deepEqual(otherView.obligations.map((entry) => entry.kind), ['ACK']);
+
+  // Only reviewer-two — the one real recipient — reacts. The author's own lack of a
+  // reaction must not block the close-nudge, since the author was never a recipient.
+  announcement.reactions.push({ content: 'EYES', user: { login: 'reviewer-two' } });
+  const closeNudge = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'me', objects: [announcement] });
+  const [settle] = closeNudge.obligations;
+  assert.equal(settle.kind, 'SETTLE');
+  assert.equal(settle.action, 'close-announcement');
+});
+
+test('B1(a): an announcement mentioning only its own author has ZERO recipients — no receipts, no close-nudge, exactly like naming nobody', () => {
+  const announcement = item('D81', 'discussion', {
+    title: '[ACK] Note to self',
+    author: { login: 'me' },
+    body: 'reminder for @me',
+    reactions: [],
+  });
+  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'me', objects: [announcement] });
+  assert.equal(authorView.obligations.length, 0);
+  assert.equal(authorView.notices.length, 0);
+});
+
+test('B1(b): a team/org path mention (@org/reviewers) is neither a receipt recipient nor a close-nudge blocker — the other named human still collects normally', () => {
+  const announcement = item('D82', 'discussion', {
+    title: '[ACK] Deploy notice',
+    author: { login: 'author-one' },
+    body: 'cc @org/reviewers and @alice for awareness',
+    reactions: [],
+  });
+  const orgView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'org', objects: [announcement] });
+  assert.equal(orgView.obligations.length, 0, '@org/reviewers must never resolve to a recipient named "org"');
+
+  const aliceView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'alice', objects: [announcement] });
+  assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
+
+  announcement.reactions.push({ content: 'EYES', user: { login: 'alice' } });
+  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'author-one', objects: [announcement] });
+  const [settle] = authorView.obligations;
+  assert.equal(settle.kind, 'SETTLE');
+  assert.equal(settle.action, 'close-announcement', 'the team path must never block the close-nudge — alice alone is the only real recipient');
+});
+
+test('B1(b): a BARE @org mention (no trailing /) is indistinguishable from a real user login and is deliberately left as a recipient — a documented limit, not a bug', () => {
+  const announcement = item('D83', 'discussion', {
+    title: '[ACK] Heads up',
+    author: { login: 'author-one' },
+    body: 'cc @org for visibility',
+    reactions: [],
+  });
+  const orgView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'org', objects: [announcement] });
+  assert.deepEqual(orgView.obligations.map((entry) => entry.kind), ['ACK']);
 });
 
 test('blocked gh authentication is machine-readable and never guesses obligations', () => {
@@ -518,8 +663,15 @@ test('F1: a reviewer who already submitted their current-revision verdict and is
   assert.equal(result.notices.length, 0);
 });
 
-test('F1: an uninvolved mentioned third party still gets a notice — the formal-signal carve-out is not a blanket suppression', () => {
-  const mentionedStranger = item('D52', 'discussion', {
+// Moved from a Discussion fixture to an Issue one by ADR-097: the original D52 fixture
+// ('cc @reviewer-one for visibility' on a plain Discussion) is now exactly the
+// Announcements-tier receipt trigger (see the ADR-097 test above), so it no longer
+// demonstrates "not a blanket suppression" — it demonstrates the opposite, on purpose.
+// The underlying F1 principle (a formal-signal carve-out doesn't suppress EVERY mention,
+// only the ones that actually hold a formal signal) still needs coverage on an object
+// type receipt-default doesn't touch — an Issue.
+test('F1: an uninvolved mentioned third party still gets a notice on an Issue — the formal-signal carve-out is not a blanket suppression', () => {
+  const mentionedStranger = item('I52', 'issue', {
     body: 'cc @reviewer-one for visibility',
   });
   const result = reduceObligations(base([mentionedStranger]));
@@ -582,15 +734,164 @@ test('F4: a self-authored comment naming the viewer produces no self-notice', ()
   assert.equal(result.notices.length, 0);
 });
 
-test('F4: a stranger mentioning the viewer in the same thread the viewer also commented in still notices', () => {
+// Restored to its pre-ADR-096 expectation by ADR-096 v2: an intermediate draft of
+// ADR-096 made ALL engagement atemporal, so this fixture briefly flipped to
+// "suppressed" — but that re-opened ADR-093's founding scenario (a later "@person please
+// respond" comment in a thread the person once touched would go silent forever). ADR-096
+// v2 makes comment-borne suppression TEMPORAL: the mention fires again here because the
+// stranger's mention comment (T2) arrives AFTER the viewer's own last comment (T1).
+test('F4: a stranger mentioning the viewer in a comment AFTER the viewer\'s own earlier comment still notices — ADR-096 v2 makes comment-borne suppression temporal, not atemporal', () => {
   const mixedThread = item('D56', 'discussion', {
     body: 'unrelated context',
     comments: [
-      { author: { login: viewer }, body: 'my own note, no mention here' },
-      { author: { login: 'someone-else' }, body: '@reviewer-one can you weigh in?' },
+      { author: { login: viewer }, body: 'my own note, no mention here', createdAt: '2026-07-21T01:00:00Z' }, // T1
+      { author: { login: 'someone-else' }, body: '@reviewer-one can you weigh in?', createdAt: '2026-07-21T02:00:00Z' }, // T2 > T1
     ],
   });
   const result = reduceObligations(base([mixedThread]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+test('ADR-096 v2: a stranger\'s comment mention followed by the viewer\'s own LATER comment is suppressed — the viewer has since seen the thread', () => {
+  const thread = item('D64', 'discussion', {
+    body: 'unrelated context',
+    comments: [
+      { author: { login: 'someone-else' }, body: '@reviewer-one can you weigh in?', createdAt: '2026-07-21T01:00:00Z' }, // T_mention
+      { author: { login: viewer }, body: 'yep, looking now', createdAt: '2026-07-21T02:00:00Z' }, // T3 > T_mention
+    ],
+  });
+  const result = reduceObligations(base([thread]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('ADR-096 v2: a viewer\'s 👀 does not suppress a comment-borne mention — 👀 carries no timestamp, so it only ever covers a title/body mention', () => {
+  const discussion = item('D65', 'discussion', {
+    body: 'unrelated context',
+    reactions: [{ content: 'EYES', user: { login: viewer } }],
+    comments: [{ author: { login: 'someone-else' }, body: '@reviewer-one can you weigh in?', createdAt: '2026-07-21T01:00:00Z' }],
+  });
+  const result = reduceObligations(base([discussion]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1);
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+test('ADR-096 v2: a comment mention with no createdAt (legacy fixture) is suppressed once the viewer has commented at all — treated as older than everything', () => {
+  const thread = item('D66', 'discussion', {
+    body: 'unrelated context',
+    comments: [
+      { author: { login: 'someone-else' }, body: '@reviewer-one can you weigh in?' }, // no createdAt
+      { author: { login: viewer }, body: 'noted' }, // no createdAt either
+    ],
+  });
+  const result = reduceObligations(base([thread]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+// Fable full-unit review, I2 (Important): formal-signal suppression (F1) — and receipt-
+// obligation completion — must apply to TITLE/BODY mentions only. A COMMENT-borne mention
+// is governed SOLELY by the temporal rule, regardless of any formal signal or completed
+// receipt on the object: a named recipient who already gave their 👀 is not deaf to a
+// LATER "@them please respond" comment. The pre-fix code gated the whole notice check
+// (both sources) behind hasFormalSignal(), silently re-opening ADR-093's founding failure
+// for anyone who also happened to hold a formal signal on the object. An OPEN obligation
+// still suppresses everything (unchanged) — only the completed/absent-obligation case
+// needed the fix.
+
+test('I2: a completed-receipt recipient still gets a notice for a comment mention that arrives AFTER their own last comment', () => {
+  const announcement = item('D90', 'discussion', {
+    title: '[ACK] Policy update',
+    body: '@reviewer-one please read this',
+    reactions: [{ content: 'EYES', user: { login: viewer } }], // receipt already given
+    comments: [
+      { author: { login: viewer }, body: 'read it, thanks', createdAt: '2026-07-22T01:00:00Z' }, // T1
+      { author: { login: 'someone-else' }, body: '@reviewer-one one more thing', createdAt: '2026-07-22T02:00:00Z' }, // T2 > T1
+    ],
+  });
+  const result = reduceObligations(base([announcement]));
+  assert.equal(result.obligations.length, 0, 'the receipt is already complete');
+  assert.equal(result.notices.length, 1, 'a later comment mention still surfaces — formal signal never covers comment mentions');
+  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+test('I2: the same completed-receipt recipient gets NO notice when the comment mention PREDATES their own last comment', () => {
+  const announcement = item('D91', 'discussion', {
+    title: '[ACK] Policy update',
+    body: '@reviewer-one please read this',
+    reactions: [{ content: 'EYES', user: { login: viewer } }],
+    comments: [
+      { author: { login: 'someone-else' }, body: '@reviewer-one one more thing', createdAt: '2026-07-22T01:00:00Z' }, // T1
+      { author: { login: viewer }, body: 'saw it, all good', createdAt: '2026-07-22T02:00:00Z' }, // T2 > T1
+    ],
+  });
+  const result = reduceObligations(base([announcement]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('I2: an OPEN obligation on the object still suppresses a comment-borne mention too — unchanged', () => {
+  const announcement = item('D92', 'discussion', {
+    title: '[ACK] Policy update',
+    body: '@reviewer-one please read this',
+    reactions: [], // receipt NOT yet given -> the viewer has an OPEN ACK obligation
+    comments: [{ author: { login: 'someone-else' }, body: '@reviewer-one any update?', createdAt: '2026-07-22T01:00:00Z' }],
+  });
+  const result = reduceObligations(base([announcement]));
+  assert.deepEqual(result.obligations.map((entry) => entry.kind), ['ACK']);
+  assert.equal(result.notices.length, 0, 'the open obligation supersedes the comment mention too — no duplicate nag');
+});
+
+// ADR-096: engagement (a comment the viewer authored, or — Discussions only — the
+// viewer's own 👀) suppresses a mentioned-in-prose notice for a TITLE/BODY mention,
+// atemporally — an edit carries no per-mention timestamp, so "the viewer has looked at
+// this object at some point" is the only signal available. The four tests below are all
+// title/body fixtures, so they are unaffected by ADR-096 v2's temporal comment rule
+// (see the comment-mention tests above, which restore/extend F4 for that rule).
+
+test('ADR-096: a viewer who commented on an FYI that mentions them gets no notice', () => {
+  const fyi = item('D60', 'discussion', {
+    title: '[FYI] Status update',
+    isFYI: true,
+    body: '@reviewer-one heads up on this',
+    comments: [{ author: { login: viewer }, body: 'thanks, saw it' }],
+  });
+  const result = reduceObligations(base([fyi]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('ADR-096: a viewer who left 👀 on a Discussion that mentions them gets no notice', () => {
+  const discussion = item('D61', 'discussion', {
+    body: '@reviewer-one take a look',
+    reactions: [{ content: 'EYES', user: { login: viewer } }],
+  });
+  const result = reduceObligations(base([discussion]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('ADR-096: a viewer who commented on an Issue that mentions them gets no notice (comment-engagement is what covers Issues/PRs — no reaction data is fetched for them)', () => {
+  const issue = item('I63', 'issue', {
+    body: '@reviewer-one please check this',
+    comments: [{ author: { login: viewer }, body: 'looking into it' }],
+  });
+  const result = reduceObligations(base([issue]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 0);
+});
+
+test('ADR-096: an uninvolved mentioned viewer — no comment, no eyes — still gets a notice; engagement suppression is not blanket', () => {
+  const untouched = item('D62', 'discussion', {
+    title: '[FYI] Status update',
+    isFYI: true,
+    body: '@reviewer-one heads up on this',
+  });
+  const result = reduceObligations(base([untouched]));
+  assert.equal(result.obligations.length, 0);
   assert.equal(result.notices.length, 1);
   assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
 });
@@ -839,7 +1140,12 @@ test('normalizeLive: the comment scan self-reports commentScanTruncated when a f
   assert.equal(result.commentScanTruncated[0].url, 'https://github.com/example/project/discussions/32');
 });
 
-test('normalizeLive: ACK routes to the first @mention, ignoring a later mention and an email address (I2)', () => {
+// Superseded by ADR-097 (receipt-default): I2's original point was "the first @mention
+// wins, later mentions are just context" — bob, mentioned second, owed nothing. ADR-097
+// replaces that with "every named account owes its own receipt," so bob now owes an ACK
+// too. The email-address guard this test also covers (`team@example.com` never reads as
+// a mention of `example`) is untouched by ADR-097 and still holds.
+test('normalizeLive: ADR-097 receipt-default — EVERY @mentioned account owes its own ACK, not just the first; an email address still never reads as a mention (supersedes the old first-mention-only I2 test)', () => {
   const raw = () => JSON.stringify({
     data: {
       repository: {
@@ -868,7 +1174,11 @@ test('normalizeLive: ACK routes to the first @mention, ignoring a later mention 
   assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
 
   const bobView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'bob', runGh: raw }));
-  assert.equal(bobView.obligations.length, 0);
+  assert.deepEqual(bobView.obligations.map((entry) => entry.kind), ['ACK']);
+
+  // 'team@example.com' must never parse as a mention of the login 'example'.
+  const emailLoginView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'example', runGh: raw }));
+  assert.equal(emailLoginView.obligations.length, 0);
 });
 
 // B1 regression: isAnswerable lives on DiscussionCategory in the real GraphQL schema, not

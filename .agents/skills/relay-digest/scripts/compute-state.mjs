@@ -39,43 +39,91 @@ function obligation(kind, object, reason, action, extra = {}) {
 
 /** Every @mention in one text, lowercased, in appearance order. The @ must not be preceded
  * by a word character or a dot, so `hello@rytho.ai` never reads as a mention of `rytho`,
- * and the handle itself must start alnum, so `@-junk` is never a valid GitHub login. */
+ * and the handle itself must start alnum, so `@-junk` is never a valid GitHub login.
+ * A handle immediately followed by `/` (e.g. `@org/team-name`) is a GitHub team/org path,
+ * never a user mention — it is dropped entirely, along with the `/segment` after it, so it
+ * never surfaces as a mention anywhere (notices or receipts). A team/org can't react `👀`,
+ * so counting one as a receipt recipient would deadlock `receipts-collected` forever
+ * (fable B1). A BARE `@org` mention (no trailing `/`) is not distinguishable from a real
+ * user login here and is deliberately left as one — see `announcementRecipients` and
+ * digest/SKILL.md for the honest limit that documents. */
 function findAllMentions(text) {
-  const regex = /(^|[^\w.@])@([A-Za-z0-9][A-Za-z0-9-]*)/g;
+  const regex = /(^|[^\w.@])@([A-Za-z0-9][A-Za-z0-9-]*)(\/)?/g;
   const handles = [];
   let match;
-  while ((match = regex.exec(text || '')) !== null) handles.push(match[2].toLowerCase());
+  while ((match = regex.exec(text || '')) !== null) {
+    if (match[3] === '/') continue; // @org/team path — not a user mention
+    handles.push(match[2].toLowerCase());
+  }
   return handles;
 }
 
-function firstMention(text) {
-  return findAllMentions(text)[0] || null;
-}
-
-/** Every @mention across an object's title, body, and comment bodies, excluding any
- * mention inside text the viewer themselves authored (title/body -> object author;
- * comment -> comment author) — the notice-tier scan is find-all, unlike the ACK
- * recipient's first-mention-wins rule above, but a self-mention is not a notice-worthy
- * signal: naming yourself in your own text is not someone pinging you (F4). A source
- * with no resolvable author is never treated as self-authored, so it still counts. */
-function mentionsOfOthers(object, viewer) {
+/** Every @mention across an object's title, body, and comment bodies, tagged with its
+ * source ('title' | 'body' | 'comment') and — for a comment — its `createdAt`, excluding
+ * any mention inside text the viewer themselves authored (title/body -> object author;
+ * comment -> comment author): naming yourself in your own text is not someone pinging you
+ * (F4). A source with no resolvable author is never treated as self-authored, so it still
+ * counts. The source/timestamp tagging is what lets the caller apply ADR-096's temporal
+ * rule to comment-borne mentions while keeping title/body mentions atemporal (see
+ * viewerLastCommentAt below and the notice-suppression code in reduceObligations). */
+function mentionsWithSource(object, viewer) {
   const sources = [
-    { text: object.title, author: object.author },
-    { text: object.body, author: object.author },
-    ...(object.comments || []).map((comment) => ({ text: comment.body, author: comment.author })),
+    { text: object.title, author: object.author, source: 'title', createdAt: null },
+    { text: object.body, author: object.author, source: 'body', createdAt: null },
+    ...(object.comments || []).map((comment) => ({
+      text: comment.body,
+      author: comment.author,
+      source: 'comment',
+      // A comment missing createdAt (legacy/fixture data with no timestamp field) sorts
+      // as "older than everything" via the empty string — see viewerLastCommentAt's
+      // string-compare below, which then treats it as covered by any prior viewer
+      // comment regardless of that comment's own timestamp, so legacy fixtures without
+      // createdAt stay meaningful instead of silently never-suppressing.
+      createdAt: comment.createdAt || '',
+    })),
   ];
-  return unique(
-    sources
-      .filter((source) => !sameLogin(loginOf(source.author), viewer))
-      .flatMap((source) => findAllMentions(source.text)),
-  );
+  const mentions = [];
+  for (const source of sources) {
+    if (sameLogin(loginOf(source.author), viewer)) continue;
+    for (const handle of findAllMentions(source.text)) {
+      mentions.push({ handle, source: source.source, createdAt: source.createdAt });
+    }
+  }
+  return mentions;
 }
 
-function designatedAckRecipient(object) {
-  if (object.ackRecipient) return loginOf(object.ackRecipient);
-  if (!/^\s*\[ACK\]/i.test(object.title || '') && !hasLabel(object, 'ack-required')) return null;
-  // The first @mention (title first, then body) names the recipient; later mentions are context.
-  return firstMention(object.title) || firstMention(object.body);
+/** True when this Discussion is Announcements-tier and therefore receipt-bearing under
+ * ADR-097's receipt-default rule. Two ways in: the pre-097 explicit markers — an [ACK]
+ * title prefix or an `ack-required` label — which stay valid but are no longer required;
+ * or, new, ANY open, non-answerable, non-fyi Discussion whose title or body names at
+ * least one @mention. Q&A (isAnswerable) is excluded — it has its own native obligation
+ * path. `fyi`-labeled is excluded — that label is the explicit broadcast opt-out (ADR-097):
+ * mentioned accounts there get a notice, never a receipt obligation. */
+function isAnnouncementDiscussion(object) {
+  if (object.type !== 'discussion') return false;
+  if (object.isFYI || hasLabel(object, 'fyi')) return false;
+  if (object.isAnswerable === true) return false;
+  if (/^\s*\[ACK\]/i.test(object.title || '') || hasLabel(object, 'ack-required')) return true;
+  return findAllMentions(object.title).length > 0 || findAllMentions(object.body).length > 0;
+}
+
+/** Every distinct account @mentioned in an Announcement Discussion's title or body,
+ * EXCLUDING the object's own author. ADR-097 makes every one of them a receipt-owing
+ * recipient — this replaces the pre-097 "first mention wins, later mentions are just
+ * context" design (`designatedAckRecipient`, removed). Comment-borne mentions never feed
+ * this list: a receipt obligation is scoped to the announcement's own text, not to wild
+ * conversation under it (that stays notice-tier — see mentionsWithSource / the temporal
+ * notice rule below). Returns [] for any Discussion that isn't Announcements-tier (see
+ * isAnnouncementDiscussion). Author self-exclusion (fable B1): "questions? ping @me" in
+ * an announcement's own body must not make its author owe a receipt on their own post, and
+ * must not block the close-nudge on their own 👀 — the close-nudge only ever waits on
+ * OTHER named recipients. A self-mention-only announcement therefore has zero recipients:
+ * no obligation, no close-nudge, exactly like naming nobody at all. */
+function announcementRecipients(object) {
+  if (!isAnnouncementDiscussion(object)) return [];
+  const author = loginOf(object.author);
+  return unique([...findAllMentions(object.title), ...findAllMentions(object.body)])
+    .filter((handle) => !sameLogin(handle, author));
 }
 
 function hasEyesFrom(object, viewer) {
@@ -110,11 +158,42 @@ function wasDesignatedReviewer(object, viewer) {
  * names the viewer, so the mention scan would otherwise keep firing after the work is done,
  * exactly the noise ADR-090 retired the old startup-digest hook to avoid. */
 function hasFormalSignal(object, viewer) {
-  const recipient = designatedAckRecipient(object);
-  if (recipient && sameLogin(recipient, viewer)) return true;
+  if (announcementRecipients(object).some((login) => sameLogin(login, viewer))) return true;
   if (wasDesignatedReviewer(object, viewer)) return true;
   if ((object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer))) return true;
   return false;
+}
+
+/** True when the viewer has EVER engaged with this object at all — commented (any time),
+ * or (Discussions only) left an 👀 reaction. This is the ATEMPORAL signal ADR-096 uses to
+ * suppress a title/body mention: a body/title mention has no per-mention timestamp (an
+ * edit doesn't record which mention was added when), so "the viewer has looked at this
+ * object at some point" is the only signal available, and that is enough — repeating a
+ * body/title mention forever just because the object still names the viewer is exactly
+ * the noise ADR-090 retired the old startup-digest hook to avoid. This does NOT cover a
+ * COMMENT-borne mention — see viewerLastCommentAt below, which applies the temporal rule
+ * ADR-096 v2 requires there (a later "@person please respond" comment must still fire even
+ * in a thread the viewer once touched). Deliberate asymmetry: Issues and PRs carry no
+ * reaction query today, so only comment-engagement applies to those two types. */
+function viewerEngaged(object, viewer) {
+  const commented = (object.comments || []).some((comment) => sameLogin(loginOf(comment.author), viewer));
+  if (commented) return true;
+  return object.type === 'discussion' && hasEyesFrom(object, viewer);
+}
+
+/** The latest `createdAt` among the viewer's OWN comments on this object, or `null` when
+ * the viewer has never commented. This is the TEMPORAL signal ADR-096 v2 requires for a
+ * comment-borne mention: a comment mention is suppressed only when it is at-or-before this
+ * timestamp — one that arrives AFTER the viewer's last comment still fires, because the
+ * viewer has not seen it yet. An 👀 reaction carries no timestamp in the collected data,
+ * so it deliberately does NOT feed this function; 👀 only ever suppresses a title/body
+ * mention via viewerEngaged above, never a comment-borne one. String-compared as ISO8601,
+ * the same way the reducer already compares review/revision timestamps elsewhere. */
+function viewerLastCommentAt(object, viewer) {
+  const stamps = (object.comments || [])
+    .filter((comment) => sameLogin(loginOf(comment.author), viewer))
+    .map((comment) => comment.createdAt || '');
+  return stamps.length ? stamps.reduce((max, value) => (value > max ? value : max)) : null;
 }
 
 function currentRevisionOf(object) {
@@ -292,9 +371,23 @@ export function reduceObligations(input) {
 
     const isFyiObject = object.isFYI || hasLabel(object, 'fyi');
     if (!isFyiObject) {
-      const recipient = designatedAckRecipient(object);
-      if (recipient && sameLogin(recipient, viewer) && !hasEyesFrom(object, viewer)) {
-        record(obligation('ACK', object, 'designated-ack-missing', 'add-eyes-reaction'), object);
+      // ADR-097 receipt-default: EVERY account named in an Announcement Discussion's
+      // title/body owes its own ACK, completed only by that account's own 👀 — no more
+      // single designated recipient. fyi-labeled Discussions are excluded above (the
+      // explicit broadcast opt-out), so this block only ever runs for receipt-bearing
+      // announcements.
+      const recipients = announcementRecipients(object);
+      if (recipients.some((login) => sameLogin(login, viewer)) && !hasEyesFrom(object, viewer)) {
+        record(obligation('ACK', object, 'announcement-receipt-missing', 'add-eyes-reaction'), object);
+      }
+      // Close-nudge: symmetric with Q&A's answered -> close-answered-question. Once every
+      // named recipient has left their OWN 👀, the announcement's author owes closing it —
+      // digest turns "has everyone seen this?" into a machine-answered SETTLE rather than
+      // requiring the author to manually poll the reaction list. Requires at least one
+      // recipient; an announcement naming nobody has no receipts to collect.
+      if (recipients.length > 0 && sameLogin(loginOf(object.author), viewer) &&
+          recipients.every((login) => hasEyesFrom(object, login))) {
+        record(obligation('SETTLE', object, 'receipts-collected', 'close-announcement'), object);
       }
 
       if (object.type === 'issue') {
@@ -392,16 +485,46 @@ export function reduceObligations(input) {
 
     // Notices: awareness only. Never suppressed by isFyiObject — a prose ping inside an
     // Announcement is exactly the gap this tier exists to catch.
-    if (mentionsOfOthers(object, viewer).some((handle) => sameLogin(handle, viewer)) &&
+    const viewerMentions = mentionsWithSource(object, viewer).filter((mention) => sameLogin(mention.handle, viewer));
+    if (viewerMentions.length &&
         !objectsWithObligations.has(objectKey(object)) &&
-        !objectsWithBlockers.has(objectKey(object)) &&
-        !hasFormalSignal(object, viewer)) {
-      // Suppressed when the viewer already has an obligation or a blocker on this object
-      // (F3) — obligation/blocker supersedes the weaker awareness signal — or when the
-      // object carries a formal signal for the viewer regardless of completion state
-      // (F1): a completed ACK/review/assignment must not resurface as standing notice
-      // noise for exactly the person who completed it (see digest/SKILL.md).
-      addNotice(object, 'mentioned-in-prose');
+        !objectsWithBlockers.has(objectKey(object))) {
+      // Suppressed outright when the viewer already has an OPEN obligation or a blocker on
+      // this object (F3) — an obligation/blocker supersedes the weaker awareness signal,
+      // and this stays a blanket gate covering every mention source: nobody needs a second
+      // nag on an object they already owe work on (fable I2 interaction check).
+      //
+      // Below this gate, formal-signal suppression (F1) and the temporal comment rule
+      // (ADR-096 v2) apply to DIFFERENT sources — this split is deliberate (fable I2):
+      //   - title/body: no per-mention timestamp exists (an edit doesn't record which
+      //     mention was added when), so EITHER prior engagement (a comment, or on a
+      //     Discussion an 👀 — viewerEngaged()) OR a formal signal regardless of
+      //     completion state (hasFormalSignal() — a named receipt recipient, requested
+      //     reviewer active-or-history, or assignee) suppresses it for good. A completed
+      //     receipt/ACK/review/assignment must not resurface as standing notice noise for
+      //     exactly the person who completed it.
+      //   - comment: DOES carry a timestamp, so it is governed SOLELY by the temporal
+      //     rule — suppressed only when the viewer's own last comment is at-or-after it —
+      //     regardless of any formal signal or completed receipt. A named recipient who
+      //     already gave their 👀 is not deaf to a LATER "@them please respond" comment:
+      //     formal-signal history answers "did you ever have a reason to look," not "have
+      //     you seen everything anyone will ever say here." Letting formal-signal history
+      //     gate a comment mention was exactly the bug this fixes — it silently
+      //     resurrected the founding ADR-093 failure (a later ping going unseen) for
+      //     anyone who happened to also hold a formal signal on the object.
+      const engagedAtAll = viewerEngaged(object, viewer);
+      const formalSignal = hasFormalSignal(object, viewer);
+      const lastCommentAt = viewerLastCommentAt(object, viewer);
+      const titleOrBodyFires = viewerMentions.some((mention) => mention.source !== 'comment') &&
+        !engagedAtAll && !formalSignal;
+      const commentFires = viewerMentions.some((mention) => mention.source === 'comment' &&
+        (lastCommentAt === null || mention.createdAt > lastCommentAt));
+      if (titleOrBodyFires || commentFires) {
+        // A mention notice exists to surface something the viewer hasn't seen; once
+        // they've visibly interacted with the thread AT OR AFTER a given mention, it is
+        // stale noise — but a later mention is new information again (see digest/SKILL.md).
+        addNotice(object, 'mentioned-in-prose');
+      }
     }
   }
 
@@ -445,7 +568,7 @@ export function graphQlQuery() {
       defaultBranchRef{name branchProtectionRule{pattern requiresApprovingReviews requiredApprovingReviewCount dismissesStaleReviews isAdminEnforced}}
       discussions(first:100){
         pageInfo{hasNextPage}
-        nodes{id number title body url closed isAnswered category{isAnswerable} author{login} labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body}}}
+        nodes{id number title body url closed isAnswered category{isAnswerable} author{login} labels(first:20){nodes{name}} reactions(first:100,content:EYES){pageInfo{hasNextPage} nodes{content user{login}}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body createdAt}}}
       }
       issues(first:100,states:OPEN){
         pageInfo{hasNextPage}
@@ -453,7 +576,7 @@ export function graphQlQuery() {
       }
       pullRequests(first:100,states:OPEN){
         pageInfo{hasNextPage}
-        nodes{id number title body url state isDraft author{login} headRefOid mergeable mergeStateStatus reviewDecision viewerCanUpdate labels(first:20){nodes{name}} assignees(first:10){nodes{login}} files(first:100){pageInfo{hasNextPage} nodes{path}} reviewRequests(first:50){nodes{requestedReviewer{... on User{login} ... on Team{slug}}}} reviews(last:100){nodes{author{login} state submittedAt commit{oid}}} timelineItems(first:100,itemTypes:[REVIEW_REQUESTED_EVENT]){pageInfo{hasNextPage} nodes{... on ReviewRequestedEvent{createdAt requestedReviewer{... on User{login} ... on Team{slug}}}}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body}}}
+        nodes{id number title body url state isDraft author{login} headRefOid mergeable mergeStateStatus reviewDecision viewerCanUpdate labels(first:20){nodes{name}} assignees(first:10){nodes{login}} files(first:100){pageInfo{hasNextPage} nodes{path}} reviewRequests(first:50){nodes{requestedReviewer{... on User{login} ... on Team{slug}}}} reviews(last:100){nodes{author{login} state submittedAt commit{oid}}} timelineItems(first:100,itemTypes:[REVIEW_REQUESTED_EVENT]){pageInfo{hasNextPage} nodes{... on ReviewRequestedEvent{createdAt requestedReviewer{... on User{login} ... on Team{slug}}}}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body createdAt}}}
       }
     }
   }`;
