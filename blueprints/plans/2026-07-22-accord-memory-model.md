@@ -68,6 +68,15 @@ GitHub objects store process; repo files store results.
 Decisions carry stable IDs (`decisions/D-021-<slug>.md`) so Briefs and Core can
 cite anchors that survive renames.
 
+**Derived views cite, never restate.** When a Brief or Core uses Decision
+material, it references the anchor (`[D-021]`) rather than copying the
+authoritative wording — a second copy of a Decision's text is a fact with two
+owners, and it will drift. A Brief may still integrate and rephrase into a
+readable current picture (that is its job), but every claim carries its
+supporting citation(s); the authoritative text lives only in the Decision
+file. This makes staleness mechanical: a derived view citing a `superseded`
+Decision is flagged by the conformance sweep as needing re-integration.
+
 **Supersession is mechanical, not editorial**: every Decision's frontmatter
 carries `status: active` or `status: superseded` + `superseded-by: D-0xx`.
 Derived views and agents trust only `active`. (This closes the biggest hole
