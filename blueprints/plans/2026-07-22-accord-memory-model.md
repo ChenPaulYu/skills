@@ -245,7 +245,49 @@ or agent — answers "what is this file, is it current?" from the top lines, and
   decisions" = index rows where `status: active`. No one maintains a separate
   current-state file that can rot.
 
-## 10. Implementation consequences (next wave, separate ratification)
+## 10. The four verb contracts
+
+**report — bring new information into the collaboration.** A content act, not
+an object type. Placement: belongs to an existing object → comment there;
+standalone tell needing a receipt → Issue; a review request whose subject is a
+repo-content diff → PR (verbatim, revision-bound), a review of anything else
+(a report, an artifact, a result) → Issue; a new not-yet-converging shared
+topic → Discussion; an already-crisp memory change → straight to PR. Transfer:
+a receipt-tell makes the recipient owe confirmation; a review-ask makes the
+reviewer owe a verdict/disposition; an assignee's progress report makes the
+acceptor owe disposition; Discussion material obligates no one unless
+graduated to a needs-input Issue. Reporting never implies the other side has
+seen, accepted, or ratified anything.
+
+**reply — complete one requested response.** Acts only on existing objects;
+never spawns a new topic (a genuinely new question becomes a linked object;
+the original keeps its purpose). The baton flips: A asks B → B owes → B
+replies → A owes disposition. **The flip rides a native signal, not prose**:
+the label pair `needs-input` ⇄ `awaiting-acceptance`, toggled by the reply
+verb at delivery — labels come from a fixed set and cannot be misspelled.
+A reply never implies consensus, closure, acceptance, or a change to formal
+memory.
+
+**settle — formally dispose of a whole object.** Only the designated seat
+settles (a Discussion's host, an Issue's acceptor). The settlement block:
+`Resolution:` · `Reason:` · `Decision required: Yes/No` (+ `Recorder:` when
+Yes) · `Follow-ups:`. When a Decision is required, settle applies the
+`awaiting-record` label; the recorder commits the Decision, links back,
+removes the label, closes. Brief/Core PRs are follow-ups and never block the
+original object's closure. Settling does not mean derived views are updated
+or that follow-up work is done.
+
+**digest — recompute the current state of the collaboration.** Answers:
+waiting on me · waiting on the counterpart · ready for settlement · waiting
+for Decision recording (via `awaiting-record`) — all derived from verifiable
+native signals only. System-health questions (an object missing an owner or
+completion rule; closed without a Resolution) belong to the conformance
+sweep's report board, not the personal digest: they are nobody's *current*
+debt. The digest never infers: no reply is not agreement; 👀 is not
+acceptance; an approved PR is not a recorded Decision; a silent Discussion is
+not a finished one.
+
+## 11. Implementation consequences (next wave, separate ratification)
 
 - Relay: report's routing table rewritten (Issue-default; Discussion demoted to
   the convergence branch; announcement machinery removed), settle encodes
