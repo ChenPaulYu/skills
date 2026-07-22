@@ -6,6 +6,17 @@
 > protocol changes require their consent per ADR-099). Examples are generic;
 > the real repo's instances stay private.
 
+## 0. Governing principle: progressive disclosure
+
+Every layer of this model answers one question: *what is the least a reader
+must see before deciding whether to read more?* The memory stack discloses
+progressively — Core (what we must remember if we forget everything) → Brief
+(how to understand a topic now) → Decision (what one round established) →
+collaboration memory (the full process). So does the digest (obligations →
+notices → the objects themselves), and the file system (index row → header →
+body). Knowledge here obeys the same law as navigable code: lead with the
+point, drill down only on demand.
+
 ## 1. The four GitHub objects and their boundaries
 
 | Object | What it is | Boundary test |
