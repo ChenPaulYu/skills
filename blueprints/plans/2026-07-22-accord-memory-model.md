@@ -112,6 +112,19 @@ Derived views and agents trust only `active`. (This closes the biggest hole
 found during convergence: without the marker, a future reader of an old
 Decision file would believe it still holds.)
 
+### Attested reference data — the roster
+
+One category of formal memory is neither deliberated (a Decision) nor derived
+(a Brief/Core projection): **reference facts both parties attest to** — the
+canonical instance is the roster (`relay.yml`: legacy handle · GitHub account
+· name · role), which historical Decisions' attributions depend on. It lives
+as a maintained file; **every change goes through a PR, so the counterpart's
+approval IS the attestation** — no per-change Decision file, no ceremony. The
+digest reducer never reads it (obligations stay native-fields-only); it
+exists for humans and agents reading history, not for routing. What stays
+forbidden is a machine-consumed parallel state store — a jointly attested
+lookup table in version control is formal memory, not state.
+
 ## 4. Resolution vs Decision — the promotion test
 
 Every Issue and Discussion must close with a **Resolution** (why it may close:
