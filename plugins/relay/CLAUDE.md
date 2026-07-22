@@ -1,6 +1,6 @@
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
 
 ## Governing principle: progressive disclosure
 
@@ -21,7 +21,7 @@ Six daily verbs form the interface:
 | `brief` | Keep reusable cited understanding current across contexts, integrating only active Decisions. |
 | `settle` | Use authority to declare an object finished, carry the native promotion signal chain, and record Decisions. |
 
-`migrate` is an explicit-only v0-to-v1 compatibility bridge, not a seventh daily verb.
+`migrate` is an explicit-only bridge that brings a repository's pre-model coordination state into this memory model, not a seventh daily verb (ADR-102).
 
 ## The four objects and their boundaries (blueprint section 1)
 
@@ -75,7 +75,7 @@ Use these refinements: a standalone tell (`tell.yml` shape) for a receipt owed b
 
 Router discipline governs only traffic created through `report`. Organic traffic — a human opening an Issue or Discussion directly on GitHub — is nudged toward the same explicit-owner rule by entry-point templates (`.github/ISSUE_TEMPLATE/`, `.github/DISCUSSION_TEMPLATE/`, PR template) that `/relay:launch` installs and audits. Templates are a convention, not a contract: `digest`'s reducer never reads their fields, and a repository without them still works. See ADR-094.
 
-**Decision reversal or amendment (ADR-099, unchanged principle, absorbed here).** Reversing or materially amending an already-agreed Decision routes exactly like making one: an Issue assigned to the counterpart whose disposition is the consent record. An accompanying tell may inform, but never substitutes — a legacy `👀` (below) or a passive mention is never read as consent, only awareness.
+**Decision reversal or amendment (ADR-099, unchanged principle, absorbed here).** Reversing or materially amending an already-agreed Decision routes exactly like making one: an Issue assigned to the counterpart whose disposition is the consent record. An accompanying tell may inform, but never substitutes — a `👀` reaction or a passive mention is never read as consent, only awareness.
 
 ## Lifecycle, end to end (blueprint section 6)
 
@@ -115,9 +115,9 @@ PR obligations are entirely unchanged: a requested reviewer owes a current-revis
 
 **Closure semantics: every Discussion is closed by its initiator.** One closure-owner class, no split by category — a Discussion opened to converge something requires a summarizing final comment first (folded into its `Resolution:`); Q&A's accepted-answer signal is the reducer-visible special case of that same rule, not a separate one (ADR-096, general form unchanged).
 
-## LEGACY: `[ACK]` Discussions (ADR-100, retires after migration)
+## LEGACY `[ACK]` Discussions — retired
 
-An open, `[ACK]`-titled Discussion created before this model keeps its **original pre-097 single-recipient** `👀` semantics: the FIRST `@mention` in its title/body (excluding the object's own author) is the designated recipient; only that account owes `ACK add-eyes-reaction`, and later mentions on the same object own nothing (they fall through to the notices tier). There is **no close-nudge** — the initiator closes a legacy `[ACK]` Discussion on their own judgment, same as any other Discussion. A `👀` here verifies only that the recipient saw the notice — never comprehension, acceptance, or agreement (it is never read as consent for a decision reversal, ADR-099). New traffic should never create a fresh `[ACK]`-titled Discussion; `report` routes a standalone tell to an Issue instead.
+The LEGACY `[ACK]`-titled-Discussion compatibility path (ADR-100) retired 2026-07-22: migration completed and the live repo carried zero open `[ACK]`/`ack-required` Discussions. An `[ACK]`-titled Discussion is now just a Discussion — a plain `@mention` lands on the notices tier like any other. See ADR-100's Legacy-compatibility section for the retired design.
 
 ## Notification is recoverable responsibility, and metadata has three tiers (blueprint section 8)
 
@@ -163,7 +163,7 @@ The deterministic GitHub obligation reducer belongs to `digest`. It collects nat
 
 ## Cost and invocation
 
-`digest` is the mechanical-tier read-only scan. The other daily verbs require judgment. `migrate` is explicit-only because legacy conversion is exceptional, destructive-adjacent compatibility work.
+`digest` is the mechanical-tier read-only scan. The other daily verbs require judgment. `migrate` is explicit-only because pre-model coordination-state migration is exceptional, destructive-adjacent compatibility work.
 
 ## When editing
 

@@ -7,12 +7,11 @@
 // (blueprints/plans/2026-07-22-accord-memory-model.md). Announcement receipt-default
 // (ADR-097) and the close-announcement nudge retired entirely — there is no Announcement
 // object any more; a passing heads-up is a plain @mention, caught only by the notices
-// tier below. A legacy [ACK]-titled Discussion keeps its pre-097 single-recipient 👀
-// semantics for backward compatibility during migration (LEGACY, see
-// isLegacyAckDiscussion/legacyAckRecipient) — that path retires once legacy [ACK]
-// Discussions have been migrated off. Issue obligations now derive from stage labels
-// (needs-input / awaiting-acceptance / awaiting-record) rather than an issueType-based
-// Decision path — see issueStage below.
+// tier below. The LEGACY [ACK]-titled-Discussion compatibility path (pre-097
+// single-recipient 👀 semantics) retired 2026-07-22 once migration completed with zero
+// live legacy objects remaining — see ADR-100's Legacy-compatibility section. Issue
+// obligations now derive from stage labels (needs-input / awaiting-acceptance /
+// awaiting-record) rather than an issueType-based Decision path — see issueStage below.
 
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -53,12 +52,10 @@ function obligation(kind, object, reason, action, extra = {}) {
  * and the handle itself must start alnum, so `@-junk` is never a valid GitHub login.
  * A handle immediately followed by `/` (e.g. `@org/team-name`) is a GitHub team/org path,
  * never a user mention — it is dropped entirely, along with the `/segment` after it, so it
- * never surfaces as a mention anywhere (notices or the LEGACY ack path). A team/org can't
- * react `👀`, so letting one become the LEGACY path's designated recipient would strand
- * that recipient's obligation forever (carried over from fable B1, pre-ADR-100). A BARE
- * `@org` mention (no trailing `/`) is not distinguishable from a real user login here and
- * is deliberately left as one — see `legacyAckRecipient` and digest/SKILL.md for the
- * honest limit that documents. */
+ * never surfaces as a mention anywhere, including the notices tier (carried over from
+ * fable B1, pre-ADR-100). A BARE `@org` mention (no trailing `/`) is not distinguishable
+ * from a real user login here and is deliberately left as one — see digest/SKILL.md for
+ * the honest limit that documents. */
 function findAllMentions(text) {
   const regex = /(^|[^\w.@])@([A-Za-z0-9][A-Za-z0-9-]*)(\/)?/g;
   const handles = [];
@@ -104,40 +101,6 @@ function mentionsWithSource(object, viewer) {
   return mentions;
 }
 
-/** LEGACY (pre-ADR-097, retained only for backward compatibility during migration — see
- * ADR-100). Under the Accord memory model there is no Announcement object any more: a
- * passing heads-up is a plain @mention, caught only by the notices tier below. An
- * [ACK]-titled open Discussion keeps its ORIGINAL single-recipient 👀 semantics so a
- * repository mid-migration doesn't silently lose in-flight legacy obligations. `fyi`
- * stays the explicit opt-out here too — a legacy [ACK] Discussion downgraded to `fyi`
- * carries no obligation, same as any other fyi-labeled object. Q&A (isAnswerable) is
- * excluded — it has its own native obligation path, unrelated to this legacy one. This
- * path is expected to retire once legacy [ACK] Discussions have been migrated off. */
-function isLegacyAckDiscussion(object) {
-  if (object.type !== 'discussion') return false;
-  if (object.isFYI || hasLabel(object, 'fyi')) return false;
-  if (object.isAnswerable === true) return false;
-  // Both legacy triggers carry over: the [ACK] title marker AND the ack-required label —
-  // an in-flight label-only legacy receipt must not vanish on deploy (ADR-100's guarantee).
-  return /^\s*\[ACK\]/i.test(object.title || '') || hasLabel(object, 'ack-required');
-}
-
-/** LEGACY. The single designated recipient of a legacy [ACK] Discussion: the FIRST
- * @mention in the title or body, excluding the object's own author (self-mentioning in
- * your own announcement never creates a receipt for yourself) — the original pre-097
- * "first mention wins, later mentions are context" design. Returns `null` for any
- * Discussion that isn't legacy-ACK (see isLegacyAckDiscussion) or that names nobody but
- * its own author. Comment-borne mentions never feed this: the legacy receipt is scoped to
- * the announcement's own title/body text, not to wild conversation under it (that stays
- * notice-tier — see mentionsWithSource / the temporal notice rule below). */
-function legacyAckRecipient(object) {
-  if (!isLegacyAckDiscussion(object)) return null;
-  const author = loginOf(object.author);
-  const mentions = unique([...findAllMentions(object.title), ...findAllMentions(object.body)])
-    .filter((handle) => !sameLogin(handle, author));
-  return mentions[0] || null;
-}
-
 function hasEyesFrom(object, viewer) {
   return (object.reactions || []).some((reaction) =>
     ['EYES', 'eyes', '👀'].includes(reaction.content) && sameLogin(loginOf(reaction.user), viewer));
@@ -163,15 +126,13 @@ function wasDesignatedReviewer(object, viewer) {
     (object.reviewRequests || []).some((request) => sameLogin(loginOf(request.reviewer || request.requestedReviewer), viewer));
 }
 
-/** True when this object already carries a FORMAL signal for the viewer — LEGACY
- * designated ACK recipient, requested reviewer (active or withdrawn history), or assignee
- * — regardless of whether that round is already complete. A completed round (eyes added,
- * verdict given) must not resurface as a standing mentioned-in-prose notice forever (F1):
- * the object still names the viewer, so the mention scan would otherwise keep firing after
- * the work is done, exactly the noise ADR-090 retired the old startup-digest hook to
- * avoid. */
+/** True when this object already carries a FORMAL signal for the viewer — requested
+ * reviewer (active or withdrawn history), or assignee — regardless of whether that round
+ * is already complete. A completed round (verdict given) must not resurface as a standing
+ * mentioned-in-prose notice forever (F1): the object still names the viewer, so the
+ * mention scan would otherwise keep firing after the work is done, exactly the noise
+ * ADR-090 retired the old startup-digest hook to avoid. */
 function hasFormalSignal(object, viewer) {
-  if (sameLogin(legacyAckRecipient(object), viewer)) return true;
   if (wasDesignatedReviewer(object, viewer)) return true;
   if ((object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer))) return true;
   return false;
@@ -405,16 +366,6 @@ export function reduceObligations(input) {
 
     const isFyiObject = object.isFYI || hasLabel(object, 'fyi');
     if (!isFyiObject) {
-      // LEGACY (ADR-100): only an [ACK]-titled Discussion still owes a receipt, and only
-      // its single first-mentioned recipient — the Accord memory model has no Announcement
-      // object any more (see isLegacyAckDiscussion). No close-nudge exists in this model:
-      // every Discussion is closed by its initiator on their own judgment (ADR-096,
-      // unchanged), never by a machine-computed "everyone has reacted" signal.
-      const legacyRecipient = legacyAckRecipient(object);
-      if (sameLogin(legacyRecipient, viewer) && !hasEyesFrom(object, viewer)) {
-        record(obligation('ACK', object, 'legacy-ack-receipt-missing', 'add-eyes-reaction'), object);
-      }
-
       if (object.type === 'issue') {
         const assigned = (object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer));
         if (assigned) {
@@ -524,19 +475,18 @@ export function reduceObligations(input) {
       //   - title/body: no per-mention timestamp exists (an edit doesn't record which
       //     mention was added when), so EITHER prior engagement (a comment, or on a
       //     Discussion an 👀 — viewerEngaged()) OR a formal signal regardless of
-      //     completion state (hasFormalSignal() — the LEGACY ack recipient, requested
-      //     reviewer active-or-history, or assignee) suppresses it for good. A completed
-      //     receipt/ACK/review/assignment must not resurface as standing notice noise for
-      //     exactly the person who completed it.
+      //     completion state (hasFormalSignal() — requested reviewer active-or-history, or
+      //     assignee) suppresses it for good. A completed review/assignment must not
+      //     resurface as standing notice noise for exactly the person who completed it.
       //   - comment: DOES carry a timestamp, so it is governed SOLELY by the temporal
       //     rule — suppressed only when the viewer's own last comment is at-or-after it —
-      //     regardless of any formal signal or completed receipt. A named recipient who
-      //     already gave their 👀 is not deaf to a LATER "@them please respond" comment:
-      //     formal-signal history answers "did you ever have a reason to look," not "have
-      //     you seen everything anyone will ever say here." Letting formal-signal history
-      //     gate a comment mention was exactly the bug this fixes — it silently
-      //     resurrected the founding ADR-093 failure (a later ping going unseen) for
-      //     anyone who happened to also hold a formal signal on the object.
+      //     regardless of any formal signal. A named reviewer who already gave their
+      //     verdict is not deaf to a LATER "@them please respond" comment: formal-signal
+      //     history answers "did you ever have a reason to look," not "have you seen
+      //     everything anyone will ever say here." Letting formal-signal history gate a
+      //     comment mention was exactly the bug this fixes — it silently resurrected the
+      //     founding ADR-093 failure (a later ping going unseen) for anyone who happened to
+      //     also hold a formal signal on the object.
       const engagedAtAll = viewerEngaged(object, viewer);
       const formalSignal = hasFormalSignal(object, viewer);
       const lastCommentAt = viewerLastCommentAt(object, viewer);
@@ -553,7 +503,7 @@ export function reduceObligations(input) {
     }
   }
 
-  const order = new Map(['ACK', 'DECIDE/ACT', 'REVIEW', 'SETTLE'].map((kind, index) => [kind, index]));
+  const order = new Map(['DECIDE/ACT', 'REVIEW', 'SETTLE'].map((kind, index) => [kind, index]));
   const obligations = [...byId.values()].sort((a, b) =>
     (order.get(a.kind) - order.get(b.kind)) || String(a.url || a.id).localeCompare(String(b.url || b.id)));
   const notices = [...noticesById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));

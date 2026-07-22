@@ -39,7 +39,7 @@
       "name": "relay",
       "source": "./plugins/relay",
       "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and protected merges, following the Accord memory model. Six daily verbs — launch, report, digest, reply, brief, settle — route intent Issue-default, expose obligations from native stage labels, record cited Decisions, preserve reusable understanding, and close work with authority. An explicit migrate bridge preserves legacy provenance. GitHub owns collaboration state; Relay owns semantics and verification. Language-agnostic.",
-      "version": "2.0.1"
+      "version": "2.1.0"
     }
   ]
 }

@@ -6,38 +6,59 @@ description: "Migrate a legacy file-based Relay repository to GitHub-native Rela
 
 > **Explicitly invoked only.** Run this skill when the user names it directly (its slug, or a clear direct request) — do not self-trigger it from inferred intent.
 
-# migrate — bridge legacy Relay repositories to GitHub-native Relay
+# migrate — bring pre-model coordination state into the Accord memory model
 
-This is exceptional compatibility work, not a daily Relay verb. Preserve the complete old record by immutable git reference, then promote only current reusable knowledge and live obligations.
+This is exceptional, destructive-adjacent compatibility work, not a daily Relay verb. `migrate` inventories whatever a repository used to coordinate before it adopted the memory model this plugin implements (the blueprint; `AGENTS.md`), and promotes only what is still reusable knowledge or a live obligation. Immutable git/GitHub history is the archive; migration never copies everything forward merely to preserve it.
+
+## What counts as pre-model coordination state
+
+Any shape a repository used before it had `decisions/`/`briefs/`/`core/` and the four-object router — not one specific legacy format:
+
+- a file-based ledger, thought stream, or status-frontmatter protocol (Relay's own pre-GitHub-native v0 is one instance, still a valid target, not the definition);
+- an overloaded `[ACK]`-style Discussion or an announcement-type object standing in for an Issue's receipt;
+- a decision that only ever lived in a commit message, a closed Issue's final comment, or someone's memory of a conversation;
+- a roster, glossary, or other reference table nobody formally owns.
 
 ## Process
 
-1. **Preflight read-only.** Resolve the legacy repository, current commit, remote, target GitHub repository, authentication, permissions, and protection. Never infer a target.
-2. **Preserve evidence.** Propose an immutable baseline tag/commit reference and permanent permalinks. Do not delete anything until the reference exists remotely and cited files render.
-3. **Inventory everything.** Read legacy projects, thoughts, ledger entries, Core files, and assets. Frontmatter defects may be noted as evidence, but syntactic conformance is not migration and never decides disposition.
-4. **Classify each source exactly once:**
-   - preserve at baseline only;
-   - create/update a cited brief;
-   - propose a Core candidate PR;
-   - create a live Discussion;
-   - create a live Issue with one owner/decider;
-   - create a live PR for an exact diff.
-5. **Show the complete mapping.** Include source permalink, destination/title, citations, assignee/reviewer, and planned legacy-path removal. Wait for explicit approval before any live mutation.
-6. **Execute idempotently.** Record each created GitHub URL in the mapping. Before creating, check for an existing recorded destination. Partial failure resumes that URL and repairs missing steps.
-7. **Verify before cleanup.** Every retained citation resolves; proposed Core contains only effective-now truth; proposed briefs are current and indexed; only live obligations became objects. Cleanup is a separate reviewed change after verification.
-8. **Cross the effective point.** Request a current-revision verdict on the migration/cleanup PR. Migration remains in progress while that PR is open, awaiting review, or approved but unmerged. After merge, read back the default branch and every destination URL; only then call the migration complete.
+1. **Preflight, read-only.** Run `relay-launch` first — confirm the target repository, authentication, permissions, protection, the `decisions/` scaffold, and entry-point templates are ready to receive migrated material before inventorying anything. Never infer a target.
+2. **Preserve evidence.** For a file-based legacy (a separate repository or directory Relay itself once used), propose an immutable baseline tag/commit reference and permanent permalinks before touching anything. GitHub-hosted legacy state (old Discussions/Issues/commits already inside the *target* repository) needs no separate freeze — its own history is already immutable; record the objects' current URLs instead.
+3. **Inventory everything.** Read every legacy source completely: ledger entries, thought files, overloaded Discussions, commit-message decisions, closed-Issue resolutions, ad-hoc rosters. Frontmatter or formatting defects may be noted as evidence; syntactic conformance is not migration and never decides disposition.
+4. **Classify each source item exactly once, via the promotion test** (blueprint section 4 — *after this exists in the new model, is there a new statement that future people or agents should treat as a valid basis for action or belief?*):
+   - **backfill a Decision file** — a real settled conclusion, if not itself later superseded: write `decisions/D-0xx-<slug>.md` under the standard frontmatter (`id · status: active|superseded · superseded-by · source · settled-by · date`), `source:` pointing at the legacy evidence, `status: superseded` set honestly wherever the record shows the conclusion was itself later reversed — never backfilled as `active` when it wasn't;
+   - **Resolution-only close** — pure execution, a receipt, a duplicate, a factual lookup: no Decision file; the migration note on the closing/backfill comment **is** the record;
+   - **derived-view material** — durable understanding that belongs in a Brief or Core, citing the Decision(s) it derives from, never restating their wording;
+   - **attested reference data** — a roster or similar living lookup table (e.g. `relay.yml`, blueprint section 3): migrates as a PR the counterpart reviews, not a Decision — nobody is deliberating a conclusion, it is a jointly attested fact;
+   - **discard with record** — genuinely stale, superseded, or abandoned material: not copied forward; noted once in the mapping table with its disposition, and left in immutable history rather than duplicated.
+5. **Show the complete mapping before any write.** Source (permalink/reference) → destination (file path or object) → classification → citations → assignee/recorder/reviewer → any still-open disposition. Wait for explicit approval before any live mutation.
+6. **Execute idempotently, per the approved mapping.** Before creating anything, check the mapping for an already-recorded destination and resume from there rather than duplicating.
+   - a backfilled Decision commits as a `decisions/` file with proper frontmatter and a stable ID, under the same five direct-commit fuses `settle` uses (source explicitly settled · adds no new semantics · links back · the commit does only this, except the same-commit supersession-marking exemption · passes author sign-off — see `settle/SKILL.md`);
+   - a still-open legacy item becomes a signed-off Resolution comment plus a close on its native object, run through the same promotion test as any ordinary closure;
+   - an announcement-shaped legacy object (an `[ACK]` Discussion, a broadcast Issue) converts to a `tell`/`needs-input` Issue **only when action or a receipt is still genuinely owed**; otherwise it closes with a plain `Resolution:` — migration never manufactures a fresh obligation out of a stale broadcast;
+   - a reversal of an already-agreed legacy decision routes through the Issue-based consent path (ADR-099) to the counterpart, never announced-only.
+   Every backfilled Decision file and every Resolution comment migration posts goes through author sign-off (ADR-095) before it is committed or posted.
+7. **Verify.** Read every created or committed destination back. Where the target repository has a conformance sweep, run it — `Canonical record:` links resolve both ways, every closed object carries a `Resolution:`, every Decision's `Source:` resolves. Where it doesn't have one, verify the same facts by hand.
+8. **Cross the effective point.** The migration's own changes — Decision backfills, Resolution comments, closes, any Brief/Core PR — must land on the default branch and read back correctly. Migration remains in progress while a migration PR is open, awaiting review, or approved but unmerged.
 
 ## Rules
 
-- Never copy every old thought into GitHub merely to preserve it; immutable git history is the archive.
-- Never create `legacy/`, `raw/`, `archive/`, or time-bucket directories.
+- Never copy every legacy item into GitHub merely to preserve it; immutable history is the archive.
+- Never create `legacy/`, `raw/`, `archive/`, or time-bucket directories — the same law as ordinary daily work (`AGENTS.md`, "Raw, briefs, and Core").
 - Migration is semantic and gated, not a frontmatter-format sweep.
+- Author sign-off (ADR-095) applies to every backfilled Decision file and every Resolution comment `migrate` posts — show the exact text, verbatim, and wait for "Is this what you mean?" before writing.
+- A reversal of an already-agreed legacy decision is never announce-only; it routes through the Issue-based consent path to the counterpart (ADR-099).
+- Backfilled Decisions carry the same five recorder fuses as `settle` — see `settle/SKILL.md` for the full list and its escapes.
+- Any Brief or Core material migration touches cites Decisions, never restates their wording — the same citation law ordinary `brief` work follows.
 - Do not rewrite historical evidence or expose private names, repository identifiers, or confidential text in public artifacts.
-- GitHub-native daily work uses `relay-launch`, `report`, `digest`, `reply`, `brief`, and `settle`.
+- GitHub-native daily work uses `relay-launch`, `report`, `digest`, `reply`, `brief`, and `settle` — `migrate` is the one-time (or per-repository-adoption) bridge, not a substitute for any of them.
+
+## Founding precedent
+
+This shape generalizes the 2026-07-22 migration of a private coordination repo — the first migration performed under this model — from Relay's own original file-based v0 protocol into the Accord memory model; the same discipline now applies to any pre-model coordination state a repository adopting Relay might carry, not only that one target.
 
 ## Completion
 
-Done means every legacy source has one disposition, provenance is durable, every live mutation has one verified URL, the reviewed migration/cleanup PR is merged into the default branch, every destination reads back correctly, and retries are safe. Pending review, merge, assigned work, or blocked verification means migration is still in progress; report the exact remaining object instead of fabricating completion.
+Done means every legacy source item has exactly one recorded disposition, provenance is durable, every migrated object/file has one verified destination, the migration's changes are merged into the default branch, every destination reads back correctly, and retries are safe. Pending review, merge, assigned work, or blocked verification means migration is still in progress; report the exact remaining item instead of fabricating completion.
 
 ## Communication style
 

@@ -25,30 +25,21 @@ test('live GraphQL query closes every selection set', () => {
   assert.equal(depth, 0);
 });
 
-test('LEGACY: a designated [ACK] recipient remains obligated until that account adds eyes (ADR-100)', () => {
-  const pending = item('D1', 'discussion', { title: '[ACK] Read this', body: '@reviewer-one read this; only @reviewer-one completes it', reactions: [] });
-  assert.deepEqual(reduceObligations(base([pending])).obligations.map((entry) => entry.kind), ['ACK']);
-
-  pending.reactions.push({ content: 'EYES', user: { login: viewer } });
-  assert.equal(reduceObligations(base([pending])).obligations.length, 0);
+test('post-migration: an [ACK]-titled Discussion is just a Discussion', () => {
+  // ADR-100's LEGACY [ACK]-titled-Discussion compatibility path retired 2026-07-22 once
+  // migration completed with zero live legacy objects remaining. Both former legacy
+  // triggers — the [ACK] title marker and the ack-required label — now behave exactly
+  // like any other Discussion: a plain @mention lands on the notices tier, never an
+  // obligation, and reactions carry no special meaning.
+  const titled = item('D1', 'discussion', { title: '[ACK] Read this', body: '@reviewer-one read this', reactions: [] });
+  const labeled = item('D2', 'discussion', { title: 'Policy update', body: '@reviewer-one please note', labels: ['ack-required'], reactions: [] });
+  const result = reduceObligations(base([titled, labeled]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 2);
+  assert.ok(result.notices.every((entry) => entry.reasons.includes('mentioned-in-prose')));
 });
 
-test('a closed Discussion no longer creates a LEGACY ACK obligation', () => {
-  const closed = item('D21', 'discussion', {
-    title: '[ACK] Superseded notice',
-    body: '@reviewer-one acknowledge',
-    closed: true,
-    reactions: [],
-  });
-  assert.equal(reduceObligations(base([closed])).obligations.length, 0);
-});
-
-test('LEGACY awareness ACK, exact review, and assigned evidenced work remain separate obligations', () => {
-  const acknowledgment = item('D14', 'discussion', {
-    title: '[ACK] Read the new rules',
-    body: '@reviewer-one attest after reading; only @reviewer-one completes it',
-    reactions: [],
-  });
+test('exact review and assigned work remain separate obligations', () => {
   const updateTask = item('I15', 'issue', {
     title: 'Install and verify the new tools',
     assignees: [{ login: viewer }],
@@ -60,14 +51,9 @@ test('LEGACY awareness ACK, exact review, and assigned evidenced work remain sep
   });
 
   assert.deepEqual(
-    reduceObligations(base([acknowledgment, updateTask, exactReview])).obligations.map((entry) => entry.kind),
-    ['ACK', 'DECIDE/ACT', 'REVIEW'],
+    reduceObligations(base([updateTask, exactReview])).obligations.map((entry) => entry.kind),
+    ['DECIDE/ACT', 'REVIEW'],
   );
-
-  acknowledgment.reactions.push({ content: 'EYES', user: { login: viewer } });
-  const remaining = reduceObligations(base([acknowledgment, updateTask, exactReview])).obligations;
-  assert.deepEqual(remaining.map((entry) => entry.kind), ['DECIDE/ACT', 'REVIEW']);
-  assert.equal(remaining[0].url, updateTask.url);
 });
 
 test('assignment belongs only to the assigned viewer', () => {
@@ -298,9 +284,8 @@ test('Core settlement appears only for an authorized viewer with satisfied curre
 
 // ADR-100 (Accord memory model): receipt-default (ADR-097) is retired entirely. There is
 // no Announcement object any more — a plain @mention on any Discussion is always just a
-// notice, never an obligation, whether or not the Discussion is `fyi`-labeled. The two
-// kinds now behave identically for a non-legacy mention.
-test('ADR-100: a plain body mention on a non-[ACK] Discussion is always a notice, never an obligation — fyi and non-fyi behave the same for a plain mention', () => {
+// notice, never an obligation, whether or not the Discussion is `fyi`-labeled.
+test('a plain body mention on a Discussion is always a notice, never an obligation — fyi and non-fyi behave the same', () => {
   const mention = item('D12', 'discussion', { body: '@reviewer-one can you look?', reactions: [] });
   const fyi = item('D13', 'discussion', { title: '[FYI] Status', body: '@reviewer-one', isFYI: true });
   const result = reduceObligations(base([mention, fyi]));
@@ -309,124 +294,27 @@ test('ADR-100: a plain body mention on a non-[ACK] Discussion is always a notice
   assert.deepEqual(result.notices.map((n) => n.url).sort(), [fyi.url, mention.url].sort());
 });
 
-// LEGACY (ADR-100): the pre-097 single-recipient design is restored, scoped ONLY to
-// [ACK]-titled Discussions, for backward compatibility during migration.
-test('LEGACY: a multi-mention [ACK] Discussion designates only the FIRST mention — later mentions own nothing', () => {
-  const announcement = item('D70', 'discussion', {
-    title: '[ACK] Policy update',
-    body: '@reviewer-one and @reviewer-two please both read this',
-    reactions: [],
-  });
-  const oneView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
-  assert.deepEqual(oneView.obligations.map((entry) => entry.kind), ['ACK']);
-  const twoView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [announcement] });
-  assert.equal(twoView.obligations.length, 0, 'the second-mentioned account owes nothing under the legacy single-recipient rule');
-  // reviewer-two, owing nothing, still gets a bare notice — the wild-traffic safety net.
-  assert.deepEqual(twoView.notices.map((n) => n.reasons), [['mentioned-in-prose']]);
-
-  announcement.reactions.push({ content: 'EYES', user: { login: 'reviewer-one' } });
-  const oneAfter = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
-  assert.equal(oneAfter.obligations.length, 0, 'reviewer-one\'s own 👀 clears the legacy receipt');
-});
-
-test('ADR-100: there is no close-nudge in this model — the initiator closes a legacy [ACK] Discussion on their own judgment, same as any other Discussion (ADR-096, unchanged)', () => {
-  const announcement = item('D71', 'discussion', {
-    title: '[ACK] Policy update',
-    body: '@reviewer-two please read this',
-    author: { login: 'reviewer-one' },
-    reactions: [{ content: 'EYES', user: { login: 'reviewer-two' } }],
-  });
-  // Even with the (sole) recipient's receipt already given, the author owes no
-  // machine-computed SETTLE — that signal chain retired with receipt-default.
-  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
-  assert.equal(authorView.obligations.length, 0);
-});
-
-test('LEGACY: the ack-required LABEL (no [ACK] title) also triggers the legacy receipt path — an in-flight label-only receipt survives the 2.0.0 deploy', () => {
-  const announcement = item('D71', 'discussion', {
-    title: 'Policy update, please confirm',
-    body: '@reviewer-one please take note',
-    labels: ['ack-required'],
-    reactions: [],
-  });
-  const view = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
-  assert.deepEqual(view.obligations.map((entry) => entry.kind), ['ACK']);
-  announcement.reactions.push({ content: 'EYES', user: { login: 'reviewer-one' } });
-  const after = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-one', objects: [announcement] });
-  assert.equal(after.obligations.length, 0, 'the 👀 clears the label-triggered legacy receipt too');
-});
-
-// LEGACY: comment-borne mentions never feed the legacy [ACK] recipient — scoped to the
-// announcement's own title/body text, not wild conversation under it.
-test('LEGACY: a mention that appears only in a COMMENT on an [ACK] Discussion never creates a legacy receipt obligation — it stays wild traffic on the notice tier', () => {
-  const threadWithCommentMention = item('D72', 'discussion', {
-    title: '[ACK] No body mention',
-    body: 'no mention in the body itself',
-    comments: [{ author: { login: 'someone-else' }, body: '@reviewer-one what do you think?', createdAt: '2026-07-22T00:00:00Z' }],
-  });
-  const result = reduceObligations(base([threadWithCommentMention]));
-  assert.equal(result.obligations.length, 0);
-  assert.equal(result.notices.length, 1);
-  assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
-});
-
-// LEGACY B1 carryover (pre-ADR-100 fable review): the same two over-collection risks the
-// pre-097 designatedAckRecipient/announcementRecipients machinery had to guard against
-// still apply to the restored single-recipient legacy path. (a) The object's own author,
-// self-mentioned in their own text ("ping @me"), must not become their own designated
-// recipient. (b) A GitHub team/org path (@org/team-name) is not a user mention at all and
-// must never become the legacy recipient. A bare @org mention (no trailing /) is still
-// indistinguishable from a real user login and is deliberately left eligible.
-
-test('LEGACY: the author\'s own self-mention in an [ACK] Discussion never becomes their own designated recipient — the next real mention is', () => {
-  const announcement = item('D80', 'discussion', {
-    title: '[ACK] Status update',
-    author: { login: 'me' },
-    body: 'questions? ping @me. Also cc @reviewer-two.',
-    reactions: [],
-  });
-  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'me', objects: [announcement] });
-  assert.equal(authorView.obligations.length, 0, 'the author owes no legacy receipt on their own self-mention');
-
-  const otherView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'reviewer-two', objects: [announcement] });
-  assert.deepEqual(otherView.obligations.map((entry) => entry.kind), ['ACK'], 'reviewer-two becomes the designated recipient since the self-mention is skipped');
-});
-
-test('LEGACY: an [ACK] Discussion mentioning only its own author designates NOBODY — same as naming no one at all', () => {
-  const announcement = item('D81', 'discussion', {
-    title: '[ACK] Note to self',
-    author: { login: 'me' },
-    body: 'reminder for @me',
-    reactions: [],
-  });
-  const authorView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'me', objects: [announcement] });
-  assert.equal(authorView.obligations.length, 0);
-  assert.equal(authorView.notices.length, 0);
-});
-
-test('LEGACY: a team/org path mention (@org/reviewers) is never the legacy designated recipient — the next real human mention is', () => {
-  const announcement = item('D82', 'discussion', {
-    title: '[ACK] Deploy notice',
+// findAllMentions' team/org-path guard still feeds the notices tier (the LEGACY
+// single-recipient path that used to consume it is gone, but the guard itself stays).
+test('an @org/team path mention is never a user mention — no notice for "org", the next real human mention still notices', () => {
+  const discussion = item('D82', 'discussion', {
     author: { login: 'author-one' },
     body: 'cc @org/reviewers and @alice for awareness',
-    reactions: [],
   });
-  const orgView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'org', objects: [announcement] });
-  assert.equal(orgView.obligations.length, 0, '@org/reviewers must never resolve to a recipient named "org"');
+  const orgView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'org', objects: [discussion] });
+  assert.equal(orgView.notices.length, 0, '@org/reviewers must never resolve to a mention of "org"');
 
-  const aliceView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'alice', objects: [announcement] });
-  assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
+  const aliceView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'alice', objects: [discussion] });
+  assert.deepEqual(aliceView.notices.map((entry) => entry.reasons), [['mentioned-in-prose']]);
 });
 
-test('LEGACY: a BARE @org mention (no trailing /) is indistinguishable from a real user login and is deliberately left eligible as the designated recipient — a documented limit, not a bug', () => {
-  const announcement = item('D83', 'discussion', {
-    title: '[ACK] Heads up',
+test('a BARE @org mention (no trailing /) is indistinguishable from a real user login and is deliberately left eligible for a notice — a documented limit, not a bug', () => {
+  const discussion = item('D83', 'discussion', {
     author: { login: 'author-one' },
     body: 'cc @org for visibility',
-    reactions: [],
   });
-  const orgView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'org', objects: [announcement] });
-  assert.deepEqual(orgView.obligations.map((entry) => entry.kind), ['ACK']);
+  const orgView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'org', objects: [discussion] });
+  assert.deepEqual(orgView.notices.map((entry) => entry.reasons), [['mentioned-in-prose']]);
 });
 
 test('blocked gh authentication is machine-readable and never guesses obligations', () => {
@@ -568,13 +456,13 @@ test('normalizeLive: an approval-ready PR that is BEHIND its base branch still s
   assert.ok(settle.reasons.includes('approved-awaiting-mergeability'));
 });
 
-test('a leading-hyphen handle is never a valid GitHub login, so the first real @mention is designated (R2-4)', () => {
-  const pending = item('D22', 'discussion', { title: '[ACK] Read this', body: '@-junk then @alice', reactions: [] });
+test('a leading-hyphen handle is never a valid GitHub login, so only the real @mention notices (R2-4)', () => {
+  const pending = item('D22', 'discussion', { body: '@-junk then @alice', reactions: [] });
   const aliceView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: 'alice', objects: [pending] });
-  assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
+  assert.deepEqual(aliceView.notices.map((entry) => entry.reasons), [['mentioned-in-prose']]);
 
   const junkView = reduceObligations({ source: 'fixture', repository: 'example/project', viewer: '-junk', objects: [pending] });
-  assert.equal(junkView.obligations.length, 0);
+  assert.equal(junkView.notices.length, 0);
 });
 
 test('normalizeLive: a REVIEW_REQUIRED aggregate blocks settlement even with a current-revision approval present — the fallback must not override a non-empty aggregate (R2-5a)', () => {
@@ -670,16 +558,15 @@ test('a mention on an object where the viewer already has an obligation does not
 });
 
 // F1: a completed round must not resurface as a standing notice for the person who
-// completed it — the formal signal (ACK recipient / requested reviewer / assignee)
+// completed it — engagement (👀) or a formal signal (requested reviewer / assignee)
 // suppresses the mention regardless of whether the round is still open.
 
-test('F1: a completed ACK (eyes already added) that also mentions the recipient produces no notice', () => {
-  const completedAck = item('D50', 'discussion', {
-    title: '[ACK] Read this',
-    body: '@reviewer-one please read and ack',
+test('F1: a Discussion the viewer already 👀\'d that also mentions them produces no notice', () => {
+  const engaged = item('D50', 'discussion', {
+    body: '@reviewer-one please take a look',
     reactions: [{ content: 'EYES', user: { login: viewer } }],
   });
-  const result = reduceObligations(base([completedAck]));
+  const result = reduceObligations(base([engaged]));
   assert.equal(result.obligations.length, 0);
   assert.equal(result.notices.length, 0);
 });
@@ -821,37 +708,32 @@ test('ADR-096 v2: a comment mention with no createdAt (legacy fixture) is suppre
   assert.equal(result.notices.length, 0);
 });
 
-// Fable full-unit review, I2 (Important): formal-signal suppression (F1) — and LEGACY
-// receipt completion — must apply to TITLE/BODY mentions only. A COMMENT-borne mention
-// is governed SOLELY by the temporal rule, regardless of any formal signal or completed
-// legacy receipt on the object: a named recipient who already gave their 👀 is not deaf to
-// a LATER "@them please respond" comment. The pre-fix code gated the whole notice check
-// (both sources) behind hasFormalSignal(), silently re-opening ADR-093's founding failure
-// for anyone who also happened to hold a formal signal on the object. An OPEN obligation
-// still suppresses everything (unchanged) — only the completed/absent-obligation case
-// needed the fix. These three fixtures use LEGACY [ACK]-titled Discussions (ADR-100) —
-// receipt-default itself is retired, but the underlying suppression-scoping principle they
-// test is unchanged.
+// Fable full-unit review, I2 (Important): formal-signal/engagement suppression (F1) must
+// apply to TITLE/BODY mentions only. A COMMENT-borne mention is governed SOLELY by the
+// temporal rule, regardless of any formal signal or prior engagement on the object: a
+// viewer who already left their own 👀 is not deaf to a LATER "@them please respond"
+// comment. The pre-fix code gated the whole notice check (both sources) behind
+// hasFormalSignal(), silently re-opening ADR-093's founding failure for anyone who also
+// happened to hold a formal signal on the object. An OPEN obligation still suppresses
+// everything (unchanged) — only the completed/absent-obligation case needed the fix.
 
-test('I2 (LEGACY): a completed-receipt recipient still gets a notice for a comment mention that arrives AFTER their own last comment', () => {
-  const announcement = item('D90', 'discussion', {
-    title: '[ACK] Policy update',
+test('I2: a viewer who already left 👀 still gets a notice for a comment mention that arrives AFTER their own last comment', () => {
+  const discussion = item('D90', 'discussion', {
     body: '@reviewer-one please read this',
-    reactions: [{ content: 'EYES', user: { login: viewer } }], // receipt already given
+    reactions: [{ content: 'EYES', user: { login: viewer } }], // title/body mention already suppressed via engagement
     comments: [
       { author: { login: viewer }, body: 'read it, thanks', createdAt: '2026-07-22T01:00:00Z' }, // T1
       { author: { login: 'someone-else' }, body: '@reviewer-one one more thing', createdAt: '2026-07-22T02:00:00Z' }, // T2 > T1
     ],
   });
-  const result = reduceObligations(base([announcement]));
-  assert.equal(result.obligations.length, 0, 'the receipt is already complete');
-  assert.equal(result.notices.length, 1, 'a later comment mention still surfaces — formal signal never covers comment mentions');
+  const result = reduceObligations(base([discussion]));
+  assert.equal(result.obligations.length, 0);
+  assert.equal(result.notices.length, 1, 'a later comment mention still surfaces — engagement never covers comment mentions');
   assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
 });
 
-test('I2 (LEGACY): the same completed-receipt recipient gets NO notice when the comment mention PREDATES their own last comment', () => {
-  const announcement = item('D91', 'discussion', {
-    title: '[ACK] Policy update',
+test('I2: the same engaged viewer gets NO notice when the comment mention PREDATES their own last comment', () => {
+  const discussion = item('D91', 'discussion', {
     body: '@reviewer-one please read this',
     reactions: [{ content: 'EYES', user: { login: viewer } }],
     comments: [
@@ -859,20 +741,18 @@ test('I2 (LEGACY): the same completed-receipt recipient gets NO notice when the 
       { author: { login: viewer }, body: 'saw it, all good', createdAt: '2026-07-22T02:00:00Z' }, // T2 > T1
     ],
   });
-  const result = reduceObligations(base([announcement]));
+  const result = reduceObligations(base([discussion]));
   assert.equal(result.obligations.length, 0);
   assert.equal(result.notices.length, 0);
 });
 
-test('I2 (LEGACY): an OPEN obligation on the object still suppresses a comment-borne mention too — unchanged', () => {
-  const announcement = item('D92', 'discussion', {
-    title: '[ACK] Policy update',
-    body: '@reviewer-one please read this',
-    reactions: [], // receipt NOT yet given -> the viewer has an OPEN ACK obligation
+test('I2: an OPEN obligation on the object still suppresses a comment-borne mention too — unchanged', () => {
+  const assigned = item('I92', 'issue', {
+    assignees: [{ login: viewer }],
     comments: [{ author: { login: 'someone-else' }, body: '@reviewer-one any update?', createdAt: '2026-07-22T01:00:00Z' }],
   });
-  const result = reduceObligations(base([announcement]));
-  assert.deepEqual(result.obligations.map((entry) => entry.kind), ['ACK']);
+  const result = reduceObligations(base([assigned]));
+  assert.deepEqual(result.obligations.map((entry) => entry.kind), ['DECIDE/ACT']);
   assert.equal(result.notices.length, 0, 'the open obligation supersedes the comment mention too — no duplicate nag');
 });
 
@@ -1171,11 +1051,10 @@ test('normalizeLive: the comment scan self-reports commentScanTruncated when a f
   assert.equal(result.commentScanTruncated[0].url, 'https://github.com/example/project/discussions/32');
 });
 
-// ADR-100 restores the LEGACY pre-097 rule through the real normalizeLive wire shape: the
-// first @mention wins, later mentions own nothing. The email-address guard this test also
-// covers (`team@example.com` never reads as a mention of `example`) is unaffected either
-// way and still holds.
-test('normalizeLive LEGACY: an [ACK] Discussion designates only the FIRST @mentioned account; an email address still never reads as a mention', () => {
+// Drives the real normalizeLive wire shape (as opposed to the fixture-tier tests above):
+// a plain body @mention notices for every named account, and an email address never
+// reads as a mention.
+test('normalizeLive: a plain body @mention via the real wire shape produces a notice only; an email address still never reads as a mention', () => {
   const raw = () => JSON.stringify({
     data: {
       repository: {
@@ -1186,9 +1065,9 @@ test('normalizeLive LEGACY: an [ACK] Discussion designates only the FIRST @menti
           nodes: [{
             id: 'D_1',
             number: 30,
-            title: '[ACK] Policy update',
+            title: 'Policy update',
             url: 'https://github.com/example/project/discussions/30',
-            body: '@alice please read and ack. cc @bob for awareness. Contact team@example.com with questions.',
+            body: '@alice please read. cc @bob for awareness. Contact team@example.com with questions.',
             closed: false,
             isAnswered: false,
             labels: { nodes: [] },
@@ -1201,14 +1080,17 @@ test('normalizeLive LEGACY: an [ACK] Discussion designates only the FIRST @menti
     },
   });
   const aliceView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'alice', runGh: raw }));
-  assert.deepEqual(aliceView.obligations.map((entry) => entry.kind), ['ACK']);
+  assert.equal(aliceView.obligations.length, 0);
+  assert.deepEqual(aliceView.notices.map((entry) => entry.reasons), [['mentioned-in-prose']]);
 
   const bobView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'bob', runGh: raw }));
-  assert.equal(bobView.obligations.length, 0, 'bob, mentioned second, owes nothing under the legacy single-recipient rule');
+  assert.equal(bobView.obligations.length, 0);
+  assert.deepEqual(bobView.notices.map((entry) => entry.reasons), [['mentioned-in-prose']]);
 
   // 'team@example.com' must never parse as a mention of the login 'example'.
   const emailLoginView = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer: 'example', runGh: raw }));
   assert.equal(emailLoginView.obligations.length, 0);
+  assert.equal(emailLoginView.notices.length, 0);
 });
 
 // B1 regression: isAnswerable lives on DiscussionCategory in the real GraphQL schema, not

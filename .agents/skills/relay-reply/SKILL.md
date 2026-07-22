@@ -20,7 +20,6 @@ Map the human's intended response to one GitHub-native action. `reply` leaves **
 | "Feedback, not a verdict" | PR Comment |
 | "This revision is acceptable" | PR Approve |
 | "This revision must change" | PR Request changes |
-| LEGACY: "I attest that I saw this [ACK] Discussion's notice" | Add your own `👀` — see the legacy note below |
 
 ## The baton flip (blueprint section 10)
 
@@ -36,7 +35,7 @@ Both the label swap and the reassignment are native GitHub fields — `relay-dig
 
 1. Open the supplied object URL and read its current state. Ask if the target or intended action is ambiguous.
 2. For PR verdicts, resolve the current head revision immediately before acting. Never carry a verdict across a changed revision.
-3. **Author sign-off.** Any response that carries prose (an answer, a comment, a PR Comment, or verdict text on Approve/Request changes) shows the exact text that will be posted, verbatim, and asks: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. A `👀` reaction (legacy only) carries no authored text, so it follows the normal write-gate: show the target and wait for approval. Wait for approval before writing.
+3. **Author sign-off.** Any response that carries prose (an answer, a comment, a PR Comment, or verdict text on Approve/Request changes) shows the exact text that will be posted, verbatim, and asks: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Wait for approval before writing.
 4. Apply the native action — including the label swap and reassignment for a baton flip, as one observable set of steps.
 5. Read the object back and verify the actor, action type, object, label state, assignee, and revision where applicable.
 
@@ -52,13 +51,9 @@ Done means the selected response exists on the correct object/current revision, 
 - Do not close objects, write final resolutions, merge, author briefs, or infer consensus.
 - If the write succeeds but verification is blocked, return the URL and say verification is incomplete.
 
-## LEGACY: `[ACK]` Discussion `👀` (ADR-100)
-
-There is no Announcement object under the Accord memory model, and new traffic should never create a fresh `[ACK]`-titled Discussion — see `report/SKILL.md`. An open `[ACK]`-titled Discussion created before this model keeps its original single-recipient semantics: the account named as the FIRST mention in its title/body clears its own receipt with `👀`, an awareness attestation only — it verifies that the recipient saw the notice, never comprehension, acceptance, or external work, and it is never read as consent (a reversal or amendment still needs the Issue-based consent path, ADR-099). This path retires once legacy `[ACK]` Discussions have been migrated off.
-
 ## Companion skills
 
-- `relay-digest` finds the obligation: an assigned `needs-input`/`awaiting-acceptance`/`awaiting-record` Issue, a native Q&A obligation on a Discussion the viewer authored (`accept-answer-or-follow-up` while unanswered with a stranger's comment, answered here by "This answer resolves my question" or by a follow-up comment; `close-answered-question` once accepted and still open), a requested PR verdict, and — LEGACY only — an `[ACK]` Discussion's single-recipient receipt.
+- `relay-digest` finds the obligation: an assigned `needs-input`/`awaiting-acceptance`/`awaiting-record` Issue, a native Q&A obligation on a Discussion the viewer authored (`accept-answer-or-follow-up` while unanswered with a stranger's comment, answered here by "This answer resolves my question" or by a follow-up comment; `close-answered-question` once accepted and still open), or a requested PR verdict.
 - `relay-settle` handles authorized closure after the response round — including closing an answered Q&A Discussion, and applying `awaiting-record` when a Decision must be committed.
 
 ## Communication style
