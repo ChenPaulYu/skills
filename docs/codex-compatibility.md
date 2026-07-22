@@ -22,7 +22,7 @@ One source owns the method; the adapter owns only the host translation.
 Codex always sees every installed skill's `name` and `description`; it loads the body only after a skill triggers. Treat metadata as a shared, bounded index.
 
 1. **One active copy per skill.** Never install the same generated name in both `~/.agents/skills` and `~/.codex/skills`. Project and global copies also overlap while that project is open, so prefer a small global profile.
-2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged.
+2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged. Whenever a Claude skill's routing semantics or frontmatter description changes, review its Codex sidecar in the same change; leaving the sidecar text unchanged is a deliberate review result, never an omission.
 3. **Front-load discrimination.** State the object, action, and strongest trigger first. Put examples, anti-triggers, sibling boundaries, and procedure in the body.
 4. **Budget mechanically.** Every description is at most 240 characters and the full marketplace sidecar is at most 7,000 characters. The validator rejects missing, stale, or oversized entries.
 5. **Install by need.** Use `minimal`, `build`, `research`, or `collaboration`; reserve `all` for environments that truly need the full roster. Use `project-only` to clear generator-managed global copies when a project's own `.agents/skills` is sufficient.
@@ -102,8 +102,8 @@ The supervisor must inspect the diff and rerun proportionate verification. A wor
 
 ## Change procedure
 
-1. Read the Claude source and classify each construct as portable core, mechanical syntax, host capability, or unsupported.
-2. Add or update the Codex-only projection rule. Do not edit the generated mirror directly.
+1. Read the Claude source and classify each construct as portable core, mechanical syntax, host capability, or unsupported. If routing semantics or a source frontmatter description changed, review every affected entry in `platforms/codex/descriptions.json` before continuing.
+2. Add or update the Codex-only projection rule. Do not edit the generated mirror directly; record an intentionally unchanged sidecar as an explicit review result in the change summary.
 3. Add fixtures for the source signal, generated output, stop boundary, and explicit degradation if needed.
 4. Regenerate with `node scripts/build-codex.mjs`.
 5. Run the release/install checks, both audits, and the full validator:
