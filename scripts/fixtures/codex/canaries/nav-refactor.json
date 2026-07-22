@@ -9,6 +9,9 @@
     { "category": "subagent_protocol" },
     { "category": "model_sonnet" }
   ],
+  "reject_text": [
+    "> **Explicitly invoked only.** Run this skill"
+  ],
   "expect_text": [
     "**Interactive choice contract (Codex).**",
     "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",

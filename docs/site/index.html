@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-07-22 (rev 96)
+  Last audit: 2026-07-22 (rev 98)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -158,7 +158,7 @@
       design record: blueprints/plans/2026-07-22-accord-memory-model.md).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 102 ADRs in docs/adr/ — 001..102 with cross-supersede / refine links
+    • 103 ADRs in docs/adr/ — 001..103 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — nav map, shape reconcile + align, relay digest;
@@ -189,7 +189,21 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 97)
+  ⚠ FIXED in this revision (rev 98)
+    1. nav 0.11.0 makes /nav:refactor invocable by both the user and the
+       model. A live Skill(nav:refactor) attempt exposed that
+       disable-model-invocation blocked the model before refactor's own
+       verbatim-move, diff, test, confidence, and real-app gates could load.
+       The frontmatter flag is removed; those skill-owned safety gates stay
+       unchanged. This resolves ADR-072's open invocation-direction question
+       narrowly for refactor — other explicit-only skills keep their policy.
+       Updated: plugins/nav/skills/refactor/SKILL.md, nav version + generated
+       manifests, README invocation bucket, Codex capability inventory +
+       mirror (adapter 1.0.3), and this map's two nav version blurbs. NEW
+       docs/adr/103-nav-refactor-allows-model-invocation.md. ADR count 102 →
+       103.
+
+  ⚠ FIXED in rev 97 (kept for history)
     1. nav 0.10.1 — /nav:do gains CLI packaging/docs discipline: the inject
        pass checks the package's command-entry contract (project.scripts /
        bin / installed binary name) before editing CLI docs or wrappers,
@@ -2662,7 +2676,7 @@ const DOMAINS = {
   nav: {
     layer: 'state',
     path: 'plugins/nav/',
-    blurb: {en:'Keep any codebase navigable as it grows. 8 skills, one verb each. Language-agnostic. v0.10.1; see <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。8 個 skill,各一動詞。跨語言。v0.10.1;plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
+    blurb: {en:'Keep any codebase navigable as it grows. 8 skills, one verb each. Language-agnostic. v0.11.0; see <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。8 個 skill,各一動詞。跨語言。v0.11.0;plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
     files: [
       ['/nav:audit', '', {en:'★ Assess codebase shape against the 8 rules — unconditional health, or read-only quick-check against a target spec. Read-only.', zh:'★ 對照 8 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。'}],
       ['/nav:refactor', '', {en:'★ Structural refactor: verbatim move + test gate after every step + real-app pass at the end. Behaviour stays identical.', zh:'★ 結構重構:原文搬移 + 每步 test gate + 結尾真實 app pass。行為完全不變。'}],
@@ -2742,7 +2756,7 @@ const DOMAINS = {
 };
 
 const CB_NODES = [
-  {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 8 skills, language-agnostic. v0.10.1.', zh:'讓既有 code 長大後仍可導覽(post-build)。8 個 skill,跨語言。v0.10.1。'}},
+  {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 8 skills, language-agnostic. v0.11.0.', zh:'讓既有 code 長大後仍可導覽(post-build)。8 個 skill,跨語言。v0.11.0。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit/survey/probe/position) → dogfood the built result → plan (align) → build, keep honest (reconcile). survey maps a decision space and reports the diff vs your understanding, summoned or offered by elicit (ADR-074); probe designs and runs a minimal experiment when a fork can\'t be settled by argument, summoned or the destination of frame:dialectic\'s guarded offer (ADR-075); elicit is now the gatekeeper — a stalled volley gets diagnosed and offers survey/probe instead of forcing another fork (ADR-076). 10 skills around a blueprints/ convention; doctor (orchestrator) deferred. Depends on nav one-way (shape → nav). v0.10.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit/survey/probe/position)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。survey 測繪決策空間、回報跟你認知的差集,召喚或被 elicit offer(ADR-074);probe 設計並跑一個最小實驗,當分岔吵不出結果時,召喚或是 frame:dialectic guarded offer 的目的地(ADR-075);elicit 現在是守門人 —— volley 卡住時先診斷,offer survey/probe 而非硬立下一個 fork(ADR-076)。10 個 skill 圍著 blueprints/ 約定;doctor(orchestrator)待加。單向依賴 nav(shape → nav)。v0.10.0。'}},
   {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 4 skills (dissect / untangle / critique / provenance); feedback as a candidate. Standalone — no nav/shape dependency. v0.6.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。4 個 skill(dissect / untangle / critique / provenance);feedback 為候選。獨立,不依賴 nav/shape。v0.6.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 4 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075) + graft (borrow a mature model + adapt it to your domain — the adapt list is the payload). All 4 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 5th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 4 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.6.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。4 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)+ graft(借成熟模型 + 為領域適應 —— adapt 清單是 payload)。4 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 5 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 4 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.6.1。由 think 改名。'}},

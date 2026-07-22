@@ -1,6 +1,6 @@
 {
   "schema_version": "2",
-  "adapter_release": "1.0.2",
+  "adapter_release": "1.0.3",
   "release_policy": {
     "adapter_versioning": "independent-semver",
     "schema_versioning": "increment-on-required-contract-change",
@@ -164,7 +164,6 @@
         "> **Explicitly invoked only.**"
       ],
       "contract_consumers": [
-        ".agents/skills/nav-refactor/SKILL.md",
         ".agents/skills/reflect-catchup/SKILL.md",
         ".agents/skills/reflect-observe/SKILL.md",
         ".agents/skills/reflect-park/SKILL.md",

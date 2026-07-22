@@ -1,7 +1,6 @@
 ---
 name: refactor
 description: "Execute a structural refactor with strict discipline: verbatim moves only (no rewriting while moving), test-gated after every step, real-app-verified at the end (browser pass for UI; CLI/integration run for backend). Behaviour-preserving only — extract, split, decompose, or reorganize code without changing what it does; for a behaviour-changing small change use /nav:do instead. The skill enforces the discipline; the agent does the moves."
-disable-model-invocation: true
 ---
 
 # Deep-module refactor

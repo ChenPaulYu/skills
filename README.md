@@ -46,16 +46,13 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 **`nav` — keep code healthy:**
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
+- `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 - `/nav:sync` — sync file-top headers to the code (per-file navigability; continuous, per-change), gated diff
 - `/nav:map` — render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads `sync`'s headers)
 - `/nav:tour` — guide a conversational walkthrough of what a codebase does, how it works, and why (rationale labeled Recorded/Inferred/Unknown), then propose a shared model for the user to correct; read-only, in-chat, `map`'s conversational sibling
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
-
-*User-invoked:*
-
-- `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
