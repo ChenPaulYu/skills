@@ -68,6 +68,35 @@ GitHub objects store process; repo files store results.
 Decisions carry stable IDs (`decisions/D-021-<slug>.md`) so Briefs and Core can
 cite anchors that survive renames.
 
+**A Decision records the whole deliberation, objectively, conclusion-first.**
+The file is self-contained: how the question arose, how the discussion ran,
+and what was concluded — so formal memory survives even without the platform
+objects. Ordering follows progressive disclosure (the conclusion is readable
+without the process); the process section is an *objective summary* — each
+position attributed by name, chronological, no editorializing, no gap-filling
+(the verbatim record stays in the linked source object; and if summarizing
+the process would require re-judging what was meant, the PR escape applies).
+The format:
+
+```markdown
+---
+id: D-021
+status: active            # | superseded
+superseded-by:            # D-0xx
+source: <Discussion/Issue link>
+settled-by: @who
+date: 2026-07-22
+---
+# D-021 — <one-sentence conclusion>
+
+## Question        how this arose: background, why decide now
+## Deliberation    objective summary: named positions, alternatives
+##                 considered, key evidence, how it converged
+## Conclusion      the authoritative wording (derived views cite only this)
+## Reason          the main rationale
+## Consequences    effects and follow-ups (#xx)
+```
+
 **Derived views cite, never restate.** When a Brief or Core uses Decision
 material, it references the anchor (`[D-021]`) rather than copying the
 authoritative wording — a second copy of a Decision's text is a fact with two
@@ -276,6 +305,17 @@ Yes) · `Follow-ups:`. When a Decision is required, settle applies the
 removes the label, closes. Brief/Core PRs are follow-ups and never block the
 original object's closure. Settling does not mean derived views are updated
 or that follow-up work is done.
+
+*The promotion signal chain is native, deliberately not an @mention.* On an
+Issue: settle writes the block (tier 2, for humans), applies `awaiting-record`
+(tier 1: which stage), and reassigns the Issue to the recorder (tier 1: who
+owes). The digest computes "recorder owes the Decision commit" from label +
+assignee alone — no prose parsing, recoverable after any outage. On a
+Discussion (no assignee field): the label carries the stage, and the recorder
+defaults to the settlement comment's author (a native field); the block's
+`Recorder:` line overrides only when naming someone else, read tolerantly.
+Completion: Decision committed → `Canonical record:` linked back → label
+removed → close; the conformance sweep verifies the links both ways.
 
 **digest — recompute the current state of the collaboration.** Answers:
 waiting on me · waiting on the counterpart · ready for settlement · waiting
