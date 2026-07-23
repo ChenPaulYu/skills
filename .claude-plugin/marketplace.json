@@ -38,8 +38,8 @@
     {
       "name": "relay",
       "source": "./plugins/relay",
-      "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and protected merges, following the Accord memory model. Six daily verbs — launch, report, digest, reply, brief, settle — route intent Issue-default, expose obligations from native stage labels, record cited Decisions, preserve reusable understanding, and close work with authority. An explicit migrate bridge preserves legacy provenance. GitHub owns collaboration state; Relay owns semantics and verification. Language-agnostic.",
-      "version": "2.1.0"
+      "description": "Coordinate asynchronously through a verified GitHub workspace under the Accord memory model. Launch can remember the default workspace and initialize its PR-attested identity roster; report resolves the destination and recipient before Issue-default routing. Digest, reply, brief, and settle keep responsibility and memory on native GitHub state. Language-agnostic.",
+      "version": "2.2.0"
     }
   ]
 }

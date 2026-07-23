@@ -20,7 +20,13 @@ The roster is not a new idea. An earlier iteration of the coordination work kept
 
 Every change goes through a PR. The counterpart's approval on that PR **is** the attestation — no separate Decision file records "we agreed the roster says X," no ceremony beyond the review itself. This is the same authority shape formal memory already uses elsewhere (a Brief's PR review, a Core PR's stricter gate) applied to the simplest possible content: a lookup table both parties sign off on by reviewing the diff.
 
-`/relay:launch` audits it, read-only, at convention tier: parseable YAML, and its GitHub-account handles resolve (`gh api users/<handle>`). Absent is `missing (optional)`, never a blocker — a repository with no legacy handles to map does not need one.
+The canonical shape is `people.<legacy_handle>.{name, github, title, git}`. `name`, `github`, and `title` are required; `git` is optional historical/commit-author reference data and never blocks routing. Legacy handles and GitHub accounts are unique. A consumer may match a requested legacy handle, name, or role only when the result is exactly one row and that row's GitHub account resolves; ambiguity is a question for the user, never permission to guess.
+
+`/relay:launch` owns initialization and later edits. It audits the roster at convention tier (parseable YAML, required fields, uniqueness, and resolvable GitHub accounts). Absence is `missing (optional)`, never a blocker, but `launch` offers a remedy: gather the proposed rows, show the complete YAML and mutations, then open a normal PR after approval. The counterpart's requested review and eventual approval attest the shared mapping. `launch` never writes roster changes directly to the default branch.
+
+The roster is useful only after an agent has found the Relay workspace. GitHub-native Relay therefore also restores an explicit default-workspace resolver for cross-repository use: explicit object/repository → `$RELAY_REPO` → the verified one-line local preference at `~/.config/relay/repo` → a cwd carrying repository-owned Relay markers → ask. `launch` may preview and persist the verified `OWNER/REPO` locally. This pointer is deletable routing configuration, not shared reference data or collaboration state; it is neither committed nor read by `digest`.
+
+`/relay:report` uses the resolved workspace's roster to translate a human-facing recipient into a verified GitHub assignee/reviewer. An explicitly supplied GitHub account may bypass roster matching only after GitHub resolves it. A missing roster, zero matches, multiple matches, or an invalid account stops before author sign-off and creation. `digest` remains roster-independent: obligations still derive only from native GitHub fields.
 
 ## Rejected
 
@@ -28,11 +34,14 @@ Every change goes through a PR. The counterpart's approval on that PR **is** the
 
 **(ii) Keeping the mapping unrecorded.** The status quo before this ADR. Rejected because a load-bearing fact with no owner is exactly the failure mode the blueprint's memory model exists to close — it is the same shape as the supersession-marker gap the blueprint itself flagged in section 7 ("a future reader ... would believe it still holds"), except here the fact was never written down at all rather than written down and left to rot.
 
+**(iii) Letting `report` infer a GitHub account or silently use cwd.** Display names, organization names, and repository remotes are suggestive but not attested identity or destination facts. In a product repository this fallback can create a perfectly valid Issue in the wrong place and assign a similarly named but wrong account. Rejected in favor of verified workspace resolution plus an exact roster match or explicit user-supplied account.
+
 ## Consequences
 
-- New file, not built by this ADR: `relay.yml` at the repository root (a per-workspace file, not part of this marketplace repository — the marketplace ships the *contract*, not a live roster).
-- `plugins/relay/CLAUDE.md` — the "Minimal implementation" section no longer states there is no roster file; it now names the forbidden thing precisely (a machine-consumed parallel *state* store) and says a jointly attested *reference* file is formal memory. The "Raw, briefs, and Core" section gains `relay.yml` as a fourth formal-memory category alongside `decisions/`/`briefs/`/`core/`.
-- `plugins/relay/skills/launch/SKILL.md` — the audit checklist gains one optional, convention-tier item (parseable YAML, handles resolve via read-only `gh api users/<handle>`; absent = `missing (optional)`, never a blocker); the Discipline section's prohibition no longer names "roster" as forbidden outright.
-- No reducer or schema change: `digest` never reads `relay.yml`, so `compute-state.mjs` and `compute-state.test.mjs` are untouched (82/82 stays 82/82).
-- No new daily verb. The daily verb set stays `launch · report · digest · reply · brief · settle` plus explicit-only `migrate`; `launch` gains an audit item, not new write authority — it never creates or edits `relay.yml`, since a change is PR-gated counterpart attestation, not a setup mutation.
-- relay `2.0.0` → `2.0.1` — a documentation/audit-surface addition, no behavior change to any verb's routing, obligation, or write contract, so a patch bump, not a minor or major one.
+- `relay.yml` lives at each Relay workspace root. The marketplace ships its contract; `/relay:launch` now owns creating or changing the live file through a reviewed PR.
+- `plugins/relay/CLAUDE.md` owns the roster schema, verified workspace resolver, and recipient-resolution law. It distinguishes a machine-consumed parallel *state* store (forbidden), attested *reference* data (`relay.yml`), and a local routing preference (`~/.config/relay/repo`).
+- `plugins/relay/skills/launch/SKILL.md` audits the optional roster and may initialize/update it through a previewed, counterpart-reviewed PR. It may also preview and persist the verified default workspace locally.
+- `plugins/relay/skills/report/SKILL.md` resolves the target workspace before the object router, then resolves the recipient from an explicit verified GitHub account or one unambiguous roster row. It asks instead of guessing.
+- No reducer or schema change: `digest` never reads `relay.yml`, so `compute-state.mjs` and `compute-state.test.mjs` are untouched (75/75 stays 75/75).
+- No new daily verb. The daily verb set stays `launch · report · digest · reply · brief · settle` plus explicit-only `migrate`; the new capability belongs to the existing setup and reporting doors.
+- Relay `2.1.0` → `2.2.0` — backward-compatible new behavior in existing verbs: roster initialization, default-workspace persistence, and verified recipient resolution.

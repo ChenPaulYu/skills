@@ -1,6 +1,6 @@
 ---
 name: report
-description: "Route a new tell, owned question, review request, or memory change to the right GitHub Issue, pull request, or Discussion — Issue-default under the Accord memory model (ADR-100). Makes responsibility visible, previews writes, and verifies the result."
+description: "Route a new tell, owned question, review request, or memory change under the Accord model after resolving the intended GitHub workspace and one verified recipient. Use for new Relay traffic; never infer a destination or username."
 ---
 
 # report — bring new information into the collaboration
@@ -37,11 +37,22 @@ Split independently completable asks into linked objects. Do not let a partial c
 
 ## Process
 
-1. Resolve the current repository and authenticated viewer. If the user supplied an existing object URL, inspect and resume it instead of creating anything.
-2. Distill title, body, object type, completion condition, owner/assignee/reviewer, and provenance links. State plainly which router step applies and why. If the request mixes a tell, a review, and an owned question, show the linked objects separately.
-3. **Author sign-off.** Show the exact title and body that will be posted, verbatim — this speaks in the user's voice on GitHub — and ask: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Show the follow-up mutations (assignment, review request, labels, links) alongside it. Wait for approval.
-4. Create the object, then apply assignment, review request, labels, and links as separate observable steps.
-5. Read the object back. Verify URL, type, assignee or requested reviewer, current revision, and the stated completion rule.
+1. **Resolve the destination before routing content.** If the user supplied an existing object URL, inspect and resume it instead of creating anything. Otherwise resolve the target Relay workspace in this order:
+   1. an explicit `OWNER/REPO` supplied for this action;
+   2. `$RELAY_REPO`;
+   3. the one-line local default at `~/.config/relay/repo`;
+   4. cwd only when repository-owned Relay markers (`relay.yml`, `decisions/`, `briefs/`, or `core/`) prove it is itself the workspace;
+   5. otherwise ask the user for `OWNER/REPO` and offer `/relay:launch` to persist it as the verified local default.
+
+   Validate every candidate with `gh repo view OWNER/REPO --json nameWithOwner,viewerPermission`. A stale or inaccessible environment/config candidate falls through with a visible warning. Never silently use a product repository merely because it is cwd or has a Git remote.
+2. **Resolve the recipient before drafting.** Resolve the authenticated viewer, then determine the one assignee or individual reviewer required by the selected object shape.
+   - If the user explicitly supplied a GitHub account, require `gh api users/<handle>` to resolve it.
+   - Otherwise read `relay.yml` from the resolved workspace and match the requested legacy handle, human-facing name, or role. Require exactly one row and verify its `github` account through GitHub.
+   - A missing roster, zero matches, multiple matches, an invalid account, or a team instead of an individual stops here: ask the user for the GitHub account. Never infer it from display-name similarity, an organization name, or a previously seen handle.
+3. Distill title, body, object type, completion condition, owner/assignee/reviewer, and provenance links. State plainly which router step applies and why. If the request mixes a tell, a review, and an owned question, show the linked objects separately.
+4. **Author sign-off.** Show the resolved `OWNER/REPO`, exact title and body that will be posted, verbatim — this speaks in the user's voice on GitHub — and ask: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Show the resolved assignee/reviewer and follow-up mutations (assignment, review request, labels, links) alongside it. Wait for approval.
+5. Create the object in the resolved repository, then apply assignment, review request, labels, and links as separate observable steps.
+6. Read the object back. Verify repository, URL, type, assignee or requested reviewer, current revision, and the stated completion rule.
 
 ## Partial failure
 
@@ -49,11 +60,13 @@ If creation succeeds but a later mutation fails, return the created URL plus the
 
 ## Completion
 
-Done means the object exists and its intended responsibility is visible in GitHub. A prose mention alone never creates work; silent assignment or reviewer failure blocks completion.
+Done means the object exists in the intended resolved repository and its intended responsibility is visible in GitHub. A prose mention alone never creates work; an unresolved destination/recipient or silent assignment/reviewer failure blocks completion.
 
 ## Boundaries
 
 `report` opens. `/relay:reply` responds. `/relay:settle` declares the whole object finished — and, when the closing Resolution warrants it, applies `awaiting-record` so a recorder can commit the Decision. Durable cross-context synthesis belongs to `/relay:brief`.
+
+`~/.config/relay/repo` is only a local default destination, not a Relay database. `relay.yml` is PR-attested identity reference data, not obligation state. `report` reads both before creation; `/relay:digest` reads neither to compute responsibility.
 
 ## Communication style
 

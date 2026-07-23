@@ -415,6 +415,31 @@ Six daily verbs form the interface:
 
 `migrate` is an explicit-only bridge that brings a repository's pre-model coordination state into this memory model, not a seventh daily verb (ADR-102).
 
+## Locating the Relay workspace and its people
+
+A Relay workspace is one GitHub repository, but it is not necessarily the repository in the current working directory. A product repository may report into a central Accord repository. Any verb that creates a new object resolves the target workspace in this order and validates every candidate with `gh repo view` before use:
+
+1. an object URL or `OWNER/REPO` explicitly supplied for this action;
+2. `$RELAY_REPO`, when set to `OWNER/REPO`;
+3. the one-line local default at `~/.config/relay/repo`, when present;
+4. the current repository only when repository-owned Relay markers (`relay.yml`, `decisions/`, `briefs/`, or `core/`) prove it is itself a Relay workspace;
+5. otherwise ask the user for `OWNER/REPO` and offer to save the verified answer as the local default.
+
+A stale or inaccessible environment/config candidate falls through with a visible warning; it never turns cwd into an implicit fallback. `~/.config/relay/repo` is routing configuration, not collaboration state: it stores only a verified default `OWNER/REPO`, may be deleted safely, and is written only after the exact local mutation is previewed and approved. `$RELAY_REPO` is an explicit per-process override and is never overwritten.
+
+`relay.yml` at the workspace root is the attested identity roster. Its canonical shape is:
+
+```yaml
+people:
+  <legacy_handle>:
+    name: <human-facing name>       # required
+    github: <GitHub account>        # required
+    title: <role or title>          # required
+    git: <commit author email>      # optional; not used for routing
+```
+
+Legacy handles and GitHub accounts are unique. `report` may use a GitHub account explicitly supplied by the user after `gh api users/<handle>` resolves it. Otherwise it matches the requested legacy handle, name, or role against `relay.yml`; exactly one row must match, and that row's `github` value must resolve. No match, multiple matches, a missing roster, or an invalid account means ask before previewing or creating anything. Never infer an account from display-name similarity, an organization name, or a previously seen handle.
+
 ## The four objects and their boundaries (blueprint section 1)
 
 | Object | What it is | Boundary test |
@@ -457,7 +482,7 @@ The **recorder is not the assignee**: the assignee executes; the recorder is who
 
 ## Object router (blueprint sections 1, 8, 10)
 
-One Relay workspace equals the current GitHub repository in v1. Cross-repository aggregation is out of scope.
+One Relay workspace equals one resolved GitHub repository. Cross-repository aggregation is out of scope, but a project repository may target a separate central workspace through the resolver above.
 
 **Issue-default.** Route a new intent by asking: does this belong to an existing object (comment there)? Is it a standalone tell needing a receipt (Issue, assignee confirms)? Is it a review request (an exact diff → PR; a review of anything else → Issue)? Is it a question you can already name an owner for (a `needs-input` Issue carrying `Question:`/`Done when:`/`After reply:`)? Is it genuinely open, not-yet-converging shared topic (a Discussion)? Is it an already-crisp memory change (straight to a PR)?
 
@@ -533,7 +558,7 @@ Formal memory is navigable the way well-kept code is: any reader answers "what i
 - **`decisions/`** (formal memory, source state) holds one file per Decision, recorded per the fuses above.
 - **`briefs/`** (formal memory, derived) contains ordinary Markdown syntheses for understanding that must stay current across future contexts and does not fit in one Decision's own scope. Each claim cites `[D-0xx]`; `briefs/README.md` owns navigation and organization. Keep it flat unless at least three stable, usually co-read briefs form a domain-based group; never group by time/status or create one-file/empty folders. Moves use `git mv` and update README and links in the same PR. If value is unclear, stay flat.
 - **`core/`** (formal memory, derived, highest weight) contains the minimum binding truth people and agents may rely on now. Change it only through an exact protected PR with a valid current-revision approval; merge is the effective point.
-- **`relay.yml`** (formal memory, attested reference data, blueprint section 3) is neither deliberated (a Decision) nor derived (a Brief/Core projection): the roster (legacy handle · GitHub account · name · role) that historical Decisions' attributions depend on. Every change goes through a PR — the counterpart's approval **is** the attestation, no per-change Decision file, no ceremony. `digest`'s reducer never reads it (obligations stay native-fields-only); it exists for humans and agents reading history, not for routing. See ADR-101.
+- **`relay.yml`** (formal memory, attested reference data, blueprint section 3) is neither deliberated (a Decision) nor derived (a Brief/Core projection): the roster (legacy handle · GitHub account · name · role, plus optional git author email) that historical Decisions' attributions and `report`'s recipient resolution depend on. Every change goes through a PR — the counterpart's approval **is** the attestation, no per-change Decision file, no ceremony. `digest`'s reducer never reads it (obligations stay native-fields-only); `report` reads it only to turn a human identity into a verified native GitHub owner. See ADR-101.
 
 A Brief never closes an object, represents consensus, or changes Core. It is not a Core prerequisite; a Core PR may cite a Decision file directly.
 
@@ -549,7 +574,7 @@ Every writing verb that posts prose into a GitHub object or commits a Decision f
 
 ## Minimal implementation
 
-Use GitHub primitives directly through authenticated `gh`/API operations and ordinary branches/PRs, plus direct commits for Decision recording under the five-fuse discipline above. There is no Relay database, status frontmatter, project file, or thought stream beyond the `decisions/`/`briefs/`/`core/` formal-memory files themselves — each of those is itself plain Markdown plus frontmatter/citations plus git history, never a parallel state store. The forbidden thing is a machine-consumed parallel **state** store, not a jointly attested **reference** file: `relay.yml` (below) is formal memory precisely because every change is PR-gated and `digest` never reads it.
+Use GitHub primitives directly through authenticated `gh`/API operations and ordinary branches/PRs, plus direct commits for Decision recording under the five-fuse discipline above. There is no Relay database, status frontmatter, project file, or thought stream beyond the `decisions/`/`briefs/`/`core/` formal-memory files themselves — each of those is itself plain Markdown plus frontmatter/citations plus git history, never a parallel state store. The forbidden thing is a machine-consumed parallel **state** store, not a PR-attested **reference** file (`relay.yml`) or a deletable local **routing preference** (`~/.config/relay/repo`). Neither participates in obligation computation.
 
 The deterministic GitHub obligation reducer belongs to `digest`. It collects native GitHub primitives, reduces them without inventing state, and returns a machine-readable blocker when collection is incomplete. `migrate` performs semantic inventory directly; the legacy frontmatter linter is retired.
 

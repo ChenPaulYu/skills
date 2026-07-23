@@ -1,22 +1,23 @@
 ---
 name: launch
-description: "Set up or audit the current GitHub repository for Relay. Use when a repository adopts Relay or its permissions and protection may have drifted. Writes only after an approved mutation plan; read-back verification is required."
+description: "Set up or audit an intended GitHub workspace for Relay, remember its verified default destination, and initialize or update its PR-attested identity roster. Use when a repository adopts Relay or its routing, roster, permissions, or protection may have drifted."
 ---
 
-# launch — make one GitHub repository safe for Relay
+# launch — make one GitHub repository safe and findable for Relay
 
-Audit the current repository, then configure only what the user approves. One Relay workspace equals this repository.
+Resolve and audit the intended Relay repository, then configure only what the user approves. One Relay workspace equals one GitHub repository; a product repository may point at a separate central workspace.
 
 ## Process
 
 `OWNER/REPO` and `BRANCH` below are placeholders — resolve them from step 1 before running any later command.
 
-1. **Resolve repository and viewer.**
+1. **Resolve repository and viewer.** If the user supplied an object URL or `OWNER/REPO`, use it. Otherwise resolve `$RELAY_REPO`, then the one-line local default at `~/.config/relay/repo`, then cwd only when it carries repository-owned Relay markers (`relay.yml`, `decisions/`, `briefs/`, or `core/`). If none resolves, ask which `OWNER/REPO` to launch; a bare cwd Git remote is a candidate to confirm, not permission to assume. Validate the result and viewer:
    ```
-   gh repo view --json nameWithOwner,defaultBranchRef,viewerPermission
+   gh repo view OWNER/REPO --json nameWithOwner,defaultBranchRef,viewerPermission
    ```
-   Missing authentication or insufficient admin access is a blocker, not a reason to guess.
+   A stale environment/config candidate falls through with a visible warning. Missing authentication or insufficient admin access is a blocker, not a reason to guess. Keep `$RELAY_REPO` as an explicit override; never overwrite it.
 2. **Audit prerequisites.** Read back:
+   - the local default Relay repository: if `~/.config/relay/repo` exists, read its one-line `OWNER/REPO` and verify it with `gh repo view`. A missing, stale, or different pointer is a local routing finding, separate from repository readiness. It never makes another repository the implicit target.
    - Discussions enabled, with usable Announcement and Q&A categories and each category's live slug:
      ```
      gh api graphql -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){hasDiscussionsEnabled discussionCategories(first:25){nodes{name slug isAnswerable}}}}' -f owner=OWNER -f name=REPO
@@ -52,22 +53,30 @@ Audit the current repository, then configure only what the user approves. One Re
      ```
      A missing label is `missing`, not `blocked` — `launch` can create it directly.
    - the `decisions/` formal-memory scaffold: the directory exists, `decisions/README.md` states it is the index (id · title · status · date, newest first, regenerated — never hand-edited) and names the frontmatter spec (`id · status: active|superseded · superseded-by · source · settled-by · date`, `settle/SKILL.md`'s Decision file format). Its absence is `missing`, not a blocker — a repository with no Decisions yet still works, `launch` just cannot confirm the scaffold is ready for the first one.
-   - the roster (`relay.yml`, attested reference data — CLAUDE.md, ADR-101), **optional, convention-tier**: if present, check it parses as YAML and that its GitHub-account handles resolve (`gh api users/<handle>`, read-only). If absent, self-report `missing (optional)` — never a blocker, and never part of the mutation plan in step 4 (`launch` audits the roster; it never authors or edits one, since a change is PR-gated counterpart attestation, not a setup mutation).
+   - the roster (`relay.yml`, attested reference data — CLAUDE.md, ADR-101), **optional, convention-tier**: if present, check the canonical `people.<legacy_handle>.{name, github, title, git}` shape, require `name`/`github`/`title`, allow optional `git`, require unique legacy handles and GitHub accounts, and resolve every account with `gh api users/<handle>` (read-only). If absent, self-report `missing (optional)` — never a blocker — and offer the separately gated reviewed-PR remedy in step 4.
 3. **Report audit-only findings.** Separate `ready`, `missing`, `inert (slug mismatch)`, `blocked-by-plan`, `blocked`, and `cannot verify`. Audit mode writes nothing.
    - `missing` — the setting or file is absent, and a `launch` mutation *can* create it (a template file, a repository setting the viewer's permission level can change).
    - `inert (slug mismatch)` — the file exists but GitHub will never serve it (see above); the fix is renaming or removing the file, not writing a new one.
    - `blocked-by-plan` — the feature is structurally unreachable on the repository's current GitHub plan/visibility tier, evidenced by the platform's own error (e.g. branch-protection/rulesets APIs returning `403 Upgrade to GitHub Pro or make this repository public` on a private free-plan repo). No mutation `launch` could ever write fixes this. Report the exact platform message verbatim, name the only two unblock paths that exist (upgrade the plan, or change repository visibility), and note plainly that the repository owner's own policy may rule either out — that is their call, not `launch`'s. The mutation plan in step 4 must **exclude** any item found `blocked-by-plan`, never propose it as if it were `missing`.
    - `blocked` — reserved for auth/permission-type blockers (missing scope, insufficient admin access) where a *different* credential could unblock it.
-4. **Gate mutations.** Show the exact settings/files/API mutations and their effect, for every `ready`-adjacent `missing` or `inert` finding only — never for anything found `blocked-by-plan`. Wait for explicit approval before changing anything. Missing or divergent entry-point templates are part of this plan: copy the file from `references/templates/` verbatim (or show the diff, if it already exists but drifted), and show its full contents before writing — same write-gate as any other mutation here. A missing Relay label (`fyi`, `needs-input`, `awaiting-acceptance`, `awaiting-record`) and a missing `decisions/` scaffold (directory + `README.md` stating the index shape and the frontmatter spec) are the same kind of mutation: show the exact label/file to create before writing it.
-5. **Apply and read back.** Use GitHub primitives or a normal protected PR for repository files. Re-query every setting with the same commands from step 2. A write response without matching read-back state is failure. For templates, read the committed file content back and confirm it matches what was shown.
+4. **Gate mutations.** Show the exact settings/files/API/local mutations and their effect, for every `ready`-adjacent `missing` or `inert` finding only — never for anything found `blocked-by-plan`. Wait for explicit approval before changing anything.
+   - **Local default repository:** offer to write the verified canonical `OWNER/REPO` as the only line in `~/.config/relay/repo`. Show the path, old value (or absence), and new value. This is local routing configuration, not shared state; it does not need counterpart review.
+   - **Roster:** gather each proposed legacy handle, human-facing name, verified GitHub account, title/role, and optional git author email. Show the complete proposed `relay.yml` verbatim plus branch name, commit, PR title/body, and the individual counterpart to request for review. The reviewer must resolve through GitHub, appear in the proposed roster, and differ from the PR author. Creating or changing the roster always uses a normal PR; counterpart approval is the attestation. Never write it directly to the default branch.
+   - **Other repository setup:** missing or divergent entry-point templates are part of this plan: copy the file from `references/templates/` verbatim (or show the diff, if it already exists but drifted), and show its full contents before writing. A missing Relay label (`fyi`, `needs-input`, `awaiting-acceptance`, `awaiting-record`) and a missing `decisions/` scaffold (directory + `README.md` stating the index shape and the frontmatter spec) are the same kind of mutation: show the exact label/file to create before writing it.
+5. **Apply and read back.** Apply only the approved rows of the mutation plan.
+   - For the local pointer, create the parent directory if needed, write one canonical `OWNER/REPO` line, read it back, and re-run `gh repo view` against that value.
+   - For a roster, create a branch from the current default branch, commit only the approved `relay.yml` diff, push it, open the approved PR, request the named individual reviewer, then read back the PR URL, head revision, changed file, exact diff, and requested reviewer. Report it as `pending attestation` until that reviewer approves and the PR merges; opening the PR does not make the roster authoritative.
+   - For other settings/files, use GitHub primitives or a normal protected PR as appropriate. Re-query every setting with the same commands from step 2. A write response without matching read-back state is failure. For templates, read the committed file content back and confirm it matches what was shown.
 
 ## Completion
 
-Done means the real repository state satisfies the contract. Return the repository URL, verified settings, remaining blockers (auth-type `blocked` and structural `blocked-by-plan` reported separately, the latter with its named unblock paths), and any manual-only step.
+Done means the real repository state satisfies the approved contract. Return the repository URL, verified local pointer (when approved), verified settings, roster state (`absent`, `pending attestation`, or merged/attested), remaining blockers (auth-type `blocked` and structural `blocked-by-plan` reported separately, the latter with its named unblock paths), and any manual-only step.
 
 ## Discipline
 
-- Do not create a parallel Relay database, status frontmatter schema, or separate content repository. A jointly attested reference file (`relay.yml`, PR-gated changes) is formal memory, not a parallel state store (ADR-101) — `launch` audits it read-only and never writes or edits it.
+- Do not create a parallel Relay database, status frontmatter schema, or separate content repository. A jointly attested reference file (`relay.yml`, PR-gated changes) is formal memory, and a one-line local default (`~/.config/relay/repo`) is deletable routing configuration; neither is collaboration state (ADR-101).
+- Never guess the workspace from a product repo's remote, and never guess a GitHub account from a display name, organization, role, or similar handle.
+- Never direct-write `relay.yml` to the default branch. A PR without the named counterpart's current approval is pending, not attested.
 - Do not weaken existing protection to make setup easier.
 - Do not claim a reviewer/approval gate works unless the ruleset and bypass state were read back.
 - Repository mutations are always shown before execution.
