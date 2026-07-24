@@ -143,12 +143,16 @@ card stack.
 
 ```css
 .archdiag{ display:flex; flex-direction:column; gap:4px; }
-.archlayer{ position:relative; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:13px 18px 13px 22px; }
-.archlayer::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:5px; }
-.archlayer.foundation::before{ background:var(--foundation); }
-.archlayer.state::before{ background:var(--state); }
-.archlayer.ui::before{ background:var(--ui); }
-.archlayer .alabel{ font-size:10.5px; text-transform:uppercase; letter-spacing:.12em; font-weight:700; color:var(--caramel); margin-bottom:8px; }
+.archlayer{ position:relative; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:13px 18px; }
+/* Layer color = a small round dot before the label — NEVER a colored left-edge stripe.
+   (2026-07-24, Paul: colored card edges are banned map-wide; emphasis uses the legend-dot
+   vocabulary or a tinted background instead. Applies to callouts and anatomy cards too —
+   no `border-left: <color>` anywhere.) */
+.archlayer .alabel{ font-size:10.5px; text-transform:uppercase; letter-spacing:.12em; font-weight:700; color:var(--caramel); margin-bottom:8px; display:flex; align-items:center; gap:7px; }
+.archlayer .alabel::before{ content:''; width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+.archlayer.foundation .alabel::before{ background:var(--foundation); }
+.archlayer.state .alabel::before{ background:var(--state); }
+.archlayer.ui .alabel::before{ background:var(--ui); }
 .archlayer .achips{ display:flex; flex-wrap:wrap; gap:5px; }
 .archlayer .achips .chip{ font-family:var(--mono); font-size:11.5px; background:var(--bg); border:1px solid var(--line); padding:2px 8px; border-radius:7px; }
 .archlayer .adesc{ font-size:13px; line-height:1.55; }
