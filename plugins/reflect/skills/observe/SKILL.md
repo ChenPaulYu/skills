@@ -1,6 +1,6 @@
 ---
 name: observe
-description: "Surface this session's candidate durable learnings, let you pick which to keep, then write only the picks — never a silent auto-write. Classified as own-learning (local docs/observations/), skill-feedback (opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users), or standing-rule (a repeated behavioral correction proposed as one always-on config line). Also ambient: when the agent notices the same correction a second time, or the user hand-repeating a personal procedure, it offers in ONE line to capture — a nod runs the single-candidate fast path; no nod, nothing happens. Feeds the repo-evolution loop: lived experience → observation → ADR → skill. Read-only except the chosen file(s) / feedback PR."
+description: "Surface this session's candidate durable learnings, let you pick which to keep, then write only the picks — never a silent auto-write. Classified as own-learning (local docs/observations/), skill-feedback (opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users), or standing-rule (a repeated behavioral correction proposed as one always-on config line). Also ambient: when the agent notices the same correction a second time, the user hand-repeating a personal procedure, or personal content leaked into a public artifact, it offers in ONE line to capture — a nod runs the single-candidate fast path; no nod, nothing happens. Feeds the repo-evolution loop: lived experience → observation → ADR → skill. Read-only except the chosen file(s) / feedback PR."
 ---
 
 # observe — harvest this session into a durable observation
@@ -17,6 +17,7 @@ observe is normally summoned, but two tells license a **proactive one-line offer
 
 - **corrected twice** — the user corrects the agent the same way for the *second* time. The loudest signal there is: it usually means a missing **standing rule**, not a missing skill.
 - **hand-repeated ritual** — the user walks through the same multi-step personal procedure by hand again.
+- **leak** — personal content (the user's private email/paths/identity, personal voice, private repo names) is spotted hardcoded in a public artifact. The offer covers both halves: fix the artifact now, and capture the pattern so it stops recurring.
 
 On a tell: offer in **one line** ("要記下來嗎？— /reflect:observe"), then drop it. A nod runs the **single-candidate fast path**: skip the broad Step 2 scan, carry that one candidate straight through classify → route → gate. No nod → nothing happens, don't re-offer the same candidate. When in doubt whether it's worth offering: offer — capture is cheap and unjudged; the pick-gate is the filter, not the offer. What stays forbidden is unchanged: no full harvest unbidden, no write without a pick.
 
@@ -72,7 +73,7 @@ Per pick, the kind (Step 2) + write-access (Step 1) decide the destination:
 | **own-learning** | local KB — Step 5 (write to `$TARGET/docs/observations/`) |
 | **skill-feedback**, runner CAN write the skills repo (maintainer) | local KB — Step 5 (it's their own skill) |
 | **skill-feedback**, runner CANNOT (downstream user) | **upstream PR — Step 5-PR** |
-| **standing-rule** (a repeated *behavioral* correction — the "corrected twice" ambient tell) | the user's **always-on config** (their `~/.claude/CLAUDE.md` / preferences file / project CLAUDE.md — wherever their standing rules live): draft the exact one-line rule, show it, write only on approval. A recurring behavior demand belongs where it's loaded every session, not in a KB nobody re-reads; an observation file is the *fallback* when the user prefers to let it ripen first. |
+| **standing-rule** (a repeated *behavioral* correction — the "corrected twice" ambient tell) | the user's **always-on config** (their `~/.claude/CLAUDE.md` / preferences file / project CLAUDE.md — wherever their standing rules live): draft the exact one-line rule, show it, write only on approval. A recurring behavior demand belongs where it's loaded every session, not in a KB nobody re-reads; an observation file is the *fallback* when the user prefers to let it ripen first. **Size test**: if the pattern is a multi-step ritual too big for one line, the right landing is a **skill** — route it as skill-feedback (a new skill or a mode on an existing one, private or marketplace per its nature), not as a rule crammed into config. |
 
 **Dedupe applies to the local-KB path only:** `ls "$TARGET/docs/observations/"` — if the learning **overlaps an existing observation**, prefer **appending/strengthening that file** (add an evidence case, move it toward `landed`) over a near-duplicate; surface the overlap, user picks new-vs-append. (The PR path lands in a fresh file in the author's `docs/feedback/` inbox; the author dedupes on triage, not the contributor.)
 
