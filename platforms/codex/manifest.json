@@ -165,7 +165,6 @@
       ],
       "contract_consumers": [
         ".agents/skills/reflect-catchup/SKILL.md",
-        ".agents/skills/reflect-observe/SKILL.md",
         ".agents/skills/reflect-park/SKILL.md",
         ".agents/skills/reflect-retrace/SKILL.md",
         ".agents/skills/relay-migrate/SKILL.md",

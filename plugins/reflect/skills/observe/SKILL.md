@@ -1,7 +1,6 @@
 ---
 name: observe
-description: "Surface this session's candidate durable learnings, let you pick which to keep, then write only the picks — never a silent auto-write. Classified as own-learning (local docs/observations/) or skill-feedback (opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users). Feeds the repo-evolution loop: lived experience → observation → ADR → skill. Summoned; read-only except the chosen file(s) / feedback PR."
-disable-model-invocation: true
+description: "Surface this session's candidate durable learnings, let you pick which to keep, then write only the picks — never a silent auto-write. Classified as own-learning (local docs/observations/), skill-feedback (opt-in PR upstream to github.com/ChenPaulYu/skills for downstream users), or standing-rule (a repeated behavioral correction proposed as one always-on config line). Also ambient: when the agent notices the same correction a second time, or the user hand-repeating a personal procedure, it offers in ONE line to capture — a nod runs the single-candidate fast path; no nod, nothing happens. Feeds the repo-evolution loop: lived experience → observation → ADR → skill. Read-only except the chosen file(s) / feedback PR."
 ---
 
 # observe — harvest this session into a durable observation
@@ -11,6 +10,15 @@ Capture **durable, reusable learnings** from the current session into a **knowle
 **Candidate-first — the agent proposes, the user disposes.** Do **not** silently auto-distill one and write it. Surface the session's candidate learnings as a short list, the user picks which (if any) to keep, and only the picks get written. The user owns what enters their knowledge base; observe's job is to *find and offer* the candidates, not to decide for them.
 
 Optional focus from the user: **$ARGUMENTS** (if given, bias the candidate scan toward that area; else scan the whole session).
+
+## Ambient trigger — the one-line capture offer (ported from the retired private `tape` skill, 2026-07-24)
+
+observe is normally summoned, but two tells license a **proactive one-line offer** mid-session (an offer, never a run):
+
+- **corrected twice** — the user corrects the agent the same way for the *second* time. The loudest signal there is: it usually means a missing **standing rule**, not a missing skill.
+- **hand-repeated ritual** — the user walks through the same multi-step personal procedure by hand again.
+
+On a tell: offer in **one line** ("要記下來嗎？— /reflect:observe"), then drop it. A nod runs the **single-candidate fast path**: skip the broad Step 2 scan, carry that one candidate straight through classify → route → gate. No nod → nothing happens, don't re-offer the same candidate. When in doubt whether it's worth offering: offer — capture is cheap and unjudged; the pick-gate is the filter, not the offer. What stays forbidden is unchanged: no full harvest unbidden, no write without a pick.
 
 ## Step 1 — Locate the knowledge base
 
@@ -42,7 +50,7 @@ Scan THIS session for the **non-obvious, reusable mechanisms or principles** wor
 
 - the non-obvious insight / mechanism / failure mode it surfaced;
 - the reusable principle, as a one-sentence **claim**;
-- its **kind** (Step 1): **own-learning** (about the user's work) or **skill-feedback** (about a skill itself) — this decides where it can go **and which test selects it**;
+- its **kind** (Step 1): **own-learning** (about the user's work), **skill-feedback** (about a skill itself), or **standing-rule** (a repeated behavioral correction whose real home is the user's always-on config — see Step 4) — this decides where it can go **and which test selects it**;
 - the evidence (this session) + **the selector for its kind** — the two kinds are kept on *different* tests; don't apply one to both:
   - **own-learning → durability AND news to the *user*.** Is this a real, likely-recurring lesson (one-off vs. recurring) — *and* would the user otherwise re-derive it (i.e. it isn't already theirs)? **Durability alone can't filter** — these two false positives are durable yet are NOT keepers: **(a) the user's OWN in-session insight** already recorded in the project's `thoughts/`/`decisions.md`/`plan.md` (handing it back is redundant, not a learning), and **(b) the agent's session-reasoning recap** ("the principle I applied / the bug I hit") — that's a plain recap, not a learning. The line: *a principle the agent APPLIED this session is recap; a non-obvious thing the USER would otherwise re-derive is an observation* — test for the latter.
   - **skill-feedback → the counterfactual bind** (NOT durability). Can you name **(S) a skill · (P) a decision-point in it · (D) a general behaviour-delta**, such that *"if S did D at P, this wouldn't recur"*? Prescriptive + locatable + general = a real skill-improving keeper — because improving a skill = changing what the agent *does* via a concrete general delta to its text, so feedback that can't name S/P/D can't improve it. A true, durable **pitfall that binds to no skill** is *not* skill-feedback → **demote it to an own-learning note** (or drop it). **Durable ≠ skill-improving** — cataloguing pitfalls as "skill-feedback" is the failure mode this guards.
@@ -64,6 +72,7 @@ Per pick, the kind (Step 2) + write-access (Step 1) decide the destination:
 | **own-learning** | local KB — Step 5 (write to `$TARGET/docs/observations/`) |
 | **skill-feedback**, runner CAN write the skills repo (maintainer) | local KB — Step 5 (it's their own skill) |
 | **skill-feedback**, runner CANNOT (downstream user) | **upstream PR — Step 5-PR** |
+| **standing-rule** (a repeated *behavioral* correction — the "corrected twice" ambient tell) | the user's **always-on config** (their `~/.claude/CLAUDE.md` / preferences file / project CLAUDE.md — wherever their standing rules live): draft the exact one-line rule, show it, write only on approval. A recurring behavior demand belongs where it's loaded every session, not in a KB nobody re-reads; an observation file is the *fallback* when the user prefers to let it ripen first. |
 
 **Dedupe applies to the local-KB path only:** `ls "$TARGET/docs/observations/"` — if the learning **overlaps an existing observation**, prefer **appending/strengthening that file** (add an evidence case, move it toward `landed`) over a near-duplicate; surface the overlap, user picks new-vs-append. (The PR path lands in a fresh file in the author's `docs/feedback/` inbox; the author dedupes on triage, not the contributor.)
 
