@@ -4,10 +4,9 @@
 
 ## What this phase produces
 
-A new reader (human or agent) shouldn't have to read 80 files to understand a repo. The map is the **progressive disclosure entry point** — three layers deep:
-1. The tour (what is this?)
-2. The architecture (3 layers, domain-by-domain)
-3. Anatomies (per-subsystem deep dives, click-to-reveal)
+A new reader (human or agent) shouldn't have to read 80 files to understand a repo. The map is the **progressive disclosure entry point** — two layers deep:
+1. The architecture (what is this? + 3 layers, domain-by-domain — opens with the 1-2 sentence project lede; the former standalone Tour card-stack is retired, see visual-spec §5)
+2. Anatomies (per-subsystem deep dives, click-to-reveal)
 
 This render is also the **dogfood test** for rule ⑧ — if you struggle to describe a domain while writing the map, that struggle gets recorded in the audit block. Stale audit block is treated as a lie, same as a stale file header. Because `nav-sync` maintains the file-top headers, the map can read each file's `head -12` header instead of re-deriving its role — run `nav-sync` first when headers may be stale.
 
@@ -69,8 +68,7 @@ The flagged files go into the audit block's "self-eval" section. **Honesty matte
 Produce `docs/codebase-map/index.html` as a **single self-contained file** with:
 
 - **Sidebar nav** with grouped sub-headings (e.g., "ANATOMIES" subhead + indented items)
-- **Tour** — what the project is, one paragraph, plus a hero screenshot if one exists or can be captured
-- **Architecture** — 3-layer stacked diagram (foundation → state → ui) with cross-layer arrows + brief descriptions
+- **Architecture** — opens the page: the 1-2 sentence project lede + stack note, then the 3-layer stacked diagram (foundation → state → ui) with cross-layer arrows + brief descriptions. (No standalone Tour section — retired, visual-spec §5.) **Light theme only** per visual-spec §2.
 - **Design rules** — the 8 rules as cards (if the codebase has documented its own rules, use those; otherwise the deep-module set)
 - **Module map** — searchable accordion of every domain + every file with one-line roles
 - **Codebase map (master)** — interactive SVG graph: one node per domain, click for details

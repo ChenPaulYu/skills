@@ -36,8 +36,7 @@ docs/codebase-map/
   <div class="layout">
     <nav class="side">[sidebar — see 4]</nav>
     <main>
-      [tour]            <!-- 5 -->
-      [architecture]    <!-- 6 -->
+      [architecture]    <!-- 6 — first section; the tour card-stack is retired (see 5) -->
       [codebase-map]    <!-- 7 -->
       [design-rules]    <!-- 8 -->
       [module-map]      <!-- 9 -->
@@ -54,6 +53,10 @@ docs/codebase-map/
 ## 2 — Color palette (CSS custom properties)
 
 Warm taupe + caramel base + jewel accents. Use these unless the project has a strong existing palette.
+
+> **Light theme only — this palette is mandatory, not a mood suggestion.** Never render the map
+> dark-themed. (2026-07-24: a render shipped dark despite this block and had to be redone —
+> treat any dark `--bg`/`--panel` in the output as a spec violation, not a style choice.)
 
 ```css
 :root{
@@ -95,7 +98,7 @@ section{ margin-bottom:60px; scroll-margin-top:24px; }
 Structure:
 - **Brand row**: dot + project name + language toggle button group
 - **Sub-description** (one line, muted)
-- **Top-level nav links** (tour, architecture, codebase map, design rules, module map)
+- **Top-level nav links** (architecture, codebase map, design rules, module map)
 - **`ANATOMIES` subhead** with dashed top border + indented links to each anatomy
 - **Conventions** link
 - **Meta block** at bottom: "generated from `<path>`" + "Updated `<date>`" in caramel
@@ -125,20 +128,14 @@ Language toggle (top-right of sidebar):
 
 Scrollspy: as user scrolls main content, sidebar link for current section gets `.active` class.
 
-## 5 — Tour section
+## 5 — Tour section (retired 2026-07-24)
 
-```html
-<section id="tour">
-  <h1>[Project name] — codebase map</h1>
-  <p class="lede">[1-2 sentences: what is this project, written for a fresh reader]</p>
-  <figure class="shot"><img src="img/hero-*.png"><figcaption>[caption]</figcaption></figure>
-  <div class="callout"><b>How to read this:</b> [progressive-disclosure instructions]</div>
-  <div class="layers" id="layers"></div>   <!-- rendered from LAYERS data (12) -->
-  <p class="small muted">[stack note: e.g. "Frontend: React 19 · Vite 7 · ..."]</p>
-</section>
-```
-
-The `.layers` block: 3 cards stacked, one per architectural layer (UI / state / foundation). Each has colored left border matching the layer, layer name + tag, and a row of domain chips. Click → scroll to module map + open the relevant domain.
+**Do not render a Tour section.** The stacked layer-card tour duplicated the Architecture
+diagram's content as a tall card column and was cut on user feedback (Paul, 2026-07-24 ricercar
+map session). The map now opens directly with Architecture (6). Fold the tour's one useful
+line — the 1-2 sentence "what is this project" lede + stack note — into the top of the
+Architecture section instead. No `[tour]` skeleton slot, no `nav_tour` T-keys, no `.layers`
+card stack.
 
 ## 6 — Architecture diagram (CSS, not ASCII)
 
@@ -330,7 +327,7 @@ If the user explicitly asks for a different language pair (EN + Japanese, etc.) 
 
 ```js
 const T = {
-  en: { /* all static UI strings keyed: nav_tour, tour_title, tour_lede, ... */ },
+  en: { /* all static UI strings keyed: nav_arch, arch_title, arch_lede, ... */ },
   zh: { /* same keys, translated */ }
 };
 let lang = localStorage.getItem('codebase-map-lang') || 'en';
