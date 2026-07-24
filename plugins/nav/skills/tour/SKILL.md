@@ -1,6 +1,6 @@
 ---
 name: tour
-description: "Guide a user through what the current codebase does, how its main parts cooperate, and which recorded decisions shaped it — then reconcile the agent's model with the user's corrections. Use for conversational codebase walkthroughs, onboarding, or shared-understanding checks. Read-only and in-chat; not a map refresh (/nav:map), a work-status catchup (/reflect:catchup), or a pre-decision survey (/shape:survey)."
+description: "Guide a user through what the current codebase does, how its main parts cooperate, and which recorded decisions shaped it — then reconcile the agent's model with the user's corrections. Two modes: a quick two-turn reconcile (default), and a summoned deep teach-converge loop (layered teaching + reverse quizzes, iterated until the two models converge). Use for conversational codebase walkthroughs, onboarding, or shared-understanding checks. Read-only and in-chat; not a map refresh (/nav:map), a work-status catchup (/reflect:catchup), or a pre-decision survey (/shape:survey)."
 ---
 
 # tour — a corrected shared system model
@@ -15,7 +15,7 @@ It belongs in `nav` because its object is the already-existing codebase, read-on
 
 ## Scope
 
-**Language-agnostic**, same as every nav skill. Whole repo by default; narrows to a named subsystem or user journey on request. **Read-only, in-chat, no durable artifact** — normally two turns (guided model, then the correction reply).
+**Language-agnostic**, same as every nav skill. Whole repo by default; narrows to a named subsystem or user journey on request. **Read-only, in-chat, no durable artifact.** Two modes: **Mode 1 (default)** is the fixed two-turn quick reconcile; **Mode 2 (summoned)** is the deep teach-converge loop — many short layers, reverse quizzes, iterated until the models converge. Mode 2 fires only on an explicit depth ask ("帶我深入理解", "live tour", "教到我懂", the user asks to be quizzed); when in doubt, run Mode 1 — being deep-taught unbidden is the anti-feature.
 
 ## The 8 rules (the through-line of every nav skill)
 
@@ -28,7 +28,7 @@ It belongs in `nav` because its object is the already-existing codebase, read-on
 7. **Below 90% confidence → ask** — a rationale claim without durable evidence is labeled Inferred or Unknown, never asserted as fact.
 8. **Agent-navigability is the audit** — struggling to name a capability or its owning domain is itself a signal the codebase (or its headers) needs `/nav:sync` / `/nav:map`, not a signal to guess harder.
 
-## Process — fixed two-turn protocol
+## Mode 1 — quick reconcile (default; fixed two-turn protocol)
 
 ### Step 1 — Scope the tour
 
@@ -89,9 +89,21 @@ Return only:
 
 If an intent/code divergence surfaces, report it — never silently edit code or decision artifacts to match it. Offer the right next door only when useful: `/shape:elicit` for a new decision, `/nav:plan` for an already-decided code change, `/nav:map` when the durable map itself is stale. Offers, never calls.
 
+## Mode 2 — deep teach-converge (summoned)
+
+The same object as Mode 1 (understanding of the existing system) run as an **iterated convergence loop** instead of one reconcile: it is `/shape:elicit`'s volley-to-convergence engine with the object flipped — elicit converges a *decision*, this converges *understanding*. Mode 1's Steps 1–2 (scope + ground) run unchanged; then loop:
+
+1. **Teach one layer — one idea per layer, plus hooks.** Each layer answers exactly the question the user is currently asking, compressed to a single idea with 1–2 concrete examples, and ends with 1–2 **named hooks** (the next questions the user may pull). Do not push the whole tree: answering the asked layer *plus the next two unasked ones* is the classic failure. The user's pull chooses the branch.
+2. **Declare the perspective every layer.** Usage-facing ("what happens when you call it") may stay anchor-free; dev-facing ("where is it written") must anchor every noun to `file:line` the user can open. Mixing the two — runtime narrative dressed in internal function names — serves neither; if the user asks "where does X actually live?", the layer was mis-perspectived.
+3. **User clarifies — answer only that.** A clarifying question is not an invitation to re-lecture; it names the exact gap. (A vocabulary confusion — the user's concept is right but mapped to the wrong term — is a one-word fix, not a re-teach.)
+4. **Reverse-quiz at checkpoints.** Every few layers, flip direction: pose 2–3 questions that test the **user's** model — prefer *transfer* questions (apply a principle the user already ratified to a **novel** case) over recall. Grade honestly, distinguishing **concept error** (re-teach that layer differently) from **vocabulary slip** (align the word, move on). The quiz is the half Mode 1 lacks: the agent's exposed model only catches the agent's errors; soft spots in the *user's* model surface **only** when it is tested — expect the quiz to catch misapplications the forward teaching never exposed.
+5. **Converge or continue.** Exit when a quiz round surfaces no new soft spots, or the user self-assesses convergence ("我大概懂 N% 了" is a progress signal, not small talk) or calls it. On exit, land Mode 1's Step 5 delta (認知差集 + 更新後共同模型 + Unresolved) over the whole run.
+
+Mode 2 inherits every Mode 1 law: provenance labels on every why-claim, read-only (decisions surfaced mid-tour are **offered** out to `/shape:elicit` / `/nav:do`, never adjudicated inline), at most one deliberately chosen analogy per layer, and rule ⑧ — **teaching is auditing**: every place the user's reading snags or the agent's model breaks under a clarifying question is a design signal worth reporting, not smoothing over. A productive Mode 2 run often emits a queue of real findings as a side effect; route them, don't fix them inline.
+
 ## Completion criterion
 
-A `tour` invocation is complete only when:
+A **Mode 1** invocation is complete only when:
 
 - capability, system flow, recorded rationale, and constraints were each grounded separately;
 - every rationale claim is provenance-labeled;
@@ -99,6 +111,8 @@ A `tour` invocation is complete only when:
 - the user was given the correction door;
 - after a correction reply, the alignment delta and revised shared model were returned;
 - no source, plan, map, ADR, or decision artifact was modified.
+
+A **Mode 2** run is complete only when, additionally: at least one reverse-quiz checkpoint ran (a deep tour that never tested the user's model is Mode 1 stretched long, not Mode 2); quiz results were graded concept-vs-vocabulary; and the exit condition (clean quiz round, or the user's own call) is stated rather than assumed.
 
 If the user ends after the first response, report that the tour is grounded but alignment remains unconfirmed — do not claim the shared model was validated.
 
@@ -121,13 +135,16 @@ If the user ends after the first response, report that the tour is grounded but 
 | Ask the user to teach the repo back from scratch | Offer the agent's model for editing. Tell: a broad "what do you think this system does?" after the agent already read the repo. |
 | Turn a disagreement into an implementation | Classify intent/code divergence and offer the right next verb. Tell: editing code or plans mid-tour. |
 | Reproduce the whole map in chat | Select the smallest model that explains capabilities, flow, decisions, and constraints. Tell: every domain and file gets equal airtime. |
+| (Mode 2) Push three layers when one was asked | One idea per layer + named hooks; the user's pull picks the branch. Tell: the reply answers the asked question and then keeps going into unasked territory. |
+| (Mode 2) Mix usage narrative with dev vocabulary | Declare the perspective per layer; dev-facing layers anchor every noun to file:line. Tell: the user asks "so where does X actually live?" and the layer can't point. |
+| (Mode 2) Quiz by recall instead of transfer | Ask the user to APPLY a ratified principle to a novel case, not to repeat a definition. Tell: every quiz question could be answered by scrolling up. |
 
 ## Companion skills
 
 - **`/nav:map`** — writes/refreshes the durable bilingual repo projection; `tour` consumes it when present but never invokes or writes it. Map answers "where is everything?"; tour answers "what model should we now share?"
 - **`/reflect:catchup`** — reconstructs current *work* state (goal/done/now/open/next). `tour` explains the relatively stable *product/system* model, not where today's task stopped.
 - **`/shape:survey`** — maps missing axes before a *decision*. `tour` explains a system that already exists and checks factual/shared understanding of it.
-- **`/shape:elicit`** — converges a *new* principle or decision. `tour` may expose an intent/code divergence but never adjudicates it — offer `/shape:elicit` instead.
+- **`/shape:elicit`** — converges a *new* principle or decision. `tour` may expose an intent/code divergence but never adjudicates it — offer `/shape:elicit` instead. Mode 2 is elicit's volley engine with the object flipped: elicit converges a decision, tour-deep converges understanding — the natural hand-off pair when a deep tour keeps surfacing decisions.
 - **`/frame:analogize`** — builds and stress-tests an analogy for one already-understood concept. `tour` uses at most one analogy as style; it is not `tour`'s engine.
 - **`/nav:audit`** — assesses architectural health and reports findings. `tour` teaches the current system without grading or fixing it; smells noticed incidentally are marked, not investigated into an audit.
 
