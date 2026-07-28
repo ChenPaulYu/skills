@@ -18,7 +18,10 @@ Inside the door, core is writable **only at freeze moments**:
 
 1. **Campaign close** — after the re-audit (altitude test + `frame:first-principles` self-audit), the campaign log's surviving rulings **batch-diff** into core.
 2. **Explicit per-item freeze order** — the user says "lock this into canon" mid-campaign; that item graduates on the spot (authority + altitude gates still run). The escape hatch, not the default.
-3. **Root-doc birth** — the campaign's founding landing is a freeze moment by definition.
+3. **Founding landing (birth)** — a freeze moment by definition, and it covers the **founding
+   set**: one file per knowledge domain the founding understanding already spans, sized by the
+   authority + altitude gates rather than a one-root-doc quota (ADR-104). Graduation remains the
+   growth channel for everything after birth.
 
 Outside these, core is **read-only — including for position's own mid-campaign rulings**, which land in the campaign log. Graduation thereby loosens correctly: it is the most common *form* of freeze, not the only one.
 

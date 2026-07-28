@@ -6,7 +6,7 @@ description: "Author and maintain a project's ratified core principles from mess
 
 # Position — author the canon layer (a gated, multi-feeding campaign)
 
-Converge what something **is** — a product, a design language, a schema — into **core (principle-wise) documents**: self-contained, principle-altitude, holding only what the user explicitly ratified. The defining unit is not a conversation but a **campaign**: many feedings of heterogeneous material across days, each one gated, each landing surgically, with the canon growing by graduation rather than being scaffolded.
+Converge what something **is** — a product, a design language, a schema — into **core (principle-wise) documents**: self-contained, principle-altitude, holding only what the user explicitly ratified. The defining unit is not a conversation but a **campaign**: many feedings of heterogeneous material across days, each one gated, each landing surgically, with the canon born at its founding, grown by graduation, and never scaffolded (ADR-104).
 
 ## Why this skill exists
 
@@ -52,9 +52,26 @@ The test, per claim: **survives any implementation change = principle · one mea
 - **core/** — user-ratified canon: self-contained at its altitude (*"reading this one page gives the complete picture; links are magnifiers, never required"* — state this invariant in the doc), carries a superseded/evolution log and an open-questions list.
 - **thoughts/** — dated hypotheses: status header ("direction confirmed / details unverified"), ⚠ conflict markers where a later ruling contradicts the text, never silently edited into agreement.
 
-### 4. Graduation(畢業制)— core grows, it is not scaffolded
+### 4. Birth and graduation(兩扇門)— core is born, then grows; it is never scaffolded
 
-position guarantees ONE core file (the root positioning doc). Every further core doc is **graduated**: a thought passes the freeze test — *explicit user sign-off, or validated by built reality* — then re-runs the authority + altitude gates and becomes `core/<domain>.md`; the root doc keeps a high-level section + link (layered self-containment). **Never pre-open empty core files** — canon means frozen, and early campaigns have nothing to freeze. On canon renames, position owns **reference integrity** (every thought, doc, and memory pointing at the old name).
+Two doors into core, one set of gates (ADR-104):
+
+- **Birth** — at a *founding* summons, author the **founding set** directly: one file per knowledge
+  domain the founding understanding already spans, sized by the authority + altitude gates, never by
+  a file quota. Freeze takes effect at birth. Field grain: tactus birthed three of four core docs on
+  day two and graduated one three weeks later, with 49 thoughts available — birth is the founding
+  norm, graduation the growth channel, and the two produce structurally identical canon (only the
+  譜系 line differs). The counter-case: a project that treated graduation as the only door kept a
+  placeholder `core/` six days past its met gate while its day-one working definition sat mislabeled
+  as a hypothesis.
+- **Graduation** — after birth, core grows by graduating: a thought passes the freeze test —
+  *explicit user sign-off, or validated by built reality* — then re-runs the authority + altitude
+  gates and becomes `core/<domain>.md`; the root doc keeps a high-level section + link (layered
+  self-containment).
+
+**Never pre-open empty core files** — birth lands *ratified content*, scaffolding creates a file
+waiting for content; the tell is whether the gates already passed. On canon renames, position owns
+**reference integrity** (every thought, doc, and memory pointing at the old name).
 
 ### 5. Periodic altitude re-audit(週期重審)
 
@@ -65,7 +82,7 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 > **Core is single-writer and freeze-gated.** Two orthogonal gates, both must pass — full protocol in [`references/write-protocol.md`](references/write-protocol.md); the kernel:
 
 - **Door (who):** only an explicitly-summoned `shape-position` writes core — every other verb, ambient conversation, and workers (no inherited authority): never. The "does this belong in core?" judgment has exactly one owner. Other verbs queue a **one-line pending amendment** in `docs/core/amendments.md` (what changed · evidence · by which verb) instead.
-- **Timing (when):** inside the door, core is writable only at **freeze moments** — ① campaign close (post-re-audit, the campaign log's surviving rulings batch-diff in) · ② an explicit per-item freeze order ("lock this into canon") · ③ root-doc birth. Outside these, core is read-only **including for position's own rulings**: ruling ≠ ratification — a mid-campaign ruling is a hypothesis with authority; ratification is a ruling that survived the campaign's churn.
+- **Timing (when):** inside the door, core is writable only at **freeze moments** — ① campaign close (post-re-audit, the campaign log's surviving rulings batch-diff in) · ② an explicit per-item freeze order ("lock this into canon") · ③ founding landing (birth — the founding set, one file per knowledge domain, ADR-104). Outside these, core is read-only **including for position's own rulings**: ruling ≠ ratification — a mid-campaign ruling is a hypothesis with authority; ratification is a ruling that survived the campaign's churn.
 - **The campaign log** (a dated, `thoughts/`-class doc) is the campaign's durable working surface — rulings land here; delta reports compute against the core + log union. Core's evolution log then records only diffs between frozen versions — canon's version history, not meeting minutes.
 - **The ledger is each summon's first feeding:** open by batch-adjudicating `docs/core/amendments.md` (provenance pre-tagged: reality-grade) — absorb or reject per item. `reconcile` sweeps the ledger's leftovers (its exit — a grow-only layer is the ADR-026 bug).
 
@@ -95,7 +112,8 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 | Rewrite the whole doc per feeding | Make surgical edits only — the evolution log is the campaign's memory. Tell: about to regenerate the whole document instead of touching just the changed claim. |
 | Treat one input mode as the norm | Gate every modality — the campaign's first accident (AI-paste) is not its definition. Tell: the gate logic only accounts for the input format that happened most recently. |
 | Absorb because the source sounds authoritative | Block and surface conflicts — guarding is the job, not deferring to confident-sounding input. Tell: about to accept a claim because of how it's phrased rather than whether it's ratified. |
-| Scaffold core files upfront | Wait for graduation — canon is frozen, nothing freezes early. Tell: creating a `docs/core/` file before anything has actually been ratified into it. |
+| Scaffold core files upfront | Land ratified content or nothing — birth writes canon, scaffolding writes placeholders. Tell: creating a `docs/core/` file before anything has actually been ratified into it. |
+| Leave a prescriptive placeholder in an empty `core/` | Leave the directory empty; the board's Next item carries the intent — a README legislating "graduation only" becomes the lock that keeps canon empty (field case: six days past a met gate). Tell: writing a `core/README.md` that tells future sessions which door they may use. |
 | Iterate a third form-variant after two flips | Lift the churn to the rule layer instead of flipping again — two flips is the alarm. Tell: about to try a third phrasing of the same claim that's already flipped twice. |
 | Fire on everyday product chat | Wait for a campaign-level summons — this isn't for everyday conversation. Tell: about to touch canon prose off a passing remark, not a deliberate campaign session. |
 | Write core mid-campaign on an in-conversation ruling | Land rulings in the campaign log; write core only at freeze moments (ADR-041). Tell: about to edit `docs/core/` off something just decided in this conversation, before a freeze point. |
