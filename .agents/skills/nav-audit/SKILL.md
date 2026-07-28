@@ -17,7 +17,7 @@ Most "code review" focuses on bugs. This audit focuses on **shape** — does the
 **The 8 rules are language-agnostic.** This audit works on any codebase. It has a **universal core** of checks that applies everywhere, plus **stack-specific heuristics** that activate when a known stack is detected.
 
 **Universal checks** (run on every codebase):
-- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · imports-per-file · information leakage / temporal decomposition (same design decision in ≥2 modules; boundaries by execution order) · **value-leakage** (a repeated value/literal that has an owner elsewhere, or a cluster of near-identical values — scanned across code AND non-code layers: CSS/design-tokens, prompt strings, config) · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
+- File LOC distribution · function LOC · dead modules · cross-domain import edges · barrel/index presence · **root flatness** (a flat pile of loose modules at source root with unfoldered families) · imports-per-file · information leakage / temporal decomposition (same design decision in ≥2 modules; boundaries by execution order) · **value-leakage** (a repeated value/literal that has an owner elsewhere, or a cluster of near-identical values — scanned across code AND non-code layers: CSS/design-tokens, prompt strings, config) · rule ⑧ self-eval (describe each load-bearing file in one sentence — flag where you struggle)
 
 **Stack-specific heuristics** (added when stack is detected):
 - **TS/React** (detect: `package.json` mentions `react`): `useState`/`useRef` counts, JSX render span, component prop counts
@@ -122,6 +122,7 @@ For each domain leader and every file > 100 LOC:
 | Imports per file | > 20 distinct imports = wide surface | ⑤ |
 | Dead modules | File with 0 inbound imports (excluding entry points + barrels) | ④ |
 | Barrels | Each subdirectory with ≥ 3 files: has an `index.<ext>` or equivalent re-export? | ② |
+| Root flatness (flat-pile) | Package/source root holds > 8 loose modules AND obvious families exist among them (shared prefix `fx_*` or shared noun) with no domain folder — composition absent: files that should live in rooms sleep in the hallway. The inverse of the barrel check (that catches folders missing a door; this catches files missing a folder). ≥ 3 same-family files → a folder + barrel. | ① |
 | Cross-domain edges | Map imports between top-level folders; flag layer violations | ⑤ |
 | Information leakage | Same design decision (a file format, protocol, magic constant, schema) encoded in ≥2 modules with no single owner — a change forces edits in all of them | ① |
 | Temporal decomposition | Modules/classes split by execution order (e.g. `read`/`modify`/`write` over a shared format) rather than by knowledge — a common cause of the leakage above | ① |
