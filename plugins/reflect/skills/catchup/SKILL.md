@@ -57,7 +57,7 @@ Always answer these five. Each item must carry enough to actually **re-enter** t
 Rules:
 - **Information density, not word count — this is the whole point.** The failure mode is a thin skim that conveys nothing; the fix is *signal per line*, not length. Plain, concise language (剪裁過的白話) — say each thing透徹 enough to re-enter, then stop. Not a 15-second skim, not a full report: as much as the **core** needs, zero padding. Optimize for information *transferred*, not characters written.
 - **Core, not detail — no code.** Convey the *why · what · how-far* at the **decision level**. **No code-level detail** — no file lists, diffs, or function names; that's noise for re-entering, not signal.
-- **The why is first-class.** Mine it from durable sources that actually carry it — commit-message **bodies**, `decisions.md`, `plan.md`, thoughts docs. If the why isn't recorded anywhere durable, say so / mark it inferred — don't invent one.
+- **The why is first-class.** Mine it from durable sources that actually carry it — commit-message **bodies**, the precedents tier (`precedents/index.md`, or legacy `decisions.md`), `plan.md`, thoughts docs. If the why isn't recorded anywhere durable, say so / mark it inferred — don't invent one.
 - **Grounded, not guessed** — every line traces to a real signal (a commit body, a changed file, a status entry, a plan item). Ambiguous, or git vs. memory disagree → mark **uncertain**, don't smooth over.
 - If `$ARGUMENTS` was given, keep the five sections but scope them to that area.
 

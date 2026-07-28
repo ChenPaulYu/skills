@@ -13,14 +13,15 @@
     "nav-plan",
     "relay-digest"
   ],
-  "expect_skill_count": 38,
+  "expect_skill_count": 39,
   "expect_skills": [
     "nav-plan",
     "research-dissect",
     "shape-build",
     "relay-digest",
     "reflect-catchup",
-    "reflect-retrace"
+    "reflect-retrace",
+    "shape-migrate"
   ],
   "expect_runtime_files": [
     ".codex/agents/executor.toml",

@@ -40,6 +40,7 @@
     "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction.",
     "shape-reconcile": "Compare blueprints thoughts, plans, and mockups with shipped reality, then propose per-file amend, consolidate, graduate, retire, or prune actions. Read-only until approved.",
     "shape-setup": "Scaffold a new project to a verified running baseline from an archetype or grounded exemplar. Use to start projects, not add features.",
-    "shape-survey": "Map an unfamiliar repo-grounded decision space into independent axes, then show what differs from the user's current model. Not for repo maps or research."
+    "shape-survey": "Map an unfamiliar repo-grounded decision space into independent axes, then show what differs from the user's current model. Not for repo maps or research.",
+    "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/)."
   }
 }

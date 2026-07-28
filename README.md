@@ -64,6 +64,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
 - `/shape:align` — decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (every carried item verified against the code, no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)
 - `/shape:reconcile` — keep the blueprints honest — amend stale facts, prune/consolidate stale `thoughts/` + `plans/`
+- `/shape:migrate` — bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)
 
 *User-invoked:*
 

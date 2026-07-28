@@ -22,9 +22,9 @@ It is the pre-build mirror of `/nav:map`'s codebase map: where the map projects 
 
 And the blueprints pipeline this skill maintains:
 
-> **One current state, one maintained render.** `plan.md` is both the agent's index and the human's board — it's already plain, readable markdown, so there is no second file to keep in sync with it. Dependencies point downstream only (`plan.md` ← `decisions.md` ← `thoughts/`) — never the reverse.
+> **One current state, one maintained render.** `plan.md` is both the agent's index and the human's board — it's already plain, readable markdown, so there is no second file to keep in sync with it. Dependencies point downstream only (`plan.md` ← `precedents/` ← `thoughts/`) — never the reverse.
 >
-> **A human who wants a visual view renders one on demand, via `/shape:mockup`.** That render is disposable — generated fresh from the current `plan.md`/`decisions.md` when actually wanted, never stored, so it cannot go stale and there is nothing for align to regenerate.
+> **A human who wants a visual view renders one on demand, via `/shape:mockup`.** That render is disposable — generated fresh from the current `plan.md`/`precedents/index.md` when actually wanted, never stored, so it cannot go stale and there is nothing for align to regenerate.
 
 Corollaries that govern every step below:
 - **Decide *with* the user.** align triages; the user picks. Surface the candidate now/next/later split and let them move things — don't silently author the priorities.
@@ -38,7 +38,7 @@ See [`references/blueprints-spec.md`](plugins/shape/skills/align/references/blue
 ```
 blueprints/
   thoughts/      ← committed design decisions (agent-facing; align reads, rarely writes)
-  decisions.md   ← committed durable *why* (reconcile owns; align reads it)
+  precedents/    ← committed durable tier of what binds (reconcile owns; align reads index.md; legacy form: decisions.md — ADR-105)
   mockups/       ← committed disposable HTML (owned by /shape:mockup) — including, on request, a board snapshot
   plan.md        ← align writes: lean status index (agent AND human read this directly)
 ```
@@ -55,7 +55,7 @@ Find `blueprints/` (commonly `docs/blueprints/`). A project **born via `/shape:s
 ### Step 2 — Ground in current reality
 
 Two inputs, both required — never plan in a vacuum:
-- **The decisions** — read `thoughts/*.md` (in-flight) **and `decisions.md`** (the durable why, for the 🧭 layer). What has been decided?
+- **The precedents** — read `thoughts/*.md` (in-flight) **and the precedents tier** (`precedents/index.md`, or legacy `decisions.md` — the durable why, for the 🧭 layer). What currently binds?
 - **The actual state — verify against the code; don't trust the plan's own claims.** What's already built? Grep the codebase for the features the thoughts describe; lean on `head -12` file headers (`/nav:sync`) + `git log` to read implementation status cheaply.
 
 **Sync-confirm done-ness — align is a status *sync*, not a read-only re-render.** For every item the *current* `plan.md` lists as In progress / Next — **especially any marked "待驗 / TBD / not-sure-if-done / 待驗是否已做"** — go *confirm it against the code*, don't carry the unresolved claim forward. If grounding shows it shipped, **move it to ✅ Shipped** in the triage (Step 3). A plan that still says "TBD: is X done?" *after* an align run is an align failure — the whole point is that the board reflects verified present reality. (This is item-*status* reconciliation, which is align's job; pruning a stale *thought doc* is still `/shape:reconcile`'s — don't conflate the two.)
@@ -72,7 +72,7 @@ Propose a split: **🚧 In progress** (the current batch's tail) · **▶ Next**
 
 Lean, one layer, grouped by status. Each entry = **what to do + which thought to read** — no prose essays. Shape per the spec's `plan.md` template.
 
-**If the user wants to *see* the board right now**, that's not this skill's job: point them at (or invoke) `/shape:mockup` to render an on-demand board snapshot from the current `plan.md` + `decisions.md` — see blueprints-spec.md's board-snapshot contract. align stops at writing `plan.md`; it never generates or maintains an HTML file.
+**If the user wants to *see* the board right now**, that's not this skill's job: point them at (or invoke) `/shape:mockup` to render an on-demand board snapshot from the current `plan.md` + precedents tier — see blueprints-spec.md's board-snapshot contract. align stops at writing `plan.md`; it never generates or maintains an HTML file.
 
 ## The seam with `nav` — don't blur it
 
@@ -97,7 +97,7 @@ align is **pre-build** (intent side). It ends at "decided + recorded in blueprin
 ## Companion skills
 
 - **`/shape:elicit`** — converge a *conceptual* decision into a new `thoughts/` doc (the WHAT align reads).
-- **`/shape:mockup`** — converge a *visual / structural* decision into a disposable interactive artifact (lands in `mockups/`); also renders an on-demand board snapshot from `plan.md` + `decisions.md` when a human wants to see one.
+- **`/shape:mockup`** — converge a *visual / structural* decision into a disposable interactive artifact (lands in `mockups/`); also renders an on-demand board snapshot from `plan.md` + the precedents tier when a human wants to see one.
 - **`/shape:reconcile`** — check `thoughts/` against current reality and clean out what's stale (the cleanup align defers to).
 - **`/nav:plan`** — the build-side sibling: ground one blueprint item into a code-level implementation plan.
 - **`/reflect:park`** — the *ephemeral* counterpart, and the boundary to get right: a "stepping away *right now*, here's where I am and why" session cursor is park's `HANDOFF.md` (single overwritten file, local by default), **not** a blueprints entry. align owns **durable** status — the roadmap board + grounded plans that outlive the session. Don't file a momentary cursor as a plan; and don't let an ad-hoc `handoff.md` stand in for either — a durable parked feature is a ⏸ board entry + a `plans/` doc.
