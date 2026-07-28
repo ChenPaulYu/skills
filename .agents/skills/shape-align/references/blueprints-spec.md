@@ -99,6 +99,19 @@ The number of `thoughts/` files is the weight knob for the design layer. A tiny 
 
 **There is no separate human-facing file to weight-adapt.** `plan.md` is always the single maintained board, at every scale — a solo project and a multi-reader product are the same shape here. When a human wants a visual, `shape-mockup` renders one on demand (see the board-snapshot contract above); nothing is pre-scaffolded or kept in sync speculatively, so there is no drift risk to manage.
 
+## Document language(文件語言)
+
+The tree's documents are **understanding-oriented artifacts** — their language follows the
+**primary reader**, not a code-repo default. Prose may be the user's language (zh-Hant-primary in
+this family) with technical terms, identifiers, paths, and quoted API names staying English —
+**mixing must be 到位**: each language used where it is the clearer one, never as decoration. The
+failure mode to refuse is the half-blend (one language's labels grafted onto the other's body —
+field case: an English-prose canon wearing Chinese header labels copied from a sibling's
+Chinese-prose canon). Per-file consistency: a file's prose is one language and its header labels
+follow it. Continuing an existing corpus, match its established language — an all-English
+precedents tier and a Chinese-primary canon are both valid, in the same project. Code, commits,
+and outward-facing docs stay English.
+
 ## Convention versions (ADR-105)
 
 The tree layout above is **v2** (current, 2026-07-28). The convention is a versioned interface

@@ -49,6 +49,7 @@ The test, per claim: **survives any implementation change = principle · one mea
 
 ### 3. Two-tier landing(雙層落地)
 
+- **Canon voice follows the reader** — when the canon's primary reader is the user, prose is the user's language (zh-Hant-primary here) with technical terms/identifiers/paths in English, mixed 到位 — never a half-blend of one language's labels on the other's body (blueprints-spec § Document language).
 - **core/** — user-ratified canon: self-contained at its altitude (*"reading this one page gives the complete picture; links are magnifiers, never required"* — state this invariant in the doc), carries a superseded/evolution log and an open-questions list.
 - **thoughts/** — dated hypotheses: status header ("direction confirmed / details unverified"), ⚠ conflict markers where a later ruling contradicts the text, never silently edited into agreement.
 
