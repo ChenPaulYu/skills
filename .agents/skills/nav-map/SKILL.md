@@ -28,7 +28,7 @@ This skill **writes** `docs/codebase-map/index.html` (bilingual EN + zh-Hant by 
 
 ## The 8 rules (the through-line of every nav skill)
 
-1. **Deep modules through information hiding** — a simple interface hiding significant complexity. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition**. *The map is this rule applied to the repo: the interface to the whole codebase.*
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition**. *The map is this rule applied to the repo: the interface to the whole codebase.* **Composition is the second half:** modules compose behind package façades into next-scale deep modules, and the map must render that real tree — its domains are a *reading* taxonomy, never a substitute for it. A flat namespace beside a maintained domain map is a named smell (the map doing the tree's job), and folder structure must never be derived FROM the map's domains — only from the measured import graph (docs/observations/2026-07-28-folders-encode-dependency-law-not-topics.md).
 2. **Interface-first at every scale** — *the map's whole reason for being.* The repo's index/map surfaces the structure; you drill into a domain, then a file, only as needed.
 3. **Explicit dependencies** — the cross-domain graph's edges are real `import` dependencies (consumer → consumed), never decorative.
 4. **Right grain — neither giant nor fragmented** — don't draw a fake anatomy for a 2-file domain (use a Module-map row); don't force structure where there isn't any.

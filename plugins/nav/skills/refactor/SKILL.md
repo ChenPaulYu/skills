@@ -29,7 +29,7 @@ If unclear what kind of refactor the user wants → rule ⑦, ask. "Is this a ve
 
 ## The 8 rules (full set — the discipline relies on them)
 
-1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge).
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). **Recursive — composition is the second half:** modules compose behind a package façade into the next-scale deep module (module → package → codebase); a folder earns existence by hiding members or by being the declared contract — anything else is a drawer.
 2. **Interface-first at every scale** — an index/facade surfaces the interface; you drill in only as needed.
 3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
 4. **Right grain — neither giant nor fragmented** — no mega-module/function; equally no needless abstraction.

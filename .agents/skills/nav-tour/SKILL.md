@@ -20,7 +20,7 @@ It belongs in `nav` because its object is the already-existing codebase, read-on
 
 ## The 8 rules (the through-line of every nav skill)
 
-1. **Deep modules through information hiding** — the tour's job is exposing the interface (capabilities, flow, constraints) without forcing the user to read every file's body first.
+1. **Deep modules through information hiding** — the tour's job is exposing the interface (capabilities, flow, constraints) without forcing the user to read every file's body first. **Composition is the second half:** deep modules stack (module → package → codebase), so the walk descends door by door — system, then a group's façade, then a member's interface — and a tour that jumps from system straight to files is skipping the middle rung.
 2. **Interface-first at every scale** — walk top-down: system in one sentence → capabilities → flow → why → constraints. Never open with file-by-file detail.
 3. **Explicit dependencies** — the "how it works" step names real interfaces (routes, commands, public functions), not assumed ones.
 4. **Right grain — neither giant nor fragmented** — select the smallest model that explains capability, flow, decisions, and constraints; don't give every domain and file equal airtime.

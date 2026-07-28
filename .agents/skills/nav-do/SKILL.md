@@ -29,7 +29,7 @@ It is **the same execution discipline a worker already carries when `nav-plan` (
 
 ## The 8 rules (full set — the discipline relies on them)
 
-1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge).
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). **Recursive — composition is the second half:** modules compose behind a package façade into the next-scale deep module (module → package → codebase); a folder earns existence by hiding members or by being the declared contract — anything else is a drawer.
 2. **Interface-first at every scale** — an index/facade surfaces the interface; you drill in only as needed.
 3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
 4. **Right grain — neither giant nor fragmented** — *the operative rule here:* place the new code so it deepens an existing module rather than widening its interface or spawning a needless one. The **N+1 trigger** (rule ④ + ②) is its trip-wire — second consumer of an inline util ⇒ extract a primitive, don't copy.
@@ -48,7 +48,7 @@ It is **the same execution discipline a worker already carries when `nav-plan` (
 - `head -12` the file(s) the change lands in — role + `Reads` without reading the body. (No header? that's a rule-① smell; note it.)
 - **grep the target domain for a reusable existing impl** before adding anything new — the single most common miss. A fresh execution re-implements what's already there (the canonical ADR-008 failure: a re-written `fillPath()` that already existed with important bucketing, shipped green-tested). Reuse it; don't add a parallel one.
 - **CLI packaging/docs work:** check the package's command-entry contract before editing docs or wrappers (Python: `[project.scripts]`; Node: `bin`; Rust: installed binary name). Daily-use docs should lead with install-once → bare command; project runners (`uv run`, `npm run`, etc.) belong in the local-development path unless the tool is intentionally repo-only.
-- Confirm placement: which existing module does this deepen? If the honest answer is "it widens an interface / needs a new module", that's a grain decision — say so before writing.
+- Confirm placement — at BOTH scales: which existing module does this deepen, and which package/group does that module sit in? A change that widens a group's façade is the same grain decision one level up. If the honest answer is "it widens an interface / needs a new module", say so before writing.
 
 ### execute — make the change
 Write the behaviour-changing code, placed per the inject pass. Keep moves and additions separate: if you must relocate existing code to make room, do that part verbatim (rule ⑥) as its own step, *then* add the new behaviour — don't rewrite-while-moving.
