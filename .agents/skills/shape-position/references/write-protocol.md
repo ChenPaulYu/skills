@@ -17,13 +17,13 @@ The old protection was **content-only** ("core admits only user-confirmed direct
 Inside the door, core is writable **only at freeze moments**:
 
 1. **Campaign close** — after the re-audit (altitude test + `frame-first-principles` self-audit), the campaign log's surviving rulings **batch-diff** into core.
-2. **Explicit per-item freeze order** — the user says "lock this into canon" mid-campaign; that item graduates on the spot (authority + altitude gates still run). The escape hatch, not the default.
+2. **Explicit per-item freeze order** — the user locks a converged, core-touching ruling ("鎖進去" / "lock this into canon"); that item lands on the spot, authority + altitude gates still run, one Evolution entry per item. A normal entrance, not an escape hatch (ADR-106) — field ratio on a canon's first day: three rulings this way, zero by graduation.
 3. **Founding landing (birth)** — a freeze moment by definition, and it covers the **founding
    set**: one file per knowledge domain the founding understanding already spans, sized by the
    authority + altitude gates rather than a one-root-doc quota (ADR-104). Graduation remains the
    growth channel for everything after birth.
 
-Outside these, core is **read-only — including for position's own mid-campaign rulings**, which land in the campaign log. Graduation thereby loosens correctly: it is the most common *form* of freeze, not the only one.
+Outside these, core is **read-only — including for position's own mid-campaign rulings**, which land in the campaign log until the user locks them. Entrances are equal (ADR-106); the lock is what distinguishes a ruling from a ratification, whatever the material's provenance.
 
 ## The campaign log
 

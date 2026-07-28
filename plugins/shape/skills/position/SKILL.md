@@ -1,6 +1,6 @@
 ---
 name: position
-description: "Author and maintain a project's core principle documents — a campaign verb: many gated feedings converge messy input into self-contained canon, two-tier (core/ = ratified, thoughts/ = dated hypotheses), born at founding and grown by graduation (ADR-104). Fires on \"幫我定位 X\", \"birth the core\", or \"this core file has accreted\". Freeze-gated (ADR-041) — other verbs queue an amendment instead of writing core. NOT for single-sitting concepts (use /shape:elicit), syncing shipped code (use /shape:reconcile), or code planning (use /nav:plan)."
+description: "Author and maintain a project's core principle documents — a campaign verb: many gated feedings converge messy input into self-contained canon, two-tier (core/ = ratified, thoughts/ = dated hypotheses), grown by ratification, not provenance — birth, graduated thoughts, and core-touching conversational rulings are equal entrances to one gate set (ADR-104/106). Fires on \"幫我定位 X\", \"birth the core\", or \"this core file has accreted\". Freeze-gated (ADR-041) — other verbs queue an amendment instead of writing core. NOT for single-sitting concepts (use /shape:elicit), syncing shipped code (use /shape:reconcile), or code planning (use /nav:plan)."
 ---
 
 # Position — author the canon layer (a gated, multi-feeding campaign)
@@ -52,26 +52,32 @@ The test, per claim: **survives any implementation change = principle · one mea
 - **core/** — user-ratified canon: self-contained at its altitude (*"reading this one page gives the complete picture; links are magnifiers, never required"* — state this invariant in the doc), carries a superseded/evolution log and an open-questions list.
 - **thoughts/** — dated hypotheses: status header ("direction confirmed / details unverified"), ⚠ conflict markers where a later ruling contradicts the text, never silently edited into agreement.
 
-### 4. Birth and graduation(兩扇門)— core is born, then grows; it is never scaffolded
+### 4. One gate set, many entrances(閘門一組,入口多個)— core grows by ratification, not provenance
 
-Two doors into core, one set of gates (ADR-104):
+The gates are provenance-independent (ADR-106): **authority** (the user explicitly ratified this
+exact content — *ruling ≠ ratification*: a passing remark never writes canon, an explicit lock
+does) · **altitude** (principle-level, per the instrument) · **the door** (only summoned position
+writes, at a freeze moment, with an Evolution entry). Material may arrive through any entrance,
+none privileged:
 
 - **Birth** — at a *founding* summons, author the **founding set** directly: one file per knowledge
-  domain the founding understanding already spans, sized by the authority + altitude gates, never by
-  a file quota. Freeze takes effect at birth. Field grain: tactus birthed three of four core docs on
-  day two and graduated one three weeks later, with 49 thoughts available — birth is the founding
-  norm, graduation the growth channel, and the two produce structurally identical canon (only the
-  譜系 line differs). The counter-case: a project that treated graduation as the only door kept a
-  placeholder `core/` six days past its met gate while its day-one working definition sat mislabeled
-  as a hypothesis.
-- **Graduation** — after birth, core grows by graduating: a thought passes the freeze test —
-  *explicit user sign-off, or validated by built reality* — then re-runs the authority + altitude
-  gates and becomes `core/<domain>.md`; the root doc keeps a high-level section + link (layered
-  self-containment).
+  domain the founding understanding already spans, sized by the gates, never by a file quota
+  (ADR-104). Field grain: tactus birthed three of four core docs on day two; the counter-case
+  project kept a placeholder `core/` six days past its met gate.
+- **A graduated thought** — the entrance whose material is a thought: it passes the freeze test
+  (*explicit user sign-off, or validated by built reality* — the authority gate applied to older
+  material), re-runs the gates, becomes `core/<domain>.md`; the root doc keeps a high-level
+  section + link.
+- **A core-touching conversational ruling** — discussion touches core → converge the wording
+  in-conversation → the user locks → update, Evolution entry per item. Field grain: a canon's
+  first day produced three positioning-level rulings this way and zero by graduation — this is a
+  normal channel, not an escape hatch, and a core-touching discussion is a legitimate *small*
+  position moment (the multi-day campaign framing describes founding scale, not a minimum).
+- **The amendments ledger** — other verbs' queued debt, adjudicated as each summons' first feeding.
 
-**Never pre-open empty core files** — birth lands *ratified content*, scaffolding creates a file
-waiting for content; the tell is whether the gates already passed. On canon renames, position owns
-**reference integrity** (every thought, doc, and memory pointing at the old name).
+**Never pre-open empty core files** — every entrance lands *ratified content*; scaffolding creates
+a file waiting for content, and the tell is whether the gates already passed. On canon renames,
+position owns **reference integrity** (every thought, doc, and memory pointing at the old name).
 
 ### 5. Periodic altitude re-audit(週期重審)
 
@@ -115,7 +121,7 @@ Canon accretes *during* campaigns, not only at feedings. Before landing a domain
 | Scaffold core files upfront | Land ratified content or nothing — birth writes canon, scaffolding writes placeholders. Tell: creating a `docs/core/` file before anything has actually been ratified into it. |
 | Leave a prescriptive placeholder in an empty `core/` | Leave the directory empty; the board's Next item carries the intent — a README legislating "graduation only" becomes the lock that keeps canon empty (field case: six days past a met gate). Tell: writing a `core/README.md` that tells future sessions which door they may use. |
 | Iterate a third form-variant after two flips | Lift the churn to the rule layer instead of flipping again — two flips is the alarm. Tell: about to try a third phrasing of the same claim that's already flipped twice. |
-| Fire on everyday product chat | Wait for a campaign-level summons — this isn't for everyday conversation. Tell: about to touch canon prose off a passing remark, not a deliberate campaign session. |
+| Write canon off a passing remark | The guard is ratification, not occasion — a core-touching discussion is a legitimate small position moment (ADR-106), but the user's explicit lock is what writes; a remark nobody locked lands in the campaign log or a thought. Tell: about to edit `docs/core/` and unable to point at the user's lock for this exact content. |
 | Write core mid-campaign on an in-conversation ruling | Land rulings in the campaign log; write core only at freeze moments (ADR-041). Tell: about to edit `docs/core/` off something just decided in this conversation, before a freeze point. |
 | Accept another verb's "it's ratified" core edit | Queue it as a `docs/core/amendments.md` line instead — only summoned position writes core. Tell: another verb is asking to write directly into `docs/core/` rather than appending an amendment. |
 
