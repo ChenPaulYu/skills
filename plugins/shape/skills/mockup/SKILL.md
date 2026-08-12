@@ -7,97 +7,21 @@ description: "Converge a decision by generating and rendering a real, disposable
 
 Converge a decision by confronting the user with a **real, disposable, interactive artifact** — not a description of it. You **generate** the candidate space and render it; the user points. For look-and-feel decisions the artifact is a **UI mockup**; for backend / agent / data / structural decisions with no literal screen, it's an **interactive diagram / chart / graph / state-flow**. Same skill, same core.
 
-## Why this skill exists
+## Stance
 
-You can't judge from a description. Prose, ASCII, an option list all *float* — they read fine and decide nothing. A real, interactive artifact rendered at the right grain is **decidable**: the user looks, clicks, flips, picks. This skill makes that artifact cheap enough to throw away, so the user judges the thing instead of a paragraph about it. Often the user has no options yet — just an open question — so **generating a divergent candidate set is half the value**, not a precondition.
+> **Core: the unit of judgement is a real, rendered, disposable, *interactive* artifact — never a description.** The one non-negotiable: the output is always an *interactive* HTML — hover / click / flip / expand it. Never a static image, ASCII, an option list, or prose. Everything else flexes; this does not.
 
-## Core — everything else derives
+- **The artifact's FORM follows the decision** — a UI mockup for look-and-feel; an interactive diagram / chart / graph / state-flow for backend / agent / data / structural decisions. No literal screen ≠ no render: draw the structure/flow and make it clickable.
+- **Generate broadly enough to include the "don't / nothing / merge these" candidate** — seeing what "don't" looks like reframes the question, not just answers it. Bias to rendering when in doubt (descriptions float; cost = one throwaway file); weight-adaptive, and exit the moment the user points.
+- **Fires on a request to see / compare / render** ("mock this", "show me what X looks like", "which of these") — never auto-fires on a passing mention. Also fires on "show me the board" (an on-demand board-snapshot render, never a standing file).
+- **Ground in the real thing before rendering** — the real palette/proportions/surrounding surface for UI, the real states/entities/data shape for a diagram; match the project's established visual language; default theme is light unless the project's own artifacts are dark.
+- **A handfeel/gesture decision needs the real behaviour to actually run, verified with faithful input** — build only the decision-critical interaction, make its effect observable, and keep chrome (full styling, i18n, extra candidates) out — length is the smell on this kind of decision, not the effort.
+- **A written file isn't a decidable artifact until activated** — open it (or serve it on a remote/headless box) and hand over a clickable URL; never hand off just a screenshot.
+- **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `/shape:reconcile`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
+- **Storage:** the blueprints tree's `mockups/<date>-<topic>/`, committed by default (watch the depth-unanchored `mockups/` gitignore trap).
+- **After a pick, offer — never auto-run — the next step**: track it (`/shape:align`) and/or build it (`/nav:do` small · `/nav:plan` bigger · `/shape:build` multi-item), guarded + one-shot, only the branch(es) that apply.
 
-> **Core: the unit of judgement is a real, rendered, disposable, *interactive* artifact — never a description.**
->
-> **The one non-negotiable: the output is always an *interactive* HTML — you can hover / click / flip / expand it. Never a static image, ASCII, an option list, or prose. Everything else flexes; this does not.**
-
-- **The artifact's FORM follows the decision** — a UI mockup for look-and-feel; an interactive diagram / chart / graph / state-flow for backend / agent / data / structural decisions. No literal screen ≠ no render: you draw the structure/flow and make it clickable.
-- **Inherited family principle (the visual form of "reframe to the most fundamental layer"):** generate broad enough to include the **"don't / nothing / merge these"** candidate — so seeing what "don't" looks like reframes the question, not just answers it.
-
-Everything below **derives** from the core — when in doubt, trace back:
-
-- *Probe, not a stage* — the artifact is the unit of judgement, so it fires wherever a judgement is needed and can **feed back upstream** (a rendered candidate can change the *concept*, not just the surface).
-- *Render when in doubt* — descriptions float; you can't tell upfront if one would suffice. Bias to rendering (cost = one throwaway file).
-- *Weight-adaptive + exit on the pick* — the artifact is disposable and the *user* judges; don't over-produce, stop the moment they point. A genuinely trivial change → just make it.
-
-## When it fires — and the boundary with verbal clarification
-
-**Fires on the user's request to see / compare / render** — "mock this", "make a mockup", "draw / diagram / visualize this", "show me what X looks like", "try a few variants", "which of these", "I don't know the options — render them". It does **not** auto-fire just because a visual or structural element gets mentioned in passing. `/shape:mockup` is the explicit override; otherwise it triggers on the request.
-
-**Also fires on "show me the board" / "what's the status, visually"** — a request to *see* the blueprints board rather than decide something. Render per the board-snapshot contract in [`../align/references/blueprints-spec.md`](plugins/shape/skills/align/references/blueprints-spec.md): copy `overview-template.html`, fill it from the current `plan.md` + the precedents tier (`precedents/index.md`, or legacy `decisions.md` — ADR-105), activate it per the usual protocol below. **Always disposable** — never write it back as a standing `overview.html`; `align` does not maintain one. This is the family's answer to "I want to *see* the plan": render it fresh, don't keep a second file in sync.
-
-**Boundary (not "visual vs conceptual"):** the line is **"can a rendered interactive artifact make this decidable?"**
-
-- **Yes → this skill.** Including structural / data / flow decisions — an interactive diagram settles "how do these entities relate", "how should this agent branch", "what's the pipeline shape".
-- **No → verbal clarification (a grounded fork).** Only pure definitional / ontology questions where no render would help — "what *is* a moment". Don't force a render where none clarifies.
-
-**Sibling — `/shape:dogfood`:** when the question is "this *built* feature feels unsmooth — what's wrong" (dogfood the real interface, report the friction + the coverage gaps that fall out), that's dogfood, not mockup. mockup renders a *synthetic candidate* to decide look/structure *before* building; dogfood drives the *already-built* thing to critique its experience. They pair **across time**: mockup the flow → build it → dogfood the result — and dogfood hands a redesign-level finding *back* to mockup to render the new shape. mockup decides *look / structure*; dogfood critiques *the built experience*.
-
-## Default protocol — light (the norm)
-
-1. **Ground.** Read the real thing the artifact represents: for UI, the real palette / proportions / surrounding surface; for a diagram, the real states / entities / data shape / flow. Don't render in a vacuum — an artifact ungrounded from the real thing isn't decidable.
-2. **Generate + render the candidate space — cheaply, in one interactive HTML.** Two layouts of the *same* light default (often both, in sequence):
-   - **(b) Discover** — option space open: render **a row of divergent generated candidates** side by side, grounded. Generate *broadly* and include the **"don't / merge / nothing"** candidate — that's what lets the decision reframe. (The common case; the user rarely brings formed options.)
-   - **(a) Refine** — direction known: one candidate with each **undecided sub-point on a live toggle**, flipped in place.
-   Either way: a single standalone HTML file — inline everything, deterministic data, zero build, no external assets.
-3. **Render + show.** Open at the right grain and capture what the user sees. (Render mechanics = a **per-project verify helper**, see below.)
-4. **Let the user point — and watch for the reframe.** They look / click / flip / pick. Stay alert for the artifact revealing the *question was wrong* (the element shouldn't exist; text beats the icon; two stages should be one). Surface it; don't just answer the surface ask.
-5. **Residue + disposal.** Record the pick. **Most artifacts are then discarded** — their job (converging the decision) is done. Promote to a visual-lock only per the rule below (rare).
-
-## Example — the move in two shots
-
-**Visual (UI):** a button could use an icon. Instead of listing options in prose, render **one interactive HTML** with a **row of candidates at the real 20px size in the real toolbar** — several icons, **plus a plain-text candidate, plus a "no icon" candidate**. At real size the answer is often "plain text wins" or "it needs nothing" — the real decision wasn't "which icon" but "should it have one at all".
-
-**Non-visual (agent / data / flow):** an agent's branching, or how a few entities relate. Instead of describing it in prose, render **an interactive diagram** — click a node to expand its branch / reveal its edges — grounded in the real states/entities, including a **"merge these two / drop this step"** candidate. Seeing the flow laid out reframes "which branch order" into "these two stages are actually one".
-
-Both carry the whole skill: interactive HTML · grounded in the real thing · a generated space · the **"don't" candidate** · the **reframe**.
-
-## Escalate — heavy (rare exception)
-
-Only when the decision is load-bearing, spans many variants, or needs a durable comparison record: **multiple files + screenshots + a decision note** (shared scene · what each is · build-cost · what's NOT in scope · fake-data note). Mark it the exception; (a)/(b) in one file is the default — a row of candidates is **not** heavy.
-
-## Visual-lock: retire-on-ship, stamp, don't maintain
-
-A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — by altitude:
-
-- **Detail / component-level** → **retire on ship.** Once the real thing ships, the **running system is the ground truth**; the artifact's job is done. Keeping it as a "north star the system must match" inverts reality → drift / lie.
-- **Structural / high-level** → may persist, **but must carry a freshness / supersession stamp**: "intent as of `<date>`, shipped `<ref>`, details defer to the real system." Without the stamp it's a lie.
-- **It can't auto-regenerate from source** (unlike a generated codebase map) → discipline is **retire + stamp, never silent refresh.** Most discard; a permanent lock is a rare exception.
-- **Enforcement point: `/shape:reconcile` (ADR-037).** At mockup time nothing is shipped yet, so retirement/stamping can't execute here — reconcile's `mockups/` sweep does it post-ship: pre-conditions (decision settled · pick + deferred branches verifiably recorded in the owning doc · inbound links resolved) → prune, with git as the deep archive; parked decisions keep their mockup with a parked stamp. This skill *states* the rule; reconcile *executes* it.
-
-## Storage & format
-
-- **Where:** the blueprints tree's `mockups/` directory, **committed** by default — mockups carry the Pick log and ratified samples, and canon/thoughts docs link into them, so leaving them untracked makes the decision record single-disk and every link dead-on-clone. One **dated topic subfolder** per decision: `mockups/<date>-<topic>/`. Repo-root *scratch* mockups may stay local via a **root-scoped** `/mockups/` ignore. ⚠ gitignore trap: a depth-unanchored `mockups/` pattern silently swallows `blueprints/mockups/` too (field case: 65 untracked mockup folders discovered in one repo). (Exact location is a per-project setting; the default is committed-in-blueprints.)
-- **Format:** a **single self-contained interactive HTML file** (the non-negotiable) — inline styles + script, deterministic data, no build, no external assets. Screenshots are transient supplements, never the deliverable.
-- **Progressive disclosure (agent-scannable):** open the file with a top `<!-- -->` comment stating **what it is · the candidates rendered · the pick (once decided)**, so an agent grasps the artifact from `head` without parsing the whole DOM. Interface-first applies to the throwaway too — a human points at the rendered thing; an agent reads the header. (Same rule as the blueprints overview template's top comment.)
-- **Only thing that leaves the throwaway zone:** a promoted visual-lock (rare) — committed or referenced from the project's CLAUDE.md, always stamped. Everything else is discarded.
-- **Lifecycle end:** committed folders don't accumulate forever — `/shape:reconcile` sweeps `mockups/` as its third tier (ADR-037), retiring a folder once its decision ships and the pick (+ any deferred branch) is verified recorded in the owning doc. Prune is recoverable (`git log --follow`); record the pick in the doc at step 5 so the sweep finds it absorbed, not orphaned.
-
-## Grounded-replica discipline (what makes an artifact trustworthy)
-
-- Grounded in the **real thing**: UI → true size, real palette, real surrounding context; diagram → real states / entities / data shape / flow (not toy or abstract).
-- **Match the project's established visual language.** Before rendering, look for prior artifacts the user already reads — sibling mockups, a codebase-map / docs site, a design-token file — and reuse their palette, fonts, and conventions (e.g. a bilingual toggle, a dark/light theme). A mockup that looks foreign to its siblings reads as "not ours" and the user spends judgement on the skin instead of the decision. The *specific* tokens/conventions are per-project (see the per-project render slot below); the *rule* — conform to what's already there — is universal.
-- **Theme default: light.** Absent an established project theme, render mockups in a fixed light theme — do not auto-follow `prefers-color-scheme` (a dark-following mockup was corrected to light on first viewing, 2026-07-24 audion session). A project whose sibling artifacts are dark overrides this per the visual-language rule above.
-- Deterministic data · no external assets · no build · single self-contained file.
-- A faithful, **disposable** replica — not the real components, not pixel-perfect, not production code. Cheap + throwaway, real enough to decide on.
-- **A handfeel / gesture decision rides on ONE responding behaviour — build *only* that, make its effect visible, verify it, and starve everything else.** When the decision is *how a gesture feels* (drag-to-place, edge-resize, an undo stack, snap), toggles-over-static can't be judged — the user has to *do* it, so the behaviour must really run. But the decision is **narrow**, and here **length is the smell, not the effort**: chrome (full styling, many candidate rows, i18n, polish) doesn't serve the decision — it's exactly where bugs hide *and* it steals the care the one interaction needs (the longer the file, the likelier the one thing that matters is broken or buried). So: implement only the decision-critical interaction · **make its effect observable** (an unobserved change reads as "broken" even when wired — pre-select, flash, show state) · **verify it actually responds via the browser-verify slot with *faithful* input** (a synthetic pointer that drops button-state during a move will falsely read as "broken" — use real-button events / real mouse). Disposable still holds: throwaway code, but **minimal** + real. *(Pre-build there's no real impl to reuse, so some throwaway behaviour is unavoidable — the discipline is minimality, not "don't reimplement".)*
-- **A mocked text-INPUT with inline highlighting can converge a token layout the real `<input>` can't reproduce — verify the typing/caret behaviour in the real field, not the disposable one.** When the artifact is a text field that colors a substring as you type (a `/command` token, syntax highlight, an @-mention pill), the disposable HTML has freedoms a real *controlled* input does not: real inline highlight is a transparent input over a colored overlay (a bare `<input>` can't color one substring), and the caret only stays under the right glyph if the overlay's per-character **advance** matches the input exactly — so a pill with **padding/margins** (fine in the mockup) detaches the caret in the real field (it must become background-only, or contenteditable). Converge the *look* on the mockup, but treat its token layout as un-load-bearing: the caret/advance constraint surfaces only in the real input. (The input-with-inline-highlight instance of the general "a mockup settles the look, not the real-engine behaviour" caveat — closer to the failure point, since the tempting padding lives *in* the mockup.)
-- Not grounded at the right grain → re-ground before asking for a decision.
-
-## Activate it — open + hand over a URL (don't just write the file)
-
-A file written to disk is not yet a decidable artifact — the user has to *see* it. So after writing, **activate it and surface a clickable URL in the chat**, the way a good scaffold does:
-
-- **First check: local session or remote/headless one?** `open <file>` and a `file://` link only work when the agent shares a machine *with a display* with the human. On a remote server / cloud dev box / container (no local display — a `file://` path the user can't reach), don't hand a dead link: start a throwaway static server (`python3 -m http.server` in the artifact's dir) and hand over `http://localhost:<port>/<file>`. For a *series* of mockups in one session, start ONE server and reuse it. (The environment, not the artifact, is the usual trigger for needing a served URL.)
-- **Local session** → **open it** with the platform opener (`open <file>` on macOS, `xdg-open` on Linux, `start` on Windows) and hand over a clickable `file://<absolute-path>` link.
-- An artifact that needs an HTTP origin (fetches, modules, anything `file://` blocks — rare for a self-contained mockup) also forces the served-URL path, regardless of local-vs-remote.
-- Prefer a real origin over a screenshot: the whole point is that the user can hover / click / flip the live thing. A screenshot is a transient supplement, never the hand-off.
+Full protocol — the firing boundary detail (incl. the `/shape:dogfood` sibling distinction), the default (light) and escalate (heavy) render steps, a worked example, the grounded-replica discipline (handfeel + mocked-text-input caveats), activation mechanics, the browser-verify slot + `browser-verifier` subagent dispatch, the post-pick offer mapping, and the anti-pattern table: `references/mockup-protocol.md`.
 
 ## The render step is per-project — the browser-verify slot
 
@@ -113,30 +37,6 @@ A pick has two natural next steps, and the offer should name **both** (ADR-028) 
 - **Build it now** — when the pick is a concrete, decided, *behaviour-changing* build, route by scope: small · holdable-in-head → **`/nav:do`** (its check bracket — inject↔execute↔verify — is the point; don't flow into the build on ambient discipline and skip it); bigger / ambiguous / wants a written plan → **`/nav:plan`**; driving multiple `plan.md` items → **`/shape:build`**. This is the seam "make it functional" flows through — name the verb so the agent routes to its check instead of winging the build.
 
 **Guarded + one-shot:** don't re-offer / nag across a rapid series of mockups; show only the branch(es) that apply (a disposable visual tweak with nothing to track *and* nothing to build → skip the offer entirely). An offer, **never a call** — skills don't invoke each other.
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| Force a render on a pure definitional / ontology question | Answer it as verbal clarification instead — a render only helps when it makes the question decidable. Tell: sketching a mockup for a question that's really "what do we mean by X." |
-| Describe a backend / agent / data flow in prose when a diagram would settle it | Draw the interactive diagram — a render isn't UI-only. Tell: writing a paragraph to describe a flow that would be one glance as a diagram. |
-| Offer ASCII / an option list / prose to decide from | Render real candidates — a description isn't decidable. Tell: about to type out an option list instead of building the candidates. |
-| Render only the options the user named | Generate a divergent set, including the "don't / merge" candidate — that's half the value. Tell: every candidate being built is a variant the user already suggested. |
-| An ungrounded / wrong-grain artifact | Ground it in the real thing — an ungrounded mockup floats and the judgement will be wrong. Tell: the mockup uses placeholder data or components that don't match what's actually in the codebase. |
-| Treat "multiple candidates" as heavy | Default to it — a row in one file is light, not the exception. Tell: building only one candidate because more "felt like too much." |
-| Use real components / chase pixel-perfect / write production code | Build a disposable replica — chasing production quality is overkill. Tell: importing the real component library instead of a throwaway approximation. |
-| Pad the artifact with chrome so it *looks* complete (full styling, i18n, extra candidates) | Build only the decision-critical interaction and cut the rest — on a handfeel decision, length is a smell that buries the one behaviour being judged. Tell: the mockup has full styling or i18n for a decision that's really about one interaction. |
-| Auto-fire on a passing mention, or decide for the user | Fire on the request, generate, and let the user point — never pick for them. Tell: about to declare a winner instead of rendering candidates for the user to choose. |
-| Keep a visual-lock as a permanent north-star the system must match | Retire it on ship — the running system becomes the truth. Tell: still comparing the shipped feature back against the mockup weeks later. |
-| Keep iterating after the user has picked | Exit on the pick. Tell: still tweaking the artifact after the user already said which one they want. |
-
-## Output
-
-- **Always: an interactive HTML file** — the one non-negotiable. A row of generated candidates and/or one candidate with live toggles; UI mockup or interactive diagram, openable and interactive, grounded in the real thing.
-- A recorded pick; most artifacts then discarded.
-- A visual-lock only as a rare, stamped exception (structural-level).
-- (Escalation, rare) multiple files + a decision note.
-- (When the pick settles something actionable) a guarded, one-shot **offer** of the next step — **track it** (`/shape:align`) and/or **build it** (`/nav:do` small · `/nav:plan` bigger · `/shape:build` multi-item, ADR-028) — never an auto-call.
 
 ## Communication style
 

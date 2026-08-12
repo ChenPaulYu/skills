@@ -5,61 +5,18 @@ description: "Factor a tangled phenomenon into mutually-INDEPENDENT axes, verify
 
 # orthogonal — factor a tangle into independent axes
 
-Take something treated as **one thing** (or as several *separate* things) and **factor it into mutually-independent primitives** — the axes along which it actually varies independently. The point is **not** "break it into parts" (any decomposition does that); it's to find axes that are **orthogonal** — moving along one doesn't move the others — and in doing so expose what was **conflated** (one word hiding N independent problems) or **falsely decoupled** (two "separate" things that are really one).
+Take something treated as **one thing** (or as several *separate* things) and **factor it into mutually-independent primitives** — the axes along which it actually varies independently — to expose what was **conflated** (one word hiding N independent problems) or **falsely decoupled** (two "separate" things that are really one). Most "break it down" yields *overlapping* or *hierarchical* parts that still tangle — fix one and another shifts, because they were never independent; the model's default decomposition does this too. `orthogonal` forces the property that makes a decomposition actually useful: **independence**.
 
-## Why this skill exists
+## Stance
 
-Most "break it down" yields *overlapping* or *hierarchical* parts that still tangle — fix one and another shifts, because they were never independent. The model's default decomposition does this too. `orthogonal` forces the property that makes a decomposition actually useful: **independence**. When the axes are truly orthogonal, each can be reasoned about — and solved — on its own, and the count of axes is the problem's real degrees of freedom.
-
-## Core — the independence check (this IS the skill)
-
-> **A candidate axis earns its place only if it passes the orthogonality test: vary it, and the others stay put.** If moving "A" also moves "B", they are not two axes — they're one (merge them), or you cut along the wrong seam (re-cut). Naming candidate dimensions is easy; *proving they are independent* is the work, and the part the default skips.
-
-## The output — the five-part structure, always
-
-The output is the structured factoring itself, **in the conversation** — its shape IS the value:
-
-- **The tangle** — what is being treated as one thing (or as falsely-separate things); the word/phenomenon under the knife.
-- **Candidate axes** — the independent primitives you propose, each named in one line.
-- **Independence check** — for each pair: does moving one move the other? A coupling found = not yet clean → split further or merge. (This step is the soul; don't skip it.)
-- **True degrees of freedom** — the axes that survive the check: the real, independent dimensions.
-- **Payload** — what was conflated (one label hiding several), or where the "separate" things were actually coupled. The reframe is the finding.
+- **Core: the independence check IS the skill.** A candidate axis earns its place only if it passes the orthogonality test: vary it, and the others stay put. If moving "A" also moves "B", they are not two axes — they're one (merge them), or you cut along the wrong seam (re-cut). Naming candidate dimensions is easy; *proving they are independent* is the work, and the part the default skips.
+- **The forced output, always in-chat** (no file artifact — frame writes none; never write source or make the decision): **the tangle** — what is being treated as one thing (or as falsely-separate things); the word/phenomenon under the knife. **Candidate axes** — the independent primitives you propose, each named in one line. **Independence check** — for each pair: does moving one move the other? A coupling found = not yet clean → split further or merge. (This step is the soul; don't skip it.) **True degrees of freedom** — the axes that survive the check: the real, independent dimensions. **Payload** — what was conflated (one label hiding several), or where the "separate" things were actually coupled. The reframe is the finding.
 - **Land it in plain words** — walked, not optional: close with one conclusion sentence with zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "orthogonal", "正交", "axis" / "軸" (need the concept? say it plainly: "these move independently — touching one doesn't move the other") — plus one analogy, chosen deliberately (borrow `frame:analogize`'s discipline **by protocol, never a call**: weigh it against alternatives in your head, pick on fit, and — if checkable — name in half a sentence where it breaks). The tangle · candidate axes · independence check · true degrees of freedom · payload above stay intact for anyone verifying; this step only adds the translation on top.
+- **Grounding.** Factor the **real** phenomenon, not an abstraction of it — anchor each axis in concrete instances ("at this value of axis A the thing looks like X; at that value, Y"). An ungrounded factoring invents tidy axes that don't survive contact with real cases. If the project has the relevant code/docs, read enough to make the axes concrete before asserting them.
+- **vs `first-principles` — the sharpest line.** `first-principles` reduces **down** to irreducible axioms and rebuilds the answer up (output: axioms · rebuilt · divergence); its axis is **depth**. `orthogonal` factors **sideways** into independent axes (output: the independent dimensions + what was conflated); its axis is **separation**. Either runs without the other. Reach for `orthogonal` when something feels like "one messy thing" that won't yield to a single fix — the tell that several independent problems are wearing one name.
+- **After the analysis — offer to route it, never decide or auto-run.** Guarded, one-shot offer: `/shape:elicit` (converge one axis into a decision *with the user*) · `/shape:mockup` (render an axis if it's a look/structure question) · `/nav:plan` (ground a now-separated piece into a code-level plan).
 
-Lightweight by default: the analysis stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
-
-## Grounding
-
-Factor the **real** phenomenon, not an abstraction of it — anchor each axis in concrete instances ("at this value of axis A the thing looks like X; at that value, Y"). An ungrounded factoring invents tidy axes that don't survive contact with real cases. If the project has the relevant code/docs, read enough to make the axes concrete before asserting them.
-
-## vs `first-principles` — the sharpest line
-
-- **`first-principles`** reduces **down** to irreducible axioms and rebuilds the answer up (output: axioms · rebuilt · divergence). Its axis is **depth**.
-- **`orthogonal`** factors **sideways** into independent axes (output: the independent dimensions + what was conflated). Its axis is **separation**.
-- Either runs without the other: disentangle a problem into axes without touching its foundations, or reduce one question to axioms without splitting it into dimensions. Reach for `orthogonal` when something feels like "one messy thing" that won't yield to a single fix — the tell that several independent problems are wearing one name.
-
-## After the analysis — offer to route it (don't decide, don't auto-run)
-
-End with a guarded, one-shot **offer** to route the result — never an auto-call:
-- `/shape:elicit` — converge one axis into a decision *with the user*.
-- `/shape:mockup` — render an axis if it's a look/structure question.
-- `/nav:plan` — ground a now-separated piece into a code-level plan.
-
-## Output
-
-- **The five-part structure, in-chat** (no file artifact): The tangle · Candidate axes · Independence check · True degrees of freedom · Payload.
-- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
-- A guarded, one-shot **offer** to route the result (`/shape:elicit` · `/shape:mockup` · `/nav:plan`) — never an auto-call. To persist, route to shape.
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| List parts and stop | Run the independence check — move one axis and confirm the others don't move — that check IS the value, not the listing. Tell: the "axes" are just a bulleted breakdown with no move-one-check-the-rest step performed. |
-| Hierarchical / overlapping parts dressed as axes | Re-cut along seams that actually vary independently — sub-parts of one thing aren't independent dimensions. Tell: changing one "axis" always drags a specific other one with it. |
-| Force orthogonality where the thing is genuinely one | Say so when it doesn't factor — "this is irreducibly one axis" is a valid result. Tell: you're inventing a second axis just to have more than one. |
-| Invent tidy axes ungrounded from the real cases | Ground each axis in concrete instances from the actual situation. Tell: the axis names could describe any generic taxonomy, not this specific case. |
-| End on a jargon sentence ("axis A and axis B check out independent") | Close with a plain-words conclusion + analogy as the actual last word. Tell: the final sentence needs "orthogonal" or "axis" to parse. |
+Anti-pattern table (the tells that mark each failure): `references/anti-patterns.md`.
 
 ## Companion skills
 

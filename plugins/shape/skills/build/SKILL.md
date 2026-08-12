@@ -6,54 +6,21 @@ disable-model-invocation: true
 
 # Build — drive the In-progress column to done
 
-The forward-motion terminus of shape: take the plan's **In-progress** items and make them real — autonomously, serial by default (parallel only by an approved schedule — see Scheduling), each grounded into a code plan, implemented under discipline, and **verified against its mockup** — pausing to ask whenever confidence drops. Where `mockup` and `elicit` and `align` converge *decisions*, `build` turns the converged plan into running, verified code.
+The forward-motion terminus of shape: take the plan's **In-progress** items and make them real — autonomously, serial by default — a sequential subagent-per-item loop (parallel only by an approved schedule), each grounded into a code plan, implemented under discipline, and **verified against its mockup** — pausing to ask whenever confidence drops. It is a **meta-skill** (like `/nav:plan`): it sequences other skills' protocols rather than re-implementing them, and the loop closes shape's spine — elicit/mockup decide, align plans, build makes it real, nav keeps it navigable.
 
-## Why this skill exists
+## Stance
 
-A blueprint that never gets built is just a description — and shape's whole spine is "converge by a real instance, not a description." `build` is where the convergence becomes **the most real instance there is: the running system**, checked against the mockup that captured the intent. It exists so the loop closes: elicit/mockup decide → align plans → **build makes it real** → nav keeps it navigable.
+- **Below 90% → ask. This is build's leash.** It runs autonomously **only while confidence holds**; the instant scope/boundary/intent on the current item drops below 90%, it stops and asks rather than plowing ahead. A red test halts. A blocked item surfaces — it never thrashes.
+- **Run to done, but stop on doubt** — not "review every item" (too slow), not "blast through to the end" (dangerous). A clear item flows; an ambiguous one halts and asks.
+- **If `plan.md` doesn't exist**, there's no board to drive — report that and point at `/shape:align` to create one first, rather than guessing at items.
+- **Per item: ground (`/nav:plan`) → summarize as a mockup-protocol diagram (a decidable checkpoint before code is written) → implement (`/nav:refactor` discipline + inject↔check, test-gated every step) → verify visual-first against the mockup (non-visual items get a test/behavioral check, never a forced screenshot) → land (move to Shipped, evidence referenced, re-run `/shape:align`) → next.** Sequential subagent-per-item by default — concurrent edits in one shared tree collide.
+- **Parallel dispatch is a policy, never a mode (ADR-040) — workflow is build's muscle, never its brain.** Execution parallelizes; adjudication (the schedule, the confidence halts, the join gate, the check brackets) never does. Kernel: ground ALL items upfront (read-only fan-out) → evaluate disjoint footprint + ≥90% decided + no shared-primitive risk → propose a serial-prefix + parallel-tail split → **the user's nod starts the batch** → in-batch agents write, don't test (mid-batch test signal is contaminated) → join on ONE authoritative gate, then check brackets serially per item. Full protocol: `references/parallel-scheduling.md`.
+- **Dispatch tier.** Dispatched item agents (serial or the parallel tail) default to cheap tier (`model: sonnet`); a judgment-dense single item can be escalated on the spot (see root CLAUDE.md's Dispatch tiers).
+- **Mark Shipped only on a green test + a checked diff.** A sub-agent's "done" is checked (same-domain parallel impl · seam/facade read at intent · header hygiene) before it counts.
+- **No silent caps.** If visual verify was skipped (no browser-verify helper) or an item was deferred, say so in the report.
+- **Skills don't call skills.** build names the sibling protocols (`/nav:plan`, `/nav:refactor`, `/shape:align`, the browser-verify slot) and describes the sequence; the executing agent runs them. Reuse-via-transcript: if `/nav:plan`/`/nav:audit` already ran for an item this session, reuse its output.
 
-It is a **meta-skill**, like `/nav:plan`: it sequences other skills' protocols rather than re-implementing them.
-
-## The shape spine (restated — this skill is self-contained)
-
-> **Converge by a real, disposable instance — never a description.** build is the spine's terminus: the disposable instances (mockups) converged the decision; build produces the **durable real thing** and verifies it against that mockup. `plan.md`'s status gains a companion: the running system (a screenshot), referenced from the Shipped entry.
-
-> **Below 90% → ask (core principle, shared with `nav` rule ⑦).** This is build's leash. It runs autonomously **only while confidence holds**; the instant scope/boundary/intent on the current item drops below 90%, it stops and asks rather than plowing ahead.
-
-## Core — confidence-gated autonomy
-
-> **Run to done, but stop on doubt.** build is not "review every item" (too slow) nor "blast through to the end" (dangerous). It drives item after item on its own, and the cadence is governed by confidence: a clear item flows; an ambiguous one (unclear scope, a boundary it can't infer, intent it can't read) **halts and asks**. A red test halts. A blocked item surfaces — it never thrashes.
-
-When a halt stops the run mid-batch (not just "ask and continue" but a real stopping point where the session might end here), it's fine to mention `/reflect:park` can save the cursor — offered, never auto-run; if the environment's harness (e.g. Claude Code) provides its own compaction/handoff mechanism, that satisfies the same need and `park` is redundant.
-
-## The per-item loop
-
-If `plan.md` doesn't exist yet, there's no board to drive — report that and point at `/shape:align` to create one first, rather than guessing at items (tolerant-reader degrade path, ADR-071).
-
-For each item in `plan.md`'s **In progress** column (each references a `thoughts/` doc):
-
-1. **Ground — via `/nav:plan`.** Turn the item/thought into a code-level plan (Context · Approach · Critical files · Verification). Reuse-via-transcript: if `/nav:plan` (or `/nav:audit` Mode 2) already ran for this item this session, reuse its output instead of re-running. (Under an approved parallel schedule, grounding for ALL items runs upfront as a read-only fan-out — see Scheduling below.)
-2. **Summarize — a visual checkpoint (mockup protocol).** Right after grounding, render a quick **interactive diagram summarizing the plan** — what changes, the approach, the affected files — following the `/shape:mockup` protocol. An interactive diagram, *not* a prose description. Two payoffs: a **decidable checkpoint** to glance at before any code is written (confidence-gate — if the summary reveals the plan is wrong, stop and re-ground rather than build the wrong thing), and for an item that has **no existing mockup**, this summary *becomes* the verify target in step 4. (build *sequences* this — it does not call the mockup skill; the agent renders per the mockup protocol, into `mockups/`.)
-3. **Implement — `/nav:refactor` discipline + inject↔check.** Move verbatim where refactoring; **test-gate after every step**. Do the work as a **sequential subagent-per-item** by default (concurrent edits in one tree collide; the only exception is an approved parallel tail — see Scheduling). Bracket the hand-off: **inject** the grounding the sub-agent can't see (critical files + roles, existing impls/seams to reuse, the **N+1 trigger**, and placement at both scales — which module the change deepens AND which package façade it must not widen); **check** the returned diff (same-domain parallel impl · seam/facade read at intent · header hygiene) before accepting "done".
-4. **Verify — visual-first, against the mockup.** Use the **browser-verify slot** (see below): open the running feature → screenshot → place it **side-by-side with the item's mockup** (its own, or the step-2 summary if it had none) and check for drift. Non-visual items (backend / logic / data) → test-gate / behavioral check; do **not** force a screenshot where there's nothing to see (that's structure-theatre). The screenshot (+ mockup comparison) is the item's **Shipped evidence**. If a non-visual item's behavioral check would invoke a live paid LLM path (especially a fan-out/multi-agent one), flag it before running the item's check — same live-LLM-cost signal as `/nav:do` — rather than silently re-running it full-cost per item.
-5. **Land.** Move the item to **Shipped** in `plan.md`, referencing the screenshot path as evidence; run **`/shape:align`** to refresh the board. If the ship changed a fact recorded in a canon doc (`docs/core/*`-class), append a one-line pending amendment to `docs/core/amendments.md` — **never edit core** (the door, ADR-041). Then the next item.
-6. **Exit.** In-progress empty → stop and report (per-item: what shipped, the screenshot/mockup comparison, anything flagged).
-
-## Scheduling — parallel dispatch is a policy, not a mode (ADR-040)
-
-> **Workflow is build's muscle, never its brain.** Execution parallelizes; adjudication (the schedule, the <90% halts, the join gate, the check brackets) never does.
-
-Serial is the default and always correct. With **several chunky In-progress items**, build may instead *propose* a schedule — full protocol in [`references/parallel-scheduling.md`](references/parallel-scheduling.md); the kernel:
-
-1. **Ground ALL items upfront** (read-only — itself a concurrent fan-out). Each plan's **Critical files** + **Verification** are the scheduling inputs — no new schema.
-2. **Evaluate** three criteria: (a) disjoint footprint — files AND test-import paths; (b) fully decided ≥90% (a dispatched agent can't stop to ask); (c) no shared-primitive risk (pre-extract the shared util serially first — the N+1 trigger, cross-agent edition).
-3. **Schedule + propose**: conflicting items → **serial prefix** (full per-item loop); disjoint remainder → **parallel tail**. **The user's nod starts the batch** (scheduling is adjudication; on opt-in harnesses the nod IS the multi-agent opt-in).
-4. **Run the tail in the shared tree** (no worktrees — decided trade): in-batch agents **write, don't test** (disjoint files ≠ disjoint import graphs — mid-batch test signal is contaminated); each returns a diff summary + `done|blocked`; ambiguity → `blocked`, back to the serial track.
-5. **Join — ONE authoritative gate**: full test gate; red → bisect by reverting item footprints. Then **check brackets serially per item** — integration is judgment work. Then land each item normally.
-
-Dispatched item agents (serial or the parallel tail) default to cheap tier (`model: sonnet`); a judgment-dense single item can be escalated on the spot (see root CLAUDE.md's Dispatch tiers).
-
-The dispatch facility is a **capability slot** (like browser-verify): a workflow/pipeline engine as named default, plain parallel sub-agents otherwise; **no facility → fully sequential. Degrade parallelism, never the gates.**
+Full per-item loop (all six steps, with citation detail), the browser-verify slot mechanics (delegate to the `browser-verifier` subagent, ADR-058), the three cross-plugin seams, and the anti-pattern table: `references/per-item-loop.md`. Parallel-dispatch full protocol: `references/parallel-scheduling.md`.
 
 ## browser-verify slot (the dependency, handled as a capability)
 
@@ -64,43 +31,6 @@ build does **not** hardcode a browser tool — it uses shape's shared **browser-
 - **Capture once per item, at land (verify economy).** Mid-item verification is the test gate; the screenshot is the item's Shipped-evidence, taken once when the item lands — never a per-step progress note.
 - **If missing, fail helpfully — never silently skip.** Surface a 3-way choice (a confidence-gate stop): **(a) install** [recommended — visual verify is build's headline]: CLI `npm install -g agent-browser` (or `brew`/`cargo install agent-browser`) then `agent-browser install`; or as a skill `npx skills add vercel-labs/agent-browser`. **(b)** proceed test-only this run (flag items to eyeball). **(c)** skip verify for this item. Report what was skipped (no silent caps).
 - **Per-project override:** a project may bind a different helper (Playwright, etc.) in its own CLAUDE.md; absent that, the default is agent-browser.
-
-## The three seams (build is the cross-plugin orchestrator)
-
-- **← reads shape:** `plan.md` (the work-list) + `mockups/` (the verification target).
-- **↓ calls nav:** `/nav:plan` (ground each item) · `/nav:refactor` discipline (implement) · `/nav:sync` (cheap header grounding for the inject step).
-- **→ writes shape:** `/shape:align` (re-render the board after each item).
-
-This is the most concentrated point of shape↔nav communication — build *controls* the loop (it lives in shape, forward-motion) while *calling* nav's code-side protocols.
-
-## Meta-skill discipline (do not skip)
-
-- **Skills don't call skills.** build names the sibling protocols and describes the sequence; the executing agent runs them (reuse-via-transcript; for the browser slot, the agent invokes the tool/skill itself).
-- **Reuse-via-transcript.** Before grounding an item, scan recent turns — if `/nav:plan`/`/nav:audit` ran for it, reuse.
-- **Confidence-gate every item.** Below 90% on scope/boundary/intent → stop and ask. This is the core, not an option.
-- **Serial by default; parallel only by an approved schedule.** One item's implementation at a time, unless the user approved a parallel tail (see Scheduling) — and even then the join gate + check brackets run serially.
-- **Test-gate + inject↔check every step.** A red test halts the loop; a sub-agent's "done" is checked against the diff before it counts.
-- **No silent caps.** If visual verify was skipped (no helper) or an item was deferred, say so in the report.
-
-## Output
-
-- Items moved In-progress → Shipped, each with evidence (screenshot + mockup comparison, or the test/behavioral result).
-- An updated `plan.md` reflecting the new Shipped baseline, screenshots referenced by path.
-- A run report: what shipped · what was flagged/asked · what's blocked · what verification was degraded (if any).
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| Blast through all items without stopping | Stop on doubt, not just at the end — the confidence-gate is the core of the skill. Tell: three items marked done in a row with no pause to check any of them. |
-| Re-implement nav:plan / nav:refactor inline | Sequence the protocols instead of duplicating them — build is a meta-skill. Tell: about to hand-roll a planning or refactor step build should be citing by name. |
-| Call another skill directly | Name the protocol and let the agent run it — skills don't call skills. Tell: about to invoke another skill's door programmatically instead of describing the step. |
-| Implement items in parallel without an approved schedule | Get the criteria evidence + the user's nod first — scheduling is adjudication (ADR-040). Tell: two items are being worked simultaneously with no schedule the user signed off on. |
-| Trust an in-batch test run | Wait for the join gate — disjoint files can still share an import graph, so mid-batch signal is contaminated. Tell: about to mark an item verified off a test run from earlier in the same batch. |
-| Force a screenshot on a pure-logic item | Skip visual verify where there's nothing to see — that's structure-theatre. Tell: about to capture a screenshot of an item with no visual surface. |
-| Silently skip visual verify when the helper's missing | Fail helpfully — offer install / test-only / skip, and report it. Tell: visual verify quietly didn't happen and nothing in the output says why. |
-| Mark Shipped on a red test or unverified diff | Test-gate + inject↔check gate every item before Shipped. Tell: about to write "Shipped" next to an item whose last test run failed. |
-| Plow past a blocked item | Surface it and ask — never thrash. Tell: retrying the same blocked step a third time instead of stopping to ask. |
 
 ## Companion skills
 

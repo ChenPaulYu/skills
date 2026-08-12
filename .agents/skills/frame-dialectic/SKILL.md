@@ -6,47 +6,27 @@ description: "Put a forming claim on trial: steelman both sides, expose its load
 
 # dialectic — put a claim on trial: strongest case vs strongest attack, then the deciding experiment
 
-Take a claim you're forming — a thesis, a paradigm, a "this is actually a new thing" — and **put it on trial**: build the strongest possible case *for* it, the strongest possible case *against* it, find the one assumption the whole thing hangs on, and name the experiment that would settle it. The point is **not** "list some pros and cons" (the default does that, lukewarm). It's the discipline the default skips: **steelman *both* sides to their maximum strength, then adjudicate** — so you learn whether the idea actually stands, not whether you can still like it.
+Take a claim you're forming — a thesis, a paradigm, a "this is actually a new thing" — and **put it on trial**: build the strongest possible case *for* it, the strongest possible case *against* it, find the one assumption the whole thing hangs on, and name the experiment that would settle it. For hard, no-standard-answer questions, most ideas don't die from being beaten; they die from **never being truly understood** — the model's default "weigh it up" strawmans the opposition by reflex and gives no decider. The point is **not** "list some pros and cons" (lukewarm, the default already does that); it's the discipline the default skips: **steelman *both* sides to their maximum strength, then adjudicate** — so you learn whether the idea actually stands, not whether you can still like it.
 
-## Why this skill exists
+## Stance
 
-For hard, no-standard-answer questions — *"is identity a thing you store or a thing you run?"*, *"is this a new paradigm or an old one renamed?"* — the quality of an idea is decided by one ability: **can you hold the supporter's and the attacker's view at full strength at the same time?** Most ideas don't die from being beaten; they die from **never being truly understood** — you reach "this is cool → let me build it" without ever constructing the existing approach's strongest form, or your reviewer's strongest objection. The model's default "weigh it up" reproduces this: it strawmans the opposition by reflex and gives no decider. dialectic forces the opposite — **symmetric maximal charity, plus a deciding experiment** — which is exactly the structure the default omits.
+- **Core: build the claim's strongest case (Steelman) → build the strongest attack, also at full strength (Devil's Advocate) → surface the single deepest load-bearing assumption (Missing Evidence) → name the one experiment that would decide it (Killer Experiment).** The output is always those five parts, plus a three-way verdict. If your "attack" is one you can easily wave away, you built a strawman — re-attack until it scares you. **Steelman both sides — the opposition too**; a Devil's Advocate you can't answer is the point, not a bug. **Write each side as an explicit inference chain and test every link** — is each arrow *cause*, or just correlation/coincidence/a missing variable? **Grounded, not asserted** — the opposition must be grounded in what the field actually holds where checkable; mark *uncertain*, never fabricate a position or result to win.
+- **The forced output, always in-chat** (no file artifact — frame writes none; never write source or make the decision), a table:
 
-## Core — the forced structure (this IS the skill)
+  | Part | What goes here |
+  |---|---|
+  | **Claim** | The one-sentence thesis on trial (echo back your read of it as line 1, so a misread claim doesn't get tried). |
+  | **Steelman** | The claim's strongest case — an explicit inference chain, every arrow tested. The version its best advocate would give. |
+  | **Devil's Advocate** | The strongest *attack*, also steelmanned. Run the three archetypes: **deflation** (it reduces to something we already have / already do), **competing explanation** (a different cause explains the same evidence — better prompting, more compute, more memory, caching…), **no-evidence** (no experiment has shown it beats the baseline). |
+  | **Missing Evidence** | The single deepest assumption the whole claim hangs on, and **which bucket it's in**: already *contradicted by existing evidence* (fatal), or merely *not-yet-tested* (an owned bet). This is the assumption you must not mistake for a fact. |
+  | **Killer Experiment** | The one experiment that would *decide it* — allowed to be future/hypothetical. The thing that turns "interesting philosophy" into "a testable claim." |
+  | **Land it in plain words** | Walked, not optional: one conclusion sentence with zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "steelman", "dialectic" (need the concept? say it plainly: "the strongest honest case each side can make") — plus one analogy, chosen deliberately (borrow `frame-analogize`'s discipline **by protocol, never a call**: weigh it against alternatives, pick on fit, and — if checkable — name in half a sentence where it breaks). The trial above (Claim → Steelman → Devil's Advocate → Missing Evidence → Killer Experiment, plus the verdict) stays intact for anyone verifying; this row only adds the translation on top. |
 
-> **Core: build the claim's strongest case (Steelman) → build the strongest attack, also at full strength (Devil's Advocate) → surface the single deepest load-bearing assumption (Missing Evidence) → name the one experiment that would decide it (Killer Experiment). The output is always those five parts, plus a three-way verdict. If your "attack" is one you can easily wave away, you built a strawman — re-attack until it scares you.**
+- **The verdict is three-way, not pass/fail** — "no evidence" is not a refutation, or the skill is useless for exactly the frontier work it's for. **Refuted** — the inference chain snaps, or the claim is contradicted by evidence that *already exists*; awareness can't save it. **Unsettled — an owned bet** — coherent, not contradicted, deciding experiment not yet run; the expected result for a genuinely new idea, carried consciously ("I'm betting on X; experiment Y would settle it; I'm building on X before Y is run — knowingly"). **Supported** — the evidence exists and holds. dialectic does not demand you *have* the evidence; it demands you survive logic and existing evidence, and name the bet precisely where genuinely unknown. The sin isn't an unproven assumption — it's mistaking it for a fact.
+- **After the trial — offer to route it, never decide or auto-run.** dialectic *tries* a claim; it does not decide its fate or build on it. Once the table is up, *offer* — never auto-call — via the Codex interactive chooser (offer-next-action, ADR-007/015): `shape-elicit` (converge into a decision *with the user*) · `shape-mockup` (render a side to decide by seeing it) · `nav-plan` (ground the surviving claim once settled enough to build) · `shape-probe` (run the Killer Experiment itself, when the verdict is *unsettled — owned bet* and the experiment is real work worth running — guarded on `shape` being installed, ADR-012). **Guarded + one-shot:** compose from what the trial actually found, always include a "just leave the table, I'll take it from here" opt-out, don't re-offer after the pick.
+- **When it fires.** Summoned on a "steelman / argue both sides / stress-test this idea" request — not auto-fired because a claim appeared. The tell: a **paradigm-class** question with no standard answer, and you catch yourself sliding from "this is cool" straight to "let me build it" without having built the opposition. **NOT for auditing an external document's evidence** — that's a referee-style review (validated ≠ claimed); dialectic stress-tests **your own forming claim**, where the deciding evidence doesn't exist yet. **vs `frame-first-principles`:** first-principles decomposes a question **down** to axioms (the assumption-laddering lives there) → its output feeds dialectic's Missing Evidence; don't re-do the laddering here. **vs `frame-orthogonal`:** orthogonal factors a tangle **sideways**; dialectic adjudicates one claim. **vs `shape-elicit`:** elicit draws the answer **out of you** (maieutic); dialectic **derives** the strongest case and attack from the claim's own structure. They pair: dialectic tries, then `shape-elicit` commits the call *with you*.
 
-The disciplines that make it real (not lukewarm pros/cons):
-
-- **Steelman *both* sides — the opposition too.** A steelman is the *strongest* version of a view, the one its smartest advocate would give. The default's reflex is the strawman ("so you think memory *is* the whole character?" — making the other side stupid). Build the version that, if you're honest, *worries you*. This applies to the attack as much as your own claim: a Devil's Advocate you can't answer is the point.
-- **Write each side as an explicit inference chain, and test every link.** Don't assert "A, therefore C." Lay out A → B → C and interrogate each arrow: is it *cause*, or just *correlation* / *coincidence* / *a missing variable*? A steelman with a broken arrow is a strawman in disguise — and the snapped link is often the whole finding ("memory → consistent information ✓, but consistency → identity ✗ — identity also needs motivation, values, a way of acting").
-- **The verdict is three-way, not pass/fail.** See below — for a claim no one has tested yet, "no evidence" is *not* a refutation.
-- **Grounded, not asserted.** The opposition / the existing approach must be grounded in what the field *actually* holds, where that's checkable — don't invent a convenient opponent. Where you can't verify, mark it *uncertain*; never fabricate a position (or a result) to win.
-
-## The five-part structure — the trial, always
-
-The output is the structured trial itself, **in the conversation** — its shape IS the value (a table is the natural form):
-
-| Part | What goes here |
-|---|---|
-| **Claim** | The one-sentence thesis on trial (echo back your read of it as line 1, so a misread claim doesn't get tried). |
-| **Steelman** | The claim's strongest case — an explicit inference chain, every arrow tested. The version its best advocate would give. |
-| **Devil's Advocate** | The strongest *attack*, also steelmanned. Run the three archetypes: **deflation** (it reduces to something we already have / already do), **competing explanation** (a different cause explains the same evidence — better prompting, more compute, more memory, caching…), **no-evidence** (no experiment has shown it beats the baseline). |
-| **Missing Evidence** | The single deepest assumption the whole claim hangs on, and **which bucket it's in**: already *contradicted by existing evidence* (fatal), or merely *not-yet-tested* (an owned bet). This is the assumption you must not mistake for a fact. |
-| **Killer Experiment** | The one experiment that would *decide it* — allowed to be future/hypothetical. The thing that turns "interesting philosophy" into "a testable claim." |
-| **Land it in plain words** | Walked, not optional: one conclusion sentence with zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "steelman", "dialectic" (need the concept? say it plainly: "the strongest honest case each side can make") — plus one analogy, chosen deliberately (borrow `frame-analogize`'s discipline **by protocol, never a call**: weigh it against alternatives, pick on fit, and — if checkable — name in half a sentence where it breaks). The trial above (Claim → Steelman → Devil's Advocate → Missing Evidence → Killer Experiment, plus the verdict) stays intact for anyone verifying; this row only adds the translation on top. |
-
-Lightweight by default: the trial stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
-
-## The verdict — three buckets, not pass/fail
-
-The most dangerous misread of this skill is using "no evidence" to kill every idea no one has done yet — which would make it useless for exactly the frontier work it's *for*. The verdict has three buckets:
-
-- **Refuted** — the inference chain snaps, **or** the claim is contradicted by evidence that *already exists*. It dies. Awareness can't save it.
-- **Unsettled — an owned bet** — coherent, not contradicted, but the deciding experiment hasn't been run. **This is not death.** For a genuinely new idea this is the *expected* result, and the right output is a bet you're carrying *with eyes open*: "I'm betting on assumption X; experiment Y would settle it; I'm building on X before Y is run — knowingly."
-- **Supported** — the evidence exists and holds.
-
-> dialectic does **not** demand you *have* the evidence. It demands you (a) survive logic and *existing* evidence, and (b) for what's genuinely unknown, name the bet so precisely that you're carrying it consciously, not stepping on it blindly. **The sin isn't an unproven assumption — frontier work always has one. The sin is mistaking it for a fact and building on it without knowing.** The whole move is one conversion: a *hidden, fatal assumption* → *a visible, owned bet*. Hidden, it's a landmine; named, it's a bet you chose.
+Worked example + anti-pattern table: `references/protocol.md`.
 
 > **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
 >
@@ -62,48 +42,6 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 - **Run the Killer Experiment itself** → `shape-probe`, when the verdict came back *unsettled — owned bet* and the deciding experiment named in that row is real work worth actually running, not just naming. **Guarded**: offered only when `shape` is installed; omitted otherwise (a broken option is worse than none) — mirrors `nav-plan`'s guarded `shape-mockup` offer (ADR-012).
 
 **Guarded + one-shot:** compose from what the trial actually found, always include a "just leave the table, I'll take it from here" opt-out, don't re-offer after the pick. An offer, not a call — skills don't invoke each other.
-
-## When it fires — and the boundaries that matter
-
-**Summoned on a "steelman / argue both sides / stress-test this idea" request** — not auto-fired because a claim appeared. The tell it's the right lens: a **paradigm-class** question with no standard answer, and you catch yourself sliding from *"this is cool"* straight to *"let me build it"* without having built the opposition.
-
-- **NOT for auditing an external document's evidence (the line to hold):** that's a referee-style review — auditing an **external document's** argument against the **evidence it already presents** (validated ≠ claimed — claim too big, evidence too small). dialectic stress-tests **your own forming claim**, where the deciding evidence **doesn't exist yet** — that's *why* Missing Evidence and Killer Experiment are rows.
-- **vs `frame-first-principles`:** first-principles decomposes a question **down** to axioms and rebuilds (the assumption-laddering — surfacing what a claim secretly assumes — lives *there*). dialectic puts a *claim* on **trial**. They hand off: first-principles surfaces the deepest assumption → that assumption becomes dialectic's **Missing Evidence**, the thing the Killer Experiment targets. Don't re-do the laddering here; borrow its output.
-- **vs `frame-orthogonal`:** orthogonal factors a tangle **sideways** into independent axes. dialectic doesn't factor — it adjudicates one claim. The trio: two lenses take a problem *apart* (down / sideways), this one puts a claim *on trial*.
-- **vs `shape-elicit`:** elicit draws the answer **out of you** (maieutic — *you* hold it). dialectic **derives** the strongest case and attack from the claim's own structure (the agent applies the frame). elicit extracts; dialectic tries. They pair: run dialectic to get the trial, then `shape-elicit` to commit the call *with you*.
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| A Devil's Advocate you can wave away | Re-attack the objection until it actually worries you — a strawman is the weak version; steelman the attack, not just the defense. Tell: you can dismiss your own counter-argument in one sentence without effort. |
-| Lukewarm "here are some pros and cons" | Push both sides to maximum strength, then adjudicate — the default already lists pros and cons; the value is the decider on top. Tell: the two sides read interchangeable with any other claim's pros/cons list. |
-| Assert "A therefore C" without testing the arrow | Lay out the chain and test each link for cause vs correlation / coincidence / missing variable. Tell: you stated the conclusion before naming the links that connect it to the premise. |
-| Kill an unproven frontier claim with "no evidence" | Return a three-way verdict — refuted / unsettled-owned-bet / supported — since "not yet tested" ≠ "refuted." Tell: the verdict collapses evidence-absent and evidence-against into the same "no". |
-| Let awareness excuse broken logic or existing counter-evidence | Reserve "I'm aware it's unproven" for genuine unknowns only — not a snapped chain, not a result that already contradicts it. Tell: you're using the word "unproven" to describe something that's actually been tested and failed. |
-| Invent a convenient opponent / a result to win | Ground the opposition in what the field actually holds and mark *uncertain* where you can't verify — fabrication makes the trial theater. Tell: you can't point to where the opposing view actually comes from. |
-| Decide the claim's fate or start building | Try + route — the commit is `shape-elicit`, the build is `nav-plan`. Tell: the reply ends with "so we should build X" instead of an offer to route. |
-| End on a jargon sentence ("verdict: unsettled — owned bet") | Close with a plain-words conclusion + analogy as the actual last word, not the five-part table alone. Tell: the final sentence needs "steelman" or "dialectic" to parse. |
-
-## Example — the move (domain-neutral)
-
-**Claim:** "A graph database is the right primary store for our product's feed."
-
-| Part | |
-|---|---|
-| **Claim** | Graph DB should be the feed's primary store. |
-| **Steelman** | The feed is fundamentally relationships (who-follows-whom, who-reshared-what). *Chain:* feed = multi-hop traversals → graph engines do traversal in O(hops) not O(joins) → at deep traversal a graph beats indexed joins. The strongest case isn't "graphs are trendy" — it's "our access pattern *is* traversal, so the model should match it." |
-| **Devil's Advocate** | **Deflation:** a 2-hop feed is a join you can already do in Postgres — no new primitive. **Competing explanation:** the speedup in the spike was from the *cache* we added at the same time, not the graph model. **No-evidence:** we've never benchmarked graph vs the relational baseline at our actual read volume. |
-| **Missing Evidence** | Load-bearing assumption: *our real traversal depth exceeds what indexed joins handle at our read volume.* Bucket: **not-yet-tested** (an owned bet) — not contradicted by anything we have, just unmeasured. |
-| **Killer Experiment** | Replay the production query mix against both stores at target scale. If the graph only wins past depth N, and our measured p95 depth is below N, the claim is **refuted for us** — and the bet was the depth assumption all along. |
-
-**Verdict:** *Unsettled — owned bet.* Coherent and uncontradicted, but it rides entirely on the depth assumption. Building on graph *now* is legitimate **if** you say out loud "we're betting our p95 depth is high — and we haven't measured it." Hidden, that assumption is a rewrite waiting to happen; named, it's a bet with a one-week experiment attached.
-
-## Output
-
-- **The five-part trial, in-chat** (no file artifact): Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment — plus a **three-way verdict** (refuted / unsettled-owned-bet / supported). To persist it, route to shape (below).
-- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
-- A guarded, one-shot **offer** to route the insight — `shape-elicit` (converge) · `shape-mockup` (render) · `nav-plan` (ground) · `shape-probe` (run the Killer Experiment, guarded on `shape` being installed) — never an auto-call.
 
 ## Companion skills
 

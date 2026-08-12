@@ -1,158 +1,26 @@
 ---
 name: plan
-description: "Turn a spec/feature description into a codebase-grounded plan: ground against touched domains, clarify ambiguity, then write a plan artifact (Context · Approach · Critical files · Verification). Fires on \"make a plan for this spec\" / \"scope this feature against the codebase\". Read-mostly — writes only the final plan file, with location consent. Companion to /nav:audit (Mode 2 is the read-only quick check; this is the full workflow)."
+description: "Turn a spec/feature description into a codebase-grounded plan: ground against touched domains, clarify ambiguity, then write a plan artifact (Context · Approach · Critical files · Verification). Fires on \"make a plan for this spec\" / \"scope this feature against the codebase\". Read-mostly — writes only the final plan file with location consent, and is the companion to /nav:audit (Mode 2 is the read-only quick check, this is the full workflow)."
 ---
 
 # Plan
 
-Turn a spec into a codebase-grounded plan. Audit the affected domains, clarify the ambiguities a spec always has, then write a plan the user (or a future agent) can execute against. The output is an artifact — a markdown file the user keeps — not a chat report.
+Turn a spec into a codebase-grounded plan: ground the affected domains, clarify the ambiguities a spec always has, then write a plan artifact the user (or a future agent) can execute against — an artifact, not a chat report. It's the full version of what `/nav:audit <spec>` (Mode 2) starts: Mode 2 stops at the gap-analysis report; plan continues into dialog and a written artifact.
 
-## Why this skill exists
+## Stance
 
-Specs land at varying levels of completeness. A complete spec is rare; usually you start from "the user wants X" + some sketches + several unstated assumptions. The work between "spec arrives" and "code can be written" is **grounding** (does the current code support this?) and **clarification** (what does the user really mean here?). This skill captures both, then writes them down so the plan doesn't evaporate into the next conversation.
+- **Four stages: Ground → Clarify → Plan → Offer.** Stage 1 is read-only grounding — scan the transcript for a same-session `/nav:audit <spec>` Mode 2 run and reuse its gap analysis before re-deriving anything. Stage 2 is interactive dialog. Stage 3 writes one file. Stage 4 offers execution, never auto-runs it.
+- **Route visual/interaction ambiguity to a render, not a question.** Colour, spacing, gesture feel, whether an affordance should exist — these can't be settled in prose. Hand off to `shape:mockup`, fold the picked design back into the plan. A mockup settles *look*, never *real-engine behaviour* (audio, gesture physics, live data) — plan a post-build smoke test for that separately.
+- **Ask only high-signal clarifying questions (3-5), never a spec dump back at the user.** Scope boundaries, contract changes, edge cases, silent trade-offs, existing-code coupling — not things you could answer yourself, not multiple questions about the same gap. An unanswered question becomes a labeled **open question** in the plan, never a guess.
+- **Confirm output location first — don't write blind.**
+  - **If the repo has a `blueprints/` tree** (the shape convention; commonly `docs/blueprints/`), default to **`blueprints/plans/<YYYY-MM-DD>-<short-slug>.md`** — co-locating the grounded plan with the intent it came from (`thoughts/` · `plan.md` · `overview.html`), so the whole arc (decision → status → grounded plan) lives in one tree. Create `blueprints/plans/` if absent.
+  - **Otherwise**, default to `docs/plans/<YYYY-MM-DD>-<short-slug>.md`. If the repo has another obvious convention (e.g. `docs/specs/`), prefer that; ask once if unclear.
+  - This is a **soft** preference — `nav` never *requires* `blueprints/` (it runs fully standalone); it just prefers that home when the tree is present, per the soft `nav → shape` rule (ADR-012/017).
+- **The plan is the artifact.** A plan that lives only in the conversation is gone next session — write the file, then summarize to chat: location, line count, key open questions, what step 1 entails.
+- **Offer next action, don't make the user type the next command.** Present an `AskUserQuestion` with a sub-agent default (recommended), inline execution, or save-only. Dispatching a sub-agent **injects** the grounding it can't re-derive (Critical files, existing seams to reuse, the N+1 trigger) and **checks** the returned diff (same-domain parallel impl, seam/facade intent, header hygiene, board sync) before accepting "done" — see ADR-008. Guarded, one-shot: skip when there's no executable step 1 yet, and never re-offer after a decline.
+- **Honest about uncertainty.** A guessed file role or an unresolved question gets said out loud in the plan, not smoothed over — rule ⑦.
 
-It's the full version of what `/nav:audit <spec>` (Mode 2) starts. Audit Mode 2 stops at the gap-analysis report; plan continues past it into dialog and an artifact.
-
-## Scope
-
-**Language-agnostic.** Same as the rest of nav — universal core + per-stack heuristics. Detect stack at the top, calibrate accordingly. Plan inherits audit's discipline for Stage 1.
-
-**Read-mostly.** Stages 1-2 read code + read conversation; only Stage 3 writes one file (the plan). Always confirm the output location before writing.
-
-## The 8 rules
-
-1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). **Recursive — composition is the second half:** modules compose behind a package façade into the next-scale deep module (module → package → codebase); a folder earns existence by hiding members or by being the declared contract — anything else is a drawer.
-2. **Interface-first at every scale** — an index/facade surfaces the interface; you drill in only as needed.
-3. **Explicit dependencies** — functions deterministic; deps explicit, not ambient.
-4. **Right grain — neither giant nor fragmented** — no mega-module/function; equally no needless abstraction.
-5. **Fit the framework** — idiomatic patterns; pass store/hook objects, not 20 loose props.
-6. **Rearrange, don't rewrite** — refactor = move code verbatim + rewire.
-7. **Below 90% confidence → ask** — *this skill is rule ⑦ as a workflow.* Stage 2 exists because spec ambiguity is the most common < 90% confidence trigger.
-8. **Agent-navigability is the audit** — struggle-to-describe IS the deep-module failure signal.
-
-## Four-stage protocol
-
-### Stage 1 — Ground (audit-equivalent on spec-touched domains)
-
-**Before running grep/inventory commands, scan the recent conversation:**
-
-1. Was `/nav:audit <this same spec>` (Mode 2) run in the last few turns?
-2. **If YES** → reuse its gap analysis as Stage 1's output. Note in the plan header: `Stage 1: reused from prior /nav:audit (turn N)`. Skip to Stage 2.
-3. **If NO** (new session, different spec, or no prior audit) → run Stage 1 fresh, following audit's Mode 2 protocol:
-   - Detect stack
-   - Parse the spec → identify the domains it touches
-   - Inventory those domains (file count, leader files, LOC distribution)
-   - Run mechanical + heuristic checks scoped to those domains (per audit's universal-core + per-stack tables)
-   - Frame findings as **gap analysis**: per affected domain → current shape · target needs · gap · suggested prep work
-
-This isn't `/nav:audit` being called — it's plan instructing the agent to apply the same protocol inline. Self-contained per ADR-001 #3.
-
-**If the spec touches an externally-consumed surface, circle the contract during grounding.** When the change restructures something other code/projects import (a library's public API, a package boundary) under a "don't break consumers" constraint, identify in Stage 1 exactly what the **frozen contract** is — the exported symbols + public signatures that must not change — versus what's free to move behind it. Carry it into the plan: the Approach phases restructure the body, and "the contract is byte-identical" becomes a per-phase **Verification** gate (a signature-diff vs the previous commit), not a hope. This is the planning half of `/nav:refactor`'s contract-freeze ("保門面、整身體").
-
-### Stage 2 — Clarify (interactive dialog with the user)
-
-A spec always has gaps the user knows but didn't write. Ask 3-5 targeted clarifying questions. Choose questions by **impact**:
-
-**First, route by medium — a question isn't always the right tool.** Some ambiguity is *verbal* (scope / contract / edge / ontology) and a question converges it. But ambiguity about **look or interaction** — colour, spacing, what overlaps what, gesture feel, whether an affordance should even exist — **can't be settled in prose; it has to be *seen*.** "What colour?" asked in text floats; three rendered candidates decide it in one glance. When the gap is visual/interaction, the clarification medium is a **mockup, not a question** → hand off to **`shape:mockup`** (it renders a divergent candidate set, the user points), then fold the picked design into the plan. This is the same boundary `shape:mockup` draws from its own side (render-decidable → mockup; pure ontology / definitional → verbal) — one line, two doors. The categories below are the *verbal* branch.
-
-> **Caveat — a mockup settles the look, not the behaviour.** A static interactive-HTML mockup converges layout/colour/affordance, but it cannot validate *real-engine behaviour* (audio playback smoothness, real-data decode, gesture physics) — that needs the running system. So when the feature has such behaviour, plan for a post-build smoke against the real thing; don't treat "mockup approved" as "behaviour verified."
-
-**High-signal question categories** (the verbal branch):
-- **Scope boundaries** — "does this include X, or is X out of scope?" (most common; specs underspecify edges)
-- **Contract changes** — "is it okay if the public API of Y changes, or must it stay backward-compatible?" (affects refactor strategy)
-- **Edge cases** — "what should happen when [edge condition the spec didn't mention]?"
-- **Trade-offs the spec was silent on** — "you want X fast vs X correct — which trade-off?" (forces the prioritization)
-- **Existing-code coupling** — "the gap analysis shows current code does Y; is changing that part of this scope or a separate session?"
-
-**Avoid low-signal questions**:
-- Things you can answer by reading the code yourself
-- Pure preference questions where any choice works (just pick one + note it as a decision in the plan)
-- Multiple questions about the same thing (consolidate)
-
-Present them as a list, numbered, in the user's preferred language. If the user defers an answer, mark it as an **open question** in the plan output rather than guessing.
-
-If you can answer everything from Stage 1 (rare), skip Stage 2 but say so in the plan: `Stage 2: no clarifying questions — spec was self-contained.`
-
-### Stage 3 — Plan (write the artifact)
-
-**Confirm output location first** — don't write blind.
-- **If the repo has a `blueprints/` tree** (the shape convention; commonly `docs/blueprints/`), default to **`blueprints/plans/<YYYY-MM-DD>-<short-slug>.md`** — co-locating the grounded plan with the intent it came from (`thoughts/` · `plan.md` · `overview.html`), so the whole arc (decision → status → grounded plan) lives in one tree. Create `blueprints/plans/` if absent.
-- **Otherwise**, default to `docs/plans/<YYYY-MM-DD>-<short-slug>.md`. If the repo has another obvious convention (e.g. `docs/specs/`), prefer that; ask once if unclear.
-
-This is a **soft** preference — `nav` never *requires* `blueprints/` (it runs fully standalone); it just prefers that home when the tree is present, per the soft `nav → shape` rule (ADR-012/017).
-
-**Plan template** (markdown):
-
-```markdown
-# <Spec title> — plan
-
-> Generated: <ISO date> · Spec source: <path or reference> · Stage 1: <fresh | reused from turn N>
-
-## Context
-
-<2-4 paragraphs grounding the change against the current codebase. Cite specific files / domains. Pull from Stage 1's gap analysis. End with the spec's intent in 1 sentence.>
-
-## Resolved questions (from Stage 2)
-
-| Question | User's answer |
-|---|---|
-| <Q1> | <A1> |
-| ... | ... |
-
-## Open questions (deferred)
-
-- <Q from Stage 2 user didn't answer> — needs decision before <when>
-- ...
-
-## Approach
-
-<The plan itself. Use whatever structure the change needs:>
-- For a small feature: numbered steps, each one a self-contained move
-- For a complex feature: phases / tiers / milestones with their own steps
-- For a refactor: list of /nav:refactor invocations (verbatim moves), each with a clear before/after
-
-Each step should be specific enough that another agent (or future-you) can execute without re-clarifying.
-
-## Critical files
-
-| File | Why it matters | Touched in step |
-|---|---|---|
-| <path:line> | <one-line role + what changes> | <step N> |
-| ... | ... | ... |
-
-## Single-source-of-truth owners
-
-The design decisions this work introduces that should have **one owner** (not be re-expressed as copies) — token namespaces, color/constant homes, config keys. Name the owner now, so the *second* value references it instead of leaking. Foreseeable categories only; the emergent ones are caught later by `/nav:do`'s N+1 reflex and `/nav:audit`'s value-leakage check (per [ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md)).
-
-| Decision (the thing that changes as a unit) | Owner (where it lives) |
-|---|---|
-| <e.g. brand palette> | <e.g. `@theme` color tokens in `index.css`> |
-| ... | ... |
-
-**Naming an owner is not adopting it — pair each new owner with an explicit adoption step + a check.** If a phase *creates* a new owner (a primitive, a shared helper, a token home) that supersedes a pattern currently hand-rolled in N places, the plan must also contain the phase that **rewires those N call sites onto it** — and a Verification line that the owner actually has callers (e.g. `grep -r run_with_fallback src/ | wc -l` > 0). This is the failure mode a verbatim-move refactor invites: `/nav:refactor` will faithfully *carry the old hand-rolled pattern along* unless a step explicitly adopts the new owner, leaving the "owner" as dead code that only a later whole-repo grounding pass (`/nav:sync`'s map leg) catches. Don't let the table assert an adoption that no phase performs.
-
-## Verification
-
-Concrete checks per step:
-1. <Step N> → verify: <test name, command, or observation>
-2. ...
-
-End-to-end: <how someone confirms the whole plan landed correctly — e.g., specific user flow + test suite + browser pass>.
-
-Board close-out: <if a `blueprints/plan.md` item tracks this plan, the final step moves it to
-✅ Shipped (one-line evidence pointer) in the same commit as the last verification — a shipped
-plan whose board item still reads open is exactly the drift `/shape:align` keeps re-discovering
-(ADR-086). Omit this line when no board item tracks the work.>
-
-## Out of scope (deferred to other sessions)
-
-- <What this plan deliberately doesn't cover>
-- ...
-```
-
-Adjust sections per situation — Critical files is essential, Open questions only if Stage 2 had unanswered items, Out of scope only if there's real risk of scope creep, Single-source-of-truth owners only when the work introduces shared design values (colors / constants / config / prompt fragments) that a second use would otherwise copy.
-
-**Write the file, then summarize to chat**: location, line count, key open questions (if any), what step 1 entails. Then proceed to Stage 4.
+Full four-stage protocol (grounding detail, the visual-vs-verbal boundary, the plan template, Stage 4's option table, the 8 rules, and the anti-pattern table): `references/plan-protocol.md`.
 
 ### Stage 4 — Offer next action (don't make the user type the next command)
 
@@ -178,45 +46,11 @@ The dispatched sub-agent defaults to cheap tier (`model: sonnet`); a judgment-de
 
 **One-shot, no nagging**: if the user picks "Save plan only", do not re-offer later in the same session. The discipline cuts both ways.
 
-## Output
-
-- A markdown plan file at the agreed location.
-- A short chat summary: where the plan landed, headline open questions, what step 1 entails.
-- An `AskUserQuestion` next-action offer (Stage 4) unless skipped per the conditions above.
-- The skill itself does NOT execute. Execution only happens if the user picks option 1 (delegated to sub-agent) or option 2 (continues inline by user choice). See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
-
-## Discipline (do not skip)
-
-- **Scan transcript first.** Stage 1 starts by checking whether audit just ran. Re-running grep when context already has the answer wastes the user's time and tokens.
-- **Ask only high-signal clarifying questions.** A spec dump back at the user is noise; 3-5 surgical questions are signal. Stage 2 is rule ⑦ in workflow form.
-- **The plan is an artifact, not a chat.** A plan that lives only in the conversation is gone next session. Write the file.
-- **Confirm location before writing.** Repos have conventions; respect them. Prefer a `blueprints/plans/` home when a `blueprints/` tree is present (soft `nav → shape`; ADR-017), else `docs/plans/`. Ask once, then proceed.
-- **Don't auto-execute. DO offer next action.** Plan = blueprint; execution = separate session(s). But silently leaving the user to type the next command is needless friction. Stage 4 offers options via `AskUserQuestion` — the user's pick is the supervision, the sub-agent option provides the context separation. Rule ⑦ stays satisfied. See [ADR-007](docs/adr/007-offer-next-action-pattern.md).
-- **Bracket the sub-agent hand-off: inject grounding in, check integration out.** A fresh sub-agent is tactical — it sees only its slice, so it won't grep the domain for an existing home and it reads project rules literally. Stage 1 already did the grounding the sub-agent lacks; inject it into the prompt, and run a deep-module integration pass on the returned diff before accepting "done". The feature is the sub-agent's job; clean integration is the parent's. See [ADR-008](docs/adr/008-inject-check-at-handoff.md).
-- **Honest about uncertainty.** If Stage 1 had to guess at a file's role, say so in the Context. If Stage 2 left a question open, list it. The plan's value is grounded honesty, not false confidence.
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| "I'll skip Stage 2 — I can guess what the user means" | Ask the 3 questions — rule ⑦, a guess drifts between agent and user. Tell: you're about to write "assuming the user wants..." instead of asking. |
-| "I'll write the plan straight to disk without asking where" | Ask where first — the user has a convention; respect it. Tell: about to call the write tool before a location has been confirmed. |
-| "I'll execute step 1 while I'm here, the plan is obvious" | Offer execution at Stage 4 instead and proceed only if the user picks it — plan and execute are different verbs, and conflating them loses review gates. Tell: code is being written before the plan itself has been shown to the user. |
-| "I'll skip Stage 4 — the next step is obvious, the user can just type the command" | Always offer the next action (unless the explicit skip condition fires) — discoverability friction is real; one click beats one typed command. Tell: the plan ends with prose describing what to do next instead of an offer to do it. |
-| "I'll fold open questions into 'TBD' inline" | Put open questions in a labeled section so they're not forgotten — inline TBDs lie by omission. Tell: a "TBD" sits buried mid-paragraph instead of surfaced in its own list. |
-| "I'll write a generic plan template without grounding" | Ground Stage 1's gap analysis explicitly in Context — a generic template defeats the purpose. Tell: the plan would read identically if the codebase behind it were swapped for a different one. |
-
-## When to escalate to the user
-
-- Stage 1 reveals the spec is fundamentally incompatible with the current architecture (not just gaps — actual blockers). Surface this before Stage 2.
-- Stage 2's first clarifying question receives an answer that invalidates the spec's premise. Stop the cascade; ask the user whether to revise the spec or proceed with the revised scope.
-- The plan you'd write conflicts with a recent ADR or convention. Flag it before writing.
-
 ## Companion skills
 
-- **`/nav:audit`** — Mode 2 is the read-only quick check (gap analysis, stop). This skill (`plan`) is the full workflow. Run audit alone when you just want to know "can this be done"; run plan when you've decided to do it.
-- **`/nav:refactor`** — typical next step from a plan that includes structural moves. The plan's `Approach` section often lists `/nav:refactor` invocations.
-- **`shape:mockup`** *(sibling family)* — the one cross-family edge: when Stage 2 hits visual/interaction ambiguity, the clarification is a render, not a question — hand off to `shape:mockup` and fold the picked design back into the plan. `nav` keeps existing code navigable; `shape` gives intent its form before building. They meet here.
+- **`/nav:audit`** — Mode 2 is the read-only quick check this skill continues past.
+- **`/nav:refactor`** — typical next step when the plan's Approach lists structural moves.
+- **`shape:mockup`** *(sibling family)* — the cross-family edge: visual/interaction ambiguity in Stage 2 routes here.
 
 ## Communication style
 

@@ -12,117 +12,19 @@ Design notes and plans accrete; reality moves past them. `reconcile` walks `blue
 
 Staleness isn't binary: a doc can be 90% live design with one line reality overtook. **`amend`** serves that middle case — correct the drifted *fact*, leave the rest verbatim. The line it must not cross — sync what's *true*, never re-decide what's *decided* — is the amend boundary (below).
 
-> **Cost tier (ADR-058):** this skill declares the mechanical-tier executor role in its frontmatter — the sweep-and-compare work is mechanical, so it runs on the cheaper model for that turn; the session model resumes on the next prompt. The amend boundary is unchanged: anything that smells like a *decision* still stops and routes to `shape-elicit`.
+## Stance
 
-## Why this skill exists
+- **Check read-only; every write gated + per-file.** Never amend, delete, or merge on inference alone. Gather all three staleness signals (code — strongest, self-declaration, date) and present them; **touch nothing** until the user confirms, per file.
+- **Present a proposed action per doc, and let the user decide.** Verdict + evidence + a proposed action (keep · amend · prune · consolidate · graduate); for amend, show the one-line diff (`-` stale claim / `+` the fact code shows). Nothing is written without an explicit yes.
+- **The amend boundary — the test:** *"Is the `+` line something reality has already decided (built code shows it), or something that needs my judgment about what should be?"* **Fact → amend here**, verbatim except the confirmed line. **Decision → stop, hand to `shape-elicit`, out of scope** — reconcile renders and keeps current, it never authors a decision.
+- **Untracked = irreversible.** Check tracked vs untracked first (`git status`, `git ls-files`) before any amend/move/delete — overwriting untracked content is as irreversible as deleting it. Never chain a destructive `rm` after an unverified `mv`/`git mv`. Confirm a merge landed (`diff -q`) before deleting the merged-from doc. One step at a time, re-checked — never batch destructive ops behind a single confirmation.
+- **Consolidate beats raw delete** when live design remains — merge, verify, *then* remove. **Graduate, don't hoard** a shipped doc that still holds durable *why* (ADR-026) — settled calls only; graduate *relocates* an already-made decision's record, it never authors one.
+- **A mockup retires only after its residue is verified absorbed and its inbound links resolved** (ADR-037) — three ordered preconditions (decision settled/shipped · residue verifiably recorded in the owning doc · inbound links resolved), default direction is prune once all pass, salvage-then-prune when residue lives only in the mockup. Parked decisions keep a parked stamp; canon-pinned mockups keep a freshness stamp — nothing else blocks retirement. Check trackedness with `git ls-files`, never `ls` (a depth-unanchored `mockups/` gitignore pattern can hide a folder git never held).
+- **Canon-grade routing — reconcile never writes core.** A verdict at settled axiom/principle altitude is **canon-grade**: recommend `shape-position` graduation and stop, the same hand-off shape as the decision-change → `shape-elicit` route. Everything overturnable by experiment/approach/bet/feature-why graduates into the precedents tier instead.
+- **Evidence over tidiness.** Cite the signal behind every verdict; mark `uncertain` rather than over-claim.
+- **Don't regenerate the board here** — offer, never auto-call, `shape-align` after cleaning; align refreshes `plan.md`, reconcile reconciles the notes.
 
-A `thoughts/` doc describing already-shipped or superseded work doesn't just clutter — it actively lies to the next reader (human or agent) who trusts it as current intent. `shape-align` *flags* such drift in passing but deliberately doesn't clean it; reconcile is the dedicated, careful cleanup. It's the pre-build mirror of `nav-audit` + the careful side of `nav-refactor`: audit assesses code shape, refactor moves code under test gates — reconcile assesses doc currency and prunes/merges under safety gates.
-
-## The shape spine (restated — this skill is self-contained)
-
-> **Capture before crystallize** — keep a decision while it's live, retire it once reality has absorbed it; reconcile is how the archive lets go without losing the record prematurely. **One current state, one maintained render** — `thoughts/` and `plan.md` must reflect *present* reality (there is no separate human-facing file to keep in sync — a visual view renders fresh, on demand, via `shape-mockup`); a doc describing the past is a stale render, a lie like a stale codebase map.
-
-## Staleness signals — collect, don't conclude
-
-For each doc, gather evidence from three angles; none alone is decisive — present them and let the user judge:
-
-1. **Code (strongest).** Is the thing it describes already built? Grep the codebase; **lean on `head -12` file headers (`nav-sync` output)** to read implementation status cheaply. Implemented → likely "done / can retire".
-2. **Self-declaration.** Does the doc's own top say shipped / completed / superseded?
-3. **Date.** Older docs are likelier stale — a *prior*, not a verdict.
-
-Combine into a per-doc verdict: **current** · **current · N stale fact(s)** (→ amend) · **likely stale** (→ prune) · **superseded by `<other>`** (→ consolidate) · **shipped · holds durable residue** (→ graduate) · **canon-grade** (settled + axiom/principle altitude → recommend `shape-position` graduation — see routing below) · **uncertain**. Honesty over tidiness — mark `uncertain` rather than guessing.
-
-## Protocol
-
-**Step 1 — Inventory.** Locate `blueprints/` (commonly `docs/blueprints/`). If no such tree exists yet, there's nothing to reconcile — report that and point at `shape-align` (which scaffolds it) rather than inventing one (tolerant-reader degrade path, root AGENTS.md / ADR-071). List **`thoughts/*.md`, `plans/*.md`, and `mockups/*/`** — plus, when the project has a `docs/core/` canon layer, the **pending-amendments ledger `docs/core/amendments.md`** (ADR-041; see the ledger row below) — reconcile maintains all three layers (`thoughts/` = converged decisions; `plans/` = `nav-plan`'s grounded code-plans; `mockups/` = the decision artifacts, swept by inherited currency — see the mockups tier below). Detect the stack so Step 2's grep uses the right syntax. **Plans drift too, and check sharper**: a plan carries explicit steps + a Verification table, so grep each step's Critical-files against the code — all shipped → prune; *some* shipped → amend (mark which landed). Same verdicts, gates, and fact-vs-decision boundary as thoughts.
-
-**Step 2 — Gather evidence (read-only).** Per doc, collect the three signals. Grep code, read each doc's top, note dates. **Touch nothing yet.**
-
-**Step 3 — Present + decide *with the user*.** Report per doc: verdict + evidence + a **proposed action** (keep · amend · prune · consolidate · graduate). Propose the fix concretely — for amend, show the **one-line diff** (`-` stale claim / `+` the fact code shows); for consolidate, which to merge. User confirms **per file**; nothing is written without an explicit yes. **If the drift is a *decision change*, not a fact — stop and hand to `shape-elicit`** (see amend boundary): say plainly it's out of scope, and once the new thought lands, consolidate the old one. Don't rewrite the decision here.
-
-**Step 4 — Write, safely (write-gated, on confirmation only).** Safety rules, non-negotiable (learned the hard way — a careless `mv`+`rm` once destroyed untracked design docs):
-- **Check tracked vs untracked first** (`git status`, `git ls-files`). Untracked = no recovery path; overwriting it is as irreversible as deleting it — treat as precious, never assume git can undo.
-- **Never chain a destructive `rm` after an unverified `mv`/`git mv`** (`git mv` aborts wholesale if any source is untracked — verify before removing).
-- **Confirm a merge landed before deleting the merged-from doc** (`diff -q` the salvaged content) — delete only what's provably duplicated.
-- **One step at a time, re-checked** — don't batch destructive ops behind a single confirmation.
-- **Amend** is the lightest write but still an overwrite: change only the confirmed line(s), verbatim otherwise (same discipline as `nav-refactor`'s move — no "while I'm here" rewrites); the `+` line states only what code shows; keep the doc's status/date current if it carries one.
-- **Consolidate beats raw delete** when live design remains — merge, verify, *then* remove. **Graduate** is consolidate pointed at the precedents tier — see below.
-
-**Step 5 — Offer to re-sync the board.** After cleaning, `plan.md` may lag — *offer* (don't auto-call) `shape-align` to refresh it (see "Offer" below). reconcile reconciles the notes; align refreshes the board — skills don't invoke each other.
-
-## The amend boundary — sync facts, never re-decide
-
-`amend` is sharp only if it never bleeds into deciding. The test:
-
-> **Is the `+` line something reality has *already decided* (built code shows it), or something that needs *my judgment about what should be*?**
-
-- **Fact → amend here.** The doc lags the code; the decision didn't change. *e.g.* doc says "stored as a flat list" but the code now uses a typed entity → sync the line; "editing is a follow-up" but editing shipped → `editing: shipped`. Record only the fact, not why/how.
-- **Decision → `shape-elicit`, out of scope.** The code didn't move; the *design judgment* did. *e.g.* the doc's principle was "tags are describe-only" and a later conversation reframed them as two layers → reconcile must **not** rewrite that principle; recommend elicit, then **consolidate** the old doc (mark superseded) once the new lands.
-
-Why the wall: decisions are born in `elicit` / `mockup` (the converge verbs); the maintenance verbs (`align`, `reconcile`) *render* and keep current, they don't author. Letting reconcile rewrite a decision would put new design judgments where no one reviews them as decisions.
-
-## Graduate — retire a shipped doc without losing its *why* (ADR-026)
-
-The gap: a thought **fully shipped** but still carrying durable *rationale* — the *why this shape* and especially the **rejected alternatives** ("we tried X, reversed it because Z"). Prune loses that; consolidate has no in-flight thought to merge into. Without graduate, reconcile can only amend-and-keep → `thoughts/` grows monotonically. Graduate is the exit ramp: **retire the thought with a forwarding address.**
-
-**Destination: the precedents tier — write in the tree's own dialect (ADR-105).** v2 trees
-(`blueprints/precedents/` with `index.md`): land the residue as a **new dated precedent file**
-(`YYYY-MM-DD-<slug>.md` — Status line · the 3-part body · an `**Evidence.**` pointer) plus one
-`index.md` row, or extend an existing precedent with a dated amendment section (related calls
-consolidate — not 1:1 fragments). v1 trees (a single `decisions.md`): merge into the right
-**feature-section** exactly as before, and mention `shape-migrate` once — never write a
-half-migrated hybrid. Either way, **prune the emptied thought**. Only the *why* graduates; *how-it-works* lives in nav's `codebase-map` (duplicate it and they drift). Distil to the 3-part section format — **the call** · **how it shows up in the system** · **what was rejected / deferred** — plain and high-level; drop status / palette / commit hashes (git's / code's). The full format spec is `blueprints-spec.md` (single source); the three parts above are the working gist this skill carries to graduate offline.
-
-**Eligibility — graduate only a *settled* call.** A deferred branch is fine (it becomes the "rejected / deferred" part); what blocks graduation is *genuinely-unsettled* design still being decided — that stays in `thoughts/`. ("Has future content" ≠ "live design" when the future is *parked*, not *in-flight*.) **Graduate respects the amend boundary** — it *relocates* an already-made decision's record, never authors one; if distilling would require deciding what the design should now be, stop → `shape-elicit`.
-
-**Keep the tier clean — fold-forward, never a status-flagged graveyard.** Every live entry is
-*currently operative*. When a later call reverses one — v2: move the dead claim to
-`overruled.md` with **what survives** and a pointer to the overturning precedent (overturning is
-an entry, never a deletion); v1: fold forward (`Supersedes: X — because Z`) then drop the stale
-section. The anti-re-litigation guard lives where readers will meet it; **git is the deep
-archive**. **Curation criterion — keep what git makes *expensive* to recover, drop what it makes *cheap*:** a live decision's *why* + rejected-alternatives (reconstructing a months-old debate from scattered commits is costly) earns its line here; *what-happened* and superseded sections (a `git diff`/`log` away) do not — "git has it" is true, but *retrieval cost* is the test, not recency. This is reconcile's **consolidate** (merge → verify → remove) pointed at a section. (v2's `overruled.md` converges partway back toward the ADR pattern — dead claims stay in the books because *what survives* is load-bearing — while live entries still fold forward and stay clean.)
-
-**Currency sweep (three blueprints tiers + the canon ledger):**
-
-| tier | predicate | action |
-|---|---|---|
-| `thoughts/` | "implemented + settled yet?" | graduate / prune / amend / keep |
-| precedents tier (`precedents/` or legacy `decisions.md`) | "still operative, or superseded?" + "do any two live entries contradict?" + v2: "does `index.md` match the files?" | fold-forward (v2: into `overruled.md`) + drop the stale entry (never delete the *guard*) |
-| `mockups/` | "is the decision it served settled, and its residue absorbed?" | retire (salvage → prune) / stamp / keep — see the mockups tier below (ADR-037) |
-| `docs/core/amendments.md` | "absorbed by a position summon, or reversed by later reality?" | prune the entry / amend / keep — **never write core itself** (the door, ADR-041); this sweep is the ledger's exit, so it doesn't become the fourth grow-only layer (ADR-026/017/037 lineage) |
-
-**Routing between the two durable layers (ADR-041/105).** The precedents tier (this skill's) and `docs/core/` (position's) are both durable; route by the litmus: **overturnable by experiment / approach / bet / feature-why → precedents** — graduate here as below; **settled axiom / principle (changing it makes the thing a different product) → core** — the verdict is **canon-grade**: *recommend* `shape-position` graduation and stop, exactly like the decision-change → `shape-elicit` hand-off. reconcile never writes core — without this reminder, a canon-grade thought's best sweep outcome is demotion into the precedents tier.
-
-The cross-decision-contradiction check is genuinely new: two decisions converged in separate `elicit` sessions can quietly conflict, which per-doc currency won't catch — a curated tier with a one-page index makes it visible. Detection is **push-primary** (a reversing decision declares `Supersedes: X` at birth in elicit) + **pull-safety-net** (this sweep). Marking a superseded section is fact-sync (the reversal already happened) — inside the amend boundary. A human view of the tier, when wanted, is the `🧭 Precedents` layer inside an on-demand `shape-mockup` board snapshot — reconcile maintains the tier, mockup renders it when asked. *Not a consensus skill* — "confirming consensus" is a property of the converge verbs, maintained by this sweep, not a verb (ADR-026).
-
-## The mockups tier — retire on ship, with a forwarding address (ADR-037)
-
-`mockup`'s own rule — detail-level artifacts **retire on ship**, structural locks carry a freshness stamp — has its enforcement point *here*: at mockup time nothing is shipped yet, and no other verb returns to `mockups/` post-ship. Without this sweep, `mockups/` grows monotonically (committed-by-default makes every decision leave a folder nothing deletes) — the same bug graduate fixed for `thoughts/`, one tier down.
-
-**A mockup exists to represent what the running system cannot yet represent; once code absorbs it, representation transfers and it exits** (ADR-039). One question per folder: *"does this still represent something the code doesn't have?"* Three ordered pre-conditions, then the verdict:
-
-1. **Decision settled/shipped?** Same evidence as thoughts: code grep, `head -12` headers. ("No one cites it" alone never triggers prune — an uncited mockup for an in-flight decision is kept.)
-2. **Residue absorbed?** The pick **and any deferred branch** must be *verifiably* recorded in the owning thought / the precedents tier — verified by reading, not assumed (mockup's step 5 should have written it; confirm it did). This is a judgment check, not a grep — present per collect-don't-conclude, mark `uncertain` rather than guess.
-3. **Inbound links resolved?** Grep `blueprints/` for citations into the folder — this one *is* mechanical; list the hits as evidence.
-
-**Default direction:** a folder failing all keep-clauses gets prune as the *default proposal* (the per-file gate stands — propose, don't presume). The razor exists so a sweep is one gated round, not three (ADR-039).
-
-| situation | action |
-|---|---|
-| ①②③ all pass | **prune** — git is the deep archive; `git log --follow -- <path>` + `git checkout <sha> -- <path>` restores it |
-| ② fails — the pick or a deferred branch lives only in the mockup | **salvage → then prune**: write the line into the owning doc, incl. a pointer (`rendered candidates: git history at mockups/<date>-<topic>/`), verify it landed, then prune — consolidate's merge → verify → remove, pointed at a mockup |
-| whole decision parked (plan's *later*) | **keep + parked stamp** ("parked, intent as of `<date>`") — the converge job is dormant, not done; re-rendering on un-park is waste (= code won't absorb it for now — the deferred intent still needs a representative) |
-| **canon-pinned** — cited from the project's CORE/canon docs (the part code can *never* absorb, e.g. texture sampling) | **keep + freshness stamp** (amend) — ONLY canon can pin: citations from sibling blueprints docs (thoughts/plans) are re-pointable (salvage → a `git log --follow` pointer) and never block retirement. Re-check each sweep like a precedents entry: "still operative, or is the running system the ground truth now?" |
-| decision in-flight | **keep**, untouched (= code hasn't absorbed it yet) |
-| folder untracked | **hard gate** — resolve tracked status before any other action; untracked never entered git, so prune would be permanent destruction |
-
-**Tracked-check discipline:** ask git's ledger, not the disk — `git ls-files`, never `ls`. The depth-unanchored `mockups/` gitignore trap means a folder can sit on disk looking committed while git never held it (field case: 65 untracked mockup folders in one repo).
-
-**Salvage respects the amend boundary:** it *relocates* a recorded pick/deferral, never authors one. If ② fails because the design judgment itself is unclear — stop, recommend `shape-elicit`.
-
-## The seam with `nav`
-
-reconcile's currency check **consumes the file headers `nav-sync` maintains**: load-bearing files with a `head -12` header make "is this implemented?" answerable without reading bodies — the strongest staleness signal. No headers → suggest `nav-sync` first; reconcile still works on grep alone, just less cheaply.
+Full protocol — the inventory/gather/present/write step sequence, the Graduate machinery (precedents-tier destination, the 3-part distillation, the currency-sweep table across all four tiers), the mockups-tier precondition table, and the seam with `nav-sync`: `references/reconcile-protocol.md`.
 
 > **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
 >
@@ -134,28 +36,12 @@ After the tree is trimmed, `plan.md` may lag the cleaned `thoughts/`/`plans/`. *
 
 **If the project still carries a leftover standing `overview.html`** (from before the shape family dropped the maintained-HTML-render mechanism), propose retiring it — delete it (git holds it) and note in `plan.md`'s header that a visual view now renders on demand via `shape-mockup` instead.
 
-## Discipline (do not skip)
-
-- **Check read-only; every write gated + per-file.** Never amend, delete, or merge on inference alone.
-- **Amend syncs facts, never re-decides** — `+` line states only what built code shows; needs a design judgment → stop, recommend `shape-elicit`. Verbatim except the confirmed line.
-- **Untracked = irreversible.** Verify tracked/untracked before any amend/move/delete; never trust an unverified `mv` then `rm`. For `mockups/`, check with `git ls-files`, never `ls` (the gitignore trap).
-- **A mockup retires only after its residue is verified absorbed and its inbound links resolved** — salvage → verify → prune, never raw delete; parked decisions and stamped structural locks stay (ADR-037).
-- **Evidence over tidiness.** Cite the signal behind every verdict; mark `uncertain` rather than over-claim.
-- **Consolidate beats delete** when live design remains; **graduate, don't hoard** a shipped doc that still holds *why* (ADR-026) — settled calls only, relocates never authors.
-- **Don't regenerate the board here** — that's `shape-align`.
-
-## Output
-
-- A per-doc currency report: verdict + evidence + proposed action (keep · amend · prune · consolidate · graduate · retire-mockup).
-- (On confirmation) a reconciled `thoughts/`, `plans/` **and `mockups/`** tree — facts amended in place, wholly-stale docs pruned/consolidated, shipped-but-rationale docs graduated into the precedents tier (in the tree's own dialect), shipped decisions' mockups retired (residue salvaged, git holding the corpus), all under the safety rules.
-- For any decision-change: a recommendation to converge it in `shape-elicit` (not rewritten here).
-- A guarded, one-shot **offer** to run `shape-align` — never an auto-call.
-
 ## Companion skills
 
 - **`shape-align`** — refreshes `plan.md` after the tree is trimmed.
-- **`shape-elicit`** — where new `thoughts/` docs (the inputs reconcile audits) come from.
-- **`shape-mockup`** — where `mockups/` folders come from (it states retire-on-ship, reconcile executes it); also renders an on-demand board snapshot when a human wants a visual view.
+- **`shape-elicit`** — where new `thoughts/` docs (the inputs reconcile audits) come from; also the hand-off for any decision-change reconcile finds.
+- **`shape-mockup`** — where `mockups/` folders come from (it states retire-on-ship, reconcile executes it).
+- **`shape-position`** — the hand-off for a canon-grade verdict (reconcile never writes core).
 - **`nav-plan`** — where `plans/` docs come from.
 - **`nav-sync`** — adds `head -12` headers so reconcile reads implementation status cheaply.
 - **`nav-audit`** — the code-side analog (assesses code shape; reconcile assesses doc currency).

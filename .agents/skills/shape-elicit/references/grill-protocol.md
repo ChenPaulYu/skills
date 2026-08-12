@@ -1,0 +1,129 @@
+# Grill protocol — elicit's full machinery
+
+> The implementation layer behind `shape-elicit`'s stance. The SKILL.md body carries the stance;
+> everything here is loaded when the volley needs it — gatekeeper diagnosis, stall tells,
+> diagnostic (root-cause) mode, the offer branches, and the anti-pattern table. Moved verbatim
+> from the pre-ADR-109 SKILL.md body; the machinery is unchanged, only re-homed.
+
+## Why this skill exists
+
+A clean conceptual decision rarely arrives by someone stating it. It arrives by **reacting**: pushing on a scaffold, refuting a fork, rewriting a line. Most AI conversation does the opposite — it dumps content, races to solve, and agrees, which *floats* and converges nothing. elicit inverts the roles: the AI proposes, the user refines/picks, and convergence is a volley. It exists to be the **summoned** version of that — a grill you call when you want to think something out, not a clarifier that interrogates every turn.
+
+
+## The 6 moves (the behavioral spec)
+
+1. **Mirror first.** Restate to confirm ("let me say it back, check I have it") before going down. Cheap alignment beats a confident wrong drill.
+2. **Drill to the most fundamental layer.** Go *under* the surface question to the principle beneath it (the real question under "which option" is often "should this thing exist at all"). Converge toward a principle, not a feature list.
+3. **Compress ambiguity into a named fork.** Offer A/B or a/b/c the user can pick in a second. One fork moves them; a wall of prose doesn't.
+4. **Friction, not agreement.** What moves the conversation is the turn where you *refute or restructure* their idea ("I might disagree — here's why"). Agreement doesn't advance; friction does. Don't flatter.
+5. **Converge by versions, end at one line.** Iterate "v2 / v3"; land on a compressible, quotable sentence. The residue is **one line** (a named principle + the decided forks), never a transcript.
+6. **Short volleys, one sharp thing per turn.** Fast, short exchanges; throw *one* pointed thing each turn, not an essay.
+
+> One line: the user doesn't want an AI that answers — they want one that **stands up the single sharpest thing to hit, drills to the principle, then compresses to a line** — one cut per turn, not a finished solution.
+
+
+## Grounding is the quality, not a convenience
+
+The forks must be **anchored in the real repo** — the actual modules, types, schema, constraints — not abstract Socratic prompts. This is the *only* reason a grounded grill beats a generic chat: when you can see the code, the fork gets *sharp* (a precise a/b about real entities), instead of good-but-floaty philosophy. Before grilling, read the real thing; lean on the nav layer to ground cheaply (`nav-sync`'s `head -12` headers tell you a module's role without reading it; its codebase map gives the repo shape). An ungrounded elicit is just abstract Socratic noise — re-ground before continuing.
+
+
+## Gatekeeper — three kinds of stuck (the honest stop)
+
+A volley can stall for three different reasons, and grilling harder only fixes one of them. What surfaces a stall is the **stall tells scanned every turn in Protocol step 3 below — observable signals in the user's words, never your own sense of progress** (left to self-assessment, the diagnosis never fires: you always believe the next fork will stand). When a tell fires, diagnose **which** stall this is before erecting yet another fork:
+
+1. **The answer is in the user's head, but fuzzy.** The ordinary shape of a hard convergence — the fork almost lands, one more turn of friction would do it. Keep grilling; the existing engine (unchanged) is built for exactly this.
+2. **The user is missing terrain the world has** — a blind spot, maybe one they don't even know they have, that makes every fork feel arbitrary because there's no ground under it. Grilling a blank spot produces nothing to draw out; friction against a void just burns turns. The honest move is to **stop grilling** and offer `shape-survey` — map the missing terrain, then come back.
+3. **Nobody knows.** The fork rests on an unmeasured fact — not an opinion anyone holds, not documented anywhere. A hundred more volleys won't produce evidence; an experiment will. Offer `shape-probe`.
+
+**The court metaphor, one line:** elicit is the court — background unclear, call the expert witness (`survey`); facts disputed, order the forensic test (`probe`); the ruling itself never leaves the court — survey and probe supply evidence, elicit converges it.
+
+These are **offers, never calls** — guarded, one-shot, and skipped gracefully if `shape-survey` or `shape-probe` isn't installed, the same law as every other cross-skill hand-off in this family. After survey or probe returns with evidence, the volley **resumes** — back in step 3 of the Protocol below, now with a filled-in fork instead of a stuck one.
+
+
+## When it fires — and the boundary with mockup
+
+**Summoned, not automatic.** elicit fires when the user *calls* for it (grill me / help me think through / I haven't decided). It does **not** auto-fire on any uncertainty — being grilled unbidden is the anti-feature.
+
+**Boundary (same line `shape-mockup` draws from its side — one line, two doors):** *can a rendered interactive artifact make this decidable?*
+
+- **No → elicit.** Pure conceptual / definitional / ontological / structural-semantic decisions — "what *is* this thing", "is this one entity or two", "what's the principle here". A render wouldn't clarify; a grounded fork would.
+- **Yes → `shape-mockup`.** Look / layout / interaction / how entities visually relate. Don't grill verbally what three rendered candidates would settle in a glance.
+
+And **not** `nav-plan`: elicit converges *what / why* (a decision or a cause); nav-plan grounds a decided spec into *how to build it against the code*. elicit lands a `thoughts/` doc; that doc is later input to nav-plan.
+
+
+## Diagnostic mode — when the object is a flaw (backward root-cause)
+
+Same engine, object reversed: instead of converging *what X should be* (forward), converge *why X is wrong* (backward). A separate "diagnose" skill would just be a **parallel copy of this convergence engine** (the N+1 anti-pattern) — so diagnosis lives here. The 6 moves are unchanged; three specialize:
+
+- **Ground the symptom against what's ACTUALLY built — not the design doc's words.** The root cause is usually the **gap between the user's mental model and the real implementation**. *(Real case: the user reached for three handles to drag-derive; the cause was that all three were exactly the ones not built — a working-selection with no grip, an unbuilt derive, a deferred promote.)* Match the symptom to the code; find where expectation and reality diverge.
+- **The named forks are candidate causes, traced against the code.** Erect a few ("A: the guard is inverted · B: state updates out of order · C: the assumption about input X is false"), then narrow by **grounded elimination, not guesswork**. The user often supplies the piercing insight (*"drag conflicts with select"*) — you ground-confirm it (e.g. enumerate that drag is already overloaded: select / create / move / resize).
+- **Drill until the bug reframes from local to structural.** Not "the grip is misplaced" but "drag is a saturated dimension". The reframe **is** the diagnosis.
+- **Canonical first fork for a "feature feels off after building" symptom: direction-wrong (structural) vs incomplete (local).** Is the feature's *direction* wrong (its premise/scope doesn't hold → redesign) or is it just *unfinished* (the concept's fine, a usage path was left undefined → finish it)? The two route to opposite next actions — redesign (`shape-mockup` / forward-elicit) vs finish (`nav-plan` → `shape-build`) — so naming which it is *is* the decision. When the symptom is a half-built feature riddled with cases that don't add up, this is the fork to erect first. **But don't guess at the holes in conversation if they were never enumerated** — *offer* (guarded, one-shot, never auto-call) to run `shape-dogfood` first: it dogfoods the built feature against the user intents and reports the coverage gaps pre-sorted by layer (missing intent = direction · dead-end scenario = incomplete), and that layer-tag is this fork's first input. Grilling a feature's logic from memory is the imagination trap; dogfood grounds it in a hands-on session with the real build before you judge.
+
+Then it flows the same way: converge to a one-line cause + fix-direction; if the fix is visual/structural, hand to `shape-mockup` (e.g. "right-click vs visible button"); hand the rebuild to `shape-build` or a worker (inject↔check). **Read-only — elicit finds the cause and converges the fix-direction; it does not edit the code in place.**
+
+*(Diagnosis vs `nav-audit`: audit is a broad, unconditional smell-scan it runs* for *you; diagnostic-mode elicit is a* specific *flaw you point at and root-cause* with *it.)*
+
+
+## Protocol — a volley loop, not fixed stages
+
+1. **Summoned.** The user calls it. Confirm the one decision in scope (mirror).
+2. **Ground.** Read the real repo region the decision touches (modules, types, constraints; `nav-sync`'s headers + its codebase map if present) so forks are sharp.
+3. **Volley.** Each turn, in one short move: mirror the shift → **scan the reply for stall tells (below)** → drill one layer toward the principle → erect **one** named fork or refutable claim → invite the hit. One sharp thing. Apply friction; don't agree to advance.
+
+   **Stall tells — checked on the user's words every turn, before the next fork, never on your own sense of momentum** (you will always believe one more fork would stand — that self-assessment never fires): the user says a variant of *"I've never considered X"*, *"is that even a real thing / a separate concern?"*, *"am I overcomplicating this?"*; asks what a term you used means; picks between forks arbitrarily or flip-flops across turns; or the fork rests on a fact nobody present can state. **A listed tell outranks your read of the moment.** These phrases often *look* like the user having a breakthrough — "am I overcomplicating this?" reads as an aha worth rewarding with a sharper fork — and rewarding it is exactly how the trap closes: they just told you the axis isn't on their map. Tell present → diagnosis mandatory, however promising the momentum feels. Any one of these → **your next reply IS the diagnosis, not a fork**: name which of the three stalls this is (Gatekeeper, above) and — in that same reply — make the matching move: case 1 → one more grounded fork; case 2 → **offer `shape-survey`**; case 3 → **offer `shape-probe`** (offers, never calls; the user may decline and keep volleying). Three escapes that are NOT the honest move: investigating the gap yourself ("let me go read the code first"), erecting a "gut-check" mini-fork about the gap, or deferring the offer to a later turn — each of these is grilling past the tell wearing a different hat. Grilling past a tell is the anti-pattern, not persistence.
+4. **Exit on snap.** The moment the user lands a principle / picks decisively / says "that's it" — **stop**. Do not continue the checklist. Weight-adaptive exit is the core.
+5. **Land the residue (small).** Compress to **one line** — the named principle + the forks decided — and write a `thoughts/<date>-<topic>.md` doc in the `blueprints/` tree, in the progressive-disclosure shape (title + one-line role + ≤3-line TL;DR + sections that lead with their point). Small residue, not a transcript.
+6. **Offer the next step (don't auto-run).** After landing the thought, *offer* — never auto-call — the natural continuation via the Codex interactive chooser (offer-next-action, ADR-007/015). Branches, composed from what the grill actually surfaced:
+
+   **Mid-grill, at the stall point (Gatekeeper) — these two fire *during* the volley, before anything lands, unlike the post-landing branches below:**
+   - **The stall diagnosed as missing terrain** (Gatekeeper case 2) → offer `shape-survey` right there, at the stuck fork, instead of continuing to grill a blank spot.
+   - **The stall diagnosed as an unmeasured fact** (Gatekeeper case 3) → offer `shape-probe` right there, instead of arguing a fork nobody can settle by more words.
+
+   **Post-landing, once the thought is written — the existing branches:**
+   - **The decision turned out render-decidable** (the grill revealed the real fork is *look / layout / how entities relate* — a thing a rendered artifact would settle better than more words) → offer `shape-mockup` to converge it by a real interactive artifact. The drill's job (finding the *right* question) is done; mockup answers it. Don't keep grilling verbally what a render would settle.
+   - **The decision is a recorded `thoughts/` doc** → offer `shape-align` to triage it into `plan.md` (now/next/later). `align` is collaborative, so it runs **in-session** (it needs this conversation's decision), not a clean worker.
+   - **The decision is itself a small, concrete, decided build** (the thought isn't a principle to track but a thing to make now) → offer the execution route: `nav-do` (small · holdable-in-head — its check bracket is the point) or `nav-plan` (bigger / wants a written plan), ADR-028. Weaker edge than mockup's (elicit usually lands a *principle*, not a build) — only when the thought really is a concrete change.
+
+   **Guarded + one-shot:** show the branch(es) that apply, always include a "just leave it, I'll continue later" opt-out, offer the align branch only when a `blueprints/` board exists (or scaffolding one is wanted), and skip the whole thing during rapid-fire elicits — don't nag. Offers, not calls — skills don't invoke each other.
+
+
+## Output
+
+- A `blueprints/thoughts/<date>-<topic>.md` doc: the decided principle (or the confirmed root cause + fix-direction), progressively disclosed (an agent grasps it from `head -12`).
+- That doc is now input to `shape-align` (triaged into the plan) and eventually `nav-plan` (grounded into code). In diagnostic mode it also hands off to `shape-mockup` (visual fix) and `shape-build` or a worker (the rebuild).
+- A guarded, one-shot **offer** to run `shape-align` and triage the new thought in (Step 6) — never an auto-call.
+- Most of the volley itself is discarded — the residue is the one-line principle/cause, not the back-and-forth.
+
+
+## Anti-patterns (refuse these)
+
+| Temptation | Instead — and the tell |
+|---|---|
+| Dump content / race to solve it | Stand up a fork instead — elicit converges by *reaction*; a solved paragraph gives nothing to push on. Tell: the reply is a finished answer instead of a choice to react to. |
+| Agree / flatter to keep it pleasant | Bring friction (refute / restructure) — agreement doesn't advance anything. Tell: the last three turns all validated what the user just said. |
+| Give a wall of prose / an essay per turn | Land one sharp thing per turn — a wall buries the fork. Tell: the turn takes more than a few sentences to reach the actual question. |
+| Stop at the surface framing | Drill to the principle underneath — the real question is usually a layer down. Tell: the fork restates the user's own framing instead of pushing past it. |
+| Ask abstract Socratic questions ungrounded from the repo | Ground the fork in real code — floaty questions are what a generic chatbot does. Tell: the question would be identical for any project, not this one. |
+| Run a fixed question checklist to the end | Exit on the snap, not the list — running the full checklist regardless is the heavyweight-brainstorm sin. Tell: still asking questions after the user has already converged. |
+| Auto-fire on any uncertainty | Stay summoned — grilling unbidden is the anti-feature. Tell: about to start a grill without the user having asked to think something through. |
+| Grill a look / layout / visual-relation decision | Hand off to `shape-mockup` — a render settles it better than argument. Tell: the fork being drawn up is really about how something should look, not what it should be. |
+| Keep a fat transcript as the residue | Land one line + the decided forks as a lean thought — the transcript itself isn't the deliverable. Tell: about to save the raw back-and-forth instead of the distilled outcome. |
+| In diagnostic mode, edit the code to "just fix it" | Stay read-only — converge the cause + fix-direction, then hand the rebuild to `shape-build` or a delegated agent. Tell: about to open an editor to patch the bug mid-diagnosis. |
+| In diagnostic mode, guess the cause without tracing it against the code | Narrow candidate causes by elimination against the actual code — a fork must be grounded, not a hunch. Tell: naming a cause you haven't actually traced through the source. |
+| Grill on when the user is missing a whole axis of the terrain | Diagnose the stall and offer `shape-survey` — a grill against a blank spot is theater, not convergence. Tell: the user's answers keep circling because a whole option they don't know about is missing from the fork. |
+
+
+## Companion skills
+
+- **`shape-mockup`** — the render-converge sibling: for decisions a real interactive artifact makes decidable (look / layout / structure); in diagnostic mode, where a visual fix-direction gets settled.
+- **`shape-dogfood`** — dogfoods a built feature against its user intents and reports the coverage gaps pre-sorted by layer (missing intent = direction · dead-end scenario = incomplete); feeds diagnostic mode's direction-vs-incomplete fork.
+- **`shape-align`** — triages the `thoughts/` docs elicit lands into the plan (now/next/later).
+- **`shape-build`** — in diagnostic mode, takes the confirmed cause + fix-direction and drives the rebuild.
+- **`shape-reconcile`** — retires those `thoughts/` docs once reality absorbs them.
+- **`nav-sync`** — its file headers + codebase map ground the forks (and trace the flaw) cheaply in the real code.
+- **`nav-audit`** — the broad, unconditional smell-scan; diagnostic-mode elicit is the *targeted* root-cause of a specific flaw you point at.
+- **`shape-survey`** — the expert witness for missing terrain: offered mid-grill when the Gatekeeper detects a blind spot the user doesn't have but the world does.
+- **`shape-probe`** — the forensic test for unmeasured facts: offered mid-grill when a fork rests on something nobody has measured yet.
+

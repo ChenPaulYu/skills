@@ -8,19 +8,20 @@ description: "Use a completed feature like a real user via browser or CLI, recor
 
 Take a feature you've built (or roughed out) that **feels off to use but you can't say why**, and **dogfood it** — use your own feature the way a user would, *before* your users do. dogfood drives the built thing firsthand — clicks through it in a browser, hits the endpoint with `curl` — **captures what it sees** (a screen recording, screenshots, the real responses), feels where it snags, and reports the friction back as concrete improvement ideas with the evidence attached. The places you have no smooth path *also* expose the design-logic the feature never covered — so a usability pass doubles as a coverage check.
 
-## Why this skill exists
-
-When something you built "feels unsmooth," the friction is real but **pre-verbal** — you can't name it, so you can't fix it. Reasoning about it from the design doc floats (the same reason `shape-mockup` exists: a description decides nothing — and a *memory* of how your own feature behaves is often wrong). The cheapest way to make the friction nameable is to **use the real thing and record what happens.** dogfood does exactly that: it drives the feature against what users are actually trying to do, captures the run, and turns "this feels off" into "watch this clip — these three spots snag, here's an idea for each, and one of them isn't friction, it's a path you never built."
-
-## Core — everything else derives
+## Stance
 
 > **Core: use the built feature against a list of user intents — drive the REAL interface (agent-browser / `curl` / CLI), never the design doc — and capture the run. Report two kinds of finding: _friction_ (it works but is clunky → a UX idea) and _coverage gap_ (an intent with no path → a logic hole). The evidence is the captured session — a screen recording, screenshots, the actual responses — never a synthesized mockup, and never an unbacked claim.**
 
-Three things derive directly and carry the skill:
+- **Experience-first; logic-coverage is the byproduct.** The design-logic holes aren't found by a separate top-down sweep — they fall out of the session: you try to do something real and there's no coherent path.
+- **Intent-driven, not aimless clicking.** Drive from a short list of *what users are trying to do* — this is what lets hands-on use catch an *absence* (a whole intent with no surface). Enumerate human purposes, not every `state × action` cell.
+- **Every finding is shown, not asserted.** A friction claim carries its screenshot or clip; a backend finding quotes the real response. "Trust me, it's clunky" floats.
+- **Caveat — discount the harness's own artifacts.** The capture rig is not the user's conditions: a headless browser's default viewport is often unusually short/narrow, synthetic fixtures are sparser than real data, a scripted pointer lacks momentum. So a finding can be an artifact of the harness, not the feature. Before routing a finding to a fix, **re-confirm it at realistic conditions** (resize to a normal viewport, use representative data); tag the ones you couldn't reproduce as *suspected-harness-artifact* rather than shipping a fix for a non-problem.
+- **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. Flag it once up front — name the call path and its rough cost knobs (model, turn/fan-out count) — then drive most of the intent list at the feature's own cheapest sufficient setting, reserving one full-cost pass for the final "does it feel right" check.
+- **Render is demoted to an optional hand-off, not the output.** The default deliverable is the evidence-rich friction report; only when a friction idea is big enough to be a *redesign* does it get handed to `shape-mockup`.
+- **Surface and route; never fix in place.** dogfood does not redesign or implement — offer the next step per finding kind, guarded + one-shot, always with a "just leave the report, I'll route later" opt-out.
+- **Lands in a project-local, git-ignored `dogfood/<date>-<feature>/`** — add `dogfood/` to `.gitignore` on first run if missing (mirrors mockup's `mockups/` convention).
 
-- **Experience-first; logic-coverage is the byproduct.** The engine is *using* the feature and feeling the friction. The design-logic holes aren't found by a separate top-down sweep — they **fall out of the session**: you try to do something real and there's no coherent path. UX is the primary lens; coverage is what the lens *also* catches.
-- **Intent-driven, not aimless clicking.** You drive from a short list of *what users are trying to do* — this is what lets hands-on use catch an **absence** (a whole intent with no surface won't snag you if you only poke at what exists; it surfaces as "I tried to do G and there was nowhere to"). Enumerate human purposes, NOT every `state × action` cell — the intent list has a floor; the state-grid is a QA matrix that explodes.
-- **Every finding is shown, not asserted.** A friction claim carries its screenshot or clip; a backend finding quotes the real response. "Trust me, it's clunky" floats — the captured evidence is the point of dogfooding.
+Full session steps, the report shape, the three boundaries (vs `/verify`, `shape-mockup`, `shape-elicit`), storage format, a worked example, and the anti-pattern table: `references/dogfood-protocol.md`.
 
 > **Browser-verify contract (Codex).** When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent. Otherwise execute the identical pass directly in the current session. In either mode, first check for a project browser-verify override; absent one, use `agent-browser`, and verify the chosen helper is present before driving anything.
 >
@@ -31,23 +32,13 @@ Three things derive directly and carry the skill:
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real build** and records it.
 
 1. **List the user intents (the test script).** What is someone *trying to achieve*? — "keep a private copy", "find it again later", "undo without losing context". Include the intents the feature implies but you never designed for; this list is the floor that keeps the session bounded.
-2. **Drive the real interface to attempt each intent, capturing the evidence.** Frontend → the project's browser-verify slot (`agent-browser`): actually click the flow; **screenshot at each friction point and dead-end** — the moments that become findings — not every routine step, and **record video only when the user explicitly asks for it** (verify economy, ADR-058: a capture is evidence, not a progress note; captures go to disk and are referenced by path, never pasted into the chat). Backend / CLI → `curl` the endpoint or run the command and **save the actual request/response**. **Don't reason from the doc or from memory** — a belief about how your own feature behaves is often false; confirm it by doing it.
+2. **Drive the real interface to attempt each intent, capturing the evidence.** Frontend → Driving the frontend uses shape's shared **browser-verify slot** (named default `agent-browser`; detect + fail-helpfully + per-project override): actually click the flow; **screenshot at each friction point and dead-end** — the moments that become findings — not every routine step, and **record video only when the user explicitly asks for it** (verify economy, ADR-058: a capture is evidence, not a progress note; captures go to disk and are referenced by path, never pasted into the chat). Backend / CLI → `curl` the endpoint or run the command and **save the actual request/response**. **Don't reason from the doc or from memory** — a belief about how your own feature behaves is often false; confirm it by doing it.
 3. **Mark friction + gaps against the captures.** Friction = the path *exists* but is clunky (too many steps, unclear feedback, awkward order, a missing affordance) — tie each to its screenshot / clip timestamp. Gap = an intent with *no coherent path* (dead-ends, contradicts, nothing to start with).
 4. **Classify each gap by layer** — missing intent (direction) vs dead-end scenario (incomplete) — so the report shows them distinctly and the hand-off is pre-sorted.
 
 > **Caveat — discount the harness's own artifacts.** The capture rig is not the user's conditions: a headless browser's default viewport is often unusually short/narrow, synthetic fixtures are sparser than real data, a scripted pointer lacks momentum. So a finding can be an **artifact of the harness, not the feature** (field case: "the primary action is below the fold" was true only at the rig's 569px height; at a normal 900px it was fully visible — only the *other* two findings were real). Before routing a finding to a fix, **re-confirm it at realistic conditions** (resize to a normal viewport, use representative data); tag the ones you couldn't reproduce as *suspected-harness-artifact* rather than shipping a fix for a non-problem.
 
 > **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. Flag it once up front — name the call path and its rough cost knobs (model, turn/fan-out count) — then drive most of the intent list at the feature's own cheapest sufficient setting (a mock, or its lowest effort/turn knob), reserving one full-cost pass for the final "does it feel right" check.
-
-## The report — evidence-rich, with ideas (not a mockup)
-
-The output is a **friction report grounded in the captured session** — *not* a rendered mockup of holes. Lead with the evidence; for each finding:
-
-- **Friction** → *where it snagged · what it felt like · one concrete improvement idea*, each **embedding its screenshot** (and a clip timestamp from the recording where there is one).
-- **Coverage gap** → the intent that had no path + its layer tag (direction / incomplete), with the screenshot of the dead-end (or the failing response).
-- **The session recording** (when one was requested and captured) sits at the top of the report so the whole run is watchable end-to-end; by default the evidence is the friction-point stills + saved responses.
-
-**Render is demoted to an optional hand-off, not the output.** When a friction idea is big enough to be a *redesign* (not a tweak), *then* hand it to `shape-mockup` to render the new shape — but the default deliverable is the evidence-rich report, because the felt-unsmooth moment wants to *see* the problem and get ideas, not a fresh artifact to evaluate.
 
 > **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
 >
@@ -63,60 +54,11 @@ dogfood surfaces and reports; it does **not** redesign or implement. Once the re
 
 **Guarded + one-shot:** compose the options from what was actually found, always include a **"just leave the report, I'll route later"** opt-out, and don't re-offer after the pick. Offers, not calls — skills don't invoke each other.
 
-## When it fires — and the three boundaries
-
-**Summoned on a "it feels off / try it / show me where it's clunky" request** about a *built* feature — not auto-fired because a feature got mentioned. Three neighbors to stay clear of:
-
-- **vs `/verify`** — both drive the real app, but the *question* differs: verify asks **"is it correct"** (does this change do what it's supposed to); dogfood asks **"is it smooth, and what's missing"** (design quality, not correctness). A passing verify can still feel awful to use — that gap is dogfood's.
-- **vs `shape-mockup`** — mockup renders a *synthetic candidate* to decide **look / structure** *before* building (or for a redesign); dogfood uses the *already-built* thing to critique its **experience**. They pair across time: mockup the flow → build it → dogfood the result. "Which option looks right" is mockup; "this built thing feels wrong" is dogfood.
-- **vs `shape-elicit`** — elicit drills **one** thing verbally to a principle (residue: one line); dogfood uses **many** intents and reports captured friction (residue: an evidence-rich report). A coverage walk is not a grill — but the *judgement* of an ambiguous gap (direction vs incomplete) hands back to elicit's diagnostic mode.
-
-## Storage & format
-
-Lands in a project-local, **git-ignored** `dogfood/` directory by default — the artifacts are disposable evidence, not source, and the recording can be large, so on first run **add `dogfood/` to the project's `.gitignore`** if it isn't already (mirrors mockup's `mockups/` convention). One **dated topic subfolder** per session: `dogfood/<date>-<feature>/`, holding the **friction report** (`report.md`), the **session recording** (`session.mp4` / `.webm` where captured), the **screenshots** (`shots/`), and **saved responses** (`responses/`). (Exact location is a per-project setting; the default is a git-ignored `dogfood/`.) The report's top states **what feature was dogfooded · the intents driven · a link to the recording · the friction found · the coverage gaps (by layer) · what's been routed**, so an agent grasps it from `head`. Driving the frontend uses shape's shared **browser-verify slot** (named default `agent-browser`; detect + fail-helpfully + per-project override — defined once in `AGENTS.md`); video capture rides whatever that slot supports, falling back to screenshots.
-
-## Example — the move (stack-neutral)
-
-A feature lets users **archive** items to declutter. It shipped; it feels off. Dogfood it — *use it for real, record it*:
-
-- **Intents (the script):** declutter now · find an archived item again later · restore one.
-- **Drive the real app + capture what it hit:**
-  - *Archive an item* → works, but it's **3 clicks deep behind a kebab menu and gives no undo toast** — path exists, clunky → **friction** (screenshot of the buried menu; idea: surface archive on hover + a 5s undo toast).
-  - *Find an archived item again* → **there's no surface that lists archived items at all** — an intent with no path → **coverage gap · direction** (screenshot of the filter bar with no "archived" option; the feature was scoped one-way).
-  - *Restore into a parent since deleted* → the endpoint `curl` returns a 500 → **coverage gap · incomplete** (the saved 500 response; a path left undefined).
-- **Report:** a session clip up top, two friction-or-gap entries each with its shot + the saved 500 response, the "find again" gap tagged *direction*, the restore gap tagged *incomplete*.
-- **Route:** "find again has no entry" → `shape-elicit` ("is archive meant to be one-way? then it's the design, not a hole"); the undo-toast idea → `nav-plan`; the 500 → `nav-plan` to finish.
-
-The session turns "this feels off" into "watch this — archiving is clunky (here's the fix), and two things you can't actually do — one's a direction question, one's just unfinished."
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| Reason about how the feature behaves from the doc / memory | Use the real build (browser / `curl`) — a belief about your own system is often false, and that's the whole engine. Tell: describing a flow's behaviour without having just driven it. |
-| Report friction without showing it | Capture the screenshot / clip / response — "trust me it's clunky" floats, captured evidence is the deliverable. Tell: a friction claim in the report has no attached evidence. |
-| Click around aimlessly | Drive from the intent list — aimless clicking misses the *absent* paths (nothing to stumble on) and only finds shallow friction. Tell: the session has no list of intents it's working through. |
-| Enumerate every `state × action` cell | Use human intents instead — they have a floor; a full state×action matrix is a QA exercise that explodes. Tell: the session is generating combinations instead of walking realistic user goals. |
-| Make rendering a mockup the mandatory output | Render only when a finding is a genuine redesign worth `shape-mockup` — the real output is an evidence-rich report + ideas. Tell: about to build a mockup before any friction has actually been found. |
-| Only report friction, ignore the gaps that fall out | Report and tag both — a clunky path AND an intent with no path at all. Tell: the report lists friction but has no section for missing coverage. |
-| Redesign or implement the fix in place | Surface + route — the redesign is `shape-elicit`/`shape-mockup`, the finish is `nav-plan` + `shape-build`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
-| Confuse it with `/verify` | Keep the question separate — verify checks correctness, dogfood critiques experience + coverage. Tell: the session is checking "does this work" instead of "does this feel right / is anything missing." |
-| Fire on a passing mention of a feature | Wait for a "try it / it feels off / show me where it's clunky" request. Tell: about to start a dogfood session off an incidental mention of a feature, not an actual ask. |
-| Keep going after the feature feels smooth | Exit when friction is captured + named + routed, or the user has what they need. Tell: continuing to poke at a flow after nothing new has surfaced for a while. |
-
-## Output
-
-- **An evidence-rich friction report** in `dogfood/<date>-<feature>/report.md` — a session recording up top when one was requested, then each finding = where it snagged · what it felt like · an improvement idea, embedding its screenshot / response.
-- **The session captures** — `session.mp4`/`.webm` (where supported), `shots/`, `responses/`.
-- **The coverage gaps that fell out**, each tagged by layer (direction vs incomplete) and routed: direction → `shape-elicit`/`shape-mockup`; incomplete → `nav-plan` + `shape-build`.
-- (Optional) a hand-off to `shape-mockup` for any finding big enough to be a *redesign* — not the default.
-- (When the session settles something trackable — e.g. "archive is deliberately one-way") a guarded, one-shot **offer** to run `shape-align` and triage it in — never an auto-call (ADR-007/015).
-
 ## Companion skills
 
 - **`/verify` · `/run`** — dogfood borrows their drive-the-real-app method, but asks a design-quality question, not a correctness one.
-- **`shape-mockup`** — renders a *synthetic* candidate to decide look/structure before building; dogfood uses the *built* result. They pair across time, and dogfood hands a redesign-level finding back to mockup.
-- **`shape-elicit`** — judges an ambiguous coverage gap (direction-wrong vs incomplete) in diagnostic mode; dogfood's layer-tag is its first input.
+- **`shape-mockup`** — renders a *synthetic* candidate to decide look/structure before building; dogfood uses the *built* result. They pair across time.
+- **`shape-elicit`** — judges an ambiguous coverage gap (direction-wrong vs incomplete) in diagnostic mode.
 - **`nav-plan`** — grounds an incomplete gap or a friction tweak into a code-level plan to finish.
 - **`shape-build`** — implements the planned paths.
 - **`shape-align`** — triages a trackable dogfood finding into `plan.md`.

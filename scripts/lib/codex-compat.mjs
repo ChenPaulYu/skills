@@ -189,7 +189,7 @@ export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contrac
 const INTERACTIVE_CHOICE_CONSUMERS = {
   "nav-plan": "### Stage 4 — Offer next action (don't make the user type the next command)",
   "nav-refactor": "### Step 8 — Offer next action (don't make the user type the next command)",
-  "shape-elicit": "6. **Offer the next step (don't auto-run).**",
+  "shape-elicit": "## Offer the next step (don't auto-run)",
   "shape-mockup": "## After the pick — offer the next step: track it · build it (don't auto-run)",
   "shape-dogfood": "## After the session — offer to route the findings (don't fix in place, don't auto-run)",
   "shape-reconcile": "## Offer to re-sync the board (don't auto-run)",
@@ -445,9 +445,9 @@ function genericContractBlock(intro) {
 const WORKER_DISPATCH_SECTIONS = {
   "nav-audit": {
     after:
-      "Each worker returns its domain's findings + self-eval. It does **not** write files (read-only audit). Reconnaissance workers default to cheap tier (the mechanical-tier executor role); a domain whose judgment call is unusually dense can be escalated on the spot (see root AGENTS.md's Dispatch tiers).",
+      "each brief injected per `references/deep-sweep.md`.",
     body: genericContractBlock(
-      "D2's inject and D3–D5's check above are this contract, lowered to Codex vocabulary: each explorer worker's brief IS the work packet below (Scope = its assigned domain's files only; Constraints = read-only, no writes; Verification = read-only greps/finds, never a mutating command); its findings + self-eval IS the worker return below. D3's merge/dedup and D5's completeness critic are the root agent applying the rejection rule at the end of this section — an under-covered or unsupported domain gets re-dispatched, not accepted.",
+      "`references/deep-sweep.md`'s D2 inject and D3–D5 check are this contract, lowered to Codex vocabulary: each explorer worker's brief IS the work packet below (Scope = its assigned domain's files only; Constraints = read-only, no writes; Verification = read-only greps/finds, never a mutating command); its findings + self-eval IS the worker return below. D3's merge/dedup and D5's completeness critic are the root agent applying the rejection rule at the end of this section — an under-covered or unsupported domain gets re-dispatched, not accepted.",
     ),
   },
   "nav-plan": {
@@ -466,9 +466,9 @@ const WORKER_DISPATCH_SECTIONS = {
   },
   "shape-build": {
     after:
-      "The dispatch facility is a **capability slot** (like browser-verify): a workflow/pipeline engine as named default, plain parallel workers otherwise; **no facility → fully sequential. Degrade parallelism, never the gates.**",
+      "Full protocol: `references/parallel-scheduling.md`.",
     body: genericContractBlock(
-      "The per-item loop's step 3 inject/check bullets and this Scheduling section's join gate above are this contract in practice — write workers default to sequential (one item's work packet at a time); a parallel tail is only ever a set of disjoint, pre-approved work packets, never overlapping scope. The step-3 \"check the returned diff\" line and the join gate's full test rerun are the root agent applying the worker return contract before any item counts as done.",
+      "`references/per-item-loop.md`'s step-3 inject/check bullets and the Stance's join gate above are this contract in practice — write workers default to sequential (one item's work packet at a time); a parallel tail is only ever a set of disjoint, pre-approved work packets, never overlapping scope. The step-3 \"check the returned diff\" line and the join gate's full test rerun are the root agent applying the worker return contract before any item counts as done.",
     ),
   },
 };

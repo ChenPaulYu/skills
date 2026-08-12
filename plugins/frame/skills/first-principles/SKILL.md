@@ -5,43 +5,17 @@ description: "Reason a question from first principles: name the conventional ans
 
 # First-principles — strip a question to its axioms, rebuild from them
 
-Take a question, belief, or decision and **reason it from the ground up** — not from "how it's done" or "what's analogous", but from the irreducible truths that survive when every inherited assumption is removed. The point is not to restate the conventional answer in fancier words; it's to **rebuild the answer from axioms** and see *where that rebuilt answer diverges from convention* — because that gap is where first-principles reasoning earns its keep (and where most "we've always done it this way" lives).
+Take a question, belief, or decision and **reason it from the ground up** — not from "how it's done" or "what's analogous", but from the irreducible truths that survive when every inherited assumption is removed. Most reasoning runs on **analogy and convention** ("competitors price per-seat, so we price per-seat") — fast, usually fine, but it silently inherits assumptions that may not hold for *your* problem, and the model's default "think about it" inherits them too. The point is not to restate the conventional answer in fancier words; it's to **rebuild the answer from axioms** and see *where that rebuilt answer diverges from convention* — that gap is where first-principles reasoning earns its keep.
 
-## Why this skill exists
+## Stance
 
-Most reasoning runs on **analogy and convention** — "competitors price per-seat, so we price per-seat", "everyone uses a queue here, so we use a queue". That's fast and usually fine, but it silently inherits assumptions that may not hold for *your* problem. The model's default "think about it" inherits them too — it reasons fluently *from* the convention rather than *underneath* it. first-principles forces the underneath: name what's assumed, cut to what's actually true, and rebuild. The value isn't a smarter-sounding answer; it's a **fixed structure that exposes the assumptions** so they can be challenged — the part default reasoning skips.
+- **Core: name the conventional answer + the assumptions it inherits → strip to the irreducible axioms → rebuild the answer from the axioms alone → surface the divergence.** The output is always those five parts, in order. If you can't separate an axiom from an assumption, you haven't stripped far enough. Every assumption gets the test **"true, or just usually done?"** — an assumption holds because of habit/analogy/market norm and could be otherwise; an axiom is a physical limit, mathematical fact, definition, or verified constraint of *this* problem. Rebuild ignores the conventional path — reason UP from the axioms as if you'd never seen the standard answer; don't reverse-engineer axioms to land back on convention (motivated reasoning, the most common failure). Ground the axioms: an axiom claimed physical/factual must be checkable — verify where you can, mark *uncertain* where you can't.
+- **The forced output, always in-chat** (no file artifact — frame writes none; never write source or make the decision): **Question** — the one-sentence target. **Conventional answer + inherited assumptions** — the default + the named assumptions it rests on (each flagged *convention* / *analogy* / *habit*). **Axioms** — the irreducible truths that survived, each grounded (verified / definitional / *uncertain*). **Rebuilt conclusion** — the answer derived from axioms alone. **Divergence** — where rebuilt ≠ conventional, and what that implies (or "none — convention holds, here's why"). Full step-by-step walk + a worked example: `references/protocol.md`.
+- **Land it in plain words.** Close with one conclusion sentence in zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "axiom", "公理", "first principles" itself (need the concept? say it plainly: "this is structurally unavoidable, not just habit"). Pair it with one analogy, chosen deliberately (borrow `frame:analogize`'s discipline **by protocol, never a call**: weigh it against the alternatives in your head, pick on fit, and — if it's checkable — name in half a sentence where it breaks). The five-part scaffold above stays intact for anyone verifying the reasoning; this step only adds the translation on top of it, never replaces it. Walked, not optional — the analysis isn't done until it's landed.
+- **After the analysis — offer to route it, never decide or auto-run.** first-principles *reasons*; it does not decide or build. Once the note is up, *offer* — never auto-call — via `AskUserQuestion` (offer-next-action, ADR-007/015/057): `/shape:elicit` (converge the divergence into a decision *with the user*) · `/shape:mockup` (render the rebuilt option, when decided by seeing it) · `/nav:do` (execute a small, decided fix — a one-sentence, one-file change you can hold in your head) · `/nav:plan` (ground a bigger/ambiguous rebuilt answer). `/nav:do` vs `/nav:plan` — reuse `do`'s own scoping question: can the fix be stated in one sentence and held in your head? Yes → `do`. Spans many files or still needs decisions → `plan`. (ADR-057) **Guarded + one-shot:** compose from what the analysis actually found, always include a "just leave the note, I'll take it from here" opt-out, don't re-offer after the pick. An offer, not a call — skills don't invoke each other.
+- **When it fires.** Summoned on a "reason this from the ground up / challenge the assumptions" request — not auto-fired because a hard question appeared. **vs `/shape:elicit` (the line to hold):** elicit draws the answer **out of you** by a grounded grill — *you* hold it, elicit is maieutic. first-principles **derives** an answer from the problem's base truths — the agent applies the frame. elicit extracts; first-principles derives. They pair: run first-principles to get a grounded divergence, then `/shape:elicit` to converge it into a decision *with you*. **vs `/frame:orthogonal`:** first-principles decomposes **down** to axioms and rebuilds up (depth); `orthogonal` factors **sideways** into mutually-independent axes (separation). **NOT for auditing an external document's argument** — just ask for a referee-style review; first-principles reasons about *your problem* from scratch, no source text to audit.
 
-## Core — the forced structure (this IS the skill)
-
-> **Core: name the conventional answer + the assumptions it inherits → strip to the irreducible axioms → rebuild the answer from the axioms alone → surface the divergence. The output is always those five parts, in order. If you can't separate an axiom from an assumption, you haven't stripped far enough.**
-
-The discipline that makes it real (not relabelled convention):
-
-- **Every assumption gets the test: "true, or just usually done?"** An assumption is anything that holds because of habit, analogy, market norm, or "that's how X works" — it could be otherwise. An axiom is what *can't* be otherwise here: a physical limit, a mathematical fact, a definition, or a verified constraint of *this* problem. If your "axiom" still smuggles in a convention, cut again.
-- **Rebuild ignores the conventional path.** Reason UP from the axioms as if you'd never seen the standard answer. Don't reverse-engineer the axioms to land back on convention — that's motivated reasoning, the most common failure here.
-- **Ground the axioms.** An axiom claimed as physical/factual must be checkable; verify it where you can, and mark *uncertain* where you can't. A fabricated premise produces a confident wrong answer.
-
-## The walk
-
-1. **State the question sharply.** One sentence — the decision/belief under examination ("should onboarding be a wizard?", "do we need a separate cache service?", "is per-seat the right pricing?").
-2. **Name the conventional answer + its inherited assumptions.** What's the default move, and *why* — list the analogies / norms / habits it rests on, explicitly. ("Per-seat, because SaaS prices per-seat and sales can forecast it" → assumptions: value scales with users · buyers expect per-seat · seats are countable.)
-3. **Strip to axioms.** Remove each assumption that's "because that's how it's done." What irreducible truths remain about *this* problem? (e.g. "the cost we incur scales with compute, not users" · "the buyer is one team with a fixed budget" — facts, not norms.)
-4. **Rebuild from the axioms alone.** Reason up to an answer using only what survived. (e.g. "if cost scales with compute and the buyer has a fixed budget, usage-based pricing tracks value and cost better than per-seat.")
-5. **Surface the divergence.** Where does the rebuilt answer differ from convention? That gap is the finding — name it plainly, and its consequence. **If there's no divergence, say so** ("convention is already first-principles-sound here") — that's a valid, useful result, not a failure.
-6. **Land it in plain words.** Close with one conclusion sentence in zero jargon — banned anywhere in this landing — the conclusion, the analogy, AND its break-note alike: "axiom", "公理", "first principles" itself (need the concept? say it plainly: "this is structurally unavoidable, not just habit"). Pair it with one analogy, chosen deliberately (borrow `frame:analogize`'s discipline **by protocol, never a call**: weigh it against the alternatives in your head, pick on fit, and — if it's checkable — name in half a sentence where it breaks). The five-part scaffold above stays intact for anyone verifying the reasoning; this step only adds the translation on top of it, never replaces it. Walked, not optional — the analysis isn't done until it's landed.
-
-## The output — the five-part structure, always
-
-The output is the **structured reasoning itself, in the conversation** — its shape IS the value (graspable at a glance):
-
-- **Question** — the one-sentence target.
-- **Conventional answer + inherited assumptions** — the default + the named assumptions it rests on (each flagged *convention* / *analogy* / *habit*).
-- **Axioms** — the irreducible truths that survived, each grounded (verified / definitional / *uncertain*).
-- **Rebuilt conclusion** — the answer derived from axioms alone.
-- **Divergence** — where rebuilt ≠ conventional, and what that implies (or "none — convention holds, here's why").
-- **Plain-language landing** — one zero-jargon conclusion sentence + one deliberately-chosen analogy (naming the break-point where checkable), always the last thing said.
-
-Lightweight by default: the analysis stays **in-chat** — frame writes **no file**. Never write source or make the decision. To persist it, route to shape (below).
+Worked example + anti-pattern table: `references/protocol.md`.
 
 ## After the analysis — offer to route it (don't decide, don't auto-run)
 
@@ -55,43 +29,6 @@ first-principles *reasons*; it does not decide or build. Once the note is up, *o
 `/nav:do` vs `/nav:plan` — reuse `do`'s own scoping question: can the fix be stated in one sentence and held in your head? Yes → `do`. Spans many files or still needs decisions → `plan`. (ADR-057)
 
 **Guarded + one-shot:** compose from what the analysis actually found, always include a "just leave the note, I'll take it from here" opt-out, don't re-offer after the pick. An offer, not a call — skills don't invoke each other.
-
-## When it fires — and the boundary that matters most
-
-**Summoned on a "reason this from the ground up / challenge the assumptions" request** — not auto-fired because a hard question appeared.
-
-- **vs `/shape:elicit` (the line to hold):** elicit draws the answer **out of you** by a grounded grill — *you* hold it, elicit is maieutic (`react-not-author`). first-principles **derives** an answer from the problem's base truths — the agent applies the frame, the answer comes from the axioms, not from your gut. **elicit extracts; first-principles derives.** They pair: run first-principles to get a grounded divergence, then `/shape:elicit` to converge it into a decision *with you*. When the question is really "help me surface what *I* already think", that's elicit, not this.
-- **vs `/frame:orthogonal`:** first-principles decomposes **down** to axioms and rebuilds up (depth); `orthogonal` factors **sideways** into mutually-independent axes (separation). The two ways to take a problem apart — reach for `orthogonal` when something feels like one messy thing hiding several independent problems.
-- **NOT for auditing an external document's argument** — just ask for a referee-style review; first-principles reasons about *your problem* from scratch, no source text to audit.
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| Relabel the conventional answer as "first principles" | Keep stripping until every premise passes *true, or just usually done?* — if an axiom still carries a convention, you didn't strip far enough. Tell: the "irreducible axiom" is itself a common industry practice, not a fact. |
-| Reverse-engineer axioms to reach the answer you already wanted | Rebuild *forgetting* the conventional answer and let the axioms lead. Tell: you picked which axioms to list only after knowing where you wanted to land. |
-| Assert an axiom you didn't ground | Verify physical/factual axioms and mark the uncertain ones *uncertain* — a fabricated premise yields a confident wrong answer. Tell: you can't point to why the axiom is true, only that the derivation needs it. |
-| Skip the divergence (just present a tidy derivation) | State the divergence (rebuilt ≠ convention) explicitly — that comparison is the payload, and "no divergence" is a valid result only if said out loud. Tell: the output reads like a derivation with no sentence comparing it back to convention. |
-| Decide or implement here | Reason + route — the decision is `/shape:elicit`, the build is `/nav:plan`. Tell: the reply starts proposing an implementation instead of offering the route. |
-| Fire on any hard question in passing | Wait for an explicit "reason from first principles / challenge the assumptions" request. Tell: about to run the full strip-and-rebuild on a question that was just asked in passing. |
-| End on a jargon sentence ("the axiom is X, so the rebuilt conclusion is Y") | Close with a plain-words conclusion + analogy as the actual last word. Tell: the final sentence needs "axiom" or "first principles" to parse. |
-
-## Example — the move (domain-neutral)
-
-**Question:** "Should our API gateway have a separate rate-limiter service?"
-
-- **Conventional answer + assumptions:** Yes, a dedicated rate-limiter service. *(analogy: big systems have one · habit: "separation of concerns" · convention: the reference architecture shows one.)*
-- **Axioms (grounded):** rate-limiting needs a shared counter with atomic increments *(definitional)* · our traffic is 2k req/s on one region *(verified)* · we already run Redis with atomic ops *(verified)* · a network hop adds ~1ms p50 *(verified)*.
-- **Rebuilt conclusion:** A shared atomic counter is the only hard requirement; Redis already provides it in-process to the gateway. At 2k req/s single-region, a separate service adds a hop and an operational unit for no axiom-level benefit.
-- **Divergence:** Convention says "separate service"; first principles says "a Redis Lua script in the gateway" until traffic spans regions or services. The separate service is solving a *scale* problem we don't have yet — it's inherited from architectures that do.
-
-The note turns "everyone has a rate-limiter service" into "we need a shared atomic counter, which we already have — defer the service until multi-region."
-
-## Output
-
-- **The five-part structure, in-chat** (no file artifact): Question · Conventional answer + assumptions · Axioms (grounded) · Rebuilt conclusion · Divergence. To persist it, route to shape (below).
-- **Plain-language landing, always last:** one zero-jargon conclusion sentence + one deliberately-chosen analogy (ADR-077).
-- A guarded, one-shot **offer** to route the insight — `/shape:elicit` (converge) · `/shape:mockup` (render) · `/nav:do` (execute a small, decided fix) · `/nav:plan` (ground a bigger one) — never an auto-call.
 
 ## Companion skills
 
