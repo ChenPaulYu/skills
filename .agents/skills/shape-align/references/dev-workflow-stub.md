@@ -26,7 +26,7 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 | Drive the in-progress board to done | `shape-build` |
 | Behaviour-preserving structural move | `nav-refactor` |
 | Re-sync file-top headers after restructuring | `nav-sync` |
-| Regenerate / render the repo map | `nav-map` → `docs/codebase-map/index.html` |
+| Regenerate / render the repo map | `nav-sync` (map leg) → `docs/codebase-map/index.html` |
 | Audit architecture | `nav-audit` |
 
 **Standing pointers:** plan board = `docs/blueprints/plan.md` (agent AND human — a visual view renders on demand via `shape-mockup`) · grounded plans = `docs/blueprints/plans/` · repo map = `docs/codebase-map/index.html`.

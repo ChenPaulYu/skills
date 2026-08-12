@@ -129,7 +129,7 @@ The design decisions this work introduces that should have **one owner** (not be
 | <e.g. brand palette> | <e.g. `@theme` color tokens in `index.css`> |
 | ... | ... |
 
-**Naming an owner is not adopting it — pair each new owner with an explicit adoption step + a check.** If a phase *creates* a new owner (a primitive, a shared helper, a token home) that supersedes a pattern currently hand-rolled in N places, the plan must also contain the phase that **rewires those N call sites onto it** — and a Verification line that the owner actually has callers (e.g. `grep -r run_with_fallback src/ | wc -l` > 0). This is the failure mode a verbatim-move refactor invites: `/nav:refactor` will faithfully *carry the old hand-rolled pattern along* unless a step explicitly adopts the new owner, leaving the "owner" as dead code that only a later whole-repo grounding pass (`/nav:map`) catches. Don't let the table assert an adoption that no phase performs.
+**Naming an owner is not adopting it — pair each new owner with an explicit adoption step + a check.** If a phase *creates* a new owner (a primitive, a shared helper, a token home) that supersedes a pattern currently hand-rolled in N places, the plan must also contain the phase that **rewires those N call sites onto it** — and a Verification line that the owner actually has callers (e.g. `grep -r run_with_fallback src/ | wc -l` > 0). This is the failure mode a verbatim-move refactor invites: `/nav:refactor` will faithfully *carry the old hand-rolled pattern along* unless a step explicitly adopts the new owner, leaving the "owner" as dead code that only a later whole-repo grounding pass (`/nav:sync`'s map leg) catches. Don't let the table assert an adoption that no phase performs.
 
 ## Verification
 

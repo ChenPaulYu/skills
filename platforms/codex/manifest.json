@@ -63,7 +63,7 @@
     },
     "research": {
       "summary": "Reasoning frames and document research.",
-      "skills": ["frame-*", "research-*"]
+      "skills": ["frame-*"]
     },
     "collaboration": {
       "summary": "Relay coordination and session reflection.",
@@ -104,7 +104,7 @@
     {
       "id": "worker_dispatch",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 adds the concrete supervision/dispatch machinery on top: scripts/lib/codex-compat.mjs#injectWorkerDispatchContract appends a 'Worker dispatch contract (Codex)' section — the canonical work-packet contract (#CODEX_WORK_PACKET_CONTRACT: goal / scope+owned files / inputs+source of truth / constraints / done_when / verification commands / base SHA / return schema) and worker return contract (#CODEX_WORKER_RETURN_CONTRACT: status done|partial|blocked / files changed / diff summary / commands+results / assumptions / unresolved risks / current SHA) — to the five dispatch-heavy skills (nav-audit, nav-plan, nav-refactor, research-dissect, shape-build), each referencing that skill's own existing inject/check prose rather than duplicating it.",
+      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 adds the concrete supervision/dispatch machinery on top: scripts/lib/codex-compat.mjs#injectWorkerDispatchContract appends a 'Worker dispatch contract (Codex)' section — the canonical work-packet contract (#CODEX_WORK_PACKET_CONTRACT: goal / scope+owned files / inputs+source of truth / constraints / done_when / verification commands / base SHA / return schema) and worker return contract (#CODEX_WORKER_RETURN_CONTRACT: status done|partial|blocked / files changed / diff summary / commands+results / assumptions / unresolved risks / current SHA) — to the four dispatch-heavy skills (nav-audit, nav-plan, nav-refactor, shape-build), each referencing that skill's own existing inject/check prose rather than duplicating it.",
       "source_signals": [
         {
           "id": "agent_call",
@@ -137,7 +137,6 @@
         ".agents/skills/nav-audit/SKILL.md",
         ".agents/skills/nav-plan/SKILL.md",
         ".agents/skills/nav-refactor/SKILL.md",
-        ".agents/skills/research-dissect/SKILL.md",
         ".agents/skills/shape-build/SKILL.md"
       ],
       "agents": [
@@ -186,7 +185,6 @@
         "> **Mechanical-tier skill.**"
       ],
       "contract_consumers": [
-        ".agents/skills/nav-map/SKILL.md",
         ".agents/skills/relay-digest/SKILL.md",
         ".agents/skills/shape-align/SKILL.md",
         ".agents/skills/shape-reconcile/SKILL.md"

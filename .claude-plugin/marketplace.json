@@ -8,20 +8,14 @@
     {
       "name": "nav",
       "source": "./plugins/nav",
-      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers), map (bilingual codebase HTML), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
-      "version": "0.12.0"
+      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers, plus the bilingual codebase map as its map leg), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
+      "version": "0.13.0"
     },
     {
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), position (canon-authoring campaign → core docs), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
       "version": "0.14.0"
-    },
-    {
-      "name": "research",
-      "source": "./plugins/research",
-      "description": "Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers (a paper is the most common instance, not the definition). Dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of documents relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), or critique a document adversarially into a referee report (claim↔evidence audit + self-attack).",
-      "version": "0.7.0"
     },
     {
       "name": "frame",

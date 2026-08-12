@@ -1,6 +1,6 @@
 ---
 name: tour
-description: "Guide a user through what the current codebase does, how its main parts cooperate, and which recorded decisions shaped it — then reconcile the agent's model with the user's corrections. Two modes: a quick two-turn reconcile (default), and a summoned deep teach-converge loop (layered teaching + reverse quizzes, iterated until the two models converge). Use for conversational codebase walkthroughs, onboarding, or shared-understanding checks. Read-only and in-chat; not a map refresh (/nav:map), a work-status catchup (/reflect:catchup), or a pre-decision survey (/shape:survey)."
+description: "Guide a user through what the current codebase does, how its main parts cooperate, and which recorded decisions shaped it — then reconcile the agent's model with the user's corrections. Two modes: a quick two-turn reconcile (default), and a summoned deep teach-converge loop (layered teaching + reverse quizzes, iterated until the two models converge). Use for conversational codebase walkthroughs, onboarding, or shared-understanding checks. Read-only and in-chat; not a map refresh (/nav:sync's map leg), a work-status catchup (/reflect:catchup), or a pre-decision survey (/shape:survey)."
 ---
 
 # tour — a corrected shared system model
@@ -26,7 +26,7 @@ It belongs in `nav` because its object is the already-existing codebase, read-on
 5. **Fit the framework** — describe the system's actual idiomatic shape, not an invented taxonomy over it.
 6. **Rearrange, don't rewrite** — a tour never edits code, plans, or decision artifacts; it only reorganizes existing evidence into a teachable order.
 7. **Below 90% confidence → ask** — a rationale claim without durable evidence is labeled Inferred or Unknown, never asserted as fact.
-8. **Agent-navigability is the audit** — struggling to name a capability or its owning domain is itself a signal the codebase (or its headers) needs `/nav:sync` / `/nav:map`, not a signal to guess harder.
+8. **Agent-navigability is the audit** — struggling to name a capability or its owning domain is itself a signal the codebase (or its headers) needs `/nav:sync` (headers or its map leg), not a signal to guess harder.
 
 ## Mode 1 — quick reconcile (default; fixed two-turn protocol)
 
@@ -87,7 +87,7 @@ Return only:
 2. **更新後共同模型** — the corrected 4–7 statements.
 3. **Unresolved** — facts still requiring source inspection or a user decision.
 
-If an intent/code divergence surfaces, report it — never silently edit code or decision artifacts to match it. Offer the right next door only when useful: `/shape:elicit` for a new decision, `/nav:plan` for an already-decided code change, `/nav:map` when the durable map itself is stale. Offers, never calls.
+If an intent/code divergence surfaces, report it — never silently edit code or decision artifacts to match it. Offer the right next door only when useful: `/shape:elicit` for a new decision, `/nav:plan` for an already-decided code change, `/nav:sync` (map leg) when the durable map itself is stale. Offers, never calls.
 
 ## Mode 2 — deep teach-converge (summoned)
 
@@ -141,7 +141,7 @@ If the user ends after the first response, report that the tour is grounded but 
 
 ## Companion skills
 
-- **`/nav:map`** — writes/refreshes the durable bilingual repo projection; `tour` consumes it when present but never invokes or writes it. Map answers "where is everything?"; tour answers "what model should we now share?"
+- **`/nav:sync`'s map leg** — writes/refreshes the durable bilingual repo projection; `tour` consumes it when present but never invokes or writes it, and routes back to `/nav:sync` when it's stale. Map answers "where is everything?"; tour answers "what model should we now share?"
 - **`/reflect:catchup`** — reconstructs current *work* state (goal/done/now/open/next). `tour` explains the relatively stable *product/system* model, not where today's task stopped.
 - **`/shape:survey`** — maps missing axes before a *decision*. `tour` explains a system that already exists and checks factual/shared understanding of it.
 - **`/shape:elicit`** — converges a *new* principle or decision. `tour` may expose an intent/code divergence but never adjudicates it — offer `/shape:elicit` instead. Mode 2 is elicit's volley engine with the object flipped: elicit converges a decision, tour-deep converges understanding — the natural hand-off pair when a deep tour keeps surfacing decisions.

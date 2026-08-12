@@ -13,10 +13,9 @@
     "nav-plan",
     "relay-digest"
   ],
-  "expect_skill_count": 35,
+  "expect_skill_count": 31,
   "expect_skills": [
     "nav-plan",
-    "research-dissect",
     "shape-build",
     "relay-digest",
     "reflect-catchup",

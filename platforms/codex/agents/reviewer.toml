@@ -4,7 +4,7 @@
 # returns, to re-read its diff and rerun its stated verification commands itself — the
 # concrete mechanism behind "the supervisor never accepts an unsupported done" (Phase 2
 # gate; see the "Worker dispatch contract (Codex)" section injected into nav-audit,
-# nav-plan, nav-refactor, research-dissect, shape-build).
+# nav-plan, nav-refactor, shape-build).
 #
 # `model` is deliberately OMITTED — see executor.toml's header for the full rationale
 # (portable template; personal model mapping lives in platforms/codex/local/).

@@ -67,7 +67,7 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 
 **Summoned on a "steelman / argue both sides / stress-test this idea" request** — not auto-fired because a claim appeared. The tell it's the right lens: a **paradigm-class** question with no standard answer, and you catch yourself sliding from *"this is cool"* straight to *"let me build it"* without having built the opposition.
 
-- **vs `research-critique` (the line to hold):** critique audits an **external document's** argument against the **evidence it already presents** (validated ≠ claimed — claim too big, evidence too small). dialectic stress-tests **your own forming claim**, where the deciding evidence **doesn't exist yet** — that's *why* Missing Evidence and Killer Experiment are rows. One audits evidence that's there; the other designs the evidence that isn't.
+- **NOT for auditing an external document's evidence (the line to hold):** that's a referee-style review — auditing an **external document's** argument against the **evidence it already presents** (validated ≠ claimed — claim too big, evidence too small). dialectic stress-tests **your own forming claim**, where the deciding evidence **doesn't exist yet** — that's *why* Missing Evidence and Killer Experiment are rows.
 - **vs `frame-first-principles`:** first-principles decomposes a question **down** to axioms and rebuilds (the assumption-laddering — surfacing what a claim secretly assumes — lives *there*). dialectic puts a *claim* on **trial**. They hand off: first-principles surfaces the deepest assumption → that assumption becomes dialectic's **Missing Evidence**, the thing the Killer Experiment targets. Don't re-do the laddering here; borrow its output.
 - **vs `frame-orthogonal`:** orthogonal factors a tangle **sideways** into independent axes. dialectic doesn't factor — it adjudicates one claim. The trio: two lenses take a problem *apart* (down / sideways), this one puts a claim *on trial*.
 - **vs `shape-elicit`:** elicit draws the answer **out of you** (maieutic — *you* hold it). dialectic **derives** the strongest case and attack from the claim's own structure (the agent applies the frame). elicit extracts; dialectic tries. They pair: run dialectic to get the trial, then `shape-elicit` to commit the call *with you*.
@@ -110,7 +110,6 @@ dialectic *tries* a claim; it does not decide its fate or build on it. Once the 
 - **`frame-first-principles`** — surfaces the deepest assumption a claim hides (assumption-laddering); its output feeds dialectic's **Missing Evidence**. The depth lens to dialectic's trial.
 - **`frame-orthogonal`** — the separation lens (factor a tangle sideways); the third member of the trio.
 - **`shape-elicit`** — commit the surviving claim into a decision *with the user* (dialectic tries; elicit draws out the call). The pairing partner.
-- **`research-critique`** — when the thing on trial is an *external paper* with evidence already in it, that's critique, not this.
 - **`nav-plan`** — ground a surviving claim into a code-level plan once settled.
 - **`shape-probe`** — runs the Killer Experiment this skill only names: when the verdict is *unsettled — owned bet*, probe designs and runs the minimal experiment that decides it. Guarded offer (ADR-012 pattern); degrades gracefully if `shape` isn't installed.
 

@@ -281,7 +281,7 @@ Domains scanned: <N>/<N> · rounds: <N> (stopped: dry | round-cap) · bounded: <
 2. …
 
 ### Notes
-- This audit is read-only. To act on findings: invoke `nav-refactor` (execute the moves), `nav-sync` (fix file headers where rule ① / ⑧ failed), or `nav-map` (regenerate the codebase map with an embedded audit block — it reads the freshly-synced headers).
+- This audit is read-only. To act on findings: invoke `nav-refactor` (execute the moves) or `nav-sync` (fix file headers where rule ① / ⑧ failed; its map leg regenerates the codebase map with an embedded audit block, reading the freshly-synced headers).
 - For Mode 2 specifically: if you want clarify-and-plan after the gap analysis (not just stop), invoke `nav-plan` — it reuses this audit's output if it ran in the same session.
 - The audit covers shape, not bug correctness. Run tests for the latter.
 ```

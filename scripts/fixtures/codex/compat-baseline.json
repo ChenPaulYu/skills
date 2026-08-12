@@ -123,7 +123,6 @@
           ".agents/skills/nav-do/SKILL.md": "2->0",
           ".agents/skills/nav-plan/SKILL.md": "11->0",
           ".agents/skills/nav-refactor/SKILL.md": "4->0",
-          ".agents/skills/research-dissect/SKILL.md": "15->0",
           ".agents/skills/shape-build/SKILL.md": "2->0",
           ".agents/skills/shape-elicit/SKILL.md": "4->0",
           ".agents/skills/shape-mockup/SKILL.md": "1->0",
@@ -138,7 +137,6 @@
         },
         "model_sonnet": {
           ".agents/skills/nav-audit/SKILL.md": "1->0",
-          ".agents/skills/nav-map/SKILL.md": "2->0",
           ".agents/skills/nav-plan/SKILL.md": "1->0",
           ".agents/skills/relay-digest/SKILL.md": "2->0",
           ".agents/skills/relay-format/SKILL.md": "2->0",
@@ -182,8 +180,6 @@
           "AGENTS.md": "4->0"
         },
         "agent_browser": {
-          ".agents/skills/nav-map/references/map-render.md": "2->retired",
-          ".agents/skills/nav-map/references/visual-spec.md": "2->retired",
           ".agents/skills/nav-refactor/SKILL.md": "1->retired",
           ".agents/skills/shape-build/SKILL.md": "10->retired",
           ".agents/skills/shape-dogfood/SKILL.md": "3->retired",

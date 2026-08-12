@@ -62,7 +62,7 @@ first-principles *reasons*; it does not decide or build. Once the note is up, *o
 
 - **vs `/shape:elicit` (the line to hold):** elicit draws the answer **out of you** by a grounded grill — *you* hold it, elicit is maieutic (`react-not-author`). first-principles **derives** an answer from the problem's base truths — the agent applies the frame, the answer comes from the axioms, not from your gut. **elicit extracts; first-principles derives.** They pair: run first-principles to get a grounded divergence, then `/shape:elicit` to converge it into a decision *with you*. When the question is really "help me surface what *I* already think", that's elicit, not this.
 - **vs `/frame:orthogonal`:** first-principles decomposes **down** to axioms and rebuilds up (depth); `orthogonal` factors **sideways** into mutually-independent axes (separation). The two ways to take a problem apart — reach for `orthogonal` when something feels like one messy thing hiding several independent problems.
-- **vs `/research:dissect`:** dissect anatomizes an *external document's* argument; first-principles reasons about *your problem* from scratch — no source text.
+- **NOT for auditing an external document's argument** — just ask for a referee-style review; first-principles reasons about *your problem* from scratch, no source text to audit.
 
 ## Anti-patterns (refuse these)
 

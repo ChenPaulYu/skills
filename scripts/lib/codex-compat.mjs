@@ -471,16 +471,6 @@ const WORKER_DISPATCH_SECTIONS = {
       "The per-item loop's step 3 inject/check bullets and this Scheduling section's join gate above are this contract in practice — write workers default to sequential (one item's work packet at a time); a parallel tail is only ever a set of disjoint, pre-approved work packets, never overlapping scope. The step-3 \"check the returned diff\" line and the join gate's full test rerun are the root agent applying the worker return contract before any item counts as done.",
     ),
   },
-  "research-dissect": {
-    after:
-      '7. **Return instruction** — tell the worker its final text IS the dissection note (raw markdown). It should return nothing else.',
-    body: [
-      "This inject → read → check protocol above already IS a work-packet/return-contract pair, specialized for document analysis rather than code (no files changed, no diff, no SHA):",
-      "",
-      "- **Goal** = the assigned document + the 5-layer framework (items 1–2 above). **Scope** = read this document only, don't wander into others. **Inputs / source of truth** = the document's own content, never the filename. **Constraints** = don't skim; don't invent the Conclusion. **done_when** = all five sections present and every item in the \"check (←)\" list below passes. **Verification** = the \"check (←)\" list, run by the dispatching agent against the returned note, not by the worker on itself. **Return schema** = the Output format template (item 3 above) — the note IS the return, not a separate status field.",
-      "- The dispatching agent never accepts a returned note at face value: it runs every \"check (←)\" item before saving, and — the document-analysis equivalent of \"reject an unsupported done\" — asks the worker to revise (never silently rewrites it itself) if any item fails.",
-    ].join("\n"),
-  },
 };
 
 /**

@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-08-12 (rev 100)
+  Last audit: 2026-08-12 (rev 101)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -11,9 +11,9 @@
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Six plugins: nav (8 skills) + shape (10 skills) + research (3 skills) +
+    • Five plugins: nav (7 skills) + shape (10 skills) +
       frame (4 skills) + reflect (3 skills) + relay (7 installed skills: six daily + one migration bridge) — see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
-    • nav skills: audit, refactor, sync, map, tour, plan, do, compose
+    • nav skills: audit, refactor, sync (headers + bilingual codebase map, two cadences one door), tour, plan, do, compose
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought), survey (map a decision space in two layers — domain-prior axes
       borrowing frame:orthogonal's independence check by protocol + a
@@ -47,19 +47,6 @@
       doctor (orchestrator) deferred. blueprints/ = artifact convention (not a
       skill); identity = forward motion: intent → form → built+verified code
       (shape/CLAUDE.md + ADR-010/011). nav stays shape-independent.
-    • research skills — object generalized 2026-07-14 from "paper" to "argument
-      document" (a paper is the most common instance, not the definition;
-      ADR-080): dissect (argument anatomy — single or batch; dispatches a
-      sub-agent per document to read in full, inject → read → check per ADR-008;
-      one note per document; forensic mode audits cited-as vs actually-says +
-      identity-from-content), untangle (relational structure across N documents —
-      lineage / clusters / contradictions / contested ground; optional claim-framed
-      positioning feeding shape:position/elicit; ADR-031, renamed+reframed from
-      map), critique (adversarial referee report on one argument document —
-      claim↔evidence audit + self-attack; consumes dissect; missing-decisive-
-      experiment findings hand to shape:probe; ADR-030).
-      research v0.7.0; standalone (no nav/shape dependency).
-      feedback as candidate skill (ADR-027).
     • frame skills (plugin renamed from think): first-principles (decompose DOWN —
       strip to irreducible axioms, rebuild, surface divergence) + orthogonal
       (decompose SIDEWAYS — factor a tangle into mutually-independent axes, verify
@@ -158,16 +145,19 @@
       design record: blueprints/plans/2026-07-22-accord-memory-model.md).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 107 ADRs in docs/adr/ — 001..107 with cross-supersede / refine links
+    • 108 ADRs in docs/adr/ — 001..108 with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
-      per plugin CLAUDE.md) — nav map, shape reconcile + align, relay digest;
-      nav sync deliberately NOT tiered (it authors the
+      per plugin CLAUDE.md) — shape reconcile + align, relay digest;
+      nav has no frontmatter-tiered verb today (map's derived-work rendering
+      folded into sync as its map leg, ADR-108 — that leg's dispatch guidance
+      now lives inside sync's body, not a separate skill's frontmatter tier);
+      nav sync itself deliberately NOT tiered (it authors the
       headers everything else reads; rule ⑧ — describing IS diagnosing); reflect
       has no tiered verb (its former tiered member, summarize, retired ADR-079).
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (38 flat skills: nav-* / reflect-* / relay-* /
-      research-* / shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
+    • Codex mirror: .agents/skills/ (31 flat skills: nav-* / reflect-* / relay-* /
+      shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; `node scripts/build-codex.mjs
@@ -189,7 +179,30 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 100)
+  ⚠ FIXED in this revision (rev 101)
+    1. ADR-108 retires the entire research plugin (critique · dissect · untangle
+       — 11-month record: critique 0 fires, untangle 0 fires, dissect 3; real
+       demand, no behavior delta, the summarize failure ADR-079 named at plugin
+       scale) and folds nav:map back into nav:sync as its map leg (same door,
+       two cadences — ADR-019 merged them, ADR-029 re-split them by cadence,
+       this ADR folds them back after the split door drew 0 direct fires in 11
+       months). This map drops: the research DOMAINS card + CB_NODES node +
+       RES_NODES/RES_EDGES (dissect/untangle/critique nodes + both edges) + the
+       #research-anatomy section + its sidebar link + res_* i18n strings (both
+       languages); the NAV_NODES 'map' node + the 'sync'→'map' and 'map'→'tour'
+       NAV_EDGES (repointed: sync's blurb now states the map leg inline, tour's
+       blurb now names sync's map leg as its sibling instead of map); the
+       install commands' research@skills / plugins/research lines; the
+       LAYERS/ARCH_LAYERS example chip lists' 'map' entry. Per-plugin counts and
+       version tokens updated, both languages: nav 8 → 7 skills (v0.12.0 →
+       v0.13.0). Marketplace total 35 → 31 skills, six plugins → five. ADR
+       count 107 → 108. Cost-tier line: nav map dropped from the frontmatter-
+       tiered list (map's sonnet-tier dispatch guidance now lives inside sync's
+       body per ADR-108, not a separate skill's frontmatter). Codex mirror
+       38 → 31 flat skills (research-* prefix retired; verified against the
+       committed .agents/skills/ listing, 31 entries).
+
+  ⚠ FIXED in rev 100 (kept for history)
     1. ADR-107 retires four skills for zero-usage-evidence / superseded-by-
        adjacent-verb reasons: frame:graft (mature-donor transplant lens),
        shape:setup (project scaffolding), research:provenance (own-citation
@@ -2411,7 +2424,6 @@
     <div class="subhead" data-t="nav_anat_subhead">PLUGIN ANATOMIES</div>
     <a href="#nav-anatomy" class="indent" data-t="nav_navanat">nav <span class="muted">· plugin</span></a>
     <a href="#shape-anatomy" class="indent" data-t="nav_shapeanat">shape <span class="muted">· plugin</span></a>
-    <a href="#research-anatomy" class="indent" data-t="nav_researchanat">research <span class="muted">· plugin</span></a>
     <a href="#conv" data-t="nav_conv">Conventions</a>
     <div class="meta">
       <div data-t="meta_about">Hand-curated · stale = lie. Re-audit when content drifts.</div>
@@ -2432,9 +2444,9 @@
       <h2 data-t="install_title">Install — one source tree, five agents</h2>
       <p class="lede" data-t="install_lede">Two channels: <b>Claude Code</b> and <b>agy</b> import the plugins natively (namespaced <code>/&lt;plugin&gt;:&lt;verb&gt;</code>); <b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> auto-discover the flat mirror <code>.agents/skills/</code>. Shortcut for any harness — tell your agent: <i>“Fetch and follow instructions from <code>https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md</code>”</i>. Or by hand, in Claude Code:</p>
       <pre class="cmd"><code>/plugin marketplace add ChenPaulYu/skills
-/plugin install nav@skills        # + shape@skills · research@skills · frame@skills · reflect@skills</code></pre>
+/plugin install nav@skills        # + shape@skills · frame@skills · reflect@skills</code></pre>
       <p class="lede" data-t="install_agy_lede">In <b>Antigravity CLI</b> (<code>agy</code>) — native Claude Code plugin import, same namespace, no conversion. Clone the repo, then:</p>
-      <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/research · plugins/frame · plugins/reflect</code></pre>
+      <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/frame · plugins/reflect</code></pre>
       <p class="small muted" data-t="install_codex_note"><b>Codex</b>, <b>opencode</b>, and <b>Cursor</b> need no install step inside this repo — all three auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>; no plugin namespace). For global use, run <code>node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots</code>: it creates <code>~/.agents/skills/</code>, installs compiled flat skills there, and syncs only the needed runtime artifacts into <code>~/.codex/</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.</p>
       <p class="small muted" data-t="install_more">Two more routes: the <a href="https://skills.sh/" target="_blank">skills.sh</a> CLI (<code>npx skills add ChenPaulYu/skills</code> — pick the prefixed skill set) and, for Cursor, the native plugin form (each plugin ships a <code>.cursor-plugin/plugin.json</code>; symlink into <code>~/.cursor/plugins/local/</code>). Full guides: <a href="https://github.com/ChenPaulYu/skills#install" target="_blank">README → Install</a>.</p>
       <p class="small muted" data-t="install_note">Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.</p>
@@ -2453,7 +2465,7 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 940 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), and research (read external sources with intent). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup). research is standalone. See ADR-012, ADR-027.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Five plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame), reflect (reflect on the session itself), relay (GitHub-native coordination). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup); the rest are standalone. See ADR-012.</span></div>
     </section>
 
     <section id="rules">
@@ -2498,18 +2510,6 @@
       <div class="callout" data-t="shape_anat_callout">Forward-motion half (nav = maintenance half). Three seams, one-way (shape → nav): blueprints/ hands off to /nav:plan; reconcile reads /nav:sync; build orchestrates /nav:plan + /nav:refactor per item.</div>
     </section>
 
-    <section id="research-anatomy">
-      <h2>
-        <span class="layer-chip foundation" data-t="layer_plugin">plugin</span>
-        <span data-t="res_anat_title">research anatomy — dissect · untangle · critique</span>
-      </h2>
-      <div class="lede" data-t="res_anat_lede">All three of research's skills are shown here — <code>dissect</code> gives the nodes; <code>untangle</code> gives the edges (how the documents relate); <code>critique</code> assesses one argument document adversarially into a referee report.<ul class="anat-list"><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>untangle</b> · the relational structure across N sources — lineage (who builds on whom) / clusters (parallel approaches) / contradictions / contested ground. Reuses dissect notes from <code>notes/</code>. Claim is optional: with it, adds a positioning layer (where your claim sits, the gap, related-work priority). Output: one note in <code>notes/</code>.</li><li><b>critique</b> · adversarially assess one argument document into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027, ADR-030, ADR-031.</div>
-      <div class="graphwrap">
-        <svg class="graph" id="resGraph" viewBox="0 0 400 160"></svg>
-        <div class="panel" id="resPanel"></div>
-      </div>
-      <div class="callout" data-t="res_anat_callout">The unit of analysis is the <b>argument</b>, not the document. Gap/Claim/Mechanism/Evidence makes cross-document comparison possible — lay multiple dissection notes side by side and the prior-art landscape becomes visible. Inject your own claim to get the "Implications" section: what does this document leave open that yours addresses?</div>
-    </section>
 
     <section id="conv">
       <h2 data-t="conv_title">Conventions — load-bearing rules for this marketplace</h2>
@@ -2550,7 +2550,7 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description. Two plugins — shape (forward motion: intent → built+verified code) and nav (navigability, the maintenance half). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup). See ADR-012.",
+    pluginsmap_howread: "click a node for its description. Five plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame), reflect (reflect on the session itself), relay (GitHub-native coordination). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup); the rest are standalone. See ADR-012.",
     rules_title: 'Design rules — the bar every skill clears',
     rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. Every <code>SKILL.md</code> embeds these verbatim; this is the canonical list.',
     map_title: 'Skill list — search & expand',
@@ -2579,7 +2579,6 @@ const T = {
     nav_default_click_label: 'tip',
     nav_default_click_text: 'audit is the read-only source of truth; plan inlines it to ground a spec into a plan artifact. sync refreshes file-top headers (per-file, gated); map renders the repo map (sync offers it at the end). refactor stays standalone. do executes a small behaviour-changing change directly, no plan (refactor twin). Click any node for its role.',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    nav_researchanat: 'research <span class="muted">· plugin</span>',
     shape_anat_title: 'shape anatomy — converge · project · reconcile · build',
     shape_anat_lede: "Skills grouped by verb around a <code>blueprints/</code> hub.<ul class='anat-list'><li><b>converge</b> · <code>mockup</code> (render-to-decide) · <code>elicit</code> (grounded grill → a principle) · <code>survey</code> (map a decision space, report the diff vs your understanding; summoned or offered by elicit; ADR-074) · <code>probe</code> (design + run a minimal experiment when a fork can't be settled by argument; summoned or the destination of frame:dialectic's guarded offer; ADR-075) · <code>dogfood</code> (use the built feature for real → friction + coverage gaps; borrows /verify·/run, ADR-033) · <code>position</code> (canon-authoring campaign → core docs; graduation-grown, mirror of reconcile; ADR-035).</li><li><b>project</b> · <code>align</code> — decide now/next/later WITH the user → <code>plan.md</code> + regenerate <code>overview.html</code> (the mirror of <code>/nav:sync</code>'s map).</li><li><b>reconcile</b> · amend a stale fact in place, prune/consolidate a wholly-stale doc, or retire a shipped-decision mockup (salvage → prune, git = deep archive; ADR-037); write-gated. A decision-change → <code>/shape:elicit</code>.</li><li><b>build</b> · <code>build</code> — drive In-progress to done — per item: ground via <code>/nav:plan</code> → implement → verify (screenshot vs mockup) → ship; autonomous but confidence-gated; parallel only by an approved schedule (ADR-040).</li></ul>",
     shape_anat_callout: "shape is the <b>forward-motion</b> half; <code>nav</code> is the maintenance half. Through-line: converge by a real disposable instance, never a description; its standing form is the blueprints board (one state, two renders — agent reads markdown, human reads the HTML projection), and its terminus is <code>build</code> (the running system, verified vs the mockup, is the third render). Three **hard** seams, one-way (<b>shape → nav</b>): <code>blueprints/</code> → <code>/nav:plan</code>; <code>reconcile</code> ← <code>/nav:sync</code>; <code>build</code> orchestrates <code>/nav:plan</code> + <code>/nav:refactor</code>. nav may **soft-recommend** shape back (guarded, e.g. nav:plan → shape:mockup). See ADR-010/011/012.",
@@ -2587,13 +2586,6 @@ const T = {
     shape_default_role: 'Verb-grouped skills around a blueprints hub: mockup, elicit (converge) · align (project) · reconcile · build (make it real). Click a node for its role.',
     shape_default_click_label: 'tip',
     shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. doctor (orchestrator) is deferred until the family proves out.',
-    res_anat_title: 'research anatomy — dissect · untangle · critique',
-    res_anat_lede: "All three of research's skills are shown here — <code>dissect</code> gives the nodes; <code>untangle</code> gives the edges (how the documents relate); <code>critique</code> assesses one argument document adversarially into a referee report.<ul class='anat-list'><li><b>dissect</b> · decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008 discipline); main agent checks the returned note before saving. Single doc or batch — one note per document. Output saved to <code>notes/</code>.</li><li><b>untangle</b> · the relational structure across N sources — lineage (who builds on whom) / clusters (parallel approaches) / contradictions / contested ground. Reuses dissect notes from <code>notes/</code>. Claim is optional: with it, adds a positioning layer (where your claim sits, the gap, related-work priority). Output: one note in <code>notes/</code>.</li><li><b>critique</b> · adversarially assess one argument document into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log.</li></ul>Standalone — no nav/shape dependency. Candidate skill remaining: <code>feedback</code> (design implications from competitor empirical results). See ADR-027, ADR-030, ADR-031.",
-    res_anat_callout: 'The unit of analysis is the <b>argument</b>, not the document. Gap/Claim/Mechanism/Evidence makes cross-document comparison possible — lay multiple dissection notes side by side and the prior-art landscape becomes visible. Inject your own claim to get the "Implications" section: what does this document leave open that yours addresses?',
-    res_default_h3: 'research plugin anatomy',
-    res_default_role: 'Three skills — dissect (argument anatomy) + untangle (relational structure across sources) + critique (adversarial referee report). Candidate: feedback. Click a node for its role.',
-    res_default_click_label: 'tip',
-    res_default_click_text: 'dissect dispatches a sub-agent per document (inject → read → check, ADR-008). Works on papers, blog posts, competitor analyses, RFCs. The output skeleton is fixed so multiple notes can be compared side by side.',
     leg_decide: 'converge', leg_project: 'project', leg_reconcile: 'reconcile', leg_build: 'build', leg_artifact: 'blueprints (convention)',
     // legend
     leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe', leg_execute: 'execute',
@@ -2627,7 +2619,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述。兩個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)與 nav(可導覽性,維護那半)。shape 硬依賴 nav(shape → nav —— 連線標出來了);nav 可軟推薦回 shape(guarded offer,如 nav:plan → shape:mockup)。見 ADR-012。',
+    pluginsmap_howread: '點 node 看描述。五個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)、nav(可導覽性,維護那半)、frame(套用具名的思考框架)、reflect(對 session 自身的反身)、relay(GitHub 原生協作)。shape 硬依賴 nav(shape → nav —— 連線標出來了);nav 可軟推薦回 shape(guarded offer,如 nav:plan → shape:mockup);其餘獨立。見 ADR-012。',
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -2654,7 +2646,6 @@ const T = {
     nav_default_click_label: '提示',
     nav_default_click_text: 'audit 是唯讀的真理之源;plan 內嵌它、把 spec ground 成 plan 檔。sync 刷新檔首 header(每檔、gated);map 渲染 repo map(sync 結尾會 offer)。refactor 維持獨立。do 直接執行一個小的、會改變行為的變更,不寫 plan(refactor 雙生)。點任一 node 看角色。',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    nav_researchanat: 'research <span class="muted">· plugin</span>',
     shape_anat_title: 'shape 解剖 —— 收斂 · 投影 · 對賬 · build',
     shape_anat_lede: '依動詞分組,圍著 <code>blueprints/</code> hub。<ul class="anat-list"><li><b>收斂</b> · <code>mockup</code>(render 即決策)· <code>elicit</code>(grounded grill → 一條原則)· <code>survey</code>(測繪決策空間,回報跟你認知的差集;召喚或被 elicit offer;ADR-074)· <code>probe</code>(當分岔吵不出結果時設計並跑一個最小實驗;召喚或是 frame:dialectic guarded offer 的目的地;ADR-075)· <code>dogfood</code>(親自用 built feature → 摩擦 + coverage gap;借 /verify·/run,ADR-033)。</li><li><b>投影</b> · <code>align</code> —— 跟 user 定 now/next/later → <code>plan.md</code> + 重生 <code>overview.html</code>(<code>/nav:sync</code> 的 map 對應)。</li><li><b>對賬</b> · <code>reconcile</code> —— 就地 amend 過時事實,prune/合併整份過時的,或退役已 ship 決策的 mockup(salvage → prune,git = deep archive;ADR-037);write-gated。決定變了 → <code>/shape:elicit</code>。</li><li><b>build</b> —— 把 In-progress 跑到清空:每 item /nav:plan ground → implement → verify(截圖對 mockup)→ ship;自動但 confidence-gated;平行只憑核准排程(ADR-040)。</li></ul>',
     shape_anat_callout: 'shape 是<b>往前推</b>那半;<code>nav</code> 是維護那半。Through-line:用真實、可丟的 instance 收斂,不用描述;常駐形式是 blueprints 看板(單一現況、兩種 render —— agent 讀 markdown,人讀 HTML 投影),終點是 <code>build</code>(跑起來、對 mockup 驗過的系統,是第三種 render)。三條**硬**縫、單向(<b>shape → nav</b>):<code>blueprints/</code> → <code>/nav:plan</code>;<code>reconcile</code> ← <code>/nav:sync</code>;<code>build</code> 編排 <code>/nav:plan</code> + <code>/nav:refactor</code>。nav 可**軟推薦**回 shape(guarded,如 nav:plan → shape:mockup)。見 ADR-010/011/012。',
@@ -2662,13 +2653,6 @@ const T = {
     shape_default_role: '依動詞分組、圍著 blueprints hub:mockup、elicit(收斂)· align(投影)· reconcile · build(做出來)。點 node 看角色。',
     shape_default_click_label: '提示',
     shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。doctor(orchestrator)等家族成熟再加。',
-    res_anat_title: 'research 解剖 —— dissect · untangle · critique',
-    res_anat_lede: "research 現有的三個 skill 都畫在這裡 —— <code>dissect</code> 給節點;<code>untangle</code> 給邊(文件怎麼關聯);<code>critique</code> 把一份論證型文件對抗式評估成 referee report。<ul class='anat-list'><li><b>dissect</b> · 把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008 紀律);主 agent 確認後存檔。單篇或批量 —— 每份文件一個 note。output 存 <code>notes/</code>。</li><li><b>untangle</b> · 一批文獻的關係結構 —— lineage(誰建在誰上)/ cluster(平行做法)/ contradiction(誰駁誰)/ contested ground(還在爭的)。reuse <code>notes/</code> 的 dissect 筆記。claim 可選:給了就多一層定位(你坐在哪、gap、related-work 優先序)。output:一份 <code>notes/</code> note。</li><li><b>critique</b> · 把一篇論文對抗式評估成 referee report —— claim↔evidence 審計(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。兩個耦合核心:把攻擊面 ground 到能重算的深度,再反駁。consume dissect;rating 留給評審本人。output:分析底稿 + review draft + cut-log。</li></ul>獨立運作 —— 不依賴 nav 或 shape。候選 skill:<code>feedback</code>(從競品實驗結果萃取設計意涵)。見 ADR-027、ADR-030、ADR-031。",
-    res_anat_callout: '分析單位是<b>論證</b>,不是文件。Gap/Claim/Mechanism/Evidence 讓跨文件比較成為可能 —— 把多份 dissect 筆記並排,先行研究的全景就浮現了。注入你自己的 claim 以得到「意義」段落:這份文件留下了什麼空白,正是你的 claim 要填的?',
-    res_default_h3: 'research plugin 解剖',
-    res_default_role: '三個 skill —— dissect(論證解剖)+ untangle(來源間的關聯結構)+ critique(對抗式 referee report)。候選:feedback。點 node 看角色。',
-    res_default_click_label: '提示',
-    res_default_click_text: 'dissect 每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008)。適用論文、部落格、競品分析、RFC。骨架固定,多份筆記可並排比較。',
     leg_decide: '收斂', leg_project: '投影', leg_reconcile: '對賬', leg_build: '做出來', leg_artifact: 'blueprints(約定)',
     leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述', leg_execute: '執行',
     leg_plugin: 'plugin',
@@ -2679,13 +2663,13 @@ const T = {
 const LAYERS = [
   {cls:'ui', name:{en:'Marketplace', zh:'Marketplace'}, tag:{en:'the container — identity from GitHub username', zh:'容器 —— 身份來自 GitHub 帳號'}, doms:['skills']},
   {cls:'state', name:{en:'Plugin', zh:'Plugin'}, tag:{en:'a topical family of skills', zh:'一個主題家族的 skills'}, doms:['nav']},
-  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','map','plan','do','compose']},
+  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','plan','do','compose']},
 ];
 
 const ARCH_LAYERS = [
   {cls:'ui', label:{en:'MARKETPLACE', zh:'MARKETPLACE'}, desc:{en:'<code>skills/</code> — the personal collection. <code>.claude-plugin/marketplace.json</code> lists which plugins live inside. Identity comes from the GitHub username (<code>ChenPaulYu/skills</code>), not the folder name.', zh:'<code>skills/</code> —— 個人收藏。<code>.claude-plugin/marketplace.json</code> 列出內含的 plugins。身份來自 GitHub 帳號(<code>ChenPaulYu/skills</code>),不是資料夾名。'}},
   {cls:'state', label:{en:'PLUGIN', zh:'PLUGIN'}, desc:{en:'<code>plugins/&lt;family&gt;/</code> — one topical family. <code>.claude-plugin/plugin.json</code> declares the plugin; <code>CLAUDE.md</code> holds its dev conventions; <code>skills/</code> holds the verbs.', zh:'<code>plugins/&lt;family&gt;/</code> —— 一個主題家族。<code>.claude-plugin/plugin.json</code> 宣告 plugin;<code>CLAUDE.md</code> 是開發約定;<code>skills/</code> 放動詞。'}},
-  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','sync','map','plan','do','compose']},
+  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','sync','plan','do','compose']},
 ];
 
 const ARCH_CONN = [
@@ -2708,13 +2692,12 @@ const DOMAINS = {
   nav: {
     layer: 'state',
     path: 'plugins/nav/',
-    blurb: {en:'Keep any codebase navigable as it grows. 8 skills, one verb each. Language-agnostic. audit gains the root-flatness check — a flat pile of loose modules at source root with unfoldered families is a composition failure (the inverse of the barrel check). v0.12.0; see <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。8 個 skill,各一動詞。跨語言。audit 新增 root-flatness 檢查——套件根一大攤鬆散模組、家族沒有房間 = 組合失敗(barrel 檢查的反面)。v0.12.0;plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
+    blurb: {en:'Keep any codebase navigable as it grows. 7 skills, one verb each. Language-agnostic. audit gains the root-flatness check — a flat pile of loose modules at source root with unfoldered families is a composition failure (the inverse of the barrel check). sync now covers both file-top headers (per-file, continuous) and the bilingual codebase map (per-repo, periodic) — two cadences, one door (ADR-108, folding the ADR-029 split back). v0.13.0; see <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。7 個 skill,各一動詞。跨語言。audit 新增 root-flatness 檢查——套件根一大攤鬆散模組、家族沒有房間 = 組合失敗(barrel 檢查的反面)。sync 現在同時涵蓋檔首 header(每檔、連續)與雙語 codebase map(每 repo、週期)——兩種 cadence、一道門(ADR-108,把 ADR-029 的拆分折回去)。v0.13.0;plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
     files: [
       ['/nav:audit', '', {en:'★ Assess codebase shape against the 8 rules — unconditional health, or read-only quick-check against a target spec. Read-only.', zh:'★ 對照 8 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。'}],
       ['/nav:refactor', '', {en:'★ Structural refactor: verbatim move + test gate after every step + real-app pass at the end. Behaviour stays identical.', zh:'★ 結構重構:原文搬移 + 每步 test gate + 結尾真實 app pass。行為完全不變。'}],
-      ['/nav:sync', '', {en:'Refresh file-top headers (any language, <code>head -12</code> = role + key deps) inline against the code, gated diff — per-file navigability, continuous/per-change cadence. Keeps <code>references/header-render.md</code>; offers <code>/nav:map</code> at the end. Headers-only since the cadence re-split (ADR-029, superseding the ADR-019 one-door merge).', zh:'就地把檔首 header(任何語言,<code>head -12</code> 即角色 + 關鍵依賴)對 code 刷新、gated diff —— 每檔可導覽,連續/隨改的 cadence。保留 <code>references/header-render.md</code>;結尾 offer <code>/nav:map</code>。依 cadence 再拆後只做 header(ADR-029,supersede ADR-019 的一道門合併)。'}],
-      ['/nav:map', '', {en:'Render the per-repo codebase map — the bilingual <code>docs/codebase-map/index.html</code> (anatomy graphs + click-to-reveal + audit block). Periodic/batched cadence; reads the headers <code>/nav:sync</code> maintains. Owns <code>references/map-render.md</code> + <code>visual-spec.md</code>. Split out of sync by cadence (ADR-029). Onboarding chat trigger moved to <code>/nav:tour</code>.', zh:'渲染 per-repo 的 codebase map —— 雙語 <code>docs/codebase-map/index.html</code>(anatomy 圖 + click-to-reveal + audit block)。週期/批次 cadence;讀 <code>/nav:sync</code> 維護的 header。擁有 <code>references/map-render.md</code> + <code>visual-spec.md</code>。依 cadence 從 sync 拆出(ADR-029)。對話式 onboarding 的觸發移交給 <code>/nav:tour</code>。'}],
-      ['/nav:tour', '', {en:'Guide a conversational walkthrough of what the codebase does, how it works, and why — every rationale claim labeled Recorded/Inferred/Unknown, never invented. Ends the first turn by proposing a falsifiable shared model and asking the user to correct it; the second turn returns the classified alignment delta. Read-only, in-chat, no durable artifact — <code>/nav:map</code>\'s conversational sibling by consumption, not invocation. ADR-082.', zh:'帶一段對話式導覽,說明 codebase 做什麼、怎麼運作、為什麼 —— 每個「為什麼」都標 Recorded/Inferred/Unknown,不編歷史。第一輪結尾提出可證偽的共同理解,請使用者糾正;第二輪回報分類過的認知差集。唯讀、限對話、不留檔 —— 是 <code>/nav:map</code> 的對話手足(消費、不呼叫)。ADR-082。'}],
+      ['/nav:sync', '', {en:'Keep a codebase navigable at both scales, one door, two legs: re-sync file-top headers (any language, <code>head -12</code> = role + key deps) inline against the code, gated diff — per-file navigability, continuous/per-change cadence; or render the bilingual codebase map (<code>docs/codebase-map/index.html</code>, anatomy graphs + click-to-reveal + audit block) — per-repo navigability, periodic/batched cadence, reads the maintained headers. Keeps <code>references/header-render.md</code> + <code>references/map-render.md</code> + <code>visual-spec.md</code>. ADR-108 folds the two legs back into one door (ADR-019 merged them, ADR-029 re-split them by cadence, the split door drew 0 direct fires in 11 months).', zh:'一道門、兩條腿,兩種尺度都可導覽:就地把檔首 header(任何語言,<code>head -12</code> 即角色 + 關鍵依賴)對 code 刷新、gated diff —— 每檔可導覽,連續/隨改的 cadence;或渲染雙語 codebase map(<code>docs/codebase-map/index.html</code>,anatomy 圖 + click-to-reveal + audit block)—— 每 repo 可導覽,週期/批次 cadence,讀維護中的 header。擁有 <code>references/header-render.md</code> + <code>references/map-render.md</code> + <code>visual-spec.md</code>。ADR-108 把兩條腿折回一道門(ADR-019 曾合併、ADR-029 依 cadence 再拆、拆出去的門 11 個月零直接呼叫)。'}],
+      ['/nav:tour', '', {en:'Guide a conversational walkthrough of what the codebase does, how it works, and why — every rationale claim labeled Recorded/Inferred/Unknown, never invented. Ends the first turn by proposing a falsifiable shared model and asking the user to correct it; the second turn returns the classified alignment delta. Read-only, in-chat, no durable artifact — <code>/nav:sync</code>\'s map leg\'s conversational sibling by consumption, not invocation. ADR-082.', zh:'帶一段對話式導覽,說明 codebase 做什麼、怎麼運作、為什麼 —— 每個「為什麼」都標 Recorded/Inferred/Unknown,不編歷史。第一輪結尾提出可證偽的共同理解,請使用者糾正;第二輪回報分類過的認知差集。唯讀、限對話、不留檔 —— 是 <code>/nav:sync</code> map leg 的對話手足(消費、不呼叫)。ADR-082。'}],
       ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session. Stage 4 offers execution + a guarded /shape:mockup visual summary (ADR-012). Writes into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/), so the grounded plan co-locates with the intent — ADR-017.', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。Stage 4 offer 執行 + 一個 guarded 的 /shape:mockup 視覺 summary(ADR-012)。有 blueprints/ 樹時寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/),讓 grounded plan 跟 intent 同處 —— ADR-017。'}],
       ['/nav:do', '', {en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md artifact. Deep-module/header/N+1 awareness throughout + a thin bracket: inject (head -12 + reuse-grep) → execute → check (header · N+1 · unconditional verify gate · board sync: a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The inject↔check sub-agent discipline (ADR-008) as a standalone verb; refactor twin (refactor preserves behaviour, do changes it) — ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不留 plan.md。全程 deep-module/header/N+1 awareness + 一道薄 bracket:inject(head -12 + reuse-grep)→ execute → check(header · N+1 · 無條件 verify gate · board sync:出貨若關掉 blueprints/plan.md 某條目,同 commit 更新它,ADR-086)。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞;refactor 雙生(refactor 保行為,do 改行為)—— ADR-023。'}],
       ['/nav:compose', '', {en:'Author or restructure a PROSE document as a deep module — lead with the point (head-able top), one fact one owner (link, don\'t restate), group by knowledge not chronology, right grain. Two modes (author from intent/notes · restructure an existing draft verbatim), diff-gated. The prose-document sibling of <code>/nav:sync</code>: sync = the header line atop a CODE file, compose = the body of a file that IS prose. Deep-prose extracted as the single owner its many consumers (shape · reflect · research · the ADRs · the forthcoming relay) were missing — the N+1 trigger. The self-sufficient writing door: document structure + the durable sentence keystones distilled inline; the bulky/volatile long-tail (grammar, misused-words, the perishable AI-tell list) stays in the optional external writing-clearly-and-concisely. ADR-049.', zh:'把一份 PROSE 文件 author 或 restructure 成 deep module —— 先講重點(head 得到的開頭)、一事一主(連結、不重抄)、按知識而非時序分組、right grain。兩種模式(從意圖/筆記 author · 把現有草稿逐字 restructure),diff-gated。<code>/nav:sync</code> 的文件版手足:sync = CODE 檔頂那行 header,compose = 一個本身就是 prose 的檔的全身。把 deep-prose 抽成單一擁有者(shape · reflect · research · ADR · 即將到來的 relay 等消費者本來各自重述)—— N+1 trigger。自足的寫作門:文件結構 + 就地萃取的耐久句子原則;笨重/會過期的長尾(文法、誤用字、會過時的 AI 字清單)留在可選的外部 writing-clearly-and-concisely。ADR-049。'}],
@@ -2735,16 +2718,6 @@ const DOMAINS = {
       ['/shape:elicit', '', {en:'Converge a conceptual question by a summoned grounded grill — AI proposes refutable structure, you refine/pick, a volley lands a one-liner as a thoughts/ doc. One engine, two objects: a forward decision ("what should X be") OR a backward root-cause ("why is X wrong" — diagnostic mode: symptom vs real impl → candidate causes → reframe local→structural). Core: weight-adaptive exit. Gatekeeper (ADR-076): when a volley stalls, diagnoses fuzzy-but-known (keep grilling) vs missing terrain (offer /shape:survey) vs unmeasured fact (offer /shape:probe) — the ruling never leaves elicit. Sibling of mockup; render-decidable → mockup; broad smell-scan → /nav:audit.', zh:'用召喚式的 grounded grill 收斂概念問題 —— AI 立結構、你 refine/挑,一場 volley 把一句話落成 thoughts/。一個引擎、兩種對象:forward decision(X 該是什麼)或 backward root-cause(X 為什麼錯 —— diagnostic mode:症狀對真實作 → 候選病因 → 局部 reframe 成結構)。Core:weight-adaptive exit。守門人(ADR-076):volley 卡住時,分辨你有但糊(續 grill)vs 缺地形(offer /shape:survey)vs 誰都沒測過(offer /shape:probe)—— 裁決權絕不離開 elicit。mockup 的姊妹;render 能定的 → mockup;廣掃 smell → /nav:audit。'}],
       ['/shape:survey', '', {en:"Map a decision space before deciding it: build the full map in two layers — domain-prior axes (orthogonal's independence check, borrowed by protocol) + a reality-diff layer grounded in the repo at file:line — then report the DIFF vs your stated understanding (missing whole axis vs missing point on an axis), filling small gaps in place and OFFERING /frame:analogize or deep-research for big ones. Two entrances: summoned directly, or offered by /shape:elicit mid-grill when it detects a blind spot. NOT /nav:map (repo structure), NOT deep-research (external report), NOT elicit (draws out what you know). ADR-074.", zh:"決定前先測繪決策空間:雙層建完整地圖 —— 領域先驗軸(借 orthogonal 的獨立性驗收,依協定借用)+ 對 repo 落實的現實落差層(file:line 級)—— 再回報跟你敘述的差集(缺整條軸 vs 缺軸上一點),小洞就地補、大洞 OFFER /frame:analogize 或 deep-research。兩個入口:直接召喚,或 /shape:elicit grill 卡住偵測到盲點時 offer。NOT /nav:map(repo 結構)、NOT deep-research(外部報告)、NOT elicit(引出你已知的)。ADR-074。"}],
       ['/shape:probe', '', {en:"Design and run a minimal experiment when a fork can't be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment's definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062) for paid-LLM fan-out. Read-only toward product code — only the findings doc persists. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), NOT /shape:dogfood (built-feature friction), NOT /verify (a known change's correctness). ADR-075.", zh:"當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062),處理實驗內的付費 LLM fan-out。對產品 code 唯讀 —— 只有 findings 檔會留下。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。NOT /shape:mockup(用 render 收斂偏好;這用實驗收斂事實)、NOT /shape:dogfood(已建功能的摩擦)、NOT /verify(已知變更的正確性)。ADR-075。"}],
-    ],
-  },
-  research: {
-    layer: 'foundation',
-    path: 'plugins/research/',
-    blurb: {en:"Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers, blog posts; a paper is the most common instance, not the definition. Three skills: dissect (argument anatomy — dispatches a sub-agent per document, inject→read→check, ADR-008; forensic mode audits cited-as vs actually-says) + untangle (relational structure across N documents — lineage / clusters / contradictions / contested ground, optional claim-framed positioning; positioning view feeds shape:position/elicit) + critique (adversarial referee report on one document — claim↔evidence audit + self-attack; missing-evidence findings can hand to shape:probe). Standalone — no nav/shape dependency. Candidate: feedback. v0.7.0; see research/CLAUDE.md + ADR-027/030/031/080.", zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書、部落格文;paper 只是最常見的實例,不是定義。三個 skill:dissect(論證解剖 — 每份文件派發 sub-agent 完整讀取,inject→read→check,ADR-008;forensic mode 稽核「引用的 vs 原文說的」)+ untangle(N 篇文件的關聯結構 — lineage / cluster / contradiction / contested ground,可選 claim 定位;定位視圖餵給 shape:position/elicit)+ critique(對一份文件的對抗式 referee report — claim↔evidence 稽核 + 自我攻擊;缺證據的 finding 可接 shape:probe)。獨立運作,不依賴 nav 或 shape。候選:feedback。v0.7.0;見 research/CLAUDE.md + ADR-027/030/031/080。'},
-    files: [
-      ['/research:dissect', '', {en:'★ Dissect one or more argument documents — paper, RFC, blog post, design proposal, ADR — into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008); main agent checks the returned note before saving. Identity confirmed from content, never the filename. Single doc or batch — one note per document. Optional "Implications for your claim" section. Forensic mode (when the doc is already cited in your notes): audits cited-as vs actually-says, returns the corrected citable form. Output saved to notes/. ADR-080 (generalized object).', zh:'★ 把一篇或多篇論證型文件(論文、RFC、部落格文、設計提案、ADR)拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008);主 agent 確認後存檔。身分從內文驗證,絕不信檔名。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。forensic mode(文件已被你的筆記引用時):稽核「引用的 vs 原文說的」,回傳修正後的可引句式。output 存到 notes/。ADR-080(物件泛化)。'}],
-      ['/research:untangle', '', {en:'★ Untangle how N argument documents relate — lineage (who builds on whom) / clusters / contradictions / contested ground. Claim is optional: with it, adds positioning (where you sit, the gap, related-work priority) — the positioning view feeds shape:position (ratify as canon) and shape:elicit (still converging), offered not called. Reuses dissect notes from notes/. Output: one note. ADR-031 (map→untangle rename + relational reframe), ADR-080 (generalized object + seams).', zh:'★ 把 N 篇論證型文件的關聯理出來 —— lineage(誰建在誰上)/ cluster / contradiction / contested ground。claim 可選:給了就多一層定位(你坐在哪、gap、related-work 優先序)—— 定位視圖餵給 shape:position(拍板成 canon)與 shape:elicit(還在收斂),offer 而非直呼。reuse notes/ 的 dissect 筆記。output:一份 note。ADR-031(map→untangle 改名 + 關係 reframe)、ADR-080(物件泛化 + 下游縫)。'}],
-      ['/research:critique', '', {en:'★ Adversarially assess one argument document (paper, RFC, design proposal, ADR) into a referee report — claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Consumes dissect; grounds deeper on attack surfaces. A missing-decisive-experiment finding can hand to shape:probe (mirrors frame:dialectic\'s bridge), offered not called. The rating stays with the reviewer. Output: analysis note + review draft + cut-log. ADR-030, ADR-080 (generalized object + probe seam).', zh:'★ 把一份論證型文件(論文、RFC、設計提案、ADR)對抗式評估成 referee report —— claim↔evidence 稽核(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。consume dissect;在攻擊面 ground 更深。缺決定性實驗的 finding 可接 shape:probe(鏡像 frame:dialectic 的橋接),offer 而非直呼。rating 留給評審本人。output:分析底稿 + review draft + cut-log。ADR-030、ADR-080(物件泛化 + probe 縫)。'}],
     ],
   },
   frame: {
@@ -2785,9 +2758,8 @@ const DOMAINS = {
 };
 
 const CB_NODES = [
-  {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 8 skills, language-agnostic. audit catches flat-pile roots (ADR pending? no — rule ① recursive). v0.12.0.', zh:'讓既有 code 長大後仍可導覽(post-build)。8 個 skill,跨語言。audit 抓 flat-pile 根目錄。v0.12.0。'}},
+  {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 7 skills, language-agnostic; sync now carries the codebase map as its map leg (ADR-108). audit catches flat-pile roots (rule ① recursive). v0.13.0.', zh:'讓既有 code 長大後仍可導覽(post-build)。7 個 skill,跨語言;sync 現在以 map leg 兼管 codebase map(ADR-108)。audit 抓 flat-pile 根目錄。v0.13.0。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form and build it into running, verified code. Converge (mockup/elicit/survey/probe/position) → dogfood the built result → plan (align) → build, keep honest (reconcile). survey maps a decision space and reports the diff vs your understanding, summoned or offered by elicit (ADR-074); probe designs and runs a minimal experiment when a fork can\'t be settled by argument, summoned or the destination of frame:dialectic\'s guarded offer (ADR-075); elicit is now the gatekeeper — a stalled volley gets diagnosed and offers survey/probe instead of forcing another fork (ADR-076). 10 skills around a blueprints/ convention; doctor (orchestrator) deferred. Depends on nav one-way (shape → nav). position grows canon by ratification, not provenance (ADR-104/106); precedents/ is the durable tier, migrate its upgrade verb (ADR-105). v0.14.0.', zh:'往前推:把意圖給形狀、一路做成跑得起來且驗過的 code。收斂(mockup/elicit/survey/probe/position)→ dogfood 做出來的結果 → 計畫(align)→ build,保持誠實(reconcile)。survey 測繪決策空間、回報跟你認知的差集,召喚或被 elicit offer(ADR-074);probe 設計並跑一個最小實驗,當分岔吵不出結果時,召喚或是 frame:dialectic guarded offer 的目的地(ADR-075);elicit 現在是守門人 —— volley 卡住時先診斷,offer survey/probe 而非硬立下一個 fork(ADR-076)。10 個 skill 圍著 blueprints/ 約定;doctor(orchestrator)待加。單向依賴 nav(shape → nav)。position 靠批准長大、不看出身(ADR-104/106);precedents/ 是 durable 層,migrate 是升級動詞(ADR-105)。v0.14.0。'}},
-  {id:'research', kind:'plugin', x:400, y:150, w:130, link:'research-anatomy', role:{en:'read with intent', zh:'有意圖地閱讀'}, desc:{en:'Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers; a paper is one instance, not the definition. 3 skills (dissect / untangle / critique); feedback as a candidate. Standalone — no nav/shape dependency. v0.7.0.', zh:'對論證型文件的嚴謹審讀與稽核 —— 論文、RFC、設計提案、ADR、白皮書;論文只是一種實例,不是定義。3 個 skill(dissect / untangle / critique);feedback 為候選。獨立,不依賴 nav/shape。v0.7.0。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 3 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075). All 3 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 4th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 3 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.7.0. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。3 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)。3 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 4 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 3 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.7.0。由 think 改名。'}},
   {id:'reflect', kind:'plugin', x:760, y:150, w:120, role:{en:'reflexive', zh:'反身橫切'}, desc:{en:'Reflect on your own working session — the work process itself, not what the other plugins operate on. 3 summoned skills: catchup · park (the single-use cursor — catchup clears it once consumed, ADR-085), and retrace (a corrected causal development path + interactive alignment artifact); planned 4th retro remains evaluative-on-process; summarize retired (ADR-079). Standalone, cross-project. v0.8.0; retrace added ADR-084.', zh:'反思你自己的工作 session —— 工作過程本身,不是其他 plugin 操作的對象。3 個召喚式 skill:catchup · park(一次性游標——catchup 讀完即清,ADR-085)、retrace(校正過的開發因果路徑 + 互動對齊 artifact);規劃中的第 4 個 retro 仍負責評價過程;summarize 已退役(ADR-079)。獨立、跨專案。v0.8.0;retrace 見 ADR-084。'}},
   {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination, following the Accord memory model (ADR-100/101): GitHub owns collaboration objects and enforced state (collaboration memory); Relay additionally owns decisions/, briefs/, and core/ as formal memory. Four objects, clean boundaries — Discussion/Issue/PR/Commit; there is no Announcement object, a tell needing a receipt is an Issue, a fact needing none gets no object. Every closed Issue/Discussion passes a promotion test to a cited, mechanically-superseded Decision file. Issue obligations derive from native stage labels (needs-input/awaiting-acceptance/awaiting-record); reply\'s baton flip and settle\'s promotion signal chain move them natively — no prose parsing. Relay resolves a verified default workspace before routing; its relay.yml roster is PR-attested identity data used by report for recipient resolution, while digest never reads it. digest\'s notices tier is now the default landing spot for almost every plain mention; the LEGACY [ACK]-titled-Discussion compatibility path retired 2026-07-22 with zero live legacy objects remaining. launch persists the verified default workspace, initializes/updates relay.yml through reviewed PRs, and installs/audits the template set, the four stage/opt-out labels, and the decisions/ scaffold. Author sign-off (ADR-095), PR review/settlement, and Q&A\'s native obligations are unchanged. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v2.2.0; ADR-090/091/092/093/094/095/096/097/098/099/100/101/102.', zh:'GitHub-native 協調，遵循 Accord 記憶模型（ADR-100/101）：GitHub 擁有協作 object 與強制狀態（協作記憶）；Relay 另外擁有 decisions/、briefs/、core/ 作為正式記憶。四種物件、界線清楚——Discussion/Issue/PR/Commit；已經沒有 Announcement 物件，需要回條的告知是一個 Issue，不需要回條的事實不開物件。每個結案的 Issue/Discussion 都要通過一次 promotion test，升等成一份被引用、機械式 supersede 的 Decision 檔。Issue 的 obligation 由原生 stage label 決定（needs-input/awaiting-acceptance/awaiting-record）；reply 的 baton flip 與 settle 的 promotion signal chain 原生地搬動它們——不解析 prose。Relay 會先解析驗證過的預設 workspace；其中的 relay.yml roster 是經 PR 共同認可的身分資料，report 用它解析收件人，而 digest 從不讀取它。digest 的 notices 層現在是幾乎所有單純 mention 的預設落點；LEGACY 的 [ACK] Discussion 相容路徑已於 2026-07-22 隨遷移完成（零個存留物件）退役。launch 會保存驗證過的預設 workspace、透過 reviewed PR 初始化/更新 relay.yml，並安裝/稽核範本集、四個 stage/opt-out 標籤，以及 decisions/ 骨架。author sign-off（ADR-095）、PR review/settlement 與 Q&A 的原生 obligation 都不變。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v2.2.0；ADR-090/091/092/093/094/095/096/097/098/099/100/101/102。'}},
@@ -2799,7 +2771,6 @@ const NAV_NODES = [
   {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
   {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass, behaviour-preserving. Syncs each touched file header inline in the same change (ADR-025, like do); the repo map regen stays sync job. plan recommends it; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass,行為不變。被動到的檔 header 在同一步 inline 同步(ADR-025,同 do);repo map 重生仍交給 sync。plan 會推薦;你自行呼叫。'}},
   {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file)', zh:'描述(檔案)'}, desc:{en:'Per-file navigability — file-top headers (per-language syntax; head -12 = role + Reads), refreshed inline, gated diff. Continuous, per-change cadence. Owns references/header-render.md; offers /nav:map at the end. Re-split from the former one-door sync (headers + map merged in ADR-019) by cadence — ADR-029.', zh:'每檔可導覽 —— 檔首 header(syntax 隨語言;head -12 即角色 + Reads),就地刷新、gated diff。連續、隨改的 cadence。擁有 references/header-render.md;結尾 offer /nav:map。從前身的一道門 sync(headers + map 在 ADR-019 合併)依 cadence 再拆 —— ADR-029。'}},
-  {id:'map', kind:'describe', x:625, y:235, w:135, role:{en:'describe (project)', zh:'描述(專案)'}, desc:{en:'Per-repo navigability — the bilingual codebase map (draggable graphs, click-to-reveal, audit block — this file uses the same form). Periodic, batched cadence. Reads the headers sync maintains; owns references/map-render.md + visual-spec.md. Split out of sync by cadence — ADR-029 (supersedes the ADR-019 merge).', zh:'每 repo 可導覽 —— 雙語 codebase map(可拖曳圖、點看面板、audit block —— 本檔即此形式)。週期、批次的 cadence。讀 sync 維護的 header;擁有 references/map-render.md + visual-spec.md。依 cadence 從 sync 拆出 —— ADR-029(supersede ADR-019 的合併)。'}},
   {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md. The inject↔check sub-agent discipline (ADR-008) promoted to a standalone verb: continuous deep-module/header/N+1/LOC awareness + a thin bracket (inject: head -12 + grep for a reusable impl → execute → check: header · N+1 · unconditional verify gate · board sync — a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The behaviour-changing twin of refactor (refactor preserves behaviour; do changes it). ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不寫 plan.md。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞:全程 deep-module/header/N+1/LOC awareness + 一道薄 bracket(inject:head -12 + grep 既有可重用實作 → execute → check:header · N+1 · 無條件 verify gate · board sync —— 出貨若關掉 blueprints/plan.md 條目,同 commit 更新它,ADR-086)。refactor 的行為改變雙生(refactor 保行為,do 改行為)。ADR-023。'}},
   {id:'compose', kind:'describe', x:690, y:130, w:120, role:{en:'author (prose doc)', zh:'撰寫(文件)'}, desc:{en:'Author or restructure a PROSE document as a deep module — lead with the point (head-able), one fact one owner (link, don\'t restate), group by knowledge not chronology, right grain. Two modes (author / restructure-verbatim), diff-gated. sync\'s prose-document sibling: sync = the header line atop a CODE file, compose = the body of a file that IS prose. Deep-prose extracted as the single owner its many consumers (shape/reflect/research/the ADRs, the forthcoming relay) were missing — the N+1 trigger. The self-sufficient writing door: owns document structure + the durable sentence keystones (active voice, omit needless words, be specific); the bulky/volatile long-tail (grammar, misused-words, the perishable AI-tell list) is left to the optional external writing-clearly-and-concisely. ADR-049.', zh:'把一份 PROSE 文件 author 或 restructure 成 deep module —— 先講重點(head 得到)、一事一主(連結、不重抄)、按知識而非時序分組、right grain。兩種模式(author / 逐字 restructure),diff-gated。sync 的文件版手足:sync = CODE 檔頂那行 header,compose = 一個本身就是 prose 的檔的全身。把 deep-prose 抽成單一擁有者(shape/reflect/research/ADR、以及即將到來的 relay 等消費者本來各自重述)—— N+1 trigger。自足的寫作門:擁有文件結構 + 耐久的句子原則(主動語態、刪廢字、要具體);笨重/會過期的長尾(文法、誤用字、會過時的 AI 字清單)留給可選的外部 writing-clearly-and-concisely。ADR-049。'}},
   {id:'tour', kind:'describe', x:625, y:330, w:135, role:{en:'describe (conversation)', zh:'描述(對話)'}, desc:{en:'Conversational walkthrough of what the codebase does, how it works, and why — every rationale claim labeled Recorded/Inferred/Unknown, never invented. Ends the first turn proposing a falsifiable shared model, asks the user to correct it, returns the classified alignment delta on reply. Read-only, in-chat, no durable artifact — summoned, judgment-tier. Consumes map (when present) by protocol, never invokes it; map\'s onboarding trigger moved here. ADR-082.', zh:'對話式導覽 codebase 做什麼、怎麼運作、為什麼 —— 每個「為什麼」都標 Recorded/Inferred/Unknown,不編歷史。第一輪結尾提出可證偽的共同理解,請使用者糾正,回覆後回報分類過的認知差集。唯讀、限對話、不留檔 —— 召喚制、判斷層。依協定消費 map(有的話),絕不呼叫;map 的 onboarding 觸發移交至此。ADR-082。'}},
@@ -2808,11 +2779,10 @@ const NAV_NODES = [
 const NAV_EDGES = [
   ['plan', 'audit'],
   ['sync', 'audit'],
-  ['sync', 'map'],
   ['plan', 'do'],
   ['refactor', 'do'],
   ['compose', 'sync'],
-  ['map', 'tour'],
+  ['sync', 'tour'],
 ];
 
 const SHAPE_NODES = [
@@ -2847,12 +2817,6 @@ const SHAPE_EDGES = [
   ['position', 'reconcile'],
 ];
 
-const RES_NODES = [
-  {id:'dissect', kind:'assess', x:80, y:70, w:130, role:{en:'argument anatomy', zh:'論證解剖'}, desc:{en:'Decompose one or more documents into Gap / Claim / Mechanism / Evidence / Conclusion. Dispatches a sub-agent per document to read it in full (inject → read → check, ADR-008). Single doc or batch — one note per document. Optional "Implications for your claim" section. Output saved to notes/. For a synthesized landscape, use map.', zh:'把一篇或多篇文件拆解成 Gap / Claim / Mechanism / Evidence / Conclusion。每份文件派發一個 sub-agent 完整讀取(inject → read → check,ADR-008)。單篇或批量 —— 每份文件一個 note。可選「對你的 claim 的意義」段落。output 存 notes/。要合成全景用 map。'}},
-  {id:'untangle', kind:'orchestrator', x:260, y:70, w:120, role:{en:'relational structure', zh:'關係結構'}, desc:{en:'Untangle how N sources relate — the edges: lineage (who builds on whom) / clusters (parallel approaches) / contradictions / contested ground. Claim is optional: with it, overlays positioning (where your claim sits, the gap it fills, a related-work priority order). Reuses dissect notes from notes/. Output: one note. ADR-031.', zh:'把 N 篇文獻的關聯理出來 —— 邊:lineage(誰建在誰上)/ cluster(平行做法)/ contradiction(誰駁誰)/ contested ground(還在爭的)。claim 可選:給了就疊一層定位(你坐在哪、gap、related-work 優先序)。reuse notes/ 的 dissect 筆記。output:一份 note。ADR-031。'}},
-  {id:'critique', kind:'assess', x:440, y:70, w:135, role:{en:'adversarial referee', zh:'對抗式評審'}, desc:{en:'Adversarially assess one argument document into a referee report: claim↔evidence audit (validated ≠ claimed) + self-attack every finding before it ships (cut non-survivors → cut-log). Two coupled cores: ground the attack surfaces to recompute-depth, then refute. Consumes dissect; the rating stays with the reviewer. Output: analysis note + review draft + cut-log. ADR-030.', zh:'把一份論證型文件對抗式評估成 referee report:claim↔evidence 審計(驗到的 ≠ 宣稱的)+ 每個 finding 出手前先自我攻防(砍掉舉不起來的 → cut-log)。兩個耦合核心:把攻擊面 ground 到能重算的深度,再反駁。consume dissect;rating 留給評審本人。output:分析底稿 + review draft + cut-log。ADR-030。'}},
-];
-const RES_EDGES = [['untangle','dissect'],['critique','dissect']];
 
 const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},
@@ -3043,9 +3007,7 @@ function render(){
     [['#2a211c','leg_orch'],['#7a9e6e','leg_assess'],['#6c8fb5','leg_transform'],['#b5894e','leg_describe'],['#cf7d2e','leg_execute']]);
   renderAnatomy('#shapeGraph', '#shapePanel', SHAPE_NODES, SHAPE_EDGES, 'shape_default',
     [['#a86b9e','leg_decide'],['#3f8fa3','leg_project'],['#b5654e','leg_reconcile'],['#3f7d4a','leg_build'],['#8a7d6e','leg_artifact']]);
-  renderAnatomy('#resGraph', '#resPanel', RES_NODES, RES_EDGES, 'res_default',
-    [['#7a9e6e','leg_assess']]);
-}
+  }
 
 function setLang(L){
   lang = L; localStorage.setItem('skills-map-lang', L);

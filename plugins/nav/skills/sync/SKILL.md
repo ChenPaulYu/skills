@@ -1,96 +1,41 @@
 ---
 name: sync
-description: "Re-sync a codebase's file-top headers to its current state — the per-file navigability layer — so head -12 answers \"what is this file?\" without reading the body. Fires on \"sync the headers\" / \"make this file navigable\", or after restructuring leaves headers stale. Shows the diff before applying. For the repo-level bilingual codebase map, see the sibling /nav:map (run sync first — the map reads these headers)."
+description: "Keep a codebase navigable at both scales: re-sync file-top headers (per-file, continuous — \"sync the headers\", after restructuring) or render the bilingual codebase map (per-repo, periodic — \"refresh the codebase map\", \"整理一下 codebase 的導覽\"). Header diffs are gated; the map reads the headers."
 ---
 
-# Header sync — file-top navigability
+# Sync — the navigability door
 
-Keep a codebase's **file-top headers** in step with its code, so `head -12` answers "what is this file?" without reading the body. This is the **per-file** half of the navigation layer; its sibling `/nav:map` renders the **per-repo** half (the bilingual codebase map) and consumes the headers this skill maintains.
+Keep the repo readable without reading it: **headers** make `head -12` answer "what is this file?"; the **map** (`docs/codebase-map/index.html`, bilingual) makes one HTML answer "what is this repo?". Two cadences, one door — headers refresh every time code is touched (light, like a lint); the map re-renders on request after a wave of change (heavy, a teaching projection). The map reads the headers, so when both are stale, headers go first.
 
-> **Cost tier (ADR-059) — deliberately NOT tiered.** sync stays on the session model: the headers it composes are the *source* every other navigability consumer reads (its sibling `/nav:map` renders from them and IS tiered to sonnet), and rule ⑧ makes composing a header double as a diagnosis — struggle-to-describe is the deep-module test. Authoring the source of truth is judgment work; a shallow header is a lie every future session inherits.
+> One door again by evidence: ADR-019 merged these, ADR-029 re-split them by cadence, and 11 months of transcripts showed the split created a second door nobody opened (map: 0 direct fires). ADR-108 folds it back — cadence is a *scheduling fact* the body handles, not an *interface fact* worth a second always-resident description.
 
-## Why this skill exists
+## Stance
 
-Navigability has two scales — per-file (a header) and per-repo (a map) — and they run on **different cadences**: a header should be refreshed *every time you touch a file* (continuous, cheap, like a lint), while the map is regenerated *periodically* (heavy, batched, a teaching projection). Binding them to one door forced either over-scoping the cheap job or under-delivering the expensive one (ADR-029, superseding ADR-019's merge). So they are **two doors over a shared grounding approach**, and this is the light, frequent one. The header is a file's **interface** (rule ②): `/shape:reconcile` reads it as its cheapest "is this implemented?" signal, and every agent reads it via `head -12` before diving into the body.
-
-See `references/header-render.md` for the full header-render procedure.
-
-## Scope
-
-**Language-agnostic.** The header CONVENTION (title + 2-3 sentence detail + `Reads:` line) applies to any language, with the comment syntax flexed per stack. Degrades gracefully on unknown stacks to universal checks + flags what was skipped.
-
-This skill **writes** file-top headers across the repo (or a bounded scope: a domain / changed files). It shows a diff and is gated before applying.
-
-## The 8 rules (the through-line of every nav skill)
-
-1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision so it never surfaces in the interface; red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). *A header is this rule applied to a file: the interface a reader gets without the body.* **Composition is the second half:** a package façade's `__init__` is the group-scale header — modules compose behind it into the next-scale deep module — so façades are header-carrying, load-bearing files in their own right, and a façade whose docstring doesn't say what the group hides (or that its width is the declared contract) is as stale as any lying file header.
-2. **Interface-first at every scale** — *this skill's whole reason for being.* The header surfaces a module's interface so you drill into the body only as needed.
-3. **Explicit dependencies** — functions deterministic; deps explicit. The header's `Reads:` line makes a file's dependencies explicit.
-4. **Right grain — neither giant nor fragmented** — don't header thin files (Button / icons / tiny barrels / 2-line modules). Don't force a header where the name already says it.
-5. **Fit the framework** — standard doc-comment syntax per language; no exotic `@tag`s.
-6. **Rearrange, don't rewrite** — restructuring an existing top comment into the convention preserves its substance; never paraphrase or shorten.
-7. **Below 90% confidence → ask** — about scope, which files are load-bearing, intent.
-8. **Agent-navigability is the audit** — *every place you struggle to write a file's one-line header is a deep-module failure signal* — that file's interface isn't clear yet (often: it does too much). Note it; it usually means the file, not the header, needs work.
+- **Headers are judgment; the map is mechanical.** Composing a header doubles as diagnosis — struggling to describe a file in one line IS the deep-module failure signal (rule ⑧); that stays on the session model. Rendering the map from maintained headers is a sweep — dispatchable to a cheap hand (ADR-067) when large.
+- **Read headers, don't re-derive.** The map's grounding is `head -12`; stale headers → sync them first, don't guess roles from bodies.
+- **Gate every header diff.** Headers mutate source: show the diff, wait for OK ("just apply" intent = batch OK). After applying, run the test gate — headers are comments and must stay green.
+- **Preserve substance verbatim** when reshaping an existing top comment (rule ⑥); never paraphrase.
+- **Skip thin files and say so** (rule ④) — buttons / icons / 2-line barrels don't earn a header.
+- **Note smells, don't fix them.** A giant file or layer violation surfaced while grounding goes to the report (→ `/nav:refactor`), never absorbed inline.
+- **Ground every map claim.** Real import edges only; below 90% → mark `(uncertain)`, never fabricate (rules ③⑦). Ship the map bilingual (EN + zh-Hant); browser-verify before done — a stale or broken map is a lie.
+- **Don't auto-render the map after every header pass.** Offer it when it's stale; render it when asked. The cadence difference survives inside the door.
 
 ## Process
 
-### Step 1 — Grounding pass
+1. **Ground** (reuse `/nav:audit`'s inventory if it ran this session): detect stack, bound scope, inventory domains + load-bearing files, `head -15` each.
+2. **Headers** — classify (missing / wrong-format / good), compose per convention, **gated diff**, apply, test gate. Full procedure: `references/header-render.md`.
+3. **Map** (when asked, or offered when stale) — render `docs/codebase-map/index.html` per `references/map-render.md` + `references/visual-spec.md`; refresh its audit block; browser-verify (zero console errors, lang toggle flips).
+4. **Report** — files touched / skipped, smells noted, `head -12 <file>` to verify. Do NOT commit unless asked; on the default branch, suggest branching first.
 
-Reuse-via-transcript: if `/nav:audit` already ran against this scope earlier in the session, reuse its inventory. Otherwise establish it once:
-- Detect stack + bound scope (whole repo / a domain / changed files).
-- Domain inventory: top-level folders, file count + LOC, leader files, layer (foundation / state / ui).
-- For each load-bearing file (leader / ≥150 LOC / barrel / user-named), `head -15` it to capture its current role + whether its top already reveals its purpose.
-
-### Step 2 — Header-render (gated)
-
-Follow `references/header-render.md` fully:
-- Identify load-bearing files from the grounding pass (skip tests / icons / name-says-it-all primitives).
-- Classify each (no header / wrong-format / already-good) and compose the header per the convention + language syntax.
-- **Show the diff. Wait for user OK** (batch-OK fine if the user prefers; auto-apply only on explicit "just apply" intent). *This is the gate* — headers are not refactors; the user sees them first.
-- Apply, then run the stack's test gate — headers are comments, should stay green; if not, a header has a syntax error → revert + fix.
-- If the project's CLAUDE.md lacks the header convention, offer to add it.
-
-### Step 3 — Report (+ offer the map)
-
-Summarize to chat:
-
-```markdown
-## Header sync — <ISO date>
-- Headers: <N> files added / restructured / skipped (list)
-- Verify: `head -12 <file>`
-```
-
-Then, if the repo-level map is also stale (or absent), *offer* `/nav:map` — it reads the freshly-synced headers as its cheapest grounding. (An offer, not an auto-run; skills don't invoke each other.)
-
-Do NOT commit unless the user asks. If on the default git branch, suggest branching first.
-
-## Discipline (do not skip)
-
-- **Header diff is the gate.** Headers mutate source; the user reviews them before they land.
-- **Skip thin files explicitly + list them.** Document the deliberate omissions (rule ④).
-- **Preserve substance.** Restructuring an existing top comment moves its content into the convention's shape — never paraphrase (rule ⑥).
-- **Don't refactor while syncing.** If the grounding pass surfaces a structural smell (giant file, layer violation), *note it* — hand to `/nav:refactor` as a separate session. Don't absorb it.
-- **Rule ⑦ applies.** Below 90% on scope / which files are load-bearing → ask.
-
-## Anti-patterns (refuse these)
-
-| Temptation | Instead — and the tell |
-|---|---|
-| Skip the diff, just apply the headers | Show the headers first, unless the user said "just apply" — headers mutate source. Tell: about to write the header into the file before the user has seen its text. |
-| Header every file uniformly | Skip the ones that don't need one — rule ④, buttons/icons/barrels don't earn a header. Tell: about to write a header for a one-line re-export file. |
-| Paraphrase an existing top comment while reshaping it | Move the comment's substance verbatim into the convention's shape — rule ⑥. Tell: the new header says the same thing in different words instead of the original words in the new shape. |
-| "While I'm here, let me also refactor X" | Route the refactor to `/nav:refactor` — it needs its own narrow scope and discipline. Tell: the diff is restructuring code, not just adding or updating a header comment. |
-| Regenerate the codebase map in the same breath | Route to `/nav:map` instead — different cadence, separate door (ADR-029). Tell: about to touch `docs/codebase-map/` during what started as a header sync. |
+The 8 nav rules and the full anti-pattern tells live in `references/header-render.md` (headers) and `references/map-render.md` (map) — read the one for the leg you're running.
 
 ## Companion skills
 
-- **`/nav:map`** — the sibling: renders the repo-level bilingual codebase map from these headers. Run `sync` first (the map reads the headers as its grounding); run `map` periodically, not every change.
-- **`/nav:audit`** — read-only health check; its inventory is reused as `sync`'s grounding pass when it ran earlier in the session.
-- **`/nav:refactor`** — execute any structural move the grounding pass surfaces (separate session).
-- **`/shape:reconcile`** — consumes the header artifact `sync` maintains (`head -12` = the cheapest "is this implemented?" signal).
+- **`/nav:audit`** — read-only health check; its inventory is this skill's grounding when fresh.
+- **`/nav:refactor`** — executes any structural move the grounding surfaces (separate session).
+- **`/nav:tour`** — conversational walkthrough; consumes the map when present, routes back here when it's stale.
+- **`/shape:reconcile`** — reads the headers as its cheapest "is this implemented?" signal.
 
 ## Communication style
 
-- Explain in the user's language with simple, direct wording.
-- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
-- Put precise technical detail after the plain explanation and only where it's needed.
+Lead with one plain sentence in the user's language; metaphor when it clarifies; precise detail after, only where needed.

@@ -1,6 +1,6 @@
 ---
 name: survey
-description: "Map a decision space you're shaky on into independent, repo-grounded axes, then report the DIFF between your stated understanding and the full map — the gap is the deliverable, teaching is a service on it. Fires on \"I need to decide X but I don't know this terrain, survey it first\", or offered by /shape:elicit when a grill hits a blind spot. NOT /nav:map (repo structure, not a decision space). NOT deep-research (external report, not your coverage diff). NOT /shape:elicit (draws out what you already know; survey maps what you don't)."
+description: "Map a decision space you're shaky on into independent, repo-grounded axes, then report the DIFF between your stated understanding and the full map — the gap is the deliverable, teaching is a service on it. Fires on \"I need to decide X but I don't know this terrain, survey it first\", or offered by /shape:elicit when a grill hits a blind spot. NOT /nav:sync's map leg (repo structure, not a decision space). NOT deep-research (external report, not your coverage diff). NOT /shape:elicit (draws out what you already know; survey maps what you don't)."
 ---
 
 # Survey — map the decision space, report the diff
@@ -53,7 +53,7 @@ Lands `blueprints/thoughts/<date>-<topic>-survey.md`, in the family's progressiv
 
 ## Boundary — three neighbors, one line each
 
-- **vs `/nav:map`** — `nav:map` renders the *repo's structure* (modules, imports, the codebase graph) so a human/agent can navigate real code. `survey` renders the *decision space* — options and axes that bear on a choice, which may or may not correspond to existing files. Structure map vs decision map.
+- **vs `/nav:sync`'s map leg** — that leg renders the *repo's structure* (modules, imports, the codebase graph) so a human/agent can navigate real code. `survey` renders the *decision space* — options and axes that bear on a choice, which may or may not correspond to existing files. Structure map vs decision map.
 - **vs `deep-research`** — `deep-research` produces an external, cited research report on a topic. `survey` produces *your coverage diff* against a decision space — it may *offer* `deep-research` for a big external-knowledge gap, but its own output is never a research report; it's a map of what you do and don't know.
 - **vs `/shape:elicit`** — elicit draws a decision **out of you** — it assumes the answer already lives in your head and just needs drawing out through friction. `survey` maps **what you don't have** — it assumes there's a real gap and fills it with a grounded diff, not a grill. They chain: survey fills the blind spot, then you (or elicit) converge with a complete map in hand.
 - **vs `/nav:audit` Mode 2** — Mode 2 is a read-only quick-check of whether the *codebase* can support a target spec (feasibility). `survey` checks whether *your own understanding* is complete before you decide anything — a knowledge-completeness question, not a codebase-feasibility one.
@@ -76,7 +76,7 @@ Lands `blueprints/thoughts/<date>-<topic>-survey.md`, in the family's progressiv
 - **`/frame:orthogonal`** — the borrowed discipline for step 1's domain-prior axes (independence check by protocol, not by call).
 - **`/frame:analogize`** — offered for a big conceptual gap that needs deliberate, stress-tested transfer.
 - **`deep-research`** — offered for a big external-knowledge gap that needs co-reading real sources.
-- **`/nav:map`** — the repo-structure sibling; survey borrows nothing from it but shares the boundary line above.
+- **`/nav:sync`'s map leg** — the repo-structure sibling; survey borrows nothing from it but shares the boundary line above.
 - **`/nav:sync`** — its file-top headers are a cheap way to ground the reality-diff layer without reading whole files.
 
 ## Communication style

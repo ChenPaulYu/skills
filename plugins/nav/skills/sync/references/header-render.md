@@ -82,7 +82,7 @@ For each file getting a new/restructured header:
 
 ### Step 4 — Show diff before applying
 
-Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent. **This is the gate** — the header diff is reviewed before applying (headers mutate source); a later `/nav:map` then reads the freshly-written headers.
+Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent. **This is the gate** — the header diff is reviewed before applying (headers mutate source); a later map render then reads the freshly-written headers.
 
 ### Step 5 — Apply
 
@@ -202,3 +202,26 @@ export function useSelection(...) {
 - **Preserve substance.** When restructuring existing doc comments, move the content into the convention's shape — never paraphrase.
 - **Test gate after applying.** Headers shouldn't break anything; if they do, revert + fix.
 - **Update CLAUDE.md.** Otherwise the convention is invisible to future agents/humans.
+
+## The 8 rules (the through-line of every nav skill)
+
+1. **Deep modules through information hiding** — a simple interface hiding significant complexity; usable without reading the body. The technique is **information hiding**: encapsulate each design decision so it never surfaces in the interface; red flag — **information leakage** (same knowledge in ≥2 modules), often from **temporal decomposition** (boundaries by execution order, not knowledge). *A header is this rule applied to a file: the interface a reader gets without the body.* **Composition is the second half:** a package façade's `__init__` is the group-scale header — modules compose behind it into the next-scale deep module — so façades are header-carrying, load-bearing files in their own right, and a façade whose docstring doesn't say what the group hides (or that its width is the declared contract) is as stale as any lying file header.
+2. **Interface-first at every scale** — *this skill's whole reason for being.* The header surfaces a module's interface so you drill into the body only as needed.
+3. **Explicit dependencies** — functions deterministic; deps explicit. The header's `Reads:` line makes a file's dependencies explicit.
+4. **Right grain — neither giant nor fragmented** — don't header thin files (Button / icons / tiny barrels / 2-line modules). Don't force a header where the name already says it.
+5. **Fit the framework** — standard doc-comment syntax per language; no exotic `@tag`s.
+6. **Rearrange, don't rewrite** — restructuring an existing top comment into the convention preserves its substance; never paraphrase or shorten.
+7. **Below 90% confidence → ask** — about scope, which files are load-bearing, intent.
+8. **Agent-navigability is the audit** — *every place you struggle to write a file's one-line header is a deep-module failure signal* — that file's interface isn't clear yet (often: it does too much). Note it; it usually means the file, not the header, needs work.
+
+
+## Anti-patterns (refuse these)
+
+| Temptation | Instead — and the tell |
+|---|---|
+| Skip the diff, just apply the headers | Show the headers first, unless the user said "just apply" — headers mutate source. Tell: about to write the header into the file before the user has seen its text. |
+| Header every file uniformly | Skip the ones that don't need one — rule ④, buttons/icons/barrels don't earn a header. Tell: about to write a header for a one-line re-export file. |
+| Paraphrase an existing top comment while reshaping it | Move the comment's substance verbatim into the convention's shape — rule ⑥. Tell: the new header says the same thing in different words instead of the original words in the new shape. |
+| "While I'm here, let me also refactor X" | Route the refactor to `/nav:refactor` — it needs its own narrow scope and discipline. Tell: the diff is restructuring code, not just adding or updating a header comment. |
+| Regenerate the codebase map in the same breath | Run the map leg separately (on request / periodic) — same door, different cadence (ADR-108 folded the former `/nav:map` back into sync). Tell: about to touch `docs/codebase-map/` during what started as a header sync, without being asked. |
+

@@ -99,7 +99,7 @@ Write the behaviour-changing code, placed per the inject pass. Keep moves and ad
 - **`/nav:plan`** — when the change is big/ambiguous enough to warrant a written, reviewed plan first; its Stage-4 sub-agent dispatch follows *this* skill's discipline.
 - **`/nav:refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`/nav:audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
-- **`/nav:sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and run **`/nav:map`** if that role change is worth reflecting in the codebase map).
+- **`/nav:sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and re-render sync's codebase map leg if that role change is worth reflecting there).
 - **`/shape:elicit` · `/shape:mockup`** — when the change isn't actually decided yet; converge first, then `do`.
 
 ## Communication style

@@ -18,21 +18,19 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Catch me up on where this session left off（接手現況） | `/reflect:catchup` |
 | Park a cursor before stepping away（收工留單） | `/reflect:park` |
 | Retrace how a long development arc got here（重新走過開發路徑） | `/reflect:retrace` |
-| Dissect / break down a paper's argument | `/research:dissect` |
 | Report progress to a counterpart over relay | `/relay:report` |
 
 ## What's in here
 
 | Plugin | What it covers |
 |---|---|
-| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, guide a conversational tour to a shared system model, ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
+| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers and the bilingual codebase map (two cadences, one door), guide a conversational tour to a shared system model, ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
-| [`research`](plugins/research/) | **Rigorous reading and auditing of argument documents** — papers, RFCs, design proposals, ADRs, whitepapers, blog posts (a paper is the most common instance, not the definition). Dissect any argument document into its structural skeleton, untangle how a set of documents relate, or critique one adversarially into a referee report. Locates where your own claim sits relative to prior art. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
 | [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `launch` verifies and remembers the default workspace, audits repository readiness, and initializes its PR-attested identity roster; `report` resolves destination and recipient before routing intent Issue-default into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records native responses; `brief` preserves cited understanding; `settle` closes with authority. GitHub owns state; Relay owns semantics and verification. Independent. |
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -46,9 +44,8 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
-- `/nav:sync` — sync file-top headers to the code (per-file navigability; continuous, per-change), gated diff
-- `/nav:map` — render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads `sync`'s headers)
-- `/nav:tour` — guide a conversational walkthrough of what a codebase does, how it works, and why (rationale labeled Recorded/Inferred/Unknown), then propose a shared model for the user to correct; read-only, in-chat, `map`'s conversational sibling
+- `/nav:sync` — keep a codebase navigable at both scales: sync file-top headers to the code (per-file navigability; continuous, per-change, gated diff) or render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads the maintained headers) — two cadences, one door (ADR-108)
+- `/nav:tour` — guide a conversational walkthrough of what a codebase does, how it works, and why (rationale labeled Recorded/Inferred/Unknown), then propose a shared model for the user to correct; read-only, in-chat, `sync`'s map leg's conversational sibling
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
@@ -68,12 +65,6 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 *User-invoked:*
 
 - `/shape:build` — drive the plan's In-progress column to done, autonomously but confidence-gated (stop below 90%)
-
-**`research` — rigorous reading and auditing of argument documents** (papers, RFCs, design proposals, ADRs, whitepapers — a paper is the most common instance, not the definition):
-
-- `/research:dissect` — dissect any argument document into Gap / Claim / Mechanism / Evidence / Conclusion; optional "Implications for your claim" section; output saved to `notes/`
-- `/research:untangle` — untangle how N documents relate (lineage / clusters / contradictions / contested ground), with optional claim-framed positioning that feeds `/shape:position` (ratify as canon) or `/shape:elicit` (still converging)
-- `/research:critique` — adversarially assess one argument document into a referee report (claim↔evidence audit + self-attack); a missing-decisive-experiment finding can hand to `/shape:probe`
 
 **`frame` — apply an explicit frame, to a problem or to an answer:**
 
@@ -115,13 +106,12 @@ Or by hand. In Claude Code:
 /plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
 /plugin install shape@skills
-/plugin install research@skills
 /plugin install frame@skills
 /plugin install reflect@skills
 /plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, `/research:*`, `/frame:*`, `/reflect:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `research`, `frame`, `reflect`, and `relay` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/shape:*`, `/frame:*`, `/reflect:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `frame`, `reflect`, and `relay` are independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 
@@ -133,7 +123,6 @@ Antigravity CLI natively imports Claude Code plugins — same `SKILL.md` format,
 git clone https://github.com/ChenPaulYu/skills.git && cd skills
 agy plugin install plugins/nav
 agy plugin install plugins/shape
-agy plugin install plugins/research
 agy plugin install plugins/frame
 ```
 
@@ -174,7 +163,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 70 entries — the same 35 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 62 entries — the same 31 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 

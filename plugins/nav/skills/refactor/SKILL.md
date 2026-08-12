@@ -131,7 +131,7 @@ Zero console errors + behaviour identical to baseline = refactor done.
 
 ### Step 7 — Sync headers, then report
 
-**Header sync (same change — do NOT defer).** For every file whose role or `Reads` changed in the move — a newly extracted file, or a source file that shed responsibility — update its top header *now*, in this refactor. A moved file whose header now lies is an **incomplete** move (stale header = lie). The header is a comment, not the code body, so syncing it does not violate verbatim. This mirrors `/nav:do`'s header-hygiene gate — per-file headers travel *with* the change; only the repo-level codebase **map** regen is deferred to `/nav:map`.
+**Header sync (same change — do NOT defer).** For every file whose role or `Reads` changed in the move — a newly extracted file, or a source file that shed responsibility — update its top header *now*, in this refactor. A moved file whose header now lies is an **incomplete** move (stale header = lie). The header is a comment, not the code body, so syncing it does not violate verbatim. This mirrors `/nav:do`'s header-hygiene gate — per-file headers travel *with* the change; only the repo-level codebase **map** regen is deferred to `/nav:sync`'s map leg.
 
 Output a summary to chat:
 - Files changed (with LOC delta — e.g., `Editor.tsx: 1718 → 773 lines`)
@@ -177,7 +177,7 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 - **Baseline must be green.** No exceptions.
 - **Test gate after every step.** Even the trivial-looking ones.
 - **Verbatim means verbatim.** Copy-paste, don't paraphrase. The text in the new file should be byte-for-byte the same as what was in the old file, except for the wiring lines (imports, returns).
-- **Header sync in the same change (Step 7).** A move changes file roles + `Reads` — update each touched file's top header now, not in a later `/nav:sync`. Same `stale header = lie` gate `/nav:do` enforces inline; only the repo-level *map* waits for `/nav:map`.
+- **Header sync in the same change (Step 7).** A move changes file roles + `Reads` — update each touched file's top header now, not in a later `/nav:sync`. Same `stale header = lie` gate `/nav:do` enforces inline; only the repo-level *map* waits for `/nav:sync`'s map leg.
 - **Browser pass at the end.** Tests prove unit behaviour, not integration. Pointer gestures, drag-drop, animations are rarely unit-tested.
 - **Rule ⑦ applies during the refactor.** If a step's correctness is below 90% confidence, **stop and clarify with the user** rather than improvising.
 - **Don't commit unless asked.** Show the diff; let the user decide when to land. (Step 8 makes "commit + open PR" a one-click option — that *is* asking.)
@@ -195,7 +195,7 @@ See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's ratio
 
 - **`/nav:do`** — the behaviour-*changing* twin: when the work adds/changes behaviour rather than preserving it (this skill is moves only).
 - **`/nav:audit`** — find what to refactor.
-- **`/nav:map`** — after the refactor lands, regenerate the codebase **map** so it reflects the new shape (the audit block records what changed). (Per-file headers of touched files are already synced in Step 7; for a holistic header sweep across the repo, run **`/nav:sync`**.)
+- **`/nav:sync`'s map leg** — after the refactor lands, regenerate the codebase **map** so it reflects the new shape (the audit block records what changed). (Per-file headers of touched files are already synced in Step 7; for a holistic header sweep across the repo, run **`/nav:sync`**.)
 
 ## Communication style
 
