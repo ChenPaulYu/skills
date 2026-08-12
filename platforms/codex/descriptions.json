@@ -25,14 +25,12 @@
     "relay-report": "Route a tell, owned question, review request, or memory change under the Issue-default Accord model. Previews writes and verifies responsibility.",
     "relay-settle": "Settle a Discussion or Issue, record a promoted Decision, merge an approved PR, or abandon one with reason. Requires authority and preserves Core gates.",
     "shape-align": "Decide with the user what is In progress, Next, and Future, then maintain a lean plan.md board. Use to align priorities or refresh what comes next.",
-    "shape-build": "Drive a blueprints plan's In-progress items to verified completion with scoped execution, checks, and board updates.",
     "shape-dogfood": "Use a completed feature like a real user via browser or CLI, record evidence, and identify workflow friction or missing intent coverage.",
-    "shape-elicit": "Grill the user to a conceptual decision or root cause. Use for undecided logic, not visuals; may offer shape-survey or shape-probe when stalled.",
+    "shape-elicit": "Grill the user to a conceptual decision or root cause. Use for undecided logic, not visuals; may offer the survey leg or shape-probe when stalled.",
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
     "shape-position": "Author and maintain a project's ratified core principles from messy inputs. Use to establish positioning, graduate durable thoughts, or repair canon.",
     "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction.",
     "shape-reconcile": "Compare blueprints thoughts, plans, and mockups with shipped reality, then propose per-file amend, consolidate, graduate, retire, or prune actions. Read-only until approved.",
-    "shape-survey": "Map an unfamiliar repo-grounded decision space into independent axes, then show what differs from the user's current model. Not for repo maps or research.",
     "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/)."
   }
 }

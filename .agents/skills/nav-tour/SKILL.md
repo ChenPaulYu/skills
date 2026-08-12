@@ -60,7 +60,7 @@ Full rationale, the 8 rules, Mode 1's scoping/grounding/delivery detail, the ful
 
 - **`nav-sync`'s map leg** — writes/refreshes the durable bilingual repo projection; `tour` consumes it when present but never invokes or writes it, and routes back to `nav-sync` when it's stale. Map answers "where is everything?"; tour answers "what model should we now share?"
 - **`reflect-catchup`** — reconstructs current *work* state (goal/done/now/open/next). `tour` explains the relatively stable *product/system* model, not where today's task stopped.
-- **`shape-survey`** — maps missing axes before a *decision*. `tour` explains a system that already exists and checks factual/shared understanding of it.
+- **`shape-elicit`'s survey leg** — maps missing axes before a *decision*. `tour` explains a system that already exists and checks factual/shared understanding of it.
 - **`shape-elicit`** — converges a *new* principle or decision. `tour` may expose an intent/code divergence but never adjudicates it — offer `shape-elicit` instead. Mode 2 is elicit's volley engine with the object flipped: elicit converges a decision, tour-deep converges understanding — the natural hand-off pair when a deep tour keeps surfacing decisions.
 - **`frame-analogize`** — builds and stress-tests an analogy for one already-understood concept. `tour` uses at most one analogy as style; it is not `tour`'s engine.
 - **`nav-audit`** — assesses architectural health and reports findings. `tour` teaches the current system without grading or fixing it; smells noticed incidentally are marked, not investigated into an audit.

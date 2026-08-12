@@ -10,8 +10,8 @@ There are two channels:
 
 | Channel | Harnesses | Skill names |
 |---|---|---|
-| Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/shape:build` |
-| Flat mirror `.agents/skills/` | Codex · opencode · Cursor | flat — `nav-audit`, `shape-build` |
+| Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/shape:mockup` |
+| Flat mirror `.agents/skills/` | Codex · opencode · Cursor | flat — `nav-audit`, `shape-mockup` |
 
 ## Claude Code
 

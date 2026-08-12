@@ -274,7 +274,6 @@ export const CODEX_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Codex
 > Missing custom-agent runtime or artifact is an inline fallback, **not** \`MISSING-TOOL\`. Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
 
 const BROWSER_VERIFY_ANCHORS = {
-  "shape-build": "## browser-verify slot (the dependency, handled as a capability)",
   "shape-mockup": "## The render step is per-project — the browser-verify slot",
   "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
 };
@@ -464,19 +463,12 @@ const WORKER_DISPATCH_SECTIONS = {
       "Step 8 option 2's inject/check bullets above are this contract in practice: the inject (extracted file paths, the move-vs-improve discipline, deferred simplifications, the surrounding seam, the N+1 trigger) supplies the work packet below; the check (diff read for a parallel impl, header hygiene, the verify gate) is the root agent applying the worker return contract before accepting \"done\".",
     ),
   },
-  "shape-build": {
-    after:
-      "Full protocol: `references/parallel-scheduling.md`.",
-    body: genericContractBlock(
-      "`references/per-item-loop.md`'s step-3 inject/check bullets and the Stance's join gate above are this contract in practice — write workers default to sequential (one item's work packet at a time); a parallel tail is only ever a set of disjoint, pre-approved work packets, never overlapping scope. The step-3 \"check the returned diff\" line and the join gate's full test rerun are the root agent applying the worker return contract before any item counts as done.",
-    ),
-  },
 };
 
 /**
  * Inserts the "Worker dispatch contract" section for the given flat skill name, right after its
  * configured anchor's paragraph. No-op (returns text unchanged) for any flat name not configured
- * above — this only touches the five dispatch-heavy skills the plan names (Phase 2, deliverable B).
+ * above — this only touches the three dispatch-heavy skills the plan names (Phase 2, deliverable B).
  */
 export function injectWorkerDispatchContract(text, flat) {
   const config = WORKER_DISPATCH_SECTIONS[flat];

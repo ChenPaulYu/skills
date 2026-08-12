@@ -14,8 +14,8 @@
     {
       "name": "shape",
       "source": "./plugins/shape",
-      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), position (canon-authoring campaign → core docs), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
-      "version": "0.15.0"
+      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought, plus a survey leg that maps a decision space when a volley stalls), probe (a minimal experiment when nobody can settle a fork by argument), position (canon-authoring campaign → core docs), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), migrate (summon-only); doctor deferred. Language-agnostic.",
+      "version": "0.16.0"
     },
     {
       "name": "frame",

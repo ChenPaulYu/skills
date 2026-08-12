@@ -7,8 +7,8 @@
 > then by stack (React + Vite). Read before trusting a screenshot or a console scan.
 >
 > This is the single owner of browser-verify mechanics for every consumer of the slot
-> (`/shape:mockup` · `/shape:align` · `/shape:build` · `/shape:dogfood` · `/nav:refactor`'s browser
-> pass). Per-project CLAUDE.md keeps only project-specifics (ports, the dev script); the universal
+> (`/shape:mockup` · `/shape:align` · `/shape:dogfood` · `/nav:refactor`'s browser pass).
+> Per-project CLAUDE.md keeps only project-specifics (ports, the dev script); the universal
 > mechanics live **here**, not re-learned per project.
 
 ## Universal — any app driven through agent-browser

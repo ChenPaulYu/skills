@@ -23,7 +23,7 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 | See the board rendered visually | `shape-mockup` → an on-demand board snapshot |
 | Scope a feature against the actual code | `nav-plan` → `docs/blueprints/plans/` |
 | Implement a small decided change | `nav-do` |
-| Drive the in-progress board to done | `shape-build` |
+| Drive the in-progress board to done | manual: `nav-plan` per item → `nav-do`/`nav-refactor` → `shape-align` |
 | Behaviour-preserving structural move | `nav-refactor` |
 | Re-sync file-top headers after restructuring | `nav-sync` |
 | Regenerate / render the repo map | `nav-sync` (map leg) → `docs/codebase-map/index.html` |

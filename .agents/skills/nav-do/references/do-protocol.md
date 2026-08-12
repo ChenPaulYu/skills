@@ -51,7 +51,6 @@ It is **the same execution discipline a worker already carries when `nav-plan` (
 | `nav-refactor` | both execute code, both deep-module-disciplined | refactor **preserves** behaviour (tests identical); `do` **changes** it (tests change). Move vs add. |
 | `nav-plan` | both deliver a decided change | plan grounds + clarifies + writes a **reviewable artifact**; `do` skips the artifact — "decided, small, just do it right". |
 | `nav-audit` | both ground in the code | audit is read-only assessment; `do` writes the change (its inject phase is a *targeted* grounding, not a full audit). |
-| `shape-build` | both execute to "done" with discipline | build drives **plan.md** items (orchestrates per-item, shape→nav); `do` is a single **plan-less** ad-hoc change. |
 | global `AGENTS.md` awareness | the same deep-module sense | AGENTS.md is always-on but operator-global + stack-calibrated; `do` is a portable, language-agnostic, **triggerable** verb carrying it into any repo. |
 
 ## Anti-patterns (refuse these)

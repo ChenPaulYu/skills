@@ -1,6 +1,45 @@
-# Survey protocol — the full engine, boundary, and output shape
+# Survey leg — map the terrain when the grill hits a blind spot
 
-> The implementation layer behind `shape-survey`'s stance. The SKILL.md body carries the stance;
+> Formerly the standalone `/shape:survey` (folded into elicit per ADR-110 — its designed
+> primary entrance was always elicit's gatekeeper offer; the separate door drew 1 direct fire
+> in 11 months). When the user accepts the mid-grill offer, elicit runs this leg itself,
+> then resumes the volley with the filled-in fork. Moved verbatim; machinery unchanged.
+
+## The former door's stance (now this leg's contract)
+
+
+Before you can converge a decision, you have to know what there is to decide. `survey` takes a decision you're about to make in unfamiliar terrain and **maps it** — builds the full space of axes and options that bear on it, grounds that map against the real repo, then reports the **diff** between what you already know and what the full map contains. Teaching what's in the gap is a service `survey` performs *on* that diff; it is never the deliverable on its own.
+
+## Stance
+
+- **The deliverable is the diff — never the full map, never a lecture.** Report only what's missing from the user's stated understanding; teaching happens inside that gap, never as a standalone tutorial. An ungrounded checklist any chatbot could produce isn't worth running.
+- **Two entrances only — never self-triggering.** User-summoned ("I don't have a handle on this space, survey it first") or offered by `shape-elicit` mid-grill when it detects a blind spot. Don't fire on a passing expression of doubt.
+- **Ground every axis in the real repo** — `file:line` evidence, not abstract domain knowledge. An axis that fails `frame-orthogonal`'s independence check (move it, something else moves) isn't an axis; merge or re-cut it.
+- **Report missing-axis and missing-point separately.** They route differently, so keep them apart even when both are small.
+- **Recon can be cheap; judging what belongs in the diff can't.** Repo scanning is dispatchable; deciding which axes survive and what the diff actually contains stays with the session model.
+- **Big gaps get offered, never taught in place.** `frame-analogize` for a concept transfer, `deep-research` for external knowledge (flag its cost — an order of magnitude above the sibling options — before offering). Small gaps: explain inline.
+- **Write-gated.** Show the doc's content (or diff) before writing it. Everything before that point is read-only reasoning — survey never edits source code.
+
+Full machinery — the two-layer engine, tolerant-reader landing shape, and the four-neighbor boundary detail: the "Full protocol" section below (this file was flattened from the former door's SKILL.md + its references at fold time). Read it when actually running a survey or when a boundary call is unclear.
+
+## Companion skills
+
+- **`shape-elicit`** — the consumer: survey's landed doc is elicit's next input, and elicit is the one door that *offers* survey mid-grill when it detects a blind spot.
+- **`frame-orthogonal`** — the borrowed discipline for the domain-prior axes (independence check by protocol, not by call).
+- **`frame-analogize`** — offered for a big conceptual gap that needs deliberate, stress-tested transfer.
+- **`deep-research`** — offered for a big external-knowledge gap that needs co-reading real sources.
+- **`nav-sync`** — its file headers + codebase map ground the reality-diff layer cheaply.
+
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.
+
+## Full protocol
+
+
+> The implementation layer behind the survey leg's stance (formerly `/shape:survey`'s, ADR-110). The stance section above carries the stance;
 > everything here is loaded when a survey is actually running or a boundary call is unclear. Moved
 > verbatim from the pre-ADR-109 SKILL.md body; the machinery is unchanged, only re-homed.
 

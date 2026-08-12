@@ -208,7 +208,7 @@ writing, **activate it and surface a clickable URL in the chat**, the way a good
 ## The render step is per-project — the browser-verify slot
 
 "Render + capture" uses shape's shared **browser-verify capability slot** (defined once in
-`AGENTS.md`, shared with `align` + `build`): a named default (`agent-browser`) +
+`AGENTS.md`, shared with `align`): a named default (`agent-browser`) +
 detect + fail-helpfully if missing + per-project override. Open the file / running system,
 locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a
 tool — name the capability.
@@ -233,7 +233,8 @@ ADR-007/015):
 - **Build it now** — when the pick is a concrete, decided, *behaviour-changing* build, route by
   scope: small · holdable-in-head → **`nav-do`** (its check bracket — inject↔execute↔verify — is
   the point; don't flow into the build on ambient discipline and skip it); bigger / ambiguous /
-  wants a written plan → **`nav-plan`**; driving multiple `plan.md` items → **`shape-build`**.
+  wants a written plan → **`nav-plan`**; driving multiple `plan.md` items → the manual path
+  (`nav-plan` per item → `nav-do`/`nav-refactor` → `shape-align`, ADR-110).
   This is the seam "make it functional" flows through — name the verb so the agent routes to its
   check instead of winging the build.
 
@@ -266,5 +267,5 @@ skip the offer entirely). An offer, **never a call** — skills don't invoke eac
 - A visual-lock only as a rare, stamped exception (structural-level).
 - (Escalation, rare) multiple files + a decision note.
 - (When the pick settles something actionable) a guarded, one-shot **offer** of the next step —
-  **track it** (`shape-align`) and/or **build it** (`nav-do` small · `nav-plan` bigger ·
-  `shape-build` multi-item, ADR-028) — never an auto-call.
+  **track it** (`shape-align`) and/or **build it** (`nav-do` small · `nav-plan` bigger,
+  ADR-028) — never an auto-call.

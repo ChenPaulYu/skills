@@ -1,6 +1,6 @@
 ---
 name: dogfood
-description: "Dogfood a built feature that feels unsmooth: use it like a real user (browser or curl/CLI) against a list of intents, capturing evidence as you go. Fires on \"I finished X but it feels off\" or \"what usage are we missing\". Reports friction (clunky but working → UX idea) and coverage gaps (missing intents → design hole), routed to /shape:elicit/mockup or /nav:plan + /shape:build."
+description: "Dogfood a built feature that feels unsmooth: use it like a real user (browser or curl/CLI) against a list of intents, capturing evidence as you go. Fires on \"I finished X but it feels off\" or \"what usage are we missing\". Reports friction (clunky but working → UX idea) and coverage gaps (missing intents → design hole), routed to /shape:elicit/mockup or /nav:plan (+ /nav:do/refactor)."
 ---
 
 # Dogfood — use the built feature for real, surface where it's unsmooth
@@ -39,9 +39,9 @@ This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses 
 
 dogfood surfaces and reports; it does **not** redesign or implement. Once the report is up, *offer* — never auto-call — the next step **per each finding's kind**, via `AskUserQuestion` (offer-next-action, ADR-007/015):
 
-- **A friction idea the user wants to pursue** → a *tweak* → `/nav:plan` (ground it) + `/shape:build`; a *redesign* → `/shape:mockup` (render the new shape) or `/shape:elicit` (if the premise is in question).
+- **A friction idea the user wants to pursue** → a *tweak* → `/nav:plan` (ground it) + `/nav:do`/`/nav:refactor`; a *redesign* → `/shape:mockup` (render the new shape) or `/shape:elicit` (if the premise is in question).
 - **A direction-level gap (missing intent)** → `/shape:elicit` (is the premise wrong? — a *new decision*, out of scope) and/or `/shape:mockup`.
-- **An incomplete gap (dead-end path)** → `/nav:plan` to ground the missing path, then `/shape:build`.
+- **An incomplete gap (dead-end path)** → `/nav:plan` to ground the missing path, then `/nav:do`/`/nav:refactor`.
 
 **Guarded + one-shot:** compose the options from what was actually found, always include a **"just leave the report, I'll route later"** opt-out, and don't re-offer after the pick. Offers, not calls — skills don't invoke each other.
 
@@ -51,7 +51,7 @@ dogfood surfaces and reports; it does **not** redesign or implement. Once the re
 - **`/shape:mockup`** — renders a *synthetic* candidate to decide look/structure before building; dogfood uses the *built* result. They pair across time.
 - **`/shape:elicit`** — judges an ambiguous coverage gap (direction-wrong vs incomplete) in diagnostic mode.
 - **`/nav:plan`** — grounds an incomplete gap or a friction tweak into a code-level plan to finish.
-- **`/shape:build`** — implements the planned paths.
+- **`/nav:do` · `/nav:refactor`** — implement the planned paths.
 - **`/shape:align`** — triages a trackable dogfood finding into `plan.md`.
 
 ## Communication style

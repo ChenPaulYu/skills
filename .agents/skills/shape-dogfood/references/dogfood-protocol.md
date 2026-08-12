@@ -61,12 +61,12 @@ dogfood surfaces and reports; it does **not** redesign or implement. Once the re
 (offer-next-action, ADR-007/015):
 
 - **A friction idea the user wants to pursue** → a *tweak* → `nav-plan` (ground it) +
-  `shape-build`; a *redesign* → `shape-mockup` (render the new shape) or `shape-elicit` (if
+  `nav-do`/`nav-refactor`; a *redesign* → `shape-mockup` (render the new shape) or `shape-elicit` (if
   the premise is in question).
 - **A direction-level gap (missing intent)** → `shape-elicit` (is the premise wrong? — a *new
   decision*, out of scope) and/or `shape-mockup`.
 - **An incomplete gap (dead-end path)** → `nav-plan` to ground the missing path, then
-  `shape-build`.
+  `nav-do`/`nav-refactor`.
 
 **Guarded + one-shot:** compose the options from what was actually found, always include a
 **"just leave the report, I'll route later"** opt-out, and don't re-offer after the pick.
@@ -140,7 +140,7 @@ two things you can't actually do — one's a direction question, one's just unfi
 | Enumerate every `state × action` cell | Use human intents instead — they have a floor; a full state×action matrix is a QA exercise that explodes. Tell: the session is generating combinations instead of walking realistic user goals. |
 | Make rendering a mockup the mandatory output | Render only when a finding is a genuine redesign worth `shape-mockup` — the real output is an evidence-rich report + ideas. Tell: about to build a mockup before any friction has actually been found. |
 | Only report friction, ignore the gaps that fall out | Report and tag both — a clunky path AND an intent with no path at all. Tell: the report lists friction but has no section for missing coverage. |
-| Redesign or implement the fix in place | Surface + route — the redesign is `shape-elicit`/`shape-mockup`, the finish is `nav-plan` + `shape-build`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
+| Redesign or implement the fix in place | Surface + route — the redesign is `shape-elicit`/`shape-mockup`, the finish is `nav-plan` + `nav-do`/`nav-refactor`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
 | Confuse it with `/verify` | Keep the question separate — verify checks correctness, dogfood critiques experience + coverage. Tell: the session is checking "does this work" instead of "does this feel right / is anything missing." |
 | Fire on a passing mention of a feature | Wait for a "try it / it feels off / show me where it's clunky" request. Tell: about to start a dogfood session off an incidental mention of a feature, not an actual ask. |
 | Keep going after the feature feels smooth | Exit when friction is captured + named + routed, or the user has what they need. Tell: continuing to poke at a flow after nothing new has surfaced for a while. |
@@ -152,7 +152,7 @@ two things you can't actually do — one's a direction question, one's just unfi
   like · an improvement idea, embedding its screenshot / response.
 - **The session captures** — `session.mp4`/`.webm` (where supported), `shots/`, `responses/`.
 - **The coverage gaps that fell out**, each tagged by layer (direction vs incomplete) and
-  routed: direction → `shape-elicit`/`shape-mockup`; incomplete → `nav-plan` + `shape-build`.
+  routed: direction → `shape-elicit`/`shape-mockup`; incomplete → `nav-plan` + `nav-do`/`nav-refactor`.
 - (Optional) a hand-off to `shape-mockup` for any finding big enough to be a *redesign* — not
   the default.
 - (When the session settles something trackable — e.g. "archive is deliberately one-way") a

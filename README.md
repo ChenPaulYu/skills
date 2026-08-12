@@ -53,18 +53,16 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
 - `/shape:elicit` — converge a conceptual decision by a grounded grill — or root-cause a logic flaw (diagnostic mode)
-- `/shape:survey` — map a decision space into independent axes grounded in the real repo, then report the diff versus what you already know (before deciding in unfamiliar terrain; not a repo map, not external research)
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
 - `/shape:probe` — design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
 - `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
 - `/shape:align` — decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (every carried item verified against the code, no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)
 - `/shape:reconcile` — keep the blueprints honest — amend stale facts, prune/consolidate stale `thoughts/` + `plans/`
-- `/shape:migrate` — bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)
 
 *User-invoked:*
 
-- `/shape:build` — drive the plan's In-progress column to done, autonomously but confidence-gated (stop below 90%)
+- `/shape:migrate` — bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)
 
 **`frame` — apply an explicit frame, to a problem or to an answer:**
 
@@ -126,9 +124,9 @@ agy plugin install plugins/shape
 agy plugin install plugins/frame
 ```
 
-Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:build`, …).
+Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:mockup`, …).
 
-**Project-level auto-detection.** `agy` also reads `.agents/skills/` in the project you open it from — the same flat, generated mirror Codex uses (see [Codex compatibility](#codex-compatibility) below). Inside this repo that mirror is already committed, so opening `agy` here loads all skills under their flat names (`nav-audit`, `shape-build`, …) with no install step. To reuse them in another project, copy the skill dirs you want into that project's `.agents/skills/`.
+**Project-level auto-detection.** `agy` also reads `.agents/skills/` in the project you open it from — the same flat, generated mirror Codex uses (see [Codex compatibility](#codex-compatibility) below). Inside this repo that mirror is already committed, so opening `agy` here loads all skills under their flat names (`nav-audit`, `shape-mockup`, …) with no install step. To reuse them in another project, copy the skill dirs you want into that project's `.agents/skills/`.
 
 Prefer the global install: it keeps the namespace, tracks the plugin source, and doesn't depend on the generated mirror.
 
@@ -141,7 +139,7 @@ git clone https://github.com/ChenPaulYu/skills.git && cd skills
 node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
 ```
 
-This installs compiled flat skills into `~/.agents/skills/`, the matching runtime artifacts those skills need into `~/.codex/`, and prunes only this generator's older duplicates from `~/.codex/skills/` when `--dedupe-global-roots` is set. Skills surface under flat names (`nav-audit`, `shape-build`, …). Verify per agent: Codex — `/skills`; opencode — `opencode debug skill`; Cursor — type `/` in Agent chat and search `nav-audit`. (Note: agy's global install above already materializes the same skills into `~/.agents/skills/`, so if you ran it, opencode and Cursor are covered.)
+This installs compiled flat skills into `~/.agents/skills/`, the matching runtime artifacts those skills need into `~/.codex/`, and prunes only this generator's older duplicates from `~/.codex/skills/` when `--dedupe-global-roots` is set. Skills surface under flat names (`nav-audit`, `shape-mockup`, …). Verify per agent: Codex — `/skills`; opencode — `opencode debug skill`; Cursor — type `/` in Agent chat and search `nav-audit`. (Note: agy's global install above already materializes the same skills into `~/.agents/skills/`, so if you ran it, opencode and Cursor are covered.)
 
 Cursor alternative — native plugin form: each plugin also carries a `.cursor-plugin/plugin.json` (Cursor's plugin layout matches Claude Code's, so the same directory serves both), which makes a cloned plugin installable as a local Cursor plugin:
 
@@ -163,7 +161,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 62 entries — the same 31 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 58 entries — the same 29 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 
