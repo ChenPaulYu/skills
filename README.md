@@ -19,7 +19,6 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Park a cursor before stepping away（收工留單） | `/reflect:park` |
 | Retrace how a long development arc got here（重新走過開發路徑） | `/reflect:retrace` |
 | Dissect / break down a paper's argument | `/research:dissect` |
-| Audit my own document's citations | `/research:provenance` |
 | Report progress to a counterpart over relay | `/relay:report` |
 
 ## What's in here
@@ -28,9 +27,9 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, render the bilingual codebase map, guide a conversational tour to a shared system model, ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
-| [`research`](plugins/research/) | **Rigorous reading and auditing of argument documents** — papers, RFCs, design proposals, ADRs, whitepapers, blog posts (a paper is the most common instance, not the definition). Dissect any argument document into its structural skeleton, untangle how a set of documents relate, critique one adversarially into a referee report, or audit your own documents' citation provenance (trace every load-bearing claim back to a verified source). Locates where your own claim sits relative to prior art. |
-| [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Four reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it), `graft` (borrow a mature model's structure and adapt it to your domain — map every primitive; the adapt list is the payload); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
-| [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), `observe` distills selected durable learning, and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
+| [`research`](plugins/research/) | **Rigorous reading and auditing of argument documents** — papers, RFCs, design proposals, ADRs, whitepapers, blog posts (a paper is the most common instance, not the definition). Dissect any argument document into its structural skeleton, untangle how a set of documents relate, or critique one adversarially into a referee report. Locates where your own claim sits relative to prior art. |
+| [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
+| [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `launch` verifies and remembers the default workspace, audits repository readiness, and initializes its PR-attested identity roster; `report` resolves destination and recipient before routing intent Issue-default into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records native responses; `brief` preserves cited understanding; `settle` closes with authority. GitHub owns state; Relay owns semantics and verification. Independent. |
 
 `nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → map). **research** (read the external world), **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
@@ -68,7 +67,6 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 
 *User-invoked:*
 
-- `/shape:setup` — scaffold a new project to a *verified* running baseline: archetype-driven (accumulating `references/archetypes/`), consistent with your standing stack principles, done only when the verification chain is green
 - `/shape:build` — drive the plan's In-progress column to done, autonomously but confidence-gated (stop below 90%)
 
 **`research` — rigorous reading and auditing of argument documents** (papers, RFCs, design proposals, ADRs, whitepapers — a paper is the most common instance, not the definition):
@@ -76,21 +74,18 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/research:dissect` — dissect any argument document into Gap / Claim / Mechanism / Evidence / Conclusion; optional "Implications for your claim" section; output saved to `notes/`
 - `/research:untangle` — untangle how N documents relate (lineage / clusters / contradictions / contested ground), with optional claim-framed positioning that feeds `/shape:position` (ratify as canon) or `/shape:elicit` (still converging)
 - `/research:critique` — adversarially assess one argument document into a referee report (claim↔evidence audit + self-attack); a missing-decisive-experiment finding can hand to `/shape:probe`
-- `/research:provenance` — audit your own documents' citations: trace every load-bearing number / quote / claim back to a verified source, classify first-hand / second-hand / orphan, emit a quarantine list; repairs via `dissect`'s forensic mode
 
 **`frame` — apply an explicit frame, to a problem or to an answer:**
 
 - `/frame:first-principles` — strip a question to its irreducible axioms, rebuild the answer from them, surface where that diverges from convention; analysis stays in-chat (route to `shape` to persist)
 - `/frame:orthogonal` — factor a tangled phenomenon into mutually-independent (orthogonal) axes; verify the independence (move one, the others stay put) and name what was conflated; in-chat
 - `/frame:dialectic` — put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat
-- `/frame:graft` — design a novel system that rhymes with a mature one by grafting it: map every primitive of a donor model onto your problem, read each as fit / break / adapt; the adapt list (borrowed structure reshaped for your domain) is the payload, not the fits. The disciplined middle between `first-principles` (invent) and lazy analogy (copy); in-chat
 - `/frame:analogize` — build a deliberately stress-tested analogy for a concept you already understand: generate multiple candidates, check the mapping against the real structure, pick on fit, name where the winner breaks; delivers to the user rather than deriving for the agent, so it doesn't feed `shape`; in-chat
 
-**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project — *all four are user-invoked*):
+**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project — *all three are user-invoked*):
 
 - `/reflect:catchup` — re-orient on where the work stands now + next, rebuilt from git/diff/plan (not chat memory); fixed shape goal · done · now · open · next; clears the consumed `HANDOFF.md` after reporting (the cursor is single-use, ADR-085)
 - `/reflect:park` — write that same five-shape cursor + the current git SHA into the project's `HANDOFF.md` before stepping away, overwriting any prior one (catchup's write-side mirror; the next catchup that drains it removes it)
-- `/reflect:observe` — surface this session's candidate learnings, you pick which to keep (zero/one/several); writes own-learning to a local KB (`docs/observations/`, `$SKILLS_REPO` when set), and routes a downstream user's skill-feedback to an opt-in, scrubbed upstream PR (`docs/feedback/` inbox) instead of a local note that goes nowhere
 - `/reflect:retrace` — reconstruct why a long development arc moved from stage to stage (prior state · pressure · evidence · decision · status · next pressure), put the causal outline in front of you for correction, then render a browser-verified interactive alignment artifact with concrete witnesses; not a catchup, codebase tour, recap, or process retro
 
 **`relay` — coordinate with a counterpart through GitHub, following the Accord memory model** (six daily model-invoked skills; standalone; `report`/`reply`/`settle`/`brief` show any outbound object text verbatim and ask "Is this what you mean?" before posting, ADR-095; ADR-100):
@@ -179,7 +174,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 74 entries — the same 37 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 70 entries — the same 35 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `build`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 

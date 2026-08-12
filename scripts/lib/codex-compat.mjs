@@ -195,7 +195,6 @@ const INTERACTIVE_CHOICE_CONSUMERS = {
   "shape-reconcile": "## Offer to re-sync the board (don't auto-run)",
   "frame-first-principles": "## After the analysis — offer to route it (don't decide, don't auto-run)",
   "frame-dialectic": "## After the trial — offer to route it (don't decide, don't auto-run)",
-  "frame-graft": "## After the analysis — offer to route it (don't decide, don't auto-run)",
 };
 
 export function injectInteractiveChoiceContract(text, flat) {

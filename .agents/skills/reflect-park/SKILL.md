@@ -63,7 +63,7 @@ Write `HANDOFF.md` at the project root. No further action — `park` doesn't com
 ## Discipline (do not skip)
 
 - **Summoned, not automatic** — same stance as every `reflect` member: no context-percentage auto-trigger, no auto-park at turn end. A human decides when to park (a statusline showing context usage is the *cue*; `park` itself is never the automatic *response* to it).
-- **Overwrite, not append.** One `HANDOFF.md`, always current. A dated chain of old handoffs is exactly what this skill declines to build — **history belongs to git (what shipped) and `reflect-observe` (what was learned); a stale cursor left lying around is Sediment**, not a second history worth maintaining (see `.agents/skills/nav-compose/references/authoring-failure-modes.md`).
+- **Overwrite, not append.** One `HANDOFF.md`, always current. A dated chain of old handoffs is exactly what this skill declines to build — **history belongs to git (what shipped); a stale cursor left lying around is Sediment**, not a second history worth maintaining (see `.agents/skills/nav-compose/references/authoring-failure-modes.md`).
 - **The write-gate is not optional.** Show the content before it lands, every time — no exception for "it's just a cursor file."
 - **Get the SHA fresh.** Never carry forward a SHA mentioned earlier in the conversation; re-run `git rev-parse HEAD` at write time.
 - **No code-level detail.** Same rule as `catchup`'s report — decision-level why/what/how-far, not file lists or diffs.
@@ -81,7 +81,6 @@ Write `HANDOFF.md` at the project root. No further action — `park` doesn't com
 ## Companion skills
 
 - **`reflect-catchup`** — the read side; on return, it checks `HANDOFF.md`'s SHA against the current one, downgrades a mismatch to "possibly stale," and **clears the cursor once consumed** (done or stale-and-absorbed) — so a parked cursor is single-use by design: park writes it, the next catchup that drains it removes it.
-- **`reflect-observe`** — distills a durable, reusable *learning*; `park` writes the *cursor* (where/why), a different object entirely (see the family-fit check in ADR-070).
 - **`shape-align`** — the *durable* counterpart, and the boundary to get right: `park` is the **ephemeral** session cursor (where/why *right now*, one overwritten `HANDOFF.md`, local by default). When what you're recording is **roadmap-level parked work that outlives the session** — a deferred feature plus a resume plan — that's a **⏸ entry on shape's `plan.md` board + a grounded `plans/<date>-<slug>.md`**, not a `HANDOFF.md`. Never invent an ad-hoc `handoff.md` for durable parked work; if the repo has no `blueprints/` yet, `align` scaffolds one from the family convention.
 
 ## Communication style

@@ -14,26 +14,26 @@
     {
       "name": "shape",
       "source": "./plugins/shape",
-      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), position (canon-authoring campaign → core docs), setup (scaffold a new project to a verified baseline — archetype references + stack principles), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
-      "version": "0.13.0"
+      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, and build them into running, verified code. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought), position (canon-authoring campaign → core docs), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + render the plan), reconcile (prune stale notes), build (drive the plan's In-progress to done); doctor deferred. Language-agnostic.",
+      "version": "0.14.0"
     },
     {
       "name": "research",
       "source": "./plugins/research",
-      "description": "Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers (a paper is the most common instance, not the definition). Dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of documents relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), critique a document adversarially into a referee report (claim↔evidence audit + self-attack), or run a provenance audit over your own documents (trace every load-bearing citation back to a verified source; quarantine the unread).",
-      "version": "0.6.0"
+      "description": "Rigorous reading and auditing of argument documents — papers, RFCs, design proposals, ADRs, whitepapers (a paper is the most common instance, not the definition). Dissect one or more documents into Gap/Claim/Mechanism/Evidence skeletons, untangle how a set of documents relate (lineage / clusters / contradictions / contested ground, with optional claim-framed positioning), or critique a document adversarially into a referee report (claim↔evidence audit + self-attack).",
+      "version": "0.7.0"
     },
     {
       "name": "frame",
       "source": "./plugins/frame",
-      "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (four reasoning lenses: first-principles, orthogonal, dialectic, graft) or to an answer you already have (analogize — build a stress-tested analogy so it lands in plain language). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.6.1"
+      "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — build a stress-tested analogy so it lands in plain language). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
+      "version": "0.7.0"
     },
     {
       "name": "reflect",
       "source": "./plugins/reflect",
-      "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Four summoned skills: catchup/park work the cursor, observe distills selected durable learning, and retrace reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap remains skill-free. Read-only except each writer's bounded artifact. Cross-project, standalone.",
-      "version": "0.7.0"
+      "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Three summoned skills: catchup/park work the cursor, and retrace reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap remains skill-free. Read-only except each writer's bounded artifact. Cross-project, standalone.",
+      "version": "0.8.0"
     },
     {
       "name": "relay",

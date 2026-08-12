@@ -68,7 +68,7 @@ Plain-language, metaphor-leaning replies are already a standing style default fo
 ## vs its neighbours
 
 - **vs `frame-first-principles`** — first-principles *derives* an answer from axioms the agent didn't have yet; analogize *re-expresses* an answer the agent already has, for the user's benefit. Derivation vs translation.
-- **vs `frame-orthogonal` / `frame-dialectic` / `frame-graft`** — all three take a problem apart or put it on trial to produce insight for whoever is reasoning. analogize doesn't produce new insight about the problem — it transports existing insight into the user's head.
+- **vs `frame-orthogonal` / `frame-dialectic`** — both take a problem apart or put it on trial to produce insight for whoever is reasoning. analogize doesn't produce new insight about the problem — it transports existing insight into the user's head.
 - **vs `shape-elicit`** — elicit draws the answer *out of* the user (they hold it, maieutic). analogize puts an answer *into* the user (the agent holds it, pedagogic). Opposite direction of transfer.
 - **vs `shape-mockup`** — mockup renders a candidate to help *decide* something. analogize explains something already settled; nothing is being decided.
 

@@ -132,10 +132,8 @@
         "disable_model_invocation": {
           ".agents/skills/nav-refactor/SKILL.md": "1->0",
           ".agents/skills/reflect-catchup/SKILL.md": "1->0",
-          ".agents/skills/reflect-observe/SKILL.md": "1->0",
           ".agents/skills/reflect-park/SKILL.md": "1->0",
           ".agents/skills/shape-build/SKILL.md": "1->0",
-          ".agents/skills/shape-setup/SKILL.md": "1->0",
           "AGENTS.md": "2->0"
         },
         "model_sonnet": {
@@ -150,12 +148,9 @@
           ".agents/skills/shape-reconcile/SKILL.md": "2->0",
           "AGENTS.md": "8->0"
         },
-        "claude_built_in": {
-          ".agents/skills/shape-setup/SKILL.md": "1->0"
-        },
+        "claude_built_in": {},
         "claude_init": {
-          ".agents/skills/shape-align/references/dev-workflow-stub.md": "1->0",
-          ".agents/skills/shape-setup/SKILL.md": "4->0"
+          ".agents/skills/shape-align/references/dev-workflow-stub.md": "1->0"
         }
       },
       "note": "reflect-summarize's prior disable_model_invocation/model_sonnet baseline entries (ADR-079 retired that skill before this ratchet) were removed as stale rather than dropped-to-zero."
@@ -167,7 +162,6 @@
         "ask_user_question": {
           ".agents/skills/frame-dialectic/SKILL.md": "1->0",
           ".agents/skills/frame-first-principles/SKILL.md": "1->0",
-          ".agents/skills/frame-graft/SKILL.md": "1->0",
           ".agents/skills/nav-plan/SKILL.md": "4->0",
           ".agents/skills/nav-refactor/SKILL.md": "2->0",
           ".agents/skills/shape-dogfood/SKILL.md": "1->0",
@@ -194,9 +188,6 @@
           ".agents/skills/shape-build/SKILL.md": "10->retired",
           ".agents/skills/shape-dogfood/SKILL.md": "3->retired",
           ".agents/skills/shape-mockup/SKILL.md": "1->retired",
-          ".agents/skills/shape-setup/SKILL.md": "3->retired",
-          ".agents/skills/shape-setup/references/archetypes/fullstack-web.md": "5->retired",
-          ".agents/skills/shape-setup/references/archetypes/python-lib.md": "1->retired",
           "AGENTS.md": "13->retired"
         },
         "legacy_browser_subagent": {}

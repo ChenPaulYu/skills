@@ -59,7 +59,7 @@
     },
     "build": {
       "summary": "Code navigation, convergence, execution, and session orientation.",
-      "skills": ["nav-*", "shape-*", "reflect-catchup", "reflect-observe"]
+      "skills": ["nav-*", "shape-*", "reflect-catchup"]
     },
     "research": {
       "summary": "Reasoning frames and document research.",
@@ -98,8 +98,7 @@
         ".agents/skills/shape-dogfood/SKILL.md",
         ".agents/skills/shape-reconcile/SKILL.md",
         ".agents/skills/frame-first-principles/SKILL.md",
-        ".agents/skills/frame-dialectic/SKILL.md",
-        ".agents/skills/frame-graft/SKILL.md"
+        ".agents/skills/frame-dialectic/SKILL.md"
       ]
     },
     {
@@ -168,8 +167,7 @@
         ".agents/skills/reflect-park/SKILL.md",
         ".agents/skills/reflect-retrace/SKILL.md",
         ".agents/skills/relay-migrate/SKILL.md",
-        ".agents/skills/shape-build/SKILL.md",
-        ".agents/skills/shape-setup/SKILL.md"
+        ".agents/skills/shape-build/SKILL.md"
       ]
     },
     {
@@ -258,9 +256,7 @@
       "generated_contract_markers": [
         "architecture enrichment adds detail once code exists."
       ],
-      "contract_consumers": [
-        ".agents/skills/shape-setup/SKILL.md"
-      ]
+      "contract_consumers": []
     }
   ],
   "generated_destinations": [

@@ -72,10 +72,9 @@ Rules:
 
 Just `rm HANDOFF.md` and say so in one line of the report — no write-gate; the file is one `reflect-park` call away from regeneration, and this is a deletion of consumed state, not an overwrite of live content. If the file is git-tracked, leave the deletion for the project's next normal commit (catchup still never commits). The one case to leave it: you're genuinely unsure its why has been captured anywhere — then say that instead of deleting.
 
-Beyond that, no artifact, no write, no commit. End after the report. (To capture a durable learning from the session, that's `reflect-observe`; for a full recap of what happened, just ask for one directly.)
+Beyond that, no artifact, no write, no commit. End after the report. (For a durable learning or a full recap of what happened, just ask for one directly.)
 
 ## Companion skills
 
 - **`reflect-park`** — the write side; before stepping away, it writes the `HANDOFF.md` this skill checks first.
-- **`reflect-observe`** — distill a durable learning from the session into the knowledge base.
 - **`shape-align`** — when you want to *decide* next and write it into a plan (catchup only reports; align decides + writes).

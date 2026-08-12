@@ -54,7 +54,7 @@ When authoring or restructuring **skill** prose specifically (a `SKILL.md` body,
 
 ### Step 1 — Frame
 
-Reuse-via-transcript: if an upstream skill (e.g. `shape-elicit`, `reflect-observe`) already converged the content earlier in the session, reuse it as the source — don't re-derive.
+Reuse-via-transcript: if an upstream skill (e.g. `shape-elicit`) already converged the content earlier in the session, reuse it as the source — don't re-derive.
 
 Establish three things (rule ⑦ — below 90% on any, ask):
 - **Type** — ADR / design doc / report / observation / README / spec / …
@@ -111,7 +111,7 @@ If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name 
 - **`nav-sync`** — the code-file sibling: file-top headers on code. compose is the whole-prose-document analog (ADR-049).
 - **`nav-audit`** — assesses code shape (read-only); compose authors docs.
 - **`shape-elicit`** — where undecided content goes when a rule-⑧ signal shows the point isn't settled.
-- **Consumers** — `/shape`, `reflect-observe`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).
+- **Consumers** — `/shape`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).
 
 ## Communication style
 

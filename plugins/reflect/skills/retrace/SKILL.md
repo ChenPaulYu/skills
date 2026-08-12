@@ -210,7 +210,6 @@ If the user stops after the outline, report “outline aligned; artifact not yet
 | Plain recap | Lists what happened in order. Use no skill for that. Retrace exists only when causal re-entry and a concrete artifact are needed. |
 | `reflect-catchup` | Reports the present cursor: goal, done, now, open, next. Retrace reconstructs the full pressure-bearing path. |
 | `nav-tour` | Builds a corrected model of the current codebase. Retrace explains development causality across decisions, probes, implementations, and artifacts. |
-| `reflect-observe` | Selects and writes durable learnings. Retrace preserves the whole causal context for human alignment. |
 | Planned `reflect-retro` | Evaluates where the process went wrong and prescribes a process change. Retrace explains neutrally. |
 | `shape-mockup` | Renders disposable candidates to decide a future shape. Retrace renders a durable account of an already-lived arc. |
 | `shape-align` / `shape-elicit` | Decide priorities or principles. Retrace only exposes the current boundary and unresolved questions. |
