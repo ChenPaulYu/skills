@@ -33,7 +33,7 @@ The 8 nav rules and the full anti-pattern tells live in `references/header-rende
 
 - **`/nav:audit`** — read-only health check; its inventory is this skill's grounding when fresh.
 - **`/nav:refactor`** — executes any structural move the grounding surfaces (separate session).
-- **`/nav:tour`** — conversational walkthrough; consumes the map when present, routes back here when it's stale.
+- **`/fathom:repo`** — studies a repository into a mental model; consumes the map as grounding when present, routes back here when it's stale.
 - **`/shape:reconcile`** — reads the headers as its cheapest "is this implemented?" signal.
 
 ## Communication style

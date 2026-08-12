@@ -170,7 +170,7 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
 - **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and document the rename in an ADR.
 - **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and write an ADR.
 - **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.
-- **Retirement is a rhythm, not an event (ADR-109)** — a model-invoked skill with zero fires across 3 months of transcripts is **demoted to `explicit-invocation-only: true`** (summon-only: context tax zero, capability intact, no debate). Demotion reverses on real demand. Deletion still requires the ADR-107 three-causes check (never-reachable / mis-triggered / genuinely unclaimed) — a raw zero alone never deletes. Watch-list clock for `tour`·`retrace` started 2026-08-12; checkpoint 2026-11 (`retrace`'s verdict also decides whether reflect's `catchup`/`park` merge into shape — queued in ADR-110). Off the list same day: `probe` (user-attested real use), `build`/`survey` (retired/folded, ADR-110), `migrate` (demoted).
+- **Retirement is a rhythm, not an event (ADR-109)** — a model-invoked skill with zero fires across 3 months of transcripts is **demoted to `explicit-invocation-only: true`** (summon-only: context tax zero, capability intact, no debate). Demotion reverses on real demand. Deletion still requires the ADR-107 three-causes check (never-reachable / mis-triggered / genuinely unclaimed) — a raw zero alone never deletes. Watch-list clock for `retrace` started 2026-08-12; checkpoint 2026-11 (`retrace`'s verdict also decides whether reflect's `catchup`/`park` merge into shape — queued in ADR-110). Off the list same day: `probe` (user-attested real use), `build`/`survey` (retired/folded, ADR-110), `migrate` (demoted). `tour` left the list 2026-08-12 by the owner's direct verdict, not the clock — deleted with its successor named (ADR-111): the three-causes check ruled mis-fit (the need is real, the single-altitude design didn't serve it; `fathom-repo` claims the need).
 - **Every plugin content change ships with a version bump** — installed plugins
   are **version-pinned cache snapshots** (`~/.claude/plugins/cache/<mkt>/<plugin>/<version>/`),
   not live reads of this directory; without a bump, `claude plugin update`
@@ -197,6 +197,47 @@ docs/adr/                         → ADRs (marketplace-level, shared across plu
 docs/site/index.html             → the bilingual marketplace map (gating, see gate #3)
 README.md                         → human-facing marketplace overview
 ```
+
+
+---
+
+# fathom — plugin conventions
+
+> To **fathom** is to deeply understand; the root is the nautical depth unit, measured line by
+> line downward — the shape of this plugin's five-level ladder.
+
+## One door
+
+The plugin has exactly one skill: `repo`. Starting a new study and resuming an old one are the
+same door — the opening move reads the study cursor (or finds none) and branches. Do not add a
+second verb without evidence that a workflow cannot enter through `repo`.
+
+## Division lines
+
+- **Object**: a repository the learner does **not** yet hold a working model of — typically a
+  foreign upstream pinned at a commit. The learner's own codebase is also valid input (the
+  collapse rules fast-pass the levels a maintainer already owns), but continuous maintenance
+  work belongs to `nav`.
+- **Not** a work-status catchup (`reflect-catchup` — where did *today's task* stop), not a
+  navigability map (`nav-sync` — durable headers/map for a repo you maintain), not a
+  decision-space survey (`/shape:survey` — axes for a *decision*, not a system).
+- **State**: unlike the nav family (single-shot, read-only toward artifacts), `repo` owns a
+  persistent study directory — cursor, pinned clone, visual artifacts. That cursor is why this
+  is a standalone plugin and not a nav verb (ADR-111).
+
+## Relationship to the etudes lab
+
+The method's evidence base — evaluation rubric, baseline/delayed-recall probes, case iterations,
+graduation thresholds — lives in the `etudes` workspace, not here. This plugin executes the
+rhythm that survived two studies; it does not carry the lab's instruments. To change the method:
+produce evidence in etudes first, then release a new fathom version. The skill's closing move
+(one-line friction note) is the return channel.
+
+## Portability standard
+
+Written for Paul first, but to a portable bar: no dependency on private conventions — the skill
+needs only a git URL, a commit, and a learning question. If it survives a third, materially
+different study, it may move to its own repository.
 
 
 ---
@@ -282,7 +323,7 @@ Repo-wide editing rules (new-skill → ADR, the ★ authoring checks, renaming +
 
 A focused collection of skills for **keeping code navigable** — auditing, refactoring, mapping, documenting, and planning against the code so it stays navigable as it grows. Inspired by Ousterhout's *A Philosophy of Software Design*; calibrated against real refactors (e.g., decomposing a 1718-line component into a 16-file subsystem with a single barrel).
 
-Seven skills today: `audit` (assess) · `refactor` (transform — behaviour-preserving) · `sync` (describe — file-top headers on code, per-file navigability, plus the periodic bilingual codebase map as its map leg, per-repo navigability) · `tour` (describe — a conversational walkthrough that lands a corrected shared system model, per-session alignment) · `plan` (ground + clarify + plan artifact, for spec-grounded work) · `do` (execute — a small behaviour-*changing* change, disciplined, no artifact) · `compose` (author/restructure — a prose document as a deep module). See [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) for the original consolidation logic, [ADR-006](docs/adr/006-nav-plan-skill.md) for why plan landed, [ADR-019](docs/adr/019-sync-collapses-headers-and-map.md) for why the former `headers` + `map` skills first collapsed into one `sync` door, [ADR-029](docs/adr/029-resplit-sync-and-map-by-cadence.md) for why they re-split into `sync` + `map` by cadence (continuous per-change headers vs periodic batched map), and [ADR-108](docs/adr/108-retire-research-fold-map-into-sync.md) for why `map` folded back into `sync` as its map leg — the split's second door drew 0 direct fires in 11 months, so the two legs (headers per-change, map periodic) live under one skill again, [ADR-021](docs/adr/021-retire-nav-doctor.md) for why `doctor` was retired (a 2-step orchestrator `audit → sync` too thin to earn a skill — its full-pass entry folded into `audit`'s onward hand-off), [ADR-023](docs/adr/023-nav-do-execution-verb.md) for why `do` landed (nav's execution verb — the inject↔check worker discipline promoted to a standalone, plan-less door), [ADR-049](docs/adr/049-nav-compose-verb.md) for why `compose` landed (deep-prose discipline extracted as a single owner — `sync`'s prose-document sibling: `sync` = the header line atop a code file, `compose` = the body of a file that *is* prose), and [ADR-082](docs/adr/082-nav-tour-shared-system-model.md) for why `tour` landed (a guided walkthrough is a deep module only because it ends in a mandatory correction loop against the agent's own model — `sync`'s map leg's conversational sibling by consumption, not invocation, split from it by the same cadence axis as ADR-029).
+Six skills today: `audit` (assess) · `refactor` (transform — behaviour-preserving) · `sync` (describe — file-top headers on code, per-file navigability, plus the periodic bilingual codebase map as its map leg, per-repo navigability) · `plan` (ground + clarify + plan artifact, for spec-grounded work) · `do` (execute — a small behaviour-*changing* change, disciplined, no artifact) · `compose` (author/restructure — a prose document as a deep module). See [ADR-003](docs/adr/003-five-skills-not-four-or-six.md) for the original consolidation logic, [ADR-006](docs/adr/006-nav-plan-skill.md) for why plan landed, [ADR-019](docs/adr/019-sync-collapses-headers-and-map.md) for why the former `headers` + `map` skills first collapsed into one `sync` door, [ADR-029](docs/adr/029-resplit-sync-and-map-by-cadence.md) for why they re-split into `sync` + `map` by cadence (continuous per-change headers vs periodic batched map), and [ADR-108](docs/adr/108-retire-research-fold-map-into-sync.md) for why `map` folded back into `sync` as its map leg — the split's second door drew 0 direct fires in 11 months, so the two legs (headers per-change, map periodic) live under one skill again, [ADR-021](docs/adr/021-retire-nav-doctor.md) for why `doctor` was retired (a 2-step orchestrator `audit → sync` too thin to earn a skill — its full-pass entry folded into `audit`'s onward hand-off), [ADR-023](docs/adr/023-nav-do-execution-verb.md) for why `do` landed (nav's execution verb — the inject↔check worker discipline promoted to a standalone, plan-less door), [ADR-049](docs/adr/049-nav-compose-verb.md) for why `compose` landed (deep-prose discipline extracted as a single owner — `sync`'s prose-document sibling: `sync` = the header line atop a code file, `compose` = the body of a file that *is* prose), and [ADR-082](docs/adr/082-nav-tour-shared-system-model.md) for why `tour` landed — since removed by [ADR-111](docs/adr/111-retire-nav-tour-fathom-succeeds.md): it delivered a model at a single altitude with no layered ladder, and the `fathom` plugin's `fathom-repo` (five gated comprehension levels + a persistent study cursor) succeeds it.
 
 **Language-agnostic by design.** The 8 rules transfer to any stack; specific checks have universal-core + per-stack heuristics.
 

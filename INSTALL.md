@@ -18,12 +18,14 @@ There are two channels:
 ```
 /plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
+/plugin install fathom@skills
 /plugin install shape@skills
-/plugin install research@skills
-/plugin install think@skills
+/plugin install frame@skills
+/plugin install reflect@skills
+/plugin install relay@skills
 ```
 
-**Verify:** `/plugin` lists the four plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
+**Verify:** `/plugin` lists the six plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
 
 ## Antigravity CLI (`agy`)
 
@@ -31,12 +33,14 @@ There are two channels:
 git clone https://github.com/ChenPaulYu/skills.git
 cd skills
 agy plugin install plugins/nav
+agy plugin install plugins/fathom
 agy plugin install plugins/shape
-agy plugin install plugins/research
-agy plugin install plugins/think
+agy plugin install plugins/frame
+agy plugin install plugins/reflect
+agy plugin install plugins/relay
 ```
 
-**Verify:** `agy plugin list` shows all four with source `claude-code`.
+**Verify:** `agy plugin list` shows all six with source `claude-code`.
 
 Note: agy's global import also materializes the skills into `~/.agents/skills/`,
 which opencode and Cursor read — so this single install may already cover them globally.
@@ -59,7 +63,7 @@ All three auto-discover `.agents/skills/`. Pick the scope:
 
 **Verify:**
 
-- Codex — `/skills` lists `nav-audit`, `shape-build`, …
+- Codex — `/skills` lists `nav-audit`, `fathom-repo`, `shape-elicit`, …
 - opencode — `opencode debug skill` lists them.
 - Cursor — type `/` in Agent chat and search for `nav-audit`.
 

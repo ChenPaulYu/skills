@@ -15,6 +15,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
 | Align on what to work on next | `/shape:align` |
+| Study an unfamiliar repository into a mental model（帶我理解陌生 repo） | `/fathom:repo` |
 | Catch me up on where this session left off（接手現況） | `/reflect:catchup` |
 | Park a cursor before stepping away（收工留單） | `/reflect:park` |
 | Retrace how a long development arc got here（重新走過開發路徑） | `/reflect:retrace` |
@@ -24,13 +25,14 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 
 | Plugin | What it covers |
 |---|---|
-| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers and the bilingual codebase map (two cadences, one door), guide a conversational tour to a shared system model, ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
+| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers and the bilingual codebase map (two cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
+| [`fathom`](plugins/fathom/) | **Study an unfamiliar repository** — one skill (`repo`) climbs a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code), one reconstruction-or-prediction gate per level, collapse rules for small repos, terminal diagrams by default, and a persistent study cursor that resumes across sessions. The learner's predictive mental model is the deliverable. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
 | [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `launch` verifies and remembers the default workspace, audits repository readiness, and initializes its PR-attested identity roster; `report` resolves destination and recipient before routing intent Issue-default into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records native responses; `brief` preserves cited understanding; `settle` closes with authority. GitHub owns state; Relay owns semantics and verification. Independent. |
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **fathom** (study a repository you don't yet hold a model of — a persistent, cross-session learning campaign), **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -45,10 +47,13 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
 - `/nav:sync` — keep a codebase navigable at both scales: sync file-top headers to the code (per-file navigability; continuous, per-change, gated diff) or render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads the maintained headers) — two cadences, one door (ADR-108)
-- `/nav:tour` — guide a conversational walkthrough of what a codebase does, how it works, and why (rationale labeled Recorded/Inferred/Unknown), then propose a shared model for the user to correct; read-only, in-chat, `sync`'s map leg's conversational sibling
 - `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
+
+**`fathom` — study an unfamiliar repository:**
+
+- `/fathom:repo` — climb a repository you don't know through five gated levels (Repository → Runtime → System → Behavior → Code): anchor the commit, judge upfront which levels collapse, teach one distinction at a time with one reconstruction-or-prediction question per level, and keep a study cursor on disk so the climb resumes across sessions; terminal diagrams by default, HTML only when interaction changes visible state
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
@@ -103,13 +108,14 @@ Or by hand. In Claude Code:
 ```bash
 /plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
+/plugin install fathom@skills
 /plugin install shape@skills
 /plugin install frame@skills
 /plugin install reflect@skills
 /plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, `/frame:*`, `/reflect:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `frame`, `reflect`, and `relay` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/fathom:*`, `/shape:*`, `/frame:*`, `/reflect:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `fathom`, `frame`, `reflect`, and `relay` are independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 
