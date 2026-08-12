@@ -1,0 +1,57 @@
+#!/bin/sh
+# post-commit — refresh the local plugin cache when a committed version bump
+# left the installed snapshot behind.
+#
+# Why: installed plugins are version-pinned cache snapshots
+# (~/.claude/plugins/cache/skills/<plugin>/<version>/), not live reads of this
+# directory. The manual rule ("after landing an edit, run `claude plugin update`
+# on each machine") was written 2026-07-17 and had already failed by 2026-08-12 —
+# all six caches were stale again, one by two major versions, and two skills
+# retired from the repo were still installed and loadable. A step that must be
+# remembered is a step that will be skipped; this hook removes the remembering.
+# Full account: docs/observations/2026-08-12-skill-copies-outlive-their-source.md
+#
+# Post-commit cannot block a commit — it only reports. It is also deliberately
+# quiet when there is nothing to do, and a no-op on machines without the
+# `claude` CLI or without these plugins installed.
+#
+# Enable once per clone (same switch as pre-commit):
+#     git config core.hooksPath scripts/hooks
+
+command -v claude >/dev/null 2>&1 || exit 0
+CACHE="$HOME/.claude/plugins/cache/skills"
+[ -d "$CACHE" ] || exit 0          # plugins not installed on this machine
+
+refreshed_marketplace=0
+for manifest in plugins/*/.claude-plugin/plugin.json; do
+  [ -f "$manifest" ] || continue
+  p=$(basename "$(dirname "$(dirname "$manifest")")")
+  v=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$manifest" | head -1)
+  [ -n "$v" ] || continue
+  [ -d "$CACHE/$p" ] || continue   # this plugin isn't installed here
+  if [ ! -d "$CACHE/$p/$v" ]; then
+    if [ "$refreshed_marketplace" -eq 0 ]; then
+      echo "→ plugin cache behind the repo — refreshing…"
+      claude plugin marketplace update skills >/dev/null 2>&1
+      refreshed_marketplace=1
+    fi
+    claude plugin update "$p@skills" >/dev/null 2>&1
+    # The CLI can report success without materializing the snapshot (it
+    # no-ops when its registry already believes $v is installed). The dir
+    # on disk is the only truth — never prune on the exit code alone.
+    if [ -d "$CACHE/$p/$v" ]; then
+      echo "  ✓ $p → $v (applies next session)"
+      # Drop superseded snapshots so a retired skill can't be served from an
+      # old pin — the exact failure that kept reflect:summarize loadable for
+      # a month after its retirement.
+      for old in "$CACHE/$p"/*/; do
+        [ -d "$old" ] || continue
+        [ "$(basename "$old")" = "$v" ] || rm -rf "$old"
+      done
+    else
+      echo "  ✗ $p: cache still missing $v after update — reinstall by hand:" >&2
+      echo "      claude plugin uninstall $p@skills && claude plugin install $p@skills" >&2
+    fi
+  fi
+done
+exit 0
