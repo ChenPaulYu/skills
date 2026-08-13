@@ -9,6 +9,27 @@ it here.
 
 What belongs to teaching a ladder, and therefore lives here:
 
+## The four tours — progressive disclosure happens *between* artifacts
+
+The most common failure is forcing every artifact into the same step-by-step interaction. Depth is
+disclosed by **moving to the next kind of tour**, not by burying more inside the current one:
+
+| Tour | Its job | Interaction it earns |
+| --- | --- | --- |
+| **Map** | the whole system and its major ownership boundaries, in one frame | none — it must land in about thirty seconds |
+| **Path** | one concrete task followed from input to output | reveal one event or relationship at a time |
+| **Branch** | the important ways that path can diverge, contrasted | select a branch and compare |
+| **Code** | the model connected to files, symbols and implementation | navigate source evidence on demand |
+
+A staged animation is a Path tour. Putting one at Map depth delays the high-level picture instead
+of clarifying it — the learner cannot see the whole before being walked through a part.
+
+**A Map tour is broad and shallow, not narrow and shallow.** The first correction this rule ever
+needed: removing detail by removing most of the system's concepts leaves the learner able to infer
+only "X on top of Y", with none of the design vocabulary. Cover most load-bearing families, give
+each a plain-language job rather than a definition, group concrete classes into neighborhoods, and
+show how they connect so the map becomes an index for the later tours.
+
 ## Level defaults
 
 - **Repository** — an **interactive guided mockup** is the default. A high-level picture is
@@ -32,6 +53,12 @@ What belongs to teaching a ladder, and therefore lives here:
 - **Never fold a contradiction.** The general rule is in `frame-draw`; the teaching-specific
   form of it: anything overturning a belief the learner *stated in the calibration probe or a gate*
   must be legible without clicking. A correction they must choose to discover was never delivered.
+- **Depth goes to the next tour, not behind a click.** Folding is for *detail* — a gloss, an
+  example, a caveat. A formal definition or source-level evidence does not belong in the current
+  artifact at all, folded or otherwise: it belongs to a later tour. Hiding it here keeps the
+  artifact's promise ("this is the whole picture") while quietly making it false, and the learner
+  who opens every fold ends up reading the implementation documentation the tour was supposed to
+  spare them.
 - **Consistency across a study.** Later artifacts reuse the earlier ones' canvas, palette,
   typography and diagram grammar — consistency is part of navigation, and a study that looks like
   one thing is easier to hold than five that don't.

@@ -113,6 +113,21 @@ disjoint from everything else in this file — see the provenance note below.
 **Earns it when the audience has no model at all.** One concrete run, stepped, with the actors
 lighting up as they act, builds a first model faster than any abstraction can.
 
+**Grammar for a lifecycle or control-flow playback** — the payoff comes from separating what stays
+fixed from what changes, and each of these four was paid for by a drawing that lacked it:
+
+- **A fixed spine**: the stages *every* run crosses, drawn once and never moved. Without it the
+  audience cannot tell "this run's path" from "the system's shape".
+- **One selected outcome lit at a time.** Drawing every branch at once turns the playback back into
+  a static diagram.
+- **A dedicated return rail** for outcomes that loop. Continuation is the single thing prose loses
+  most often, and an arrow that merely points backwards into the spine reads as a mistake.
+- **A terminal state that replaces the rail** when the run finishes or pauses. If ending and looping
+  look alike, the audience cannot tell that the thing can stop.
+
+Responsive behaviour follows from the spine: **rearrange the stages, never shrink the whole
+drawing** — a legible diagram at one third the size is not the same diagram.
+
 ### Annotated real output — the cheapest form, routinely skipped
 
 A log, a JSON response, a stack trace, a directory listing — **already legible, needing only arrows

@@ -31,9 +31,10 @@ wins.
    repaired misconception drifts back toward its original shape.
 3. **Flow governs.** The rhythm of chunk, check and dwell serves comprehension; the moment it
    starts serving itself it has failed.
-4. **Disclose progressively — with one hard exception.** Fold detail freely, but **never fold the
-   sentence that overturns something the learner believes**. A correction they must click to
-   discover is a correction that was never delivered.
+4. **Disclose progressively — with one hard exception.** Fold *detail* freely — but depth belongs
+   to the next tour rather than behind a click, and **never fold the sentence that overturns
+   something the learner believes**. A correction they must click to discover is a correction that
+   was never delivered.
 5. **Assume nothing is known — and name things by use, not by category.** Gloss every term of art
    at first contact, and describe a thing by what the learner does with it (an install line, an
    import, a call) rather than by its architectural class. Category words explain a shape to
@@ -70,10 +71,10 @@ wins.
 Repository -> Runtime -> System -> Behavior -> Code
 ```
 
-Each level's question, gate examples, and collapse rules: `references/ladder.md`. Visual form per
-level (Map / Path / Branch / Code Tour): `references/forms.md`. The Code level procedure:
-`references/code-guiding.md`. Levels locate the learner; they do not demand five artifacts or
-equal time.
+Each level's question, gate examples, and collapse rules: `references/ladder.md`. The four tours
+that disclose depth — Map, Path, Branch, Code — and the per-level form defaults:
+`references/forms.md`. The Code level procedure: `references/code-guiding.md`. Levels locate the
+learner; they do not demand five artifacts or equal time.
 
 ## First visit
 

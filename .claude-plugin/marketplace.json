@@ -21,13 +21,13 @@
       "name": "fathom",
       "source": "./plugins/fathom",
       "description": "Fathom an unfamiliar repository — four verbs over one shared study state: index (anchor the pin, judge the ladder depth, land a file:line anchor index, deliver a measured trust verdict), guide (the teaching climb Repository → Runtime → System → Behavior → Code — calibrate on the learner background, teach with knowledge-matched forms, dwell for questions, gate on their own narration), quiz (spaced retention checking against the learner model), dive (follow one topic as deep as they want, advancing nothing). index.md records how deep the repository is, understanding.md how deep the learner is — files, not call order, are the connective tissue, so every verb runs standalone. Language-agnostic.",
-      "version": "0.8.0"
+      "version": "0.9.0"
     },
     {
       "name": "frame",
       "source": "./plugins/frame",
       "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.12.0"
+      "version": "0.13.0"
     },
     {
       "name": "relay",
