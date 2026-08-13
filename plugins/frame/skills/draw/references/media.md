@@ -49,6 +49,37 @@ the diagram or move to an interactive medium.
 Fails at: fixed spatial layout (it lays out for you, so positions cannot be made permanent),
 weighted edges, and anything needing interaction.
 
+**Pick Mermaid over D2 when the diagram must live in a README that someone else reads on GitHub** —
+that inline rendering is the only thing Mermaid has that D2 doesn't, and it is decisive when you
+don't own the viewer.
+
+## D2
+
+**When**: a flow, sequence, state or containment diagram is worth keeping **and you control where
+it renders**. Same idea as Mermaid — text in, diagram out — with far better defaults.
+
+Why it wins where it wins: a node is a line, an edge is `a -> b`, styles go in braces, and roughly
+thirty lines produce what would be several hundred lines of hand-written HTML. `sketch: true` gives
+a hand-drawn look that reads as a diagram rather than as a slide. SVG is native output; PDF, PPTX
+and GIF fall out of the same source, and multi-board sources can render as an animated SVG — a
+cheap stepper without writing one.
+
+Grammar notes worth knowing before the first render:
+- **Set `theme-id: 0`** unless you want a specific look. The terminal themes uppercase Latin text,
+  which mangles identifiers (`top_k` → `TOP_K`).
+- Some shapes (`page`) render badly under `sketch: true`. Check before shipping.
+- `top` and other layout words are reserved and cannot be node names.
+
+Two limits decide when it loses:
+- **The layout is the engine's, not yours.** It re-lays out on every render, so it cannot carry a
+  **map** — the one form whose whole payoff is that positions stay permanent across drawings. Use
+  D2 for flows, never for territory.
+- **Its ASCII export mis-measures double-width characters.** Latin-only output is clean; CJK output
+  has its box drawing shifted and is unusable. In a CJK context the terminal medium stays
+  hand-written.
+
+Cost: an install (`brew install d2`) plus a render step, and it does not appear inline on GitHub.
+
 ## Annotated real output
 
 **When**: the thing already exists and is already legible — a log, a JSON response, a stack trace,

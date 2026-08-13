@@ -42,7 +42,8 @@ Cheapest medium that carries the form wins. Selection rules and per-medium gramm
 | --- | --- |
 | **Terminal ASCII** | it is small, needed *now*, and consumed in the conversation. No artifact, no file. |
 | **Markdown table / list** | the form is a matrix or a list. Tables need no drawing. |
-| **Mermaid** | a flow, sequence or state diagram must **live in a document** — versionable as text, renders in most viewers. |
+| **Mermaid** | a flow, sequence or state diagram must **live in a document someone else opens on GitHub** — inline rendering is the one thing it has that D2 doesn't. |
+| **D2** | same text-to-diagram idea, far better looking, and **you control the rendering** — ~30 lines replace hundreds of hand-written ones. Never for a map (it re-lays out every render), and its ASCII export breaks on CJK. |
 | **Annotated real output** | the thing already exists and is legible (a log, a response, a tree) — point at it rather than redrawing it. |
 | **Interactive artifact** | **interaction changes visible state** (stepping time, switching a variant, re-lighting a path), or the audience asks. Borrow `shape-mockup`'s build protocol for this one. |
 
