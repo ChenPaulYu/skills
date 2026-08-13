@@ -1,6 +1,6 @@
 {
   "name": "shape",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav (which keeps existing code navigable). Skills: mockup (render-to-decide — including an on-demand blueprints board snapshot), elicit (grounded grill → a thought, with a survey leg that maps a decision space and reports the diff vs your understanding when a volley stalls), probe (design and run a minimal experiment when nobody can settle a fork by argument), position (canon-authoring campaign → core docs), dogfood (use a built feature for real → friction + coverage gaps), align (decide next + write the plan), reconcile (prune stale notes), migrate (bring a blueprints/core tree to the current convention version — summon-only, ADR-105); doctor deferred. blueprints/ is the artifact convention; the durable-why tier is precedents/ (legacy: decisions.md).",
   "author": {
     "name": "Paul",
