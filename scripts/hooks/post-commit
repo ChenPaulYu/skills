@@ -28,7 +28,20 @@ for manifest in plugins/*/.claude-plugin/plugin.json; do
   p=$(basename "$(dirname "$(dirname "$manifest")")")
   v=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$manifest" | head -1)
   [ -n "$v" ] || continue
-  [ -d "$CACHE/$p" ] || continue   # this plugin isn't installed here
+  if [ ! -d "$CACHE/$p" ]; then
+    # NEW plugin — present in the repo, never installed here. The original hook
+    # skipped this case, which is why fathom sat unreachable from the moment it
+    # was authored: the repo had it, no session did.
+    echo "→ new plugin $p not installed here — installing…"
+    claude plugin marketplace update skills >/dev/null 2>&1
+    refreshed_marketplace=1
+    if claude plugin install "$p@skills" >/dev/null 2>&1 && [ -d "$CACHE/$p" ]; then
+      echo "  ✓ $p installed (applies next session)"
+    else
+      echo "  ✗ $p: install failed — run \`claude plugin install $p@skills\` by hand" >&2
+    fi
+    continue
+  fi
   if [ ! -d "$CACHE/$p/$v" ]; then
     if [ "$refreshed_marketplace" -eq 0 ]; then
       echo "→ plugin cache behind the repo — refreshing…"
@@ -54,4 +67,20 @@ for manifest in plugins/*/.claude-plugin/plugin.json; do
     fi
   fi
 done
+
+# Orphans — installed here, gone from the repo. The original hook only walked
+# plugins the REPO has, so a retirement propagated only halfway: reflect stayed
+# installed with catchup/park/retrace loadable for three hours after the commit
+# that deleted it, and reflect:summarize survived a month the same way. A
+# retirement that reaches the source but not the runtime has not happened.
+for cached in "$CACHE"/*/; do
+  [ -d "$cached" ] || continue
+  p=$(basename "$cached")
+  [ -d "plugins/$p" ] && continue
+  echo "→ $p is installed but no longer in the repo — uninstalling…"
+  claude plugin uninstall "$p@skills" >/dev/null 2>&1
+  rm -rf "$cached"                       # the CLI can exit 0 without removing the snapshot
+  echo "  ✓ $p uninstalled"
+done
+
 exit 0

@@ -1,6 +1,6 @@
 ---
 name: mockup
-description: "Converge a decision by generating and rendering a real, disposable, interactive HTML artifact — never prose, ASCII, or an option list. Fires on \"mock up X\", \"show me what X looks like\", or \"which of these\": a UI mockup for look-and-feel, or an interactive diagram for backend/agent/data/structural decisions. NOT for pure definitional questions (\"what IS this concept\") — that's verbal clarification."
+description: "Converge a decision by generating and rendering a real, disposable, interactive HTML artifact — never prose, ASCII, or an option list. Fires on \"mock up X\" / \"mockup 一下\" / \"想看長什麼樣\", or \"which of these\": a UI mockup for look-and-feel, or an interactive diagram for backend/agent/data/structural decisions. NOT for pure definitional questions (\"what IS this concept\") — that's verbal clarification."
 ---
 
 # Render-to-decide — mockup or diagram

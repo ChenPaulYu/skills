@@ -1,6 +1,6 @@
 ---
 name: plan
-description: "Turn a spec/feature description into a codebase-grounded plan: ground against touched domains, clarify ambiguity, then write a plan artifact (Context · Approach · Critical files · Verification). Fires on \"make a plan for this spec\" / \"scope this feature against the codebase\". Read-mostly — writes only the final plan file with location consent, and is the companion to /nav:audit (Mode 2 is the read-only quick check, this is the full workflow)."
+description: "Turn a spec/feature description into a codebase-grounded plan: ground against touched domains, clarify ambiguity, then write a plan artifact (Context · Approach · Critical files · Verification). Fires on \"make a plan for this spec\" / \"幫我寫好 plan\" / \"scope this feature against the codebase\". Read-mostly — writes only the final plan file with location consent, and is the companion to /nav:audit (Mode 2 is the read-only quick check, this is the full workflow)."
 ---
 
 # Plan

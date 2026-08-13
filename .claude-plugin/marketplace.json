@@ -9,13 +9,13 @@
       "name": "nav",
       "source": "./plugins/nav",
       "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers, plus the bilingual codebase map as its map leg), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
-      "version": "0.16.0"
+      "version": "0.17.0"
     },
     {
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought, plus a survey leg that maps a decision space when a volley stalls), probe (a minimal experiment when nobody can settle a fork by argument), dogfood (use a built feature for real → friction + coverage gaps), align (verify → compact → triage in one pass, then render the plan), migrate (summon-only); doctor deferred. Language-agnostic.",
-      "version": "0.19.2"
+      "version": "0.20.0"
     },
     {
       "name": "fathom",

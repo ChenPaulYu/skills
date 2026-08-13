@@ -1,6 +1,6 @@
 ---
 name: do
-description: "Make a small, already-decided, behaviour-changing code change directly — with deep-module discipline, but no plan.md. Fires on \"just add X\", or post-converge \"make it functional\". NOT for behaviour-preserving moves (use /nav:refactor) or large/ambiguous specs (use /nav:plan)."
+description: "Make a small, already-decided, behaviour-changing code change directly — with deep-module discipline, but no plan.md. Fires on \"just add X\" / \"你做一下\" / \"直接開始實作\", or post-converge \"make it functional\". NOT for behaviour-preserving moves (use /nav:refactor) or large/ambiguous specs (use /nav:plan)."
 ---
 
 # Deep-module do — execute a small change, disciplined

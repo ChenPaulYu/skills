@@ -6,6 +6,11 @@ description: "Index an unfamiliar repository and judge how much to trust it: anc
 
 # index — map the ground before anyone walks it
 
+> **The core** (fathom): every claim returns to pinned evidence · know where the learner actually
+> is · flow governs · disclose progressively but never fold the correction · assume nothing is known,
+> and name things by use rather than by category. Stated in full in `fathom-guide`.
+
+
 Produce the two things every later step stands on: a **reusable anchor index** of an unfamiliar
 repository, and a **trust verdict** saying how much to believe what you read in it. No teaching
 here — the deliverable is grounding, not a lesson.

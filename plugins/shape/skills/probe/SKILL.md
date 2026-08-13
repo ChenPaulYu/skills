@@ -1,6 +1,6 @@
 ---
 name: probe
-description: "Design and run a minimal experiment when nobody can settle a fork by argument: an A/B comparison, a blind judgment test, or a behavior probe that lets reality vote. Fires on \"run a small experiment to find out whether X\", \"we don't know — let's test it\", or offered when a fork is undecidable by argument. NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), /shape:dogfood (probes a built feature's friction), or /verify (checks a change did what it claims)."
+description: "Design and run a minimal experiment when nobody can settle a fork by argument: an A/B comparison, a blind judgment test, or a behavior probe that lets reality vote. Fires on \"run a small experiment to find out whether X\" / \"probe 一下\", \"we don't know — let's test it\", or offered when a fork is undecidable by argument. NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), /shape:dogfood (probes a built feature's friction), or /verify (checks a change did what it claims)."
 ---
 
 # Probe — design a minimal experiment, let reality vote

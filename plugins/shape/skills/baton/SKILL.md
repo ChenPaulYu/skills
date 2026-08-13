@@ -1,7 +1,7 @@
 ---
 name: baton
 disable-model-invocation: true
-description: "Take or pass the session baton — one overwritten cursor holding goal · done · now · open · next. Take it on arrival (rebuilt from durable state, so it survives /clear); pass it before stepping away (the why git will never carry). Summoned only. NOT /shape:align — that maintains the project's durable record; this is the ephemeral note between sessions."
+description: "Take or pass the session baton — fires on \"我回來了\" / \"上次做到哪\" / \"先記一下進度\" — one overwritten cursor holding goal · done · now · open · next. Take it on arrival (rebuilt from durable state, so it survives /clear); pass it before stepping away (the why git will never carry). Summoned only. NOT /shape:align — that maintains the project's durable record; this is the ephemeral note between sessions."
 ---
 
 # baton — take it on arrival, pass it before you go

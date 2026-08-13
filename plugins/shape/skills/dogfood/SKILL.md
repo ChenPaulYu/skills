@@ -1,6 +1,6 @@
 ---
 name: dogfood
-description: "Dogfood a built feature that feels unsmooth: use it like a real user (browser or curl/CLI) against a list of intents, capturing evidence as you go. Fires on \"I finished X but it feels off\" or \"what usage are we missing\". Reports friction (clunky but working → UX idea) and coverage gaps (missing intents → design hole), routed to /shape:elicit/mockup or /nav:plan (+ /nav:do/refactor)."
+description: "Dogfood a built feature that feels unsmooth: use it like a real user (browser or curl/CLI) against a list of intents, capturing evidence as you go. Fires on \"I finished X but it feels off\" / \"dogfood 一下\" / \"用起來怪怪的\", or \"what usage are we missing\". Reports friction (clunky but working → UX idea) and coverage gaps (missing intents → design hole), routed to /shape:elicit/mockup or /nav:plan (+ /nav:do/refactor)."
 ---
 
 # Dogfood — use the built feature for real, surface where it's unsmooth
@@ -25,8 +25,6 @@ Full session steps, the report shape, the three boundaries (vs `/verify`, `/shap
 ## The session — use it for real, capture as you go (dogfood's own front)
 
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real build** and records it.
-
-0. **Show the run's cost before driving anything (ADR-114).** dogfood is computer-use automation by construction — it is squarely in the ask-first class. After the intent list exists, state what the session will cost (roughly how many interactions, whether any intent hits a live LLM path) and **get one confirmation for the batch**. The user may scope it down (drive three intents, not nine); that is a normal answer, not a failure. Declined outright → report the intent list as the deliverable and say plainly that nothing was driven, so nobody mistakes an unrun session for a clean one.
 
 0. **Get one `AskUserQuestion` confirmation before driving anything (ADR-114).** dogfood is computer-use automation by construction, so it sits squarely in the ask-first class. Once the intent list exists, present the run's shape as a real structured choice — roughly how many interactions, whether any intent touches a live-LLM path, and a scoped-down option (drive the top N intents, not all) alongside the full run. Scoping down is a normal answer, not a refusal. **Declined outright → the intent list itself is the deliverable**, and say plainly that nothing was driven, so an unrun session is never mistaken for a clean one.
 
