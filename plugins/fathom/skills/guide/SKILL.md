@@ -134,10 +134,15 @@ verb from silently redefining where the study is.
    respects that curiosity is the better teacher. Take their answer; if it skips a level the next
    one depends on, say what will be missing and let them decide anyway.
 3. Teach with the level's form (`references/forms.md`), leading with one plain conclusion.
-4. **Dwell** — stop and invite the learner's questions before testing anything. Repair what those
-   questions expose (wording, a missing gloss, a form that isn't landing). Unlimited rounds; the
-   gate never fires mid-dwell. When the questions keep reaching past this level, offer the dive
-   (see *Borrowing the siblings* below) instead of deferring them to a later level.
+4. **Dwell — name the choices, and preview the gate.** Stop and invite questions, but never with a
+   bare "anything you want to ask?": say what the options actually are (keep asking about this ·
+   move on to the next piece · check yourself now), and **tell them what the gate will ask before
+   they answer it**. A learner who knows what they will be asked can aim their questions at their
+   own gaps; a learner who doesn't is guessing what matters. Previewing costs nothing because the
+   gate asks for *their* narration, not a memorised fact — there is nothing to rehearse.
+   Repair what the questions expose (wording, a missing gloss, a form that isn't landing).
+   Unlimited rounds; the gate never fires mid-dwell. When the questions keep reaching past this
+   level, offer the dive (see *Borrowing the siblings* below) instead of deferring them.
 5. **Gate — verbalization, not fill-in-the-blank.** Ask the learner to narrate their own model in
    their own words, without the artifact in front of them, contrasting it against the anchor the
    calibration probe surfaced ("what is this, and how does it differ from the X you've built?").
