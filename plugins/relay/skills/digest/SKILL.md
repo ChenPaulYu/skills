@@ -1,7 +1,7 @@
 ---
 name: digest
 model: sonnet
-description: "Show the current viewer's real Relay obligations from GitHub — including requesting a reviewer for your own unreviewed PR — plus a separate non-binding notices tier for prose mentions. Use for 'what needs me?' or a reliable actionable view. Read-only: excludes completed rounds and ordinary notifications from obligations."
+description: "Show what actually needs you in a Relay workspace, read from GitHub — open obligations assigned to you, needs-input rounds, and your own unreviewed PRs — plus a separate non-binding notices tier. Fires on \"what needs me\", \"有什麼要我看的\", \"對方有回我嗎\", \"relay 有東西嗎\". Read-only; excludes completed rounds and ordinary notifications."
 ---
 
 # digest — show only what genuinely needs this viewer

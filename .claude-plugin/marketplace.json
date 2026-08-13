@@ -33,7 +33,7 @@
       "name": "relay",
       "source": "./plugins/relay",
       "description": "Coordinate asynchronously through a verified GitHub workspace under the Accord memory model. Launch can remember the default workspace and initialize its PR-attested identity roster; report resolves the destination and recipient before Issue-default routing. Digest, reply, brief, and settle keep responsibility and memory on native GitHub state. Language-agnostic.",
-      "version": "2.2.0"
+      "version": "2.3.0"
     }
   ]
 }
