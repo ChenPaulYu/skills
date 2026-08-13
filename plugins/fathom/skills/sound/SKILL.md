@@ -1,0 +1,100 @@
+---
+name: sound
+description: "Take soundings on an unfamiliar repository: anchor it at a commit (with its distance from the latest release), judge how deep the comprehension ladder needs to be, land a growing file:line anchor index, and deliver a measured trust verdict — how much to believe what you read here. Fires on 'index this repo', '幫我盤一下這個 repo', 'is this codebase trustworthy?', 'how healthy is this project?'. Read-only toward the learner: it grounds, it does not teach — /fathom:guide is the teaching door."
+---
+
+# sound — measure the water before anyone gets in
+
+Produce the two things every later step stands on: a **reusable anchor index** of an unfamiliar
+repository, and a **trust verdict** saying how much to believe what you read in it. No teaching
+here — the deliverable is grounding, not a lesson.
+
+## Stance
+
+- **Read deep, report compressed.** Inspect docs, manifests, entry points, tests, and the
+  load-bearing runtime paths as far as needed; the output is an index, never an inspection log.
+- **Read the load-bearing core personally.** Periphery may go to recon sub-agents that report
+  facts with `file:line`; cross-check their reports against each other and against the core you
+  read yourself. Contradictions are findings, not noise.
+- **Mark every load-bearing claim** known / assumed / unknown.
+- **Measure, don't infer.** The trust verdict is counted, not felt.
+
+## 1. Anchor
+
+Record: upstream URL · full commit SHA · the learning question (if one exists) · runtime
+constraints. Clone and pin the commit if not already present.
+
+Also record **release distance** — three cheap commands that pre-empt "are we even on the version
+the docs describe?":
+
+```text
+latest release tag        ·  published package version (registry)  ·  commits between tag and pin
+```
+
+A pin far ahead of the last release is itself a finding: the reader is looking at unreleased work.
+
+## 2. Collapse judgment
+
+Decide how many ladder levels this repository actually needs, and say so:
+
+- **Single meaningful runtime** → the Runtime level collapses.
+- **Small library, one narrow public promise, no long-lived state** → System and Behavior merge.
+- **A repository the user maintains** (map, headers, ADRs exist) → the top levels fast-pass.
+- Never collapse Behavior into Code: entering implementation without a behavior inventory is
+  file-led reading wearing a disguise.
+
+## 3. `soundings.md` — the anchor index
+
+Land it in the study home. Its contract, stated in its own header:
+
+1. Its job is answering **behavior** questions — not exhaustive structural coverage.
+2. It **grows downward**: every level descended and every behavior traced writes new anchors back.
+3. Every anchor is `file:line` **at the pin**.
+4. **The source clone is never annotated** — a single inserted line shifts every anchor and dirties
+   the diff against the pin. The index is the mark layer the source deliberately doesn't carry.
+5. Consult it before any deep read.
+
+Shape: a one-frame summary · a module inventory with verdicts (core / support / peripheral) and
+anchors · the load-bearing lifecycle · ownership boundaries · open threads. Per-module
+deep-module observations (deep vs leaky vs debt vs dead) belong here too — this file's consumer
+is the agent deciding what to believe, and they surface to a learner only as just-in-time warnings
+before reading that specific code.
+
+## 4. Trust verdict — one judgment, counted signals
+
+The payload is **how much to believe what you read here**, which changes how everything later is
+read. Count, then judge:
+
+| Signal | Measure |
+| --- | --- |
+| Maintenance intensity | commits and distinct contributors in a recent window; release cadence |
+| Test investment | test LOC vs source LOC; CI pipelines; enforced hooks |
+| Documentation staleness | does the README/AGENTS-style doc describe the code **at this pin**? |
+| Stability | churn on the load-bearing files; leftovers from a recent rewrite |
+| Product gap | is the open surface the whole product, or a funnel into a hosted one? |
+| External-information risk | do widely-circulated descriptions still match the code? |
+
+Close with a **"so read it like this"** instruction — that instruction is the deliverable; the
+numbers only earn it. Typical shapes: *trust code over prose* · *remember shapes, not signatures*
+· *every claim is pinned and can be re-checked*.
+
+**Not a per-module health map for the learner.** At this altitude a per-module verdict affords no
+next action, and information with no action attached is decoration.
+
+## Closing
+
+Report the verdict and the index location in the conversation; offer once to continue with
+`/fathom:guide`. Do not begin teaching.
+
+## Companion skills
+
+- **`/fathom:guide`** — the teaching climb; consumes this file, and performs a sounding inline if
+  none exists or it has gone stale.
+- **`/fathom:dive`** — pursues one topic against these anchors and writes new ones back.
+- **`/nav:audit`** — assesses a codebase you maintain against deep-module rules; `sound` grounds a
+  repository you are trying to *understand*, and its verdict is about believability, not health.
+
+## Communication style
+
+Explain in the user's language with simple, direct wording. Lead with one plain sentence; keep
+code, identifiers, and paths in their original form; put precision after, only where needed.

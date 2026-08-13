@@ -3,11 +3,14 @@
   "max_chars_per_skill": 240,
   "max_total_chars": 7000,
   "skills": {
+    "fathom-dive": "Follow one repository topic as deep as the learner wants, answered against pinned file:line evidence, without advancing the comprehension ladder.",
+    "fathom-guide": "Teach an unfamiliar repository level by level (Repository to Code), dwelling for questions and gating on the learner own narration. Resumes from a cursor on disk.",
+    "fathom-quiz": "Check what a learner still holds about a repository they studied: probe by narration, then update the learner model. Advances nothing.",
+    "fathom-sound": "Index an unfamiliar repository and judge how much to trust it: anchor the pin, land a file:line anchor index, deliver a measured trust verdict. Grounds; does not teach.",
     "frame-analogize": "Build and stress-test an analogy for a settled concept. Use for ELI5, metaphors, or 'explain differently'; compares candidates and names where the winner breaks.",
     "frame-dialectic": "Put a forming claim on trial: steelman both sides, expose its load-bearing assumption, and name a deciding experiment. Use for devil's advocacy or thesis stress tests.",
     "frame-first-principles": "Rebuild a question or decision from irreducible axioms, separating necessity from convention. Use to challenge assumptions or reason from first principles.",
     "frame-orthogonal": "Factor a tangled problem into independent axes and verify that moving one leaves the others fixed. Use to expose conflated or falsely coupled dimensions.",
-    "fathom-repo": "Study an unfamiliar repository through five gated levels (Repository to Code), one probe per level, resumable via a study cursor on disk. Not a catchup or a map refresh.",
     "nav-audit": "Audit codebase architecture against deep-module principles. Use for health, smells, feature-readiness, or full-domain reviews; read-only.",
     "nav-compose": "Author or restructure prose as a navigable deep module: lead with the point, group by knowledge, and keep each fact owned once.",
     "nav-do": "Implement a small, decided behavior change without a plan artifact. Use for quick features or fixes, not refactors or ambiguous work.",
@@ -22,11 +25,11 @@
     "relay-report": "Route a tell, owned question, review request, or memory change under the Issue-default Accord model. Previews writes and verifies responsibility.",
     "relay-settle": "Settle a Discussion or Issue, record a promoted Decision, merge an approved PR, or abandon one with reason. Requires authority and preserves Core gates.",
     "shape-align": "Decide with the user what is In progress, Next, and Future, then maintain a lean plan.md board. Use to align priorities or refresh what comes next.",
+    "shape-baton": "Take or pass the session baton: one overwritten cursor of goal, done, now, open, next. Take it on arrival; pass it before stepping away. Explicitly invoked; not align's durable record.",
     "shape-dogfood": "Use a completed feature like a real user via browser or CLI, record evidence, and identify workflow friction or missing intent coverage.",
     "shape-elicit": "Grill the user to a conceptual decision or root cause. Use for undecided logic, not visuals; may offer the survey leg or shape-probe when stalled.",
-    "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
-    "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction.",
     "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/).",
-    "shape-baton": "Take or pass the session baton: one overwritten cursor of goal, done, now, open, next. Take it on arrival; pass it before stepping away. Explicitly invoked; not align's durable record."
+    "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
+    "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction."
   }
 }

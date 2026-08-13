@@ -3,11 +3,27 @@
 > To **fathom** is to deeply understand; the root is the nautical depth unit, measured line by
 > line downward — the shape of this plugin's five-level ladder.
 
-## One door
+## Four verbs, one shared state (ADR-114)
 
-The plugin has exactly one skill: `repo`. Starting a new study and resuming an old one are the
-same door — the opening move reads the study cursor (or finds none) and branches. Do not add a
-second verb without evidence that a workflow cannot enter through `repo`.
+| Verb | Owns the moment | Writes |
+| --- | --- | --- |
+| `sound` | "index this repo" · "is it trustworthy?" — grounding without teaching | `soundings.md` |
+| `guide` | "walk me through it" · "where were we?" — the teaching climb | cursor · `bearings.md` · artifacts |
+| `quiz` | "test me" — spaced retention, may fire days later | `bearings.md` |
+| `dive` | "keep digging at X" — one thread, no ladder movement | `soundings.md` · `bearings.md` |
+
+**Files, not call order, are the connective tissue** — which is why the flow is free. `soundings.md`
+records how deep the repository is; `bearings.md` records how deep the learner is; `_index.md` is
+the cursor. Every verb runs standalone because the state is on disk.
+
+`guide` covers the run-it-all case through the marketplace's **reuse-via-transcript** pattern: if
+`soundings.md` is missing or stale it performs the sounding inline rather than sending the user to
+another door first.
+
+**Keep the near-neighbours distinct** — this split only pays if the boundaries hold: `dwell`
+(inside `guide`) is bound to the level just taught; `dive` is unbounded and advances nothing.
+`gate` (inside `guide`) is a level's exit; `quiz` is retention checking independent of progression.
+Adding a fifth verb needs evidence that no existing door can carry the moment.
 
 ## Division lines
 
@@ -18,9 +34,9 @@ second verb without evidence that a workflow cannot enter through `repo`.
 - **Not** a work-status catchup (`/shape:baton` — where did *today's task* stop), not a
   navigability map (`/nav:sync` — durable headers/map for a repo you maintain), not a
   decision-space survey (`/shape:elicit`'s survey leg — axes for a *decision*, not a system).
-- **State**: unlike the nav family (single-shot, read-only toward artifacts), `repo` owns a
-  persistent study directory — cursor, pinned clone, visual artifacts. That cursor is why this
-  is a standalone plugin and not a nav verb (ADR-111).
+- **State**: unlike the nav family (single-shot, read-only toward artifacts), these verbs share a
+  persistent study directory — cursor, learner model, anchor index, pinned clone, artifacts. That
+  shared state is why this is a standalone plugin and not a nav verb (ADR-111).
 
 ## Provenance labelling (inherited from `retrace`, ADR-113)
 
