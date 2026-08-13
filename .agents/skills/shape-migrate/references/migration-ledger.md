@@ -20,14 +20,20 @@ convention change it implements, runnable against any tree, any time, once.
 
 | Version | Fingerprint |
 |---|---|
-| **v3** (current, ADR-112) | `blueprints/thoughts/*.md` carry a `Status:` line; no `precedents/` folder |
+| **v3** (current, ADR-112 · extended ADR-113) | `blueprints/thoughts/*.md` carry a `Status:` line; no `precedents/` folder |
 | v2 (legacy, ADR-105) | `blueprints/precedents/index.md` exists |
 | v1 (legacy, ADR-026) | `blueprints/decisions.md` exists, no `precedents/` |
 | pre-blueprints | neither; possibly no `blueprints/` at all — nothing to migrate, point at `shape-align` to scaffold |
 
 More than one fingerprint present = a half-migrated tree; report it as the finding and offer to
-complete the relevant `M<n>` (M1 for a v1 remnant, M2 for a v2 remnant). Detection is idempotent
-— re-running migrate on a current tree reports "already v3, nothing to do."
+complete the relevant `M<n>` (M1 for a v1 remnant, M2 for a v2 remnant, M3 for a root `HANDOFF.md`
+remnant). Detection is idempotent — re-running migrate on a current tree reports "already v3,
+nothing to do."
+
+**`baton.md` is not part of the fingerprint.** ADR-113 added it to v3's layout as an optional,
+ephemeral tier — it is single-use and routinely absent (deleted once read), so its absence never
+signals an old version the way a missing `Status:` line does. M3 below moves an existing root
+`HANDOFF.md` into the tree; a v3 tree that has simply never had one parked is not "unmigrated."
 
 ## The migration ledger (append-only)
 
@@ -81,6 +87,29 @@ promotion step, no freeze gate.
   no replacement door. Any verb may edit a `thoughts/` file's `Status:` line directly going
   forward (`shape-align` for a fact reality already settled, `shape-elicit` for a reconsidered
   call).
+
+### M3 — root `HANDOFF.md` → `blueprints/baton.md` (joins v3's ephemeral tier) · ADR-113, 2026-08-13
+
+**Shape of the target:** no format change — `blueprints/baton.md` is the exact same five-section
+template (`goal · done · now · open · next` + the git-SHA metadata line) `HANDOFF.md` already
+used; only its location and owner move, from a root file written/read by the now-dissolved
+`reflect` plugin's `park`/`catchup` to a `blueprints/` tier written/read by `shape-baton`.
+
+**Mapping:**
+- **Tree exists** → the source file moves **verbatim**, content untouched: `git mv HANDOFF.md
+  blueprints/baton.md` if tracked, a plain `mv` if not (park's own doctrine already treats it as
+  local-only by default — most sources will be untracked; check with `git ls-files` per the
+  tracked-check gate before choosing which). No reformatting, no re-dating — the SHA and the five
+  sections carry over exactly as written.
+- **No tree** → **left in place** at the project root. This is not a partial migration: root
+  `HANDOFF.md` is the standing no-tree fallback (tolerant reader, ADR-071), not a legacy dialect
+  waiting to be moved. Only migrate it once a `blueprints/` tree is scaffolded (by `shape-align`
+  or otherwise) for some other reason — never scaffold a tree just to relocate a cursor.
+- No index/`overruled.md` equivalent — `baton.md` is a singleton with no cross-references to
+  repoint, so this is the ledger's simplest entry: one file, one move, no fold-forward.
+- Stale `/reflect:catchup` / `/reflect:park` mentions elsewhere in a project's own docs are a
+  naming sweep, not a structural transform — out of scope for this entry; migrate moves content,
+  it doesn't rewrite prose that names the old skill.
 
 ## Protocol
 

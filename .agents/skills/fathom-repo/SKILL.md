@@ -128,7 +128,7 @@ study is not a lab report.
 
 ## Companion skills
 
-- **`reflect-catchup`** — where today's *work* stopped; `repo` owns where the *understanding*
+- **`shape-baton`** — where today's *work* stopped; `repo` owns where the *understanding*
   stopped.
 - **`nav-sync`** — durable navigability for a repo you maintain; `repo` may consume its map as
   grounding when studying your own codebase.

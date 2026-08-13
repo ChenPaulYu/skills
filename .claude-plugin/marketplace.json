@@ -9,31 +9,25 @@
       "name": "nav",
       "source": "./plugins/nav",
       "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers, plus the bilingual codebase map as its map leg), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
-      "version": "0.15.0"
+      "version": "0.15.1"
     },
     {
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought, plus a survey leg that maps a decision space when a volley stalls), probe (a minimal experiment when nobody can settle a fork by argument), dogfood (use a built feature for real → friction + coverage gaps), align (verify → compact → triage in one pass, then render the plan), migrate (summon-only); doctor deferred. Language-agnostic.",
-      "version": "0.17.1"
+      "version": "0.18.0"
     },
     {
       "name": "fathom",
       "source": "./plugins/fathom",
       "description": "Fathom an unfamiliar repository — one skill, repo: climb a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code). Produces a growing soundings.md anchor index, calibrates on the learner's background before building anything, teaches with knowledge-matched forms (guided interactive mockup at Repository; playback / diff / tree / weighted graph per knowledge kind), dwells for questions, then gates by verbalization — the learner narrates their own model. Persistent study cursor resumes across sessions. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Language-agnostic.",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     {
       "name": "frame",
       "source": "./plugins/frame",
       "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — build a stress-tested analogy so it lands in plain language). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
       "version": "0.8.0"
-    },
-    {
-      "name": "reflect",
-      "source": "./plugins/reflect",
-      "description": "Reflect on your own working session — the one reflexive, cross-cutting family. Three summoned skills: catchup/park work the cursor, and retrace reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. A plain chronological recap remains skill-free. Read-only except each writer's bounded artifact. Cross-project, standalone.",
-      "version": "0.9.0"
     },
     {
       "name": "relay",

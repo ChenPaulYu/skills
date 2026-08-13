@@ -14,9 +14,6 @@
     "nav-plan": "Turn a feature intent into a codebase-grounded implementation plan after auditing touched domains and resolving ambiguity. Writes only the approved plan.",
     "nav-refactor": "Execute a behavior-preserving structural refactor with verbatim moves and test gates. Use to extract, split, or reorganize code without changing behavior.",
     "nav-sync": "Refresh load-bearing files' top headers to describe their purpose, details, and dependencies after code changes.",
-    "reflect-catchup": "Rebuild current work state from HANDOFF.md, git, files, plans, and live context. Use after a break; read-only and present-state only.",
-    "reflect-park": "Write goal, done, now, open, next, and the current SHA to HANDOFF.md before stepping away. Explicitly invoked; overwrites the prior cursor.",
-    "reflect-retrace": "Retrace why development changed stage by stage, get user correction, then render an evidence-backed interactive artifact. Not catchup or tour.",
     "relay-brief": "Maintain a cited Brief from active Decision files when understanding must stay current across contexts. Always a pull request; never closes work, claims consensus, or changes Core.",
     "relay-digest": "Show the viewer's GitHub obligations: assigned work, reviews/re-reviews, settlement, and requesting a reviewer for an unreviewed PR. Read-only; mentions are notices.",
     "relay-launch": "Set up or audit Relay in the current GitHub repository: identity, Discussions, permissions, CODEOWNERS, and protection. Writes require approval and read-back.",
@@ -29,6 +26,7 @@
     "shape-elicit": "Grill the user to a conceptual decision or root cause. Use for undecided logic, not visuals; may offer the survey leg or shape-probe when stalled.",
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
     "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction.",
-    "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/)."
+    "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/).",
+    "shape-baton": "Take or pass the session baton: one overwritten cursor of goal, done, now, open, next. Take it on arrival; pass it before stepping away. Explicitly invoked; not align's durable record."
   }
 }

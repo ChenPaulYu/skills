@@ -188,6 +188,11 @@
         },
         "legacy_browser_subagent": {}
       }
+    },
+    {
+      "date": "2026-08-13",
+      "reason": "ADR-113: reflect dissolves (catchup + park merge into shape:baton, retrace retires). .agents/skills/reflect-catchup, reflect-park, reflect-retrace are deleted outright, so their prior zeroed counts simply stop existing rather than dropping further. The new .agents/skills/shape-baton carries disable-model-invocation: true in its source frontmatter, same as every other explicit_invocation_only member; lowerFrontmatter strips it and injects the equivalent body-level policy paragraph exactly as it already does for shape-migrate and relay-migrate, so the generated file's disable_model_invocation count is 0, same as the existing zero ceiling. No per_file_max_counts change needed.",
+      "bumps": {}
     }
   ]
 }

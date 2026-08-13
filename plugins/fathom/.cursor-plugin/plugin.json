@@ -1,6 +1,6 @@
 {
   "name": "fathom",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Fathom an unfamiliar repository — to fathom is to deeply understand; the root is the nautical depth unit, measured line by line downward, the shape of this plugin's ladder. One skill: repo — climb Repository → Runtime → System → Behavior → Code. Opening moves: produce a growing soundings.md anchor index, then a calibration probe on the learner's background (sets gloss list, contrast anchor, chapter compression). Per level: teach with knowledge-matched forms (interactive guided mockup at Repository; playback for process, diff for delta-from-known, weighted graph with next-hints for structure), dwell for questions, then a verbalization gate — the learner narrates their own model, the agent repairs only the exposed gap. Persistent study cursor resumes across sessions. Method evidence lives in the etudes lab. Language-agnostic.",
   "author": {
     "name": "Paul",

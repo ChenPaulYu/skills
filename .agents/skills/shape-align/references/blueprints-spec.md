@@ -16,6 +16,7 @@ blueprints/
   plans/             ← committed. one .md per grounded code-level plan from nav-plan (the build-side render of a thought).
   mockups/           ← committed. interactive HTML decision artifacts from shape-mockup (Pick logs + ratified samples) — plus, on request, a disposable board snapshot rendering plan.md for a human to browse.
   plan.md            ← committed. the lean status index — agent AND human read this directly.
+  baton.md           ← usually untracked (local-only cursor by default; committing it is the user's call for cross-machine work). the ephemeral tier, below plan.md — overwritten, single-use, owned by shape-baton. No tree → root HANDOFF.md is the fallback.
 ```
 
 > **`plan.md` (singular) vs `plans/` (plural)** are different things, deliberately: `plan.md` is align's lean *status index* (now/next/later); `plans/` holds nav-plan's *grounded implementation plans* (one per item, Context · Approach · Critical files · Verification). Intent → status → grounded-how.
@@ -24,6 +25,7 @@ blueprints/
 - **`plans/`** — the grounding layer (owned by `nav-plan`). Each file = one item grounded into a code-level implementation plan, dated `YYYY-MM-DD-<slug>.md`. It's the build-side render of a thought; lives here so the whole arc (decision → status → grounded-how) stays in one tree. `shape-align` keeps these current alongside `thoughts/` (a plan whose steps all shipped is stale, same as an implemented thought).
 - **`mockups/`** — visual-decision artifacts (owned by `shape-mockup`), **committed**: they carry Pick logs and ratified samples, and thoughts/ link into them — untracked means a single-disk record and dead links on clone. Individual artifacts remain *disposable in spirit* (most are superseded and never reopened), but the record stays in git. Root-level scratch may be ignored via a root-scoped `/mockups/`.
 - **`plan.md`** — what to do, grouped by status. The agent's index — and, since it's plain markdown, directly human-readable too. Lean: only "what + which thought", no prose essays.
+- **`baton.md`** — the **ephemeral** tier, below `plan.md`. One overwritten file: the session cursor — a five-section goal · done · now · open · next note, written on the way out and read on the way in, owned entirely by `shape-baton`. Not a decision and not a status entry — it never enters `thoughts/` or `plan.md`, and it's single-use (`baton` deletes it once its picture has been read and folded into a report). **No tree → root `HANDOFF.md`** is the fallback location; never scaffold a tree just to pass a baton, and the skill self-reports which location it used (tolerant reader, ADR-071).
 
 Where `blueprints/` itself lives is per-project (commonly `docs/blueprints/`). Ask once on first scaffold; remember it thereafter.
 
@@ -61,8 +63,9 @@ Rules: `head -12` yields the gist (title + Status + TL;DR + into "The call"). Ea
 | DECISION (what's decided — in force or not) | `thoughts/*.md` | agent | what was decided and why · what currently binds (`Status: in force`) · what was rejected or superseded |
 | STATUS (now/next/later) | `plan.md` | agent + human | what we're doing now / next / later — the single maintained board |
 | VIEW (on-demand) | a `shape-mockup` board snapshot | human | rendered fresh when wanted from `plan.md` **and** `thoughts/`, click-to-reveal — never stored |
+| CURSOR (ephemeral, session-to-session) | `blueprints/baton.md` (no tree → root `HANDOFF.md`) | agent, next session | where/why the last session stopped — held until read and cleared, owned by `shape-baton` |
 
-Dependencies point **downstream only**: a board snapshot, when rendered, derives from `plan.md` + `thoughts/`. Never the reverse. Rendering a snapshot must never become a place where new decisions are born — those belong in a thought.
+Dependencies point **downstream only**: a board snapshot, when rendered, derives from `plan.md` + `thoughts/`. Never the reverse. Rendering a snapshot must never become a place where new decisions are born — those belong in a thought. The CURSOR row sits **outside** this chain — `baton.md` is written and read directly by `shape-baton`, never derived from DECISION/STATUS/VIEW and never a source for them either.
 
 ## `plan.md` shape
 

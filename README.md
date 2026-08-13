@@ -16,9 +16,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
 | See where we are, compact drift, decide what's next（重新整理） | `/shape:align` |
 | Study an unfamiliar repository into a mental model（帶我理解陌生 repo） | `/fathom:repo` |
-| Catch me up on where this session left off（接手現況） | `/reflect:catchup` |
-| Park a cursor before stepping away（收工留單） | `/reflect:park` |
-| Retrace how a long development arc got here（重新走過開發路徑） | `/reflect:retrace` |
+| Take or pass the session cursor before/after stepping away（交接記事本） | `/shape:baton` |
 | Report progress to a counterpart over relay | `/relay:report` |
 
 ## What's in here
@@ -27,12 +25,11 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers and the bilingual codebase map (two cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
 | [`fathom`](plugins/fathom/) | **Study an unfamiliar repository** — one skill (`repo`) climbs a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code): a growing `soundings.md` anchor index, a calibration probe on the learner's background, knowledge-matched visual forms (guided interactive mockup at Repository; playback / diff / tree / weighted graph per knowledge kind), dwell rounds, verbalization gates, and a persistent study cursor that resumes across sessions. The learner's predictive mental model is the deliverable. |
-| [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, and keep the `blueprints/` board honest against the code. Six verbs; the build itself is handed to `nav`. |
+| [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, keep the `blueprints/` board honest against the code, and hand the ephemeral session cursor (`baton`) between sessions. Seven verbs; the build itself is handed to `nav`. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
-| [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `launch` verifies and remembers the default workspace, audits repository readiness, and initializes its PR-attested identity roster; `report` resolves destination and recipient before routing intent Issue-default into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records native responses; `brief` preserves cited understanding; `settle` closes with authority. GitHub owns state; Relay owns semantics and verification. Independent. |
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **fathom** (study a repository you don't yet hold a model of — a persistent, cross-session learning campaign), **frame** (apply a frame to a problem or to an answer), **reflect** (turn attention back on your own working session — the reflexive, cross-cutting family), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **fathom** (study a repository you don't yet hold a model of — a persistent, cross-session learning campaign), **frame** (apply a frame to a problem or to an answer), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -65,6 +62,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 
 *User-invoked:*
 
+- `/shape:baton` — take or pass the session baton — one overwritten cursor holding goal · done · now · open · next; take it on arrival, pass it before stepping away; lives at `blueprints/baton.md` (no-tree fallback: root `HANDOFF.md`)
 - `/shape:migrate` — bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)
 
 **`frame` — apply an explicit frame, to a problem or to an answer:**
@@ -73,12 +71,6 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/frame:orthogonal` — factor a tangled phenomenon into mutually-independent (orthogonal) axes; verify the independence (move one, the others stay put) and name what was conflated; in-chat
 - `/frame:dialectic` — put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat
 - `/frame:analogize` — build a deliberately stress-tested analogy for a concept you already understand: generate multiple candidates, check the mapping against the real structure, pick on fit, name where the winner breaks; delivers to the user rather than deriving for the agent, so it doesn't feed `shape`; in-chat
-
-**`reflect` — reflect on your session** (the reflexive, cross-cutting family; cross-project — *all three are user-invoked*):
-
-- `/reflect:catchup` — re-orient on where the work stands now + next, rebuilt from git/diff/plan (not chat memory); fixed shape goal · done · now · open · next; clears the consumed `HANDOFF.md` after reporting (the cursor is single-use, ADR-085)
-- `/reflect:park` — write that same five-shape cursor + the current git SHA into the project's `HANDOFF.md` before stepping away, overwriting any prior one (catchup's write-side mirror; the next catchup that drains it removes it)
-- `/reflect:retrace` — reconstruct why a long development arc moved from stage to stage (prior state · pressure · evidence · decision · status · next pressure), put the causal outline in front of you for correction, then render a browser-verified interactive alignment artifact with concrete witnesses; not a catchup, codebase tour, recap, or process retro
 
 **`relay` — coordinate with a counterpart through GitHub, following the Accord memory model** (six daily model-invoked skills; standalone; `report`/`reply`/`settle`/`brief` show any outbound object text verbatim and ask "Is this what you mean?" before posting, ADR-095; ADR-100):
 
@@ -109,11 +101,10 @@ Or by hand. In Claude Code:
 /plugin install fathom@skills
 /plugin install shape@skills
 /plugin install frame@skills
-/plugin install reflect@skills
 /plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/fathom:*`, `/shape:*`, `/frame:*`, `/reflect:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `fathom`, `frame`, `reflect`, and `relay` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/fathom:*`, `/shape:*`, `/frame:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `fathom`, `frame`, and `relay` are independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 
@@ -165,7 +156,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 54 entries — the same 27 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 50 entries — the same 25 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 

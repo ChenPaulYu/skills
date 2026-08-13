@@ -21,11 +21,10 @@ There are two channels:
 /plugin install fathom@skills
 /plugin install shape@skills
 /plugin install frame@skills
-/plugin install reflect@skills
 /plugin install relay@skills
 ```
 
-**Verify:** `/plugin` lists the six plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
+**Verify:** `/plugin` lists the five plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
 
 ## Antigravity CLI (`agy`)
 
@@ -36,11 +35,10 @@ agy plugin install plugins/nav
 agy plugin install plugins/fathom
 agy plugin install plugins/shape
 agy plugin install plugins/frame
-agy plugin install plugins/reflect
 agy plugin install plugins/relay
 ```
 
-**Verify:** `agy plugin list` shows all six with source `claude-code`.
+**Verify:** `agy plugin list` shows all five with source `claude-code`.
 
 Note: agy's global import also materializes the skills into `~/.agents/skills/`,
 which opencode and Cursor read — so this single install may already cover them globally.

@@ -13,12 +13,11 @@
     "nav-plan",
     "relay-digest"
   ],
-  "expect_skill_count": 27,
+  "expect_skill_count": 25,
   "expect_skills": [
     "nav-plan",
     "relay-digest",
-    "reflect-catchup",
-    "reflect-retrace",
+    "shape-baton",
     "shape-migrate"
   ],
   "expect_runtime_files": [

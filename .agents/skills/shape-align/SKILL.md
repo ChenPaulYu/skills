@@ -23,7 +23,7 @@ It runs on **compaction pressure**, the same instinct as compacting an agent's c
 - **Consolidate beats raw delete** when live design remains — merge, verify, *then* remove. Curation criterion: **keep what git makes expensive to recover (a live call's why + rejected alternatives), drop what git makes cheap.**
 - **A mockup retires only after three ordered preconditions pass** (ADR-037): the decision is settled/shipped · its residue is verifiably recorded in the owning doc · inbound links are resolved. Default is prune once all pass; salvage-then-prune when residue lives only in the mockup. Parked decisions keep a parked stamp. Check trackedness with `git ls-files`, never `ls`.
 - **Evidence over tidiness.** Cite the signal behind every verdict (code — strongest · self-declaration · date); mark `uncertain` rather than over-claim.
-- **Clear a rotten handoff note.** If the project root holds a `HANDOFF.md` whose recorded SHA no longer matches `HEAD` and whose content this pass has verified as shipped or absorbed, delete it in the same sweep — a stale cursor is a record that lies, and align exists to stop the record lying. (`reflect-catchup` clears the note it *read*; align covers the note nobody came back for.) Never delete one whose why hasn't been absorbed somewhere durable first.
+- **Clear a rotten handoff note.** If `blueprints/baton.md` (or, on a no-tree project, the root `HANDOFF.md` fallback) has a recorded SHA that no longer matches `HEAD` and content this pass has verified as shipped or absorbed, delete it in the same sweep — a stale cursor is a record that lies, and align exists to stop the record lying. (`shape-baton` clears the note it *read*; align covers the note nobody came back for.) Never delete one whose why hasn't been absorbed somewhere durable first.
 - **One state, one maintained render.** `plan.md` is the single source of truth for status. A visual view is generated on demand by `shape-mockup` — never a second maintained copy that can drift.
 
 Full protocol — locating/scaffolding the tree (incl. the dev-workflow-stub install), the four-step sequence, and the `nav-plan` seam + ADR-086 push/pull rationale: `references/protocol.md`. The compaction machinery — inventory/gather/present/write, the currency sweep across tiers, the mockups precondition table, the `nav-sync` seam: `references/reconcile-protocol.md`. Tree + document format: `references/blueprints-spec.md`.
@@ -34,7 +34,7 @@ Full protocol — locating/scaffolding the tree (incl. the dev-workflow-stub ins
 - **`shape-mockup`** — converges a visual/structural decision into `mockups/` (it states retire-on-ship; align executes it); also renders an on-demand board snapshot.
 - **`nav-plan`** — the build-side sibling: grounds one blueprint item into a code-level implementation plan.
 - **`nav-sync`** — its `head -12` headers are how align reads implementation status cheaply.
-- **`reflect-park`** — the *ephemeral* counterpart: a "stepping away right now" session cursor is park's `HANDOFF.md`, not a blueprints entry. align owns **durable** status.
+- **`shape-baton`** — the *ephemeral* counterpart: a "stepping away right now" session cursor is `blueprints/baton.md`, not a blueprints entry align maintains. align owns **durable** status.
 
 ## Communication style
 

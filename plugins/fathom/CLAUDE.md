@@ -15,12 +15,24 @@ second verb without evidence that a workflow cannot enter through `repo`.
   foreign upstream pinned at a commit. The learner's own codebase is also valid input (the
   collapse rules fast-pass the levels a maintainer already owns), but continuous maintenance
   work belongs to `nav`.
-- **Not** a work-status catchup (`/reflect:catchup` — where did *today's task* stop), not a
+- **Not** a work-status catchup (`/shape:baton` — where did *today's task* stop), not a
   navigability map (`/nav:sync` — durable headers/map for a repo you maintain), not a
   decision-space survey (`/shape:elicit`'s survey leg — axes for a *decision*, not a system).
 - **State**: unlike the nav family (single-shot, read-only toward artifacts), `repo` owns a
   persistent study directory — cursor, pinned clone, visual artifacts. That cursor is why this
   is a standalone plugin and not a nav verb (ADR-111).
+
+## Provenance labelling (inherited from `retrace`, ADR-113)
+
+Every causal or rationale claim `repo` makes about *why* the system became what it is is labelled
+by how it is known: **Recorded** (a record states the reason — a commit body, an ADR, a
+comment), **Inferred** (a bounded interpretation of source, diff, or test-sequence evidence — say
+what the inference rests on), or **Unknown** (the available evidence cannot support the claim —
+say so rather than fill the gap). Never let "implemented" imply "decided," "verified" imply
+"committed," or "current code" imply "original intent" — what shipped and why it was chosen are
+different claims with different evidence, and collapsing them is exactly the failure this rule
+blocks. Applies at every level of the ladder, most acutely at System and Behavior, where the
+temptation to read intent off the code alone is strongest.
 
 ## Relationship to the etudes lab
 

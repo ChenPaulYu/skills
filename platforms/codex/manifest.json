@@ -61,15 +61,14 @@
       "skills": [
         "nav-do",
         "nav-plan",
-        "reflect-catchup"
+        "shape-baton"
       ]
     },
     "build": {
       "summary": "Code navigation, convergence, execution, and session orientation.",
       "skills": [
         "nav-*",
-        "shape-*",
-        "reflect-catchup"
+        "shape-*"
       ]
     },
     "research": {
@@ -79,10 +78,9 @@
       ]
     },
     "collaboration": {
-      "summary": "Relay coordination and session reflection.",
+      "summary": "Relay coordination.",
       "skills": [
-        "relay-*",
-        "reflect-*"
+        "relay-*"
       ]
     },
     "all": {
@@ -173,10 +171,8 @@
         "> **Explicitly invoked only.**"
       ],
       "contract_consumers": [
-        ".agents/skills/reflect-catchup/SKILL.md",
-        ".agents/skills/reflect-park/SKILL.md",
-        ".agents/skills/reflect-retrace/SKILL.md",
         ".agents/skills/relay-migrate/SKILL.md",
+        ".agents/skills/shape-baton/SKILL.md",
         ".agents/skills/shape-migrate/SKILL.md"
       ]
     },

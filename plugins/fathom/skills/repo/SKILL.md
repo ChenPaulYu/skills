@@ -1,6 +1,6 @@
 ---
 name: repo
-description: "Study an unfamiliar repository into a predictive mental model by climbing a five-level ladder — Repository → Runtime → System → Behavior → Code — one reconstruction-or-prediction gate per level, resumable across sessions via a study cursor on disk. Fires on 'study this repo', '帶我理解這個 repo', 'learn how this codebase works', or resuming ('continue the study', '我們上次學到哪'). NOT a work-status catchup (/reflect:catchup), not headers/map upkeep for a repo you maintain (/nav:sync), not a decision-space survey (/shape:elicit's survey leg)."
+description: "Study an unfamiliar repository into a predictive mental model by climbing a five-level ladder — Repository → Runtime → System → Behavior → Code — one reconstruction-or-prediction gate per level, resumable across sessions via a study cursor on disk. Fires on 'study this repo', '帶我理解這個 repo', 'learn how this codebase works', or resuming ('continue the study', '我們上次學到哪'). NOT a work-status catchup (/shape:baton), not headers/map upkeep for a repo you maintain (/nav:sync), not a decision-space survey (/shape:elicit's survey leg)."
 ---
 
 # repo — climb an unfamiliar repository
@@ -127,7 +127,7 @@ study is not a lab report.
 
 ## Companion skills
 
-- **`/reflect:catchup`** — where today's *work* stopped; `repo` owns where the *understanding*
+- **`/shape:baton`** — where today's *work* stopped; `repo` owns where the *understanding*
   stopped.
 - **`/nav:sync`** — durable navigability for a repo you maintain; `repo` may consume its map as
   grounding when studying your own codebase.

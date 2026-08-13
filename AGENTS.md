@@ -154,8 +154,8 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
 
 ## Authoring conventions (every plugin, every skill)
 
-- **★ Contracts vs conventions** — only two disk structures in this repo are true *contracts* (a reader breaks if they're missing/malformed, backed by a linter/gate): ① relay thought frontmatter (`/relay:format` lints it), ② the manifest + generated-artifact set (gates 1–2 above, `validate-codex-skills.mjs`). Everything else on disk — the `blueprints/` tree, `plan.md`, file-top headers, the codebase map, `HANDOFF.md`, and so on — is a **convention**: the verb that reads it scaffolds it, repairs it, and tolerates absence or a non-standard shape without breaking. Don't promote a convention to contract-strictness by treating its canonical shape as mandatory. (The former third contract, the `docs/core/` freeze protocol, retired with `/shape:position` — [ADR-112](docs/adr/112-one-board-verb-two-tiers.md); a decision is now born durable in `thoughts/` with a `Status:` line, itself a convention, not a frozen contract.) Full rationale: [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md).
-- **★ Tolerant reader — three states, self-reported** — every verb that reads a convention-owned structure (above) handles three states: **standard shape** → consume directly; **non-standard/ad-hoc shape** → tolerate, consume what's readable; **absent** → degrade gracefully and **self-report which tier it read from**, so the user can judge how much to trust the result. Canonical instance: `plugins/reflect/skills/catchup/SKILL.md`'s "Consumption priority" section. [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md).
+- **★ Contracts vs conventions** — only two disk structures in this repo are true *contracts* (a reader breaks if they're missing/malformed, backed by a linter/gate): ① relay thought frontmatter (`/relay:format` lints it), ② the manifest + generated-artifact set (gates 1–2 above, `validate-codex-skills.mjs`). Everything else on disk — the `blueprints/` tree, `plan.md`, `blueprints/baton.md` (or its no-tree fallback, root `HANDOFF.md`), file-top headers, the codebase map, and so on — is a **convention**: the verb that reads it scaffolds it, repairs it, and tolerates absence or a non-standard shape without breaking. Don't promote a convention to contract-strictness by treating its canonical shape as mandatory. (The former third contract, the `docs/core/` freeze protocol, retired with `/shape:position` — [ADR-112](docs/adr/112-one-board-verb-two-tiers.md); a decision is now born durable in `thoughts/` with a `Status:` line, itself a convention, not a frozen contract.) Full rationale: [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md).
+- **★ Tolerant reader — three states, self-reported** — every verb that reads a convention-owned structure (above) handles three states: **standard shape** → consume directly; **non-standard/ad-hoc shape** → tolerate, consume what's readable; **absent** → degrade gracefully and **self-report which tier it read from**, so the user can judge how much to trust the result. Canonical instance: `plugins/shape/skills/baton/references/protocol.md`'s "Consumption priority" section. [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md).
 - **★ Invocation category is visible, not just in frontmatter** — a skill's invocation axis (model-invoked by default, or summoned-only via `explicit-invocation-only: true`) already has one owner, the frontmatter field; `README.md`'s Invocation section should additionally bucket entries by category (User-invoked / Model-invoked) so the fact is scannable by a human, not just greppable in frontmatter. Inventory + what's still an open question: [ADR-072](docs/adr/072-invocation-direction-law-inventory.md).
 - **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `frame`'s reasoning lenses use canonical names — `first-principles` — for discoverability, while its `analogize` member uses a bare verb); document the divergence in that plugin's CLAUDE.md.
 - **★ Self-contained skill, three layers** — governed by **⚖ The three-layer law at the top of this file** (ADR-109; single owner, stated once). The one nuance owned here: *self-contained* means within the skill's **directory**, not within the body — a skill depends on no CLAUDE.md being loaded, and its `references/` ship with it.
@@ -184,7 +184,7 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
 - **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and document the rename in an ADR.
 - **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and write an ADR.
 - **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.
-- **Retirement is a rhythm, not an event (ADR-109)** — a model-invoked skill with zero fires across 3 months of transcripts is **demoted to `explicit-invocation-only: true`** (summon-only: context tax zero, capability intact, no debate). Demotion reverses on real demand. Deletion still requires the ADR-107 three-causes check (never-reachable / mis-triggered / genuinely unclaimed) — a raw zero alone never deletes. Watch-list clock for `retrace` started 2026-08-12; checkpoint 2026-11 (`retrace`'s verdict also decides whether reflect's `catchup`/`park` merge into shape — queued in ADR-110). Off the list same day: `probe` (user-attested real use), `build`/`survey` (retired/folded, ADR-110), `migrate` (demoted). `tour` left the list 2026-08-12 by the owner's direct verdict, not the clock — deleted with its successor named (ADR-111): the three-causes check ruled mis-fit (the need is real, the single-altitude design didn't serve it; `fathom-repo` claims the need).
+- **Retirement is a rhythm, not an event (ADR-109)** — a model-invoked skill with zero fires across 3 months of transcripts is **demoted to `explicit-invocation-only: true`** (summon-only: context tax zero, capability intact, no debate). Demotion reverses on real demand. Deletion still requires the ADR-107 three-causes check (never-reachable / mis-triggered / genuinely unclaimed) — a raw zero alone never deletes. The watch list is currently empty: `retrace` retired and `reflect` dissolved 2026-08-13 ([ADR-113](docs/adr/113-baton-joins-blueprints-reflect-dissolves.md)) — `catchup`/`park` merged into `shape-baton`, so the queued November question resolved early. Off the list same day: `probe` (user-attested real use), `build`/`survey` (retired/folded, ADR-110), `migrate` (demoted). `tour` left the list 2026-08-12 by the owner's direct verdict, not the clock — deleted with its successor named (ADR-111): the three-causes check ruled mis-fit (the need is real, the single-altitude design didn't serve it; `fathom-repo` claims the need).
 - **Every plugin content change ships with a version bump** — installed plugins
   are **version-pinned cache snapshots** (`~/.claude/plugins/cache/<mkt>/<plugin>/<version>/`),
   not live reads of this directory; without a bump, `claude plugin update`
@@ -232,12 +232,24 @@ second verb without evidence that a workflow cannot enter through `repo`.
   foreign upstream pinned at a commit. The learner's own codebase is also valid input (the
   collapse rules fast-pass the levels a maintainer already owns), but continuous maintenance
   work belongs to `nav`.
-- **Not** a work-status catchup (`reflect-catchup` — where did *today's task* stop), not a
+- **Not** a work-status catchup (`shape-baton` — where did *today's task* stop), not a
   navigability map (`nav-sync` — durable headers/map for a repo you maintain), not a
   decision-space survey (`shape-elicit`'s survey leg — axes for a *decision*, not a system).
 - **State**: unlike the nav family (single-shot, read-only toward artifacts), `repo` owns a
   persistent study directory — cursor, pinned clone, visual artifacts. That cursor is why this
   is a standalone plugin and not a nav verb (ADR-111).
+
+## Provenance labelling (inherited from `retrace`, ADR-113)
+
+Every causal or rationale claim `repo` makes about *why* the system became what it is is labelled
+by how it is known: **Recorded** (a record states the reason — a commit body, an ADR, a
+comment), **Inferred** (a bounded interpretation of source, diff, or test-sequence evidence — say
+what the inference rests on), or **Unknown** (the available evidence cannot support the claim —
+say so rather than fill the gap). Never let "implemented" imply "decided," "verified" imply
+"committed," or "current code" imply "original intent" — what shipped and why it was chosen are
+different claims with different evidence, and collapsing them is exactly the failure this rule
+blocks. Applies at every level of the ladder, most acutely at System and Behavior, where the
+temptation to read intent off the code alone is strongest.
 
 ## Relationship to the etudes lab
 
@@ -389,56 +401,6 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 - **Changing the 8 rules**: they are nav's framework, restated verbatim in every nav `SKILL.md` — update each in the **same commit**, and write an ADR.
 - **The 8 rules apply to nav's own files too** (the meta-discipline noted above): a `SKILL.md` past ~500 lines, or one enumerating many distinct responsibilities, gets split — same bar as the product code nav audits.
-
-
----
-
-# reflect — plugin conventions
-> Context for any agent (or human) editing **this plugin itself**.
-> For executing one of the skills, read its `SKILL.md` — each is self-contained. Repo-wide authoring + maintenance rules live in the repo-root [`CLAUDE.md`](CLAUDE.md).
-
-## What this plugin is
-
-Skills for **reflecting on your own working session** — the **one reflexive, cross-cutting family**. Every other family faces *outward* at an artifact in the world: `nav` = existing code · `shape` = a product's decisions / forward-motion · `research` = external documents · `think` = your reasoning about a problem. `reflect` alone turns attention **back on the work itself** — the current session and its durable traces in git/files. Because that concern cuts *across* every other family (you reflect before/after `nav` work, `shape` work, research), it can't be folded into any one of them; it sits across them, not parallel — which is exactly why it's its own family.
-
-> **Why the name is `reflect`, not `manage` or `retro` (ADR-056).** `manage` mis-coloured the family as *maintenance* (which is `nav`'s job) — it fit 0 of the 3 members. `reflect` filters by **reflexivity, not tense** (Latin *reflectere*, "bend back" — a mirror shows you *now*), so it admits `catchup`'s forward "now + next" where `retro` (past-only) cannot. `reflect` is the **genus**; `retro` (see the value-guardrail) is a *species* under it. Distinct from `think`: think operates on the *problem's content*; reflect operates on the *work container* (where am I · what did I do · what did I learn).
-
-Three active skills, **one read/write pair plus one knowledge move** — not a flat list. `catchup` / `park` are the cursor pair, **orient (read) → orient (write)**; `retrace` reconstructs a whole development arc as corrected causal stages and a concrete alignment artifact. Two chronological predecessors were retired: `summarize` — [ADR-079](docs/adr/079-retire-reflect-summarize.md) — for failing the No-Op test, and `observe` — [ADR-107](docs/adr/107-retirement-round-four-verbs.md) — for costing every turn while never once being invoked.
-
-- **`catchup`** — *orient* (read): where does the work stand **now**? Rebuilt from durable state (git / diff / changed files / any plan) — checking a parked `HANDOFF.md` first when one exists — NOT chat memory, so it survives `/clear`, context compaction, or returning after a break. Fixed shape (goal · done · now · open · next), plain language, read-only except one bounded delete: after reporting, it clears a consumed cursor (done, or stale-and-absorbed) so `HANDOFF.md` is single-use ([ADR-085](docs/adr/085-reflect-catchup-clears-consumed-cursor.md)).
-- **`park`** — *orient* (write): the mirror of `catchup` — before stepping away, write the same five-shape cursor + the current git SHA into the project's `HANDOFF.md`, overwriting any prior one. Summoned only; the supply side of `catchup`'s grounding.
-- **`retrace`** — *causal re-entry* (write): how did the work arrive here? Reconstructs prior state → pressure → evidence → decision → status → next pressure, provenance-labels every bridge, gates on user correction, then writes a dated interactive artifact with concrete witnesses. A recap lists what happened; retrace explains why each turn became necessary ([ADR-084](docs/adr/084-reflect-retrace-causal-development-alignment.md)).
-
-**Read/write symmetry, cursor side only**: `catchup`/`park` work the **cursor** (where the session is, and why) as a matched read/write pair. `retrace` faces the **knowledge of the work** instead, restoring the complete causal path for human alignment. A plain recap still needs no skill, and a durable learning is now written by asking for one directly. See [ADR-044](docs/adr/044-manage-plugin.md) (family birth), [ADR-056](docs/adr/056-manage-renamed-reflect.md) (the `manage → reflect` rename + planned `retro`), [ADR-070](docs/adr/070-reflect-park-write-side-of-cursor.md) (`park`), [ADR-079](docs/adr/079-retire-reflect-summarize.md) (`summarize` retired), [ADR-084](docs/adr/084-reflect-retrace-causal-development-alignment.md) (`retrace`), and [ADR-107](docs/adr/107-retirement-round-four-verbs.md) (`observe` retired).
-
-**Cross-project + language-agnostic.** `catchup` and `retrace` read the current project's durable state; `retrace` writes a dated project-local alignment artifact after the user corrects its causal outline.
-
-## Conventions for skills inside this plugin
-
-> Repo-wide authoring + maintenance rules live once in the repo-root [`CLAUDE.md`](CLAUDE.md). reflect-specific:
-
-- **Read-only by default, two writers with separate owners**: `catchup`'s only write is deleting a consumed `HANDOFF.md` after reporting ([ADR-085](docs/adr/085-reflect-catchup-clears-consumed-cursor.md) — the cursor is single-use: park writes it, the catchup that drains it removes it); `park` overwrites the single `HANDOFF.md` cursor; `retrace` writes only its dated alignment artifact after an outline correction gate. No reflect skill edits code, manifests, plans, decisions, or canon. (One writer before ADR-070, two before [ADR-084](docs/adr/084-reflect-retrace-causal-development-alignment.md); `catchup` gained its delete-only exception in ADR-085.)
-- **Summoned, not automatic — no exceptions (2026-08-12)**: all three fire on explicit call; being auto-parked or auto-retraced is the anti-feature (same stance as `shape-elicit`). The one prior exception — `observe`'s nod-gated ambient capture offer — died with `observe` itself: it turned out to fire from the *description* without the skill ever loading, so the offer arrived while the machinery behind it never ran ([ADR-107](docs/adr/107-retirement-round-four-verbs.md)). Ambient self-firing stays forbidden family-wide.
-- **Grounded, not from memory**: `catchup` rebuilds current state from durable evidence; `retrace` reconstructs historical causality from recorded intent + shipped state and labels every unsupported bridge. Live context enriches both but never silently replaces evidence.
-- **Cost tier (ADR-059)**: the criterion (mechanical verbs declare the mechanical-tier executor role in frontmatter, turn-level) is owned by the repo-root [`CLAUDE.md`](CLAUDE.md). reflect has no tiered verb. `catchup` judges now + next, `park` judges the cursor, and `retrace` synthesizes and provenance-labels causal history; all stay on the session model.
-
-## The value-guardrail (why these three, and what's excluded)
-
-Each skill must force a structure the default would skip (the same gate as `think`, [ADR-034](docs/adr/034-think-plugin.md)). `catchup` earns it via **grounding-from-durable-state + a fixed shape**. `park` earns it via the **mirrored fixed-shape + overwrite-with-SHA-check** protocol. `retrace` earns it via **six-field causal stages + provenance labels + an outline correction gate + concrete witnesses + a browser-verified artifact**. Deliberately excluded: `easy-explain` (style, no forced structure) and retired `summarize` (a complete neutral chronology is default behavior, [ADR-079](docs/adr/079-retire-reflect-summarize.md)). A new member must name the structure default behavior skips.
-
-**Family-fit check for `park`** (2026-07-13, Paul pushed back, resolved before scaffolding): the judge is *object*, not tense — `park` writes about the work container itself (reflexivity), the same test `catchup`'s forward-looking "now + next" already passed under ADR-056. Full walk-through + the reversal-line ("the day every use needs its own justification is the day the name stops fitting") lives in `blueprints/thoughts/2026-07-13-reflect-park-writes-the-handoff.md`.
-
-**Planned 5th member — `retro` (ADR-056, accepted in principle, not yet built).** Its slot remains **whole-session, evaluative on process**: where the work went in circles / took wrong turns → what to change. `retrace` does not fill that slot: it reconstructs causality neutrally, while retro would judge friction and prescribe one process change. Retro's forced structure remains **friction timeline (git churn / reverts / abandoned branches) → root-cause per item → one concrete process change**; it still requires a `shape-elicit` pass + its own ADR before scaffolding.
-
-## Where things live + when editing
-
-```
-.claude-plugin/plugin.json   → reflect's manifest (the version + metadata owner)
-CLAUDE.md                    → ← you are here (reflect-specific)
-skills/<name>/SKILL.md       → catchup · park · retrace, each self-contained
-```
-
-Repo-wide layout + all editing rules (new-skill → ADR, the ★ authoring checks, renaming + versioning, the site-map gate, stale-`SKILL.md`) live in the repo-root [`CLAUDE.md`](CLAUDE.md).
 
 
 ---

@@ -1,7 +1,7 @@
 ---
 name: migrate
 disable-model-invocation: true
-description: "Migrate a project's blueprints document tree to the current convention version — detect which version the tree speaks, propose the mapping, then execute gated, verbatim structural transforms with reference integrity (e.g. v2 precedents/ → v3 thoughts/ with Status lines). Fires on \"migrate the blueprints\", \"升級文件結構\", \"this tree still uses decisions.md / precedents/\", or when another shape/reflect verb reports a legacy tree. NOT for judging staleness (/shape:align) or authoring decisions (/shape:elicit) — migrate moves recorded content, never re-decides it. Distinct from relay:migrate (GitHub workspace migration)."
+description: "Migrate a project's blueprints document tree to the current convention version — detect which version the tree speaks, propose the mapping, then execute gated, verbatim structural transforms with reference integrity (e.g. v2 precedents/ → v3 thoughts/ with Status lines). Fires on \"migrate the blueprints\", \"升級文件結構\", \"this tree still uses decisions.md / precedents/\", or when another shape verb reports a legacy tree. NOT for judging staleness (/shape:align) or authoring decisions (/shape:elicit) — migrate moves recorded content, never re-decides it. Distinct from relay:migrate (GitHub workspace migration)."
 ---
 
 # Migrate — bring a document tree to the current convention version
