@@ -83,12 +83,21 @@ learner; they do not demand five artifacts or equal time.
    inline now (see `/fathom:index` for the full protocol — anchor + release distance, collapse
    rules, the index contract, the counted trust verdict). Report the verdict to the learner before
    teaching: it changes how they read everything that follows.
-2. **Calibration probe** — before building anything learner-facing, ask 2–3 open questions about
-   the learner's **background knowledge** (adjacent frameworks used hands-on, concepts owned by
-   experience), never "how well do you know this repo" (a stranger's answer is uselessly "not at
-   all"). The answers set three dials: the gloss list (skip what they own), the contrast anchor
-   (diff against what they actually built), and which chapters compress. Record the answers in
-   `understanding.md` — they are the first entries in the learner model.
+2. **Calibration probe — two axes, probed separately, synthesized into one route.**
+   Before building anything learner-facing, ask 2–3 open questions on each axis:
+   - **Ability** — background knowledge: adjacent frameworks used hands-on, concepts owned by
+     experience. Never "how well do you know this repo" (a stranger's answer is uselessly "not
+     at all"). This axis sets **how** to teach: the gloss list (skip what they own), the contrast
+     anchor (diff against what they actually built), chunk size.
+   - **Intent** — what they're here for: the goal, any immediate task, and what they're curious
+     about. This axis sets **what order** to teach: which seam to enter first, which behavior
+     becomes the first control path, which chapters compress to a mention.
+   The synthesis is the route: a learner who owns an adjacent system but has never met this
+   repo's X wants X as the first seam and their own system as the contrast anchor — not an even
+   tour of all modules. Record both axes under `understanding.md`'s **Learner angle**; intent
+   drifts, so re-read it at every level entry (orientation, loop step 1) and let a moved goal
+   move the route. One standing limit: *preferred form* is a tiebreaker between forms that carry
+   the knowledge equally — form follows the knowledge, not the mood.
 3. **Build the level's artifact** (`references/forms.md`), then verify it in a browser before
    delivering — every interaction exercised, console clean, no horizontal overflow — and say
    "reload the page" when you revise it (a local file the learner already has open does not
@@ -167,6 +176,13 @@ verb from silently redefining where the study is.
    rest of the level depends on — not one step of a procedure. After a chunk, ask **one** short
    check about *that distinction*: reconstruct it, or predict from it, answerable in a sentence.
    A step that only adds detail to a distinction already checked earns no check of its own.
+   **Which kind of check fits which learner state** — prediction before revealing, evidence after
+   an ungrounded judgment, assumption when a premise was smuggled — is the selector in
+   `references/questioning.md`; it chooses the one check this step budgets, never adds more.
+   **Three check phrasings are banned** — "does that make sense?" · "any questions?" · "do you
+   understand?" (in any language) — each invites a yes that verifies nothing. The replacement is
+   always the narration form: say it back in your own words · apply it to this new case · what's
+   still fuzzy?
 3. **Let them park a question at every check.** The learner may raise a question instead of, or
    alongside, answering. Triage it out loud, never silently:
    - **Load-bearing right here** → answer briefly now; the chunk is not finished without it.
@@ -189,9 +205,18 @@ verb from silently redefining where the study is.
    calibration probe surfaced ("what is this, and how does it differ from the X you've built?").
    Diagnose the gaps from their narration. Structured probes (fill-in, count-the-boundaries,
    predict-the-outcome) are demoted to diagnostic tools — reach for one only when the narration is
-   too vague to locate the gap. A template makes the learner complete *your* sentence; a
-   narration exposes *their* model.
-7. Repair only the exposed gap.
+   too vague to locate the gap, and **the probe must not leak its own answer**: not in the stem,
+   not in the option set (three plausible, not one), not in the title of a diagram sitting next to
+   it. A template makes the learner complete *your* sentence; a narration exposes *their* model.
+7. **Repair only the exposed gap — then verify the repair took.** When the wrong answer hasn't
+   yet located the gap, escalate through the repair ladder in `references/questioning.md`
+   (conceptual reorientation → narrowed options → point-at-evidence → explain; at most two hints
+   before explaining, and hint depth is a chunk-size signal). After any correction, by whatever
+   level it resolved, ask the same distinction back **in a case not yet discussed** (repaired "X
+   is exact-match, not fuzzy" → probe with a near-miss pair it would NOT catch). A repair that is
+   only heard is the highest regression risk in the learner model; the transfer probe is what
+   moves it from heard to held, and its outcome is the regression-risk evidence
+   `understanding.md` records.
 8. **Pass** → name the next level and its first seam. **Learner skips** → allowed, but record
    `skipped` in the cursor with one line of risk ("errors later may trace here"); never silently.
 9. Update **all three files**: the cursor (level status, gate evidence, open questions, next step),
@@ -235,6 +260,14 @@ Four buckets, every entry quoted in the learner's own words and dated:
 
 > updated <date> · companion to index.md (how deep the repo is; this is how deep the
 > learner is). Confirmed entries have a shelf life — age makes them re-probe candidates.
+
+## Learner angle — two axes, from the calibration probe; re-read at every level entry
+- Goal: <what they want from this repo>
+- Immediate task: <if one exists — the strongest route signal>
+- Curious about: <their words>
+- Known adjacent: <systems/concepts owned by experience — the gloss-skip list>
+- Contrast anchor: <the thing they built that this repo diffs against>
+- Preferred form: <tiebreaker only — form follows the knowledge>
 
 ## Confirmed — they said it themselves
 | Their words | Evidence | Date | Re-probe priority |

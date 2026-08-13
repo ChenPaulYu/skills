@@ -46,7 +46,9 @@ Pick two or three. For each: ask the learner to narrate; if the narration is too
 a gap, *then* reach for a structured probe as a diagnostic — a prediction ("given this input,
 what happens?"), a contrast ("how does this differ from X?"), or an ownership assignment ("who
 holds that state?"). Never lead with the structured form: a template makes them complete your
-sentence; a narration exposes their model.
+sentence; a narration exposes their model. The full probe selector, the repair ladder for when
+an answer exposes decay, and the banned check phrasings live in `/fathom:guide`'s questioning
+reference — borrow them by protocol.
 
 ## 3. Grade the model, not the answer
 

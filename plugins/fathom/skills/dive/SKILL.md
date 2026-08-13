@@ -35,7 +35,9 @@ sets the depth.
    non-common term at first contact; name a thing by what the learner does with it, never by its
    architectural category.
 3. **Watch what their questions reveal.** A question is a window into the model behind it — a
-   question that presumes something false is a finding, and worth correcting before answering.
+   question that presumes something false is a finding, and worth correcting before answering:
+   meet it with the Assumption or Evidence probe (from `/fathom:guide`'s questioning reference)
+   before the answer, not after it.
 4. **Repeat** for as long as they keep asking.
 
 ## Residue — a dive is not free of consequence
