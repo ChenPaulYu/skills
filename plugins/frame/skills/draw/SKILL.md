@@ -15,20 +15,22 @@ README, or an interactive artifact, and picking wrong is the usual reason a good
 
 ## Decision 1 — which form?
 
-**Ask what question the audience will put to the picture, then draw that.** Full vocabulary and
-what each form earns: `references/forms.md`.
+**Ask what question the audience will put to the picture, then draw that.** A picture asserts one
+kind of relationship; there are only about eight, and the question names which. Full vocabulary,
+what each form earns, and where this cut comes from: `references/forms.md`.
 
-| Their question | Form |
-| --- | --- |
-| In what order does it happen? | flow chart |
-| Who talks to whom, and when? | sequence diagram |
-| What state is it in, and what changes it? | state diagram |
-| Where does each thing live? | map with fixed positions |
-| What uses what? | node-edge graph, canonical path weighted |
-| What kinds are there? | grouped map (not a literal tree) |
-| Which should I pick? | matrix — not a diagram |
-| What accumulates, what expires? | stepper over time |
-| How is this different from what I know? | side-by-side diff |
+| Their question | The relationship asserted | Form |
+| --- | --- | --- |
+| In what order does it happen? | order in time | flow chart — but only if it branches |
+| Who talks to whom, and when? | order **across actors** | sequence diagram |
+| What state is it in, and what changes it? | condition | state diagram |
+| What accumulates, what expires? | lifetime | stepper over time · playback of one real run |
+| Where does each thing live? | position | map with fixed positions · containment when it nests |
+| What uses what? | connection | node-edge graph, canonical path weighted |
+| What kinds are there? | membership | grouped map (not a literal tree) |
+| How is this different from what I know? | difference | side-by-side diff (two) · small multiples (a series) |
+| Which should I pick? | choice | matrix — not a diagram; decision tree only if the criteria are ordered |
+| How much, how many, what trend? | quantity | a chart — and encode the point as **position or length**, never area |
 
 ## Decision 2 — which medium?
 
@@ -52,6 +54,9 @@ a context switch and costs you verification.
   relationships, and drawing one where none exist teaches a falsehood.
 - **The payload is never behind the interaction.** Anything that overturns what the audience
   believes must be legible without clicking. Fold detail, never the headline.
+- **Signal the one thing.** Every drawing has one thing worth remembering — the canonical path, the
+  row with no counterpart, the box that changes. Mark it. A drawing where everything carries equal
+  emphasis claims everything matters equally, which is never true.
 - **Name things by what they do with them** — an install line, an import, a call, a path — never
   by architectural category (*embedded · service · layer · runtime · abstraction*, in any
   language). Those explain a shape to someone who already owns the taxonomy.

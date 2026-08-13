@@ -4,6 +4,13 @@ The selection rule is in the skill body: **ask what question the audience will p
 This file is the vocabulary that answer resolves to, and the conditions under which each form is
 worth its cost.
 
+**Why the question, and not the subject matter.** A drawing can only assert a handful of things:
+order, condition, lifetime, position, connection, membership, difference, choice, quantity. Every
+form below is one of those relationships made visible, which is why the audience's question picks
+the form directly — the question *names the relationship*. Classifying by subject instead ("this is
+an architecture, so draw an architecture diagram") is how a picture ends up correct and useless.
+Provenance for this cut is at the foot of the file.
+
 ## The forms
 
 ### Flow chart — "what happens next?"
@@ -37,6 +44,11 @@ one; an unmarked terminal state is how readers miss that something can end.
 must stay permanent** across every later drawing, so a deeper view is recognisably the same
 territory zoomed in. Moving a box between drawings discards everything the audience had memorised.
 
+**Containment** is the map's nesting variant — boxes inside boxes, for "what is inside what". Reach
+for it when the boundary itself is the lesson (a process boundary, a package, a deployment unit).
+Past three levels of nesting it stops being readable: split into a second drawing that zooms one
+box, keeping the outer positions identical.
+
 ### Node-edge graph — "what uses what?"
 
 **Earns it when the dependency shape itself is the lesson** — a hub, a cycle, a layer violation.
@@ -59,6 +71,10 @@ for diagrams when what the audience actually needs is a table they can scan down
 
 Use it whenever the audience must *choose* or *compare*, and put the deciding dimension first.
 
+A **decision tree** beats the matrix only when the criteria are genuinely *ordered* — when the
+first question makes the later ones irrelevant. If every option must be weighed on every dimension,
+the tree hides exactly what the audience needs to see, and the matrix wins.
+
 ### Stepper over time — "what accumulates? what expires?"
 
 **Earns it when lifetime is the lesson.** A table can *state* that a buffer holds ten items; only a
@@ -70,6 +86,27 @@ accumulates, or overflows, a table is enough.
 **Earns it when the audience arrives with a model.** Their own words go on the left — quoted, not
 paraphrased — and reality on the right. Mark the row that has *no counterpart*: that row is the
 whole point, and it is the one they will remember.
+
+### Small multiples — "how does this differ across the series?"
+
+**The diff's plural.** A side-by-side diff is for *two* things and asserts a delta; small multiples
+is for *many* and asserts a pattern across them. Same drawing, same scale, repeated — the eye does
+the comparison for free, which no amount of prose can match.
+
+Grammar: identical axes and identical scale in every panel, or the comparison is a lie. Order the
+panels by something meaningful (time, size, the dimension being varied), never alphabetically.
+
+### Quantity — "how much? what trend?"
+
+The one form family with a century of measurement behind it: **position along a common scale is read
+most accurately, then length; angle, area, volume, shading and colour saturation are read worst, in
+roughly that order.** The single practical consequence — **encode the thing that matters as position
+or length, and never as area.** A pie chart and a bubble chart both ask the eye to compare areas,
+which it cannot do.
+
+Beyond that, chart choice is a solved and well-documented craft (deviation · correlation · ranking ·
+distribution · change over time · magnitude · part-to-whole · spatial · flow). It is largely
+disjoint from everything else in this file — see the provenance note below.
 
 ### Playback of one real run — "just show me it happening"
 
@@ -98,3 +135,33 @@ Which medium carries the form — terminal ASCII, a markdown table, mermaid in a
 annotated real output, or an interactive artifact — is the second decision, and it lives in
 `media.md`. Choosing a form without choosing a medium is how a good picture ends up in the wrong
 place.
+
+## Provenance — where this cut sits, and what it deliberately doesn't inherit
+
+Two established traditions cover most of this ground, and **they do not talk to each other**:
+
+- **Chart choice** (FT's nine categories, Abela's four, the Data Viz Catalogue) classifies
+  *quantity*. Underneath it sits the perceptual measurement — Bertin's visual variables, Cleveland
+  & McGill's accuracy ranking — which is where the position-over-area rule above comes from. None
+  of these taxonomies contains a flow chart, a state diagram, or a node-edge graph.
+- **Engineering notation** (UML's structure/behaviour split, C4's four zoom levels, BPMN,
+  ArchiMate) classifies *what is being modelled*, never what the reader wants from it. It is rich
+  in structure and process forms and has no notion of quantity at all.
+
+This file sits on a **third axis: what the reader is trying to do** — the axis that InfoVis theory
+uses (Shneiderman's task taxonomy, Munzner's action-plus-target task abstraction) and that neither
+tradition above provides. That choice is deliberate: this skill exists to make something land for
+someone else, so the reader's question is the only thing that can pick the form.
+
+Three consequences worth holding onto:
+
+- **Two forms here have no name in either tradition** — the **side-by-side diff** and the
+  **misconception table**. Both parent traditions assume a reader arriving with no prior model.
+  Explanation always has one to overturn, which is why these carry more weight than their obscurity
+  suggests.
+- **"Flow" means three unrelated things.** Movement volume in chart choice (Sankey), literal
+  control flow in UML/BPMN, and a narrative genre in the storytelling literature. Say which you
+  mean.
+- **A container is not a form.** Slide shows, comic strips, magazine layouts and annotated-chart
+  articles are established *narrative genres* — but each is a sequence of forms, not a form. Where
+  they belong is `media.md` § Composition.
