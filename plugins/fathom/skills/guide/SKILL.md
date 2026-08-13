@@ -109,6 +109,10 @@ learner; they do not demand five artifacts or equal time.
    refresh itself; a stale tab has been mistaken for a broken build).
    **These plain-language rules bind the build, and if you delegate it they must be copied into
    the brief — a sub-agent sees only the brief:**
+   - **The brief fixes the WHAT; the builder owns only the HOW.** It names the distinctions to
+     make visible, the canonical example, the evidence anchors, and the next seam; the builder
+     chooses form and medium within that, and reads no source beyond the anchors handed to it.
+     A builder that decides what matters has become a second teacher without a learner model.
    - **Name a thing by what the learner does with it, not by its architectural category.**
      Category words — *embedded · library · service · middleware · layer · mechanism · runtime ·
      abstraction*, and their equivalents in any language — describe a shape to someone who

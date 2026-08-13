@@ -5,7 +5,8 @@ shape (ownership → spatial map · process → playback · state over time → 
 → claim expansion · taxonomy → grouped map · structure → weighted graph · lifecycle → canonical-run
 diagram), plus the rendering discipline (verify before delivering, say "reload", labels in the
 learner's language, the paid lessons about empty interaction). Follow that protocol; do not restate
-it here.
+it here. The seam in one line: **draw decides how an already-clarified relationship becomes
+visible; the ladder decides which relationship needs clarifying now.**
 
 What belongs to teaching a ladder, and therefore lives here:
 

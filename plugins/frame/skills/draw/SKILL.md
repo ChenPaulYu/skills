@@ -71,7 +71,7 @@ a context switch and costs you verification.
 | --- | --- |
 | something is still **being chosen** | `/shape:mockup` on its own — it renders disposable candidates to decide between. Mockup draws what *might be*; this draws what *is*. When `draw` picks the interactive medium it borrows mockup's protocol, so the two compose rather than compete. |
 | the difficulty is **conceptual, not structural** | `/frame:analogize` — a stress-tested comparison lands better than a box diagram. |
-| you are **teaching a repository level by level** | `/fathom:guide` — it borrows this grammar and adds its own pedagogy on top. |
+| you are **teaching a repository level by level** | `/fathom:guide` — it borrows this grammar and adds its own pedagogy on top. The seam: this skill decides how an already-clarified relationship becomes visible; the teaching protocol decides **which** relationship needs clarifying now. |
 
 ## Communication style
 
