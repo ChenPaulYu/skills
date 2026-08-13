@@ -17,6 +17,16 @@ here — the deliverable is grounding, not a lesson.
 - **Read the load-bearing core personally.** Periphery may go to recon workers that report
   facts with `file:line`; cross-check their reports against each other and against the core you
   read yourself. Contradictions are findings, not noise.
+- **Borrow `nav-audit`'s protocol for the sweep, not for the verdict.** Its deep-sweep mode
+  (one worker per domain) is the right reconnaissance shape for a large or legacy repository,
+  and its deep-module vocabulary — information leakage, right grain, god file, missing barrel —
+  is the right language for the per-module observations this index carries. If an audit already
+  ran against this repository in-session, reuse its output rather than re-deriving it. What it
+  cannot give you: the pin and its release distance, the collapse judgment, `file:line` anchors
+  you can re-query (an audit yields findings, not addresses), doc staleness, and counted test
+  investment. **Its verdict answers a different question** — audit asks *is this well built,
+  should we fix it*; this asks *can I believe what I read here*. A well-maintained codebase can
+  have wholly false documentation, and a messy one can be scrupulously honest.
 - **Mark every load-bearing claim** known / assumed / unknown.
 - **Measure, don't infer.** The trust verdict is counted, not felt.
 
@@ -92,8 +102,10 @@ Report the verdict and the index location in the conversation; offer once to con
 - **`fathom-guide`** — the teaching climb; consumes this file, and indexes inline if
   none exists or it has gone stale.
 - **`fathom-dive`** — pursues one topic against these anchors and writes new ones back.
-- **`nav-audit`** — assesses a codebase you maintain against deep-module rules; `index` grounds a
-  repository you are trying to *understand*, and its verdict is about believability, not health.
+- **`nav-audit`** — borrowed by protocol for the domain fan-out sweep and the deep-module
+  vocabulary (see Stance), and reused wholesale when it already ran in-session. It assesses a
+  codebase you maintain and asks whether to fix it; `index` grounds a repository you are trying to
+  *understand* and asks whether to believe it.
 
 ## Communication style
 
