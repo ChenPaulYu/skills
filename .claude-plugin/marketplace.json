@@ -15,7 +15,7 @@
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought, plus a survey leg that maps a decision space when a volley stalls), probe (a minimal experiment when nobody can settle a fork by argument), dogfood (use a built feature for real → friction + coverage gaps), align (verify → compact → triage in one pass, then render the plan), migrate (summon-only); doctor deferred. Language-agnostic.",
-      "version": "0.19.0"
+      "version": "0.19.1"
     },
     {
       "name": "fathom",
