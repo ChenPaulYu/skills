@@ -1,6 +1,6 @@
 ---
 name: reply
-description: "Respond on an existing GitHub object: deliver requested input (flips the needs-input/awaiting-acceptance baton natively), post a comment, PR Comment, Approve, or Request changes. A reply records the human's response; it never decides that the whole object is finished."
+description: "Respond on an existing GitHub object — 回覆他 / 幫我回 — deliver requested input (flips the needs-input/awaiting-acceptance baton natively), post a comment, PR Comment, Approve, or Request changes. A reply records the human's response; it never decides that the whole object is finished."
 ---
 
 # reply — leave my response on an existing object

@@ -141,8 +141,10 @@ used; only its location and owner move, from a root file written/read by the now
   with per-file gates; migrate transforms *structure* (which convention does this tree speak?)
   with a whole-tree mapping. Migrate runs first when both are wanted: align's compaction pass then
   operates on the current convention.
-- **vs `relay-migrate`** — different plugin, different object entirely (GitHub workspace
-  migration). The shared verb name is why both descriptions disambiguate.
+- **vs relay's legacy adoption** — different object entirely (GitHub workspace history, not a
+  `blueprints/`/`core/` tree). No longer a verb on relay's side — it retired to a hand-driven
+  discipline in `AGENTS.md` (ADR-115) — but the name collision that motivated this
+  note predates the retirement, so the boundary is worth stating once here too.
 
 ## Anti-patterns (refuse these)
 

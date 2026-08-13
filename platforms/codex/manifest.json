@@ -172,7 +172,6 @@
         "> **Explicitly invoked only.**"
       ],
       "contract_consumers": [
-        ".agents/skills/relay-migrate/SKILL.md",
         ".agents/skills/shape-baton/SKILL.md",
         ".agents/skills/shape-migrate/SKILL.md"
       ]

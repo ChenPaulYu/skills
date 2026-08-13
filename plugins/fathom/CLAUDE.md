@@ -3,7 +3,7 @@
 > To **fathom** is to deeply understand; the root is the nautical depth unit, measured line by
 > line downward — the shape of this plugin's five-level ladder.
 
-## Four verbs, one shared state (ADR-114)
+## Four verbs, one shared state (ADR-116)
 
 | Verb | Owns the moment | Writes |
 | --- | --- | --- |

@@ -220,7 +220,7 @@ README.md                         → human-facing marketplace overview
 > To **fathom** is to deeply understand; the root is the nautical depth unit, measured line by
 > line downward — the shape of this plugin's five-level ladder.
 
-## Four verbs, one shared state (ADR-114)
+## Four verbs, one shared state (ADR-116)
 
 | Verb | Owns the moment | Writes |
 | --- | --- | --- |
@@ -423,7 +423,7 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [ADR-115](docs/adr/115-relay-condenses-to-four.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
 
 ## Governing principle: progressive disclosure
 
@@ -433,18 +433,16 @@ Every layer of this model answers one question: *what is the least a reader must
 
 Relay is a thin semantic layer over one GitHub repository. GitHub owns collaboration objects and state; Relay supplies routing, obligation semantics, authority checks, read-after-write verification, reusable synthesis policy, and authorized settlement/recording. It does not maintain a parallel coordination database.
 
-Six daily verbs form the interface:
+Four daily verbs form the interface:
 
 | Verb | Owns |
 |---|---|
-| `launch` | Audit or configure repository prerequisites, protection, entry-point templates, labels, and the `decisions/` scaffold. |
 | `report` | Route a new human intent to a Discussion, Issue, or pull request — Issue-default. |
 | `digest` | Show only real obligations for the current viewer. |
 | `reply` | Leave the viewer's response on an existing object, flipping native baton labels where applicable. |
-| `brief` | Keep reusable cited understanding current across contexts, integrating only active Decisions. |
 | `settle` | Use authority to declare an object finished, carry the native promotion signal chain, and record Decisions. |
 
-`migrate` is an explicit-only bridge that brings a repository's pre-model coordination state into this memory model, not a seventh daily verb (ADR-102).
+Repository setup is no longer a verb: it is the workspace's own structure (`relay.yml`, `decisions/`, entry-point templates) plus its own conformance CI, audited on schedule rather than on demand. Keeping reusable cited understanding current across contexts (a Brief) is still done by hand, following `briefs/README.md`'s own discipline, not a verb. Bringing a repository's pre-Relay history into the model is likewise no longer a verb — see "One-off legacy adoption" below. All three retired the same week, for the same reason: each restated a rule the repository already enforces or a move too rare to standardize (ADR-115).
 
 ## Locating the Relay workspace and its people
 
@@ -521,7 +519,7 @@ One Relay workspace equals one resolved GitHub repository. Cross-repository aggr
 
 Use these refinements: a standalone tell (`tell.yml` shape) for a receipt owed by one assignee; a `needs-input` Issue when content, not just a receipt, is wanted from a nameable owner; Q&A Discussions when an accepted answer is the completion condition and no single obvious owner exists; assigned Issues for verifiable work; pull requests for exact changes; and a `fyi` label on **any** object type as the explicit opt-out — a durable, linkable object that obligates nobody. Split independently completable asks into linked objects.
 
-Router discipline governs only traffic created through `report`. Organic traffic — a human opening an Issue or Discussion directly on GitHub — is nudged toward the same explicit-owner rule by entry-point templates (`.github/ISSUE_TEMPLATE/`, `.github/DISCUSSION_TEMPLATE/`, PR template) that `relay-launch` installs and audits. Templates are a convention, not a contract: `digest`'s reducer never reads their fields, and a repository without them still works. See ADR-094.
+Router discipline governs only traffic created through `report`. Organic traffic — a human opening an Issue or Discussion directly on GitHub — is nudged toward the same explicit-owner rule by entry-point templates (`.github/ISSUE_TEMPLATE/`, `.github/DISCUSSION_TEMPLATE/`, PR template) installed once when a workspace adopts Relay and audited on schedule by its own conformance CI, not a relay verb (ADR-115). Templates are a convention, not a contract: `digest`'s reducer never reads their fields, and a repository without them still works. See ADR-094.
 
 **Decision reversal or amendment (ADR-099, unchanged principle, absorbed here).** Reversing or materially amending an already-agreed Decision routes exactly like making one: an Issue assigned to the counterpart whose disposition is the consent record. An accompanying tell may inform, but never substitutes — a `👀` reaction or a passive mention is never read as consent, only awareness.
 
@@ -563,6 +561,28 @@ PR obligations are entirely unchanged: a requested reviewer owes a current-revis
 
 **Closure semantics: every Discussion is closed by its initiator.** One closure-owner class, no split by category — a Discussion opened to converge something requires a summarizing final comment first (folded into its `Resolution:`); Q&A's accepted-answer signal is the reducer-visible special case of that same rule, not a separate one (ADR-096, general form unchanged).
 
+## One-off legacy adoption — no verb, kept as discipline (ADR-115)
+
+Bringing a repository's pre-Relay history into the model used to be `relay-migrate`. It retired
+unfired: the move is once-ever and bespoke — a standing verb cannot know the two repositories
+involved in advance, so when it happens it is hand-driven. The discipline survives here, because
+it is what makes such a move safe:
+
+- **Preserve evidence before touching anything.** Pin an immutable baseline (tag or commit) for
+  the legacy source, so the pre-migration state is always recoverable.
+- **Inventory completely, not by sample.** Read every legacy source end to end — ledger entries,
+  thought files, overloaded Discussions, commit-message decisions, closed-Issue resolutions.
+  A partial inventory silently drops the things nobody remembered.
+- **Classify each item before moving it**: a settled conclusion backfills a Decision file
+  (`decisions/D-0xx-<slug>.md`, standard frontmatter, only if not itself later superseded) ·
+  durable understanding becomes Brief or Core material **citing** the Decisions it derives from,
+  never restating their wording · a living lookup table (a roster, `relay.yml`) migrates as a PR
+  the counterpart reviews, never as a Decision.
+- **Show the complete mapping before any write** — source permalink → destination → classification
+  → citations → assignee. The counterpart approves the map, not the individual moves.
+- **Verify, then delete.** Every source item accounted for in its destination, and every inbound
+  reference resolved, *before* the legacy source is removed.
+
 ## LEGACY `[ACK]` Discussions — retired
 
 The LEGACY `[ACK]`-titled-Discussion compatibility path (ADR-100) retired 2026-07-22: migration completed and the live repo carried zero open `[ACK]`/`ack-required` Discussions. An `[ACK]`-titled Discussion is now just a Discussion — a plain `@mention` lands on the notices tier like any other. See ADR-100's Legacy-compatibility section for the retired design.
@@ -601,17 +621,17 @@ If an early step creates an object and a later mutation fails, return the existi
 
 ## Author sign-off (outbound prose)
 
-Every writing verb that posts prose into a GitHub object or commits a Decision file in the user's voice — `report`'s object body, `reply`'s answer/comment/verdict text, `settle`'s settlement block/Decision file text, `brief`'s synthesis — shows the user the exact text that will be posted or committed, verbatim, and asks: "Is this what you mean?" Post/commit only after they confirm; a rewrite goes through the same gate. Mechanical mutations with no authored text — labels, assignment, reactions, read-backs — follow the normal write-gate above, not this one. Correctness is checkable by the agent; whether the text is what the user meant to say, in the voice they want, only the user can judge. See ADR-095.
+Every writing verb that posts prose into a GitHub object or commits a Decision file in the user's voice — `report`'s object body, `reply`'s answer/comment/verdict text, `settle`'s settlement block/Decision file text — shows the user the exact text that will be posted or committed, verbatim, and asks: "Is this what you mean?" Post/commit only after they confirm; a rewrite goes through the same gate. Mechanical mutations with no authored text — labels, assignment, reactions, read-backs — follow the normal write-gate above, not this one. Correctness is checkable by the agent; whether the text is what the user meant to say, in the voice they want, only the user can judge. See ADR-095. (A Brief is hand-authored, not written by a verb — the same "show the exact text first" instinct applies by convention, not this gate.)
 
 ## Minimal implementation
 
 Use GitHub primitives directly through authenticated `gh`/API operations and ordinary branches/PRs, plus direct commits for Decision recording under the five-fuse discipline above. There is no Relay database, status frontmatter, project file, or thought stream beyond the `decisions/`/`briefs/`/`core/` formal-memory files themselves — each of those is itself plain Markdown plus frontmatter/citations plus git history, never a parallel state store. The forbidden thing is a machine-consumed parallel **state** store, not a PR-attested **reference** file (`relay.yml`) or a deletable local **routing preference** (`~/.config/relay/repo`). Neither participates in obligation computation.
 
-The deterministic GitHub obligation reducer belongs to `digest`. It collects native GitHub primitives, reduces them without inventing state, and returns a machine-readable blocker when collection is incomplete. `migrate` performs semantic inventory directly; the legacy frontmatter linter is retired.
+The deterministic GitHub obligation reducer belongs to `digest`. It collects native GitHub primitives, reduces them without inventing state, and returns a machine-readable blocker when collection is incomplete. One-off legacy adoption (above) performs semantic inventory by hand; the legacy frontmatter linter is retired.
 
 ## Cost and invocation
 
-`digest` is the mechanical-tier read-only scan. The other daily verbs require judgment. `migrate` is explicit-only because pre-model coordination-state migration is exceptional, destructive-adjacent compatibility work.
+`digest` is the mechanical-tier read-only scan. The other three daily verbs require judgment. One-off legacy adoption stays hand-driven, no verb (ADR-115), because pre-model coordination-state migration is exceptional, destructive-adjacent compatibility work — too rare and too repository-specific to standardize.
 
 ## When editing
 
@@ -653,7 +673,7 @@ Grouped by verb (mirrors `nav`'s family shape):
 - **project** — keep the record honest, then decide what's next:
   - `align` — one pass that leaves `blueprints/` telling the truth about **now**: **verify** every carried item against the code first, mechanically rather than by re-reading the board (ADR-086 — a real sweep once found 5 of 7 "Next" items had already shipped), then **compact** what drifted (amend a stale fact in place, prune/consolidate a wholly-stale doc, retire a shipped mockup once its pick is recorded in the owning doc — the three ADR-037 preconditions), then **triage** now/next/later *with the user* and write `plan.md` (the agent's single maintained board). No carried item vanishes silently — everything lands Shipped, Next, Future, or an explicit user-confirmed cut. Runs on **compaction pressure** (back from a break, a batch just shipped, the tree got noisy), not a schedule. A human wanting to see it renders an on-demand snapshot via `shape-mockup` — align never maintains a standing HTML file. Folds the former `reconcile` verb into this one pass (ADR-112): the record's honesty and the next call were always read off the same evidence, so one door replaces two. The pre-build mirror of `nav-audit` + careful `nav-refactor`. *(built; verify-before-triage ADR-086, mockup retirement ADR-037, reconcile merge ADR-112)*
 - **maintain** — keep the tree's format current:
-  - `migrate` — upgrade a tree to the current **convention version**: detect which dialect `blueprints/`/`core/` speaks, propose the mapping, then execute **verbatim, gated, reference-safe** structural transforms and verify nothing dangles (e.g. v1 `decisions.md` → v2 `precedents/`). The convention is a versioned interface with living instances, so an append-only ledger of transforms ships with each convention change — without it a convention change either orphans the fleet or freezes forever. Moves recorded content; never re-decides it (that's `elicit`) and never judges staleness (that's `align`). Distinct from `relay-migrate` (GitHub workspace migration). **Summon-only** (`explicit-invocation-only: true`, ADR-110) — an episodic, author-driven event with zero model-routing value; capability intact behind `shape-migrate`. *(built; ADR-105)*
+  - `migrate` — upgrade a tree to the current **convention version**: detect which dialect `blueprints/`/`core/` speaks, propose the mapping, then execute **verbatim, gated, reference-safe** structural transforms and verify nothing dangles (e.g. v1 `decisions.md` → v2 `precedents/`). The convention is a versioned interface with living instances, so an append-only ledger of transforms ships with each convention change — without it a convention change either orphans the fleet or freezes forever. Moves recorded content; never re-decides it (that's `elicit`) and never judges staleness (that's `align`). Distinct from relay's legacy adoption (GitHub workspace history) — no longer a verb there, folded into `AGENTS.md` as discipline (ADR-115). **Summon-only** (`explicit-invocation-only: true`, ADR-110) — an episodic, author-driven event with zero model-routing value; capability intact behind `shape-migrate`. *(built; ADR-105)*
 - **`blueprints/` = convention**, not a skill — the artifact container the verbs read/write. `thoughts/` carries decisions permanently (dated, `Status:` line — in force / superseded by \<file\> / shipped); there is no separate `core/` tier to graduate into (ADR-112 retired it along with `/shape:position`). Layout + `plan.md` shape + the on-demand human-render contract (rendered by `shape-mockup`, never maintained as a standing file — ADR-063) live in [`skills/align/references/blueprints-spec.md`](plugins/shape/skills/align/references/blueprints-spec.md).
 - **`doctor` = deferred** — an orchestrator (elicit → align) only crystallizes once there's genuinely enough to orchestrate — an even thinner sequence than before the ADR-112 merge. nav's own `doctor` was **retired** (ADR-021) for being too thin a sequence (`audit → sync`, 2 steps) — a caution that an orchestrator with little to orchestrate is redundant ceremony, not a convenience. Don't build shape's until the sequence earns it.
 

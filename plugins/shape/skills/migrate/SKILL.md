@@ -17,7 +17,7 @@ The blueprints artifact convention is a **versioned interface with living instan
 - **User confirms before any write**, and execution proceeds one transform at a time, re-checked between steps — never batch destructive ops behind a single confirmation.
 - **Verify, then delete.** Every source section must be accounted for in the target and a repo-wide grep for the old name must return zero non-historical hits *before* the source is removed.
 
-Full version-detection table, the append-only migration ledger (where new `M<n>` entries land), the six-step protocol, boundary detail (vs `/shape:align`, `/relay:migrate`), and the anti-pattern table: `references/migration-ledger.md`.
+Full version-detection table, the append-only migration ledger (where new `M<n>` entries land), the six-step protocol, boundary detail (vs `/shape:align`, relay's retired `migrate` bridge), and the anti-pattern table: `references/migration-ledger.md`.
 
 ## Communication style
 

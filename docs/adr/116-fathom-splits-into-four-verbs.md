@@ -1,6 +1,6 @@
-# ADR-114 — fathom splits into four verbs; `repo` renamed; the learner model gets a file
+# ADR-116 — fathom splits into four verbs; `repo` renamed; the learner model gets a file
 
-> 2026-08-13 · Status: accepted · fathom 0.3.0 → 0.4.0 · marketplace 25 → 28 skills
+> 2026-08-13 · Status: accepted · renumbered from 114 (collided with the cost-gates ADR that landed 18 minutes earlier; first-to-land keeps the number) · fathom 0.3.0 → 0.4.0 · marketplace 25 → 28 skills
 
 ## Context
 

@@ -1,25 +1,19 @@
 ---
 name: settle
-description: "Close a Discussion or Issue with an authorized settlement block, record a Decision file when the closure promotes to one, merge an approved pull request, or close an explicitly abandoned pull request with a reason. Core additionally requires verified enforcement before merge makes it binding. Never authors a Brief, substitutes for approval, or re-decides the matter."
+description: "Close a Discussion or Issue with an authorized settlement block, record a Decision file when the closure promotes to one, merge an approved pull request, or close an explicitly abandoned pull request with a reason — fires on 結案 / 這件事拍板了 as well as \"close this\" / \"merge this PR\". Core additionally requires verified enforcement before merge makes it binding. Never authors a Brief, substitutes for approval, or re-decides the matter."
 ---
 
 # settle — formally dispose of a whole object
 
 `reply` leaves my response. `settle` verifies authority, applies the settlement block, disposes of the object (close or merge), and — when the closure promotes to a Decision — carries the native promotion signal chain through to a recorded, linked-back Decision file.
 
-Only the designated seat settles: a Discussion's host, an Issue's acceptor, or (for a PR) the requested reviewer's approval plus the settlement owner's merge.
+## Stance
+
+- **Only the designated seat settles**: a Discussion's host, an Issue's acceptor, or (for a PR) the requested reviewer's approval plus the settlement owner's merge.
 
 ## The settlement block
 
-Every close (Discussion or Issue) is preceded by this block, shown verbatim to the user before posting (author sign-off, below):
-
-```
-Resolution: <why this may close — done, answered, received, duplicate, not needed, covered by D-0xx>
-Reason: <concise reason>
-Decision required: Yes/No
-Recorder: <@who — only when Decision required is Yes>
-Follow-ups: #42, #43
-```
+Every close (Discussion or Issue) is preceded by the settlement block (template: `references/templates.md`), shown verbatim to the user before posting (author sign-off, below).
 
 `Follow-ups:` links where work continues elsewhere — including any Brief/Core PR triggered by a recorded Decision. **Brief/Core PRs are follow-ups and never block the original object's closure.** Settling does not mean derived views are updated or that follow-up work is done — only that this object's own disposition is settled.
 
@@ -60,30 +54,13 @@ The recorder is not necessarily the assignee who did the work — it is whoever 
 
 - the exact wording IS the decision (an external statement, a rights/responsibility allocation) — precision here is the point, and a PR's review-before-merge is the appropriate gate;
 - the source has no clear settlement to record from;
-- the record would synthesize multiple objects — that is a Brief in disguise, route it to `/relay:brief`.
+- the record would synthesize multiple objects — that is a Brief in disguise — hand-author it under `briefs/README.md`'s citation law, not here.
 
 **Standing fuse, above all five:** the moment writing the record requires re-judging "what did we actually mean," it is no longer recording — stop and route it through a PR instead.
 
 ### Decision file format
 
-```markdown
----
-id: D-021
-status: active            # | superseded
-superseded-by:            # D-0xx
-source: <Discussion/Issue link>
-settled-by: @who
-date: 2026-07-22
----
-# D-021 — <one-sentence conclusion>
-
-## Question        how this arose: background, why decide now
-## Deliberation    objective summary: named positions, alternatives
-                    considered, key evidence, how it converged
-## Conclusion      the authoritative wording (derived views cite only this)
-## Reason          the main rationale
-## Consequences    effects and follow-ups (#xx)
-```
+Frontmatter fields and the section template: `references/templates.md`.
 
 Lead with the conclusion (progressive disclosure) — a reader gets "what was decided, does it still hold" from the frontmatter and title alone. The Deliberation section is an **objective summary**: each position attributed by name, chronological, no editorializing, no gap-filling — the verbatim record stays in the linked source object, and if summarizing it would require re-judging what was meant, the standing fuse applies. IDs are stable (`D-0xx`) so Briefs and Core can cite an anchor that survives renames.
 
