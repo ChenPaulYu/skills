@@ -20,8 +20,8 @@
     {
       "name": "fathom",
       "source": "./plugins/fathom",
-      "description": "Fathom an unfamiliar repository — one skill, repo: climb a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code). Produces a growing soundings.md anchor index, calibrates on the learner's background before building anything, teaches with knowledge-matched forms (guided interactive mockup at Repository; playback / diff / tree / weighted graph per knowledge kind), dwells for questions, then gates by verbalization — the learner narrates their own model. Persistent study cursor resumes across sessions. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Language-agnostic.",
-      "version": "0.2.1"
+      "description": "Fathom an unfamiliar repository — one skill, repo: climb a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code). The opening scan anchors the pin (with its distance from the latest release), lands a growing soundings.md anchor index, and delivers a measured trust verdict — how much to believe what you read here. A calibration probe on the learner's background then sets the gloss list and contrast anchor before anything learner-facing is built; each level teaches with knowledge-matched forms (guided interactive mockup at Repository; playback / claim-expansion / tree / weighted graph per knowledge kind), dwells for questions, then gates by verbalization — the learner narrates their own model. Persistent study cursor resumes across sessions. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Language-agnostic.",
+      "version": "0.3.0"
     },
     {
       "name": "frame",

@@ -34,10 +34,11 @@ Broad but shallow: cover the load-bearing primitive families, give each a plain-
 a full definition), and show how they connect — neighborhoods, not exports. No implementation, no
 edge cases.
 
-**Gate (verbalization)**: without reopening the artifact — "用你自己的話講：這個 repo 是什麼？
-你會怎麼跟另一個工程師介紹它跟你熟的 <the learner's calibration anchor> 差在哪？" Diagnostic
-probe if too vague: the one-sentence promise frame ("An application gives ___; it coordinates
-___, ___, ___; it returns ___").
+**Gate (verbalization)**: without reopening the artifact, the learner says in their own words what
+this repository is, and how they would introduce it to another engineer *relative to the anchor
+the calibration probe surfaced*. Diagnostic probe if the narration is too vague to locate the gap:
+the one-sentence promise frame ("An application gives ___; it coordinates ___, ___, ___; it
+returns ___").
 
 ## 2. Runtime
 

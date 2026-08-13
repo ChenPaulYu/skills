@@ -1,9 +1,9 @@
 # Code Guiding — enter implementation through a behavior seam
 
-> **Validation status: unvalidated.** This level has not yet been executed in a completed study
-> (both lab cases stopped at Behavior). Run it attentively: if it feels too heavy or too
-> line-bound, that observation is method evidence — put it in the closing friction note rather
-> than silently improvising.
+> **Validation status: unvalidated.** Unlike the levels above it, this procedure has not yet been
+> run end to end in a completed study. Follow it attentively: if it feels too heavy or too
+> line-bound, that observation is worth more than a silent improvisation — put it in the closing
+> friction note.
 
 ## Never assign files as reading units
 

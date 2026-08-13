@@ -31,8 +31,9 @@ Attention is the scarce resource: at every step, give the smallest model that is
   interactive guided mockup — the one place HTML is the default; everywhere else terminal-first,
   escalating only when interaction changes visible state.
 - **Experience first, name second.** A term of art may only appear attached to the thing that
-  already made it feel like something (teach 想→做→看, then gloss "ReAct" on it — never the
-  reverse). Every remaining non-common term gets a click-gloss or a one-line plain gloss.
+  already made it feel like something: teach the mechanism in plain words, let the learner watch
+  it happen, *then* hang the canonical name on it — never the reverse. Every remaining non-common
+  term gets a click-gloss or a one-line plain gloss.
 
 ## The ladder
 
@@ -48,7 +49,11 @@ equal time.
 ## First visit
 
 1. **Anchor** — record upstream URL, full commit SHA, the learning question, and learner
-   familiarity. Clone into the study home (pin the commit) if not already present.
+   familiarity. Clone into the study home (pin the commit) if not already present. Also record
+   **release distance**: the latest release tag and the published package version vs the pin
+   (`git tag --sort=-creatordate | head`, registry lookup, `git log <latest>..HEAD | wc -l`).
+   Three cheap commands that pre-empt "are we even on the version the docs describe?" — and a pin
+   far ahead of the last release is itself a teaching warning.
 2. **Collapse judgment** — decide upfront how many levels this repository needs
    (`references/ladder.md` § Collapse rules), and say so before climbing. A small library must not
    receive big-framework ceremony.
@@ -59,14 +64,38 @@ equal time.
    and behavior traced writes new anchors back; every anchor is `file:line` at the pin; the source
    clone is **never annotated** (one inserted line shifts every anchor). Consult it before any
    deep read.
-4. **Calibration probe** — before building anything learner-facing, ask 2–3 open questions about
+4. **Trust verdict — measure, don't infer.** One repo-level judgment of *how much to believe what
+   you read here*, backed by counted signals: maintenance intensity (commits / contributors in a
+   recent window, release cadence), test investment (test LOC vs source LOC, CI pipelines),
+   documentation staleness (does the README describe the code at this pin?), stability (churn on
+   the load-bearing files; mid-rewrite leftovers), and any product-vs-OSS gap. Close it with a
+   **"so read it like this"** instruction — that instruction is the deliverable; the numbers only
+   earn it. This is Repository-level because it changes how the learner reads every later level.
+   **Not** a per-module health map. A per-module verdict has no consumer at this level — the
+   learner isn't reading code yet, so "this layer is well factored" affords no next action, and
+   information with no action attached is decoration. Per-module findings live in `soundings.md`
+   (the agent is their consumer) and surface later as just-in-time warnings, immediately before
+   reading that specific code.
+5. **Calibration probe** — before building anything learner-facing, ask 2–3 open questions about
    the learner's **background knowledge** (adjacent frameworks used hands-on, concepts owned by
    experience), never "how well do you know this repo" (a stranger's answer is uselessly "not at
    all"). The answers set three dials: the gloss list (skip what they own), the contrast anchor
    (diff against what they actually built), and which chapters compress.
-5. **Build the level's artifact** (`references/forms.md`) and verify it in a browser before
-   delivering — interactions, console, overflow.
-6. **Scaffold the cursor** — study home defaults to `docs/studies/` (sibling of the project's
+6. **Build the level's artifact** (`references/forms.md`), then verify it in a browser before
+   delivering — every interaction exercised, console clean, no horizontal overflow — and say
+   "reload the page" when you revise it (a local file the learner already has open does not
+   refresh itself; a stale tab has been mistaken for a broken build).
+   **These plain-language rules bind the build, and if you delegate it they must be copied into
+   the brief — a worker sees only the brief:**
+   - **Name a thing by what the learner does with it, not by its architectural category.**
+     Category words — *embedded · library · service · middleware · layer · mechanism · runtime ·
+     abstraction*, and their equivalents in any language — describe a shape to someone who
+     already knows the taxonomy and say nothing to someone who doesn't. Banned unless immediately
+     cashed out: an install line, an import, a call, a file path, a command.
+   - **Experience first, name second** (stance above) — plus the gloss list from step 5.
+   - **One micro-example threads the artifact**, starting in the chapter that first exercises it.
+   - Invent no facts: every claim traces to `soundings.md` or the source at the pin.
+7. **Scaffold the cursor** — study home defaults to `docs/studies/` (sibling of the project's
    `docs/blueprints/`; the study is self-contained — its visuals live inside it, never in the
    host project's mockups). Ask once only if the default doesn't fit, then write `_index.md`
    (template below); the cursor remembers.
@@ -79,13 +108,16 @@ owes <gate>" — then resume at the pending gate or the next seam. No replay of 
 ## The per-level loop
 
 1. Teach with the level's form (`references/forms.md`), leading with one plain conclusion.
-2. **Dwell** — stop and invite the learner's questions ("這層有什麼你想追問的？"). Repair what
-   their questions expose (wording, missing gloss, a form that isn't landing) before testing
-   anything. Unlimited rounds; the gate never fires mid-dwell.
-3. **Gate — verbalization, not fill-in-the-blank.** Ask the learner to narrate their own model
-   ("不看頁面，用你自己的話講：這是什麼、跟你熟的 X 差在哪"), then diagnose the gaps from their
-   narration. Structured probes (fill-in, count-the-boundaries, predict-the-outcome) are demoted
-   to diagnostic tools — used only when the narration is too vague to locate the gap.
+2. **Dwell** — stop and invite the learner's questions before testing anything. Repair what those
+   questions expose (wording, a missing gloss, a form that isn't landing). Unlimited rounds; the
+   gate never fires mid-dwell.
+3. **Gate — verbalization, not fill-in-the-blank.** Ask the learner to narrate their own model in
+   their own words, without the artifact in front of them, contrasting it against the anchor the
+   calibration probe surfaced ("what is this, and how does it differ from the X you've built?").
+   Diagnose the gaps from their narration. Structured probes (fill-in, count-the-boundaries,
+   predict-the-outcome) are demoted to diagnostic tools — reach for one only when the narration is
+   too vague to locate the gap. A template makes the learner complete *your* sentence; a
+   narration exposes *their* model.
 4. Repair only the exposed gap.
 5. **Pass** → name the next level and its first seam. **Learner skips** → allowed, but record
    `skipped` in the cursor with one line of risk ("errors later may trace here"); never silently.
@@ -122,9 +154,9 @@ Layout beside it: `soundings.md` (the growing anchor index) · `source/` (pinned
 ## Closing a study (or a session)
 
 End with one breadcrumb line and update the cursor. When the study itself closes, add a one-line
-friction note — which level dragged, which form didn't help — and offer once to record it in the
-method lab (for Paul: `etudes/method/iterations/`). The note is the method's return channel; the
-study is not a lab report.
+friction note — which level dragged, which form didn't help — and offer once to record it wherever
+the user keeps method evidence. The note is the method's return channel; the study is not a lab
+report.
 
 ## Companion skills
 
@@ -136,8 +168,8 @@ study is not a lab report.
 
 ## Communication style
 
-Converse in the learner's language (for Paul: Traditional Chinese, Taiwanese phrasing); keep code,
-identifiers, and paths in English. Lead every reply with one plain sentence; gloss each non-common
-term at first contact in plain language; put precision after, only where needed. Never
-force-translate a term of art — when the conversation language lacks a natural equivalent, keep
-the English term (ruled in trial: 「方言」 rejected for "action format").
+Converse in the learner's language; keep code, identifiers, and paths in their original form. Lead
+every reply with one plain sentence; gloss each non-common term at first contact in plain language;
+put precision after, only where needed. **Never force-translate a term of art** — when the
+conversation language has no natural equivalent, keep the original term rather than inventing an
+awkward calque; a coined translation costs the learner more than the foreign word did.

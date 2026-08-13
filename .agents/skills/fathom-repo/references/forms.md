@@ -1,53 +1,57 @@
 # Visual forms — form follows the knowledge, inside one guided container
 
-Two rules replaced the old "terminal by default" (ratified in the 2026-08-13 smolagents trial):
+Two rules:
 
 1. **Level default**: the Repository level defaults to an **interactive guided mockup** — a
-   high-level picture is precisely where interaction earns its cost. Mid-ladder levels
-   (Runtime/System/Behavior) stay terminal-first, escalating to HTML only when interaction
-   changes visible state. The Code level's form is the drill-down graph (pending trial).
-2. **Within an artifact, form follows the KIND of knowledge each section carries** — the guided
-   story is the container; each chapter picks its organ:
+   high-level picture is precisely where interaction earns its cost. Mid-ladder levels stay
+   terminal-first, escalating only when interaction changes visible state. The Code level's form
+   (a behavior→code drill-down graph) is not yet settled.
+2. **Within an artifact, form follows the KIND of knowledge each section carries.** The guided
+   story is the container; each chapter picks its organ.
 
-| Knowledge kind | Form | Non-negotiables (each one paid for in trial) |
+| Knowledge kind | Form | Spec |
 | --- | --- | --- |
-| Ownership / boundary | **Spatial map** | Positions are permanent — a later "structure" chapter reuses the SAME layout one zoom deeper; spatial memory is the point. |
-| Temporal process | **Run playback** | One micro-task stepped line by line; an actor legend lights up per line; a format/variant switch replays the same task the other way. Watching beats describing. |
-| Delta from known | **Contrast diff** | Left column = what the learner has personally built (from the calibration probe); ends with the green "no counterpart" row — the diff's product is the NEW thing, not the sameness. |
-| Taxonomy | **Classification tree** | Root = the repo's promise; branches = families; leaves = one-line jobs. A flat card grid is "a directory in clothes" — the hierarchy must be drawn. |
-| Structure / dependency | **Node-edge graph** | Arrows = who imports whom; **edge weights** mark the one-canonical-run spine; every node's detail ends with clickable **"接下來看" hints** (hand-written reasons for core nodes, adjacency fallback). A graph without weights and a suggested walk is an inventory, not a tour. |
+| Ownership / boundary | **Spatial map** | Three-party split (caller / the thing itself / outside world) as cards. Positions are permanent — a later structure chapter reuses the SAME layout one zoom deeper, so the learner's spatial memory keeps paying. |
+| Temporal process | **Run playback** | The micro-example stepped line by line in a console; an actor legend lights per line; an annotation beneath carries the *why* of that line; a variant switch replays the same task the other way. Preferred over a static outcome-branch diagram at Repository level: **watching one run beats mapping all runs** when the learner has no model to hang branches on yet. |
+| Delta from known | **Claim expansion** | Not a two-column table. Each row is one of the learner's own sentences from the calibration probe, plus a verdict chip (right · partly right · doesn't hold · didn't consider) that acts as the *door*; clicking unfolds a fixed three-beat body: **mechanism → the trade-off behind it → what it costs you in practice**. **Correct claims expand too** — a right answer is where the next layer is cheapest to add. Grading alone teaches nothing; the beats are the chapter. |
+| Taxonomy | **Classification tree** | Root = the promise, branches = families, leaves = one-line jobs; lead families visually weighted. Draw the *grouping*, not a literal tree: root as a slim top bar (a root floating beside a tall column leaks dead space), leaves in a strict N-column grid (free-wrapping leaves produce orphan full-width cards). |
+| Structure / dependency | **Node-edge graph** | Arrows = who uses whom; **edge weights** mark the one-canonical-run spine; every node's detail ends with clickable *next-step* hints (hand-written reasons for core nodes, adjacency as fallback). A graph without weights and a suggested walk is an inventory, not a tour. |
 | Lifecycle / outcome classes | **Canonical-run outcome diagram** | Fixed spine → outcome pills → a branch card dropping from the spine → a terminal strip (dashed loop-back vs solid done) → control-flow chips. Home level: **System** — Repository teaches what one run feels like; System teaches every path a run can take. |
 
 ## The guided container
 
-Chapters with one takeaway each; sidebar navigation; final chapter = seams (the next zoom's
-choices) + the gate preview. Every chapter states in its takeaway **what was deliberately folded
-and which level owns it**. Aim: each chapter readable in ~30 seconds before interaction.
+Chapters with one takeaway each; sidebar navigation; a final chapter of seams (the next zoom's
+choices) plus the gate preview. Every takeaway names **what was deliberately folded and which
+level owns it**. Aim: each chapter readable in ~30 seconds before any interaction.
 
 ## The micro-example thread
 
-One tiny task threads the artifact (small enough to be boring, rich enough to need two distinct
-actions — e.g. "look something up, then compute on it"). It **starts in the chapter that first
-exercises it**, with one line of why-this-task; mentioning it earlier is noise, not foreshadowing.
-In a two-variant system, the playback replays the SAME task under each variant so the difference
-demonstrates itself (one step vs two rounds).
+One tiny task threads the artifact — small enough to be boring, rich enough to need two distinct
+actions (e.g. "look something up, then compute on it"; "state a fact, then ask something that
+needs it"). It **starts in the chapter that first exercises it**, with one line of why-this-task;
+mentioning it earlier is noise, not foreshadowing. Under a two-variant system, replay the SAME
+task per variant so the difference demonstrates itself.
 
 ## The gloss layer
 
-Dotted click-terms (`.term`) with plain-language popovers. The list is set by the calibration
-probe — skip what the learner owns — plus a second net the probe misses: **architecture-description
-words** (embedded, runtime, sandbox…). Rule: **experience first, name second** — a term may only
-appear attached to the thing that already made it feel like something.
+Dotted click-terms with plain-language popovers. The list comes from the calibration probe — skip
+what the learner owns — plus the net the probe always misses: **architecture-description words**
+(embedded, service, runtime, layer, mechanism). Those are not glossed but *rewritten*: name a
+thing by what the learner does with it (see SKILL.md's build step).
 
 ## Delivery discipline
 
-- Keep visual consistency with the study's earlier artifacts (canvas, palette, typography,
-  diagram grammar) — consistency is part of navigation.
-- **Browser-verify before delivering**: every interaction exercised, console clean, no horizontal
-  overflow; screenshots back to the learner.
-- Artifacts are disposable; the losing variant of a form comparison is pruned at level close,
-  never silently.
+- Visual consistency with the study's earlier artifacts (canvas, palette, typography, diagram
+  grammar) — consistency is part of navigation.
+- **Browser-verify before delivering**; then tell the learner to reload if you revised a page they
+  already had open.
+- Artifacts are disposable; prune the losing variant of a form comparison at level close, never
+  silently.
 - Responsive layouts rearrange stages rather than shrinking the whole diagram.
+- Labels the artifact shows (verdict chips, beat headings, hint rows) render in the learner's
+  language; the English names in this file are the *roles*, not the strings.
+- CSS trap worth knowing: an author `display:` rule beats the UA `[hidden]` rule — pair any
+  `display:flex/grid` class with `.cls[hidden]{display:none}` if you toggle visibility by attribute.
 
 ## Terminal dialects (mid-ladder default)
 

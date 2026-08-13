@@ -50,7 +50,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 
 **`fathom` — study an unfamiliar repository:**
 
-- `/fathom:repo` — climb a repository you don't know through five gated levels (Repository → Runtime → System → Behavior → Code): anchor the commit, judge which levels collapse, land a growing `soundings.md` anchor index, calibrate on the learner's background (gloss list · contrast anchor · chapter compression), teach with knowledge-matched forms (guided interactive mockup at Repository; terminal-first mid-ladder), dwell for the learner's questions, gate by verbalization, and keep a study cursor on disk so the climb resumes across sessions
+- `/fathom:repo` — climb a repository you don't know through five gated levels (Repository → Runtime → System → Behavior → Code): anchor the commit (plus its distance from the latest release), judge which levels collapse, land a growing `soundings.md` anchor index, deliver a measured **trust verdict** (how much to believe what you read here — maintenance, test investment, doc staleness, churn — closing with a read-it-like-this instruction), calibrate on the learner's background (gloss list · contrast anchor · chapter compression), teach with knowledge-matched forms (guided interactive mockup at Repository; terminal-first mid-ladder), dwell for the learner's questions, gate by verbalization, and keep a study cursor on disk so the climb resumes across sessions
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
