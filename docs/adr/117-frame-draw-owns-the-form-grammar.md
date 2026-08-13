@@ -1,4 +1,4 @@
-# ADR-115 — `frame:visualize` owns the form grammar; fathom borrows it
+# ADR-117 — `frame:draw` owns the form grammar; fathom borrows it
 
 > 2026-08-13 · Status: accepted · frame 0.9.0 → 0.10.0 · fathom 0.7.0 → 0.8.0 · 25 → 26 skills
 
@@ -19,12 +19,12 @@ A general instrument was locked inside a specific skill — rule ① leakage at 
 
 ## Decision
 
-**A new verb, `/frame:visualize`**, owns the grammar and the rendering discipline.
+**A new verb, `/frame:draw`**, owns the grammar and the rendering discipline.
 
 It lands in `frame` rather than `shape` because frame already has the wing it belongs to. Frame's
 three reasoning lenses face *inward* (structure a problem for your own understanding);
 `analogize` faces *outward* (make something already settled land for the audience). That outward
-wing had exactly one member and one medium. `visualize` is its sibling: same direction, same
+wing had exactly one member and one medium. `draw` is its sibling: same direction, same
 premise — the thing is understood, only its legibility is in question — different medium, a
 picture instead of a comparison.
 
@@ -47,4 +47,4 @@ study, and disposability.
   threshold, and the two paid lessons about empty interaction move with it.
 - Risk accepted: frame grows from four verbs to five, and the ADR-109 retirement rhythm applies —
   a door drawing zero fires across three months is demoted to summon-only before deletion is
-  argued. `visualize` is a watch candidate alongside fathom's `quiz` and `dive`.
+  argued. `draw` is a watch candidate alongside fathom's `quiz` and `dive`.

@@ -26,7 +26,7 @@
     {
       "name": "frame",
       "source": "./plugins/frame",
-      "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; visualize — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
+      "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
       "version": "0.10.0"
     },
     {

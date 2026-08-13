@@ -113,6 +113,7 @@ function main() {
   validateManifestDrift();
   validateRegistration(pluginSkills);
   validateSiteMapVersions();
+  validateAdrNumbers();
   const compat = validateCodexCompatPhase0(ROOT, {
     worktreeFreeze: process.argv.includes("--codex-compat"),
   });
@@ -449,6 +450,34 @@ function validateManifestDrift() {
   }
 }
 
+/**
+ * ADR numbers are a single-owner namespace with no owner — two sessions that pick a
+ * number independently collide silently, and the collision only surfaces when a human
+ * notices two files sharing a prefix (this happened twice in one afternoon: 114 and
+ * 115). There is no manifest to derive the next number from, so the cheapest durable
+ * fix is to refuse a duplicate at commit time and let the second author renumber.
+ */
+function validateAdrNumbers() {
+  const dir = join(ROOT, "docs", "adr");
+  if (!existsSync(dir)) return;
+  const byNumber = new Map();
+  for (const name of readdirSync(dir)) {
+    const m = /^(\d{3})-.+\.md$/.exec(name);
+    if (!m) continue;
+    const n = m[1];
+    if (!byNumber.has(n)) byNumber.set(n, []);
+    byNumber.get(n).push(name);
+  }
+  for (const [n, files] of [...byNumber].sort()) {
+    if (files.length > 1) {
+      errors.push(
+        `docs/adr/: number ${n} is claimed by ${files.length} files (${files.join(", ")}) — ` +
+          `ADR numbers must be unique; the later author renumbers to the next free number and ` +
+          `updates every reference (site map audit block, plugin CLAUDE.md, skill bodies)`,
+      );
+    }
+  }
+}
 /**
  * Registration gate (#3): every skill must be named in BOTH human-facing surfaces —
  * README.md and docs/site/index.html. The unambiguous token both carry is the

@@ -1,6 +1,6 @@
 # Visual forms — what this level renders, and how
 
-**The form grammar itself lives in `/frame:visualize`** — which kind of knowledge asks for which
+**The form grammar itself lives in `/frame:draw`** — which kind of knowledge asks for which
 shape (ownership → spatial map · process → playback · state over time → stepper · delta from known
 → claim expansion · taxonomy → grouped map · structure → weighted graph · lifecycle → canonical-run
 diagram), plus the rendering discipline (verify before delivering, say "reload", labels in the
@@ -29,7 +29,7 @@ What belongs to teaching a ladder, and therefore lives here:
   calibration probe — skip what the learner already owns — plus the net the probe always misses:
   architecture-description words. Those are not glossed but *rewritten* (name things by use; see
   the core).
-- **Never fold a contradiction.** The general rule is in `/frame:visualize`; the teaching-specific
+- **Never fold a contradiction.** The general rule is in `/frame:draw`; the teaching-specific
   form of it: anything overturning a belief the learner *stated in the calibration probe or a gate*
   must be legible without clicking. A correction they must choose to discover was never delivered.
 - **Consistency across a study.** Later artifacts reuse the earlier ones' canvas, palette,
