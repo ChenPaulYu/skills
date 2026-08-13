@@ -86,12 +86,32 @@ equal time.
 Read the cursor, restate position in one sentence — "we're at <level> of <repo>; this level still
 owes <gate>" — then resume at the pending gate or the next seam. No replay of prior levels.
 
+**Before resuming after a real gap**, check `bearings.md`: if entries the next level depends on are
+aged or carry high regression risk, run a retention pass first (borrow `/fathom:quiz`'s protocol —
+two or three probes, narration-first). Climbing on decayed foundations wastes the level.
+
+## Borrowing the siblings, mid-climb
+
+These verbs are separate doors so they can also be summoned cold — but the climb reaches for them
+by protocol, inline, without sending the learner away. Follow the sibling's protocol; do not call
+it as a step.
+
+| When, during a climb | Borrow | Why |
+| --- | --- | --- |
+| Dwell questions keep reaching **past** the current level, or the learner wants one thread taken far deeper than this level warrants | **`dive`** | Dwell is level-bound by design; forcing a deep thread through it either derails the level or stonewalls real curiosity. Take the dive, then return via the breadcrumb — the ladder has not moved. |
+| Resuming after a gap · a gate exposes decay in an **earlier** level's material · the next level rests on something `bearings.md` marks high-risk | **`quiz`** | The per-level gate tests the level just taught; retention is a different question and needs the learner model, not the lesson. |
+| The learner asks something the anchor index cannot answer, or a claim cannot be grounded at the pin | **`sound`** | Re-ground rather than improvise; new anchors belong in `soundings.md` either way. |
+
+Always name the detour and restore position afterwards — the breadcrumb is what keeps a borrowed
+verb from silently redefining where the study is.
+
 ## The per-level loop
 
 1. Teach with the level's form (`references/forms.md`), leading with one plain conclusion.
 2. **Dwell** — stop and invite the learner's questions before testing anything. Repair what those
    questions expose (wording, a missing gloss, a form that isn't landing). Unlimited rounds; the
-   gate never fires mid-dwell.
+   gate never fires mid-dwell. When the questions keep reaching past this level, offer the dive
+   (see *Borrowing the siblings* below) instead of deferring them to a later level.
 3. **Gate — verbalization, not fill-in-the-blank.** Ask the learner to narrate their own model in
    their own words, without the artifact in front of them, contrasting it against the anchor the
    calibration probe surfaced ("what is this, and how does it differ from the X you've built?").
