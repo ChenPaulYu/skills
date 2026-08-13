@@ -27,9 +27,8 @@ override; otherwise it triggers on the request.
 **Also fires on "show me the board" / "what's the status, visually"** — a request to *see* the
 blueprints board rather than decide something. Render per the board-snapshot contract in
 [`../align/references/blueprints-spec.md`](plugins/shape/skills/align/references/blueprints-spec.md): copy
-`overview-template.html`, fill it from the current `plan.md` + the precedents tier
-(`precedents/index.md`, or legacy `decisions.md` — ADR-105), activate it per the usual protocol
-below. **Always disposable** — never write it back as a standing `overview.html`; `align` does
+`overview-template.html`, fill it from the current `plan.md` + `thoughts/` (filtered to
+`Status: in force` — ADR-112), activate it per the usual protocol below. **Always disposable** — never write it back as a standing `overview.html`; `align` does
 not maintain one. This is the family's answer to "I want to *see* the plan": render it fresh,
 don't keep a second file in sync.
 
@@ -109,16 +108,16 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
   it's a lie.
 - **It can't auto-regenerate from source** (unlike a generated codebase map) → discipline is
   **retire + stamp, never silent refresh.** Most discard; a permanent lock is a rare exception.
-- **Enforcement point: `/shape:reconcile` (ADR-037).** At mockup time nothing is shipped yet, so
-  retirement/stamping can't execute here — reconcile's `mockups/` sweep does it post-ship:
+- **Enforcement point: `/shape:align` (ADR-037).** At mockup time nothing is shipped yet, so
+  retirement/stamping can't execute here — align's `mockups/` sweep does it post-ship:
   pre-conditions (decision settled · pick + deferred branches verifiably recorded in the owning
   doc · inbound links resolved) → prune, with git as the deep archive; parked decisions keep
-  their mockup with a parked stamp. This skill *states* the rule; reconcile *executes* it.
+  their mockup with a parked stamp. This skill *states* the rule; align *executes* it.
 
 ## Storage & format
 
 - **Where:** the blueprints tree's `mockups/` directory, **committed** by default — mockups
-  carry the Pick log and ratified samples, and canon/thoughts docs link into them, so leaving
+  carry the Pick log and ratified samples, and thoughts docs link into them, so leaving
   them untracked makes the decision record single-disk and every link dead-on-clone. One **dated
   topic subfolder** per decision: `mockups/<date>-<topic>/`. Repo-root *scratch* mockups may stay
   local via a **root-scoped** `/mockups/` ignore. ⚠ gitignore trap: a depth-unanchored
@@ -135,8 +134,8 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
   the blueprints overview template's top comment.)
 - **Only thing that leaves the throwaway zone:** a promoted visual-lock (rare) — committed or
   referenced from the project's CLAUDE.md, always stamped. Everything else is discarded.
-- **Lifecycle end:** committed folders don't accumulate forever — `/shape:reconcile` sweeps
-  `mockups/` as its third tier (ADR-037), retiring a folder once its decision ships and the pick
+- **Lifecycle end:** committed folders don't accumulate forever — `/shape:align` sweeps
+  `mockups/` as part of its compaction pass (ADR-037), retiring a folder once its decision ships and the pick
   (+ any deferred branch) is verified recorded in the owning doc. Prune is recoverable (`git log
   --follow`); record the pick in the doc at step 5 so the sweep finds it absorbed, not orphaned.
 

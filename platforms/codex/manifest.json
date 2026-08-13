@@ -20,7 +20,10 @@
       "C": "host capability",
       "D": "explicit degradation"
     },
-    "baseline_classes": ["A", "B"],
+    "baseline_classes": [
+      "A",
+      "B"
+    ],
     "capability_class": "C",
     "degradation_class": "D",
     "degradation_statuses": [
@@ -55,23 +58,38 @@
     },
     "minimal": {
       "summary": "Small everyday build loop.",
-      "skills": ["nav-do", "nav-plan", "reflect-catchup"]
+      "skills": [
+        "nav-do",
+        "nav-plan",
+        "reflect-catchup"
+      ]
     },
     "build": {
       "summary": "Code navigation, convergence, execution, and session orientation.",
-      "skills": ["nav-*", "shape-*", "reflect-catchup"]
+      "skills": [
+        "nav-*",
+        "shape-*",
+        "reflect-catchup"
+      ]
     },
     "research": {
       "summary": "Reasoning frames and document research.",
-      "skills": ["frame-*"]
+      "skills": [
+        "frame-*"
+      ]
     },
     "collaboration": {
       "summary": "Relay coordination and session reflection.",
-      "skills": ["relay-*", "reflect-*"]
+      "skills": [
+        "relay-*",
+        "reflect-*"
+      ]
     },
     "all": {
       "summary": "Every generated skill; use only when the full roster is needed.",
-      "skills": ["*"]
+      "skills": [
+        "*"
+      ]
     }
   },
   "capabilities": [
@@ -96,7 +114,6 @@
         ".agents/skills/shape-elicit/SKILL.md",
         ".agents/skills/shape-mockup/SKILL.md",
         ".agents/skills/shape-dogfood/SKILL.md",
-        ".agents/skills/shape-reconcile/SKILL.md",
         ".agents/skills/frame-first-principles/SKILL.md",
         ".agents/skills/frame-dialectic/SKILL.md"
       ]
@@ -180,8 +197,7 @@
       ],
       "contract_consumers": [
         ".agents/skills/relay-digest/SKILL.md",
-        ".agents/skills/shape-align/SKILL.md",
-        ".agents/skills/shape-reconcile/SKILL.md"
+        ".agents/skills/shape-align/SKILL.md"
       ]
     },
     {

@@ -14,7 +14,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Make a small, already-decided change | `/nav:do` |
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
-| Align on what to work on next | `/shape:align` |
+| See where we are, compact drift, decide what's next（重新整理） | `/shape:align` |
 | Study an unfamiliar repository into a mental model（帶我理解陌生 repo） | `/fathom:repo` |
 | Catch me up on where this session left off（接手現況） | `/reflect:catchup` |
 | Park a cursor before stepping away（收工留單） | `/reflect:park` |
@@ -27,7 +27,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers and the bilingual codebase map (two cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
 | [`fathom`](plugins/fathom/) | **Study an unfamiliar repository** — one skill (`repo`) climbs a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code): a growing `soundings.md` anchor index, a calibration probe on the learner's background, knowledge-matched visual forms (guided interactive mockup at Repository; playback / diff / tree / weighted graph per knowledge kind), dwell rounds, verbalization gates, and a persistent study cursor that resumes across sessions. The learner's predictive mental model is the deliverable. |
-| [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, or a rendered interactive artifact), record it in a legible `blueprints/` board, keep it current, and build it into running, verified code. The forward-motion half to `nav`'s maintenance half. |
+| [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, and keep the `blueprints/` board honest against the code. Six verbs; the build itself is handed to `nav`. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three reasoning lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus `analogize` (build a stress-tested analogy so an already-settled concept lands in plain language). Lenses feed `shape`; `analogize` doesn't. Renamed from `think`. |
 | [`reflect`](plugins/reflect/) | **Reflect on your session** — the one reflexive, cross-cutting family: `catchup`/`park` read and write the single-use cursor (catchup clears the consumed `HANDOFF.md` after reporting), and `retrace` reconstructs a long development arc as evidence-backed causal stages before rendering a user-corrected interactive alignment artifact. Cross-cutting; independent. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `launch` verifies and remembers the default workspace, audits repository readiness, and initializes its PR-attested identity roster; `report` resolves destination and recipient before routing intent Issue-default into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records native responses; `brief` preserves cited understanding; `settle` closes with authority. GitHub owns state; Relay owns semantics and verification. Independent. |
@@ -61,9 +61,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
 - `/shape:probe` — design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
-- `/shape:position` — author the canon layer: a gated multi-feeding campaign that lands core (principle-wise) docs — delta-report gating, altitude instrument, graduation-grown `core/`; mirror of `/shape:reconcile`
-- `/shape:align` — decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (every carried item verified against the code, no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)
-- `/shape:reconcile` — keep the blueprints honest — amend stale facts, prune/consolidate stale `thoughts/` + `plans/`
+- `/shape:align` — one pass, on compaction pressure: verify every carried item against the code, compact what drifted (amend stale facts, prune/consolidate stale `thoughts/` + `plans/`), then decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)
 
 *User-invoked:*
 
@@ -167,7 +165,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 58 entries — the same 29 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 54 entries — the same 27 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 
@@ -213,7 +211,7 @@ node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
 
 Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without reading every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
 
-And the forward-motion counterpart (`shape`): **converge by a real, disposable instance — never a description.** Push a decision into a form you can point at (a grounded fork, a rendered artifact, a blueprints board), keep it current, and build it into running, verified code.
+And the forward-motion counterpart (`shape`): **converge by a real, disposable instance — never a description.** Push a decision into a form you can point at (a grounded fork, a rendered artifact, a blueprints board), record it so it is born durable, and keep it honest against the code — then hand the build to `nav`.
 
 When in doubt: rule ⑦. Ask.
 

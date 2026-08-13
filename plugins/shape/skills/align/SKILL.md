@@ -1,34 +1,37 @@
 ---
 name: align
 model: sonnet
-description: "Align on what to build next: decide with you what's In progress, Next, or Future from current decisions and real work, then write the single maintained plan.md board. Fires on \"where are we\" or \"what should we work on next\". NOT /nav:plan (this triages forward; that grounds a spec into code) — and not a visual render, which is an on-demand /shape:mockup board snapshot."
+description: "Compact a project's blueprints tree against reality, then decide what's next: verify every carried item against the code, prune or amend what drifted, and rewrite the plan.md board with you. Fires on \"where are we\", \"下一步做什麼\", \"重新整理一下\", or returning to a project after a break. NOT /nav:plan (this triages forward; that grounds a spec into code)."
 ---
 
-# Align — decide what's next, render it
+# Align — compact the record, decide what's next
 
-Recurring, lightweight alignment on **what to build next**. Read the converged decisions and the real state of the work, decide *with the user* what's now / next / later, and land it as `plan.md` — the one real, current artifact you point at, not a paragraph you re-read. Want to *see* it rendered? That's an on-demand `/shape:mockup` board snapshot, not align's job — align never maintains a standing HTML file.
+One pass over the `blueprints/` tree that leaves it telling the truth about **now**: verify what the board claims against the actual code, clean what reality moved past, and land the current call in `plan.md` — the one real artifact you point at, not a paragraph you re-read.
+
+It runs on **compaction pressure**, the same instinct as compacting an agent's context: you returned after a break, a batch just shipped, or the tree got noisy. Keep what would be expensive to recover; drop what git makes cheap.
 
 ## Stance
 
-- **Decide *with* the user, don't author priorities silently.** Surface the now/next/later split; let them move things, add, cut.
-- **Ground in reality before triaging** — read `thoughts/*.md` + the precedents tier (`precedents/index.md` / legacy `decisions.md`), and verify against the actual code (grep, `head -12` headers, `git log`) rather than trusting the plan's own claims.
-- **Sync-confirm done-ness — align is a status *sync*, not a read-only re-render.** For every item the *current* `plan.md` lists as In progress / Next — **especially any marked "待驗 / TBD / not-sure-if-done / 待驗是否已做"** — go *confirm it against the code*, don't carry the unresolved claim forward. If grounding shows it shipped, **move it to ✅ Shipped** in the triage. A plan that still says "TBD: is X done?" *after* an align run is an align failure — the whole point is that the board reflects verified present reality. (This is item-*status* reconciliation, which is align's job; pruning a stale *thought doc* is still `/shape:reconcile`'s — don't conflate the two.)
-- **Every carried item gets verified, mechanically — a sampled spot-check is not a sync (ADR-086).** The measured failure mode: a "refresh" that re-reads the board, reorders it, and carries every claim forward unverified — one real sweep then found **5 of 7 "Next" items had already shipped**, some for days. So: no 🚧/▶ item enters triage without evidence attached (a grep hit, a `head -12` header, a `git log` ref, a test name). When the board is long, fan the per-item verification out to cheap parallel sub-agents (`model: sonnet`, read-only) instead of skipping it — verification cost is the reason this step gets rationalized away, so make it cheap rather than optional.
-- **No item vanishes silently (ADR-086).** Every item on the *previous* board must land somewhere visible in the new one — ✅ Shipped (with evidence), ⏸ Future (with the why/trigger), still in ▶ Next, or an **explicit, user-confirmed cut**. A reprioritization that quietly loses an item creates ghost work. If you're proposing to drop something, say so out loud in the triage — dropping is a decision the user makes, not a diff artifact.
-- **Don't clean here.** Stale/implemented thoughts get *flagged*, not pruned — that's `/shape:reconcile`'s job, write-gated.
-- **No new decisions during triage.** A decision that surfaces while aligning belongs in a `thoughts/` doc, via `/shape:elicit` or `/shape:mockup`.
-- **Write-gated.** Show what you'll write (or a diff for an existing tree) before committing files.
-- **One state, one maintained render.** `plan.md` is the single source of truth for status; a visual view is generated on demand by `/shape:mockup`, never a second maintained copy that can drift.
+- **Verify before you triage — every carried item, mechanically (ADR-086).** No 🚧/▶ item enters the triage without evidence attached (a grep hit, a `head -12` header, a `git log` ref, a test name). The measured failure: a "refresh" that re-reads the board, reorders it, and carries every claim forward unverified — one real sweep then found **5 of 7 "Next" items had already shipped**, some for days. A plan that still says "TBD: is X done?" *after* an align run is an align failure. When the board is long, fan verification out to cheap read-only sub-agents rather than skipping it — make it cheap, not optional.
+- **No item vanishes silently (ADR-086).** Every item on the previous board lands somewhere visible in the new one — ✅ Shipped (with evidence), ⏸ Future (with the why/trigger), still ▶ Next, or an **explicit, user-confirmed cut**. Dropping is a decision the user makes, not a diff artifact.
+- **Decide *with* the user.** Surface the now/next/later split and let them move, add, cut. Never author priorities silently.
+- **One dry-run, then one confirmation — not twenty.** Present the whole pass as a single proposal (what's shipped · what to amend · what to prune or consolidate · what the board becomes), then write on one yes. Per-file interrogation makes the user click through without reading, which kills the gate it was meant to be.
+- **Two exceptions that stay per-step, always:** anything **untracked** (`git status` / `git ls-files` first — overwriting untracked content is as irreversible as deleting it; never chain a destructive `rm` after an unverified `mv`; confirm a merge landed with `diff -q` before deleting the merged-from doc), and any **delete of content git does not already hold**. One step at a time, re-checked — never batched.
+- **The amend boundary — the test:** *"Is the `+` line something reality already decided (built code shows it), or something that needs judgment about what should be?"* **Fact → amend here**, verbatim except the confirmed line. **Decision → stop and hand to `/shape:elicit`.** align renders and keeps current; it never authors a decision. A decision that surfaces mid-triage belongs in a `thoughts/` doc, not in `plan.md`.
+- **Consolidate beats raw delete** when live design remains — merge, verify, *then* remove. Curation criterion: **keep what git makes expensive to recover (a live call's why + rejected alternatives), drop what git makes cheap.**
+- **A mockup retires only after three ordered preconditions pass** (ADR-037): the decision is settled/shipped · its residue is verifiably recorded in the owning doc · inbound links are resolved. Default is prune once all pass; salvage-then-prune when residue lives only in the mockup. Parked decisions keep a parked stamp. Check trackedness with `git ls-files`, never `ls`.
+- **Evidence over tidiness.** Cite the signal behind every verdict (code — strongest · self-declaration · date); mark `uncertain` rather than over-claim.
+- **One state, one maintained render.** `plan.md` is the single source of truth for status. A visual view is generated on demand by `/shape:mockup` — never a second maintained copy that can drift.
 
-Full protocol — locating/scaffolding the `blueprints/` tree (incl. the dev-workflow-stub install), the tree layout, the four-step sequence, and the `nav:plan` seam + ADR-086 push/pull rationale: `references/protocol.md`. Tree/format spec: `references/blueprints-spec.md`. Read either when actually running align.
+Full protocol — locating/scaffolding the tree (incl. the dev-workflow-stub install), the four-step sequence, and the `nav:plan` seam + ADR-086 push/pull rationale: `references/protocol.md`. The compaction machinery — inventory/gather/present/write, the currency sweep across tiers, the mockups precondition table, the `/nav:sync` seam: `references/reconcile-protocol.md`. Tree + document format: `references/blueprints-spec.md`.
 
 ## Companion skills
 
-- **`/shape:elicit`** — converges a conceptual decision into a new `thoughts/` doc (the WHAT align reads).
-- **`/shape:mockup`** — converges a visual/structural decision into `mockups/`; also renders an on-demand board snapshot from `plan.md` + the precedents tier.
-- **`/shape:reconcile`** — cleans out stale `thoughts/` (the cleanup align defers to).
+- **`/shape:elicit`** — converges a conceptual decision into a new `thoughts/` doc (the WHAT align reads), and the hand-off for any decision-change align finds.
+- **`/shape:mockup`** — converges a visual/structural decision into `mockups/` (it states retire-on-ship; align executes it); also renders an on-demand board snapshot.
 - **`/nav:plan`** — the build-side sibling: grounds one blueprint item into a code-level implementation plan.
-- **`/reflect:park`** — the *ephemeral* counterpart: a "stepping away right now" session cursor is park's `HANDOFF.md`, not a blueprints entry — align owns **durable** status, don't conflate the two.
+- **`/nav:sync`** — its `head -12` headers are how align reads implementation status cheaply.
+- **`/reflect:park`** — the *ephemeral* counterpart: a "stepping away right now" session cursor is park's `HANDOFF.md`, not a blueprints entry. align owns **durable** status.
 
 ## Communication style
 

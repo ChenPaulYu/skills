@@ -192,7 +192,6 @@ const INTERACTIVE_CHOICE_CONSUMERS = {
   "shape-elicit": "## Offer the next step (don't auto-run)",
   "shape-mockup": "## After the pick — offer the next step: track it · build it (don't auto-run)",
   "shape-dogfood": "## After the session — offer to route the findings (don't fix in place, don't auto-run)",
-  "shape-reconcile": "## Offer to re-sync the board (don't auto-run)",
   "frame-first-principles": "## After the analysis — offer to route it (don't decide, don't auto-run)",
   "frame-dialectic": "## After the trial — offer to route it (don't decide, don't auto-run)",
 };

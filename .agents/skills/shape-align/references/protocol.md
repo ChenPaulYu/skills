@@ -29,12 +29,12 @@ And the blueprints pipeline this skill maintains:
 
 > **One current state, one maintained render.** `plan.md` is both the agent's index and the
 > human's board — it's already plain, readable markdown, so there is no second file to keep in
-> sync with it. Dependencies point downstream only (`plan.md` ← `precedents/` ← `thoughts/`) —
-> never the reverse.
+> sync with it. Dependencies point downstream only (`plan.md` ← `thoughts/`) — never the reverse.
 >
 > **A human who wants a visual view renders one on demand, via `shape-mockup`.** That render is
-> disposable — generated fresh from the current `plan.md`/`precedents/index.md` when actually
-> wanted, never stored, so it cannot go stale and there is nothing for align to regenerate.
+> disposable — generated fresh from the current `plan.md` + `thoughts/` (filtered to `Status: in
+> force`) when actually wanted, never stored, so it cannot go stale and there is nothing for align
+> to regenerate.
 
 Corollaries that govern every step below:
 - **Decide *with* the user.** align triages; the user picks. Surface the candidate now/next/later
@@ -51,8 +51,7 @@ See [`blueprints-spec.md`](.agents/skills/shape-align/references/blueprints-spec
 
 ```
 blueprints/
-  thoughts/      ← committed design decisions (agent-facing; align reads, rarely writes)
-  precedents/    ← committed durable tier of what binds (reconcile owns; align reads index.md; legacy form: decisions.md — ADR-105)
+  thoughts/      ← committed decisions (agent-facing; dated, Status-tagged — align reads + writes via the compaction pass)
   mockups/       ← committed disposable HTML (owned by shape-mockup) — including, on request, a board snapshot
   plan.md        ← align writes: lean status index (agent AND human read this directly)
 ```
@@ -77,9 +76,9 @@ the workflow, and this first run scaffolds it (there is deliberately no `shape:i
 ### Step 2 — Ground in current reality
 
 Two inputs, both required — never plan in a vacuum:
-- **The precedents** — read `thoughts/*.md` (in-flight) **and the precedents tier**
-  (`precedents/index.md`, or legacy `decisions.md` — the durable why, for the 🧭 layer). What
-  currently binds?
+- **What binds** — read `thoughts/*.md` and filter to `Status: in force` (the durable why, for
+  the 🧭 layer; legacy trees: the `precedents/` tier or `decisions.md` — see
+  `blueprints-spec.md`'s Convention versions). What currently binds?
 - **The actual state — verify against the code; don't trust the plan's own claims.** What's
   already built? Grep the codebase for the features the thoughts describe; lean on `head -12`
   file headers (`nav-sync`) + `git log` to read implementation status cheaply.
@@ -93,7 +92,9 @@ Propose a split: **🚧 In progress** (the current batch's tail) · **▶ Next**
 **⏸ Future** (decided but deferred, with the blocker/why) · **✅ Shipped** (current baseline).
 Surface it and let the user move items, add, cut. This is the alignment — don't skip the
 dialog. If the grounding surfaced a thought that looks already-implemented or stale, **flag it
-but don't clean it here** — that's `shape-reconcile`'s job.
+for the compaction pass rather than cleaning it inline mid-triage** — the
+inventory/gather/present/write sequence in `reconcile-protocol.md` (run within this same
+skill).
 
 (The no-item-vanishes gate for this step is stated in full, verbatim, in the SKILL.md body's
 Stance section — ADR-086.)
@@ -105,8 +106,8 @@ prose essays. Shape per the spec's `plan.md` template.
 
 **If the user wants to *see* the board right now**, that's not this skill's job: point them at
 (or invoke) `shape-mockup` to render an on-demand board snapshot from the current `plan.md` +
-precedents tier — see blueprints-spec.md's board-snapshot contract. align stops at writing
-`plan.md`; it never generates or maintains an HTML file.
+`thoughts/` (filtered to `Status: in force`) — see blueprints-spec.md's board-snapshot contract.
+align stops at writing `plan.md`; it never generates or maintains an HTML file.
 
 ## The seam with `nav` — don't blur it
 
@@ -130,6 +131,6 @@ honest daily, pull keeps it honest against undisciplined writers.
 - `blueprints/plan.md` — lean, status-grouped index (created or refreshed); the single
   maintained artifact, agent- and human-readable.
 - (First run) the scaffolded `blueprints/` tree.
-- A chat summary: what moved between now/next/later, anything flagged as possibly-stale (→
-  reconcile), and — if the user wants a visual view — a pointer to run `shape-mockup` for an
-  on-demand board snapshot.
+- A chat summary: what moved between now/next/later, anything flagged as possibly-stale (→ the
+  compaction pass), and — if the user wants a visual view — a pointer to run `shape-mockup` for
+  an on-demand board snapshot.

@@ -12,7 +12,7 @@ The gap was real, not hypothetical: this repo has hand-rolled the deliverable `p
 
 ## Design chain — three lenses, borrowed by protocol (never by call)
 
-`probe` doesn't invoke `frame-dialectic`, `frame-first-principles`, or `frame-orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern `shape-position` established for elicit/mockup/first-principles (ADR-008):
+`probe` doesn't invoke `frame-dialectic`, `frame-first-principles`, or `frame-orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern the now-retired `position` skill established for elicit/mockup/first-principles (ADR-008):
 
 1. **Locate the load-bearing assumption** — `frame-dialectic`'s move. A fork usually has several plausible-sounding cruxes; only one is actually load-bearing (the assumption that, if it flips, flips the decision). Don't design an experiment around a surface disagreement — find the one thing the fork actually rests on. If dialectic already ran and named a "Missing Evidence" row, that *is* this step's output — reuse it, don't re-derive it.
 2. **Strip it to the smallest testable claim** — `frame-first-principles`' move. Convention vs necessity: restate the load-bearing assumption as the smallest falsifiable statement, stripped of the surface phrasing that made it sound bigger or vaguer than it is. Test the necessity, never the wording ("does a graph database read faster" is testable; "is a graph database the right model" is not — reduce to the first before designing anything).

@@ -28,9 +28,7 @@
     "shape-dogfood": "Use a completed feature like a real user via browser or CLI, record evidence, and identify workflow friction or missing intent coverage.",
     "shape-elicit": "Grill the user to a conceptual decision or root cause. Use for undecided logic, not visuals; may offer the survey leg or shape-probe when stalled.",
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
-    "shape-position": "Author and maintain a project's ratified core principles from messy inputs. Use to establish positioning, graduate durable thoughts, or repair canon.",
     "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction.",
-    "shape-reconcile": "Compare blueprints thoughts, plans, and mockups with shipped reality, then propose per-file amend, consolidate, graduate, retire, or prune actions. Read-only until approved.",
     "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/)."
   }
 }

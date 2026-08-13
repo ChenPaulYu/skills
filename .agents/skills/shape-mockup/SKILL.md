@@ -18,7 +18,7 @@ Converge a decision by confronting the user with a **real, disposable, interacti
 - **Ground in the real thing before rendering** — the real palette/proportions/surrounding surface for UI, the real states/entities/data shape for a diagram; match the project's established visual language; default theme is light unless the project's own artifacts are dark.
 - **A handfeel/gesture decision needs the real behaviour to actually run, verified with faithful input** — build only the decision-critical interaction, make its effect observable, and keep chrome (full styling, i18n, extra candidates) out — length is the smell on this kind of decision, not the effort.
 - **A written file isn't a decidable artifact until activated** — open it (or serve it on a remote/headless box) and hand over a clickable URL; never hand off just a screenshot.
-- **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `shape-reconcile`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
+- **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `shape-align`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
 - **Storage:** the blueprints tree's `mockups/<date>-<topic>/`, committed by default (watch the depth-unanchored `mockups/` gitignore trap).
 - **After a pick, offer — never auto-run — the next step**: track it (`shape-align`) and/or build it (`nav-do` small · `nav-plan` bigger), guarded + one-shot, only the branch(es) that apply.
 

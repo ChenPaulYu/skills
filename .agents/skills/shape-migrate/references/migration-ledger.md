@@ -20,12 +20,14 @@ convention change it implements, runnable against any tree, any time, once.
 
 | Version | Fingerprint |
 |---|---|
-| **v2** (current, ADR-105) | `blueprints/precedents/index.md` exists |
-| **v1** (legacy, ADR-026) | `blueprints/decisions.md` exists, no `precedents/` |
+| **v3** (current, ADR-112) | `blueprints/thoughts/*.md` carry a `Status:` line; no `precedents/` folder |
+| v2 (legacy, ADR-105) | `blueprints/precedents/index.md` exists |
+| v1 (legacy, ADR-026) | `blueprints/decisions.md` exists, no `precedents/` |
 | pre-blueprints | neither; possibly no `blueprints/` at all — nothing to migrate, point at `shape-align` to scaffold |
 
-Both present = a half-migrated tree; report it as the finding and offer to complete M1. Detection
-is idempotent — re-running migrate on a current tree reports "already v2, nothing to do."
+More than one fingerprint present = a half-migrated tree; report it as the finding and offer to
+complete the relevant `M<n>` (M1 for a v1 remnant, M2 for a v2 remnant). Detection is idempotent
+— re-running migrate on a current tree reports "already v3, nothing to do."
 
 ## The migration ledger (append-only)
 
@@ -50,6 +52,36 @@ project's notes/registry when it cited nothing — say so rather than invent).
   optional and only on request — a prescriptive placeholder left behind is the same lock ADR-104
   named in `core/`.
 
+### M2 — `core/` + `precedents/` (v2) → `thoughts/` with `Status:` lines (v3) · ADR-112, 2026-08-13
+
+**Shape of the target:** `blueprints/thoughts/` only — the durable thought template
+(`blueprints-spec.md`): an H1, a `> <date> · **Status: in force** (or `superseded by <file>` /
+`shipped`) · <TL;DR>` blockquote in the first three lines, then **the call** · **how it shows up
+in the system** · **what was rejected or deferred**, and an `**Evidence.**` line. One tier, no
+promotion step, no freeze gate.
+
+**Mapping:**
+- Each `precedents/<date>-<slug>.md` → moves to `thoughts/<date>-<slug>.md` **verbatim** — its
+  existing `Status:` line, 3-part body, and `**Evidence.**` pointer already match the target
+  template; only the opening blockquote's wording is normalized to the three-line form.
+- Each `core/<doc>.md` (a ratified canon doc) → becomes a new `thoughts/<date>-<slug>.md`, dated
+  by the doc's own established-date (`git log -L`, or the migration date if undeterminable — noted
+  as approximate in the `Status:` line) with `**Status: in force**`; content maps onto the call /
+  how it shows up / what was rejected sections **verbatim**, split by the doc's existing headings
+  where it already used them, or filed under "the call" whole when it didn't.
+- `precedents/index.md` and `overruled.md` are **deleted** — the index was a standing render of
+  exactly what `head -3 thoughts/*.md` reproduces on demand (no longer maintained, per doctrine);
+  each `overruled.md` entry's **what survives** folds into the *overturning* thought's own body
+  (if not already present there), and the *overturned* file's `Status:` line is set to
+  `superseded by <file>` — **in place, not a move** (supersession is an edit, ADR-112).
+- Each open row in `docs/core/amendments.md` **folds into its target doc as a direct edit** — the
+  amendment is applied, not left queued, because there is no freeze gate left to wait behind; the
+  ledger file is then deleted.
+- The ADR-041 freeze protocol and the `/shape:position` write-door retire with this migration —
+  no replacement door. Any verb may edit a `thoughts/` file's `Status:` line directly going
+  forward (`shape-align` for a fact reality already settled, `shape-elicit` for a reconsidered
+  call).
+
 ## Protocol
 
 1. **Detect + report (read-only).** Version fingerprint, section inventory, inbound-reference
@@ -70,19 +102,16 @@ project's notes/registry when it cited nothing — say so rather than invent).
    *then* remove the source. Run the project's test/lint gate if one exists — migration must not
    break a build that greps docs.
 6. **Report.** What moved where, every re-pointed reference, anything marked approximate, and a
-   one-line suggestion to run `shape-reconcile` next — migration preserves staleness faithfully,
-   so a stale v1 section is now a stale v2 precedent, and that's reconcile's job to find.
+   one-line suggestion to run `shape-align` next — migration preserves staleness faithfully, so a
+   stale source section is now a stale target entry, and finding that is align's compaction pass's
+   job.
 
 ## Boundaries
 
-- **vs `reconcile`** — reconcile judges *currency* (is this doc still true?) with per-file gates;
-  migrate transforms *structure* (which convention does this tree speak?) with a whole-tree
-  mapping. Migrate runs first when both are wanted: reconcile's verbs then operate on the current
-  convention.
-- **vs `position`** — core content changes go through position's door, always. When a future
-  migration touches `docs/core/` *structure* (file renames, an amendments-ledger reshape), the
-  migration is authored into the ledger by the ADR that changes the convention, and execution
-  still respects ADR-041: migrate may move canon files verbatim, never edit their content.
+- **vs `shape-align`'s compaction pass** — that pass judges *currency* (is this doc still true?)
+  with per-file gates; migrate transforms *structure* (which convention does this tree speak?)
+  with a whole-tree mapping. Migrate runs first when both are wanted: align's compaction pass then
+  operates on the current convention.
 - **vs `relay-migrate`** — different plugin, different object entirely (GitHub workspace
   migration). The shared verb name is why both descriptions disambiguate.
 
@@ -91,7 +120,7 @@ project's notes/registry when it cited nothing — say so rather than invent).
 | Temptation | Instead — and the tell |
 |---|---|
 | Improve prose while moving it | Verbatim or nothing — a migration diff should be `git mv`-shaped plus mechanical structure. Tell: a moved sentence reads better than its source. |
-| Migrate and reconcile in one pass | Migrate first, offer reconcile after. Tell: about to drop a section because it "looks stale" mid-move. |
+| Migrate and reconcile staleness in one pass | Migrate first, offer `shape-align`'s compaction pass after. Tell: about to drop a section because it "looks stale" mid-move. |
 | Invent a date or an evidence pointer | Mark it approximate in the Status line. Tell: a `established <date>` no git query produced. |
 | Leave a prescriptive tombstone by default | Delete the source; git archives it. Tell: writing a file whose only content is "this moved". |
 | Ship a convention change without its `M<n>` | Block it — rule 2. Tell: a spec/ADR edit renames a structure and this ledger gained nothing. |
@@ -101,4 +130,4 @@ project's notes/registry when it cited nothing — say so rather than invent).
 - A migration report: version detected, mapping executed, references re-pointed, approximations
   flagged.
 - The tree at the current convention version, contents verbatim, zero dangling references.
-- A one-shot suggestion to run `shape-reconcile` (never auto-invoked).
+- A one-shot suggestion to run `shape-align` (never auto-invoked).

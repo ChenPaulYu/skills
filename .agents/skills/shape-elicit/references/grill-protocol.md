@@ -119,8 +119,7 @@ Then it flows the same way: converge to a one-line cause + fix-direction; if the
 
 - **`shape-mockup`** — the render-converge sibling: for decisions a real interactive artifact makes decidable (look / layout / structure); in diagnostic mode, where a visual fix-direction gets settled.
 - **`shape-dogfood`** — dogfoods a built feature against its user intents and reports the coverage gaps pre-sorted by layer (missing intent = direction · dead-end scenario = incomplete); feeds diagnostic mode's direction-vs-incomplete fork.
-- **`shape-align`** — triages the `thoughts/` docs elicit lands into the plan (now/next/later).
-- **`shape-reconcile`** — retires those `thoughts/` docs once reality absorbs them.
+- **`shape-align`** — triages the `thoughts/` docs elicit lands into the plan (now/next/later), and prunes/retires them once reality absorbs them.
 - **`nav-sync`** — its file headers + codebase map ground the forks (and trace the flaw) cheaply in the real code.
 - **`nav-audit`** — the broad, unconditional smell-scan; diagnostic-mode elicit is the *targeted* root-cause of a specific flaw you point at.
 - **The survey leg** (`references/survey-leg.md`) — the expert witness for missing terrain, run by elicit itself when the Gatekeeper detects a blind spot (formerly the standalone `/shape:survey`, ADR-110).
