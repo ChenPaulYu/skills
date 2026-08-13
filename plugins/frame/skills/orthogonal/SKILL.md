@@ -1,6 +1,6 @@
 ---
 name: orthogonal
-description: "Factor a tangled phenomenon into mutually-INDEPENDENT axes, verify independence (move one, others must not move), and name what was conflated or falsely decoupled. Fires on \"disentangle this\", \"are these orthogonal\", \"separate the concerns\", \"這些是獨立的嗎\". In-chat, offers to route to shape. Distinct from /frame:first-principles (reduces DOWN to axioms; this factors SIDEWAYS)."
+description: "Factor a tangle into mutually-independent axes and verify it (move one, the others must not move). Fires on \"disentangle this\", \"separate the concerns\", \"這些是獨立的嗎\". In-chat, no file."
 ---
 
 # orthogonal — factor a tangle into independent axes

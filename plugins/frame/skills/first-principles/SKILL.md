@@ -1,6 +1,6 @@
 ---
 name: first-principles
-description: "Reason a question from first principles: name the conventional answer and its assumptions, strip to irreducible axioms, rebuild, then surface where it DIVERGES from convention. Fires on \"reason this from first principles\", \"strip the assumptions\", \"is this convention or necessity\", \"從第一性原理想\". In-chat, offers to route (/shape:elicit, /shape:mockup, /nav:do, /nav:plan)."
+description: "Strip a question to its irreducible axioms, rebuild from them, and surface where that DIVERGES from convention. Fires on \"reason this from first principles\", \"從第一性原理想\". In-chat, no file."
 ---
 
 # First-principles — strip a question to its axioms, rebuild from them

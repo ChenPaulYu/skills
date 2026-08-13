@@ -1,6 +1,6 @@
 ---
 name: analogize
-description: "Build a deliberately stress-tested analogy for an already-understood concept, then name where it breaks down. Fires on ELI5 / plain-language / metaphor requests: \"explain like I'm five\", \"give me the plain-language version\", \"用比喻解釋\", \"打個比方\". In-chat, writes no file. Distinct from /frame:first-principles (derives an answer FROM axioms; this re-expresses one already held) and /shape:elicit (draws an answer OUT of the user; this puts one INTO their head)."
+description: "Build a stress-tested analogy for a concept already understood, then name where it breaks. Fires on \"explain like I'm five\", \"用比喻解釋\", \"打個比方\". In-chat, no file."
 ---
 
 # analogize — a stress-tested analogy, not the first one that comes to mind

@@ -1,6 +1,6 @@
 ---
 name: dialectic
-description: "Put a forming claim on trial: steelman both sides, surface the load-bearing assumption, then name the deciding experiment. Fires on \"steelman this\", \"play devil's advocate\", \"strongest case for and against\", \"這個論點站得住嗎\". In-chat, offers to route (/shape:elicit, /shape:mockup, /nav:plan, /shape:probe). NOT for auditing an external document's existing evidence (just ask for a referee-style review) — this stress-tests your own forming claim, where the decider doesn't exist yet."
+description: "Put a forming claim on trial: steelman both sides, surface the load-bearing assumption, name the deciding experiment. Fires on \"steelman this\", \"play devil's advocate\", \"這個論點站得住嗎\". In-chat, no file."
 ---
 
 # dialectic — put a claim on trial: strongest case vs strongest attack, then the deciding experiment
