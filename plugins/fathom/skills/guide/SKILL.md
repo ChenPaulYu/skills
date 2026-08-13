@@ -147,31 +147,12 @@ verb from silently redefining where the study is.
 ## The per-level loop
 
 1. **Orient before teaching — from the learner model, not the ladder.** Never open a level with
-   material. Open by reading `understanding.md` back to them in four beats:
-   - **What you hold now** — quote their own confirmed statements; name what was recently repaired
-     and may slip; name the uncertainty *they* flagged; name what has been shown but never tested.
-     Close it with one sentence characterising the *shape* of their current model ("you have a
-     parts list but no timeline").
-   - **What's missing that this level supplies** — tie it to the gaps just listed, especially to
-     their own open question. A level the learner didn't know they needed is a level they will
-     experience as arbitrary.
-   - **Why this object** — if the level teaches one path, one runtime, one behavior out of several,
-     say why *that* one and what is deferred.
-   - **What you'll be able to do afterwards** — concrete capabilities in their world (debug this
-     class of failure · predict this outcome without testing · decide whether you need to build X),
-     never "pass the gate". The gate is your instrument, not their reason.
-
-   **The names of levels are your coordinates, not their context.** "You passed Repository, now
-   we're at System" orients the agent and tells the learner nothing. This step is the reason
-   `understanding.md` exists — its first job is orientation, and only its second is quiz fodder.
-   An artifact carries orientation implicitly through its title, chapters and lead paragraph;
-   terminal-first teaching has no such scaffold, so the step must be walked out loud.
-
-   **End the orientation by offering the choice, not announcing the route.** Having laid out the
-   gaps, ask which one they want to close — the ladder's default order is a recommendation, and
-   naming it as such ("the trunk comes next by default, but your open question is over here")
-   respects that curiosity is the better teacher. Take their answer; if it skips a level the next
-   one depends on, say what will be missing and let them decide anyway.
+   material: read `understanding.md` back to them first, in the four beats scripted in
+   `references/ladder.md` — what you hold now · what's missing that this level supplies · why
+   this object · what you'll be able to do afterwards. Level names are your coordinates, not
+   their context. End by **offering the choice, not announcing the route** — the default order is
+   a recommendation; if their pick skips a level the next one depends on, say what will be
+   missing and let them decide anyway.
 2. **Teach in chunks; check after each load-bearing one.** A chunk is one new distinction the
    rest of the level depends on — not one step of a procedure. After a chunk, ask **one** short
    check about *that distinction*: reconstruct it, or predict from it, answerable in a sentence.
@@ -217,71 +198,21 @@ verb from silently redefining where the study is.
    `understanding.md` (what the learner now holds, corrected, or left open — in their own words), and
    `index.md` (any anchor newly traced).
 
-## The study cursor — `<study-home>/<repo-name>/progress.md`
+## The two study files
 
-```markdown
-# <repo-name> — study cursor
+Templates and layout: `references/study-files.md`. What the body needs to know:
 
-> upstream: <url> · commit: <sha> · fathom v0.1 · started <date>
+- **`progress.md`** — the cursor: where the *work* stopped. Pin, learning question, collapse
+  judgment, per-level status with gate evidence, skipped gates with their risk, open questions,
+  next action.
+- **`understanding.md`** — the learner model: what the *learner* currently holds. The Learner
+  angle (both calibration axes, re-read at every level entry), then four buckets — Confirmed /
+  Corrected / Open / Never tested — every entry quoted in the learner's own words and dated,
+  plus the dive log.
 
-**Learning question:** <one sentence>
-**Learner familiarity:** <one sentence>
-**Collapse:** <levels collapsed/merged and why, or "full ladder">
-
-| Level | Status | Gate evidence |
-| --- | --- | --- |
-| Repository | passed <date> | <learner's answer, one line> |
-| Runtime | collapsed | single runtime |
-| System | current | — |
-| Behavior | pending | — |
-| Code | pending | — |
-
-**Skipped gates:** <level — why — risk trace, or "none">
-**Open questions:** <bullets>
-**Next:** <the single most concrete next action>
-```
-
-Layout beside it: `index.md` (the growing anchor index) · `understanding.md` (the learner model,
-below) · `source/` (pinned clone) · `mockups/` and `tour/` (visual artifacts, only those earned).
-
-## The learner model — `<study-home>/<repo-name>/understanding.md`
-
-The cursor records where the *work* stopped; this records what the *learner* currently holds.
-Four buckets, every entry quoted in the learner's own words and dated:
-
-```markdown
-# <repo-name> — understanding
-
-> updated <date> · companion to index.md (how deep the repo is; this is how deep the
-> learner is). Confirmed entries have a shelf life — age makes them re-probe candidates.
-
-## Learner angle — two axes, from the calibration probe; re-read at every level entry
-- Goal: <what they want from this repo>
-- Immediate task: <if one exists — the strongest route signal>
-- Curious about: <their words>
-- Known adjacent: <systems/concepts owned by experience — the gloss-skip list>
-- Contrast anchor: <the thing they built that this repo diffs against>
-- Preferred form: <tiebreaker only — form follows the knowledge>
-
-## Confirmed — they said it themselves
-| Their words | Evidence | Date | Re-probe priority |
-
-## Corrected — repaired; highest regression risk
-| What they held | Repaired to | When | Regression risk |
-
-## Open — uncertainty they flagged themselves (the most valuable column)
-| Their words | Status |
-
-## Never tested — taught or shown, never probed
-- <bullets>
-
-## Dive log
-| Topic | When | Where it landed |
-```
-
-A **convention, not a contract** — tolerate an absent or non-standard file, consume what's
-readable, write back in the shape you found. `/fathom:quiz` reads this to choose what to re-probe;
-`/fathom:dive` appends to it.
+Both are a **convention, not a contract** — tolerate an absent or non-standard file, consume
+what's readable, write back in the shape you found. `/fathom:quiz` reads the model to choose what
+to re-probe; `/fathom:dive` appends to it.
 
 ## Closing a study (or a session)
 

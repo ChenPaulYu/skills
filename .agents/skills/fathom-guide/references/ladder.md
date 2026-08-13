@@ -31,6 +31,36 @@ only when the narration is too vague to locate the gap, never as the opening que
 fill-in-the-blank template makes the learner complete YOUR sentence; a verbalization exposes THEIR
 model.
 
+## Opening a level — the orientation script (per-level loop, step 1)
+
+Never open a level with material. Open by reading `understanding.md` back to the learner in four
+beats:
+
+- **What you hold now** — quote their own confirmed statements; name what was recently repaired
+  and may slip; name the uncertainty *they* flagged; name what has been shown but never tested.
+  Close it with one sentence characterising the *shape* of their current model ("you have a
+  parts list but no timeline").
+- **What's missing that this level supplies** — tie it to the gaps just listed, especially to
+  their own open question. A level the learner didn't know they needed is a level they will
+  experience as arbitrary.
+- **Why this object** — if the level teaches one path, one runtime, one behavior out of several,
+  say why *that* one and what is deferred.
+- **What you'll be able to do afterwards** — concrete capabilities in their world (debug this
+  class of failure · predict this outcome without testing · decide whether you need to build X),
+  never "pass the gate". The gate is your instrument, not their reason.
+
+**The names of levels are your coordinates, not their context.** "You passed Repository, now
+we're at System" orients the agent and tells the learner nothing. This step is the reason
+`understanding.md` exists — its first job is orientation, and only its second is quiz fodder.
+An artifact carries orientation implicitly through its title, chapters and lead paragraph;
+terminal-first teaching has no such scaffold, so the step must be walked out loud.
+
+**End the orientation by offering the choice, not announcing the route.** Having laid out the
+gaps, ask which one they want to close — the ladder's default order is a recommendation, and
+naming it as such ("the trunk comes next by default, but your open question is over here")
+respects that curiosity is the better teacher. Take their answer; if it skips a level the next
+one depends on, say what will be missing and let them decide anyway.
+
 ## Collapse rules (decide upfront, say it aloud)
 
 Run this judgment during the first visit, before teaching, and tell the learner the resulting
