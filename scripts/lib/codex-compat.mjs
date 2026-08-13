@@ -159,6 +159,9 @@ export function lowerWorkerProse(text) {
 /** Exact source constructs only. The source sections continue to own their option labels and
  * routing meaning; these rules replace only the Claude-specific chooser name around them. */
 const INTERACTIVE_CHOICE_PROSE_RULES = [
+  { find: "a real `AskUserQuestion`", replace: "a real Codex interactive-chooser call" },
+  { find: "one `AskUserQuestion` confirmation", replace: "one Codex interactive-chooser confirmation" },
+  { find: "one real `AskUserQuestion` for the whole batch", replace: "one real Codex interactive-chooser call for the whole batch" },
   { find: "`AskUserQuestion`-style ask", replace: "host-structured interactive-choice ask" },
   { find: "`AskUserQuestion` listing", replace: "the Codex interactive chooser listing" },
   { find: "via `AskUserQuestion`", replace: "via the Codex interactive chooser" },
@@ -187,6 +190,7 @@ export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contrac
  * so the compiler adds behavior without copying any choice content. Missing or duplicate anchors
  * are hard generation failures: source drift must never silently remove a supervision gate. */
 const INTERACTIVE_CHOICE_CONSUMERS = {
+  "nav-do": "3. **Verify gate \u2014 the verification is unconditional; only its *auto-execution* is gated (ADR-114).**",
   "nav-plan": "### Stage 4 — Offer next action (don't make the user type the next command)",
   "nav-refactor": "### Step 8 — Offer next action (don't make the user type the next command)",
   "shape-elicit": "## Offer the next step (don't auto-run)",

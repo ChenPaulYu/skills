@@ -52,9 +52,9 @@ Adding new (e.g. private `_`-prefixed) members is fine; removing or changing a f
 
 When green: optionally commit (small commits make bisecting trivial later).
 
-### Step 6 — Browser pass (GATE)
+### Step 6 — Browser pass (GATE — unconditional; its auto-execution is gated, ADR-114)
 
-Tests prove unit-level behaviour. The full integration is only proven by running the app:
+Tests prove unit-level behaviour. The full integration is only proven by running the app. **Run it without asking when you can state the pass up front as ≤5 interactions** (open → exercise the one moved area → screenshot → confirm). **Ask first — a real `AskUserQuestion`, not a line of prose** — when it needs broader computer-use driving, when it would spend live LLM tokens, or when you cannot state the check up front — and if the user declines, **report it as debt** ("shipped unverified at your call: \<what wasn't exercised\>"), never as a silent skip.
 
 ```bash
 pnpm dev              # or npm start

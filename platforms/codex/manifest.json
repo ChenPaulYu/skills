@@ -107,13 +107,14 @@
       ],
       "interactive_choice_contract": "scripts/lib/codex-compat.mjs#CODEX_INTERACTIVE_CHOICE_CONTRACT",
       "contract_consumers": [
+        ".agents/skills/frame-dialectic/SKILL.md",
+        ".agents/skills/frame-first-principles/SKILL.md",
+        ".agents/skills/nav-do/SKILL.md",
         ".agents/skills/nav-plan/SKILL.md",
         ".agents/skills/nav-refactor/SKILL.md",
-        ".agents/skills/shape-elicit/SKILL.md",
-        ".agents/skills/shape-mockup/SKILL.md",
         ".agents/skills/shape-dogfood/SKILL.md",
-        ".agents/skills/frame-first-principles/SKILL.md",
-        ".agents/skills/frame-dialectic/SKILL.md"
+        ".agents/skills/shape-elicit/SKILL.md",
+        ".agents/skills/shape-mockup/SKILL.md"
       ]
     },
     {
