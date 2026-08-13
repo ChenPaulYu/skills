@@ -3,6 +3,27 @@
 Each level answers one question, ends at one gate, and hides everything below it. Levels locate
 the learner — they are a coordinate, not five mandatory artifacts.
 
+## The image to teach (the names are for you; this is for them)
+
+The level names are the agent's coordinate system — stable, unambiguous, and printed in every
+cursor and record. The learner needs an image instead, and one carries the whole ladder:
+
+| Level | What the learner is looking at |
+| --- | --- |
+| Repository | the whole tree from a distance — what kind is it, what does it bear |
+| Runtime | which tree, when there is a grove |
+| System | **the trunk** — the channel one run travels *and* the structure holding everything up |
+| Behavior | **the branches** — where it forks, and how the forks differ in kind |
+| Code | the grain of the wood — what it is actually made of |
+
+The trunk/branch pair does real work: it is the reason **System always precedes Behavior**
+(branches attach to a trunk; there is nowhere to hang them otherwise), and the reason System
+carries *two* things rather than one — a trunk is a conduit and a load-bearing structure at the
+same time, which is exactly the lifecycle and the ownership map. Learners reliably mistake
+System and Behavior for siblings of the same kind, because both names are abstract nouns of the
+same shape; the image forecloses that reading. Introduce it when it earns its place — usually at
+the entry to System — not as a recital at the start.
+
 **Gate style (ratified 2026-08-13): verbalization first.** A gate asks the learner to narrate
 their own model in their own words; the agent diagnoses gaps from the narration and repairs only
 those. The structured phrasings listed per level below are **diagnostic probes** — reach for one

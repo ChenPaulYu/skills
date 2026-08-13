@@ -25,7 +25,7 @@ Attention is the scarce resource: at every step, give the smallest model that is
 - **Falling marginal return = change resolution.** When new cases only append exceptions and no
   longer change the main model, stop adding breadth — climb, or close.
 - **Form follows the knowledge, not the mood.** Ownership wants a spatial map, process wants a
-  playback, delta-from-known wants a diff, taxonomy wants a tree, structure wants a weighted
+  playback, delta-from-known wants a diff, taxonomy wants a grouped map, structure wants a weighted
   graph with a suggested walk (`references/forms.md`). The Repository level defaults to an
   interactive guided mockup — the one place HTML is the default; everywhere else terminal-first,
   escalating only when interaction changes visible state.
