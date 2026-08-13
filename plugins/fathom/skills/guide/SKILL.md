@@ -176,13 +176,9 @@ verb from silently redefining where the study is.
    rest of the level depends on — not one step of a procedure. After a chunk, ask **one** short
    check about *that distinction*: reconstruct it, or predict from it, answerable in a sentence.
    A step that only adds detail to a distinction already checked earns no check of its own.
-   **Which kind of check fits which learner state** — prediction before revealing, evidence after
-   an ungrounded judgment, assumption when a premise was smuggled — is the selector in
-   `references/questioning.md`; it chooses the one check this step budgets, never adds more.
-   **Three check phrasings are banned** — "does that make sense?" · "any questions?" · "do you
-   understand?" (in any language) — each invites a yes that verifies nothing. The replacement is
-   always the narration form: say it back in your own words · apply it to this new case · what's
-   still fuzzy?
+   Which kind of check fits which learner state, and the banned yes-inviting phrasings ("does
+   that make sense?" and kin), live in `references/questioning.md` — the selector chooses the one
+   check this step budgets, never adds more.
 3. **Let them park a question at every check.** The learner may raise a question instead of, or
    alongside, answering. Triage it out loud, never silently:
    - **Load-bearing right here** → answer briefly now; the chunk is not finished without it.
@@ -209,14 +205,12 @@ verb from silently redefining where the study is.
    not in the option set (three plausible, not one), not in the title of a diagram sitting next to
    it. A template makes the learner complete *your* sentence; a narration exposes *their* model.
 7. **Repair only the exposed gap — then verify the repair took.** When the wrong answer hasn't
-   yet located the gap, escalate through the repair ladder in `references/questioning.md`
-   (conceptual reorientation → narrowed options → point-at-evidence → explain; at most two hints
-   before explaining, and hint depth is a chunk-size signal). After any correction, by whatever
-   level it resolved, ask the same distinction back **in a case not yet discussed** (repaired "X
-   is exact-match, not fuzzy" → probe with a near-miss pair it would NOT catch). A repair that is
-   only heard is the highest regression risk in the learner model; the transfer probe is what
-   moves it from heard to held, and its outcome is the regression-risk evidence
-   `understanding.md` records.
+   yet located the gap, escalate through the repair ladder in `references/questioning.md` — at
+   most two hints before explaining. After any correction, by whatever level it resolved, ask the
+   same distinction back **in a case not yet discussed** (repaired "X is exact-match, not fuzzy"
+   → probe with a near-miss pair it would NOT catch). A repair that is only heard is the highest
+   regression risk in the learner model; the transfer probe is what moves it from heard to held,
+   and its outcome is the regression-risk evidence `understanding.md` records.
 8. **Pass** → name the next level and its first seam. **Learner skips** → allowed, but record
    `skipped` in the cursor with one line of risk ("errors later may trace here"); never silently.
 9. Update **all three files**: the cursor (level status, gate evidence, open questions, next step),

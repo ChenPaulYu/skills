@@ -25,7 +25,7 @@ Worked shape (abstract): the learner says *"this component is responsible for X.
 — descend: **Clarification** ("responsible meaning it checks, it stores, or it rejects?") →
 **Evidence** ("which call shows it owning that?") → **Implication** ("if it's briefly down, what
 does the caller experience?"). Stop the moment one of the three exposes the gap; the sequence is a
-搜查 order, not a routine.
+search order, not a routine.
 
 **Prediction has a precondition**: something not yet revealed. It is the highest-value probe and
 the easiest to destroy — once the behavior has been shown, the prediction question is theater.
