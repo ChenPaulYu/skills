@@ -6,7 +6,7 @@ description: "Follow one repository topic as deep as the learner wants, answered
 
 # dive — chase one thread as deep as it goes
 
-> **The core** (fathom): every claim returns to pinned evidence · know where the learner actually
+> **The core** (fathom): every claim returns to evidence of its own kind (repo → pinned file:line · general concept → official docs · learner → their recorded words) · know where the learner actually
 > is · flow governs · disclose progressively but never fold the correction · assume nothing is known,
 > and name things by use rather than by category. Stated in full in `fathom-guide`.
 
