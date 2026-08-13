@@ -1,5 +1,7 @@
 # invocation 方向律 — model-invocable / summoned-only 的依賴方向
 
+> **Status: shipped** · graduated → ADR-072
+
 > **TL;DR**: 把 [mattpocock/skills](https://github.com/mattpocock/skills) 的 invocation 依賴方向紀律推廣為本
 > marketplace 的通用規則——**summoned-only skill 永不被其他 skill 的散文推薦指向;cross-reference
 > 只准指向 model-invocable 的 skill**,每個 skill 明示自己屬哪類。這是給 2026-07-02 那次「elicit 因

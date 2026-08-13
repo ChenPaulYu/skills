@@ -1,5 +1,7 @@
 # Authoring 詞彙表 — skill prose 怎麼失效,把詞釘進本 repo 的實例
 
+> **Status: shipped** · graduated → ADR-069;owner 檔 nav/compose/references/authoring-failure-modes.md
+
 > **TL;DR**: mattpocock/skills 的 writing-great-skills skill 建了一套「skill prose 怎麼失效」的正式詞彙(Premature Completion / Negation / No-Op / Sediment / Sprawl / Leading Word / Completion Criterion),本文把每個詞對應到本 repo 已觀察到的具體案例——多半是本 repo **憑直覺已經做對(或半做對)**的事,只是沒有名字可指認、傳承、檢查。提案:root `CLAUDE.md` 的 Authoring conventions 加一節收留這套詞彙(單一 owner),各 plugin 引用而非各自重述。
 >
 > **狀態**：已 graduate → [ADR-069](docs/adr/069-adopt-prose-failure-vocabulary-plus-the-tell-column.md) · owner 檔 `plugins/nav/skills/compose/references/authoring-failure-modes.md` · 2026-07-13

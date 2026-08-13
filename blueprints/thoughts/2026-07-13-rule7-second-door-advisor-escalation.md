@@ -1,5 +1,7 @@
 # rule ⑦ 長出第二扇門 —— advisor escalation
 
+> **Status: superseded by docs/adr/087-consultant-seat-drops-advisor-rung.md** · advisor 工具 2026-07-17 退役,顧問席改為強模型 sub-agent
+
 > **TL;DR**：rule ⑦「低於 90% 信心 → 問」目前只有一扇門(問使用者)。提案長出第二扇門：先問一句分流題——**這個卡住的判斷,答案握在使用者手裡,還是要更深一層推理才挖得出來?**——前者走原門(問使用者),後者走新門(呼叫 `advisor` tool 問更強的模型)。準則單一 owner 放 root `CLAUDE.md`(掛 rule ⑦ 旁,仿 ADR-059 手法),各 plugin 只列自己的 instance。**明確排除** `shape:elicit` 與 `frame` 家族——它們的存在意義就是把答案從使用者身上榨出來,advisor 介入等於讓大模型代替使用者回答自己的逼問。
 >
 > **狀態**：提案,待 Paul 拍板;**前提已解除**——unavailable 的根因是伺服器端分階段推送 flag(`tengu_sage_compass2`),2026-07-13 已在 `~/.claude/settings.json` env 設 `CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL=1` 繞過,並以兩次全新 headless session 實測(純 settings 路徑亦通),advisor 均回傳真實建議。

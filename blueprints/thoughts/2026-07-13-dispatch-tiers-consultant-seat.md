@@ -1,5 +1,7 @@
 # 派工分層與顧問席 — 強腦坐判斷席，便宜手做偵察與執行，席位認名字不認工具
 
+> **Status: in force** · graduated → ADR-067;2026-08-13 由 ADR-114 加上成本分級閘,原則未被推翻
+
 > **TL;DR**：一條原則統一「advisor 機制」與「強模型規劃、弱模型執行」兩題——**判斷（計畫、驗收、卡點）用強腦，偵察與執行用便宜手；降階的安全條件是下游有強腦驗收點；所有席位用相對名字（session 模型／cheap tier），不寫死工具或模型名**。不新增任何 skill：落點是 ADR-058/059 的延伸慣例＋既有派工點各加一句。
 >
 > **狀態**：已 graduate → [ADR-067](docs/adr/067-dispatch-tiers-consultant-seat.md) · 2026-07-13 · 由 `/shape:elicit` 收斂（Paul × Fable，四個 fork 逐一拍板）

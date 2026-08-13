@@ -1,5 +1,7 @@
 # frame 鏡頭的人話落地 — 最後一步強制零行話結論+比喻
 
+> **Status: in force** · graduated → ADR-077;graft 已退役(ADR-107),其餘三鏡頭的落地步驟仍在
+
 > **TL;DR**:四個推理鏡頭(first-principles、orthogonal、dialectic、graft)的輸出對推理誠實、對人類殘忍——結論是行話寫的(B 型痛,Paul 2026-07-14 拍板)。藥方:每個鏡頭的 protocol 加最後一個 **walked step**——人話落地(一句零行話結論+一個比喻,借 `frame:analogize` 紀律 by protocol)。四鏡齊上,不試點。
 
 ## 一句話原則

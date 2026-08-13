@@ -1,5 +1,7 @@
 # research 泛化 — paper 是文件的一種,不是特殊元件
 
+> **Status: superseded by docs/adr/108-retire-research-fold-map-into-sync.md** · research plugin 整族已退役
+
 > **TL;DR**:Paul 拍板(2026-07-14):research 家的孤立源於物件定義錯誤——「論文」應降格為「論證型文件」的例子之一。修法 A2+留名:家不拆、不改名,identity 重寫為「對論證型文件的嚴謹審讀」,四個 description 去論文中心化;同 ADR 一併接三條下游縫。不搬 frame(協定形狀不合:frame=in-chat 無檔,這四個=產檔 campaign)。
 
 ## 一句話原則

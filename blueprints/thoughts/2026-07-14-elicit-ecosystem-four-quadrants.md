@@ -1,5 +1,7 @@
 # elicit 生態系 — 四象限知識狀態與三個裁決
 
+> **Status: in force** · survey/probe 已落地;survey 2026-08-13 折進 elicit 成 survey leg(ADR-110),四象限框架本身仍成立
+
 > **TL;DR**:elicit 只服務「我知道我知道」象限;補齊生態系 = 兩個新動詞(`shape:survey` 測繪盲點、`shape:probe` 實驗問現實)+ teach 走路由(不新建)+ elicit 升格守門人(卡住時診斷該挖你/該教你/該問現實,遞出去)。
 > 狀態:2026-07-14 elicit 收斂完成,Paul 拍板;實施計畫在 `blueprints/plans/2026-07-14-elicit-ecosystem.md`。
 

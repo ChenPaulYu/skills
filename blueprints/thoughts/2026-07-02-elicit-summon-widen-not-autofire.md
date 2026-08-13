@@ -1,5 +1,7 @@
 # elicit 移除 disable-model-invocation — 決策
 
+> **Status: shipped** · elicit 已移除 disable-model-invocation 並保持 model-invoked 至今
+
 > **TL;DR**: `shape:elicit` 拿掉 `disable-model-invocation: true`,回到 2026-07-01(commit `5bf071f`)之前的狀態。原因:目前平台的觸發閘門是二元的(model-invocable 全開 / 全鎖,只有使用者訊息裡逐字出現 `/shape:elicit` 才能繞過鎖),沒有「使用者明確點頭但 AI 不會自己猜」這種中間態——而 elicit 過去能被其他 skill(`align`/`dogfood`/`reconcile`)的散文推薦(「recommend `/shape:elicit`」)順暢接上,靠的正是 model-invocation 開著。拿掉鎖之後,行為紀律回到 elicit 自己 `SKILL.md` 寫的「Summoned, not automatic」這條*文字*規範,不再由平台機制硬擋。
 >
 > **狀態**: 已落地——`plugins/shape/skills/elicit/SKILL.md` 的 frontmatter 已移除該行,尚未 commit。

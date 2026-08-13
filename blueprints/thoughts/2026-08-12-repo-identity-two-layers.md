@@ -1,5 +1,7 @@
 # The repo is two layers, not one thing — skills are tools, the doctrine layer is the dojo
 
+> **Status: in force** · 今日拍板的雙層憲章,尚未被任何後續決定推翻
+
 > **One line: skill 層全部是工具，以 fire 數審判；練功房是 doctrine 層（ADR·observations·rules·三層法），以可轉移性審判——每個優化取捨先問自己踩在哪一層。**
 > Converged 2026-08-12 via a grounded grill (the first live run of the amended elicit), resolving the
 > strategic review's blind-spot #1 ("what is this system FOR — no one has ruled").

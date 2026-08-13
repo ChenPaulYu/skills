@@ -25,3 +25,17 @@ MSG
   exit 1
 fi
 echo "✓ mirrors + manifests in sync"
+
+# The repo eats its own convention: ADR-105 says a convention change ships with
+# its migration, and ADR-112 changed it without anyone applying M2 — here or in
+# five other project trees — because nothing reported the drift. A tree cannot
+# ask to be migrated, so this asks on its behalf, mechanically, every commit.
+if ! node scripts/validate-blueprints.mjs; then
+  cat >&2 <<'MSG'
+✗ pre-commit blocked: this repo's own blueprints tree drifted from the current convention.
+  Fix: run /shape:migrate (its append-only ledger holds the recipe), or add the
+  missing Status line (in force / shipped / superseded by <file>) to the named thought.
+  To bypass deliberately: git commit --no-verify
+MSG
+  exit 1
+fi

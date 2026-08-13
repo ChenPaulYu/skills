@@ -2,7 +2,7 @@
 
 > **Point:** A person who feels left behind after a long development thread does not need a longer timeline. They need the path reconstructed as pressure-bearing transitions: what was true, what broke, what evidence exposed it, what was chosen, how far it landed, and what unresolved pressure forced the next turn.
 >
-> **Status:** Ratified by Paul on 2026-07-15 → [ADR-084](docs/adr/084-reflect-retrace-causal-development-alignment.md) · originating observation: [`2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges`](docs/observations/2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md).
+> **Status: superseded by docs/adr/113-baton-joins-blueprints-reflect-dissolves.md** · retrace 退役、reflect 解散(2026-08-13)。原始批准:Ratified by Paul on 2026-07-15 → [ADR-084](docs/adr/084-reflect-retrace-causal-development-alignment.md) · originating observation: [`2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges`](docs/observations/2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md).
 
 ## The gap is causal re-entry, not recap
 
