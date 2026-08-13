@@ -21,7 +21,7 @@
       "name": "fathom",
       "source": "./plugins/fathom",
       "description": "Fathom an unfamiliar repository — one skill, repo: climb a five-level comprehension ladder (Repository → Runtime → System → Behavior → Code) with one reconstruction-or-prediction gate per level, collapse rules for small repos, level-matched visual forms, and a persistent study cursor that resumes across sessions. The learner's predictive mental model is the deliverable. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Language-agnostic.",
-      "version": "0.1.0"
+      "version": "0.1.1"
     },
     {
       "name": "frame",

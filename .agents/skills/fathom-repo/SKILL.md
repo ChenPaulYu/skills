@@ -105,7 +105,7 @@ study is not a lab report.
   stopped.
 - **`nav-sync`** — durable navigability for a repo you maintain; `repo` may consume its map as
   grounding when studying your own codebase.
-- **`/shape:survey`** — maps a *decision* space; `repo` maps a *system* that already exists.
+- **`shape-elicit` (survey leg)** — maps a *decision* space; `repo` maps a *system* that already exists.
 
 ## Communication style
 

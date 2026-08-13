@@ -17,7 +17,7 @@ second verb without evidence that a workflow cannot enter through `repo`.
   work belongs to `nav`.
 - **Not** a work-status catchup (`/reflect:catchup` — where did *today's task* stop), not a
   navigability map (`/nav:sync` — durable headers/map for a repo you maintain), not a
-  decision-space survey (`/shape:survey` — axes for a *decision*, not a system).
+  decision-space survey (`/shape:elicit`'s survey leg — axes for a *decision*, not a system).
 - **State**: unlike the nav family (single-shot, read-only toward artifacts), `repo` owns a
   persistent study directory — cursor, pinned clone, visual artifacts. That cursor is why this
   is a standalone plugin and not a nav verb (ADR-111).

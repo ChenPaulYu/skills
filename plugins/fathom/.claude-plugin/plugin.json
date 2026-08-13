@@ -1,6 +1,6 @@
 {
   "name": "fathom",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fathom an unfamiliar repository — to fathom is to deeply understand; the root is the nautical depth unit, measured line by line downward, the shape of this plugin's ladder. One skill: repo — climb Repository → Runtime → System → Behavior → Code with one reconstruction-or-prediction gate per level, collapse rules for small repos, level-matched visual forms (terminal diagrams by default), and a persistent study cursor that resumes across sessions. The learner's predictive mental model is the deliverable, not a document. Method evidence lives in the etudes lab; this plugin executes the converged rhythm. Language-agnostic.",
   "author": {
     "name": "Paul",
