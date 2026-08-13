@@ -3,6 +3,13 @@
 Each level answers one question, ends at one gate, and hides everything below it. Levels locate
 the learner — they are a coordinate, not five mandatory artifacts.
 
+**Gate style (ratified 2026-08-13): verbalization first.** A gate asks the learner to narrate
+their own model in their own words; the agent diagnoses gaps from the narration and repairs only
+those. The structured phrasings listed per level below are **diagnostic probes** — reach for one
+only when the narration is too vague to locate the gap, never as the opening question. A
+fill-in-the-blank template makes the learner complete YOUR sentence; a verbalization exposes THEIR
+model.
+
 ## Collapse rules (decide upfront, say it aloud)
 
 Run this judgment during the first visit, before teaching, and tell the learner the resulting
@@ -27,9 +34,10 @@ Broad but shallow: cover the load-bearing primitive families, give each a plain-
 a full definition), and show how they connect — neighborhoods, not exports. No implementation, no
 edge cases.
 
-**Gate (reconstruction)**: the learner states the repository promise in one sentence without
-reopening the map, e.g. fill-in-the-blank — "An application gives ___ to <repo>; <repo>
-coordinates ___, ___, and ___; it returns ___."
+**Gate (verbalization)**: without reopening the artifact — "用你自己的話講：這個 repo 是什麼？
+你會怎麼跟另一個工程師介紹它跟你熟的 <the learner's calibration anchor> 差在哪？" Diagnostic
+probe if too vague: the one-sentence promise frame ("An application gives ___; it coordinates
+___, ___, ___; it returns ___").
 
 ## 2. Runtime
 
