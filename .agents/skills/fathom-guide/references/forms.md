@@ -31,6 +31,54 @@ only "X on top of Y", with none of the design vocabulary. Cover most load-bearin
 each a plain-language job rather than a definition, group concrete classes into neighborhoods, and
 show how they connect so the map becomes an index for the later tours.
 
+## The study artifact shell — fixed across studies
+
+*Graduated 2026-08-13: the shell recurred verbatim across two studies (same class vocabulary),
+then silently died in a third because it lived only in the artifacts — the convention now lives
+here so every study's pages read the same way.*
+
+**The shell is the report format, not the diagnosis.** It carries no claim about the repository —
+the form inside each chapter still follows the knowledge — but it is **fixed across studies**, so
+a learner opening any new study's page already knows how to read it. Two layers:
+
+**The chapter shell.** A left sidebar of numbered chapters (bold title + one-line subtitle), one
+chapter visible at a time, prev/next buttons at each chapter's foot, and a pin-note under the nav
+(commit + "anchors trace to index.md"). On narrow screens the sidebar becomes a horizontal strip.
+A long scroll of `h2` sections is NOT the shell — staging is the point: one chapter, one claim,
+one place to be.
+
+**The chapter spine** — six by default; a chapter may be **swapped when the repository's knowledge
+demands it** (say so in the artifact's head comment), never silently dropped:
+
+1. **What it's for** — the promise as a business card (install line · import · one real call),
+   who-owns-what boundary if it earns a drawing, and **the trust panel**: verdict headline,
+   counted-signals grid, "so read it like this" list. Trust always rides in chapter 1 — it
+   changes how every later chapter is read.
+2. **Watch one run** — the canonical run played step by step; a variant toggle replays the *same*
+   micro-example (the difference demonstrates itself). Close by naming what was folded.
+3. **Against what you hold** — the learner's **recorded** claims (calibration probe, gates, prior
+   studies' understanding.md) as expandable rows with verdicts. **Never invent a quote.** If no
+   learner model exists yet, contrast against the probe's contrast anchor instead; if there is
+   truly nothing recorded, this is the one chapter that may compress to a paragraph.
+4. **What it provides** — the capability taxonomy: root promise, family branches, leaf jobs.
+   Leaves carry a job description, not a definition — names hang as an index for later levels.
+5. **How it's organized** — the structure view (map, dependency graph, or whatever the shape
+   asks for), with per-module verdicts (core / support / peripheral) and anchors on select.
+6. **The next seams** — where the study can zoom next, as choice cards. The closing offer is a
+   chapter, not a footnote.
+
+**The three-beat block.** Anything that expands — a claim row, a mechanism, a module — unfolds in
+one fixed rhythm: **actual mechanism** (ending in a `file:line` anchor chip — the chip is part of
+the beat, not decoration) → **why it's designed this way** → **what it means for you**. Three
+beats, always in that order; a learner who has expanded one block knows the rhythm of every block
+in every study.
+
+**Continuity mechanics.** Reuse the established class vocabulary when building
+(`chapter · stage-nav · story-panel · takeaway · warn-chip · term`/`gloss-pop · anchor · beat ·
+claim · cap-branch/leaf · seam · trust/sig`) — copy the shell's CSS/JS from the previous study's
+artifact rather than re-inventing it. Canvas, palette, typography and the gloss mechanism are
+shared across **all** studies; the accent hue may vary per study.
+
 ## Level defaults
 
 - **Repository** — an **interactive guided mockup** is the default. A high-level picture is
