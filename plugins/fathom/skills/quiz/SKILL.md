@@ -5,6 +5,11 @@ description: "Check what the learner still holds about a repository they have be
 
 # quiz — find out what actually stuck
 
+> **The core** (fathom): every claim returns to pinned evidence · know where the learner actually
+> is · flow governs · disclose progressively but never fold the correction · assume nothing is known,
+> and name things by use rather than by category. Stated in full in `/fathom:guide`.
+
+
 Probe the learner's live model of a repository and write back what the probing revealed. This
 verb **advances nothing**: no level is passed, no artifact is built. Its only product is a truer
 `understanding.md`.

@@ -1,6 +1,6 @@
 {
   "name": "fathom",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Fathom an unfamiliar repository — four verbs over one shared study state (ADR-114). index anchors the pin and its distance from the latest release, judges how deep the ladder needs to be, lands a growing file:line anchor index, and delivers a measured trust verdict — how much to believe what you read here. guide runs the teaching climb — Repository → Runtime → System → Behavior → Code — calibrating on the learner background, teaching with knowledge-matched forms, dwelling for questions, gating on the learner own narration. quiz checks what actually stuck, spaced and independent of progression. dive follows one topic as deep as the learner wants without advancing the ladder. index.md records how deep the repository is, understanding.md how deep the learner is, progress.md is the cursor — so any verb runs standalone and the order is free. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Language-agnostic.",
   "author": {
     "name": "Paul",

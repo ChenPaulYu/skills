@@ -5,6 +5,11 @@ description: "Follow one topic in a repository as far as the learner wants to ta
 
 # dive — chase one thread as deep as it goes
 
+> **The core** (fathom): every claim returns to pinned evidence · know where the learner actually
+> is · flow governs · disclose progressively but never fold the correction · assume nothing is known,
+> and name things by use rather than by category. Stated in full in `/fathom:guide`.
+
+
 Give the learner a place to keep asking about **one topic** without derailing the curriculum or
 being force-marched to the next level. The ladder does not move here; the learner's curiosity
 sets the depth.
