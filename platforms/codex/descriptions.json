@@ -11,6 +11,7 @@
     "frame-dialectic": "Put a forming claim on trial: steelman both sides, expose its load-bearing assumption, and name a deciding experiment. Use for devil's advocacy or thesis stress tests.",
     "frame-first-principles": "Rebuild a question or decision from irreducible axioms, separating necessity from convention. Use to challenge assumptions or reason from first principles.",
     "frame-orthogonal": "Factor a tangled problem into independent axes and verify that moving one leaves the others fixed. Use to expose conflated or falsely coupled dimensions.",
+    "frame-visualize": "Render something already understood so it lands for someone else, choosing the form from the kind of knowledge. Not for picking between options — the artifact is the explanation.",
     "nav-audit": "Audit codebase architecture against deep-module principles. Use for health, smells, feature-readiness, or full-domain reviews; read-only.",
     "nav-compose": "Author or restructure prose as a navigable deep module: lead with the point, group by knowledge, and keep each fact owned once.",
     "nav-do": "Implement a small, decided behavior change without a plan artifact. Use for quick features or fixes, not refactors or ambiguous work.",
