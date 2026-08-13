@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-08-13 (rev 110)
+  Last audit: 2026-08-13 (rev 111)
 ═══════════════════════════════════════════════════════════════════════════
 
   This file is generated commentary — the marketplace itself is the source
@@ -14,13 +14,13 @@
     • Five plugins: nav (6 skills) + fathom (4 skills) + shape (7 skills) +
       frame (4 skills) + relay (7 installed skills: six daily + one migration bridge) — 28 skills total; see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
     • nav skills: audit, refactor, sync (headers + bilingual codebase map, two cadences one door), plan, do, compose
-    • fathom skills: sound (anchor the pin + release distance, collapse
-      judgment, the growing soundings.md file:line index, a measured trust
+    • fathom skills: index (anchor the pin + release distance, collapse
+      judgment, the growing index.md file:line index, a measured trust
       verdict — grounds without teaching), guide (the five-level climb
       Repository → Runtime → System → Behavior → Code: calibrate on the
       learner's background, knowledge-matched forms, dwell, verbalization
-      gate, cursor + bearings.md learner model), quiz (spaced retention
-      checking against bearings, advances nothing), dive (one topic as deep
+      gate, cursor + understanding.md learner model), quiz (spaced retention
+      checking against understanding.md, advances nothing), dive (one topic as deep
       as the learner wants, no ladder movement) — ADR-114
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought; gatekeeper offers three branches when a volley stalls,
@@ -187,7 +187,24 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
 
-  ⚠ FIXED in this revision (rev 110)
+  ⚠ FIXED in this revision (rev 111)
+    1. fathom 0.4.0 -> 0.4.1 — the grounding verb and the three study
+       files renamed for directness: `/fathom:sound` -> `/fathom:index`
+       (index is the domain term of art for building a queryable
+       representation of a codebase, and "sound" reads as the adjective
+       right where a trustworthiness judgment is being made), with
+       soundings.md -> index.md, bearings.md -> understanding.md, and the
+       cursor _index.md -> progress.md. Opening a study directory now
+       needs no legend: index (what the repo contains) · understanding
+       (what the learner holds) · progress (where the work is). The
+       nautical register stays where it belongs — in the plugin name.
+       Also registered here: guide gains an explicit "borrowing the
+       siblings mid-climb" protocol (dwell reaching past the level ->
+       dive; resuming after a gap or a gate exposing older decay ->
+       quiz; an ungroundable claim -> index), so the split composes
+       instead of forcing the learner between doors.
+
+  ⚠ FIXED in rev 110 (kept for history)
     1. ADR-114 splits fathom 1 -> 4 verbs (0.3.0 -> 0.4.0; marketplace
        25 -> 28 skills). Two live studies showed the flow is not fixed —
        sessions ran scan → teach → follow-up → teach → check in whatever
@@ -198,16 +215,16 @@
        (ADR-108's nav:map) did not transfer: map died because sync's
        trigger subsumed it, not because splitting is wrong. New verbs:
        `sound` (grounding: anchor + release distance, collapse judgment,
-       the growing soundings.md file:line index, a measured trust
+       the growing index.md file:line index, a measured trust
        verdict), `guide` (the climb; renamed from `repo`, which violated
        the bare-verb naming rule), `quiz` (spaced retention checking
-       against a NEW learner-model file, bearings.md — Confirmed /
+       against a NEW learner-model file, understanding.md — Confirmed /
        Corrected / Open / Never-tested, corrected entries carrying the
        highest regression risk), `dive` (one topic to any depth, ladder
        untouched). Files rather than call order are the connective
        tissue, which is what makes every verb standalone; `guide` still
        covers run-it-all via the reuse-via-transcript pattern, performing
-       the sounding inline when soundings.md is absent or stale.
+       the sounding inline when index.md is absent or stale.
        Boundaries held explicitly: dwell (in guide) is level-bound while
        dive is not; gate (in guide) is a level's exit while quiz is
        retention. Registered here: DOMAINS.fathom's four rows, the CB
@@ -242,7 +259,7 @@
        files, OSS-vs-product gap) closing with a read-it-like-this
        instruction. Explicitly NOT a per-module health map: that has no
        consumer at Repository level and reads as decoration; per-module
-       findings stay in soundings.md and surface as just-in-time warnings
+       findings stay in index.md and surface as just-in-time warnings
        before reading that code. The artifact-building step now carries the
        plain-language rules inline — including "name a thing by what the
        learner does with it, not by its architectural category" — with the
@@ -298,7 +315,7 @@
        2026-08-13 smolagents step-by-step trial (etudes lab,
        method/iterations/2026-08-13-fathom-step-trial.md) ratified six
        deltas into the skill. Opening moves now produce a growing
-       soundings.md anchor index and run a calibration probe on the
+       index.md anchor index and run a calibration probe on the
        learner's BACKGROUND (not repo knowledge) — its answers set the
        gloss list, contrast anchor, and chapter compression. Forms rule
        upgraded from level→form to level+knowledge-kind→form: Repository
@@ -1286,7 +1303,7 @@
        renamed. ADR count 79 → 80.
 
   ⚠ FIXED in rev 74 (kept for history)
-    1. `reflect:summarize` RETIRED (ADR-079; reflect v0.4.0 → 0.5.0). It failed the
+    1. `reflect:summarize` RETIRED (ADR-079; reflect v0.4.1 → 0.5.0). It failed the
        No-Op test: a plain "summarize this session" request already produces the
        complete, neutral, chronological recap summarize's own forced structure
        (Complete + Objective + Grounded) restated — no scaffolding forced anything
@@ -1624,7 +1641,7 @@
        line, not this card; relay v0.1.0 → 0.5.0, "reply" → "review" per
        ADR-053, +format verb); graph-node blurbs for nav (6 → 7 skills),
        shape (v0.3.0 → 0.7.0, 6 → 8 skills, position no longer "planned" —
-       it shipped in ADR-035/041), research (v0.4.0 → 0.5.0, 3 → 4 skills,
+       it shipped in ADR-035/041), research (v0.4.1 → 0.5.0, 3 → 4 skills,
        +provenance), reflect (v0.2.0 → 0.3.0), relay (v0.1.0 → 0.5.0, same
        reply → review + format fix). Also fixed: README.md's plugin table
        row for relay still said `report`/`reply` while relay's own
@@ -1646,7 +1663,7 @@
 
   ⚠ FIXED in rev 61 (kept for history)
     1. Cost tier goes MARKETPLACE-WIDE (ADR-059, extends ADR-058; nav v0.7.0 →
-       0.8.0, relay v0.4.0 → 0.5.0, reflect v0.2.0 → 0.3.0; shape's additions fold
+       0.8.0, relay v0.4.1 → 0.5.0, reflect v0.2.0 → 0.3.0; shape's additions fold
        into its uncommitted 0.7.0): mechanical verbs declare model: sonnet in
        SKILL.md frontmatter (turn-level override; all gates unchanged). Criterion
        moved to repo-root CLAUDE.md (single owner; shape's ADR-058 bullet trimmed
@@ -1871,7 +1888,7 @@
        verdicts (verified / needs qualification / unsupported) + corrected
        citable sentence-form. New "Citation verification" output section +
        two discipline bullets (never-trust-the-filename; headline numbers
-       carry conditions). research 3 → 4 skills; v0.4.0 → 0.5.0; ADR 41 → 42.
+       carry conditions). research 3 → 4 skills; v0.4.1 → 0.5.0; ADR 41 → 42.
        Updated: provenance SKILL.md (new) + dissect SKILL.md + research
        CLAUDE.md (spine: provenance = the reflexive corner) + plugin.json +
        .cursor-plugin + marketplace.json + README (table, command list,
@@ -1979,7 +1996,7 @@
        setup log → graduates on user sign-off (晉升 loop, 4th appearance).
        Reconciled with the "no init" razor (rejects mkdir-theatre; setup's
        payload is what default scaffolding skips). shape 7 → 8 skills;
-       v0.4.0 → 0.5.0; ADR 35 → 36; codex mirror 17 → 18.
+       v0.4.1 → 0.5.0; ADR 35 → 36; codex mirror 17 → 18.
 
   ⚠ FIXED in rev 38 (kept for history)
     1. shape: mockups storage default FLIPPED git-ignored → COMMITTED (Paul's
@@ -2046,7 +2063,7 @@
        ADR 33 → 34.
     2. docs sync: research was under-reported as 1-2 skills in marketplace.json
        (v0.2.0, stale "map") + README + this site's CB_NODES/blurb — corrected to
-       its real 3 (dissect / untangle / critique, v0.4.0).
+       its real 3 (dissect / untangle / critique, v0.4.1).
 
   ⚠ FIXED in rev 34 (kept for history)
     1. shape: `rehearse` reoriented + renamed → `dogfood` (ADR-033, supersedes
@@ -2102,7 +2119,7 @@
        at the end; map reads the headers sync maintains. Reasoning: headers and
        the map have different cadences, and ADR-019's claimed shared-grounding-
        pass synergy didn't fire in practice — the literal reverse of rev 21.
-       nav 5 → 6 skills; v0.4.0 → 0.5.0. NAV_NODES sync reshaped (headers-only)
+       nav 5 → 6 skills; v0.4.1 → 0.5.0. NAV_NODES sync reshaped (headers-only)
        + new map node (describe kind, sync's color family); NAV_EDGES gains
        sync→map. nav anatomy lede/default-role/click-text + install_lede counts
        five → six. ADR count 28 → 29. (NOT to be conflated with /research:map —
@@ -2902,12 +2919,12 @@ const DOMAINS = {
   fathom: {
     layer: 'foundation',
     path: 'plugins/fathom/',
-    blurb: {en:'Study an unfamiliar repository into a predictive mental model. **4 verbs over one shared study state** (ADR-114) — the flow is not fixed, so files rather than call order connect them: <code>soundings.md</code> records how deep the repository is, <code>bearings.md</code> how deep the learner is, <code>_index.md</code> is the cursor. <b>sound</b> grounds without teaching (anchor + release distance · collapse judgment · the growing file:line index · a measured trust verdict closing in a read-it-like-this instruction). <b>guide</b> runs the climb (Repository → Runtime → System → Behavior → Code): calibrate on the learner background, teach with knowledge-matched forms — spatial map, run playback, claim expansion, classification tree, weighted graph — dwell for questions, gate by verbalization. <b>quiz</b> checks what stuck, ranked by decay risk. <b>dive</b> follows one topic as deep as wanted, advancing nothing. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Code level still unsettled. v0.4.0; see <code>plugins/fathom/CLAUDE.md</code>.', zh:'把一個陌生 repository 讀成可預測的心智模型。**四個動詞、共用一份 study 狀態**(ADR-114)——流程本來就不固定,所以連接組織是檔案而不是呼叫順序:<code>soundings.md</code> 記 repo 有多深、<code>bearings.md</code> 記學習者到哪、<code>_index.md</code> 是游標。<b>sound</b> 只接地不教學(錨定＋release 距離 · 塌縮判斷 · 會長大的 file:line 索引 · 一份量測過的可信度總評,收在「所以你該怎麼讀它」)。<b>guide</b> 帶爬階梯(Repository → Runtime → System → Behavior → Code):依學習者背景校準,按知識種類配形式——空間圖、執行播放、主張展開、分類樹、加權 graph——先 dwell 追問,再用語言化 gate 驗收。<b>quiz</b> 依衰退風險抽問看什麼留下來了。<b>dive</b> 把一個主題追到學習者想要的深度,不推進任何層級。fathom = 深入理解;字源是水深單位,一噚一噚往下量。Code 層仍未定案。v0.4.0;見 <code>plugins/fathom/CLAUDE.md</code>。'},
+    blurb: {en:'Study an unfamiliar repository into a predictive mental model. **4 verbs over one shared study state** (ADR-114) — the flow is not fixed, so files rather than call order connect them: <code>index.md</code> records how deep the repository is, <code>understanding.md</code> how deep the learner is, <code>progress.md</code> is the cursor. <b>index</b> grounds without teaching (anchor + release distance · collapse judgment · the growing file:line index · a measured trust verdict closing in a read-it-like-this instruction). <b>guide</b> runs the climb (Repository → Runtime → System → Behavior → Code): calibrate on the learner background, teach with knowledge-matched forms — spatial map, run playback, claim expansion, classification tree, weighted graph — dwell for questions, gate by verbalization. <b>quiz</b> checks what stuck, ranked by decay risk. <b>dive</b> follows one topic as deep as wanted, advancing nothing. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. Code level still unsettled. v0.4.1; see <code>plugins/fathom/CLAUDE.md</code>.', zh:'把一個陌生 repository 讀成可預測的心智模型。**四個動詞、共用一份 study 狀態**(ADR-114)——流程本來就不固定,所以連接組織是檔案而不是呼叫順序:<code>index.md</code> 記 repo 有多深、<code>understanding.md</code> 記學習者到哪、<code>progress.md</code> 是游標。<b>index</b> 只接地不教學(錨定＋release 距離 · 塌縮判斷 · 會長大的 file:line 索引 · 一份量測過的可信度總評,收在「所以你該怎麼讀它」)。<b>guide</b> 帶爬階梯(Repository → Runtime → System → Behavior → Code):依學習者背景校準,按知識種類配形式——空間圖、執行播放、主張展開、分類樹、加權 graph——先 dwell 追問,再用語言化 gate 驗收。<b>quiz</b> 依衰退風險抽問看什麼留下來了。<b>dive</b> 把一個主題追到學習者想要的深度,不推進任何層級。fathom = 深入理解;字源是水深單位,一噚一噚往下量。Code 層仍未定案。v0.4.1;見 <code>plugins/fathom/CLAUDE.md</code>。'},
     files: [
-      ['/fathom:sound', '', {en:'Take the soundings before anyone gets in: anchor the upstream URL + full SHA + release distance (latest tag / published version vs the pin — a pin far ahead of release is itself a finding), judge how many ladder levels this repo needs (collapse rules), then land soundings.md — the agent-facing file:line anchor index that answers behavior questions, grows downward as the study descends, and never annotates the pinned clone. Closes with a measured trust verdict: maintenance intensity, test investment, doc staleness, churn, product gap — ending in a read-it-like-this instruction. Grounds; does not teach. ADR-114.', zh:'在任何人下水前先測深:錨定 upstream URL + 完整 SHA + release 距離(最新 tag／已發佈版本 vs 你的 pin——pin 遠超前 release 本身就是發現),判斷這個 repo 需要幾層階梯(塌縮規則),然後產出 soundings.md——給 agent 的 file:line 錨點索引,只答 behavior 問題、隨研究往下長、絕不註記釘住的 clone。收尾是一份量測過的可信度總評:維護強度、測試投入、文件過期程度、核心變動率、產品落差——最後給一句「所以你該怎麼讀它」。只接地,不教學。ADR-114。'}],
-      ['/fathom:guide', '', {en:'The teaching climb: reuse (or inline) the sounding, calibrate on the learner BACKGROUND — never repo familiarity — to set the gloss list, contrast anchor and chapter compression, then teach one level at a time with knowledge-matched forms (interactive guided mockup at Repository; terminal-first mid-ladder), dwell for the learner questions, and gate by VERBALIZATION — they narrate their own model, the agent repairs only the exposed gap. Writes three files: the cursor, bearings.md (the learner model), and any anchor newly traced. ADR-114.', zh:'教學的爬梯:重用(或就地執行)測深,依學習者的「背景知識」校準——絕不問對這個 repo 熟不熟——以決定 gloss 清單、對照錨與章節壓縮,然後一次教一層,按知識種類配形式(Repository 層預設互動 guided mockup;中段層級 terminal 優先),先 dwell 讓學習者追問,再用「語言化 gate」驗收——由他自己講出模型,agent 只修暴露出來的那塊。寫三份檔案:游標、bearings.md(學習者模型)、以及新追出來的錨點。ADR-114。'}],
-      ['/fathom:quiz', '', {en:'Find out what actually stuck: read bearings.md, rank by decay risk (corrected entries first — a repaired misconception regresses toward its original shape; then aged Confirmed entries, the learner own Open flags, and what was shown but never probed), ask for narration rather than recall, and write back what the answers revealed — held / decayed / never landed / newly exposed. Advances no level; may fire days after any teaching. ADR-114.', zh:'查出到底什麼留下來了:讀 bearings.md,依衰退風險排序(修正過的優先——被修好的誤解會朝原本的形狀回歸;再來是放久的 Confirmed、學習者自己標的 Open、以及看過但沒考過的),要求他用自己的話講而不是背誦,再把答案揭露的東西寫回去——留住了／退化了／從來沒進去／新暴露的洞。不推進任何層級;可以在教學結束好幾天後才跑。ADR-114。'}],
-      ['/fathom:dive', '', {en:'Chase one thread as deep as it goes: the learner names a topic and keeps asking, every load-bearing claim resolving to file:line at the pin (soundings first, source when the index does not reach), anything ungrounded labelled inferred or unknown. The ladder does not move — a dive never marks a level passed. Residue on exit: new anchors into soundings.md, what the questions revealed into bearings.md, unsettled items into the cursor, and a breadcrumb restoring position. The unbounded cousin of guide dwell. ADR-114.', zh:'把一條線追到底:學習者指定主題、無限追問,每個承重主張都回錨到 pin 上的 file:line(先查 soundings,索引不夠再讀源碼),接不到地的一律標記為推論或未知。階梯不動——dive 絕不標記任何層級通過。離開時的殘留:新錨點寫回 soundings.md、問題揭露的理解寫回 bearings.md、沒解決的進游標,最後用麵包屑把人放回原位。是 guide 裡 dwell 的無界表親。ADR-114。'}],
+      ['/fathom:index', '', {en:'Take the soundings before anyone gets in: anchor the upstream URL + full SHA + release distance (latest tag / published version vs the pin — a pin far ahead of release is itself a finding), judge how many ladder levels this repo needs (collapse rules), then land index.md — the agent-facing file:line anchor index that answers behavior questions, grows downward as the study descends, and never annotates the pinned clone. Closes with a measured trust verdict: maintenance intensity, test investment, doc staleness, churn, product gap — ending in a read-it-like-this instruction. Grounds; does not teach. ADR-114.', zh:'在任何人下水前先測深:錨定 upstream URL + 完整 SHA + release 距離(最新 tag／已發佈版本 vs 你的 pin——pin 遠超前 release 本身就是發現),判斷這個 repo 需要幾層階梯(塌縮規則),然後產出 index.md——給 agent 的 file:line 錨點索引,只答 behavior 問題、隨研究往下長、絕不註記釘住的 clone。收尾是一份量測過的可信度總評:維護強度、測試投入、文件過期程度、核心變動率、產品落差——最後給一句「所以你該怎麼讀它」。只接地,不教學。ADR-114。'}],
+      ['/fathom:guide', '', {en:'The teaching climb: reuse (or inline) the sounding, calibrate on the learner BACKGROUND — never repo familiarity — to set the gloss list, contrast anchor and chapter compression, then teach one level at a time with knowledge-matched forms (interactive guided mockup at Repository; terminal-first mid-ladder), dwell for the learner questions, and gate by VERBALIZATION — they narrate their own model, the agent repairs only the exposed gap. Writes three files: the cursor, understanding.md (the learner model), and any anchor newly traced. ADR-114.', zh:'教學的爬梯:重用(或就地執行)測深,依學習者的「背景知識」校準——絕不問對這個 repo 熟不熟——以決定 gloss 清單、對照錨與章節壓縮,然後一次教一層,按知識種類配形式(Repository 層預設互動 guided mockup;中段層級 terminal 優先),先 dwell 讓學習者追問,再用「語言化 gate」驗收——由他自己講出模型,agent 只修暴露出來的那塊。寫三份檔案:游標、understanding.md(學習者模型)、以及新追出來的錨點。ADR-114。'}],
+      ['/fathom:quiz', '', {en:'Find out what actually stuck: read understanding.md, rank by decay risk (corrected entries first — a repaired misconception regresses toward its original shape; then aged Confirmed entries, the learner own Open flags, and what was shown but never probed), ask for narration rather than recall, and write back what the answers revealed — held / decayed / never landed / newly exposed. Advances no level; may fire days after any teaching. ADR-114.', zh:'查出到底什麼留下來了:讀 understanding.md,依衰退風險排序(修正過的優先——被修好的誤解會朝原本的形狀回歸;再來是放久的 Confirmed、學習者自己標的 Open、以及看過但沒考過的),要求他用自己的話講而不是背誦,再把答案揭露的東西寫回去——留住了／退化了／從來沒進去／新暴露的洞。不推進任何層級;可以在教學結束好幾天後才跑。ADR-114。'}],
+      ['/fathom:dive', '', {en:'Chase one thread as deep as it goes: the learner names a topic and keeps asking, every load-bearing claim resolving to file:line at the pin (soundings first, source when the index does not reach), anything ungrounded labelled inferred or unknown. The ladder does not move — a dive never marks a level passed. Residue on exit: new anchors into index.md, what the questions revealed into understanding.md, unsettled items into the cursor, and a breadcrumb restoring position. The unbounded cousin of guide dwell. ADR-114.', zh:'把一條線追到底:學習者指定主題、無限追問,每個承重主張都回錨到 pin 上的 file:line(先查 soundings,索引不夠再讀源碼),接不到地的一律標記為推論或未知。階梯不動——dive 絕不標記任何層級通過。離開時的殘留:新錨點寫回 index.md、問題揭露的理解寫回 understanding.md、沒解決的進游標,最後用麵包屑把人放回原位。是 guide 裡 dwell 的無界表親。ADR-114。'}],
     ],
   },
   shape: {
@@ -2954,7 +2971,7 @@ const DOMAINS = {
 const CB_NODES = [
   {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic; sync now carries the codebase map as its map leg (ADR-108). audit catches flat-pile roots (rule ① recursive). tour retired — /fathom:guide succeeds it (ADR-111). v0.16.0.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言;sync 現在以 map leg 兼管 codebase map(ADR-108)。audit 抓 flat-pile 根目錄。tour 退役——由 /fathom:guide 接任(ADR-111)。v0.16.0。'}},
   {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form, then hand it to the manual build path. Converge (mockup/elicit — including its survey leg/probe) → dogfood the built result → plan + compact (align) → migrate for convention upgrades. elicit is the gatekeeper — a stalled volley gets diagnosed: missing terrain runs the survey leg in place (folded from the retired standalone survey, ADR-110), unmeasured fact offers probe (ADR-076); probe designs and runs a minimal experiment when a fork can\'t be settled by argument, summoned or the destination of frame:dialectic\'s guarded offer (ADR-075). 7 skills around a blueprints/ convention, now including baton (the ephemeral session cursor, merged from the dissolved reflect\'s catchup + park, ADR-113); doctor (orchestrator) deferred; build retired, zero fires ever (ADR-110) — the manual path /nav:plan → /nav:do·/nav:refactor → /shape:align replaces it. Depends on nav one-way (shape → nav). decisions are born durable in thoughts/ with a Status line — the canon and precedents tiers retired (ADR-112). v0.19.2.', zh:'往前推:把意圖給形狀,再交給手動的 build 路徑。收斂(mockup/elicit——含它的 survey leg/probe)→ dogfood 做出來的結果 → 計畫+壓縮(align)→ migrate 管慣例升版。elicit 是守門人 —— volley 卡住時先診斷:缺地形就地跑 survey leg(從退役的獨立 survey 折進來,ADR-110),誰都沒測過就 offer probe(ADR-076);probe 設計並跑一個最小實驗,當分岔吵不出結果時,召喚或是 frame:dialectic guarded offer 的目的地(ADR-075)。7 個 skill 圍著 blueprints/ 約定,現在多了 baton(短暫的 session 游標,由已解散的 reflect 的 catchup + park 合併而來,ADR-113);doctor(orchestrator)待加;build 已退役,從未被呼叫過(ADR-110)——手動路徑 /nav:plan → /nav:do·/nav:refactor → /shape:align 取代它。單向依賴 nav(shape → nav)。決定在 thoughts/ 出生即耐久、帶 Status 行(ADR-112);precedents/ 是 durable 層,migrate——現在 summon-only——是升級動詞(ADR-105)。v0.19.2。'}},
-  {id:'fathom', kind:'plugin', x:400, y:45, w:120, role:{en:'study a repo', zh:'讀懂陌生 repo'}, desc:{en:'Study an unfamiliar repository into a predictive mental model — 4 verbs over one shared study state (ADR-114): sound (ground: anchor + file:line index + trust verdict), guide (the five-level teaching climb with dwell and verbalization gates), quiz (spaced retention checking), dive (one topic as deep as wanted). Files connect them, so the order is free. Succeeds the retired nav:tour (ADR-111); consumes nav:sync map as grounding when studying your own codebase, never writes it. Standalone. v0.4.0.', zh:'把一個陌生 repository 讀成可預測的心智模型——四個動詞、共用一份 study 狀態(ADR-114):sound(接地:錨定＋file:line 索引＋可信度總評)、guide(五層教學爬梯,含 dwell 與語言化 gate)、quiz(依衰退風險抽問)、dive(把一個主題追到底)。用檔案連接,所以順序自由。接替退役的 nav:tour(ADR-111);讀自己的 codebase 時消費 nav:sync 的 map 當底料、絕不寫它。獨立。v0.4.0。'}},
+  {id:'fathom', kind:'plugin', x:400, y:45, w:120, role:{en:'study a repo', zh:'讀懂陌生 repo'}, desc:{en:'Study an unfamiliar repository into a predictive mental model — 4 verbs over one shared study state (ADR-114): index (ground: anchor + file:line index + trust verdict), guide (the five-level teaching climb with dwell and verbalization gates), quiz (spaced retention checking), dive (one topic as deep as wanted). Files connect them, so the order is free. Succeeds the retired nav:tour (ADR-111); consumes nav:sync map as grounding when studying your own codebase, never writes it. Standalone. v0.4.1.', zh:'把一個陌生 repository 讀成可預測的心智模型——四個動詞、共用一份 study 狀態(ADR-114):index(接地:錨定＋file:line 索引＋可信度總評)、guide(五層教學爬梯,含 dwell 與語言化 gate)、quiz(依衰退風險抽問)、dive(把一個主題追到底)。用檔案連接,所以順序自由。接替退役的 nav:tour(ADR-111);讀自己的 codebase 時消費 nav:sync 的 map 當底料、絕不寫它。獨立。v0.4.1。'}},
   {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 3 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075). All 3 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 4th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. Standalone — the 3 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.8.0. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。3 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)。3 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 4 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 3 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。v0.8.0。由 think 改名。'}},
   {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination, following the Accord memory model (ADR-100/101): GitHub owns collaboration objects and enforced state (collaboration memory); Relay additionally owns decisions/, briefs/, and core/ as formal memory. Four objects, clean boundaries — Discussion/Issue/PR/Commit; there is no Announcement object, a tell needing a receipt is an Issue, a fact needing none gets no object. Every closed Issue/Discussion passes a promotion test to a cited, mechanically-superseded Decision file. Issue obligations derive from native stage labels (needs-input/awaiting-acceptance/awaiting-record); reply\'s baton flip and settle\'s promotion signal chain move them natively — no prose parsing. Relay resolves a verified default workspace before routing; its relay.yml roster is PR-attested identity data used by report for recipient resolution, while digest never reads it. digest\'s notices tier is now the default landing spot for almost every plain mention; the LEGACY [ACK]-titled-Discussion compatibility path retired 2026-07-22 with zero live legacy objects remaining. launch persists the verified default workspace, initializes/updates relay.yml through reviewed PRs, and installs/audits the template set, the four stage/opt-out labels, and the decisions/ scaffold. Author sign-off (ADR-095), PR review/settlement, and Q&A\'s native obligations are unchanged. 7 installed skills — six daily verbs plus explicit-only migrate. Standalone. v2.2.0; ADR-090/091/092/093/094/095/096/097/098/099/100/101/102.', zh:'GitHub-native 協調，遵循 Accord 記憶模型（ADR-100/101）：GitHub 擁有協作 object 與強制狀態（協作記憶）；Relay 另外擁有 decisions/、briefs/、core/ 作為正式記憶。四種物件、界線清楚——Discussion/Issue/PR/Commit；已經沒有 Announcement 物件，需要回條的告知是一個 Issue，不需要回條的事實不開物件。每個結案的 Issue/Discussion 都要通過一次 promotion test，升等成一份被引用、機械式 supersede 的 Decision 檔。Issue 的 obligation 由原生 stage label 決定（needs-input/awaiting-acceptance/awaiting-record）；reply 的 baton flip 與 settle 的 promotion signal chain 原生地搬動它們——不解析 prose。Relay 會先解析驗證過的預設 workspace；其中的 relay.yml roster 是經 PR 共同認可的身分資料，report 用它解析收件人，而 digest 從不讀取它。digest 的 notices 層現在是幾乎所有單純 mention 的預設落點；LEGACY 的 [ACK] Discussion 相容路徑已於 2026-07-22 隨遷移完成（零個存留物件）退役。launch 會保存驗證過的預設 workspace、透過 reviewed PR 初始化/更新 relay.yml，並安裝/稽核範本集、四個 stage/opt-out 標籤，以及 decisions/ 骨架。author sign-off（ADR-095）、PR review/settlement 與 Q&A 的原生 obligation 都不變。共安裝 7 個 skill——6 個日常 verb 加 explicit-only migrate。獨立。v2.2.0；ADR-090/091/092/093/094/095/096/097/098/099/100/101/102。'}},
 ];

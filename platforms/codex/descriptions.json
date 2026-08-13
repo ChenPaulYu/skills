@@ -5,8 +5,8 @@
   "skills": {
     "fathom-dive": "Follow one repository topic as deep as the learner wants, answered against pinned file:line evidence, without advancing the comprehension ladder.",
     "fathom-guide": "Teach an unfamiliar repository level by level (Repository to Code), dwelling for questions and gating on the learner own narration. Resumes from a cursor on disk.",
+    "fathom-index": "Index an unfamiliar repository and judge how much to trust it: anchor the pin, land a file:line anchor index, deliver a measured trust verdict. Grounds; does not teach.",
     "fathom-quiz": "Check what a learner still holds about a repository they studied: probe by narration, then update the learner model. Advances nothing.",
-    "fathom-sound": "Index an unfamiliar repository and judge how much to trust it: anchor the pin, land a file:line anchor index, deliver a measured trust verdict. Grounds; does not teach.",
     "frame-analogize": "Build and stress-test an analogy for a settled concept. Use for ELI5, metaphors, or 'explain differently'; compares candidates and names where the winner breaks.",
     "frame-dialectic": "Put a forming claim on trial: steelman both sides, expose its load-bearing assumption, and name a deciding experiment. Use for devil's advocacy or thesis stress tests.",
     "frame-first-principles": "Rebuild a question or decision from irreducible axioms, separating necessity from convention. Use to challenge assumptions or reason from first principles.",

@@ -224,17 +224,17 @@ README.md                         → human-facing marketplace overview
 
 | Verb | Owns the moment | Writes |
 | --- | --- | --- |
-| `sound` | "index this repo" · "is it trustworthy?" — grounding without teaching | `soundings.md` |
-| `guide` | "walk me through it" · "where were we?" — the teaching climb | cursor · `bearings.md` · artifacts |
-| `quiz` | "test me" — spaced retention, may fire days later | `bearings.md` |
-| `dive` | "keep digging at X" — one thread, no ladder movement | `soundings.md` · `bearings.md` |
+| `index` | "index this repo" · "is it trustworthy?" — grounding without teaching | `index.md` |
+| `guide` | "walk me through it" · "where were we?" — the teaching climb | cursor · `understanding.md` · artifacts |
+| `quiz` | "test me" — spaced retention, may fire days later | `understanding.md` |
+| `dive` | "keep digging at X" — one thread, no ladder movement | `index.md` · `understanding.md` |
 
-**Files, not call order, are the connective tissue** — which is why the flow is free. `soundings.md`
-records how deep the repository is; `bearings.md` records how deep the learner is; `_index.md` is
+**Files, not call order, are the connective tissue** — which is why the flow is free. `index.md`
+records how deep the repository is; `understanding.md` records how deep the learner is; `progress.md` is
 the cursor. Every verb runs standalone because the state is on disk.
 
 `guide` covers the run-it-all case through the marketplace's **reuse-via-transcript** pattern: if
-`soundings.md` is missing or stale it performs the sounding inline rather than sending the user to
+`index.md` is missing or stale it performs the indexing inline rather than sending the user to
 another door first.
 
 **Keep the near-neighbours distinct** — this split only pays if the boundaries hold: `dwell`

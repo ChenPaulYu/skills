@@ -28,36 +28,36 @@ steal.
 
 | Verb | Trigger it owns | Writes |
 | --- | --- | --- |
-| `/fathom:sound` | "index this repo" · "is this codebase trustworthy?" — no teaching wanted | `soundings.md` |
-| `/fathom:guide` | "walk me through this repo" · "where did we leave off?" — the main door | cursor · `bearings.md` · artifacts |
-| `/fathom:quiz` | "test me" · "how much do I still remember?" — may fire days after any teaching | `bearings.md` |
-| `/fathom:dive` | "I want to keep digging at X" — pursue one topic, do not advance the ladder | `soundings.md` · `bearings.md` |
+| `/fathom:index` | "index this repo" · "is this codebase trustworthy?" — no teaching wanted | `index.md` |
+| `/fathom:guide` | "walk me through this repo" · "where did we leave off?" — the main door | cursor · `understanding.md` · artifacts |
+| `/fathom:quiz` | "test me" · "how much do I still remember?" — may fire days after any teaching | `understanding.md` |
+| `/fathom:dive` | "I want to keep digging at X" — pursue one topic, do not advance the ladder | `index.md` · `understanding.md` |
 
 **Files, not call order, are the connective tissue** — which is what makes the order free:
 
 ```text
-soundings.md   how deep the repository is   ← sound writes · guide/dive read+write
-bearings.md    where the learner's model is ← guide/quiz/dive write · quiz reads
-_index.md      the cursor                   ← guide writes · all read to locate themselves
+index.md   how deep the repository is   ← index writes · guide/dive read+write
+understanding.md    where the learner's model is ← guide/quiz/dive write · quiz reads
+progress.md      the cursor                   ← guide writes · all read to locate themselves
 ```
 
 Any verb runs standalone because the state lives on disk. `guide` covers the run-it-all case via
 the marketplace's existing **reuse-via-transcript** pattern (as `nav:sync` reuses `nav:audit`):
-if `soundings.md` is absent or stale it performs the sounding inline rather than demanding the
-user call `sound` first.
+if `index.md` is absent or stale it performs the indexing inline rather than demanding the
+user call `index` first.
 
 **Boundaries between the near-neighbours**, so the split does not blur:
 
 - **dwell** (inside `guide`) is bound to the level just taught and precedes its gate;
   **`dive`** is unbounded, may cross levels, and advances nothing.
 - **gate** (inside `guide`) is a level's exit; **`quiz`** is spaced retention checking against
-  `bearings.md`, independent of progression.
+  `understanding.md`, independent of progression.
 
 **Naming**: `repo` → `guide` (a bare verb; the pilot who boards precisely because the captain does
 not know these waters). `climb` was considered and rejected — it fights the plugin's downward
 depth metaphor.
 
-## The learner model — `bearings.md`
+## The learner model — `understanding.md`
 
 New, and the reason `quiz` can exist as a door: a per-study record of *what the learner currently
 understands*, distinct from the cursor's record of *where the work stopped*. Four buckets —

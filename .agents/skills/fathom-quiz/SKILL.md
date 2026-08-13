@@ -8,7 +8,7 @@ description: "Check what a learner still holds about a repository they studied: 
 
 Probe the learner's live model of a repository and write back what the probing revealed. This
 verb **advances nothing**: no level is passed, no artifact is built. Its only product is a truer
-`bearings.md`.
+`understanding.md`.
 
 ## Stance
 
@@ -18,14 +18,14 @@ verb **advances nothing**: no level is passed, no artifact is built. Its only pr
   misassigned) is worth ten forgotten identifiers.
 - **A wrong answer is the point.** It buys a repair; a session where everything is answered
   correctly probed too shallow.
-- **Never quiz what was never taught** — that is an exam, not a check. `bearings.md`'s
+- **Never quiz what was never taught** — that is an exam, not a check. `understanding.md`'s
   *Never tested* bucket names what was merely shown; those are legitimate targets, framed as
   "we covered this in passing — what stuck?".
 - **Two or three probes, then stop.** This is a check, not an ordeal.
 
 ## 1. Read the model
 
-Load `bearings.md` from the study home (tolerate an absent or non-standard file — reconstruct
+Load `understanding.md` from the study home (tolerate an absent or non-standard file — reconstruct
 what you can from the cursor and the conversation, and say which tier you read from). Rank
 candidates by decay risk:
 
@@ -46,7 +46,7 @@ sentence; a narration exposes their model.
 
 ## 3. Grade the model, not the answer
 
-For each probe, classify and write back to `bearings.md`:
+For each probe, classify and write back to `understanding.md`:
 
 - **Held** — restate their words, refresh the date, lower its re-probe priority.
 - **Decayed** — they had it, they lost it: move back to *Corrected* with today's date and a raised
@@ -69,10 +69,10 @@ uninvited.
 ## Companion skills
 
 - **`fathom-guide`** — the teaching climb; its per-level gate is an exit exam, this is spaced
-  retention checking, and both write `bearings.md`.
+  retention checking, and both write `understanding.md`.
 - **`fathom-dive`** — where a shaky answer should go when the learner wants to chase it rather
   than be re-taught.
-- **`fathom-sound`** — re-ground when an answer cannot be judged because the facts themselves are
+- **`fathom-index`** — re-ground when an answer cannot be judged because the facts themselves are
   unclear at the pin.
 
 ## Communication style

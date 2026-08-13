@@ -14,7 +14,7 @@ sets the depth.
 - **The learner names the topic and owns the depth.** Unlimited rounds. Never redirect to "we'll
   cover that at the next level" — if they want it now, they get it now.
 - **Answer from evidence, not memory.** Every load-bearing claim resolves to `file:line` at the
-  pin (consult `soundings.md` first; read the source when the index doesn't reach). Label anything
+  pin (consult `index.md` first; read the source when the index doesn't reach). Label anything
   you cannot ground as *inferred* or *unknown* rather than smoothing it over.
 - **Depth without ceremony.** No artifact, no gate, no level talk. A terminal diagram when shape
   or sequence genuinely needs one; otherwise plain answers.
@@ -37,9 +37,9 @@ sets the depth.
 
 On exit, three writes and one restore:
 
-- **`soundings.md`** — any anchor newly traced during the dive (this is how the index grows
+- **`index.md`** — any anchor newly traced during the dive (this is how the index grows
   downward without a formal level descent).
-- **`bearings.md`** — what the dive revealed about the learner's model: beliefs confirmed by their
+- **`understanding.md`** — what the dive revealed about the learner's model: beliefs confirmed by their
   questions, misconceptions surfaced and repaired, and a row in the dive log (topic · when · where
   it landed).
 - **The cursor's open questions** — anything the dive raised and did not settle.
@@ -53,7 +53,7 @@ On exit, three writes and one restore:
   keep reaching past the current level, or when no teaching is running at all.
 - **`/fathom:quiz`** — checks what stuck; a dive is the natural destination for a topic that a
   quiz found shaky and the learner would rather chase than be re-taught.
-- **`/fathom:sound`** — when the dive keeps hitting unanchored ground, re-ground the index instead
+- **`/fathom:index`** — when the dive keeps hitting unanchored ground, re-ground the index instead
   of improvising.
 
 ## Communication style
