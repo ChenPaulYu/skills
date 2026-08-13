@@ -62,8 +62,13 @@ demands it** (say so in the artifact's head comment), never silently dropped:
    truly nothing recorded, this is the one chapter that may compress to a paragraph.
 4. **What it provides** — the capability taxonomy: root promise, family branches, leaf jobs.
    Leaves carry a job description, not a definition — names hang as an index for later levels.
-5. **How it's organized** — the structure view (map, dependency graph, or whatever the shape
-   asks for), with per-module verdicts (core / support / peripheral) and anchors on select.
+5. **How it's organized** — default form: a **weighted dependency graph** (nodes in fixed bands,
+   every edge verified against imports at the pin, the canonical path from chapter 2 drawn
+   thick), per-module verdicts (core / support / peripheral) and anchors on node select, plus a
+   suggested next-node walk. A graph asserts *connection*; a layered map asserts only *position*
+   and has already drifted in once — choose something other than the graph only when the shape
+   demands it, and say so. Drawing the edges also audits the map: it forces out glue modules
+   that a block layout hides.
 6. **The next seams** — where the study can zoom next, as choice cards. The closing offer is a
    chapter, not a footnote.
 
