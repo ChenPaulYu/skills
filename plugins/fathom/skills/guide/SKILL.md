@@ -107,22 +107,48 @@ verb from silently redefining where the study is.
 
 ## The per-level loop
 
-1. Teach with the level's form (`references/forms.md`), leading with one plain conclusion.
-2. **Dwell** — stop and invite the learner's questions before testing anything. Repair what those
+1. **Orient before teaching — from the learner model, not the ladder.** Never open a level with
+   material. Open by reading `understanding.md` back to them in four beats:
+   - **What you hold now** — quote their own confirmed statements; name what was recently repaired
+     and may slip; name the uncertainty *they* flagged; name what has been shown but never tested.
+     Close it with one sentence characterising the *shape* of their current model ("you have a
+     parts list but no timeline").
+   - **What's missing that this level supplies** — tie it to the gaps just listed, especially to
+     their own open question. A level the learner didn't know they needed is a level they will
+     experience as arbitrary.
+   - **Why this object** — if the level teaches one path, one runtime, one behavior out of several,
+     say why *that* one and what is deferred.
+   - **What you'll be able to do afterwards** — concrete capabilities in their world (debug this
+     class of failure · predict this outcome without testing · decide whether you need to build X),
+     never "pass the gate". The gate is your instrument, not their reason.
+
+   **The names of levels are your coordinates, not their context.** "You passed Repository, now
+   we're at System" orients the agent and tells the learner nothing. This step is the reason
+   `understanding.md` exists — its first job is orientation, and only its second is quiz fodder.
+   An artifact carries orientation implicitly through its title, chapters and lead paragraph;
+   terminal-first teaching has no such scaffold, so the step must be walked out loud.
+
+   **End the orientation by offering the choice, not announcing the route.** Having laid out the
+   gaps, ask which one they want to close — the ladder's default order is a recommendation, and
+   naming it as such ("the trunk comes next by default, but your open question is over here")
+   respects that curiosity is the better teacher. Take their answer; if it skips a level the next
+   one depends on, say what will be missing and let them decide anyway.
+3. Teach with the level's form (`references/forms.md`), leading with one plain conclusion.
+4. **Dwell** — stop and invite the learner's questions before testing anything. Repair what those
    questions expose (wording, a missing gloss, a form that isn't landing). Unlimited rounds; the
    gate never fires mid-dwell. When the questions keep reaching past this level, offer the dive
    (see *Borrowing the siblings* below) instead of deferring them to a later level.
-3. **Gate — verbalization, not fill-in-the-blank.** Ask the learner to narrate their own model in
+5. **Gate — verbalization, not fill-in-the-blank.** Ask the learner to narrate their own model in
    their own words, without the artifact in front of them, contrasting it against the anchor the
    calibration probe surfaced ("what is this, and how does it differ from the X you've built?").
    Diagnose the gaps from their narration. Structured probes (fill-in, count-the-boundaries,
    predict-the-outcome) are demoted to diagnostic tools — reach for one only when the narration is
    too vague to locate the gap. A template makes the learner complete *your* sentence; a
    narration exposes *their* model.
-4. Repair only the exposed gap.
-5. **Pass** → name the next level and its first seam. **Learner skips** → allowed, but record
+6. Repair only the exposed gap.
+7. **Pass** → name the next level and its first seam. **Learner skips** → allowed, but record
    `skipped` in the cursor with one line of risk ("errors later may trace here"); never silently.
-6. Update **all three files**: the cursor (level status, gate evidence, open questions, next step),
+8. Update **all three files**: the cursor (level status, gate evidence, open questions, next step),
    `understanding.md` (what the learner now holds, corrected, or left open — in their own words), and
    `index.md` (any anchor newly traced).
 
