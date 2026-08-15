@@ -88,6 +88,17 @@ read. Count, then judge:
 | Stability | churn on the load-bearing files; leftovers from a recent rewrite |
 | Product gap | is the open surface the whole product, or a funnel into a hosted one? |
 | External-information risk | do widely-circulated descriptions still match the code? |
+| **Live-upstream check** | is the URL everyone cites still where the work happens? |
+
+**The live-upstream check is cheap and catches a catastrophic failure.** A repository can be
+archived, mirrored, or moved to another host or org while every tutorial, package README, and
+model answer keeps pointing at the old address. Confirm the pin's home before anything else:
+recent commit dates on the URL you cloned, an `ARCHIVED`/`MOVED` marker in the tree, a README that
+redirects, a suspiciously thin file list. When it has moved, record what did **not** follow —
+issue and PR history, stars, CI (`.github/` vs another host's config) — because that is what makes
+external material stale. (2026-08-15: `github.com/tidalcycles/strudel` proved to be a tombstone
+whose entire tree was one forwarding note; the live repository was on another host under a
+different org. Studying the dead mirror would have produced a confident study of nothing.)
 
 Close with a **"so read it like this"** instruction — that instruction is the deliverable; the
 numbers only earn it. Typical shapes: *trust code over prose* · *remember shapes, not signatures*
@@ -100,6 +111,14 @@ next action, and information with no action attached is decoration.
 
 Report the verdict and the index location in the conversation; offer once to continue with
 `/fathom:guide`. Do not begin teaching.
+
+**Say what does not exist yet.** Grounding produces `index.md` (how deep the repo is) — it does
+**not** produce `understanding.md` (how deep the learner is), because calibrating belongs to the
+teaching door. So state it plainly in the hand-off: there is no learner model yet, and anything
+learner-facing compiled before one exists — a `/fathom:compile` artifact, a tour — is authored for
+a generic reader. Inferring the learner from side channels is not a substitute — the calibration protocol lives
+with `/fathom:guide`, which owns it. Offering the compile is
+fine; offering it *silently* is how material gets built for nobody.
 
 ## Companion skills
 

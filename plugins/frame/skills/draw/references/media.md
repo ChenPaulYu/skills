@@ -80,6 +80,17 @@ Two limits decide when it loses:
 
 Cost: an install (`brew install d2`) plus a render step, and it does not appear inline on GitHub.
 
+## diagram-design plugin
+
+The polished-static lane between D2 and the interactive artifact: the `diagram-design`
+marketplace plugin (installed 2026-08-14) renders 27 editorial diagram types as self-contained
+HTML/SVG, skinnable to the project's tokens via its `style-guide.md`. Reach for it when the
+diagram is a deliverable someone will keep and quality is part of the message; skip it for
+quick in-conversation sketches (ASCII/mermaid are cheaper) and for anything stateful (the
+interactive artifact owns state). Its own SKILL.md carries the full grammar — connector rules,
+complexity budgets, taste gate — follow those, not a summary here. First validated on the
+fathom family diagram (`etudes/atlas/docs/fathom-family.html`).
+
 ## Annotated real output
 
 **When**: the thing already exists and is already legible — a log, a JSON response, a stack trace,

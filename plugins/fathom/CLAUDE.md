@@ -3,7 +3,7 @@
 > To **fathom** is to deeply understand; the root is the nautical depth unit, measured line by
 > line downward — the shape of this plugin's five-level ladder.
 
-## Four verbs, one shared state (ADR-116)
+## Five verbs, one shared state (ADR-116)
 
 | Verb | Owns the moment | Writes |
 | --- | --- | --- |
@@ -11,6 +11,7 @@
 | `guide` | "walk me through it" · "where were we?" — the teaching climb | cursor · `understanding.md` · artifacts |
 | `quiz` | "test me" — spaced retention, may fire days later | `understanding.md` |
 | `dive` | "keep digging at X" — one thread, no ladder movement | `index.md` · `understanding.md` |
+| `compile` | "生成 horizon/地圖" · "重編一下" — turn the study into its artifacts, any time | `studies/<name>/atlas/*.json` |
 
 **Files, not call order, are the connective tissue** — which is why the flow is free. `index.md`
 records how deep the repository is; `understanding.md` records how deep the learner is; `progress.md` is
@@ -23,7 +24,26 @@ another door first.
 **Keep the near-neighbours distinct** — this split only pays if the boundaries hold: `dwell`
 (inside `guide`) is bound to the level just taught; `dive` is unbounded and advances nothing.
 `gate` (inside `guide`) is a level's exit; `quiz` is retention checking independent of progression.
-Adding a fifth verb needs evidence that no existing door can carry the moment.
+Adding a verb needs evidence that no existing door can carry the moment — `compile` cleared that
+bar 2026-08-14/15: a compile fires outside every door's moment (post-dive enrich, stale-study
+return, a bare "生成 horizon" with no teaching in flight) and its atlas half was validated across
+four studies before landing.
+
+## The artifact layer (three products, one compiler door)
+
+Each study level births its own artifact — **different products, never one mega-fixture**:
+**horizon** (Repository) · **tides** (System/State) · **atlas** (Behavior/Code), each with its own
+schema and shell. All three are compiled by `/fathom:compile`, which reads the study's recorded
+gate to decide what may exist. Binding each artifact to its birth gate inside `index`/`guide` was
+tried and rejected — that conflates *when an artifact may first exist* (data, `birth-gates.md`)
+with *when someone wants it compiled* (any time); those doors keep a one-line offer pointing at
+`compile` and own no machinery.
+
+Everything the compiler needs ships with that door (first consumer owns): `skills/compile/` —
+`references/` (compile-loop: two-pass loop + five hard rules · birth-gates: what may exist at
+which gate · one protocol+brief pair per artifact), `scripts/` (scanner, structural gate),
+`assets/` (schemas + shells; deployed copies are instances, assets are canonical). Only **atlas**
+is graduated today; horizon/tides stay lab-side until their fixture-ization pilots pass in etudes.
 
 ## Division lines
 

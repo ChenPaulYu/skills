@@ -16,6 +16,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
 | See where we are, compact drift, decide what's next（重新整理） | `/shape:align` |
 | Study an unfamiliar repository into a mental model（帶我理解陌生 repo） | `/fathom:guide` |
+| Compile a study into its artifacts（把讀過的 repo 編成儀表板與地圖） | `/fathom:compile` |
 | Take or pass the session cursor before/after stepping away（交接記事本） | `/shape:baton` |
 | Report progress to a counterpart over relay | `/relay:report` |
 
@@ -24,7 +25,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Plugin | What it covers |
 |---|---|
 | [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers and the bilingual codebase map (two cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
-| [`fathom`](plugins/fathom/) | **Study an unfamiliar repository** — four verbs over one shared study state: `index` (anchor the pin, land a file:line index, deliver a measured trust verdict), `guide` (the teaching climb Repository → Runtime → System → Behavior → Code — calibrate, teach with knowledge-matched forms, dwell, gate on the learner's own narration), `quiz` (spaced retention checking), `dive` (follow one topic as deep as they want, advancing nothing). Files, not call order, connect them — so the flow is free. |
+| [`fathom`](plugins/fathom/) | **Study an unfamiliar repository** — five verbs over one shared study state: `index` (anchor the pin, land a file:line index, deliver a measured trust verdict), `guide` (the teaching climb Repository → Runtime → System → Behavior → Code — calibrate, teach with knowledge-matched forms, dwell, gate on the learner's own narration), `quiz` (spaced retention checking), `dive` (follow one topic as deep as they want, advancing nothing), `atlas` (compile the study into a guided multi-scale code map). Files, not call order, connect them — so the flow is free. |
 | [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, keep the `blueprints/` board honest against the code, and hand the ephemeral session cursor (`baton`) between sessions. Seven verbs; the build itself is handed to `nav`. |
 | [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Four reasoning-and-delivery verbs. Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (a stress-tested analogy) and `draw` (render it, form chosen by the kind of knowledge — the grammar `fathom` borrows). Lenses feed `shape`; the outward pair doesn't. Renamed from `think`. |
 | [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` resolves destination and recipient before routing intent Issue-default into Discussions, Issues, or pull requests; `digest` shows real obligations; `reply` records native responses; `settle` closes with authority. GitHub owns state; Relay owns semantics and verification. Independent. |
@@ -54,6 +55,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 - `/fathom:guide` — climb the five gated levels (Repository → Runtime → System → Behavior → Code): calibrate on the learner's background (gloss list · contrast anchor · chapter compression), teach with knowledge-matched forms (guided interactive mockup at Repository; terminal-first mid-ladder), dwell for their questions, gate on their own narration, and keep a cursor + learner model on disk so the climb resumes across sessions
 - `/fathom:quiz` — check what actually stuck: read `understanding.md`, probe what is most likely to have decayed (corrected entries first), ask for narration rather than recall, and write back what the answers revealed; advances no level
 - `/fathom:dive` — follow one topic as deep as the learner wants, answered against pinned `file:line` evidence, without moving the ladder; residue lands in `index.md` + `understanding.md` and the breadcrumb restores position
+- `/fathom:compile` — turn the study into its artifacts: horizon (repo-level dashboard), tides (system/state board), atlas (behavior/code map) — each a semantic fixture rendered by a fixture-driven shell; the gate decides what may exist, and a re-compile enriches as the study deepens; needs an existing study, does not teach
 
 **`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
 
@@ -85,7 +87,21 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 
 ## Install
 
-One source tree, two channels, five agents: **Claude Code** and **Antigravity CLI (`agy`)** import the plugins natively (namespace preserved — `/nav:audit`); **Codex**, **opencode**, and **Cursor** auto-discover the generated flat mirror `.agents/skills/` (flat names — `nav-audit`; see [Codex compatibility](#codex-compatibility)). The plugins under `plugins/` are the single source of truth everywhere.
+One source tree, three channels, five agents. `plugins/` is the single source of truth everywhere:
+
+| Agent | Reads | Skill names |
+|---|---|---|
+| **Claude Code** | `plugins/` natively | `/nav:audit` |
+| **Antigravity (`agy`)** | `plugins/` via `agy plugin install` (preferred); or project `.agents/skills/` | `/nav:audit` · or flat `nav-audit` |
+| **Codex** · **opencode** | generated `.agents/skills/` | `nav-audit` |
+| **Cursor** | generated `platforms/cursor/<plugin>/` (ADR-118 — **not** the Codex mirror) | `nav-audit` inside each plugin |
+
+After any skill edit, regenerate **all** derived surfaces, then validate:
+
+```bash
+node scripts/build-manifests.mjs && node scripts/build-codex.mjs && node scripts/build-cursor.mjs
+node scripts/validate-codex-skills.mjs
+```
 
 Shortcut for any harness — tell your agent:
 
@@ -113,34 +129,45 @@ Antigravity CLI natively imports Claude Code plugins — same `SKILL.md` format,
 ```bash
 git clone https://github.com/ChenPaulYu/skills.git && cd skills
 agy plugin install plugins/nav
+agy plugin install plugins/fathom
 agy plugin install plugins/shape
 agy plugin install plugins/frame
+agy plugin install plugins/relay
 ```
 
-Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:mockup`, …).
+Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/fathom:compile`, `/shape:mockup`, …).
+
+AGY-only automation (hooks, MCP) stays in `~/.gemini/config/` on the machine — never commit it here, so Claude / Codex / Cursor stay untouched.
 
 **Project-level auto-detection.** `agy` also reads `.agents/skills/` in the project you open it from — the same flat, generated mirror Codex uses (see [Codex compatibility](#codex-compatibility) below). Inside this repo that mirror is already committed, so opening `agy` here loads all skills under their flat names (`nav-audit`, `shape-mockup`, …) with no install step. To reuse them in another project, copy the skill dirs you want into that project's `.agents/skills/`.
 
 Prefer the global install: it keeps the namespace, tracks the plugin source, and doesn't depend on the generated mirror.
 
-### Codex · opencode · Cursor (flat mirror)
+### Codex · opencode (flat mirror)
 
-All three auto-discover `.agents/skills/` — so **inside a clone of this repo there is nothing to install**; the committed mirror loads automatically. For global use (all projects), run the supported adapter install:
+Both auto-discover `.agents/skills/` — so **inside a clone of this repo there is nothing to install**; the committed mirror loads automatically. For **global use alongside Cursor**, install Codex into its own root so flat names do not collide:
 
 ```bash
 git clone https://github.com/ChenPaulYu/skills.git && cd skills
-node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
+node scripts/build-codex.mjs --sync-global --profile all --global-root codex
 ```
 
-This installs compiled flat skills into `~/.agents/skills/`, the matching runtime artifacts those skills need into `~/.codex/`, and prunes only this generator's older duplicates from `~/.codex/skills/` when `--dedupe-global-roots` is set. Skills surface under flat names (`nav-audit`, `shape-mockup`, …). Verify per agent: Codex — `/skills`; opencode — `opencode debug skill`; Cursor — type `/` in Agent chat and search `nav-audit`. (Note: agy's global install above already materializes the same skills into `~/.agents/skills/`, so if you ran it, opencode and Cursor are covered.)
+That installs compiled flat skills into `~/.codex/skills/`, runtime artifacts into `~/.codex/`, and prunes this marketplace from `~/.agents/skills/`. Default `--global-root agents` still targets `~/.agents/skills/` when Cursor is not in play. Skills surface under flat names (`nav-audit`, `shape-mockup`, …). Verify: Codex — `/skills`; opencode — `opencode debug skill`.
 
-Cursor alternative — native plugin form: each plugin also carries a `.cursor-plugin/plugin.json` (Cursor's plugin layout matches Claude Code's, so the same directory serves both), which makes a cloned plugin installable as a local Cursor plugin:
+### Cursor (native plugins)
+
+Cursor is not a Codex consumer. A generated Cursor Plugin tree lives under `platforms/cursor/<plugin>/` (flattened skill names — `nav-audit` — because Cursor does not namespace plugin skills). Install:
 
 ```bash
-ln -s "$(pwd)/plugins/nav" ~/.cursor/plugins/local/nav   # repeat per plugin; restart Cursor
+git clone https://github.com/ChenPaulYu/skills.git && cd skills
+node scripts/build-cursor.mjs --sync-local
 ```
 
-Cursor's `/add-plugin` marketplace is a separate, review-gated publishing channel — not needed for any of this.
+That symlinks the generated plugins into `~/.cursor/plugins/local/`. Reload Cursor (**Developer: Reload Window**), then type `/` in Agent chat and search `nav-audit`. Do **not** symlink `plugins/nav` — that directory is the Claude source (bare names collide; Claude-host tool names leak). Full translation contract: [Cursor compatibility](docs/cursor-compatibility.md).
+
+**Dual-global:** Codex `--global-root codex` + Cursor `--sync-local`, then turn **OFF** Cursor’s “Include third-party Plugins, Skills, and other configs” so Cursor does not also scan `~/.codex/skills`. See [Cursor compatibility](docs/cursor-compatibility.md).
+
+Cursor's public `/add-plugin` marketplace is a separate, review-gated publishing channel — not this repo's release path. The generated `.cursor-plugin/marketplace.json` is for a Team Marketplace import of this GitHub repo.
 
 ### npx (skills.sh CLI)
 
@@ -154,7 +181,7 @@ npx skills add ChenPaulYu/skills
 npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
 ```
 
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows 50 entries — the same 25 skills twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
+Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows each skill twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
 
 ### Local development (Paul only)
 
@@ -174,6 +201,7 @@ Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `descrip
 
 ```bash
 node scripts/build-codex.mjs       # re-run after editing any SKILL.md
+node scripts/build-cursor.mjs      # re-run after editing any SKILL.md (Cursor plugins)
 node scripts/build-manifests.mjs   # re-run after editing any plugin version/description/author
 node scripts/validate-codex-skills.mjs --release-smoke
 node scripts/validate-codex-skills.mjs
@@ -188,12 +216,20 @@ Enable the pre-commit hook once per clone so this runs automatically before ever
 git config core.hooksPath scripts/hooks
 ```
 
-Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. The same mirror serves **opencode** and **Cursor**, which scan the identical project + global directories — one generated mirror, three consumers. Antigravity CLI (`agy`) reads the same directory in project-level mode — though for `agy` the [global plugin install](#antigravity-cli-agy) above is preferred, since it keeps the plugin namespace. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill, regenerate, and validate.
+Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. The same mirror serves **opencode**, which scans the identical project + global directories. **Cursor is a separate channel** — native Cursor Plugins generated by `scripts/build-cursor.mjs`, not this Codex lowering (see [Cursor compatibility](#cursor-compatibility)). Antigravity CLI (`agy`) reads `.agents/skills/` in project-level mode — though for `agy` the [global plugin install](#antigravity-cli-agy) above is preferred, since it keeps the plugin namespace. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill, regenerate, and validate.
 
-Keep only one active copy of each Codex skill. For a global install, sync a focused profile instead of the full roster; `--dedupe-global-roots` removes only older copies carrying this repository's generated banner, and the same install writes only the runtime artifacts the selected profile needs:
+Keep only one active copy of each Codex skill. For dual-global with Cursor, use `--global-root codex`; otherwise `--global-root agents` (default). The install always prunes this marketplace from the other global root:
 
 ```bash
-node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
+node scripts/build-codex.mjs --sync-global --profile all --global-root codex
+```
+
+## Cursor compatibility
+
+Cursor loads **Cursor Plugins**, not the Codex `.agents/skills/` lowering. `plugins/` stays the source of truth; `scripts/build-cursor.mjs` emits installable plugins under `platforms/cursor/<plugin>/` with flattened skill names (`nav-audit`) and Cursor-native tool names (`AskQuestion`, `Task`). The adapter has its own release line in `platforms/cursor/manifest.json`. Full translation/install contract: [`docs/cursor-compatibility.md`](docs/cursor-compatibility.md).
+
+```bash
+node scripts/build-cursor.mjs --sync-local
 ```
 
 ## Philosophy (the through-line)

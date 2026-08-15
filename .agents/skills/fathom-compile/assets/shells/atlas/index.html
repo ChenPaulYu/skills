@@ -1,0 +1,981 @@
+<!--
+atlas/index.html — the generic, fixture-driven Atlas shell (★ load-bearing).
+
+Loads a semantic fixture via `?fixture=<url>` (see assets/schema/atlas-fixture.schema.json —
+no coordinates in the data by contract) and renders two frozen posters: repo scale (tier bands,
+module cards, a grey import-road network) and behavior scale (file frames, function cards, a
+lit route with call/return/signal edge grammar, a slim step dock, and a pull-up code drawer).
+All geometry comes from layout.js; this file only renders and handles interaction.
+
+Run: serve the study workspace root (the drawer fetches `<sourceRoot>/<file>` and needs it
+reachable), e.g. `python3 -m http.server 4181` from that root, then open
+http://localhost:4181/atlas/index.html?fixture=studies/<name>/atlas/fixture.gen.json.
+
+Reads: layout.js (computeRepoLayout · computeBehaviorLayout · edgePath) · a fixture JSON
+matching assets/schema/atlas-fixture.schema.json.
+-->
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fathom · Atlas</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<style>
+  :root {
+    --canvas: #f4f1ea; --panel: #fffdf8; --panel-2: #f6f1e8; --ink: #2a211c; --muted: #756d63; --faint: #aaa095;
+    --line: #e4ded4; --amber: #b45b3c; --amber-soft: #f5e6df; --cyan: #397493; --cyan-soft: #e5f0f4;
+    --road: #d6cdc0; --shadow: 0 18px 46px -30px rgba(55,43,32,.38);
+    --mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, monospace;
+    --sans: Inter, -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; }
+  body { margin: 0; background: var(--canvas); color: var(--ink); font: 13px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  button, input { font: inherit; color: inherit; }
+  button { border: 0; cursor: pointer; background: none; }
+  a { color: inherit; }
+
+  header { display: flex; align-items: center; gap: 16px; padding: 10px 20px; border-bottom: 1px solid var(--line); background: rgba(255,253,248,.96); flex-wrap: wrap; }
+  header b { font-size: 14px; }
+  header small { color: var(--muted); font: 10px var(--mono); }
+  .crumb { display: flex; align-items: center; gap: 8px; font: 11px var(--mono); color: var(--muted); }
+  .crumb button { border: 1px solid var(--line); border-radius: 7px; background: var(--panel); padding: 5px 10px; font: 11px var(--mono); color: var(--ink); }
+  .crumb button:hover { border-color: var(--amber); color: var(--amber); }
+  .crumb .here { color: var(--amber); font-weight: 700; }
+  .fsroot-hint { margin-left: auto; color: var(--faint); font: 9px var(--mono); }
+
+  .layout { display: grid; grid-template-columns: 1fr; min-height: 0; }
+  .layout.has-sidebar { grid-template-columns: 250px 1fr; }
+  .sidebar { padding: 14px; border-right: 1px solid var(--line); background: rgba(255,253,248,.9); overflow-y: auto; }
+  .sidebar h2 { margin: 0 0 4px; font-size: 12px; }
+  .sidebar .sub { margin: 0 0 12px; color: var(--faint); font: 10px var(--mono); }
+  .behavior-list { display: grid; gap: 6px; }
+  .behavior-item { display: block; width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); text-align: left; }
+  .behavior-item:hover { border-color: rgba(180,91,60,.4); background: var(--panel-2); }
+  .behavior-item.active { border-color: var(--amber); background: var(--amber-soft); }
+  .behavior-item b { display: block; font-size: 11.5px; }
+  .behavior-item span { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
+  .behavior-empty { padding: 14px 10px; color: var(--faint); border: 1px dashed var(--line); border-radius: 9px; font-size: 11px; }
+
+  .stage-area { position: relative; min-width: 0; overflow: hidden; background: var(--canvas); }
+  .stage-wrap { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: grab; }
+  .refit-btn { position: fixed; right: 20px; bottom: 84px; z-index: 40; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--muted); cursor: pointer; font: 11px var(--mono); box-shadow: 0 10px 24px -18px rgba(42,33,28,.5); }
+  .refit-btn:hover { color: var(--amber); border-color: var(--amber); }
+  .stage { position: absolute; left: 0; top: 0; border-radius: 0; transform-origin: 0 0; }
+  .stage.glide { transition: transform .45s cubic-bezier(.22,.61,.36,1); }
+  .stage svg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+
+  /* ---------- repo scale ---------- */
+  .band { position: absolute; left: 0; right: 0; border-top: 1px dashed #ddd5c8; }
+  .band:nth-child(even) { background: rgba(237,232,223,.4); }
+  .band-label { position: absolute; left: 16px; top: 8px; color: var(--muted); font: 11px var(--mono); letter-spacing: .05em; }
+  .band-label i { color: var(--faint); font-style: normal; }
+  .mod { position: absolute; padding: 9px 12px; border: 1.5px solid #d8cfc2; border-radius: 11px; background: var(--panel); box-shadow: 0 8px 18px -14px rgba(55,43,32,.4); cursor: pointer; transition: border-color .15s, box-shadow .15s, opacity .15s; }
+  .mod b { display: block; overflow: hidden; font: 12.5px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+  .mod span { display: block; margin-top: 2px; overflow: hidden; color: var(--muted); font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .mod i { display: block; margin-top: 2px; overflow: hidden; color: var(--faint); font-style: normal; font: 9px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+  .mod:hover, .mod.lit { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(180,91,60,.12), 0 14px 26px -16px rgba(55,43,32,.5); }
+  .mod.dimmed { opacity: .38; }
+  .mod.enterable::after { content: "點進去 →"; position: absolute; right: 10px; bottom: 6px; color: var(--amber); font: 8px var(--mono); opacity: 0; transition: opacity .15s; }
+  .mod.enterable:hover::after { opacity: 1; }
+  path.road { fill: none; stroke: var(--road); stroke-width: 1.6; transition: stroke .15s, stroke-width .15s, opacity .15s; }
+  path.road.lit { stroke: var(--amber); stroke-width: 2.6; }
+  path.road.dimmed { opacity: .25; }
+
+  /* ---------- behavior scale ---------- */
+  .frame { position: absolute; border: 1.5px dashed #cfc5b6; border-radius: 14px; background: rgba(255,253,248,.5); }
+  .frame b { position: absolute; left: 12px; top: 8px; font: 11px var(--mono); }
+  .frame small { position: absolute; left: 12px; top: 24px; color: var(--faint); font: 10px var(--mono); }
+  .node { position: absolute; padding: 8px 10px; border: 1.5px solid #d8cfc2; border-radius: 10px; background: var(--panel); box-shadow: 0 8px 18px -14px rgba(55,43,32,.4); cursor: pointer; transition: border-color .2s, background .2s, opacity .2s, box-shadow .2s, transform .18s; overflow: hidden; }
+  .node:hover { border-color: rgba(180,91,60,.55); box-shadow: 0 14px 28px -16px rgba(55,43,32,.55); transform: translateY(-1px); }
+  .node.current { animation: currentPulse .55s ease-out; }
+  @keyframes currentPulse { 0% { box-shadow: 0 0 0 0 rgba(180,91,60,.4); } 100% { box-shadow: 0 0 0 14px rgba(180,91,60,0); } }
+  path.edge { transition: opacity .25s; }
+  path.edge.hl { stroke: #8a7f72; opacity: 1; stroke-width: 2; }
+  path.edge.now { animation: edgeGlow .5s ease-out; }
+  @keyframes edgeGlow { 0% { filter: drop-shadow(0 0 10px rgba(180,91,60,.55)); } 100% { filter: drop-shadow(0 0 3px rgba(180,91,60,.25)); } }
+  .chip { transition: background .25s, transform .25s; }
+  .chip.hit { animation: chipPop .3s ease-out; }
+  @keyframes chipPop { 0% { transform: scale(1.35); } 100% { transform: scale(1); } }
+  path.road { transition: stroke .25s, stroke-width .25s, opacity .25s; }
+  .mod { transition: border-color .2s, box-shadow .2s, opacity .25s, transform .18s; }
+  .mod:hover { transform: translateY(-1px); }
+  .mod-info { animation: panelIn .28s cubic-bezier(.22,.61,.36,1); }
+  @keyframes panelIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: none; } }
+  .drawer-narration.fresh { animation: narrIn .3s ease-out; }
+  @keyframes narrIn { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: none; } }
+  .code-line.flash { animation: lineFlash 1s ease-out; }
+  @keyframes lineFlash { 0% { background: rgba(180,91,60,.28); } 100% { background: var(--amber-soft); } }
+  button:active, .drawer-tab:active, .refit-btn:active { transform: scale(.96); }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  .node .kind { display: block; overflow: hidden; color: var(--faint); font: 8px var(--mono); letter-spacing: .06em; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; }
+  .node b { display: block; margin-top: 2px; overflow: hidden; font-size: 11.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .node .io { display: block; margin-top: 2px; overflow: hidden; color: var(--cyan); font: 8.5px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+  .node .summary { display: block; margin-top: 3px; overflow: hidden; color: var(--muted); font-size: 9.5px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .node.route-off { opacity: .4; }
+  .node.route-off:hover { opacity: 1; }
+  .node.visited { border-color: rgba(180,91,60,.55); }
+  .node.current { border-color: var(--amber); background: var(--amber-soft); box-shadow: 0 0 0 4px rgba(180,91,60,.14); }
+  .node.here { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(57,116,147,.18); }
+  .node.here::after { content: "📍"; position: absolute; top: 4px; right: 6px; font-size: 11px; }
+  .chips { position: absolute; top: -9px; right: -6px; display: flex; gap: 2px; }
+  .chip { min-width: 16px; height: 16px; padding: 0 3px; border-radius: 999px; background: #d8cfc2; color: #fff; text-align: center; font: 9px/16px var(--mono); }
+  .chip.hit { background: var(--amber); }
+  path.edge { fill: none; stroke: #ddd5c8; stroke-width: 1.6; }
+  path.edge.kind-return { stroke-dasharray: 7 5; }
+  path.edge.kind-signal { stroke-dasharray: 2 5; stroke-linecap: round; }
+  path.edge.walked { stroke: #cf8a5b; stroke-width: 2.2; }
+  path.edge.now { stroke: var(--amber); stroke-width: 3.4; filter: drop-shadow(0 0 4px rgba(180,91,60,.35)); }
+  /* Cargo labels are part of the LIGHTING, not the background: hidden by default,
+     shown only for the current guide edge or a hovered node's own edges. */
+  text.cargo, rect.cargo-mask { display: none; }
+  text.cargo.show, rect.cargo-mask.show { display: block; }
+  text.cargo { fill: #5a5248; font: 600 12px var(--mono); }
+  text.cargo.now { fill: var(--amber); font-weight: 700; }
+  rect.cargo-mask { fill: #f4f1ea; opacity: .97; rx: 3; }
+
+  .legend { display: flex; gap: 18px; align-items: center; padding: 6px 20px; color: var(--muted); font: 11px var(--mono); flex-wrap: wrap; border-bottom: 1px solid var(--line); background: rgba(255,253,248,.7); }
+  .legend svg { vertical-align: middle; }
+
+  /* ---------- step dock (slim, one row) ---------- */
+  .step-dock { position: absolute; z-index: 12; left: 16px; right: 16px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,253,248,.97); box-shadow: var(--shadow); }
+  .step-dock[hidden] { display: none; }
+  .step-dock button.nav { width: 30px; height: 28px; flex: none; border-radius: 7px; color: var(--muted); background: var(--panel-2); }
+  .step-dock button.nav:hover:not(:disabled) { color: #fff; background: var(--amber); }
+  .step-dock button.nav:disabled { opacity: .3; cursor: default; }
+  .step-progress { flex: none; color: var(--faint); font: 9px var(--mono); min-width: 52px; }
+  .step-head { flex: 1; min-width: 0; overflow: hidden; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+  .step-play { flex: none; padding: 6px 10px; border-radius: 7px; color: #fffaf2; background: var(--amber); font: 10px var(--mono); font-weight: 700; }
+  .step-anchor { flex: none; padding: 6px 8px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); font: 9px var(--mono); }
+  .step-anchor:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* ---------- drawer ---------- */
+  .drawer { position: absolute; z-index: 14; left: 0; right: 0; bottom: 0; height: min(42%, 380px); display: flex; flex-direction: column; border-top: 1px solid var(--line); background: #fffdf8; box-shadow: 0 -20px 44px -34px rgba(55,43,32,.45); transform: translateY(100%); transition: transform .28s cubic-bezier(.22,.61,.36,1); }
+  .drawer.open { transform: translateY(0); }
+  .drawer.resizing { transition: none; }
+  .drawer.dock-left, .drawer.dock-right { top: 0; bottom: 0; height: auto !important; width: var(--drawer-w, 460px); border-top: 0; }
+  .drawer.dock-left { left: 0; right: auto; border-right: 1px solid var(--line); box-shadow: 20px 0 44px -34px rgba(55,43,32,.45); transform: translateX(-100%); }
+  .drawer.dock-right { right: 0; left: auto; border-left: 1px solid var(--line); box-shadow: -20px 0 44px -34px rgba(55,43,32,.45); transform: translateX(100%); }
+  .drawer.dock-left.open, .drawer.dock-right.open { transform: translateX(0); }
+  .drawer.dock-left .drawer-tab, .drawer.dock-right .drawer-tab { top: 50%; width: 26px; height: 96px; border: 1px solid var(--line); transform: translateY(-50%); writing-mode: vertical-rl; }
+  .drawer.dock-left .drawer-tab { left: auto; right: -26px; border-left: 0; border-radius: 0 8px 8px 0; }
+  .drawer.dock-right .drawer-tab { right: auto; left: -26px; border-right: 0; border-radius: 8px 0 0 8px; }
+  .drawer-resizer { position: absolute; z-index: 6; top: -4px; left: 0; right: 0; height: 9px; cursor: ns-resize; }
+  .drawer.dock-left .drawer-resizer, .drawer.dock-right .drawer-resizer { top: 0; bottom: 0; width: 9px; height: auto; cursor: ew-resize; }
+  .drawer.dock-left .drawer-resizer { left: auto; right: -4px; }
+  .drawer.dock-right .drawer-resizer { right: auto; left: -4px; }
+  .drawer-resizer:hover { background: rgba(180,91,60,.15); }
+  .dock-group { display: flex; flex: none; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .dock-group button { padding: 3px 7px; border: 0; background: none; color: var(--faint); cursor: pointer; font-size: 11px; }
+  .dock-group button:hover { color: var(--amber); }
+  .dock-group button.on { background: var(--amber-soft); color: var(--amber); }
+  .drawer-tab { position: absolute; top: -26px; left: 50%; width: 108px; height: 26px; border: 1px solid var(--line); border-bottom: 0; border-radius: 8px 8px 0 0; background: #fffdf8; color: var(--muted); font: 10px var(--mono); transform: translateX(-50%); box-shadow: 0 -10px 24px -18px rgba(55,43,32,.4); }
+  .drawer-tab:hover { color: var(--amber); }
+  .drawer-header { display: flex; flex-direction: column; gap: 4px; padding: 9px 14px; border-bottom: 1px solid var(--line); }
+  .drawer-header-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .drawer-header-row b { overflow: hidden; font: 10px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+  .drawer-header-row b i { color: var(--cyan); font-style: normal; }
+  .explain-kind { color: var(--faint); font: 8px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+  .explain-io { color: var(--cyan); font: 9px var(--mono); font-style: normal; }
+  .explain-tour { color: var(--amber); font-weight: 600; }
+  .mod-info { position: fixed; z-index: 45; left: 20px; bottom: 20px; width: min(380px, calc(100vw - 40px)); padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); box-shadow: 0 18px 40px -24px rgba(42,33,28,.5); font-size: 12px; }
+  .mod-info b { display: block; font: 12px var(--mono); }
+  .mod-info .gloss { color: var(--ink); margin: 4px 0; }
+  .mod-info .meta { color: var(--muted); font: 9px var(--mono); }
+  .mod-info .neighbors { margin-top: 6px; color: var(--muted); font-size: 11px; }
+  .mod-info .neighbors i { color: var(--cyan); font-style: normal; font: 9px var(--mono); }
+  .mod-info .not-paved { margin-top: 6px; color: var(--faint); font-size: 10px; }
+  .mod-info .close { position: absolute; top: 8px; right: 10px; border: 0; background: none; color: var(--faint); cursor: pointer; font-size: 13px; }
+  .drawer-actions { display: flex; flex: none; gap: 6px; }
+  .drawer-actions a { padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; text-decoration: none; font: 9px var(--mono); color: var(--muted); }
+  .drawer-actions a:hover { border-color: var(--amber); color: var(--amber); }
+  .drawer-actions a.disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
+  .drawer-narration { margin: 0; color: #4b423a; font-size: 11.5px; }
+  .drawer-narration b { color: var(--amber); }
+  .drawer-body { flex: 1; overflow: auto; padding: 6px 0 30px; }
+  .drawer-empty { padding: 22px 18px; color: var(--faint); font-size: 11px; }
+  .code-line { display: flex; gap: 12px; padding: 0 14px; cursor: pointer; white-space: pre; font: 10.5px/1.6 var(--mono); }
+  .code-line:hover { background: #f6f1e8; }
+  .code-line .ln { flex: none; width: 42px; color: #c5bcb0; text-align: right; user-select: none; }
+  .code-line .lc { flex: 1; color: #3a322b; }
+  .code-line.hot { background: var(--amber-soft); }
+  .code-line.hot .ln { color: var(--amber); font-weight: 700; }
+
+  .toast { position: fixed; z-index: 50; left: 50%; top: 64px; transform: translate(-50%,-10px); padding: 8px 12px; border: 1px solid #b9d4dc; border-radius: 8px; color: var(--cyan); background: var(--cyan-soft); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; font: 11px var(--mono); box-shadow: var(--shadow); }
+  .toast.show { opacity: 1; transform: translate(-50%,0); }
+  .loading, .error-box { padding: 60px 24px; color: var(--muted); text-align: center; }
+  .error-box b { display: block; margin-bottom: 6px; color: var(--amber); }
+</style>
+</head>
+<body>
+  <header>
+    <div><b>Fathom · Atlas</b><br><small id="repoMeta">載入中…</small></div>
+    <nav class="crumb" id="crumb"></nav>
+    <span class="fsroot-hint" id="fsrootHint"></span>
+  </header>
+  <div class="legend" id="legend"></div>
+  <div class="layout" id="layout">
+    <aside class="sidebar" id="sidebar" hidden></aside>
+    <section class="stage-area" id="stageArea">
+      <div class="loading" id="loading">讀取 fixture 中…</div>
+    </section>
+  </div>
+  <div class="toast" id="toast"></div>
+
+<script src="layout.js"></script>
+<script>
+(function () {
+  "use strict";
+  const AL = window.AtlasLayout;
+
+  // ---------- fixture load ----------
+  const params = new URLSearchParams(location.search);
+  const fixtureParam = params.get("fixture");
+  const fsRoot = params.get("fsRoot"); // optional absolute local FS path to the study workspace root, for vscode:// links
+  if (!fixtureParam) {
+    document.getElementById("loading").outerHTML =
+      `<div class="error-box"><b>需要 ?fixture=</b>傳入 studies/&lt;name&gt;/atlas/fixture.gen.json 的相對路徑。</div>`;
+    return;
+  }
+  const fixtureUrl = new URL(fixtureParam, location.href);
+
+  const el = {
+    loading: document.getElementById("loading"),
+    stageArea: document.getElementById("stageArea"),
+    layout: document.getElementById("layout"),
+    sidebar: document.getElementById("sidebar"),
+    crumb: document.getElementById("crumb"),
+    legend: document.getElementById("legend"),
+    repoMeta: document.getElementById("repoMeta"),
+    fsrootHint: document.getElementById("fsrootHint"),
+    toast: document.getElementById("toast")
+  };
+  el.fsrootHint.textContent = fsRoot ? "開 IDE 已啟用" : "加 ?fsRoot=<絕對路徑> 啟用「開 IDE」";
+
+  let toastTimer = null;
+  function showToast(msg) {
+    el.toast.textContent = msg;
+    el.toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.toast.classList.remove("show"), 2400);
+  }
+
+  fetch(fixtureUrl)
+    .then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(boot)
+    .catch((err) => {
+      el.loading.outerHTML = `<div class="error-box"><b>抓不到 fixture</b>嘗試的網址：${fixtureUrl.href}<br>${err.message}</div>`;
+    });
+
+  function boot(fixture) {
+    el.loading.remove();
+    el.repoMeta.textContent = `${fixture.meta.repo} · ${(fixture.meta.sha || "").slice(0, 7)} · ${fixture.meta.generatedBy}`;
+
+    const repoLayout = AL.computeRepoLayout(fixture.repo);
+    const graph = fixture.graph || { frames: [], nodes: [], edges: [] };
+    const behaviors = fixture.behaviors || [];
+    const behaviorLayout = AL.computeBehaviorLayout(graph, behaviors);
+    const nodeById = new Map((graph.nodes || []).map((n) => [n.id, n]));
+    const frameFiles = new Set(behaviorLayout.frames.map((f) => f.file));
+
+    let view = "repo";
+    let selectedBehaviorId = null;
+    let cursor = 0; // 0 = not started; N = N steps completed, current node = steps[N-1]
+    let playTimer = null;
+    let drawerOpen = false;
+    let hereNodeId = null; // node lit by a code-drawer line click (📍)
+
+    // ---------- resolve the source root against the fixture URL (see plan Step 2) ----------
+    // studyDir = fixture URL's path with its trailing /atlas/fixture*.json stripped.
+    const studyDirMatch = fixtureUrl.pathname.match(/^(.*)\/atlas\/fixture[^/]*\.json$/);
+    const studyDir = studyDirMatch ? studyDirMatch[1] : fixtureUrl.pathname.replace(/\/[^/]*$/, "");
+    function sourceCandidates(file) {
+      const sourceRoot = fixture.meta.sourceRoot || "";
+      const urls = [];
+      // candidate A: sourceRoot resolved against the server root (typical: served from the study workspace).
+      urls.push(new URL(`/${sourceRoot}/${file}`, location.origin).href);
+      // candidate B: sourceRoot's tail ("source") resolved directly under the fixture's own study dir.
+      const tail = sourceRoot.split("/").pop() || "source";
+      urls.push(new URL(`${studyDir}/${tail}/${file}`, location.origin).href);
+      return Array.from(new Set(urls));
+    }
+
+    function githubUrl(node) {
+      if (!fixture.meta.upstream || !fixture.meta.sha) return null;
+      const start = AL.firstLine(node.lines);
+      return `${fixture.meta.upstream.replace(/\/$/, "")}/blob/${fixture.meta.sha}/${node.file}${Number.isNaN(start) ? "" : `#L${start}`}`;
+    }
+    function vscodeUrl(node) {
+      if (!fsRoot) return null;
+      const start = AL.firstLine(node.lines);
+      return `vscode://file${encodeURI(`${fsRoot}/${fixture.meta.sourceRoot}/${node.file}`)}:${Number.isNaN(start) ? 1 : start}:1`;
+    }
+
+    // ================= breadcrumb =================
+    function renderCrumb() {
+      if (view === "repo") {
+        el.crumb.innerHTML = `<span class="here">repo 海報</span><span>›</span><span style="color:var(--faint)">行為海報（點模組進入）</span>`;
+      } else {
+        const b = behaviors.find((x) => x.id === selectedBehaviorId);
+        el.crumb.innerHTML = `<button id="backRepo">← repo 海報</button><span>›</span><span class="here">行為海報${b ? ` · ${b.title}` : ""}</span>`;
+        document.getElementById("backRepo").addEventListener("click", () => {
+          stopPlay();
+          view = "repo";
+          render();
+        });
+      }
+    }
+
+    // ================= repo scale =================
+    function enterBehaviorScale() {
+      view = "behavior";
+      selectedBehaviorId = null;
+      cursor = 0;
+      drawerOpen = false;
+      hereNodeId = null;
+      render();
+    }
+
+    function showModuleInfo(m, covered) {
+      document.querySelector(".mod-info")?.remove();
+      const inbound = fixture.repo.imports.filter(([, t]) => t === m.id).map(([f]) => f);
+      const outbound = fixture.repo.imports.filter(([f]) => f === m.id).map(([, t]) => t);
+      const magnitude = m.magnitude ? `${m.magnitude.lines ? m.magnitude.lines.toLocaleString() + " 行" : ""}${m.magnitude.files ? " · " + m.magnitude.files + " 檔" : ""}` : "";
+      const panel = document.createElement("aside");
+      panel.className = "mod-info";
+      panel.innerHTML = `<button class="close" aria-label="關閉">✕</button><b>${m.path}</b><div class="gloss">${m.zh || ""}</div><div class="meta">${magnitude}</div><div class="neighbors">被誰用：<i>${inbound.join("、") || "—"}</i><br>用了誰：<i>${outbound.join("、") || "—"}</i></div>${covered ? `<div class="not-paved">點「進去」可下潛到行為海報</div>` : `<div class="not-paved">行為層還沒鋪到這裡——study 推進後重編就會亮</div>`}`;
+      panel.querySelector(".close").addEventListener("click", () => panel.remove());
+      document.body.appendChild(panel);
+    }
+    function onModuleClick(m) {
+      if (!m.enterable) {
+        showModuleInfo(m, false);
+        return;
+      }
+      // Module paths are dir-level ("mem0/memory/"); frame files are file-level — prefix match.
+      const covered = behaviors.length && [...frameFiles].some((file) => file.startsWith(m.path.replace(/\/$/, "") + "/") || file === m.path);
+      if (!covered) {
+        showModuleInfo(m, false);
+        return;
+      }
+      enterBehaviorScale();
+    }
+
+    function litRoads(stage, id) {
+      stage.querySelectorAll(".road").forEach((p) => {
+        const [f, t] = p.dataset.road.split(">");
+        p.classList.toggle("lit", !!id && (f === id || t === id));
+        p.classList.toggle("dimmed", !!id && f !== id && t !== id);
+      });
+      stage.querySelectorAll(".mod").forEach((mEl) => {
+        const connected = !id || mEl.dataset.mod === id ||
+          repoLayout.imports.some(([f, t]) => (f === id && t === mEl.dataset.mod) || (t === id && f === mEl.dataset.mod));
+        mEl.classList.toggle("dimmed", !!id && !connected);
+        mEl.classList.toggle("lit", !!id && mEl.dataset.mod === id);
+      });
+    }
+
+    function renderRepoScale() {
+      el.layout.classList.remove("has-sidebar");
+      el.sidebar.hidden = true;
+      el.legend.innerHTML = `<span>灰線＝import 道路網（誰認識誰）· hover 模組看它的鄰居 · 點可進入的模組下潛到行為海報</span>`;
+      el.stageArea.innerHTML = `<div class="stage-wrap"><div class="stage" id="stage" style="width:${repoLayout.world.width}px;height:${repoLayout.world.height}px"></div></div>`;
+      const stage = document.getElementById("stage");
+
+      let html = repoLayout.tiers
+        .map((t) => `<div class="band" style="top:${t.y}px;height:${t.h}px"><span class="band-label">${t.label} <i>· ${t.gloss}</i></span></div>`)
+        .join("");
+      let svg = `<svg width="${repoLayout.world.width}" height="${repoLayout.world.height}">`;
+      (repoLayout.imports || []).forEach(([f, t]) => {
+        const from = repoLayout.modules[f];
+        const to = repoLayout.modules[t];
+        if (!from || !to) return;
+        const g = AL.edgePath(from, to);
+        svg += `<path class="road" data-road="${f}>${t}" d="${g.d}"/>`;
+      });
+      svg += `</svg>`;
+      html += svg;
+      (fixture.repo.modules || []).forEach((m) => {
+        const pos = repoLayout.modules[m.id];
+        if (!pos) return;
+        const magnitude = m.magnitude.lines || m.magnitude.files || "";
+        const approx = m.magnitude.approx ? " · 示意" : "";
+        const basename = m.path.split("/").filter(Boolean).pop();
+        html += `<div class="mod${m.enterable ? " enterable" : ""}" data-mod="${m.id}" style="left:${pos.x}px;top:${pos.y}px;width:${pos.w}px"><b>${basename}</b><span>${m.zh}</span><i>${magnitude}${approx}</i></div>`;
+      });
+      stage.innerHTML = html;
+      fitStage(stage, repoLayout.world);
+      stage.querySelectorAll(".mod").forEach((mEl) => {
+        mEl.addEventListener("mouseenter", () => litRoads(stage, mEl.dataset.mod));
+        mEl.addEventListener("mouseleave", () => litRoads(stage, null));
+        mEl.addEventListener("click", () => onModuleClick(fixture.repo.modules.find((m) => m.id === mEl.dataset.mod)));
+      });
+    }
+
+    // ================= behavior scale =================
+    function activeBehavior() {
+      return behaviors.find((b) => b.id === selectedBehaviorId) || null;
+    }
+    function activeSteps() {
+      const b = activeBehavior();
+      return b ? b.route.steps : [];
+    }
+
+    function selectBehavior(id) {
+      selectedBehaviorId = id;
+      cursor = 0;
+      stopPlay();
+      drawerOpen = false;
+      hereNodeId = null;
+      render();
+    }
+
+    function renderSidebar() {
+      el.layout.classList.add("has-sidebar");
+      el.sidebar.hidden = false;
+      if (!behaviors.length) {
+        el.sidebar.innerHTML = `<h2>行為</h2><p class="sub">選一條行為，看它怎麼走</p><div class="behavior-empty">這條路 study 還沒鋪 —— 這個 fixture 還沒有任何行為路線。</div>`;
+        return;
+      }
+      el.sidebar.innerHTML = `<h2>行為</h2><p class="sub">選一條行為，看它怎麼走</p><div class="behavior-list" id="behaviorList"></div>`;
+      const list = document.getElementById("behaviorList");
+      behaviors.forEach((b) => {
+        const item = document.createElement("button");
+        item.className = `behavior-item${b.id === selectedBehaviorId ? " active" : ""}`;
+        item.innerHTML = `<b>${b.title}</b><span>${b.short}</span>`;
+        item.addEventListener("click", () => selectBehavior(b.id));
+        list.appendChild(item);
+      });
+    }
+
+    // Ported from the two-scale-grammar mockup's cursor model: cursor counts completed steps
+    // (0 = not started, current node = steps[cursor-1]). Edge (steps[i]->steps[i+1]) is "now"
+    // when its arrival is the current node, "walked" once you've moved past its arrival, else
+    // cold. The poster itself never reframes as cursor changes — only lighting updates.
+    function edgeWalked(steps, from, to) {
+      let walked = false;
+      for (let i = 0; i < steps.length - 1; i += 1) {
+        if (steps[i] === from && steps[i + 1] === to && i + 1 < cursor) walked = true;
+      }
+      return walked;
+    }
+    function edgeNow(steps, from, to) {
+      return cursor >= 2 && from === steps[cursor - 2] && to === steps[cursor - 1];
+    }
+
+    // Structural render: sidebar, legend, and the stageArea skeleton (stage-wrap + step-dock +
+    // drawer containers). Runs once per "enter behavior scale" / "switch behavior" — NOT per
+    // step. Step navigation only calls updateStage()/updateDockText() below, so the drawer's
+    // fetched-and-highlighted code listing (and its scroll position) survives a step advance —
+    // the poster stage never reframes and the drawer never loses its place mid-walk.
+    function renderBehaviorScale() {
+      renderSidebar();
+      el.legend.innerHTML = `
+        <span><svg width="42" height="10"><line x1="0" y1="5" x2="34" y2="5" stroke="#b45b3c" stroke-width="2.2"/><path d="M34,1.7 L34,8.3 L42,5 z" fill="#b45b3c"/></svg> 呼叫（帶參數下去）</span>
+        <span><svg width="42" height="10"><line x1="0" y1="5" x2="33" y2="5" stroke="#b45b3c" stroke-width="2.2" stroke-dasharray="6 4"/><path d="M34,1.2 L34,8.8 L42,5 z" fill="#fffdf8" stroke="#b45b3c" stroke-width="1.2"/></svg> 回傳（值浮上來）</span>
+        <span><svg width="42" height="10"><line x1="0" y1="5" x2="34" y2="5" stroke="#b45b3c" stroke-width="2.2" stroke-dasharray="2 5" stroke-linecap="round"/><circle cx="38" cy="5" r="3" fill="#b45b3c"/></svg> 控制訊號（不是資料）</span>
+        <span>邊上的字＝正在傳的貨物</span>`;
+
+      if (!(graph.nodes || []).length) {
+        el.stageArea.innerHTML = `<div class="error-box"><b>這條路 study 還沒鋪</b>這個 fixture 的 graph 還是空的。</div>`;
+        return;
+      }
+
+      el.stageArea.innerHTML = `<div class="stage-wrap"><div class="stage" id="stage" style="width:${behaviorLayout.world.width}px;height:${behaviorLayout.world.height}px"></div></div>
+        <div class="step-dock" id="stepDock" hidden>
+          <button class="nav" id="prevStep" type="button">‹</button>
+          <span class="step-progress" id="stepProgress"></span>
+          <span class="step-head" id="stepHead"></span>
+          <button class="nav" id="nextStep" type="button">›</button>
+          <button class="step-play" id="playStep" type="button">▶ 走一遍</button>
+          <button class="step-anchor" id="stepAnchor" type="button">看 code ▲</button>
+        </div>
+        <aside class="drawer" id="drawer">
+          <div class="drawer-resizer" id="drawerResizer"></div>
+          <button class="drawer-tab" id="drawerTab" type="button">▲ code</button>
+          <div class="drawer-header">
+            <div class="drawer-header-row"><b id="drawerPath">尚未選擇 code</b><span style="display:flex;gap:6px;align-items:center;flex:none"><span class="dock-group" id="dockGroup"><button data-dock="left" type="button" title="靠左">◧</button><button data-dock="bottom" type="button" title="靠下">⬓</button><button data-dock="right" type="button" title="靠右">◨</button></span><span class="drawer-actions" id="drawerActions"></span></span></div>
+            <p class="drawer-narration" id="drawerNarration" hidden></p>
+          </div>
+          <div class="drawer-body" id="drawerBody"><div class="drawer-empty">選一條行為、按「開始導覽」，或直接點任何一張卡——這裡會顯示解釋與原始碼（唯讀）。</div></div>
+        </aside>`;
+
+      drawerCurrentFile = null; // fresh #drawerBody element — force the next showSource() to repopulate it
+      updateStage();
+      wireDock();
+      wireDrawer();
+      updateDockText();
+      syncDrawerToCursor();
+    }
+
+    // Lighting-only render: rebuilds frames+edges+nodes inside #stage (cheap, no persisted DOM
+    // state lives there) and re-attaches node click handlers. Called on every cursor/hereNode
+    // change. Does NOT touch #stepDock or #drawer, so the drawer's code listing and scroll
+    // position are untouched by stepping.
+    function updateStage() {
+      const stage = document.getElementById("stage");
+      if (!stage) return;
+      const steps = activeSteps();
+      const routed = steps.length > 0;
+
+      let html = behaviorLayout.frames
+        .map((f) => `<div class="frame" style="left:${f.x}px;top:${f.y}px;width:${f.w}px;height:${f.h}px"><b>${f.label}</b><small>${f.gloss}</small></div>`)
+        .join("");
+      let svg = `<svg width="${behaviorLayout.world.width}" height="${behaviorLayout.world.height}"><defs>
+        <marker id="mCall" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b45b3c"/></marker>
+        <marker id="mCallCold" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ddd5c8"/></marker>
+        <marker id="mReturn" markerWidth="9" markerHeight="9" refX="7.5" refY="3.5" orient="auto"><path d="M0.8,0.8 L0.8,6.2 L8,3.5 z" fill="#fffdf8" stroke="#b45b3c" stroke-width="1.2"/></marker>
+        <marker id="mReturnCold" markerWidth="9" markerHeight="9" refX="7.5" refY="3.5" orient="auto"><path d="M0.8,0.8 L0.8,6.2 L8,3.5 z" fill="#fffdf8" stroke="#ddd5c8" stroke-width="1.2"/></marker>
+        <marker id="mSignal" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><circle cx="3.5" cy="3.5" r="2.6" fill="#b45b3c"/></marker>
+        <marker id="mSignalCold" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><circle cx="3.5" cy="3.5" r="2.6" fill="#ddd5c8"/></marker>
+      </defs>`;
+      (graph.edges || []).forEach((e) => {
+        const from = behaviorLayout.nodes[e.from];
+        const to = behaviorLayout.nodes[e.to];
+        if (!from || !to) return;
+        const g = AL.edgePath(from, to);
+        const walked = routed && edgeWalked(steps, e.from, e.to);
+        const now = routed && edgeNow(steps, e.from, e.to);
+        const cls = `edge kind-${e.kind}${now ? " now" : walked ? " walked" : ""}`;
+        const markerBase = e.kind === "call" ? "mCall" : e.kind === "return" ? "mReturn" : "mSignal";
+        const marker = now || walked ? markerBase : `${markerBase}Cold`;
+        svg += `<path class="${cls}" data-edge="${e.from}>${e.to}" d="${g.d}" marker-end="url(#${marker})"/>`;
+        // Opaque paper mask + lift above the stroke — an unmasked label on a line is unreadable.
+        const cargoShow = now ? " show now" : "";
+        const cargoW = e.cargo.length * 12 + 14;
+        const cargoY = g.my - 8;
+        svg += `<rect class="cargo-mask${cargoShow}" data-cargo="${e.from}>${e.to}" x="${g.mx - cargoW / 2}" y="${cargoY - 13}" width="${cargoW}" height="18" rx="3"></rect>`;
+        svg += `<text class="cargo${cargoShow}" data-cargo="${e.from}>${e.to}" x="${g.mx}" y="${cargoY}" text-anchor="middle">${e.cargo}</text>`;
+      });
+      svg += `</svg>`;
+      html += svg;
+
+      (graph.nodes || []).forEach((n) => {
+        const pos = behaviorLayout.nodes[n.id];
+        if (!pos) return;
+        const mySteps = routed ? steps.map((s, i) => (s === n.id ? i + 1 : 0)).filter(Boolean) : [];
+        const isCurrent = cursor > 0 && steps[cursor - 1] === n.id;
+        const visited = mySteps.some((s) => s <= cursor);
+        const offRoute = routed && !mySteps.length;
+        const classes = ["node"];
+        if (isCurrent) classes.push("current");
+        else if (visited) classes.push("visited");
+        if (offRoute) classes.push("route-off");
+        if (n.id === hereNodeId) classes.push("here");
+        const basename = n.file.split("/").filter(Boolean).pop();
+        html += `<div class="${classes.join(" ")}" data-node="${n.id}" style="left:${pos.x}px;top:${pos.y}px;width:${pos.w}px;height:${pos.h}px">${mySteps.length ? `<div class="chips">${mySteps.map((s) => `<span class="chip${s <= cursor ? " hit" : ""}">${s}</span>`).join("")}</div>` : ""}<span class="kind">${n.kind} · ${basename}:${AL.firstLine(n.lines)}</span><b>${n.label}</b><span class="io">${n.io}</span><span class="summary">${n.summary}</span></div>`;
+      });
+
+      stage.innerHTML = html;
+      fitStage(stage, behaviorLayout.world);
+      stage.querySelectorAll(".node").forEach((nEl) => {
+        // Hover a node → its own edges brighten; everything else politely steps back.
+        nEl.addEventListener("mouseenter", () => {
+          const id = nEl.dataset.node;
+          stage.querySelectorAll("path[data-edge]").forEach((p) => {
+            const [f, t] = p.dataset.edge.split(">");
+            p.classList.toggle("hl", f === id || t === id);
+          });
+          stage.querySelectorAll("[data-cargo]").forEach((c) => {
+            const [f, t] = c.dataset.cargo.split(">");
+            if (f === id || t === id) c.classList.add("show");
+          });
+        });
+        nEl.addEventListener("mouseleave", () => {
+          stage.querySelectorAll("path.hl").forEach((p) => p.classList.remove("hl"));
+          stage.querySelectorAll("[data-cargo].show:not(.now)").forEach((c) => {
+            if (!c.classList.contains("now")) c.classList.remove("show");
+          });
+          // keep the current guide edge's cargo lit
+          stage.querySelectorAll("text.cargo.now, rect.cargo-mask.now").forEach((c) => c.classList.add("show"));
+        });
+        nEl.addEventListener("click", () => {
+          const id = nEl.dataset.node;
+          if (routed) {
+            const occurrences = steps.map((s, i) => (s === id ? i + 1 : 0)).filter(Boolean);
+            if (occurrences.length) {
+              cursor = occurrences.reduce((closest, s) => (Math.abs(s - cursor) < Math.abs(closest - cursor) ? s : closest), occurrences[0]);
+            }
+          }
+          openDrawerFor(nodeById.get(id));
+          updateStage();
+          updateDockText();
+        });
+      });
+    }
+
+    function updateDockText() {
+      const dock = document.getElementById("stepDock");
+      if (!dock) return;
+      const steps = activeSteps();
+      if (!steps.length) {
+        dock.hidden = true;
+        return;
+      }
+      dock.hidden = false;
+      const b = activeBehavior();
+      document.getElementById("prevStep").disabled = cursor <= 0;
+      document.getElementById("nextStep").disabled = cursor >= steps.length;
+      document.getElementById("stepProgress").textContent = cursor === 0 ? "尚未出發" : `${cursor} / ${steps.length}`;
+      const head = cursor > 0 ? (b.route.narration[cursor - 1] || {}).head || "" : b.question;
+      document.getElementById("stepHead").textContent = head;
+      const playBtn = document.getElementById("playStep");
+      playBtn.textContent = cursor >= steps.length ? "↺ 重來" : "▶ 開始導覽";
+      playBtn.hidden = cursor > 0 && cursor < steps.length; // mid-walk: ‹ › are the only pace
+    }
+
+    function wireDock() {
+      document.getElementById("prevStep").addEventListener("click", () => { stopPlay(); goStep(-1); });
+      document.getElementById("nextStep").addEventListener("click", () => { stopPlay(); goStep(1); });
+      document.getElementById("playStep").addEventListener("click", togglePlay);
+      document.getElementById("stepAnchor").addEventListener("click", () => setDrawer(true));
+    }
+
+    // Auto-focus: the poster still never ZOOMS on its own — but when the user has leaned in
+    // and the current step walks out of view, glide-pan (same scale) to keep it on stage.
+    // At full fit everything is already visible, so nothing moves (mockup-B behavior preserved).
+    function keepStepInView(nodeId) {
+      const stage = document.getElementById("stage");
+      const pos = behaviorLayout.nodes[nodeId];
+      if (!stage || !pos) return;
+      const wrap = stage.parentElement;
+      const wrapW = wrap.clientWidth;
+      const wrapH = wrap.clientHeight;
+      const margin = 60;
+      const bottomReserve = 140; // step dock + drawer tab
+      const nx = pos.x * cam.scale + cam.tx;
+      const ny = pos.y * cam.scale + cam.ty;
+      const nw = (pos.w || 200) * cam.scale;
+      const nh = (pos.h || 110) * cam.scale;
+      let dx = 0;
+      let dy = 0;
+      if (nx < margin) dx = margin - nx;
+      else if (nx + nw > wrapW - margin) dx = (wrapW - margin) - (nx + nw);
+      if (ny < margin) dy = margin - ny;
+      else if (ny + nh > wrapH - bottomReserve) dy = (wrapH - bottomReserve) - (ny + nh);
+      if (!dx && !dy) return;
+      cam.tx += dx;
+      cam.ty += dy;
+      stage.classList.add("glide");
+      applyCam();
+      setTimeout(() => stage.classList.remove("glide"), 500);
+    }
+    function goStep(delta) {
+      const steps = activeSteps();
+      const next = Math.max(0, Math.min(steps.length, cursor + delta));
+      if (next === cursor) return;
+      cursor = next;
+      updateDockText();
+      updateStage();
+      syncDrawerToCursor(); // drawer content follows the current step (spec: "content follows current step")
+      if (cursor > 0) keepStepInView(steps[cursor - 1]);
+    }
+
+    function stopPlay() {
+      clearInterval(playTimer);
+      playTimer = null;
+      const btn = document.getElementById("playStep");
+      if (btn) btn.textContent = "▶ 走一遍";
+    }
+    // No auto-play: the walkthrough's pace belongs to the learner — one press, one step.
+    function togglePlay() {
+      const steps = activeSteps();
+      if (cursor >= steps.length) { cursor = 0; goStep(1); return; } // ↺ 重來
+      if (cursor === 0) goStep(1); // 開始導覽 → stand on step 1, then ‹ › by hand
+    }
+
+    // ---------- drawer ----------
+    const fileCache = new Map();
+    function setDrawer(open) {
+      drawerOpen = open;
+      const drawer = document.getElementById("drawer");
+      if (drawer) drawer.classList.toggle("open", open);
+    }
+    function wireDrawer() {
+      document.getElementById("drawerTab").addEventListener("click", () => setDrawer(!drawerOpen));
+      // Dock side (bottom|left, VS Code style) + drag-resize; both persist across renders/sessions.
+      const drawer = document.getElementById("drawer");
+      const dockGroup = document.getElementById("dockGroup");
+      const applyDockState = () => {
+        const dock = localStorage.getItem("atlasDrawerDock") || "bottom";
+        drawer.classList.toggle("dock-left", dock === "left");
+        drawer.classList.toggle("dock-right", dock === "right");
+        dockGroup.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.dock === dock));
+        const savedH = localStorage.getItem("atlasDrawerH");
+        const savedW = localStorage.getItem("atlasDrawerW");
+        const sideDock = dock === "left" || dock === "right";
+        if (!sideDock && savedH) drawer.style.height = savedH;
+        drawer.style.width = sideDock ? (savedW || "") : "";
+      };
+      applyDockState();
+      dockGroup.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+        localStorage.setItem("atlasDrawerDock", b.dataset.dock);
+        applyDockState();
+      }));
+      const resizer = document.getElementById("drawerResizer");
+      let resizing = null;
+      resizer.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        resizing = { x: event.clientX, y: event.clientY, h: drawer.offsetHeight, w: drawer.offsetWidth };
+        drawer.classList.add("resizing");
+        document.body.style.userSelect = "none";
+      });
+      window.addEventListener("pointermove", (event) => {
+        if (!resizing) return;
+        if (drawer.classList.contains("dock-left")) {
+          const w = Math.max(300, Math.min(window.innerWidth * 0.7, resizing.w + (event.clientX - resizing.x)));
+          drawer.style.width = `${w}px`;
+        } else if (drawer.classList.contains("dock-right")) {
+          const w = Math.max(300, Math.min(window.innerWidth * 0.7, resizing.w - (event.clientX - resizing.x)));
+          drawer.style.width = `${w}px`;
+        } else {
+          const h = Math.max(160, Math.min(window.innerHeight * 0.82, resizing.h - (event.clientY - resizing.y)));
+          drawer.style.height = `${h}px`;
+        }
+      });
+      window.addEventListener("pointerup", () => {
+        if (!resizing) return;
+        resizing = null;
+        drawer.classList.remove("resizing");
+        document.body.style.userSelect = "";
+        if (drawer.classList.contains("dock-left") || drawer.classList.contains("dock-right")) localStorage.setItem("atlasDrawerW", drawer.style.width);
+        else localStorage.setItem("atlasDrawerH", drawer.style.height);
+      });
+      setDrawer(drawerOpen);
+    }
+    function openDrawerFor(node) {
+      if (!node) return;
+      showSource(node);
+      renderNodeExplanation(node);
+      setDrawer(true);
+    }
+    // A free click on a card deserves the node's own 解釋 — interface first, then any
+    // walkthrough narration that mentions it (best body-bearing entry across behaviors).
+    function renderNodeExplanation(node) {
+      const box = document.getElementById("drawerNarration");
+      if (!box) return;
+      let tour = null;
+      behaviors.forEach((b) => {
+        b.route.steps.forEach((stepId, i) => {
+          const entry = b.route.narration[i];
+          if (stepId === node.id && entry && entry.body && !tour) tour = { behavior: b.title, ...entry };
+        });
+      });
+      box.hidden = false;
+      box.innerHTML = `<span class="explain-kind">${node.kind || ""}</span> <b>${node.label}</b>`
+        + (node.io ? ` <i class="explain-io">${node.io}</i>` : "")
+        + (node.summary ? `<br>${node.summary}` : "")
+        + (tour ? `<br><span class="explain-tour">導覽解說（${tour.behavior}）：</span>${tour.body}` : "");
+      box.classList.remove("fresh");
+      void box.offsetWidth; // restart the entrance animation
+      box.classList.add("fresh");
+    }
+    function syncDrawerToCursor() {
+      const steps = activeSteps();
+      if (cursor > 0 && steps.length) showSource(nodeById.get(steps[cursor - 1]));
+      renderDrawerNarration();
+    }
+    function renderDrawerNarration() {
+      const box = document.getElementById("drawerNarration");
+      const b = activeBehavior();
+      if (!box) return;
+      if (b && cursor > 0) {
+        const entry = b.route.narration[cursor - 1] || {};
+        if (entry.body) {
+          box.hidden = false;
+          box.innerHTML = `<b>STEP ${String(cursor).padStart(2, "0")}</b> ${entry.body}`;
+          box.classList.remove("fresh");
+          void box.offsetWidth;
+          box.classList.add("fresh");
+          return;
+        }
+      }
+      box.hidden = true;
+      box.textContent = "";
+    }
+    async function fetchSource(file) {
+      if (fileCache.has(file)) return fileCache.get(file);
+      const candidates = sourceCandidates(file);
+      let lastErr = null;
+      for (const url of candidates) {
+        try {
+          const resp = await fetch(url);
+          if (!resp.ok) { lastErr = new Error(`HTTP ${resp.status}`); continue; }
+          const text = await resp.text();
+          fileCache.set(file, text);
+          return text;
+        } catch (err) { lastErr = err; }
+      }
+      throw Object.assign(new Error(lastErr ? lastErr.message : "fetch failed"), { attempted: candidates });
+    }
+    function highlightLine(text) {
+      if (window.hljs) {
+        try { return hljs.highlight(text, { language: "python" }).value; } catch (e) { /* fall through */ }
+      }
+      const esc = document.createElement("div");
+      esc.textContent = text;
+      return esc.innerHTML;
+    }
+    let drawerCurrentFile = null;
+    async function showSource(node) {
+      const pathEl = document.getElementById("drawerPath");
+      const actionsEl = document.getElementById("drawerActions");
+      const bodyEl = document.getElementById("drawerBody");
+      if (!pathEl) return;
+      const start = AL.firstLine(node.lines);
+      pathEl.innerHTML = `${node.file} <i>:${node.lines}</i>`;
+      const gh = githubUrl(node);
+      const vs = vscodeUrl(node);
+      actionsEl.innerHTML = `<a href="${vs || "#"}" class="${vs ? "" : "disabled"}" title="${vs ? "開啟" : "加 ?fsRoot= 才能用"}">開 IDE ↗</a>${gh ? `<a href="${gh}" target="_blank" rel="noreferrer">GitHub ↗</a>` : ""}`;
+      let text;
+      try {
+        text = await fetchSource(node.file);
+      } catch (err) {
+        bodyEl.innerHTML = `<div class="drawer-empty">抓不到 ${node.file} —— 試過：${(err.attempted || []).join(" · ")}</div>`;
+        drawerCurrentFile = null;
+        return;
+      }
+      const isNewFile = drawerCurrentFile !== node.file;
+      if (isNewFile) {
+        drawerCurrentFile = node.file;
+        bodyEl.innerHTML = text
+          .split("\n")
+          .map((line, i) => `<div class="code-line" data-line="${i + 1}"><span class="ln">${i + 1}</span><span class="lc">${highlightLine(line)}</span></div>`)
+          .join("");
+        bodyEl.querySelectorAll(".code-line").forEach((row) => {
+          // Per-line click only relocates the 📍 marker on the poster (narrowest-range match) —
+          // it does not change what the drawer is showing; the learner is free-browsing code.
+          row.addEventListener("click", () => {
+            const line = Number(row.dataset.line);
+            const id = nodeAtLocation(node.file, line);
+            if (id && id !== hereNodeId) {
+              hereNodeId = id;
+              updateStage();
+            }
+          });
+        });
+      }
+      const [s, e] = String(node.lines).split(/[–-]/).map(Number);
+      highlightRange(node.file, [s, e || s], start);
+    }
+    function highlightRange(file, [start, end], scrollTo) {
+      const bodyEl = document.getElementById("drawerBody");
+      if (!bodyEl || drawerCurrentFile !== file) return;
+      bodyEl.querySelectorAll(".code-line.hot").forEach((row) => row.classList.remove("hot", "flash"));
+      for (let n = start; n <= end; n += 1) bodyEl.querySelector(`[data-line="${n}"]`)?.classList.add("hot", "flash");
+      setTimeout(() => bodyEl.querySelectorAll(".code-line.flash").forEach((row) => row.classList.remove("flash")), 1100);
+      const target = bodyEl.querySelector(`[data-line="${scrollTo || start}"]`);
+      if (target) target.scrollIntoView({ block: "center" });
+    }
+    // Ranges nest within one file, so the narrowest match wins (ported from behavior-graph mockup).
+    function nodeAtLocation(file, line) {
+      let best = null;
+      (graph.nodes || []).forEach((n) => {
+        if (!file.endsWith(n.file)) return;
+        const [start, end] = String(n.lines).split(/[–-]/).map(Number);
+        const last = end || start;
+        if (line < start || line > last) return;
+        const span = last - start;
+        if (!best || span < best.span) best = { id: n.id, span };
+      });
+      return best ? best.id : null;
+    }
+
+    // ================= shared: camera (fit + user zoom/pan) =================
+    // Steps never move the camera (poster stays framed) — but the USER may lean in:
+    // wheel = zoom at cursor, drag empty ground = pan, `f` / ⌖ button = back to full fit.
+    const cam = { scale: 1, tx: 8, ty: 8, fit: 1 };
+    window.__atlas = { cam }; // debug/test hook (module scope is otherwise unreachable from eval)
+    function applyCam() {
+      const stage = document.getElementById("stage");
+      if (stage) stage.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.scale})`;
+    }
+    function fitStage(stage, world) {
+      const wrap = stage.parentElement;
+      // The wrap's own height collapses (stage is absolutely positioned), so derive the
+      // available height from the viewport and pin the wrap to it — never trust clientHeight here.
+      const viewportH = Math.max(280, window.innerHeight - wrap.getBoundingClientRect().top - 16);
+      wrap.style.height = `${viewportH}px`;
+      const availW = Math.max(320, wrap.clientWidth - 16);
+      const availH = viewportH - 16;
+      const scale = Math.max(0.1, Math.min(1, availW / world.width, availH / world.height));
+      cam.scale = scale;
+      cam.fit = scale;
+      cam.tx = Math.max(8, (wrap.clientWidth - world.width * scale) / 2);
+      cam.ty = Math.max(8, (viewportH - world.height * scale) / 2);
+      stage.style.left = "0px";
+      stage.style.top = "0px";
+      applyCam();
+    }
+    let panPointer = null;
+    el.stageArea.addEventListener("wheel", (event) => {
+      const stage = document.getElementById("stage");
+      if (!stage) return;
+      if (event.target.closest(".drawer, .mod-info")) return; // scrollable UI keeps its own wheel
+      event.preventDefault();
+      const rect = stage.parentElement.getBoundingClientRect();
+      const px = event.clientX - rect.left;
+      const py = event.clientY - rect.top;
+      const next = Math.max(cam.fit * 0.6, Math.min(3, cam.scale * (event.deltaY > 0 ? 0.9 : 1.11)));
+      const wx = (px - cam.tx) / cam.scale;
+      const wy = (py - cam.ty) / cam.scale;
+      cam.scale = next;
+      cam.tx = px - wx * next;
+      cam.ty = py - wy * next;
+      applyCam();
+    }, { passive: false });
+    el.stageArea.addEventListener("pointerdown", (event) => {
+      if (event.target.closest(".node, .mod, button, a, input")) return;
+      if (!document.getElementById("stage")) return;
+      panPointer = { x: event.clientX, y: event.clientY, tx: cam.tx, ty: cam.ty };
+      el.stageArea.style.cursor = "grabbing";
+    });
+    window.addEventListener("pointermove", (event) => {
+      if (!panPointer) return;
+      cam.tx = panPointer.tx + (event.clientX - panPointer.x);
+      cam.ty = panPointer.ty + (event.clientY - panPointer.y);
+      applyCam();
+    });
+    window.addEventListener("pointerup", () => {
+      panPointer = null;
+      el.stageArea.style.cursor = "";
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.target.closest("input, textarea")) return;
+      if (event.key === "f" || event.key === "F") refit();
+      if (view === "behavior") {
+        if (event.key === "ArrowRight" || event.key === "]") goStep(1);
+        if (event.key === "ArrowLeft" || event.key === "[") goStep(-1);
+      }
+    });
+    function refit() {
+      const stage = document.getElementById("stage");
+      if (!stage) return;
+      fitStage(stage, view === "repo" ? repoLayout.world : behaviorLayout.world);
+    }
+    window.addEventListener("resize", refit); // resize refits; steps never do (poster stays framed)
+
+    // ================= top-level render =================
+    function render() {
+      renderCrumb();
+      if (view === "repo") renderRepoScale();
+      else renderBehaviorScale();
+    }
+
+    const refitBtn = document.createElement("button");
+    refitBtn.className = "refit-btn";
+    refitBtn.textContent = "⌖ 全覽 (f)";
+    refitBtn.addEventListener("click", refit);
+    document.body.appendChild(refitBtn);
+
+    render();
+  }
+})();
+</script>
+</body>
+</html>

@@ -122,9 +122,10 @@ The hook (`scripts/hooks/pre-commit`) blocks a commit whose generated artifacts 
   ```
 - **Why this gate exists**: the version used to be hand-copied across three files, so a bump that missed one drifted silently — `nav` sat at a stale `0.4.0` and `shape` at `0.5.0` in `marketplace.json` while their real version had moved on. One owner + a gating validator kills that class of bug.
 
-### 2. Codex / Cursor / opencode skill mirror is generated
+### 2. Codex / Cursor / opencode skill mirrors are generated
 
 - `.agents/skills/` + the repo-root `AGENTS.md` are generated from `plugins/` by `node scripts/build-codex.mjs`. Never hand-edit them — edit the plugin `SKILL.md` / `CLAUDE.md`, regenerate, then validate (same validator as above).
+- `platforms/cursor/<plugin>/` + repo-root `.cursor-plugin/marketplace.json` are generated from `plugins/` by `node scripts/build-cursor.mjs`. Never hand-edit them (except `platforms/cursor/manifest.json`, the Cursor adapter's release owner). Cursor is a native-plugin channel, not a Codex-mirror consumer (ADR-118).
 
 ### 3. Human-facing surfaces are gating — site map AND README
 
@@ -201,12 +202,16 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
 ```
 .claude-plugin/marketplace.json   → registers every plugin (name · source · description · version)
 plugins/<name>/.claude-plugin/    → per-plugin manifest (the version + metadata OWNER)
-plugins/<name>/.cursor-plugin/    → generated projection (do not hand-edit)
+plugins/<name>/.cursor-plugin/    → generated four-field projection (do not hand-edit; not the installable Cursor plugin)
 plugins/<name>/CLAUDE.md          → plugin-specific identity + roster + design patterns
 plugins/<name>/skills/<s>/SKILL.md → individual skills, each self-contained
 scripts/build-manifests.mjs       → regenerates cursor projections + marketplace versions
 scripts/build-codex.mjs           → regenerates .agents/skills/ + AGENTS.md
+scripts/build-cursor.mjs          → regenerates platforms/cursor/<plugin>/ + .cursor-plugin/marketplace.json
 scripts/validate-codex-skills.mjs → gates ALL of the above (run before commit)
+platforms/cursor/                 → generated Cursor Plugins (do not hand-edit except manifest.json)
+platforms/cursor/manifest.json    → Cursor adapter release (hand-owned)
+.cursor-plugin/marketplace.json   → generated Cursor marketplace (do not hand-edit)
 docs/adr/                         → ADRs (marketplace-level, shared across plugins)
 docs/site/index.html             → the bilingual marketplace map (gating, see gate #3)
 README.md                         → human-facing marketplace overview
@@ -220,7 +225,7 @@ README.md                         → human-facing marketplace overview
 > To **fathom** is to deeply understand; the root is the nautical depth unit, measured line by
 > line downward — the shape of this plugin's five-level ladder.
 
-## Four verbs, one shared state (ADR-116)
+## Five verbs, one shared state (ADR-116)
 
 | Verb | Owns the moment | Writes |
 | --- | --- | --- |
@@ -228,6 +233,7 @@ README.md                         → human-facing marketplace overview
 | `guide` | "walk me through it" · "where were we?" — the teaching climb | cursor · `understanding.md` · artifacts |
 | `quiz` | "test me" — spaced retention, may fire days later | `understanding.md` |
 | `dive` | "keep digging at X" — one thread, no ladder movement | `index.md` · `understanding.md` |
+| `compile` | "生成 horizon/地圖" · "重編一下" — turn the study into its artifacts, any time | `studies/<name>/atlas/*.json` |
 
 **Files, not call order, are the connective tissue** — which is why the flow is free. `index.md`
 records how deep the repository is; `understanding.md` records how deep the learner is; `progress.md` is
@@ -240,7 +246,26 @@ another door first.
 **Keep the near-neighbours distinct** — this split only pays if the boundaries hold: `dwell`
 (inside `guide`) is bound to the level just taught; `dive` is unbounded and advances nothing.
 `gate` (inside `guide`) is a level's exit; `quiz` is retention checking independent of progression.
-Adding a fifth verb needs evidence that no existing door can carry the moment.
+Adding a verb needs evidence that no existing door can carry the moment — `compile` cleared that
+bar 2026-08-14/15: a compile fires outside every door's moment (post-dive enrich, stale-study
+return, a bare "生成 horizon" with no teaching in flight) and its atlas half was validated across
+four studies before landing.
+
+## The artifact layer (three products, one compiler door)
+
+Each study level births its own artifact — **different products, never one mega-fixture**:
+**horizon** (Repository) · **tides** (System/State) · **atlas** (Behavior/Code), each with its own
+schema and shell. All three are compiled by `fathom-compile`, which reads the study's recorded
+gate to decide what may exist. Binding each artifact to its birth gate inside `index`/`guide` was
+tried and rejected — that conflates *when an artifact may first exist* (data, `birth-gates.md`)
+with *when someone wants it compiled* (any time); those doors keep a one-line offer pointing at
+`compile` and own no machinery.
+
+Everything the compiler needs ships with that door (first consumer owns): `skills/compile/` —
+`references/` (compile-loop: two-pass loop + five hard rules · birth-gates: what may exist at
+which gate · one protocol+brief pair per artifact), `scripts/` (scanner, structural gate),
+`assets/` (schemas + shells; deployed copies are instances, assets are canonical). Only **atlas**
+is graduated today; horizon/tides stay lab-side until their fixture-ization pilots pass in etudes.
 
 ## Division lines
 

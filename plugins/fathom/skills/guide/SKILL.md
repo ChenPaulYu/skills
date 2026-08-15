@@ -88,21 +88,18 @@ learner; they do not demand five artifacts or equal time.
    inline now (see `/fathom:index` for the full protocol — anchor + release distance, collapse
    rules, the index contract, the counted trust verdict). Report the verdict to the learner before
    teaching: it changes how they read everything that follows.
-2. **Calibration probe — two axes, probed separately, synthesized into one route.**
-   Before building anything learner-facing, ask 2–3 open questions on each axis:
-   - **Ability** — background knowledge: adjacent frameworks used hands-on, concepts owned by
-     experience. Never "how well do you know this repo" (a stranger's answer is uselessly "not
-     at all"). This axis sets **how** to teach: the gloss list (skip what they own), the contrast
-     anchor (diff against what they actually built), chunk size.
-   - **Intent** — what they're here for: the goal, any immediate task, and what they're curious
-     about. This axis sets **what order** to teach: which seam to enter first, which behavior
-     becomes the first control path, which chapters compress to a mention.
-   The synthesis is the route: a learner who owns an adjacent system but has never met this
-   repo's X wants X as the first seam and their own system as the contrast anchor — not an even
-   tour of all modules. Record both axes under `understanding.md`'s **Learner angle**; intent
-   drifts, so re-read it at every level entry (orientation, loop step 1) and let a moved goal
-   move the route. One standing limit: *preferred form* is a tiebreaker between forms that carry
-   the knowledge equally — form follows the knowledge, not the mood.
+2. **Calibration probe** — the protocol is shared ground:
+   [`references/calibration.md`](references/calibration.md) (two axes — ability and
+   intent — probed separately with open questions, plus the narration probe that seeds the
+   Corrected table; recorded in the learner's own words under `understanding.md`'s **Learner
+   angle**). It is a shared protocol: `/fathom:compile` calibrates from the same two axes, because **anything
+   learner-facing must be calibrated first** and artifacts are learner-facing too.
+   Here the synthesis becomes **the teaching route**: a learner who owns an adjacent system but
+   has never met this repo's X wants X as the first seam and their own system as the contrast
+   anchor — not an even tour of all modules. Intent drifts, so re-read the angle at every level
+   entry (orientation, loop step 1) and let a moved goal move the route. One standing limit:
+   *preferred form* is a tiebreaker between forms that carry the knowledge equally — form follows
+   the knowledge, not the mood.
 3. **Build the level's artifact** (`references/forms.md`), then verify it in a browser before
    delivering — every interaction exercised, console clean, no horizontal overflow — and say
    "reload the page" when you revise it (a local file the learner already has open does not

@@ -13,7 +13,7 @@
     "nav-plan",
     "relay-digest"
   ],
-  "expect_skill_count": 26,
+  "expect_skill_count": 27,
   "expect_skills": [
     "nav-plan",
     "relay-digest",
@@ -22,7 +22,8 @@
     "fathom-index",
     "fathom-guide",
     "fathom-quiz",
-    "fathom-dive"
+    "fathom-dive",
+    "fathom-compile"
   ],
   "expect_runtime_files": [
     ".codex/agents/executor.toml",

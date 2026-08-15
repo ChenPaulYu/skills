@@ -3,6 +3,7 @@
   "max_chars_per_skill": 240,
   "max_total_chars": 7000,
   "skills": {
+    "fathom-compile": "Turn a fathom study into its artifacts — horizon (repo dashboard), tides (state board), atlas (code map): semantic fixtures rendered by fixture-driven shells, re-runnable so they enrich as the study deepens. Needs an existing study.",
     "fathom-dive": "Follow one repository topic as deep as the learner wants, answered against pinned file:line evidence, without advancing the comprehension ladder.",
     "fathom-guide": "Teach an unfamiliar repository level by level (Repository to Code), dwelling for questions and gating on the learner own narration. Resumes from a cursor on disk.",
     "fathom-index": "Index an unfamiliar repository and judge how much to trust it: anchor the pin, land a file:line anchor index, deliver a measured trust verdict. Grounds; does not teach.",
