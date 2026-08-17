@@ -118,11 +118,12 @@ The repo is the source of truth; every tool that runs these skills reads a **cop
 | Runtime | Reads | Rots because |
 |---|---|---|
 | Claude Code | `~/.claude/plugins/cache/skills/<plugin>/<version>/` | the snapshot is **version-pinned** — new content never arrives, and a *retired* plugin stays loadable from its old pin |
-| Codex · Cursor · opencode | `~/.agents/skills/<plugin>-<skill>/` | a plain copy, only as fresh as the last generator run |
+| Codex · opencode | `~/.codex/skills/<plugin>-<skill>/` — the dual-global root | a plain copy, only as fresh as the last generator run |
+| Cursor | `~/.cursor/plugins/local/<plugin>` → `platforms/cursor/<plugin>` | symlinks, so content is always live; only the *set* of links goes stale when a plugin joins or retires |
 
-Cursor needs no second copy: `cursor-agent` scans `~/.claude/skills` · `~/.codex/skills` · `~/.agents/skills` · `~/.cursor/skills`, so the one directory Codex already uses serves it too. **One skill, one place on disk.**
+**Cursor is a native-plugin channel, not a Codex-mirror consumer** ([ADR-118](docs/adr/118-cursor-native-plugin-adapter.md)). It *does* discover `~/.agents/skills`, and that is the trap rather than the shortcut: the tree there carries the Codex lowering — invocation flags stripped, tools rewritten into a vocabulary Cursor doesn't have — so the skills would load and be quietly wrong. Hence the dual-global root: Codex installs under `~/.codex`, this marketplace is pruned out of `~/.agents/skills`, and no flattened name exists in two roots where it could hide a skill from Cursor's slash menu. Turn Cursor's *"Include third-party Plugins, Skills, and other configs"* **off** so it doesn't scan `~/.codex/skills` either.
 
-[`scripts/sync-installed.sh`](scripts/sync-installed.sh) is the single owner of "bring the copies back in line" — it refreshes the plugin cache (installing what's new, uninstalling what left the repo, dropping superseded pins) and regenerates the shared mirror. The hooks are thin callers that only decide *when*: **post-commit** (you authored the change) and **post-merge / post-rewrite** (you pulled it, merge or rebase). Nothing has to be remembered.
+[`scripts/sync-installed.sh`](scripts/sync-installed.sh) is the single owner of "bring the copies back in line" — it refreshes the plugin cache (installing what's new, uninstalling what left the repo, dropping superseded pins), installs the Codex mirror at the dual-global root, and re-aims the Cursor symlinks. The hooks are thin callers that only decide *when*: **post-commit** (you authored the change) and **post-merge / post-rewrite** (you pulled it, merge or rebase). Nothing has to be remembered.
 
 Why hooks rather than a documented command: the manual rule was written 2026-07-17 and had already failed by 2026-08-12 — every cache stale again, one by two major versions, two retired skills still loadable. **A step that must be remembered is a step that will be skipped.** Full account: [`docs/observations/2026-08-12-skill-copies-outlive-their-source.md`](docs/observations/2026-08-12-skill-copies-outlive-their-source.md).
 

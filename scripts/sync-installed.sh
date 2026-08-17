@@ -9,11 +9,18 @@
 #                  bump does not reach a session until `claude plugin update`
 #                  materialises the new pin; a retired plugin stays loadable
 #                  from its old pin forever.
-#   Codex        → ~/.agents/skills/<plugin>-<skill>/
-#   Cursor       → the SAME ~/.agents/skills/ (cursor-agent scans, per its own
-#                  resolver, ~/.claude/skills · ~/.codex/skills · ~/.agents/skills
-#                  · ~/.cursor/skills). One directory, two tools, no second copy.
-#   opencode     → also reads the .agents/skills convention.
+#   Codex        → ~/.codex/skills/<plugin>-<skill>/, the Codex lowering.
+#   opencode     → the same tree; it reads the .agents/skills convention too.
+#   Cursor       → ~/.cursor/plugins/local/<plugin> → platforms/cursor/<plugin>.
+#                  A NATIVE plugin channel, not the Codex mirror (ADR-118).
+#                  Cursor does discover ~/.agents/skills, and that is the trap,
+#                  not the shortcut: the tree there is Codex-lowered, so the
+#                  skills would load and be quietly wrong. Hence the dual-global
+#                  root — Codex installs under ~/.codex and this marketplace is
+#                  pruned out of ~/.agents/skills, so no flattened name exists
+#                  in two roots where it could hide a skill from Cursor's menu.
+#                  Symlinks, so a pull updates Cursor with nothing copied; the
+#                  sync only has to re-aim them when a plugin joins or retires.
 #
 # This script is the SINGLE OWNER of "bring the copies back in line" (rule ①).
 # The git hooks in scripts/hooks/ are thin callers — post-commit (you authored a
@@ -41,32 +48,31 @@ QUIET=0
 
 say() { [ "$QUIET" -eq 1 ] || echo "$@"; }
 
-# ── Codex · Cursor · opencode — the shared ~/.agents/skills mirror ────────────
-GLOBAL="$HOME/.agents/skills"
-
-# Fingerprint the mirror so quiet mode can stay silent when nothing moved.
-# Every file, not just SKILL.md: a skill's references/ carry as much of it as
-# its body does, and a fingerprint that cannot see them reports "nothing
-# changed" after a real update.
-fingerprint() {
-  [ -d "$GLOBAL" ] || { echo "absent"; return; }
-  {
-    find "$GLOBAL" -type f -print0 2>/dev/null \
-      | LC_ALL=C sort -z | xargs -0 cat 2>/dev/null
-  } | cksum
-}
-
 if command -v node >/dev/null 2>&1; then
-  before=$(fingerprint)
+  # Fingerprint an install root so quiet mode can stay silent when nothing
+  # moved. Every file, not just SKILL.md: a skill's references/ carry as much of
+  # it as its body does, and a fingerprint that cannot see them reports
+  # "nothing changed" after a real update. Symlinks are followed (`cat`), which
+  # is what makes it work for Cursor's link farm as well as Codex's copies.
+  fingerprint() {
+    [ -d "$1" ] || { echo "absent"; return; }
+    {
+      find -L "$1" -type f -print0 2>/dev/null \
+        | LC_ALL=C sort -z | xargs -0 cat 2>/dev/null
+    } | cksum
+  }
+
+  # ── Codex · opencode — the flat mirror at the dual-global root ──────────────
+  CODEX_ROOT="$HOME/.codex/skills"
+  before=$(fingerprint "$CODEX_ROOT")
   # --sync-global installs the COMPILED mirror and prunes skills that left the
   # repo (a retirement that reaches the source but not the runtime has not
-  # happened). --dedupe-global-roots removes generated duplicates that older
-  # installs left under ~/.codex/skills, so one skill = one file on disk.
-  if out=$(node scripts/build-codex.mjs --sync-global --dedupe-global-roots 2>&1); then
+  # happened). --global-root codex keeps this marketplace out of
+  # ~/.agents/skills, which Cursor scans — see ADR-118 in the header.
+  if out=$(node scripts/build-codex.mjs --sync-global --global-root codex 2>&1); then
     say "$out"
-    after=$(fingerprint)
     if [ "$QUIET" -eq 1 ]; then
-      [ "$before" != "$after" ] && echo "✓ Codex/Cursor skill mirror updated → $GLOBAL"
+      [ "$before" != "$(fingerprint "$CODEX_ROOT")" ] && echo "✓ Codex skill mirror updated → $CODEX_ROOT"
       # A hand-edit the installer refused to touch is announced exactly ONCE —
       # so quiet mode must not be the run that eats it. Swallowing this line is
       # how "your file was preserved" becomes "your file silently stopped
@@ -75,18 +81,34 @@ if command -v node >/dev/null 2>&1; then
     fi
   else
     echo "$out" >&2
-    echo "✗ Codex/Cursor mirror sync failed — run \`node scripts/build-codex.mjs --sync-global --dedupe-global-roots\` by hand" >&2
+    echo "✗ Codex mirror sync failed — run \`node scripts/build-codex.mjs --sync-global --global-root codex\` by hand" >&2
   fi
-  # build-codex.mjs regenerates the repo's own committed mirror as a side
-  # effect. After a clean pull that is a no-op; if it is not, the tree that was
-  # pushed was already out of sync — say so rather than leaving a silent diff.
-  if [ -n "$(git status --porcelain -- .agents AGENTS.md .codex plugins 2>/dev/null)" ]; then
-    echo "⚠ regenerating left the working tree dirty (.agents / AGENTS.md / plugins):" >&2
-    git status --porcelain -- .agents AGENTS.md .codex plugins >&2
+
+  # ── Cursor — native plugins, symlinked (ADR-118) ────────────────────────────
+  CURSOR_ROOT="$HOME/.cursor/plugins/local"
+  before=$(fingerprint "$CURSOR_ROOT")
+  if out=$(node scripts/build-cursor.mjs --sync-local 2>&1); then
+    say "$out"
+    if [ "$QUIET" -eq 1 ] && [ "$before" != "$(fingerprint "$CURSOR_ROOT")" ]; then
+      echo "✓ Cursor plugins updated → $CURSOR_ROOT (reload Cursor to pick them up)"
+    fi
+  else
+    echo "$out" >&2
+    echo "✗ Cursor plugin sync failed — run \`node scripts/build-cursor.mjs --sync-local\` by hand" >&2
+  fi
+
+  # Both generators rewrite the repo's own committed output as a side effect.
+  # After a clean pull that is a no-op; if it is not, the tree that was pushed
+  # was already out of sync — say so rather than leaving a silent diff.
+  DERIVED=".agents AGENTS.md .codex platforms .cursor-plugin plugins"
+  # shellcheck disable=SC2086
+  if [ -n "$(git status --porcelain -- $DERIVED 2>/dev/null)" ]; then
+    echo "⚠ regenerating left the working tree dirty:" >&2
+    git status --porcelain -- $DERIVED >&2
     echo "  Someone committed a stale mirror. Review, then commit the regeneration." >&2
   fi
 else
-  say "· node not found — skipping the Codex/Cursor mirror"
+  say "· node not found — skipping the Codex mirror and the Cursor plugins"
 fi
 
 # ── Claude Code — the version-pinned plugin cache ─────────────────────────────
