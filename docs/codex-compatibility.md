@@ -6,7 +6,7 @@ The Codex adapter now releases independently from the Claude marketplace. Its re
 
 ## The rule
 
-Never solve Codex compatibility by weakening or forking the Claude skill. Keep `plugins/**`, `CLAUDE.md`, `.claude-plugin/**`, and `.cursor-plugin/**` unchanged. Translate host-specific syntax and runtime assumptions while preserving the skill's behavioral gates.
+Never solve Codex compatibility by weakening or forking the Claude skill. Keep `plugins/**`, `CLAUDE.md`, `.claude-plugin/**`, and `plugins/*/.cursor-plugin/**` unchanged. Translate host-specific syntax and runtime assumptions while preserving the skill's behavioral gates. **Cursor is not this adapter** — it has its own generated plugin tree ([ADR-118](docs/adr/118-cursor-native-plugin-adapter.md), [`docs/cursor-compatibility.md`](docs/cursor-compatibility.md)).
 
 ```text
 Claude owner                          Codex projection
@@ -21,7 +21,7 @@ One source owns the method; the adapter owns only the host translation.
 
 Codex always sees every installed skill's `name` and `description`; it loads the body only after a skill triggers. Treat metadata as a shared, bounded index.
 
-1. **One active copy per skill.** Never install the same generated name in both `~/.agents/skills` and `~/.codex/skills`. Project and global copies also overlap while that project is open, so prefer a small global profile.
+1. **One active copy per skill.** Never install the same generated name in both `~/.agents/skills` and `~/.codex/skills`. Prefer `--global-root codex` when Cursor plugins are also global (Cursor scans `~/.agents/skills` by default). Project and global copies also overlap while that project is open, so prefer a small global profile when not using the Cursor-safe root.
 2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged. Whenever a Claude skill's routing semantics or frontmatter description changes, review its Codex sidecar in the same change; leaving the sidecar text unchanged is a deliberate review result, never an omission.
 3. **Front-load discrimination.** State the object, action, and strongest trigger first. Put examples, anti-triggers, sibling boundaries, and procedure in the body.
 4. **Budget mechanically.** Every description is at most 240 characters and the full marketplace sidecar is at most 7,000 characters. The validator rejects missing, stale, or oversized entries.
@@ -33,18 +33,22 @@ Audit the current projection and global duplicates:
 node scripts/validate-codex-skills.mjs --metadata-audit
 ```
 
-Install one compiled profile into the supported global Codex roots:
+Install one compiled profile into a single active global root:
 
 ```bash
-node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots
+# Cursor-safe dual-global (recommended when Cursor plugins are also installed)
+node scripts/build-codex.mjs --sync-global --profile all --global-root codex
+
+# Codex-only machines (default root)
+node scripts/build-codex.mjs --sync-global --profile build --global-root agents
 ```
 
 This command now:
 
-- creates `~/.agents/skills/` if it does not exist;
+- installs into `~/.codex/skills/` (`--global-root codex`) or `~/.agents/skills/` (`--global-root agents`, default);
 - installs only compiled flat skills for the selected profile;
 - installs only the required Codex runtime artifacts for that profile into `~/.codex/` (portable role templates, generated browser verifier, lifecycle hook files when needed);
-- records a receipt and prunes only this generator's stale global copies/runtime artifacts;
+- records a receipt on the active root and prunes this marketplace's generated copies from the other global root;
 - never copies raw Claude-source skills into Codex roots.
 
 While developing this marketplace itself, eliminate project/global overlap entirely:
@@ -53,7 +57,7 @@ While developing this marketplace itself, eliminate project/global overlap entir
 node scripts/build-codex.mjs --sync-global --profile project-only
 ```
 
-`project-only` removes only the generator-owned global copies/runtime artifacts recorded in the receipt, leaving unrelated user files alone. The legacy-root cleanup checks the generated banner before deletion; it does not remove unrelated or hand-authored skills.
+`project-only` removes only the generator-owned global copies/runtime artifacts recorded in the receipt, leaving unrelated user files alone. The other-root cleanup checks the generated banner before deletion; it does not remove unrelated or hand-authored skills.
 
 ## Translation table
 

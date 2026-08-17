@@ -1,0 +1,42 @@
+{
+  "name": "skills",
+  "owner": {
+    "name": "Paul"
+  },
+  "metadata": {
+    "description": "Paul's skills marketplace — native Cursor Plugins generated from the Claude source under plugins/.",
+    "pluginRoot": "platforms/cursor"
+  },
+  "plugins": [
+    {
+      "name": "fathom",
+      "source": "fathom",
+      "description": "Fathom an unfamiliar repository — five verbs over one shared study state: index (anchor the pin, judge the ladder depth, land a file:line anchor index, deliver a measured trust verdict), guide (the teaching climb Repository → Runtime → System → Behavior → Code — calibrate on the learner background, teach with knowledge-matched forms, dwell for questions, gate on their own narration), quiz (spaced retention checking against the learner model), dive (follow one topic as deep as they want, advancing nothing), atlas (compile the study into a guided multi-scale code map). index.md records how deep the repository is, understanding.md how deep the learner is — files, not call order, are the connective tissue, so every verb runs standalone. Language-agnostic.",
+      "version": "0.15.0"
+    },
+    {
+      "name": "frame",
+      "source": "frame",
+      "description": "Apply an explicit, named frame that forces a structure the default skips — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
+      "version": "0.13.1"
+    },
+    {
+      "name": "nav",
+      "source": "nav",
+      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers, plus the bilingual codebase map as its map leg), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
+      "version": "0.17.0"
+    },
+    {
+      "name": "relay",
+      "source": "relay",
+      "description": "Coordinate asynchronously through a verified GitHub workspace under the Accord memory model. Report resolves the destination and recipient before Issue-default routing. Digest, reply, and settle keep responsibility and memory on native GitHub state. Language-agnostic.",
+      "version": "2.4.0"
+    },
+    {
+      "name": "shape",
+      "source": "shape",
+      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav. Skills: mockup (render-to-decide), elicit (grounded grill → a thought, plus a survey leg that maps a decision space when a volley stalls), probe (a minimal experiment when nobody can settle a fork by argument), dogfood (use a built feature for real → friction + coverage gaps), align (verify → compact → triage in one pass, then render the plan), migrate (summon-only); doctor deferred. Language-agnostic.",
+      "version": "0.20.0"
+    }
+  ]
+}

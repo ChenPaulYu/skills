@@ -1,0 +1,410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ChenPaulYu/skills/plugins/fathom/skills/compile/assets/schema/atlas-fixture.schema.json",
+  "title": "Atlas fixture",
+  "description": "Purely semantic fixture for the atlas artifact (repo poster + behavior routes). No coordinate fields anywhere — the shell owns layout. Authoring law: skills/compile/references/atlas-protocol.md; cross-artifact law: skills/compile/references/compile-loop.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fixtureVersion",
+    "meta",
+    "repo"
+  ],
+  "properties": {
+    "fixtureVersion": {
+      "const": 1
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo",
+        "upstream",
+        "sha",
+        "sourceRoot",
+        "generatedBy",
+        "studyRef"
+      ],
+      "properties": {
+        "repo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "upstream": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sha": {
+          "type": "string",
+          "minLength": 7
+        },
+        "sourceRoot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generatedBy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "studyRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compiledAt": {
+          "type": "string",
+          "description": "Date of the compile that produced this fixture — half of the staleness check."
+        },
+        "studyGate": {
+          "type": "string",
+          "description": "Study level this compile was based on (Repository|Runtime|System|Behavior|Code) — compared against progress.md to detect stale artifacts."
+        }
+      }
+    },
+    "repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tiers",
+        "modules",
+        "imports"
+      ],
+      "properties": {
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "gloss"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "gloss": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "path",
+              "tier",
+              "zh",
+              "magnitude",
+              "enterable"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tier": {
+                "type": "string",
+                "minLength": 1
+              },
+              "zh": {
+                "type": "string",
+                "minLength": 1
+              },
+              "magnitude": {
+                "type": "object",
+                "additionalProperties": false,
+                "anyOf": [
+                  {
+                    "required": [
+                      "lines"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "files"
+                    ]
+                  }
+                ],
+                "properties": {
+                  "lines": {
+                    "type": "integer",
+                    "description": "Exact line count from scan-repo.mjs — always numeric; the shell formats."
+                  },
+                  "files": {
+                    "type": "integer",
+                    "description": "Exact file count from scan-repo.mjs — always numeric; the shell formats."
+                  },
+                  "approx": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "enterable": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "imports": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "description": "The shared behavior-scale graph: one canvas, lit differently per route. Single owner for node/edge facts — behaviors[] reference these ids instead of repeating them (avoids the duplicated-fact / information-leakage shape from the first draft).",
+      "additionalProperties": false,
+      "default": {
+        "frames": [],
+        "nodes": [],
+        "edges": []
+      },
+      "required": [
+        "frames",
+        "nodes",
+        "edges"
+      ],
+      "properties": {
+        "frames": {
+          "type": "array",
+          "description": "Layout hint: grouping only, no coordinates.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "file",
+              "label",
+              "gloss"
+            ],
+            "properties": {
+              "file": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "gloss": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "kind",
+              "file",
+              "lines",
+              "io",
+              "summary"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "file": {
+                "type": "string",
+                "minLength": 1
+              },
+              "lines": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tier": {
+                "type": "string",
+                "minLength": 1
+              },
+              "io": {
+                "type": "string",
+                "minLength": 1
+              },
+              "zh": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "peek": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "from",
+              "to",
+              "kind",
+              "cargo"
+            ],
+            "properties": {
+              "from": {
+                "type": "string",
+                "minLength": 1
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "call",
+                  "return",
+                  "signal"
+                ]
+              },
+              "cargo": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "behaviors": {
+      "type": "array",
+      "default": [],
+      "description": "Each behavior is a lit route through the shared `graph` above — it does not carry its own copy of nodes/edges. `route.steps[i]` MUST resolve to a `graph.nodes[].id` (cross-array reference — static JSON Schema cannot express this; enforced by scripts/validate-fixture.mjs).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "short",
+          "copy",
+          "question",
+          "keywords",
+          "route"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "short": {
+            "type": "string",
+            "minLength": 1
+          },
+          "copy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "route": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "steps",
+              "narration"
+            ],
+            "properties": {
+              "steps": {
+                "type": "array",
+                "description": "Each entry must exist as a graph.nodes[].id — see scripts/validate-fixture.mjs.",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "narration": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "head"
+                  ],
+                  "properties": {
+                    "head": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "body": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "provisional": {
+            "type": "boolean",
+            "description": "True when compiled at a study gate below Behavior level — coarse route, subject to revision."
+          },
+          "compiledAt": {
+            "type": "string",
+            "description": "Date of the compile that produced/last revised this behavior."
+          },
+          "studyGate": {
+            "type": "string",
+            "description": "Study level the compile was based on (Repository|Runtime|System|Behavior|Code)."
+          }
+        }
+      }
+    }
+  }
+}

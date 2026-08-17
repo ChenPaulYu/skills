@@ -1,0 +1,9 @@
+{
+  "name": "relay",
+  "version": "2.4.0",
+  "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and merge protection, following the Accord memory model (ADR-100). Four daily verbs: report resolves destination and recipient before Issue-default routing; digest surfaces native obligations; reply responds with baton flips; settle closes with authority and records Decisions. Language-agnostic.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  }
+}

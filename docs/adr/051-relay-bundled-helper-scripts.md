@@ -12,7 +12,7 @@ The sharpest case: **graduation**. A decision graduates when *every* `@`-ed pers
 
 ## Decision
 
-**relay may bundle helper scripts for its deterministic / correctness-critical operations**, under each skill's `skills/<name>/scripts/` (which `scripts/build-codex.mjs` already copies verbatim into the Codex/Cursor mirror). The split:
+**relay may bundle helper scripts for its deterministic / correctness-critical operations**, under each skill's `skills/<name>/scripts/` (which `scripts/build-codex.mjs` copies verbatim into the Codex mirror, and `scripts/build-cursor.mjs` into the Cursor plugin tree — ADR-118). The split:
 
 - **Code (a bundled script)** — the mechanical, deterministic, often correctness-critical work: set-comparison, structured parsing, signature checks.
 - **The LLM (SKILL.md prose)** — the judgment: distilling a report into buckets, writing a decision's rationale.

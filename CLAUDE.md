@@ -108,9 +108,10 @@ The hook (`scripts/hooks/pre-commit`) blocks a commit whose generated artifacts 
   ```
 - **Why this gate exists**: the version used to be hand-copied across three files, so a bump that missed one drifted silently — `nav` sat at a stale `0.4.0` and `shape` at `0.5.0` in `marketplace.json` while their real version had moved on. One owner + a gating validator kills that class of bug.
 
-### 2. Codex / Cursor / opencode skill mirror is generated
+### 2. Codex / Cursor / opencode skill mirrors are generated
 
 - `.agents/skills/` + the repo-root `AGENTS.md` are generated from `plugins/` by `node scripts/build-codex.mjs`. Never hand-edit them — edit the plugin `SKILL.md` / `CLAUDE.md`, regenerate, then validate (same validator as above).
+- `platforms/cursor/<plugin>/` + repo-root `.cursor-plugin/marketplace.json` are generated from `plugins/` by `node scripts/build-cursor.mjs`. Never hand-edit them (except `platforms/cursor/manifest.json`, the Cursor adapter's release owner). Cursor is a native-plugin channel, not a Codex-mirror consumer (ADR-118).
 
 ### 3. Human-facing surfaces are gating — site map AND README
 
@@ -187,12 +188,16 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
 ```
 .claude-plugin/marketplace.json   → registers every plugin (name · source · description · version)
 plugins/<name>/.claude-plugin/    → per-plugin manifest (the version + metadata OWNER)
-plugins/<name>/.cursor-plugin/    → generated projection (do not hand-edit)
+plugins/<name>/.cursor-plugin/    → generated four-field projection (do not hand-edit; not the installable Cursor plugin)
 plugins/<name>/CLAUDE.md          → plugin-specific identity + roster + design patterns
 plugins/<name>/skills/<s>/SKILL.md → individual skills, each self-contained
 scripts/build-manifests.mjs       → regenerates cursor projections + marketplace versions
 scripts/build-codex.mjs           → regenerates .agents/skills/ + AGENTS.md
+scripts/build-cursor.mjs          → regenerates platforms/cursor/<plugin>/ + .cursor-plugin/marketplace.json
 scripts/validate-codex-skills.mjs → gates ALL of the above (run before commit)
+platforms/cursor/                 → generated Cursor Plugins (do not hand-edit except manifest.json)
+platforms/cursor/manifest.json    → Cursor adapter release (hand-owned)
+.cursor-plugin/marketplace.json   → generated Cursor marketplace (do not hand-edit)
 docs/adr/                         → ADRs (marketplace-level, shared across plugins)
 docs/site/index.html             → the bilingual marketplace map (gating, see gate #3)
 README.md                         → human-facing marketplace overview

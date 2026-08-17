@@ -1,8 +1,9 @@
 #!/bin/sh
 # pre-commit — gate generated-artifact + manifest drift before every commit.
 #
-# Why: the Codex mirror (.agents/skills/, AGENTS.md), the cursor projections, and
-# the marketplace.json versions are all DERIVED from sources under plugins/. A
+# Why: the Codex mirror (.agents/skills/, AGENTS.md), the Cursor plugins
+# (platforms/cursor/), the four-field cursor projections, and the
+# marketplace.json versions are all DERIVED from sources under plugins/. A
 # commit that edits a source without regenerating ships silent drift (it has
 # happened — shape's mirror sat stale in HEAD). This hook makes that impossible.
 #
@@ -18,7 +19,8 @@ if ! node scripts/validate-codex-skills.mjs; then
 ✗ pre-commit blocked: generated artifacts are out of sync with their sources.
   Fix (usually):
       node scripts/build-codex.mjs       # .agents/skills/ + AGENTS.md
-      node scripts/build-manifests.mjs   # .cursor-plugin + marketplace.json versions
+      node scripts/build-cursor.mjs      # platforms/cursor/ + .cursor-plugin/marketplace.json
+      node scripts/build-manifests.mjs   # plugins/*/.cursor-plugin + marketplace.json versions
   then `git add` the regenerated files and commit again.
   To bypass deliberately: git commit --no-verify
 MSG

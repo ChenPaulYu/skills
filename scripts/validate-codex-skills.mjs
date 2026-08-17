@@ -2,10 +2,11 @@
 /**
  * validate-codex-skills.mjs
  *
- * Guards the dual-support contract:
+ * Guards the generated-artifact contract:
  * - Claude Code source lives under plugins/<plugin>/skills/<skill>/SKILL.md.
  * - Codex mirror lives under .agents/skills/<plugin>-<skill>/SKILL.md.
- * - The mirror must be exactly what scripts/build-codex.mjs generates.
+ * - Cursor plugins live under platforms/cursor/<plugin>/ (flattened skill folders).
+ * - Those mirrors must be exactly what scripts/build-codex.mjs / build-cursor.mjs generate.
  * - Every skill is REGISTERED in both human surfaces (README + site map) — gate #3.
  *   Without this the validator is blind to a half-registered skill (one whose SKILL.md
  *   + mirror are committed but whose README/site-map entries are missing); it ships
@@ -49,6 +50,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLUGINS_DIR = join(ROOT, "plugins");
 const CODEX_SKILLS_DIR = join(ROOT, ".agents", "skills");
 const CODEX_AGENTS_DIR = join(ROOT, ".codex", "agents");
+const CURSOR_PLUGINS_DIR = join(ROOT, "platforms", "cursor");
+const CURSOR_MANIFEST = join(CURSOR_PLUGINS_DIR, "manifest.json");
 const CODEX_DESCRIPTION_LIMIT = 1024;
 const CODEX_PROJECTION = loadCodexProjection(ROOT);
 const errors = [];
@@ -107,8 +110,10 @@ function main() {
   const pluginSkills = readPluginSkills();
   validateClaudeSources(pluginSkills);
   validateCodexManifestMetadata();
+  validateCursorManifestMetadata();
   validateCodexProjection(pluginSkills);
   validateCodexMirror(pluginSkills, ROOT);
+  validateCursorMirror(pluginSkills, ROOT);
   validateGeneratedDrift();
   validateManifestDrift();
   validateRegistration(pluginSkills);
@@ -125,7 +130,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`Codex/Claude skill compatibility ok: ${pluginSkills.length} plugin skills`);
+  console.log(`Codex/Claude/Cursor skill compatibility ok: ${pluginSkills.length} plugin skills`);
 }
 
 function validateCodexManifestMetadata() {
@@ -386,6 +391,64 @@ function validateCodexMirror(pluginSkills, root) {
   }
 }
 
+function validateCursorManifestMetadata() {
+  if (!existsSync(CURSOR_MANIFEST)) {
+    errors.push("platforms/cursor/manifest.json is missing");
+    return;
+  }
+  let manifest;
+  try {
+    manifest = JSON.parse(readFileSync(CURSOR_MANIFEST, "utf8"));
+  } catch (error) {
+    errors.push(`platforms/cursor/manifest.json is not valid JSON: ${error.message}`);
+    return;
+  }
+  if (!/^\d+$/.test(String(manifest.schema_version || ""))) {
+    errors.push(`platforms/cursor/manifest.json schema_version must be an integer string, got ${JSON.stringify(manifest.schema_version)}`);
+  }
+  if (!/^\d+\.\d+\.\d+$/.test(String(manifest.adapter_release || ""))) {
+    errors.push(`platforms/cursor/manifest.json adapter_release must be independent semver (x.y.z), got ${JSON.stringify(manifest.adapter_release)}`);
+  }
+  if (manifest.release_policy?.docs_owner !== "docs/cursor-compatibility.md") {
+    errors.push("platforms/cursor/manifest.json release_policy.docs_owner must be docs/cursor-compatibility.md");
+  }
+}
+
+function validateCursorMirror(pluginSkills, root) {
+  const cursorRoot = join(root, "platforms", "cursor");
+  for (const item of pluginSkills) {
+    const skillMd = join(cursorRoot, item.plugin, "skills", item.flat, "SKILL.md");
+    if (!existsSync(skillMd)) {
+      errors.push(`missing Cursor plugin skill for ${item.plugin}:${item.skill} at ${rel(skillMd)}`);
+      continue;
+    }
+
+    const frontmatter = readFrontmatter(skillMd);
+    if (!frontmatter) continue;
+
+    const name = frontmatterField(frontmatter, "name");
+    const description = frontmatterField(frontmatter, "description");
+    if (name?.value !== item.flat) {
+      errors.push(`${rel(skillMd)} has name "${name?.value}", expected "${item.flat}" for Cursor`);
+    }
+    if (!description) {
+      errors.push(`${rel(skillMd)} is missing a description`);
+    }
+
+    const sourceFrontmatter = readFrontmatter(item.skillMd);
+    if (sourceFrontmatter && /^disable-model-invocation:\s*true\s*$/m.test(sourceFrontmatter)) {
+      if (!/^disable-model-invocation:\s*true\s*$/m.test(frontmatter)) {
+        errors.push(`${rel(skillMd)} dropped disable-model-invocation from the Claude source`);
+      }
+    }
+
+    const pluginManifest = join(cursorRoot, item.plugin, ".cursor-plugin", "plugin.json");
+    if (!existsSync(pluginManifest)) {
+      errors.push(`missing Cursor plugin manifest at ${rel(pluginManifest)}`);
+    }
+  }
+}
+
 function validateGeneratedDrift() {
   const tempRoot = mkdtempSync(join(tmpdir(), "skills-codex-validate-"));
   try {
@@ -397,8 +460,13 @@ function validateGeneratedDrift() {
       cwd: tempRoot,
       stdio: ["ignore", "pipe", "pipe"],
     });
+    execFileSync(process.execPath, ["scripts/build-cursor.mjs"], {
+      cwd: tempRoot,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
 
     validateCodexMirror(readPluginSkillsFrom(tempRoot), tempRoot);
+    validateCursorMirror(readPluginSkillsFrom(tempRoot), tempRoot);
     compareTrees(join(tempRoot, ".agents", "skills"), CODEX_SKILLS_DIR, ".agents/skills");
     compareFiles(
       join(tempRoot, ".codex", "agents", "browser-verifier.toml"),
@@ -406,6 +474,18 @@ function validateGeneratedDrift() {
       ".codex/agents/browser-verifier.toml",
     );
     compareFiles(join(tempRoot, "AGENTS.md"), join(ROOT, "AGENTS.md"), "AGENTS.md");
+    compareTrees(
+      join(tempRoot, "platforms", "cursor"),
+      join(ROOT, "platforms", "cursor"),
+      "platforms/cursor",
+      "node scripts/build-cursor.mjs",
+    );
+    compareFiles(
+      join(tempRoot, ".cursor-plugin", "marketplace.json"),
+      join(ROOT, ".cursor-plugin", "marketplace.json"),
+      ".cursor-plugin/marketplace.json",
+      "node scripts/build-cursor.mjs",
+    );
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
   }
@@ -593,9 +673,9 @@ function readPluginSkillsFrom(root) {
   return pluginSkills;
 }
 
-function compareTrees(expectedDir, actualDir, label) {
+function compareTrees(expectedDir, actualDir, label, hint = "node scripts/build-codex.mjs") {
   const expectedFiles = listFiles(expectedDir).sort();
-  const actualFiles = listFiles(actualDir).sort();
+  const actualFiles = existsSync(actualDir) ? listFiles(actualDir).sort() : [];
   const all = new Set([...expectedFiles, ...actualFiles]);
 
   for (const file of all) {
@@ -604,10 +684,10 @@ function compareTrees(expectedDir, actualDir, label) {
       continue;
     }
     if (!actualFiles.includes(file)) {
-      errors.push(`${label}/${file} is missing; run node scripts/build-codex.mjs`);
+      errors.push(`${label}/${file} is missing; run ${hint}`);
       continue;
     }
-    compareFiles(join(expectedDir, file), join(actualDir, file), `${label}/${file}`);
+    compareFiles(join(expectedDir, file), join(actualDir, file), `${label}/${file}`, hint);
   }
 }
 

@@ -1,0 +1,110 @@
+# Survey leg — map the terrain when the grill hits a blind spot
+
+> Formerly the standalone `/shape:survey` (folded into elicit per ADR-110 — its designed
+> primary entrance was always elicit's gatekeeper offer; the separate door drew 1 direct fire
+> in 11 months). When the user accepts the mid-grill offer, elicit runs this leg itself,
+> then resumes the volley with the filled-in fork. Moved verbatim; machinery unchanged.
+
+## The former door's stance (now this leg's contract)
+
+
+Before you can converge a decision, you have to know what there is to decide. `survey` takes a decision you're about to make in unfamiliar terrain and **maps it** — builds the full space of axes and options that bear on it, grounds that map against the real repo, then reports the **diff** between what you already know and what the full map contains. Teaching what's in the gap is a service `survey` performs *on* that diff; it is never the deliverable on its own.
+
+## Stance
+
+- **The deliverable is the diff — never the full map, never a lecture.** Report only what's missing from the user's stated understanding; teaching happens inside that gap, never as a standalone tutorial. An ungrounded checklist any chatbot could produce isn't worth running.
+- **Two entrances only — never self-triggering.** User-summoned ("I don't have a handle on this space, survey it first") or offered by `shape-elicit` mid-grill when it detects a blind spot. Don't fire on a passing expression of doubt.
+- **Ground every axis in the real repo** — `file:line` evidence, not abstract domain knowledge. An axis that fails `frame-orthogonal`'s independence check (move it, something else moves) isn't an axis; merge or re-cut it.
+- **Report missing-axis and missing-point separately.** They route differently, so keep them apart even when both are small.
+- **Recon can be cheap; judging what belongs in the diff can't.** Repo scanning is dispatchable; deciding which axes survive and what the diff actually contains stays with the session model.
+- **Big gaps get offered, never taught in place.** `frame-analogize` for a concept transfer, `deep-research` for external knowledge (flag its cost — an order of magnitude above the sibling options — before offering). Small gaps: explain inline.
+- **Write-gated.** Show the doc's content (or diff) before writing it. Everything before that point is read-only reasoning — survey never edits source code.
+
+Full machinery — the two-layer engine, tolerant-reader landing shape, and the four-neighbor boundary detail: the "Full protocol" section below (this file was flattened from the former door's SKILL.md + its references at fold time). Read it when actually running a survey or when a boundary call is unclear.
+
+## Companion skills
+
+- **`shape-elicit`** — the consumer: survey's landed doc is elicit's next input, and elicit is the one door that *offers* survey mid-grill when it detects a blind spot.
+- **`frame-orthogonal`** — the borrowed discipline for the domain-prior axes (independence check by protocol, not by call).
+- **`frame-analogize`** — offered for a big conceptual gap that needs deliberate, stress-tested transfer.
+- **`deep-research`** — offered for a big external-knowledge gap that needs co-reading real sources.
+- **`nav-sync`** — its file headers + codebase map ground the reality-diff layer cheaply.
+
+## Communication style
+
+- Explain in the user's language with simple, direct wording.
+- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
+- Put precise technical detail after the plain explanation and only where it's needed.
+
+## Full protocol
+
+
+> The implementation layer behind the survey leg's stance (formerly `/shape:survey`'s, ADR-110). The stance section above carries the stance;
+> everything here is loaded when a survey is actually running or a boundary call is unclear. Moved
+> verbatim from the pre-ADR-109 SKILL.md body; the machinery is unchanged, only re-homed.
+
+## Why this skill exists
+
+`shape-elicit` converges a decision by drawing it out of you through a grounded grill — but that only works when the answer already lives in your head, waiting to be drawn out. When it doesn't — when you know you're missing terrain, or worse, don't even know you're missing it — grilling you produces nothing: there's nothing there to draw out, and friction against a blank spot just wastes turns. `survey` is the verb for that gap: instead of drawing an answer *out of* you, it builds the map *for* you, then hands you back exactly the part you didn't already have — so you can return to elicit (or decide directly) with a filled-in picture instead of a blind spot.
+
+## Two entrances (survey never fires itself)
+
+`survey` is **model-invoked but never self-triggering** — it only runs when one of two doors opens:
+
+1. **User-summoned**, state "I know I don't know" — you're about to decide something and can name the terrain you're shaky on: *"I need to decide X, but I don't have a handle on this space — survey it first."*
+2. **Offered by `shape-elicit`**, state "I don't know I don't know" — mid-grill, elicit detects the volley is stuck because you're missing a whole axis you never named, and *offers* `survey` as the honest way to stop (never auto-calls it — offers, not calls, same as every cross-skill hand-off in this family).
+
+Both entrances land here for the same reason: nobody spontaneously summons a skill to reveal their own blind spot (entrance 2 solves that paradox by making the detection live inside the one skill already in the room — elicit — while the mapping itself stays a separate verb, never duplicated into elicit's engine).
+
+## The engine — three steps
+
+1. **Build the full map, in two layers.**
+   - **Domain-prior axes** — the dimensions the decision space breaks into *before* looking at any one repo, borrowed from `frame-orthogonal`'s discipline **by protocol, not by call** (skills don't invoke each other): an axis only earns its place if it passes the independence check — move it, and the others must not move. A candidate that fails this (moving it drags another "axis" along) isn't an axis; it's a checklist item wearing an axis's clothes. Merge it or re-cut.
+   - **Reality-diff layer** — for each surviving axis, ground it against the actual repo / existing decisions: which modules, configs, or prior calls does this axis touch, at `file:line` resolution where possible? An axis with no grounded evidence of what it would affect is still a guess, not a map.
+2. **Compute the diff against your stated understanding.** Ask what you already believe about this space, then diff it against the full map from step 1. Report two kinds of gap **separately, never merged**:
+   - **Missing whole axis** — a dimension you didn't know existed at all.
+   - **Missing point on an axis** — you knew the axis, but not one of its live options/values.
+   These route differently (a missing axis usually needs more explaining than a missing point), so keeping them apart is part of the diff's honesty.
+3. **Fill the gaps — sized to the gap, never uniform.**
+   - **Small gap** → explain it in place: plain language, an analogy where one helps, done inline. No hand-off needed for a one-line fact.
+   - **Big gap** → don't try to teach it yourself in-line. **Offer** — never call — the verb built for that transfer: `frame-analogize` when the gap is a concept that needs deliberate, stress-tested transfer into your head; `deep-research` when the gap is external-world knowledge that needs co-reading real sources — note its cost when offering it: deep-research is a multi-agent research harness that fans out dozens of searches and verification rounds, a cost an order of magnitude above the sibling options here, so the nod to run it is an informed one, not a reflex (ADR-062). Offers are guarded and one-shot, same convention as every other offer in this family (ADR-007/015) — the user picks, or declines and keeps the diff as-is.
+
+## Grounding — recon can be cheap, judgment can't
+
+Building the reality-diff layer means scanning the repo and (sometimes) looking things up — that reconnaissance can be dispatched to a cheap-tier delegated agent per the dispatch-tiers convention (recon reports grounded in fact: `file:line` or a source URL, never impressions). **Judging which axes survive the independence check, and what actually belongs in the diff, stays with the session model** — that's the map-quality call, and it's exactly the kind of judgment dispatch tiers reserve for the strong seat.
+
+## Output
+
+Lands `blueprints/thoughts/<date>-<topic>-survey.md`, in the family's progressive-disclosure shape: a `head -12`-able title, a one-line role, and a ≤3-line TL;DR stating what was surveyed and the headline gap. The doc states explicitly, near the top, that **it is input to `shape-elicit`** — the diff this survey found is what elicit grills next, not a standalone reference.
+
+**Tolerant reader (ADR-071):** `blueprints/` is a *convention*, not a contract. If the tree doesn't exist yet, scaffold it (mirroring `shape-align`'s first-run behavior) rather than failing; if it exists in a non-standard shape, tolerate it and write into whatever shape is there; either way, self-report which tier you read/wrote from so the user can calibrate trust in the result.
+
+**Write-gated.** Show the doc's content (or a diff, if amending) before writing it. Everything before that point — the map, the diff, the fills — is read-only reasoning; survey never edits source code.
+
+## Boundary — three neighbors, one line each
+
+- **vs `nav-sync`'s map leg** — that leg renders the *repo's structure* (modules, imports, the codebase graph) so a human/agent can navigate real code. `survey` renders the *decision space* — options and axes that bear on a choice, which may or may not correspond to existing files. Structure map vs decision map.
+- **vs `deep-research`** — `deep-research` produces an external, cited research report on a topic. `survey` produces *your coverage diff* against a decision space — it may *offer* `deep-research` for a big external-knowledge gap, but its own output is never a research report; it's a map of what you do and don't know.
+- **vs `shape-elicit`** — elicit draws a decision **out of you** — it assumes the answer already lives in your head and just needs drawing out through friction. `survey` maps **what you don't have** — it assumes there's a real gap and fills it with a grounded diff, not a grill. They chain: survey fills the blind spot, then you (or elicit) converge with a complete map in hand.
+- **vs `nav-audit` Mode 2** — Mode 2 is a read-only quick-check of whether the *codebase* can support a target spec (feasibility). `survey` checks whether *your own understanding* is complete before you decide anything — a knowledge-completeness question, not a codebase-feasibility one.
+
+## Anti-patterns (refuse these)
+
+| Temptation | Instead — and the tell |
+|---|---|
+| Hand back a generic textbook checklist | Ground every axis in the real repo/decisions — an ungrounded checklist is what any chatbot produces, and isn't worth a verb. Tell: the axis list would be identical for a different project. |
+| Solve or decide for the user | Stop at a grounded diff — survey maps, it doesn't rule; the ruling stays in `shape-elicit` or the user directly. Tell: about to recommend which option the user should pick instead of mapping the terrain. |
+| Auto-fire on any uncertainty | Wait for a summons, or an offer from elicit at a detected blind spot — never self-trigger on a passing "I'm not sure." Tell: about to run a survey off an offhand expression of doubt, not an actual request. |
+| Dump the full map when only the diff matters | Report what's *missing* from the user's stated understanding — the full map is scaffolding, not the deliverable. Tell: the output restates everything the user already knew alongside the actual gap. |
+| Teach before mapping | Map first (steps 1–2), only then fill (step 3) — teaching without a diff to anchor it floats. Tell: explaining a concept before the gap that makes it relevant has been identified. |
+| Merge "missing axis" and "missing point" into one gap list | Report them separately — they route differently and carry different weight. Tell: a missing-axis finding and a missing-point finding are sitting in the same undifferentiated bullet list. |
+| Call `frame-analogize` or `deep-research` directly instead of offering | Offer it instead — skills don't invoke each other; a big gap gets a gated, one-shot offer and the user picks. Tell: about to run another skill's protocol inline rather than naming it as an option. |
+
+## Companion skills
+
+- **`shape-elicit`** — the consumer: survey's landed doc is elicit's next input, and elicit is the one door that *offers* survey mid-grill when it detects a blind spot.
+- **`frame-orthogonal`** — the borrowed discipline for step 1's domain-prior axes (independence check by protocol, not by call).
+- **`frame-analogize`** — offered for a big conceptual gap that needs deliberate, stress-tested transfer.
+- **`deep-research`** — offered for a big external-knowledge gap that needs co-reading real sources.
+- **`nav-sync`'s map leg** — the repo-structure sibling; survey borrows nothing from it but shares the boundary line above.
+- **`nav-sync`** — its file-top headers are a cheap way to ground the reality-diff layer without reading whole files.

@@ -508,9 +508,26 @@ if (process.argv.includes("--sync-global")) {
 function syncGlobal() {
   const HOME = process.env.HOME || process.env.USERPROFILE;
   if (!HOME) return;
-  const globalDir = join(HOME, ".agents", "skills");
+
+  const rootChoice = (argValue("--global-root") ?? "agents").toLowerCase();
+  if (rootChoice !== "agents" && rootChoice !== "codex") {
+    throw new Error(`--global-root must be "agents" or "codex", got ${JSON.stringify(rootChoice)}`);
+  }
+  const agentsDir = join(HOME, ".agents", "skills");
+  const codexSkillsDir = join(HOME, ".codex", "skills");
+  const globalDir = rootChoice === "codex" ? codexSkillsDir : agentsDir;
+  const otherDir = rootChoice === "codex" ? agentsDir : codexSkillsDir;
   const homeCodexDir = join(HOME, ".codex");
-  console.log(`\n→ Syncing to global directory: ${globalDir}`);
+
+  console.log(`\n→ Syncing to global directory: ${globalDir} (--global-root ${rootChoice})`);
+  if (rootChoice === "codex") {
+    console.log("  Cursor-safe mode: Codex skills live under ~/.codex/skills so they do not");
+    console.log("  collide with Cursor Plugins that also scan ~/.agents/skills.");
+    console.log('  In Cursor Settings → Rules, Skills, Subagents: turn OFF');
+    console.log('  "Include third-party Plugins, Skills, and other configs"');
+    console.log("  so Cursor does not also load ~/.codex/skills.");
+  }
+
   const profileName = argValue("--profile") ?? "all";
   const available = PLUGINS.flatMap((plugin) =>
     readdirSync(join(PLUGINS_DIR, plugin, "skills"))
@@ -522,14 +539,19 @@ function syncGlobal() {
   const receiptPath = join(globalDir, ".skills-marketplace-codex.json");
   const previousReceipt = existsSync(receiptPath)
     ? JSON.parse(readFileSync(receiptPath, "utf8"))
-    : {};
+    : readLegacyReceipt(agentsDir, codexSkillsDir);
   const runtimePlan = runtimePlanForSelection(selected);
-  preflightGlobalRuntime(
-    homeCodexDir,
-    previousReceipt.runtime ?? {},
-    runtimePlan,
-    previousReceipt.runtimeOwnership ?? {},
-  );
+  const skillsOnly = process.argv.includes("--skills-only");
+  if (!skillsOnly) {
+    preflightGlobalRuntime(
+      homeCodexDir,
+      previousReceipt.runtime ?? {},
+      runtimePlan,
+      previousReceipt.runtimeOwnership ?? {},
+    );
+  } else {
+    console.log("  --skills-only: installing skill trees only; leaving ~/.codex runtime artifacts unchanged.");
+  }
 
   mkdirSync(globalDir, { recursive: true });
   mkdirSync(join(homeCodexDir, "agents"), { recursive: true });
@@ -569,38 +591,70 @@ function syncGlobal() {
     }
   }
 
-  pruneOwnedGlobalRuntime(
-    homeCodexDir,
-    previousReceipt.runtime ?? {},
-    runtimePlan,
-    previousReceipt.runtimeOwnership ?? {},
-  );
-  const runtimeInstalled = installOwnedGlobalRuntime(homeCodexDir, runtimePlan);
-  cleanupLegacyRelayHook(
-    homeCodexDir,
-    previousReceipt.runtime ?? {},
-    previousReceipt.runtimeOwnership ?? {},
-  );
-  const runtimeOwnership = nextRuntimeOwnership(runtimePlan);
+  let runtimeInstalled = 0;
+  let runtimeOwnership = previousReceipt.runtimeOwnership ?? { files: {} };
+  let runtimeForReceipt = previousReceipt.runtime ?? { portableAgents: [], generatedAgents: [] };
+  if (!skillsOnly) {
+    pruneOwnedGlobalRuntime(
+      homeCodexDir,
+      previousReceipt.runtime ?? {},
+      runtimePlan,
+      previousReceipt.runtimeOwnership ?? {},
+    );
+    runtimeInstalled = installOwnedGlobalRuntime(homeCodexDir, runtimePlan);
+    cleanupLegacyRelayHook(
+      homeCodexDir,
+      previousReceipt.runtime ?? {},
+      previousReceipt.runtimeOwnership ?? {},
+    );
+    runtimeOwnership = nextRuntimeOwnership(runtimePlan);
+    runtimeForReceipt = runtimePlan;
+  }
 
   writeFileSync(
     receiptPath,
-    `${JSON.stringify({ profile: profileName, skills: selected, runtime: runtimePlan, runtimeOwnership }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        profile: profileName,
+        globalRoot: rootChoice,
+        skills: selected,
+        runtime: runtimeForReceipt,
+        runtimeOwnership,
+        ...(skillsOnly ? { skillsOnly: true } : {}),
+      },
+      null,
+      2,
+    )}\n`,
   );
   console.log(`✓ Synced ${syncedCount} compiled skills with Codex profile "${profileName}".`);
   console.log("✓ Unprefixed Claude-source skills were not copied; Codex installs only the compiled names.");
-  console.log(`✓ Synced ${runtimeInstalled} Codex runtime artifact(s) into ${join(HOME, ".codex")}.`);
+  if (skillsOnly) {
+    console.log("✓ Skipped Codex runtime sync (--skills-only).");
+  } else {
+    console.log(`✓ Synced ${runtimeInstalled} Codex runtime artifact(s) into ${join(HOME, ".codex")}.`);
+  }
+
+  // Always keep a single active global copy: prune this marketplace from the other root.
+  let removedOther = 0;
+  mkdirSync(otherDir, { recursive: true });
+  for (const flat of available) {
+    const otherSkill = join(otherDir, flat);
+    if (!isGeneratedMarketplaceSkill(join(otherSkill, "SKILL.md"))) continue;
+    rmSync(otherSkill, { recursive: true });
+    removedOther++;
+  }
+  if (removedOther) {
+    console.log(
+      `✓ Removed ${removedOther} generated marketplace skills from ${otherDir} (single active global root).`,
+    );
+  }
+  // Drop a stale receipt on the unused root so a later switch does not resurrect old lists.
+  const otherReceipt = join(otherDir, ".skills-marketplace-codex.json");
+  if (existsSync(otherReceipt) && otherDir !== globalDir) rmSync(otherReceipt);
 
   if (process.argv.includes("--dedupe-global-roots")) {
-    const legacyRoot = join(HOME, ".codex", "skills");
-    let removed = 0;
-    for (const flat of available) {
-      const legacyDir = join(legacyRoot, flat);
-      if (!isGeneratedMarketplaceSkill(join(legacyDir, "SKILL.md"))) continue;
-      rmSync(legacyDir, { recursive: true });
-      removed++;
-    }
-    console.log(`✓ Removed ${removed} generated duplicate marketplace skills from ~/.codex/skills.`);
+    // Flag kept for CLI compatibility: the other-root prune above already enforces one copy.
+    console.log("✓ --dedupe-global-roots: other global root already pruned.");
   }
 
   const copies = findInstalledSkillCopies(HOME, selected);
@@ -608,8 +662,22 @@ function syncGlobal() {
   if (duplicates.length) {
     console.warn("\n⚠ Duplicate Codex skill copies remain across ~/.agents/skills and ~/.codex/skills:");
     for (const [name, paths] of duplicates) console.warn(`  ${name}: ${paths.join(" · ")}`);
-    console.warn("  Re-run with --dedupe-global-roots to remove generated marketplace duplicates.");
+    console.warn("  Re-run with --dedupe-global-roots (or --global-root) to remove generated marketplace duplicates.");
   }
+}
+
+/** Prefer the receipt next to the active root; fall back to the other root when switching. */
+function readLegacyReceipt(agentsDir, codexSkillsDir) {
+  for (const dir of [agentsDir, codexSkillsDir]) {
+    const path = join(dir, ".skills-marketplace-codex.json");
+    if (!existsSync(path)) continue;
+    try {
+      return JSON.parse(readFileSync(path, "utf8"));
+    } catch {
+      /* ignore */
+    }
+  }
+  return {};
 }
 
 function argValue(flag) {
