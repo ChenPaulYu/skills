@@ -48,13 +48,27 @@ more ground, and each is one message, not a stage:
    cost of the learner no longer deriving it.
 4. **Explain directly** — plainly, without ceremony about the misses.
 
-Then, **regardless of which level resolved it, verify the repair took**: re-ask the same
-distinction in a case not yet discussed (the transfer probe in the per-level loop, step 7). A
-repair that ends at "I see" was heard, not held.
-
 **Hint depth is a flow signal.** Reaching level 3 on consecutive checks means the chunks are too
 big — shrink them (the same dial as two-instant-corrects meaning they're too small). Track it in
 the head, not in a ledger.
+
+## When they say they don't understand
+
+This is **not** a wrong answer. There is no model on the repair ladder yet. Adding a second
+picture — a new metaphor, a second code path, a ranking formula, another store — is how the last
+picture died (mempalace 2026-08-17: floor/gate/MCP/boost after "永遠先問 drawers").
+
+1. **Drop the last distinction you added.** Keep only the previous sentence they almost had.
+2. **Re-answer in one sentence**, using only interface verbs already used in this thread
+   (`mine`, `search`, a flag they typed). No new name in the subject slot.
+3. **Wait for their narration.** Do not put the dropped distinction back until they ask.
+
+Banned in the same turn: a new analogy, CLI-vs-MCP, a second collection, "technically also".
+"太長" is the same signal as 不懂 — shrink, don't replace.
+
+Then, **regardless of which path resolved it** (subtract, or the repair ladder), **verify the
+repair took**: re-ask the same distinction in a case not yet discussed (the transfer probe in the
+per-level loop, step 7). A repair that ends at "I see" was heard, not held.
 
 ## Banned check phrasings
 
@@ -67,4 +81,5 @@ case* · *what's still fuzzy?*
 - **`fathom-quiz`** — the selector's narration-first rule is quiz's own stance; the structured
   rows serve as its diagnostic fallbacks, and the repair ladder applies when a probe exposes decay.
 - **`fathom-dive`** — a dive question that presumes something false is met with the Assumption or
-  Evidence probe before the answer, not after it.
+  Evidence probe before the answer, not after it. 「不懂」 on a dive subtracts; it does not open a
+  second picture.

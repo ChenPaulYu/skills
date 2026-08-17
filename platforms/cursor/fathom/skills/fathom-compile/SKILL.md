@@ -73,6 +73,14 @@ information leakage.
    authored for a generic reader. Inferring the learner from side channels is **not** a
    substitute, and a calibration that arrives *after* a compile makes that compile a re-compile
    candidate: record what is now known to be mis-aimed in `understanding.md`.
+   **Claims must not fake a conversation.** 「常見誤解」 and any chapter that reads as testing
+   *this* learner require a Corrected-table row. A generic-reader compile uses 注意 / 文件不符,
+   and its claims `chapterTitle` / `intro` must say they test public docs — never that they
+   tested someone who was not asked. Horizon claims-nav is 「主張」, not 「先驗校準」
+   (mempalace 2026-08-17: the old hardcoded label made a generic compile look like a quiz).
+   **Names live where they click.** First-use glosses hang on interface verbs (`mine`, `search`,
+   `--palace`) in the chapters a learner opens (boundary you-column, playback facts) — not only
+   in a long header lead. A gloss they have to hunt for is a gloss they will not take.
 2. **Mechanical layer first.** `node scripts/scan-repo.mjs <sourceRoot> <rootDir> [--lang=python|js]`
    produces magnitudes and import edges. The model never authors these numbers.
 3. **Two-pass loop** (tiers per the household dispatch rules — creation is judgment-dense,
@@ -121,7 +129,7 @@ information leakage.
 ## Stance
 
 - **Purely semantic fixtures; shells own layout.** No coordinates in the data, ever — structure in,
-  geometry out. The five hard rules every session must obey before writing a fixture live in
+  geometry out. The hard rules every session must obey before writing a fixture live in
   [`compile-loop.md`](references/compile-loop.md); the per-artifact authoring law lives in that
   artifact's protocol.
 - **Revision allowed, identity never.** A recompile may rewrite prose a deeper study corrected; it
@@ -132,8 +140,13 @@ information leakage.
   until it can express anything. Three distinct studies promote a shape; fewer is an idiosyncrasy.
   Full procedure: [`references/form-growth.md`](references/form-growth.md).
 - **Learner-facing strings 繁體中文（台灣用語）**; identifiers, paths, code stay English.
+- **No fake calibration.** Claims that look like they quiz this person require a Corrected-table
+  row. Product-native metaphors that are not interface verbs stay off the subject of a sentence
+  (same gate as `fathom-guide` core rule 5).
 
 ## Communication style
 
 - Lead each reply with one plain sentence in the user's language; metaphor when it clarifies.
 - Precise technical detail after, only where needed.
+- If compiling without a learner model, say so in the first sentence of the report — and again
+  in the fixture's claims intro — so the page cannot be mistaken for a quiz of someone present.

@@ -32,12 +32,14 @@ sets the depth.
 
 1. **Fix the thread** — restate the topic in one line so both of you are chasing the same thing.
 2. **Answer, grounded** — smallest useful answer first, then the evidence anchor. Gloss any
-   non-common term at first contact; name a thing by what the learner does with it, never by its
-   architectural category.
+   non-common term at first contact; name a thing by what the learner **types or calls**, never
+   by its architectural category, and never let a product metaphor that isn't in those verbs be
+   the subject of the sentence (inherited from `/fathom:guide` core rule 5).
 3. **Watch what their questions reveal.** A question is a window into the model behind it — a
    question that presumes something false is a finding, and worth correcting before answering:
    meet it with the Assumption or Evidence probe (from `/fathom:guide`'s questioning reference)
-   before the answer, not after it.
+   before the answer, not after it. If they say they don't understand, **subtract** (same
+   reference, § When they say they don't understand) — do not add a second picture.
 4. **Repeat** for as long as they keep asking.
 
 ## Residue — a dive is not free of consequence
@@ -66,5 +68,5 @@ On exit, three writes and one restore:
 ## Communication style
 
 Explain in the user's language with simple, direct wording. Lead every answer with one plain
-sentence; put precision after, only where needed; keep code, identifiers, and paths in their
-original form.
+sentence; **one takeaway per turn** until they say it back. Put precision after, only where
+needed; keep code, identifiers, and paths in their original form.

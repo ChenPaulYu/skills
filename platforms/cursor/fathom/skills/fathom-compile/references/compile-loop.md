@@ -19,7 +19,7 @@ Measured basis (2026-08-14, four studies): an unverified contribution shipped **
 (including a false causal mechanism a learner would have been taught); a brief-hardened verified
 compile shipped **0**. The loop is not ceremony.
 
-## Five hard rules (each one exists because it caught a real defect)
+## Hard rules (each one exists because it caught a real defect)
 
 1. **Gate before write.** `validate-fixture.mjs` passes before the file lands — any
    session, any writer, no exceptions.
@@ -31,6 +31,13 @@ compile shipped **0**. The loop is not ceremony.
    author's optimism.
 5. **常見誤解 framing is reserved** for entries traceable to the learner model's Corrected
    table; teaching notes without that provenance use 注意 framing.
+6. **No fake calibration.** A claims chapter that reads as testing *this* learner is a defect
+   unless `understanding.md` has a Corrected row for that claim. Generic-reader compiles say so
+   in `meta.generatedBy` *and* in the claims intro. Horizon claims-nav is 「主張」; chrome that
+   says 「先驗校準」 is a defect — it licenses the page to look like someone was asked.
+7. **Interface verbs carry first-use names.** Gloss `mine` / `search` / a flag in the chapters
+   the learner opens; do not park the only definition in `header.lead`. A product metaphor that
+   is not those verbs is not the subject of a sentence (same gate as `fathom-guide` core rule 5).
 
 ## Language: plain words, no borrowed metaphors
 
@@ -46,6 +53,7 @@ the reader translate before they can even start understanding.
 | 「兩種方言」for two ways of writing the same pattern | 「兩種寫法」 | dialect is a linguistics metaphor; the reader must map it back before it means anything |
 | 「方言」for compile / infer / finetune | 「三種跑法」(field: `scenarios`) | those aren't even variants of one language — one bad word stretched over two different concepts, which is how a schema field starts lying |
 | category names (「這是一個 facade」) | what you do with it (「正門：應用程式呼叫的那一行」) | fathom core rule 5 — category words explain a shape to someone who already owns the taxonomy |
+| product furniture as subject (「closet 是 index」) | hang it on a command (「`mine` 寫短卡；`search` 拿來改原文順序」) | a name absent from the CLI is an empty slot; the learner fills it with the nearest word they own |
 
 **Schema field names are upstream of prose.** An authoring agent given a field called `dialects`
 will write 方言; renaming the field to `scenarios` fixes every future compile at the source. When

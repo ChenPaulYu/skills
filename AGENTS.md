@@ -285,7 +285,7 @@ with *when someone wants it compiled* (any time); those doors keep a one-line of
 `compile` and own no machinery.
 
 Everything the compiler needs ships with that door (first consumer owns): `skills/compile/` —
-`references/` (compile-loop: two-pass loop + five hard rules · birth-gates: what may exist at
+`references/` (compile-loop: two-pass loop + hard rules · birth-gates: what may exist at
 which gate · one protocol+brief pair per artifact), `scripts/` (scanner, structural gate),
 `assets/` (schemas + shells; deployed copies are instances, assets are canonical). Only **atlas**
 is graduated today; horizon/tides stay lab-side until their fixture-ization pilots pass in etudes.

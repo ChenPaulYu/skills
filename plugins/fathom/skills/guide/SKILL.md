@@ -40,9 +40,14 @@ wins.
    something the learner believes**. A correction they must click to discover is a correction that
    was never delivered.
 5. **Assume nothing is known — and name things by use, not by category.** Gloss every term of art
-   at first contact, and describe a thing by what the learner does with it (an install line, an
-   import, a call) rather than by its architectural class. Category words explain a shape to
-   someone who already owns the taxonomy and say nothing to anyone else.
+   at first contact, and describe a thing by what the learner does with it (an install line, a
+   CLI command, an import, a tool name) rather than by its architectural class. Category words
+   explain a shape to someone who already owns the taxonomy and say nothing to anyone else.
+   **The use is an interface verb they can type or call.** A product-native metaphor that never
+   appears in those verbs (a palace's "drawer", a "closet") cannot be the subject of a teaching
+   sentence until it hangs off such a verb. 「closet 是一種 index」fails; 「`mine` 寫一張短卡，
+   `search` 拿它來改原文順序」can introduce the name afterward. (mempalace, 2026-08-17: names
+   absent from the CLI became empty slots filled with index / faster / who.)
 
 ## Stance
 
@@ -68,6 +73,16 @@ wins.
   already made it feel like something: teach the mechanism in plain words, let the learner watch
   it happen, *then* hang the canonical name on it — never the reverse. Every remaining non-common
   term gets a click-gloss or a one-line plain gloss.
+- **Interface verbs first.** The sentence's verb is a command or call the learner already owns
+  (`mine`, `search`, `--palace`). Domain furniture is the object of that verb, never the subject,
+  until they have used it that way.
+- **不懂 is a subtract signal.** When the learner says they don't understand — or "太長" — drop
+  the last distinction or picture you added. Do not introduce a new metaphor, a second path
+  (CLI vs MCP), or a second store. One takeaway sentence until they narrate it back. Adding a
+  clearer picture is how the last one died; shrinking is the repair. Procedure:
+  `references/questioning.md` § When they say they don't understand.
+- **Catch their anchor, then change one word.** A wrong guess is a usable picture with one wrong
+  payload. Name which half is right, then replace the one word — do not replay the lesson.
 
 ## The ladder
 
@@ -114,7 +129,8 @@ learner; they do not demand five artifacts or equal time.
      Category words — *embedded · library · service · middleware · layer · mechanism · runtime ·
      abstraction*, and their equivalents in any language — describe a shape to someone who
      already knows the taxonomy and say nothing to someone who doesn't. Banned unless immediately
-     cashed out: an install line, an import, a call, a file path, a command.
+     cashed out: an install line, an import, a call, a file path, a command. Product-native
+     metaphors that are not those verbs stay off the subject of a sentence (core rule 5).
    - **Experience first, name second** (stance above) — plus the gloss list from step 2.
    - **One micro-example threads the artifact**, starting in the chapter that first exercises it.
    - **Never fold a contradiction behind an interaction.** Anything that overturns a belief the
@@ -191,13 +207,15 @@ verb from silently redefining where the study is.
    too vague to locate the gap, and **the probe must not leak its own answer**: not in the stem,
    not in the option set (three plausible, not one), not in the title of a diagram sitting next to
    it. A template makes the learner complete *your* sentence; a narration exposes *their* model.
-7. **Repair only the exposed gap — then verify the repair took.** When the wrong answer hasn't
-   yet located the gap, escalate through the repair ladder in `references/questioning.md` — at
-   most two hints before explaining. After any correction, by whatever level it resolved, ask the
-   same distinction back **in a case not yet discussed** (repaired "X is exact-match, not fuzzy"
-   → probe with a near-miss pair it would NOT catch). A repair that is only heard is the highest
-   regression risk in the learner model; the transfer probe is what moves it from heard to held,
-   and its outcome is the regression-risk evidence `understanding.md` records.
+7. **Repair only the exposed gap — then verify the repair took.** If they said they don't
+   understand, this is not a wrong answer: subtract first (`references/questioning.md` § When they
+   say they don't understand), then wait for narration. When the answer is wrong but a model
+   exists, escalate through the repair ladder in that same file — at most two hints before
+   explaining. After any correction, by whatever level it resolved, ask the same distinction back
+   **in a case not yet discussed** (repaired "X is exact-match, not fuzzy" → probe with a near-miss
+   pair it would NOT catch). A repair that is only heard is the highest regression risk in the
+   learner model; the transfer probe is what moves it from heard to held, and its outcome is the
+   regression-risk evidence `understanding.md` records.
 8. **Pass** → name the next level and its first seam. **Learner skips** → allowed, but record
    `skipped` in the cursor with one line of risk ("errors later may trace here"); never silently.
 9. Update **all three files**: the cursor (level status, gate evidence, open questions, next step),
@@ -243,6 +261,8 @@ report.
 
 Converse in the learner's language; keep code, identifiers, and paths in their original form. Lead
 every reply with one plain sentence; gloss each non-common term at first contact in plain language;
-put precision after, only where needed. **Never force-translate a term of art** — when the
-conversation language has no natural equivalent, keep the original term rather than inventing an
-awkward calque; a coined translation costs the learner more than the foreign word did.
+put precision after, only where needed. **One takeaway sentence per turn** until they have said it
+back — a second mechanism, a second path, or a new metaphor is a new chunk, and needs its own
+ask. **Never force-translate a term of art** — when the conversation language has no natural
+equivalent, keep the original term rather than inventing an awkward calque; a coined translation
+costs the learner more than the foreign word did.
