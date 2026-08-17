@@ -753,7 +753,15 @@ function validateRuntimeOwnershipConflictSmokes(root) {
       encoding: "utf8",
       env: firstEnv,
     });
-    if (first.status === 0) errors.push("runtime ownership smoke expected first-install same-name conflict to fail");
+    // Contract: a user-owned runtime file is SKIPPED, not fatal. The install
+    // used to abort here, which was right about the file and wrong about
+    // everything else — one hand-tuned agent.toml took the whole skill mirror
+    // down with it, and from a `git pull` hook that means skills stop updating
+    // forever. So: exit 0, the user's bytes untouched, a receipt that records
+    // the skip so the warning fires once rather than every pull.
+    if (first.status !== 0) {
+      errors.push(`runtime ownership smoke expected first-install same-name conflict to be skipped, not fatal: ${summarizeSpawnFailure(first)}`);
+    }
     if (readFileSync(join(firstHome, ".codex", "agents", "executor.toml"), "utf8") !== userAgent) {
       errors.push("runtime ownership smoke overwrote first-install user executor.toml");
     }
@@ -763,8 +771,35 @@ function validateRuntimeOwnershipConflictSmokes(root) {
     if (readFileSync(join(firstHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
       errors.push("runtime ownership smoke overwrote first-install user hooks.json entry");
     }
-    if (existsSync(join(firstHome, ".agents", "skills", ".skills-marketplace-codex.json"))) {
-      errors.push("runtime ownership smoke wrote a partial receipt before reporting first-install conflict");
+    const firstReceiptPath = join(firstHome, ".agents", "skills", ".skills-marketplace-codex.json");
+    if (!existsSync(firstReceiptPath)) {
+      errors.push("runtime ownership smoke wrote no receipt despite a successful skip-and-continue install");
+    } else {
+      const firstReceipt = JSON.parse(readFileSync(firstReceiptPath, "utf8"));
+      if (!firstReceipt.runtimePreserved?.["agents/executor.toml"]) {
+        errors.push("runtime ownership smoke did not record the skipped executor.toml under runtimePreserved");
+      }
+      if (firstReceipt.runtimeOwnership?.files?.["agents/executor.toml"]) {
+        errors.push("runtime ownership smoke claimed ownership of bytes it never wrote (executor.toml)");
+      }
+      // The skip must be surgical: the other runtime artifacts still install.
+      if (!existsSync(join(firstHome, ".codex", "agents", "explorer.toml"))) {
+        errors.push("runtime ownership smoke let one skipped file block the rest of the runtime install");
+      }
+    }
+    // Second run, nothing changed: the warning is acknowledged, so it stays quiet.
+    const firstAgain = spawnSync(process.execPath, ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"], {
+      cwd: root,
+      encoding: "utf8",
+      env: firstEnv,
+    });
+    if (firstAgain.status !== 0) {
+      errors.push(`runtime ownership smoke re-run failed: ${summarizeSpawnFailure(firstAgain)}`);
+    } else if (/was edited by hand/.test(`${firstAgain.stdout}${firstAgain.stderr}`)) {
+      errors.push("runtime ownership smoke re-warned about an already-acknowledged hand edit");
+    }
+    if (readFileSync(join(firstHome, ".codex", "agents", "executor.toml"), "utf8") !== userAgent) {
+      errors.push("runtime ownership smoke overwrote user executor.toml on the second run");
     }
 
     const editedEnv = { ...process.env, HOME: editedHome, USERPROFILE: editedHome };
@@ -795,18 +830,32 @@ function validateRuntimeOwnershipConflictSmokes(root) {
       ["scripts/build-codex.mjs", "--sync-global", "--profile", "project-only"],
       { cwd: root, encoding: "utf8", env: editedEnv },
     );
-    if (prune.status === 0) errors.push("runtime ownership smoke expected modified receipt-owned prune to fail");
-    if (readFileSync(explorerPath, "utf8") !== editedExplorer) {
-      errors.push("runtime ownership smoke changed a user-edited explorer.toml during failed prune");
+    // The dangerous half of skip-and-continue: this file LEFT the release, so
+    // the prune wants it gone — and we did once write it, so the ownership key
+    // is there. But the bytes are the user's now. Having installed a path is
+    // not a licence to delete it; only bytes still identical to what we wrote
+    // may be removed. Losing this assertion loses a hand-edited file silently.
+    if (prune.status !== 0) {
+      errors.push(`runtime ownership smoke expected the prune to skip the user-edited file, not fail: ${summarizeSpawnFailure(prune)}`);
     }
-    if (readFileSync(receiptPath, "utf8") !== receiptBefore) {
-      errors.push("runtime ownership smoke changed the receipt during failed prune");
+    if (!existsSync(explorerPath)) {
+      errors.push("runtime ownership smoke DELETED a user-edited explorer.toml during prune");
+    } else if (readFileSync(explorerPath, "utf8") !== editedExplorer) {
+      errors.push("runtime ownership smoke changed a user-edited explorer.toml during prune");
+    }
+    if (readFileSync(receiptPath, "utf8") === receiptBefore) {
+      errors.push("runtime ownership smoke left the receipt unchanged after a successful narrowing install");
+    } else {
+      const prunedReceipt = JSON.parse(readFileSync(receiptPath, "utf8"));
+      if (!prunedReceipt.runtimePreserved?.["agents/explorer.toml"]) {
+        errors.push("runtime ownership smoke did not record the preserved explorer.toml in the receipt");
+      }
     }
     if (readFileSync(join(editedHome, ".codex", "hooks", "custom-session-start.mjs"), "utf8") !== userHookScript) {
-      errors.push("runtime ownership smoke changed a user hook script during failed prune");
+      errors.push("runtime ownership smoke changed a user hook script during prune");
     }
     if (readFileSync(join(editedHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
-      errors.push("runtime ownership smoke changed user hooks.json during failed prune");
+      errors.push("runtime ownership smoke changed user hooks.json during prune");
     }
   } finally {
     rmSync(firstHome, { recursive: true, force: true });

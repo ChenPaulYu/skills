@@ -1,0 +1,16 @@
+#!/bin/sh
+# post-merge — you pulled someone else's change (or your own from another
+# machine); bring this machine's installed copies in line with it.
+#
+# This is the hook that makes `git pull` the whole update ritual: no
+# `claude plugin update`, no `node scripts/build-codex.mjs --sync-global`, no
+# remembering. Fires after a successful `git pull` / `git merge`, including a
+# fast-forward. Its sibling post-rewrite covers `git pull --rebase`, which
+# does NOT fire post-merge.
+#
+# The what and the why live in scripts/sync-installed.sh (single owner).
+#
+# Enable once per clone:   git config core.hooksPath scripts/hooks
+
+sh "$(dirname "$0")/../sync-installed.sh" --quiet || true
+exit 0

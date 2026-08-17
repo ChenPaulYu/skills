@@ -361,11 +361,36 @@ function previousRuntimeFilePaths(previousPlan) {
   ];
 }
 
-function preflightGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership = {}) {
-  const conflicts = [];
+/**
+ * Decide which ~/.codex runtime files this install may touch.
+ *
+ * A file whose bytes are neither what we installed nor what the repo ships was
+ * edited by the person at the keyboard — most often to pin a model tier. It is
+ * theirs; we do not write over it. This used to `throw`, which contradicted its
+ * own message ("preserving it unchanged") and took the whole skill mirror down
+ * with it — fatal once this runs from a `git pull` hook, where one hand-tuned
+ * agent file would block every skill update forever. Now it does what it says:
+ * skip that file, keep everything else moving.
+ *
+ * Re-warning on every pull would be its own kind of broken, so an acknowledged
+ * hand-edit is recorded in the receipt (`runtimePreserved`) and stays silent
+ * until its bytes change again.
+ *
+ * Returns { preserved: Set<rel>, acknowledged: {rel: hash}, warnings: string[] }.
+ */
+function preflightGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership = {}, previouslyPreserved = {}) {
+  const preserved = new Set();
+  const acknowledged = {};
+  const warnings = [];
   const ownedFiles = ownership.files || {};
   const nextSpecs = runtimeFileSpecs(homeCodexDir, nextPlan);
   const nextPaths = new Set(nextSpecs.map((spec) => spec.rel));
+
+  const note = (rel, hash, message) => {
+    preserved.add(rel);
+    acknowledged[rel] = hash;
+    if (previouslyPreserved[rel] !== hash) warnings.push(message);
+  };
 
   for (const spec of nextSpecs) {
     if (!existsSync(spec.dest)) continue;
@@ -373,7 +398,7 @@ function preflightGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership 
     const expected = ownedFiles[spec.rel];
     const source = fileHash(spec.source);
     if (expected ? current !== expected : current !== source) {
-      conflicts.push(`Codex runtime ownership conflict: ~/.codex/${spec.rel} is not the receipt-owned version; preserving it unchanged`);
+      note(spec.rel, current, `⚠ ~/.codex/${spec.rel} was edited by hand — preserving it unchanged (this install will not update it)`);
     }
   }
 
@@ -381,35 +406,51 @@ function preflightGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership 
     if (nextPaths.has(rel) || !ownedFiles[rel]) continue;
     const dest = join(homeCodexDir, rel);
     if (existsSync(dest) && fileHash(dest) !== ownedFiles[rel]) {
-      conflicts.push(`Codex runtime ownership conflict: ~/.codex/${rel} was modified after install; preserving it unchanged`);
+      note(rel, fileHash(dest), `⚠ ~/.codex/${rel} left this release but was edited by hand — preserving it unchanged (not removed)`);
     }
   }
 
-  if (conflicts.length) throw new Error(conflicts.join("\n"));
+  return { preserved, acknowledged, warnings };
 }
 
-function nextRuntimeOwnership(runtimePlan) {
+function nextRuntimeOwnership(runtimePlan, preserved = new Set()) {
   const files = {};
-  for (const spec of runtimeFileSpecs("", runtimePlan)) files[spec.rel] = fileHash(spec.source);
+  for (const spec of runtimeFileSpecs("", runtimePlan)) {
+    // A preserved file is the user's, not ours — claiming ownership of bytes we
+    // never wrote is how a later run would silently clobber their edit.
+    if (preserved.has(spec.rel)) continue;
+    files[spec.rel] = fileHash(spec.source);
+  }
   return { files };
 }
 
-function pruneOwnedGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership = {}) {
+function pruneOwnedGlobalRuntime(homeCodexDir, previousPlan, nextPlan, ownership = {}, preserved = new Set()) {
   const nextPortable = new Set(nextPlan.portableAgents || []);
   const nextGenerated = new Set(nextPlan.generatedAgents || []);
   const ownedFiles = ownership.files || {};
 
+  // Remove only bytes we ourselves wrote and that are still byte-identical to
+  // what we wrote. Having owned a path once is not a licence to delete it: the
+  // user may have edited it since, and "we installed this" is not "this is
+  // still ours". Deleting on the ownership KEY alone destroyed a hand-edited
+  // agent file the moment the conflict stopped being fatal.
+  const removeIfStillOurs = (rel) => {
+    if (preserved.has(rel)) return;
+    const owned = ownedFiles[rel];
+    if (!owned) return;
+    const stale = join(homeCodexDir, rel);
+    if (!existsSync(stale) || fileHash(stale) !== owned) return;
+    rmSync(stale, { force: true });
+  };
+
   for (const agent of previousPlan.portableAgents || []) {
     if (nextPortable.has(agent)) continue;
-    const stale = join(homeCodexDir, "agents", agent);
-    if (ownedFiles[`agents/${agent}`] && existsSync(stale)) rmSync(stale, { force: true });
+    removeIfStillOurs(`agents/${agent}`);
   }
   for (const agent of previousPlan.generatedAgents || []) {
     if (nextGenerated.has(agent)) continue;
-    const stale = join(homeCodexDir, "agents", agent);
-    if (ownedFiles[`agents/${agent}`] && existsSync(stale)) rmSync(stale, { force: true });
+    removeIfStillOurs(`agents/${agent}`);
   }
-
 }
 
 function cleanupLegacyRelayHook(homeCodexDir, previousPlan, ownership = {}) {
@@ -457,15 +498,17 @@ function cleanupLegacyRelayHook(homeCodexDir, previousPlan, ownership = {}) {
   else writeFileSync(configPath, `${JSON.stringify(nextConfig, null, 2)}\n`);
 }
 
-function installOwnedGlobalRuntime(homeCodexDir, runtimePlan) {
+function installOwnedGlobalRuntime(homeCodexDir, runtimePlan, preserved = new Set()) {
   let installed = 0;
   const homeAgentsDir = join(homeCodexDir, "agents");
 
   for (const file of runtimePlan.portableAgents) {
+    if (preserved.has(`agents/${file}`)) continue;
     copyFileEnsuringParent(join(PORTABLE_CODEX_AGENTS_SOURCE_DIR, file), join(homeAgentsDir, file));
     installed++;
   }
   for (const file of runtimePlan.generatedAgents) {
+    if (preserved.has(`agents/${file}`)) continue;
     copyFileEnsuringParent(join(CODEX_AGENTS_DIR, file), join(homeAgentsDir, file));
     installed++;
   }
@@ -542,13 +585,20 @@ function syncGlobal() {
     : readLegacyReceipt(agentsDir, codexSkillsDir);
   const runtimePlan = runtimePlanForSelection(selected);
   const skillsOnly = process.argv.includes("--skills-only");
+  let preserved = new Set();
+  // --skills-only never looks at the runtime, so it must carry the previous
+  // acknowledgements forward verbatim; dropping them would re-warn about every
+  // hand-edit the next time a full sync runs.
+  let acknowledged = previousReceipt.runtimePreserved ?? {};
+  let warnings = [];
   if (!skillsOnly) {
-    preflightGlobalRuntime(
+    ({ preserved, acknowledged, warnings } = preflightGlobalRuntime(
       homeCodexDir,
       previousReceipt.runtime ?? {},
       runtimePlan,
       previousReceipt.runtimeOwnership ?? {},
-    );
+      previousReceipt.runtimePreserved ?? {},
+    ));
   } else {
     console.log("  --skills-only: installing skill trees only; leaving ~/.codex runtime artifacts unchanged.");
   }
@@ -600,14 +650,15 @@ function syncGlobal() {
       previousReceipt.runtime ?? {},
       runtimePlan,
       previousReceipt.runtimeOwnership ?? {},
+      preserved,
     );
-    runtimeInstalled = installOwnedGlobalRuntime(homeCodexDir, runtimePlan);
+    runtimeInstalled = installOwnedGlobalRuntime(homeCodexDir, runtimePlan, preserved);
     cleanupLegacyRelayHook(
       homeCodexDir,
       previousReceipt.runtime ?? {},
       previousReceipt.runtimeOwnership ?? {},
     );
-    runtimeOwnership = nextRuntimeOwnership(runtimePlan);
+    runtimeOwnership = nextRuntimeOwnership(runtimePlan, preserved);
     runtimeForReceipt = runtimePlan;
   }
 
@@ -620,6 +671,7 @@ function syncGlobal() {
         skills: selected,
         runtime: runtimeForReceipt,
         runtimeOwnership,
+        runtimePreserved: acknowledged,
         ...(skillsOnly ? { skillsOnly: true } : {}),
       },
       null,
@@ -632,6 +684,12 @@ function syncGlobal() {
     console.log("✓ Skipped Codex runtime sync (--skills-only).");
   } else {
     console.log(`✓ Synced ${runtimeInstalled} Codex runtime artifact(s) into ${join(HOME, ".codex")}.`);
+  }
+  // stderr, not stdout: a quiet hook swallows the routine chatter, and a
+  // hand-edit the install refused to touch is the one thing worth interrupting for.
+  for (const warning of warnings) console.warn(warning);
+  if (preserved.size && !warnings.length) {
+    console.log(`· ${preserved.size} hand-edited runtime file(s) preserved (already acknowledged).`);
   }
 
   // Always keep a single active global copy: prune this marketplace from the other root.

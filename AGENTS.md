@@ -101,13 +101,32 @@ node scripts/validate-codex-skills.mjs   # the single enforcement point for gate
 
 It must print `... ok`. It re-derives every generated artifact in a temp copy and compares — so it catches a missed regen **even when you edited a different plugin**.
 
-**Automate it — enable the pre-commit hook once per clone:**
+**Automate it — enable the hooks once per clone:**
 
 ```bash
-git config core.hooksPath scripts/hooks   # one-time; runs the validator before every commit
+git config core.hooksPath scripts/hooks   # one-time, per machine; wires up every hook below
 ```
 
-The hook (`scripts/hooks/pre-commit`) blocks a commit whose generated artifacts are out of sync and tells you which generator to run. Bypass deliberately with `git commit --no-verify`. This is the backstop for the failure that motivated these gates — a commit once shipped a stale Codex mirror because the validator wasn't run.
+`scripts/hooks/pre-commit` blocks a commit whose generated artifacts are out of sync and tells you which generator to run. Bypass deliberately with `git commit --no-verify`. This is the backstop for the failure that motivated these gates — a commit once shipped a stale Codex mirror because the validator wasn't run.
+
+**The same switch also makes `git pull` the whole update ritual** — see *Installed copies* below.
+
+### 0. Installed copies follow the repo automatically — `git pull` is the ritual
+
+The repo is the source of truth; every tool that runs these skills reads a **copy**, and each copy rots in its own way:
+
+| Runtime | Reads | Rots because |
+|---|---|---|
+| Claude Code | `~/.claude/plugins/cache/skills/<plugin>/<version>/` | the snapshot is **version-pinned** — new content never arrives, and a *retired* plugin stays loadable from its old pin |
+| Codex · Cursor · opencode | `~/.agents/skills/<plugin>-<skill>/` | a plain copy, only as fresh as the last generator run |
+
+Cursor needs no second copy: `cursor-agent` scans `~/.claude/skills` · `~/.codex/skills` · `~/.agents/skills` · `~/.cursor/skills`, so the one directory Codex already uses serves it too. **One skill, one place on disk.**
+
+[`scripts/sync-installed.sh`](scripts/sync-installed.sh) is the single owner of "bring the copies back in line" — it refreshes the plugin cache (installing what's new, uninstalling what left the repo, dropping superseded pins) and regenerates the shared mirror. The hooks are thin callers that only decide *when*: **post-commit** (you authored the change) and **post-merge / post-rewrite** (you pulled it, merge or rebase). Nothing has to be remembered.
+
+Why hooks rather than a documented command: the manual rule was written 2026-07-17 and had already failed by 2026-08-12 — every cache stale again, one by two major versions, two retired skills still loadable. **A step that must be remembered is a step that will be skipped.** Full account: [`docs/observations/2026-08-12-skill-copies-outlive-their-source.md`](docs/observations/2026-08-12-skill-copies-outlive-their-source.md).
+
+A `~/.codex/agents/*.toml` you hand-edited (a model-tier pin, say) is **yours**: the installer skips it, says so once, and never mentions it again unless its bytes change. Run `sh scripts/sync-installed.sh` by hand any time to see the full report.
 
 ### 1. Plugin version + manifests are single-owner
 
@@ -194,8 +213,9 @@ A second check, `validateSiteMapVersions`, closes one narrow slice of the *conte
   0.7.0 vs 0.10.0 — so a same-day 32-file fix reached zero sessions. Full
   account: [`docs/observations/2026-07-17-plugin-cache-pins-version-stale-content.md`](docs/observations/2026-07-17-plugin-cache-pins-version-stale-content.md).)
   After landing an edit: bump `plugins/<name>/.claude-plugin/plugin.json`
-  (the version owner, gate #1), regenerate manifests, then
-  `claude plugin update <name>@skills` on each machine (applies next session).
+  (the version owner, gate #1) and regenerate manifests. **Propagating the bump
+  to each machine is no longer a manual step** — the hooks in gate #0 do it on
+  commit and on pull; the bump is what tells them there is anything to do.
 
 ## Where things live
 
@@ -212,6 +232,8 @@ scripts/validate-codex-skills.mjs → gates ALL of the above (run before commit)
 platforms/cursor/                 → generated Cursor Plugins (do not hand-edit except manifest.json)
 platforms/cursor/manifest.json    → Cursor adapter release (hand-owned)
 .cursor-plugin/marketplace.json   → generated Cursor marketplace (do not hand-edit)
+scripts/sync-installed.sh         → single owner of "make THIS machine's installed copies match the repo"
+scripts/hooks/                    → pre-commit (validate) · post-commit / post-merge / post-rewrite (sync)
 docs/adr/                         → ADRs (marketplace-level, shared across plugins)
 docs/site/index.html             → the bilingual marketplace map (gating, see gate #3)
 README.md                         → human-facing marketplace overview

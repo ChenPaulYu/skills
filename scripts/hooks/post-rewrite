@@ -1,0 +1,13 @@
+#!/bin/sh
+# post-rewrite — `git pull --rebase` (and plain `git rebase`) replay commits
+# instead of merging, so post-merge never fires. Same job, other door.
+#
+# Git passes the trigger ("rebase" / "amend") as $1 and the rewritten-commit
+# list on stdin; neither changes what we do, so both are ignored — but stdin is
+# drained so git never sees a broken pipe.
+#
+# The what and the why live in scripts/sync-installed.sh (single owner).
+
+cat >/dev/null 2>&1 || true
+sh "$(dirname "$0")/../sync-installed.sh" --quiet || true
+exit 0

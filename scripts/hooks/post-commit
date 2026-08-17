@@ -1,86 +1,11 @@
 #!/bin/sh
-# post-commit — refresh the local plugin cache when a committed version bump
-# left the installed snapshot behind.
+# post-commit — you authored a change here; bring this machine's installed
+# copies in line with it.
 #
-# Why: installed plugins are version-pinned cache snapshots
-# (~/.claude/plugins/cache/skills/<plugin>/<version>/), not live reads of this
-# directory. The manual rule ("after landing an edit, run `claude plugin update`
-# on each machine") was written 2026-07-17 and had already failed by 2026-08-12 —
-# all six caches were stale again, one by two major versions, and two skills
-# retired from the repo were still installed and loadable. A step that must be
-# remembered is a step that will be skipped; this hook removes the remembering.
-# Full account: docs/observations/2026-08-12-skill-copies-outlive-their-source.md
+# The what and the why live in scripts/sync-installed.sh (single owner). This
+# hook only says WHEN: after a commit lands locally.
 #
-# Post-commit cannot block a commit — it only reports. It is also deliberately
-# quiet when there is nothing to do, and a no-op on machines without the
-# `claude` CLI or without these plugins installed.
-#
-# Enable once per clone (same switch as pre-commit):
-#     git config core.hooksPath scripts/hooks
+# Enable once per clone:   git config core.hooksPath scripts/hooks
 
-command -v claude >/dev/null 2>&1 || exit 0
-CACHE="$HOME/.claude/plugins/cache/skills"
-[ -d "$CACHE" ] || exit 0          # plugins not installed on this machine
-
-refreshed_marketplace=0
-for manifest in plugins/*/.claude-plugin/plugin.json; do
-  [ -f "$manifest" ] || continue
-  p=$(basename "$(dirname "$(dirname "$manifest")")")
-  v=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$manifest" | head -1)
-  [ -n "$v" ] || continue
-  if [ ! -d "$CACHE/$p" ]; then
-    # NEW plugin — present in the repo, never installed here. The original hook
-    # skipped this case, which is why fathom sat unreachable from the moment it
-    # was authored: the repo had it, no session did.
-    echo "→ new plugin $p not installed here — installing…"
-    claude plugin marketplace update skills >/dev/null 2>&1
-    refreshed_marketplace=1
-    if claude plugin install "$p@skills" >/dev/null 2>&1 && [ -d "$CACHE/$p" ]; then
-      echo "  ✓ $p installed (applies next session)"
-    else
-      echo "  ✗ $p: install failed — run \`claude plugin install $p@skills\` by hand" >&2
-    fi
-    continue
-  fi
-  if [ ! -d "$CACHE/$p/$v" ]; then
-    if [ "$refreshed_marketplace" -eq 0 ]; then
-      echo "→ plugin cache behind the repo — refreshing…"
-      claude plugin marketplace update skills >/dev/null 2>&1
-      refreshed_marketplace=1
-    fi
-    claude plugin update "$p@skills" >/dev/null 2>&1
-    # The CLI can report success without materializing the snapshot (it
-    # no-ops when its registry already believes $v is installed). The dir
-    # on disk is the only truth — never prune on the exit code alone.
-    if [ -d "$CACHE/$p/$v" ]; then
-      echo "  ✓ $p → $v (applies next session)"
-      # Drop superseded snapshots so a retired skill can't be served from an
-      # old pin — the exact failure that kept reflect:summarize loadable for
-      # a month after its retirement.
-      for old in "$CACHE/$p"/*/; do
-        [ -d "$old" ] || continue
-        [ "$(basename "$old")" = "$v" ] || rm -rf "$old"
-      done
-    else
-      echo "  ✗ $p: cache still missing $v after update — reinstall by hand:" >&2
-      echo "      claude plugin uninstall $p@skills && claude plugin install $p@skills" >&2
-    fi
-  fi
-done
-
-# Orphans — installed here, gone from the repo. The original hook only walked
-# plugins the REPO has, so a retirement propagated only halfway: reflect stayed
-# installed with catchup/park/retrace loadable for three hours after the commit
-# that deleted it, and reflect:summarize survived a month the same way. A
-# retirement that reaches the source but not the runtime has not happened.
-for cached in "$CACHE"/*/; do
-  [ -d "$cached" ] || continue
-  p=$(basename "$cached")
-  [ -d "plugins/$p" ] && continue
-  echo "→ $p is installed but no longer in the repo — uninstalling…"
-  claude plugin uninstall "$p@skills" >/dev/null 2>&1
-  rm -rf "$cached"                       # the CLI can exit 0 without removing the snapshot
-  echo "  ✓ $p uninstalled"
-done
-
+sh "$(dirname "$0")/../sync-installed.sh" --quiet || true
 exit 0
