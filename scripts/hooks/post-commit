@@ -7,5 +7,16 @@
 #
 # Enable once per clone:   git config core.hooksPath scripts/hooks
 
+# Not during a rebase. Git fires post-commit for every replayed commit, and the
+# sync regenerates tracked files (.agents/**, AGENTS.md, .codex/agents/**) as a
+# side effect — so one intermediate commit whose mirror is out of sync dirties
+# the tree mid-replay and the next patch aborts with "your local changes would
+# be overwritten". Such commits exist in this history. post-rewrite fires once
+# at the end of the rebase and does the whole job then.
+GIT_DIR_PATH=$(git rev-parse --git-dir 2>/dev/null) || exit 0
+if [ -d "$GIT_DIR_PATH/rebase-merge" ] || [ -d "$GIT_DIR_PATH/rebase-apply" ]; then
+  exit 0
+fi
+
 sh "$(dirname "$0")/../sync-installed.sh" --quiet || true
 exit 0

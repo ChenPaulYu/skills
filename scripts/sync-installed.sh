@@ -17,8 +17,8 @@
 #
 # This script is the SINGLE OWNER of "bring the copies back in line" (rule ①).
 # The git hooks in scripts/hooks/ are thin callers — post-commit (you authored a
-# change) and post-merge / post-checkout / post-rewrite (you pulled someone
-# else's). Nothing here must be remembered by a human: a step that must be
+# change) and post-merge / post-rewrite (you pulled someone else's, merged or
+# rebased). Nothing here must be remembered by a human: a step that must be
 # remembered is a step that will be skipped.
 # Full account: docs/observations/2026-08-12-skill-copies-outlive-their-source.md
 #
@@ -45,12 +45,14 @@ say() { [ "$QUIET" -eq 1 ] || echo "$@"; }
 GLOBAL="$HOME/.agents/skills"
 
 # Fingerprint the mirror so quiet mode can stay silent when nothing moved.
+# Every file, not just SKILL.md: a skill's references/ carry as much of it as
+# its body does, and a fingerprint that cannot see them reports "nothing
+# changed" after a real update.
 fingerprint() {
   [ -d "$GLOBAL" ] || { echo "absent"; return; }
   {
-    ls -1 "$GLOBAL"
-    find "$GLOBAL" -maxdepth 2 -name SKILL.md -print0 2>/dev/null \
-      | sort -z | xargs -0 cat 2>/dev/null
+    find "$GLOBAL" -type f -print0 2>/dev/null \
+      | LC_ALL=C sort -z | xargs -0 cat 2>/dev/null
   } | cksum
 }
 
@@ -63,8 +65,13 @@ if command -v node >/dev/null 2>&1; then
   if out=$(node scripts/build-codex.mjs --sync-global --dedupe-global-roots 2>&1); then
     say "$out"
     after=$(fingerprint)
-    if [ "$QUIET" -eq 1 ] && [ "$before" != "$after" ]; then
-      echo "✓ Codex/Cursor skill mirror updated → $GLOBAL"
+    if [ "$QUIET" -eq 1 ]; then
+      [ "$before" != "$after" ] && echo "✓ Codex/Cursor skill mirror updated → $GLOBAL"
+      # A hand-edit the installer refused to touch is announced exactly ONCE —
+      # so quiet mode must not be the run that eats it. Swallowing this line is
+      # how "your file was preserved" becomes "your file silently stopped
+      # updating", with nothing ever said.
+      printf '%s\n' "$out" | grep '⚠' >&2 || true
     fi
   else
     echo "$out" >&2
