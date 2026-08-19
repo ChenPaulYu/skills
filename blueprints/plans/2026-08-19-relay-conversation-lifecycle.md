@@ -1,6 +1,6 @@
 # Relay conversation lifecycle — implementation plan
 
-> Generated: 2026-08-19 · Spec source: Relay/Accord workflow review · Status: executing as one Relay 2.5.0 release after user consolidation
+> Generated: 2026-08-19 · Spec source: Relay/Accord workflow review · Status: complete — Relay 2.5.0 released and the target workspace adopted
 
 ## Outcome
 
@@ -324,6 +324,14 @@ Verification: closure cannot claim repository graduation without a real pushed c
 ### End-to-end adoption
 
 After Relay 2.5.0 is installed, run the Accord scheduled workflow manually against current state in report-only mode. Review every proposed overdue/finding row with the repository owner, then enable the daily schedule with cadence-controlled comments. Do not enable email routing or automatic repairs in the same rollout.
+
+### Completion evidence
+
+- Relay 2.5.0 is on the marketplace default branch; all 84 reducer tests and the full Claude/Codex/Cursor compatibility validator pass.
+- The target workspace adopted a pinned reducer runtime, explicit threshold policy, standing pinned report, cadence state, canonical-commit conformance, and six local delivery/parser tests in a separate pushed commit.
+- A live mixed-scope dogfood Issue was split into a linked `needs-input` child with its own assignee and completion condition; the original scope settled independently with `Resolution:` and `Follow-ups:`.
+- The scheduled workflow was invoked twice. The first run created and pinned the standing report and delivered the overdue mentions; the immediate second run reported zero reminders and added no duplicate comment.
+- GitHub identity remains the notification target; the workspace's separate git-email field remains authorship-only. No email delivery, semantic comment parser, or automatic source-object mutation was enabled.
 
 ## Deferred experiments
 
