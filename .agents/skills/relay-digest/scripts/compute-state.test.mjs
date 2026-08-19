@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
-import { collectGitHubPrimitives, graphQlQuery, reduceObligations } from './compute-state.mjs';
+import { collectGitHubPrimitives, graphQlQuery, reduceObligations, runCli } from './compute-state.mjs';
 
 const viewer = 'reviewer-one';
 const base = (objects) => ({ source: 'fixture', repository: 'example/project', viewer, objects });
@@ -23,6 +26,12 @@ test('live GraphQL query closes every selection set', () => {
     assert.ok(depth >= 0, 'a selection set closed before it opened');
   }
   assert.equal(depth, 0);
+});
+
+test('schema 5 keeps lifecycle findings separate from obligations and notices', () => {
+  const result = reduceObligations(base([]));
+  assert.equal(result.schemaVersion, 5);
+  assert.deepEqual(result.findings, []);
 });
 
 test('post-migration: an [ACK]-titled Discussion is just a Discussion', () => {
@@ -171,22 +180,96 @@ test('awaiting-record stage: the recorder (reassigned assignee) owes SETTLE reco
   assert.deepEqual(result.reasons, ['awaiting-record']);
 });
 
+test('a staged Issue obligation starts at the later native stage-label or current-assignee event', () => {
+  const staged = item('I72', 'issue', {
+    assignees: [{ login: viewer }],
+    labels: ['needs-input'],
+    lifecycleCollected: true,
+    lifecycleEvents: [
+      { type: 'LABELED_EVENT', label: 'needs-input', createdAt: '2026-08-17T09:00:00Z' },
+      { type: 'ASSIGNED_EVENT', assignee: viewer, createdAt: '2026-08-17T10:00:00Z' },
+    ],
+  });
+
+  const [result] = reduceObligations(base([staged])).obligations;
+  assert.equal(result.stageEnteredAt, '2026-08-17T10:00:00Z');
+});
+
+test('a truncated Issue lifecycle degrades only that stage age to an explicit finding', () => {
+  const truncated = item('I73', 'issue', {
+    assignees: [{ login: viewer }],
+    labels: ['needs-input'],
+    lifecycleCollected: true,
+    lifecycleTimelineTruncated: true,
+    lifecycleEvents: [],
+  });
+
+  const result = reduceObligations(base([truncated]));
+  assert.equal(result.obligations[0].stageEnteredAt, null);
+  assert.deepEqual(result.findings.map((entry) => entry.code), ['stage-age-unknown']);
+  assert.equal(result.findings[0].url, truncated.url);
+});
+
 test('conflicting stage labels are malformed: the LATEST stage in canonical order wins and the obligation is flagged', () => {
   const conflicting = item('I70', 'issue', {
     assignees: [{ login: viewer }],
     labels: ['needs-input', 'awaiting-record'],
   });
-  const [result] = reduceObligations(base([conflicting])).obligations;
+  const output = reduceObligations(base([conflicting]));
+  const [result] = output.obligations;
   assert.equal(result.kind, 'SETTLE');
   assert.equal(result.action, 'record-decision');
   assert.deepEqual(result.reasons, ['awaiting-record']);
   assert.deepEqual(result.malformed, ['conflicting-stage-labels']);
+  assert.deepEqual(output.findings.map((entry) => entry.code), ['conflicting-stage-labels']);
 });
 
-test('a stage label on an Issue with no assignee produces no obligation for anyone (conformance-tier concern, not a digest obligation)', () => {
+test('a stage label with no assignee produces a finding but no invented obligation', () => {
   const unassigned = item('I71', 'issue', { assignees: [], labels: ['awaiting-acceptance'] });
   const result = reduceObligations(base([unassigned]));
   assert.equal(result.obligations.length, 0);
+  assert.deepEqual(result.findings.map((entry) => entry.code), ['stage-without-assignee']);
+});
+
+test('multiple action owners is a finding only when a stage promises one baton', () => {
+  const staged = item('I74', 'issue', {
+    assignees: [{ login: viewer }, { login: 'someone-else' }],
+    labels: ['needs-input'],
+  });
+  const plain = item('I75', 'issue', {
+    assignees: [{ login: viewer }, { login: 'someone-else' }],
+  });
+
+  const result = reduceObligations(base([staged, plain]));
+  assert.deepEqual(result.findings.map((entry) => [entry.code, entry.number]), [
+    ['multiple-action-owners', staged.number],
+  ]);
+});
+
+test('overdue is derived only when the workspace supplies a threshold policy and evaluation time', () => {
+  const staged = item('I76', 'issue', {
+    assignees: [{ login: viewer }],
+    labels: ['needs-input'],
+    updatedAt: '2026-08-20T11:59:00Z',
+    lifecycleCollected: true,
+    lifecycleEvents: [
+      { type: 'LABELED_EVENT', label: 'needs-input', createdAt: '2026-08-17T12:00:00Z' },
+      { type: 'ASSIGNED_EVENT', assignee: viewer, createdAt: '2026-08-17T12:00:00Z' },
+    ],
+  });
+
+  const withoutPolicy = reduceObligations({ ...base([staged]), collectedAt: '2026-08-20T12:00:00Z' });
+  assert.equal(withoutPolicy.findings.some((entry) => entry.code === 'overdue-stage'), false);
+
+  const withPolicy = reduceObligations({
+    ...base([staged]),
+    collectedAt: '2026-08-20T12:00:00Z',
+    policy: { overdueAfterDays: { default: 7, 'needs-input': 2 } },
+  });
+  const overdue = withPolicy.findings.find((entry) => entry.code === 'overdue-stage');
+  assert.equal(overdue.stageEnteredAt, '2026-08-17T12:00:00Z');
+  assert.equal(overdue.ageDays, 3);
+  assert.equal(overdue.thresholdDays, 2);
 });
 
 test('duplicate review signals collapse to one obligation', () => {
@@ -335,7 +418,7 @@ test('blocked output matches the declared schema exactly — no leaked collector
   });
   const result = reduceObligations(collected);
   assert.deepEqual(Object.keys(result).sort(), [
-    'blocked', 'blockers', 'notices', 'obligations', 'repository', 'schemaVersion', 'source', 'viewer',
+    'blocked', 'blockers', 'findings', 'notices', 'obligations', 'repository', 'schemaVersion', 'source', 'viewer',
   ].sort());
   assert.equal('objects' in result, false);
 });
@@ -1201,4 +1284,82 @@ test('normalizeLive: someone else\'s issue body mentioning the viewer still prod
   assert.equal(result.obligations.length, 0);
   assert.equal(result.notices.length, 1);
   assert.deepEqual(result.notices[0].reasons, ['mentioned-in-prose']);
+});
+
+test('normalizeLive: Issue label and assignment timeline events produce stageEnteredAt', () => {
+  const raw = () => JSON.stringify(issueFixture({
+    labels: { nodes: [{ name: 'needs-input' }] },
+    assignees: { nodes: [{ login: viewer }] },
+    timelineItems: {
+      pageInfo: { hasPreviousPage: false },
+      nodes: [
+        { __typename: 'LabeledEvent', createdAt: '2026-08-17T09:00:00Z', label: { name: 'needs-input' } },
+        { __typename: 'AssignedEvent', createdAt: '2026-08-17T10:00:00Z', assignee: { login: viewer } },
+      ],
+    },
+  }));
+
+  const result = reduceObligations(collectGitHubPrimitives({ repository: 'example/project', viewer, runGh: raw }));
+  assert.equal(result.obligations[0].stageEnteredAt, '2026-08-17T10:00:00Z');
+});
+
+test('live collection injects an explicit evaluation time for deterministic age calculations', () => {
+  const raw = () => JSON.stringify(issueFixture());
+  const collected = collectGitHubPrimitives({
+    repository: 'example/project',
+    viewer,
+    runGh: raw,
+    now: () => '2026-08-20T12:00:00Z',
+  });
+  assert.equal(collected.collectedAt, '2026-08-20T12:00:00Z');
+});
+
+test('CLI applies overdue thresholds only from an explicit policy file', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'relay-digest-'));
+  const inputPath = join(directory, 'input.json');
+  const policyPath = join(directory, 'policy.json');
+  writeFileSync(inputPath, JSON.stringify({
+    ...base([item('I77', 'issue', {
+      assignees: [{ login: viewer }],
+      labels: ['needs-input'],
+      lifecycleCollected: true,
+      lifecycleEvents: [
+        { type: 'LABELED_EVENT', label: 'needs-input', createdAt: '2026-08-17T12:00:00Z' },
+        { type: 'ASSIGNED_EVENT', assignee: viewer, createdAt: '2026-08-17T12:00:00Z' },
+      ],
+    })]),
+    collectedAt: '2026-08-20T12:00:00Z',
+  }));
+  writeFileSync(policyPath, JSON.stringify({ overdueAfterDays: { 'needs-input': 2 } }));
+
+  let output = '';
+  const originalWrite = process.stdout.write;
+  process.stdout.write = (chunk) => { output += chunk; return true; };
+  try {
+    assert.equal(runCli(['--input', inputPath, '--policy', policyPath]), 0);
+  } finally {
+    process.stdout.write = originalWrite;
+    rmSync(directory, { recursive: true, force: true });
+  }
+
+  const result = JSON.parse(output);
+  assert.equal(result.findings.some((entry) => entry.code === 'overdue-stage'), true);
+});
+
+test('CLI read failure preserves the complete schema-5 result shape', () => {
+  let output = '';
+  const originalWrite = process.stdout.write;
+  process.stdout.write = (chunk) => { output += chunk; return true; };
+  try {
+    assert.equal(runCli(['--input', '/definitely/missing/relay-input.json']), 2);
+  } finally {
+    process.stdout.write = originalWrite;
+  }
+
+  const result = JSON.parse(output);
+  assert.equal(result.schemaVersion, 5);
+  assert.deepEqual(result.blockers, []);
+  assert.deepEqual(result.findings, []);
+  assert.deepEqual(result.obligations, []);
+  assert.deepEqual(result.notices, []);
 });

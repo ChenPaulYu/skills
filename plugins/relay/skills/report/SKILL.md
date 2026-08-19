@@ -1,17 +1,23 @@
 ---
 name: report
-description: "Route a new tell, owned question, review request, or memory change under the Accord model after resolving the intended GitHub workspace and one verified recipient. Use for new Relay traffic — 回報給對方 / 跟他說 — never infer a destination or username."
+description: "Route a new tell, owned question, review request, or independently completable follow-up under the Accord model after resolving the GitHub workspace and one verified recipient. Use for new Relay traffic — 回報給對方 / 跟他說 — never infer a destination, username, or that every follow-up belongs in the old thread."
 ---
 
 # report — bring new information into the collaboration
 
 `report` is a content act, not an object type (blueprint section 10). Place what the human wants to say in the smallest durable object that matches it, then verify GitHub shows the intended responsibility.
 
-## Router (Issue-default, ADR-100)
+## Router (Issue-default, ADR-100/120)
 
 Ask in order:
 
-1. **Does this belong to an existing object?** Yes -> comment there. Never open a new object for something that already has a home.
+1. **Is there an existing object nearby?** Apply both follow-up axes before choosing its destination:
+   - no independent completion condition -> this is clarification/evidence for the current `Done when`; route it to `/relay:reply`;
+   - its own stateable completion condition -> open a linked follow-up Issue, even when the parent depends on it;
+   - unclear completion condition -> ask for it or keep the topic in a Discussion;
+   - separately decide whether the parent can settle with the child in `Follow-ups:` or must remain open for its own unmet rule.
+
+   Full procedure and reciprocal-link mutation: `references/follow-up-routing.md`.
 2. **Is this a standalone tell that needs a receipt?** Yes -> Issue. Assign the recipient; their confirmation (a comment or the close itself) is the receipt. This is the `tell.yml` shape: what to take note of, and who is assigned to confirm it.
 3. **Is this a review request?** If the subject is an exact, verbatim, revision-bound repo-content diff -> pull request, with a requested reviewer named at creation. If it is a review of anything else — a report, an artifact, a result, a piece of prose that isn't a diff — -> Issue, with the reviewer as assignee and the disposition they owe stated as the completion rule.
 4. **Is this a question you can already name an owner for?** Yes -> a `needs-input` Issue, assigned to that owner, carrying the three computable facts (blueprint section 8):
@@ -22,7 +28,7 @@ Ask in order:
    ```
    This is the graduation moment for "content, not just a receipt, is wanted": a question with a stateable owner and completion rule never stays prose. `/relay:reply`'s baton flip (`needs-input` → `awaiting-acceptance`, with reassignment to the acceptor) is what completes this round — see `reply/SKILL.md`.
 5. **Is this a genuinely open, not-yet-converging shared topic?** Yes -> a Discussion (Relay's upstream nursery, ADR-098, unchanged): Ideas for open-ended exploration, Q&A when there's a specific question with no single obvious owner and GitHub's native accepted-answer affordance is the right completion condition. Nobody owing work here is a *feature* — once an owner and a completion rule can be stated, graduate: open the Issue and link back (GitHub's create-issue-from-discussion preserves the lineage natively). An ask that's born crisp may open the Issue directly; the two-stage path is never mandatory ceremony. **The smell this kills:** an Issue where nobody can say what "done" looks like — that should have been (or stayed) a Discussion.
-6. **Is this an already-crisp memory change?** Yes -> straight to a pull request. A Brief update, a Core change, or any change whose exact wording IS the point never routes through a Discussion or Issue first — see `brief/SKILL.md` and `plugins/relay/CLAUDE.md`'s Core section. (A Decision itself is not authored through `report` at all — it is recorded by the settling authority once its source object closes; see `settle/SKILL.md`.)
+6. **Is this a repository-memory change?** If the exact delta is already covered by settlement, it belongs to `/relay:settle`'s direct commit -> push recording pass, not a new report. If the exact diff still needs review, use a pull request with an individual requested reviewer. A Decision itself is recorded only by the settling authority.
 
 **There is no Announcement object (ADR-100).** A fact that needs no receipt gets no object at all: if it matters, it belongs in a commit or a Brief; a passing heads-up is a plain `@mention` on the object it's actually relevant to, caught only by `/relay:digest`'s non-binding notices tier. Do not open a Discussion or Issue purely to broadcast — name the object the information actually belongs to and mention there, or if genuinely nobody owns acting on it, it isn't a report at all.
 
@@ -33,11 +39,11 @@ Ask in order:
 - **Entry-owner discipline (unchanged in spirit, restated for the new shapes).** Any ask that expects a response must land in a natively-owned shape: an assigned Issue (tell, review-of-non-diff, needs-input, decision reversal) or a requested-reviewer PR (exact diff). A prose `@mention` typed directly into a title, body, or comment is never itself an entry point — it reaches only `/relay:digest`'s non-binding notices tier, not anyone's obligations, so an ask that only ever exists as prose can go unanswered indefinitely. If it doesn't fit one of those owned shapes, it isn't a report worth making yet — route it to a Discussion instead (step 5) until it can be named. This discipline governs traffic created *through* `report`; organic traffic — someone opening a GitHub Issue or Discussion directly — is nudged toward the same explicit-owner rule by the repository's own entry-point templates, whose presence its conformance CI audits (ADR-094; the installing verb retired in ADR-115).
 - **PR reviewer requirement.** The PR route requires naming a requested reviewer at creation, not leaving it to be added later — and that reviewer must be an individual, never a team: `/relay:digest` cannot route a team review request to anyone, so a team-requested review is invisible to every member's obligations.
 
-Split independently completable asks into linked objects. Do not let a partial child object close a broader parent.
+Split every ask with its own completion condition into a linked Issue. Do not let a partial child close a broader parent, or keep a settled parent open merely because an independent child continues.
 
 ## Process
 
-1. **Resolve the destination before routing content.** If the user supplied an existing object URL, inspect and resume it instead of creating anything. Otherwise resolve the target Relay workspace in this order:
+1. **Resolve the destination before routing content.** If the user supplied an existing object URL, inspect it and apply the two follow-up axes; resume it only when the matter has no independent completion condition. Otherwise resolve the target Relay workspace in this order:
    1. an explicit `OWNER/REPO` supplied for this action;
    2. `$RELAY_REPO`;
    3. the one-line local default at `~/.config/relay/repo`;
@@ -49,10 +55,10 @@ Split independently completable asks into linked objects. Do not let a partial c
    - If the user explicitly supplied a GitHub account, require `gh api users/<handle>` to resolve it.
    - Otherwise read `relay.yml` from the resolved workspace and match the requested legacy handle, human-facing name, or role. Require exactly one row and verify its `github` account through GitHub.
    - A missing roster, zero matches, multiple matches, an invalid account, or a team instead of an individual stops here: ask the user for the GitHub account. Never infer it from display-name similarity, an organization name, or a previously seen handle.
-3. Distill title, body, object type, completion condition, owner/assignee/reviewer, and provenance links. State plainly which router step applies and why. If the request mixes a tell, a review, and an owned question, show the linked objects separately.
+3. Distill title, body, object type, completion condition, owner/assignee/reviewer, and provenance links. For a follow-up, show the two-axis result, `Origin:` link, reciprocal source comment, and parent disposition. If the request mixes a tell, a review, and an owned question, show the independently completable objects separately.
 4. **Author sign-off.** Show the resolved `OWNER/REPO`, exact title and body that will be posted, verbatim — this speaks in the user's voice on GitHub — and ask: "Is this what you mean?" Post only after they confirm; a rewrite goes through the same gate. Show the resolved assignee/reviewer and follow-up mutations (assignment, review request, labels, links) alongside it. Wait for approval.
-5. Create the object in the resolved repository, then apply assignment, review request, labels, and links as separate observable steps.
-6. Read the object back. Verify repository, URL, type, assignee or requested reviewer, current revision, and the stated completion rule.
+5. Create the object in the resolved repository, then apply assignment, review request, labels, and links as separate observable steps. For a fork, create/read the child before adding the reverse source link.
+6. Read the object back. Verify repository, URL, type, assignee or requested reviewer, current revision, stated completion rule, and both follow-up links where applicable.
 
 ## Partial failure
 
@@ -60,7 +66,7 @@ If creation succeeds but a later mutation fails, return the created URL plus the
 
 ## Completion
 
-Done means the object exists in the intended resolved repository and its intended responsibility is visible in GitHub. A prose mention alone never creates work; an unresolved destination/recipient or silent assignment/reviewer failure blocks completion.
+Done means the object exists in the intended resolved repository and its intended responsibility is visible in GitHub. A fork additionally requires a child with one `Done when`, one assignee, `Origin:`, and a verified source link. A prose mention alone never creates work; an unresolved destination/recipient or silent assignment/reviewer/link failure blocks completion.
 
 ## Boundaries
 

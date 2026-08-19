@@ -3,7 +3,11 @@
 // Collection is intentionally separate from the deterministic reducer: fixture JSON
 // exercises semantics without network access, while live use shells out only to `gh`.
 //
-// SCHEMA_VERSION 4 (ADR-100): the reducer follows the Accord memory model
+// SCHEMA_VERSION 5 (ADR-120): lifecycle facts and native-only findings are additive
+// to ADR-100's Accord-memory-model obligations. Responsibility still derives only
+// from native fields; findings diagnose state but never invent an owner.
+//
+// SCHEMA_VERSION 4 (ADR-100) established the Accord memory model
 // (blueprints/plans/2026-07-22-accord-memory-model.md). Announcement receipt-default
 // (ADR-097) and the close-announcement nudge retired entirely — there is no Announcement
 // object any more; a passing heads-up is a plain @mention, caught only by the notices
@@ -17,7 +21,7 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 
 const loginOf = (actor) => typeof actor === 'string' ? actor : actor?.login || actor?.slug || null;
 const sameLogin = (left, right) => Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -43,6 +47,16 @@ function obligation(kind, object, reason, action, extra = {}) {
     ...objectRef(object),
     reasons: [reason],
     action,
+    ...extra,
+  };
+}
+
+function finding(code, object, extra = {}) {
+  return {
+    id: `finding:${code}:${objectKey(object)}`,
+    kind: 'FINDING',
+    code,
+    ...objectRef(object),
     ...extra,
   };
 }
@@ -286,8 +300,8 @@ const ISSUE_STAGES = [
  * labels are meant to be mutually exclusive (an Issue is in exactly one stage), so this
  * picks the LATEST stage in the canonical order (needs-input < awaiting-acceptance <
  * awaiting-record) for a deterministic obligation, and flags the object with
- * `malformed: ['conflicting-stage-labels']` rather than silently choosing with no signal —
- * a conformance-tier concern, not something the digest hides. */
+ * `malformed: ['conflicting-stage-labels']` rather than silently choosing with no signal.
+ * Schema 5 also emits the same defect in the separate findings tier. */
 function issueStage(object) {
   const present = ISSUE_STAGES.filter((stage) => hasLabel(object, stage.label));
   if (present.length === 0) return { kind: 'DECIDE/ACT', reason: 'issue-assigned', action: 'act', malformed: null };
@@ -297,6 +311,34 @@ function issueStage(object) {
   }
   const latest = present.reduce((a, b) => (ISSUE_STAGES.indexOf(b) > ISSUE_STAGES.indexOf(a) ? b : a));
   return { kind: latest.kind, reason: latest.label, action: latest.action, malformed: ['conflicting-stage-labels'] };
+}
+
+function latestEventAt(events, predicate) {
+  const stamps = events.filter(predicate).map((event) => event.createdAt).filter(Boolean);
+  return stamps.length ? stamps.reduce((latest, stamp) => (stamp > latest ? stamp : latest)) : null;
+}
+
+/** The baton age comes only from native stage/assignment events. `undefined` means the
+ * caller supplied a legacy fixture with no lifecycle collection; `null` means live
+ * lifecycle data was collected but cannot prove the current stage's start. */
+function issueStageEnteredAt(object, stage, currentOwner) {
+  if (object.lifecycleCollected !== true) return undefined;
+  if (object.lifecycleTimelineTruncated === true) return null;
+  const events = object.lifecycleEvents || [];
+  const assignedAt = latestEventAt(events, (event) =>
+    event.type === 'ASSIGNED_EVENT' && sameLogin(loginOf(event.assignee), currentOwner));
+  if (stage.reason === 'issue-assigned') return assignedAt;
+  const labeledAt = latestEventAt(events, (event) =>
+    event.type === 'LABELED_EVENT' && String(event.label || '').toLowerCase() === stage.reason);
+  if (!assignedAt || !labeledAt) return null;
+  return assignedAt > labeledAt ? assignedAt : labeledAt;
+}
+
+function overdueThresholdDays(policy, stage) {
+  const thresholds = policy?.overdueAfterDays;
+  if (!thresholds) return null;
+  const value = Number(thresholds[stage] ?? thresholds.default);
+  return Number.isFinite(value) && value > 0 ? value : null;
 }
 
 function mergeObligation(existing, incoming) {
@@ -319,6 +361,7 @@ export function reduceObligations(input) {
       viewer: input.viewer || null,
       blocked: input.blocked,
       blockers: [],
+      findings: [],
       obligations: [],
       notices: [],
     };
@@ -332,6 +375,7 @@ export function reduceObligations(input) {
       viewer: null,
       blocked: { code: 'viewer-unresolved', message: 'Could not resolve the authenticated GitHub viewer.' },
       blockers: [],
+      findings: [],
       obligations: [],
       notices: [],
     };
@@ -339,6 +383,7 @@ export function reduceObligations(input) {
 
   const byId = new Map();
   const blockers = [];
+  const findingsById = new Map();
   const objectsWithObligations = new Set();
   const objectsWithBlockers = new Set();
   const noticesById = new Map();
@@ -351,6 +396,12 @@ export function reduceObligations(input) {
   function recordBlocker(blocker, object) {
     blockers.push(blocker);
     objectsWithBlockers.add(objectKey(object));
+  }
+
+
+  function addFinding(object, code, extra = {}) {
+    const entry = finding(code, object, extra);
+    findingsById.set(entry.id, entry);
   }
 
   // A notice is awareness, never work owed — kept in a separate array so no consumer can
@@ -367,10 +418,46 @@ export function reduceObligations(input) {
     const isFyiObject = object.isFYI || hasLabel(object, 'fyi');
     if (!isFyiObject) {
       if (object.type === 'issue') {
+        const stage = issueStage(object);
+        const currentAssignees = unique((object.assignees || []).map(loginOf));
+        if (stage.malformed?.includes('conflicting-stage-labels')) {
+          addFinding(object, 'conflicting-stage-labels', { stage: stage.reason });
+        }
+        if (stage.reason !== 'issue-assigned' && currentAssignees.length === 0) {
+          addFinding(object, 'stage-without-assignee', { stage: stage.reason });
+        }
+        if (stage.reason !== 'issue-assigned' && currentAssignees.length > 1) {
+          addFinding(object, 'multiple-action-owners', { stage: stage.reason, assignees: currentAssignees });
+        }
+        if (object.lifecycleCollected === true && currentAssignees.length === 1) {
+          const stageEnteredAt = issueStageEnteredAt(object, stage, currentAssignees[0]);
+          if (stageEnteredAt === null) {
+            addFinding(object, 'stage-age-unknown', { stage: stage.reason, stageEnteredAt: null });
+          } else if (stageEnteredAt) {
+            const thresholdDays = overdueThresholdDays(input.policy, stage.reason);
+            const evaluatedAt = Date.parse(input.collectedAt || '');
+            const enteredAt = Date.parse(stageEnteredAt);
+            if (thresholdDays && Number.isFinite(evaluatedAt) && Number.isFinite(enteredAt)) {
+              const ageDays = (evaluatedAt - enteredAt) / 86_400_000;
+              if (ageDays >= thresholdDays) {
+                addFinding(object, 'overdue-stage', {
+                  stage: stage.reason,
+                  assignee: currentAssignees[0],
+                  stageEnteredAt,
+                  ageDays,
+                  thresholdDays,
+                });
+              }
+            }
+          }
+        }
         const assigned = (object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer));
         if (assigned) {
-          const stage = issueStage(object);
-          const extra = stage.malformed ? { malformed: stage.malformed } : {};
+          const stageEnteredAt = issueStageEnteredAt(object, stage, viewer);
+          const extra = {
+            ...(stage.malformed ? { malformed: stage.malformed } : {}),
+            ...(stageEnteredAt !== undefined ? { stageEnteredAt } : {}),
+          };
           record(obligation(stage.kind, object, stage.reason, stage.action, extra), object);
         }
       }
@@ -506,6 +593,7 @@ export function reduceObligations(input) {
   const order = new Map(['DECIDE/ACT', 'REVIEW', 'SETTLE'].map((kind, index) => [kind, index]));
   const obligations = [...byId.values()].sort((a, b) =>
     (order.get(a.kind) - order.get(b.kind)) || String(a.url || a.id).localeCompare(String(b.url || b.id)));
+  const findings = [...findingsById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));
   const notices = [...noticesById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));
   // Self-report rather than silently drop: the comment scan is capped (see graphQlQuery),
   // so an object whose comments connection exceeded the cap may hide an undetected mention.
@@ -519,8 +607,10 @@ export function reduceObligations(input) {
     source: input.source || 'fixture',
     repository: input.repository || null,
     viewer,
+    ...(input.collectedAt ? { collectedAt: input.collectedAt } : {}),
     blocked: null,
     blockers,
+    findings,
     obligations,
     notices,
     ...(commentScanTruncated.length ? { commentScanTruncated } : {}),
@@ -547,7 +637,7 @@ export function graphQlQuery() {
       }
       issues(first:100,states:OPEN){
         pageInfo{hasNextPage}
-        nodes{id number title body url state author{login} labels(first:20){nodes{name}} assignees(first:10){nodes{login}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body createdAt}}}
+        nodes{id number title body url state createdAt updatedAt author{login} labels(first:20){nodes{name}} assignees(first:10){nodes{login}} timelineItems(last:100,itemTypes:[LABELED_EVENT,UNLABELED_EVENT,ASSIGNED_EVENT,UNASSIGNED_EVENT]){pageInfo{hasPreviousPage} nodes{__typename ... on LabeledEvent{createdAt label{name}} ... on UnlabeledEvent{createdAt label{name}} ... on AssignedEvent{createdAt assignee{... on User{login}}} ... on UnassignedEvent{createdAt assignee{... on User{login}}}}} comments(last:50){pageInfo{hasNextPage} nodes{author{login} body createdAt}}}
       }
       pullRequests(first:100,states:OPEN){
         pageInfo{hasNextPage}
@@ -592,6 +682,12 @@ function normalizeLive(data, repository, viewer) {
   }));
   const issues = flattenConnection(repo.issues).map((value) => {
     const comments = flattenConnection(value.comments);
+    const lifecycleEvents = flattenConnection(value.timelineItems).map((event) => ({
+      type: String(event.__typename || '').replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase(),
+      createdAt: event.createdAt,
+      label: event.label?.name || null,
+      assignee: event.assignee || null,
+    }));
     return {
       ...value,
       type: 'issue',
@@ -600,6 +696,9 @@ function normalizeLive(data, repository, viewer) {
       // conformance sweep (blueprint section 8), never a signal the digest reducer parses.
       labels: flattenConnection(value.labels),
       assignees: flattenConnection(value.assignees),
+      lifecycleCollected: Boolean(value.timelineItems),
+      lifecycleEvents,
+      lifecycleTimelineTruncated: value.timelineItems?.pageInfo?.hasPreviousPage === true,
       comments,
       commentsTruncated: value.comments?.pageInfo?.hasNextPage === true,
     };
@@ -666,14 +765,22 @@ function normalizeLive(data, repository, viewer) {
 }
 
 /** Collect live primitives, returning a machine-readable blocked result on any gap. */
-export function collectGitHubPrimitives({ repository, viewer, runGh = defaultRunGh } = {}) {
+export function collectGitHubPrimitives({
+  repository,
+  viewer,
+  runGh = defaultRunGh,
+  now = () => new Date().toISOString(),
+} = {}) {
   try {
     const resolvedRepository = repository || JSON.parse(runGh(['repo', 'view', '--json', 'nameWithOwner'])).nameWithOwner;
     const resolvedViewer = viewer || JSON.parse(runGh(['api', 'user'])).login;
     const [owner, name] = String(resolvedRepository || '').split('/');
     if (!owner || !name) throw new Error('repository must be OWNER/REPO');
     const raw = runGh(['api', 'graphql', '-f', `query=${graphQlQuery()}`, '-F', `owner=${owner}`, '-F', `name=${name}`]);
-    return normalizeLive(JSON.parse(raw), resolvedRepository, resolvedViewer);
+    return {
+      ...normalizeLive(JSON.parse(raw), resolvedRepository, resolvedViewer),
+      collectedAt: now(),
+    };
   } catch (error) {
     return {
       schemaVersion: SCHEMA_VERSION,
@@ -693,10 +800,14 @@ function option(args, name) {
 
 export function runCli(args = process.argv.slice(2)) {
   const inputPath = option(args, '--input');
+  const policyPath = option(args, '--policy');
   try {
-    const input = inputPath
+    const primitives = inputPath
       ? { ...JSON.parse(readFileSync(inputPath, 'utf8')), source: 'fixture' }
       : collectGitHubPrimitives({ repository: option(args, '--repo'), viewer: option(args, '--for') });
+    const input = policyPath
+      ? { ...primitives, policy: JSON.parse(readFileSync(policyPath, 'utf8')) }
+      : primitives;
     const result = reduceObligations(input);
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
     return result.blocked ? 2 : 0;
@@ -706,7 +817,9 @@ export function runCli(args = process.argv.slice(2)) {
       source: inputPath ? 'fixture' : 'github',
       blocked: { code: 'input-unreadable', message: error.message },
       blockers: [],
+      findings: [],
       obligations: [],
+      notices: [],
     }, null, 2)}\n`);
     return 2;
   }

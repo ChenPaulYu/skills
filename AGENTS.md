@@ -471,7 +471,7 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [ADR-115](docs/adr/115-relay-condenses-to-four.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [ADR-115](docs/adr/115-relay-condenses-to-four.md), [ADR-120](docs/adr/120-relay-conversation-lifecycle.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
 
 ## Governing principle: progressive disclosure
 
@@ -523,17 +523,17 @@ Legacy handles and GitHub accounts are unique. `report` may use a GitHub account
 |---|---|---|
 | **Discussion** — think together | Explore a topic that has no clear answer yet; exchange views until a provisional conclusion forms | You cannot yet state an owner and a completion rule. Once you can → open an Issue, linked back |
 | **Issue** — get one thing finished | Track a bounded responsibility: who owes the next step, what counts as done | Exactly one accountable owner + a checkable completion rule. "Please take note of X" is also a bounded responsibility (the assignee's confirmation completes it) |
-| **Pull Request** — review a concrete change | A proposed modification to shared memory, reviewed item by item; accept or request changes | There is a diff to review verbatim. A PR is *proposed*, never *in force* |
+| **Pull Request** — review a concrete change | An optional review round for a diff whose exact delta is not yet settled, or whose repository requires review | There is a diff to review verbatim. A PR is *proposed*, never *in force* |
 | **Commit (on main)** — keep what is established | The version future people and agents rely on directly | Branch commits are PR draft material; only main establishes. Core additionally requires an effective review |
 
 **There is no Announcement object (ADR-100).** A tell that needs a receipt is an Issue (assignee confirms, then close). A fact that needs no receipt gets no object — if it matters it lives in a commit/Brief; a passing heads-up is an `@mention` on the relevant object (caught by the notices tier). Discussions are the low-frequency, high-value exception: opening one signals "this needs both of us thinking." Their scarcity is their weight.
 
-One-line version: Discussion handles *how we think*; Issue handles *who does what*; PR handles *whether this change may enter*; Commit preserves *what currently stands*.
+One-line version: Discussion handles *how we think*; Issue handles *who does what*; PR handles *diff review when needed*; Commit preserves *what currently stands*.
 
 ## Two memories (blueprint section 2)
 
 - **Collaboration memory** — the GitHub objects themselves (Discussions, Issues, PR conversations, reviews, comments). Complete, contextual, append-only by nature; preserves *how things happened*. Not necessarily still true.
-- **Formal memory** — version-controlled repository files: `decisions/`, `briefs/`, `core/`. Curated, reviewed, versioned; preserves *what can be relied on now*. Agents load this first.
+- **Formal memory** — version-controlled repository files: `decisions/`, `briefs/`, `core/`. Curated, explicitly settled, versioned; preserves *what can be relied on now*. Agents load this first.
 
 GitHub objects store process; repository files store results.
 
@@ -547,25 +547,49 @@ GitHub objects store process; repository files store results.
 
 Every Issue and Discussion closes with a `Resolution:`. Only some Resolutions are promoted to a Decision file — settle asks: *after closing this object, is there a new statement that future people or agents should treat as a valid basis for action or belief?* Yes → record a Decision. No (pure execution of an existing Decision, receipt confirmations, duplicates, factual lookups, ideas collected without a choice) → the closing Resolution comment **is** the formal record; no file. Close now means "this object has been translated into long-term memory (or confirmed to need none)."
 
-## Who writes what, and how it enters the repo (blueprint section 5)
+## Who writes what, and how it enters the repo (ADR-120 refinement)
 
 | Content | Path into repo | Why |
 |---|---|---|
-| Decision | The designated **recorder** commits directly to main | Recording an already-settled conclusion, not making a new one |
-| Brief | Always a PR | Integration involves choices and interpretation — another person reviews |
-| Core | Always a PR, stricter | Highest-weight shared understanding: supporting Decisions listed, counterpart approval, no auto-merge |
+| Decision | The designated **recorder** commits and pushes directly after exact settlement | Recording an already-settled conclusion, not making a new one |
+| Brief | Direct commit and push when the exact derived delta is settled; otherwise continue review | Integration may introduce choices, so direction-only agreement is insufficient |
+| Core | Direct commit and push only when the exact highest-weight delta is settled | Every line remains traceable to supporting Decisions; exact acceptance replaces duplicate PR ceremony |
 
-The **recorder is not the assignee**: the assignee executes; the recorder is whoever holds settlement authority (a Discussion's host, an Issue's acceptor). Direct-commit Decisions carry five fuses (source explicitly settled · adds no new semantics · links back · the commit does only this — except marking a superseded Decision's frontmatter in the same commit, which is exempted as part of the same recording act, not a second edit · agent-drafted text passes author sign-off) — see `settle/SKILL.md` for the full list and the escapes that force a PR instead (exact wording IS the decision; no clear settlement; synthesizing multiple objects). Standing fuse: the moment recording requires re-judging "what did we actually mean," route it through a PR.
+The **recorder is not the assignee**: the assignee executes; the recorder is whoever holds settlement authority (a Discussion's host, an Issue's acceptor). A direct formal-memory write requires exact settlement, adds no new semantics, links back, keeps one recording purpose (mechanical supersession may share that commit), passes author sign-off, reconciles concurrent changes, pushes, and reads the remote commit back. The moment recording requires re-judging "what did we actually mean," the delta is not settled: continue the source conversation or use an explicitly requested/required PR. Relay never opens a PR merely to repeat an acceptance already recorded on the source object.
 
 ## Object router (blueprint sections 1, 8, 10)
 
 One Relay workspace equals one resolved GitHub repository. Cross-repository aggregation is out of scope, but a project repository may target a separate central workspace through the resolver above.
 
-**Issue-default.** Route a new intent by asking: does this belong to an existing object (comment there)? Is it a standalone tell needing a receipt (Issue, assignee confirms)? Is it a review request (an exact diff → PR; a review of anything else → Issue)? Is it a question you can already name an owner for (a `needs-input` Issue carrying `Question:`/`Done when:`/`After reply:`)? Is it genuinely open, not-yet-converging shared topic (a Discussion)? Is it an already-crisp memory change (straight to a PR)?
+**Issue-default.** Route a new intent by asking: does it have its own stateable completion condition (linked Issue), or is it only clarification/evidence for the current object (comment there)? Is it a standalone tell needing a receipt (Issue, assignee confirms)? Is it a review request (an unsettled exact diff → PR; a review of anything else → Issue)? Is it a question you can already name an owner for (a `needs-input` Issue carrying `Question:`/`Done when:`/`After reply:`)? Is it genuinely open, not-yet-converging shared topic (a Discussion)? Is it an exact memory delta already covered by settlement (`settle` records it directly)?
 
 **Upstream nursery (ADR-098, unchanged, absorbed here).** The boundary between Issue and Discussion collapses to one practical test: can you state an owner and a completion rule yet? Not yet routes to a Discussion — Ideas for open-ended exploration, Q&A for a specific question — where nobody owing work there is a *feature*, matching GitHub's own stated purpose for Discussions as the place ideas develop before an Issue exists. Once an owner and a completion rule can be stated, open the Issue and link back to the originating Discussion. An ask born crisp may open the Issue directly — the two-stage path is never mandatory ceremony. The smell this kills: an Issue where nobody can say what "done" looks like.
 
-Use these refinements: a standalone tell (`tell.yml` shape) for a receipt owed by one assignee; a `needs-input` Issue when content, not just a receipt, is wanted from a nameable owner; Q&A Discussions when an accepted answer is the completion condition and no single obvious owner exists; assigned Issues for verifiable work; pull requests for exact changes; and a `fyi` label on **any** object type as the explicit opt-out — a durable, linkable object that obligates nobody. Split independently completable asks into linked objects.
+Use these refinements: a standalone tell (`tell.yml` shape) for a receipt owed by one assignee; a `needs-input` Issue when content, not just a receipt, is wanted from a nameable owner; Q&A Discussions when an accepted answer is the completion condition and no single obvious owner exists; assigned Issues for verifiable work; pull requests only for exact diffs that still require review; and a `fyi` label on **any** object type as the explicit opt-out — a durable, linkable object that obligates nobody.
+
+## Conversation transitions — one scope, one current baton (ADR-120)
+
+Every comment that creates new responsibility passes two independent tests:
+
+1. **Object boundary:** if the new matter has its own stateable completion condition, `report`
+   opens a linked follow-up Issue with its own `Done when` and current assignee. If it has none,
+   `reply` keeps it as clarification, evidence, or an answer on the current object. If the condition
+   cannot yet be stated, keep or move the topic to a Discussion.
+2. **Parent disposition:** after a child exists, ask whether the parent can truthfully settle while
+   that child stays open. If yes, list it in `Follow-ups:` and settle the parent's own scope. If no,
+   the parent remains open for its own unmet completion rule. A dependency can still have an
+   independent child lifecycle.
+
+`reply` owns `clarify`, `answer`, and same-scope `handoff`; `report` owns `fork`; `settle` owns
+whole-object disposition. A receipt never answers a question, an answer never accepts itself, and
+acceptance never silently settles unrelated follow-up work.
+
+The assignee is only the current baton. Settlement authority remains with the stable acceptor or
+Discussion host. A generic handoff may be performed only by the current assignee or settlement
+seat. Plain assigned work and `needs-input` may transfer; `awaiting-acceptance` exits only through
+the acceptor's disposition, and `awaiting-record` exits only after the recording chain completes.
+Every successful transition updates native fields and reads them back; digest never reconstructs a
+partial handoff from comment prose.
 
 Router discipline governs only traffic created through `report`. Organic traffic — a human opening an Issue or Discussion directly on GitHub — is nudged toward the same explicit-owner rule by entry-point templates (`.github/ISSUE_TEMPLATE/`, `.github/DISCUSSION_TEMPLATE/`, PR template) installed once when a workspace adopts Relay and audited on schedule by its own conformance CI, not a relay verb (ADR-115). Templates are a convention, not a contract: `digest`'s reducer never reads their fields, and a repository without them still works. See ADR-094.
 
@@ -579,12 +603,13 @@ Discussion (talked out) ─┐
 Issue (worked out) ──────┘                                  │
                        no  → closing comment is the record → close
                        yes → settle applies awaiting-record, reassigns recorder
-                              → recorder commits D-0xx → links back → label removed → close
-                              → affects a Brief/Core? → PR (counterpart reviews)
-                              → merge → established
+                              → exact settled Decision/Brief/Core delta is previewed
+                              → recorder commits + pushes → links back
+                              → label removed → close
+                       delta not exact/settled → continue source review or use an explicit/required PR
 ```
 
-Typical traffic: execution/research/decisions → Issues; memory changes → PRs; receipted tells → Issues; Discussions only when two heads are genuinely needed.
+Typical traffic: execution/research/decisions → Issues; unsettled diff review → PRs; exact settled memory changes → direct commit through `settle`; receipted tells → Issues; Discussions only when two heads are genuinely needed.
 
 ## Issue obligation actions (native stage labels)
 
@@ -597,7 +622,7 @@ An OPEN Issue assigned to the viewer yields **exactly one** obligation, whose ac
 | `awaiting-acceptance` | `DECIDE/ACT accept-or-dispose` | The assignee (reassigned by `reply`'s baton flip) must accept or dispose of delivered input |
 | `awaiting-record` | `SETTLE record-decision` | The assignee (reassigned by `settle`'s promotion signal) is the recorder who owes the Decision commit |
 
-Conflicting labels (more than one present at once) are malformed: the reducer picks the latest stage in the order above and flags the obligation `malformed: ['conflicting-stage-labels']` rather than silently choosing — a conformance-tier concern, not a silent pick. A stage label on an Issue with no assignee produces no obligation for anyone.
+Conflicting labels (more than one present at once) are malformed: the reducer picks the latest stage in the order above and preserves `malformed: ['conflicting-stage-labels']` on the obligation while also emitting a lifecycle finding. A stage label with no assignee produces no obligation and a `stage-without-assignee` finding; staged multi-assignee Issues similarly produce `multiple-action-owners`.
 
 **The baton flip** (`reply`, blueprint section 10): delivering requested input on a `needs-input` Issue is a native state transition, not just a comment — `reply` posts the answer, removes `needs-input`, applies `awaiting-acceptance`, and reassigns to the acceptor. Both the label swap and the reassignment are native fields; `digest` computes "who owes what" from them alone, no prose parsing.
 
@@ -606,6 +631,26 @@ Conflicting labels (more than one present at once) are malformed: the reducer pi
 Q&A Discussions keep their native obligations (GitHub's own `isAnswerable`/`isAnswered`): `DECIDE/ACT accept-answer-or-follow-up` while open and unanswered with a stranger's comment; `SETTLE close-answered-question` once accepted and still open.
 
 PR obligations are entirely unchanged: a requested reviewer owes a current-revision verdict; `Request changes` returns ACT to the author; approval hands merge to the author or a named PR assignee; Core additionally requires verified enforcement.
+
+### Lifecycle facts, findings, and reminder delivery
+
+`digest` remains deterministic and mechanical-tier. It derives `stageEnteredAt` from the currently
+present stage's latest label event and the current assignee's latest assignment event; a plain
+assigned Issue uses its current assignee's assignment event. Generic `updatedAt` never measures
+responsibility age. A truncated or incomplete timeline makes that object's age unknown and is
+self-reported without blocking other objects.
+
+Lifecycle `findings` are separate from obligations and limited to native-field defects: conflicting
+stage labels, a stage without an assignee, multiple assignees on a staged Issue, policy-gated
+overdue stages, and native relationship asymmetry only where the API exposes both directions
+reliably. Repository prose/file checks belong to workspace conformance. Semantic interpretation of
+arbitrary comments is advisory only, never runs inside `digest`, and never creates or transfers an
+obligation.
+
+The reducer emits age as fact; a workspace supplies reminder thresholds as explicit policy. A
+scheduled workspace job owns delivery: one pinned report body carries current state, while fresh
+mention-bearing comments fire only for a new finding/obligation or when its re-ping cadence elapses.
+The schedule never auto-reassigns, auto-closes, or mutates a source object.
 
 **Closure semantics: every Discussion is closed by its initiator.** One closure-owner class, no split by category — a Discussion opened to converge something requires a summarizing final comment first (folded into its `Resolution:`); Q&A's accepted-answer signal is the reducer-visible special case of that same rule, not a separate one (ADR-096, general form unchanged).
 
@@ -659,7 +704,7 @@ Formal memory is navigable the way well-kept code is: any reader answers "what i
 - **`core/`** (formal memory, derived, highest weight) contains the minimum binding truth people and agents may rely on now. Change it only through an exact protected PR with a valid current-revision approval; merge is the effective point.
 - **`relay.yml`** (formal memory, attested reference data, blueprint section 3) is neither deliberated (a Decision) nor derived (a Brief/Core projection): the roster (legacy handle · GitHub account · name · role, plus optional git author email) that historical Decisions' attributions and `report`'s recipient resolution depend on. Every change goes through a PR — the counterpart's approval **is** the attestation, no per-change Decision file, no ceremony. `digest`'s reducer never reads it (obligations stay native-fields-only); `report` reads it only to turn a human identity into a verified native GitHub owner. See ADR-101.
 
-A Brief never closes an object, represents consensus, or changes Core. It is not a Core prerequisite; a Core PR may cite a Decision file directly.
+A Brief never closes an object, represents consensus, or changes Core. It is not a Core prerequisite; a settled Core update may cite a Decision file directly.
 
 ## Mutation and recovery contract
 

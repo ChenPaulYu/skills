@@ -1,12 +1,12 @@
 # Relay — GitHub-native coordination design
 
-> **Current as of 2026-07-22 (relay 2.1.0).** Relay is a compact semantic layer over one GitHub repository, following the Accord memory model. [ADR-090](docs/adr/090-relay-github-native.md) owns the GitHub-native strategy reversal; [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md) owns the memory-model adoption and points at the design record itself, [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md); `plugins/relay/CLAUDE.md` owns the operative contract.
+> **Current as of 2026-08-19 (relay 2.5.0, ADR-120).** Relay is a compact semantic layer over one GitHub repository, following the Accord memory model. [ADR-090](docs/adr/090-relay-github-native.md) owns the GitHub-native strategy reversal; [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md) owns the memory-model adoption; [ADR-120](docs/adr/120-relay-conversation-lifecycle.md) owns mid-conversation transitions and exact-settlement recording; `plugins/relay/CLAUDE.md` owns the operative contract.
 
 ## The design in one view
 
 GitHub stores the events and enforced state (collaboration memory); `decisions/`, `briefs/`, and `core/` store what can be relied on now (formal memory). Relay teaches agents how to choose the right object, distinguish notification from obligation, verify writes, promote a settled Resolution into a cited Decision, maintain reusable understanding derived from those Decisions, and close work only with authority.
 
-The daily path is six verbs: `launch · report · digest · reply · brief · settle`. An explicit-only `migrate` bridge converts legacy repositories.
+The daily path is four verbs: `report · digest · reply · settle`. Workspace setup/conformance, Brief maintenance, and legacy adoption live with the repository rather than behind standing verbs (ADR-115).
 
 ## The four objects and two memories
 
@@ -14,41 +14,54 @@ The daily path is six verbs: `launch · report · digest · reply · brief · se
 |---|---|---|
 | Discussion | Think together — no clear owner or completion rule yet | Once you can state both → open a linked Issue |
 | Issue | Get one thing finished — one accountable owner, a checkable completion rule | "Please take note of X" counts too — the assignee's confirmation completes it |
-| Pull request | Review a concrete, verbatim diff | Proposed, never in force until merged |
-| Commit (main) | What is currently established | Core additionally requires an effective review |
+| Pull request | Optionally review a concrete, verbatim diff that is not yet settled | Proposed, never in force until merged |
+| Commit (main) | What is currently established | A direct formal-memory commit requires exact settlement and remote read-back |
 
 **There is no Announcement object.** A tell that needs a receipt is an Issue (assignee confirms, then closes). A fact that needs no receipt gets no object at all — a passing heads-up is a plain `@mention`, caught only by the notices tier. Discussions also serve as Relay's upstream nursery (ADR-098, unchanged, absorbed into this model): while an ask still lacks a nameable owner and completion rule, it stays a Discussion and graduates to a linked Issue once both can be stated, with a born-crisp ask free to open the Issue directly. Q&A Discussions keep their native accepted-answer obligation path.
 
-**Collaboration memory** (GitHub itself) is complete, append-only, preserves *how things happened*. **Formal memory** (`decisions/`/`briefs/`/`core/`) is curated and versioned, preserves *what can be relied on now*, and is what agents load first. A Decision (`decisions/D-0xx-<slug>.md`) records one settled conclusion with stable frontmatter (`id · status: active|superseded · superseded-by · source · settled-by · date`); a Brief cites active Decisions (`[D-0xx]`) without restating their wording; Core is the smallest cross-topic projection, changed only through a reviewed PR. See [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md) and the blueprint for the full model.
+**Collaboration memory** (GitHub itself) is complete, append-only, preserves *how things happened*. **Formal memory** (`decisions/`/`briefs/`/`core/`) is curated and versioned, preserves *what can be relied on now*, and is what agents load first. A Decision (`decisions/D-0xx-<slug>.md`) records one settled conclusion with stable frontmatter (`id · status: active|superseded · superseded-by · source · settled-by · date`); a Brief cites active Decisions (`[D-0xx]`) without restating their wording; Core is the smallest cross-topic projection. An exact settled delta enters by direct commit and push; a PR is reserved for a diff that still needs review or repository enforcement.
 
 ## Object routing (Issue-default)
 
 | Condition | Object |
 |---|---|
-| Belongs to an existing object | Comment there |
+| No independent completion condition; only clarifies the current object | Comment there through `reply` |
+| Has its own stateable completion condition | Linked Issue through `report`, even when the parent depends on it |
 | A standalone tell needing a receipt | Issue (assignee confirms) |
 | A review request over an exact diff | Pull request |
 | A review of anything else (a report, an artifact, a result) | Issue |
 | A question with a nameable owner | `needs-input` Issue (Question / Done when / After reply) |
 | Genuinely open, not-yet-converging shared topic | Discussion (Ideas or Q&A) |
-| An already-crisp memory change | Pull request, directly |
+| An exact memory delta already covered by settlement | Direct commit and push through `settle` |
+| An exact diff that still needs review | Pull request |
 
 A `fyi` label works as a general opt-out on any object type — a durable, linkable record that obligates nobody. Reversing or materially amending an already-agreed Decision routes exactly like making one: an Issue assigned to the counterpart whose disposition is the consent record (ADR-099, unchanged principle). See [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md) for the historical awareness/review/task-evidence split this router's Issue/PR distinction descends from.
 
-## Six boundaries
+## Conversation lifecycle
+
+A later comment is routed on two axes. First, does the new matter have its own stateable completion
+condition? If yes, it becomes a linked Issue; if no, it remains clarification/evidence on the
+current object. Second, can the parent truthfully settle while that child remains open? If yes, the
+parent closes with the child in `Follow-ups:`; if no, the parent stays open for its own unmet rule.
+
+`reply` owns clarification, answers, and same-scope handoff. `report` owns the forked Issue.
+`settle` owns whole-object disposition. The assignee is the current baton, while the acceptor/host
+is stable settlement authority. Plain work and `needs-input` may hand off; `awaiting-acceptance`
+exits only through the acceptor, and `awaiting-record` exits only through completed recording.
+Receipt, answer, acceptance, and settlement never collapse into one event.
+
+## Four boundaries
 
 | Verb | Starts from | Done when | Does not own |
 |---|---|---|---|
-| `launch` | Repository adoption or drift concern | Required settings, labels, templates, and the `decisions/` scaffold read back correctly | Daily objects |
 | `report` | A new human intent | Object and responsibility exist and verify | Response, closure, or recording |
 | `digest` | "What needs me?" | Every real obligation appears once | Mutation |
 | `reply` | An existing object | My selected native response exists, baton labels flip correctly | Whole-object completion |
-| `brief` | Reusable understanding derived from one or more active Decisions | Merged cited Markdown and index read back correctly | Consensus, closure, Core, or restating Decision wording |
-| `settle` | Authorized Resolution, promotion to Decision, or approved current-revision PR | Resolution/close/merge/Decision-commit and effective point verify | Brief authoring or approval substitution |
+| `settle` | Authorized whole-object disposition | Resolution, direct settled commit/push, close, or explicitly reviewed PR merge reads back | Inventing semantics not covered by settlement |
 
 ## Authority model
 
-Mention is not obligation; Comment is not approval; task claims need evidence; Closed is not decided; Core is true only after merge; a Decision is not automatically a Brief/Core update. Assignment, stage labels, and requested review are the obligation signals — all native, typo-proof fields. Formal verdicts bind to the current PR revision, and stale approval dismissal prevents a changed diff from inheriting old consent.
+Mention is not obligation; Comment is not approval; task claims need evidence; Closed is not decided; a pushed file is not settled unless the exact delta was accepted; a Decision is not automatically a Brief/Core update. Assignment, stage labels, and requested review are the obligation signals — all native, typo-proof fields. Formal PR verdicts bind to the current revision, and stale approval dismissal prevents a changed diff from inheriting old consent.
 
 ## Issue obligation actions (native stage labels)
 
@@ -56,13 +69,22 @@ An OPEN Issue assigned to the viewer yields exactly one obligation, derived from
 
 `reply`'s **baton flip** performs the `needs-input` → `awaiting-acceptance` transition natively (label swap plus reassignment to the acceptor) when requested input is delivered. `settle`'s **promotion signal chain** applies `awaiting-record` plus reassigns to the recorder when a closing Resolution promotes to a Decision — the object stays open until the Decision is recorded, linked back, and the label removed. Both chains are native fields, deliberately never an `@mention`, so `digest` computes who-owes-what without parsing prose.
 
-## Two-tier digest: obligations versus notices
+## Digest: obligations, findings, and notices
 
-`digest` returns `obligations` and a separate, non-binding `notices` array. Obligations are the bullets above plus PR review/settlement (entirely unchanged from prior versions) and Q&A's native accepted-answer path. Notices are awareness only — a prose `@mention` with no formal signal — and are never presented, sorted, or counted as obligations. Under the Accord memory model this is the **default landing spot for almost every plain mention**, since there is no receipt-default obligation to absorb any of them first; a notice is suppressed when the object already carries an open obligation or a blocker, a formal signal (title/body only, regardless of completion state), or prior viewer engagement (atemporal for title/body, temporal for a comment-borne mention — a later ping still fires even for someone who once engaged). See [ADR-093](docs/adr/093-relay-obligations-vs-notices.md) for the tier's origin and [ADR-096](docs/adr/096-relay-closure-semantics.md) for the temporal-suppression rule, both unaffected in mechanism by this wave.
+`digest` returns real `obligations`, native-state `findings`, and separate non-binding `notices`.
+Findings diagnose malformed or overdue lifecycle state without inventing a new owner. Notices are
+awareness only — a prose `@mention` with no formal signal — and are never counted as obligations.
+Stage age comes from native label/assignment timeline events, never generic `updatedAt`; overdue
+classification appears only when the workspace supplies thresholds. Arbitrary comment semantics
+remain outside mechanical-tier digest.
 
 ## Entry-point templates
 
-Router discipline (above) only governs traffic created *through* `report`. `launch` installs and audits GitHub's own Issue Forms and Discussion category forms (`.github/ISSUE_TEMPLATE/`, `.github/DISCUSSION_TEMPLATE/`, plus a PR template) so organic traffic — a human opening an Issue or Discussion directly — is nudged toward the same explicit-owner rule at write time. Under this model the Issue Forms are `task.yml`, `decision.yml`, `needs-input.yml`, and `tell.yml` (the standalone-receipt shape that replaces the retired Announcement object); the only Discussion category form is `q-a.yml`. Templates are a convention, not a contract: `digest`'s reducer never reads their fields, and a repository without them still works, with `launch` self-reporting the absence rather than blocking. See [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md).
+Router discipline governs traffic created *through* `report`. Organic GitHub traffic is nudged by
+the workspace's own Issue/Discussion forms and audited by its scheduled conformance CI; the retired
+`launch` verb no longer owns this setup (ADR-115). Templates remain conventions, never reducer
+dependencies. Direct human comments receive native-state age/reminder coverage, but semantic scope
+drift remains advisory future work.
 
 ## Lifecycle, end to end
 
@@ -72,14 +94,15 @@ Discussion (talked out) ─┐
 Issue (worked out) ──────┘                                  │
                        no  → closing comment is the record → close
                        yes → settle applies awaiting-record, reassigns recorder
-                              → recorder commits D-0xx → links back → label removed → close
-                              → affects a Brief/Core? → PR (counterpart reviews)
-                              → merge → established
+                              → exact Decision/Brief/Core delta previewed
+                              → recorder commits + pushes → remote read-back + source link
+                              → label removed → close
+                       exact delta not settled → continue review or use an explicit/required PR
 ```
 
 **Every Discussion is closed by its initiator** — one closure-owner class, no split by category. A Discussion opened to converge something requires a summarizing final comment first, folded into its `Resolution:`; Q&A's native accepted-answer/closure signal is the reducer-visible special case of that same rule, not a separate one. See [ADR-096](docs/adr/096-relay-closure-semantics.md) (general form unchanged by this wave).
 
-An unmerged PR closed after review is abandoned, not completed. An otherwise-ready Core PR with policy-only review remains blocked from Relay settlement because history is not enforcement. A migration remains planned or staged until its reviewed cleanup lands and every destination reads back.
+An unmerged PR closed after review is abandoned, not completed. When a PR is used, policy-only review remains blocked from Relay settlement because history is not enforcement. A migration remains planned or staged until its cleanup lands and every destination reads back.
 
 ## Formal memory: indexes and navigability
 
@@ -87,7 +110,7 @@ Formal memory is navigable the way well-kept code is. A Decision's frontmatter I
 
 ## Two optional knowledge routes
 
-Raw GitHub may be synthesized into a Brief when understanding must stay current across contexts — but only by citing active Decisions, never by restating their wording or by synthesizing raw GitHub threads directly (that gap is what the Decision layer exists to close). Separately, an active Decision may lead to a protected Core PR. Neither route is mandatory, and Brief is not a stage on the way to Core.
+Raw GitHub may be synthesized into a Brief when understanding must stay current across contexts — but only by citing active Decisions, never by restating their wording or by synthesizing raw GitHub threads directly. Separately, an active Decision may lead to a Core update. Neither route is mandatory, and Brief is not a stage on the way to Core. Once the exact derived delta is settled, `settle` commits and pushes it directly; a PR is only an explicit or repository-required review path.
 
 `briefs/README.md` owns Brief navigation and safe topic-based reorganization. `core/` owns only binding truth effective now. Git history and stable GitHub URLs preserve provenance.
 
@@ -116,3 +139,5 @@ Relay performs read-after-write verification. When creation succeeds and a later
 - **2026-07-22 — ADR-100 (relay 1.4.0 → 2.0.0, semantic break)** adopts the **Accord memory model** as Relay's design basis: four objects with clean boundaries (Discussion/Issue/PR/Commit), two memories (GitHub collaboration memory, `decisions/`/`briefs`/`core/` formal memory), a Decision→Brief→Core disclosure stack with mechanical supersession, and native stage-label obligations (`needs-input`/`awaiting-acceptance`/`awaiting-record`) replacing the entire Announcement/receipt-default apparatus. **There is no Announcement object.** ADR-097 retires in full; ADR-096's Announcement-closure branch retires (its general Discussion-closure principle survives, folded into `settle`); the awareness leg of ADR-091/092 survives only inside a LEGACY `[ACK]`-titled-Discussion compatibility path (original pre-097 single-recipient semantics, no close-nudge, expected to retire after migration); ADR-093's Announcement-specific hard rule retires while its obligations/notices split and the open-PR invariant remain in force; ADR-098 and ADR-099 remain fully in force, absorbed into the new router unchanged. `compute-state.mjs`: `SCHEMA_VERSION` 3 → 4; `authorizedResolution`/`issueType`/`finalResolution` removed; `issueStage` added. `compute-state.test.mjs`: 76 → 81, all green. Every writing SKILL.md (`report`, `reply`, `settle`, `brief`, `launch`) rewritten to the new contracts; `launch`'s template set drops `announcements.yml`, adds `needs-input.yml`/`tell.yml`, and gains label/`decisions/`-scaffold audit findings. Full detail: [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md) and the blueprint it points at.
 - **2026-07-22 (relay 2.0.1 → 2.1.0)** retires the LEGACY `[ACK]`-titled-Discussion compatibility path ADR-100 introduced: migration completed and the live repo carried zero open `[ACK]`/`ack-required` Discussions, so `isLegacyAckDiscussion`/`legacyAckRecipient` and the single-recipient ACK obligation branch were removed outright from `compute-state.mjs`; `hasFormalSignal` no longer checks a legacy recipient; the `order` map drops the dead `ACK` kind. An `[ACK]`-titled Discussion is now just a Discussion — its mentions land on the notices tier like any other. `compute-state.test.mjs`: legacy-specific tests removed or rewritten onto plain Discussions/Issues, findAllMentions' team/org-path and bare-`@org` guard coverage preserved without the legacy machinery; 82 → 75, all green (net fewer tests: several legacy-only cases collapsed into one `post-migration: an [ACK]-titled Discussion is just a Discussion` assertion plus rewritten generic coverage). `plugins/relay/CLAUDE.md`'s LEGACY section replaced with a one-line retirement note; `digest/SKILL.md` and `reply/SKILL.md` had every LEGACY `[ACK]`/`👀` mention removed. See ADR-100's Legacy-compatibility section for the retired design.
 - **2026-07-22 — ADR-102 (relay stays 2.1.0, skill-scope rewrite only)** generalizes `migrate` from a v0→v1 compatibility bridge (its only named target already migrated) into a general pre-model-coordination-state → memory-model migrator: file-based ledgers/thought streams, overloaded ACK-style Discussions, commit-only or closed-Issue-only decisions, and unowned rosters, classified exactly once via the promotion test (backfill a Decision · Resolution-only close · derived-view/Brief material · attested reference data · discard-with-record) and migrated under the same author-sign-off, five-fuse, and cite-never-restate discipline the daily verbs already use. No reducer/schema change: `compute-state.test.mjs` stays 75/75. Full detail: [ADR-102](docs/adr/102-relay-migrate-generalizes.md).
+- **2026-08-13 — ADR-115 (relay 2.4.0)** condenses the interface to four verbs (`report · digest · reply · settle`). Workspace conformance replaces `launch`, repository guidance replaces `brief`, and one-off discipline replaces `migrate`. It explicitly leaves reminders to a daily workspace schedule.
+- **2026-08-19 — ADR-120 (relay 2.5.0)** adds the missing conversation lifecycle in one release: a two-axis follow-up boundary, native baton handoffs with protected stages, schema-5 lifecycle findings and stage age, scheduled re-ping delivery, and direct commit -> push when settlement covers the exact repository delta.

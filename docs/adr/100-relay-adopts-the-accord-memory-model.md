@@ -1,6 +1,6 @@
 # ADR 100 — Relay 2.0.0 adopts the Accord memory model
 
-**Status**: accepted
+**Status**: partially superseded by ADR-120 (mandatory Brief/Core PR path only)
 **Date**: 2026-07-22
 **Refines**: [ADR-090](docs/adr/090-relay-github-native.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md)
 **Supersedes**: [ADR-097](docs/adr/097-relay-receipt-default.md) in full; the Announcement-specific branch of [ADR-096](docs/adr/096-relay-closure-semantics.md); the awareness/ACK leg of [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md) and [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md) outside legacy compatibility; the Announcement-specific hard rule and notices-scope framing of [ADR-093](docs/adr/093-relay-obligations-vs-notices.md)

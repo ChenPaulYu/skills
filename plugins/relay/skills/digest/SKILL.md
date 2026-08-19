@@ -1,7 +1,7 @@
 ---
 name: digest
 model: sonnet
-description: "Show what actually needs you in a Relay workspace, read from GitHub — open obligations assigned to you, needs-input rounds, and your own unreviewed PRs — plus a separate non-binding notices tier. Fires on \"what needs me\", \"有什麼要我看的\", \"對方有回我嗎\", \"relay 有東西嗎\". Read-only; excludes completed rounds and ordinary notifications."
+description: "Show what actually needs you in a Relay workspace, read from GitHub — open obligations, native lifecycle findings and stage age, plus separate non-binding notices. Fires on \"what needs me\", \"有什麼要我看的\", \"對方有回我嗎\", \"relay 有東西嗎\". Read-only; never infers responsibility from prose."
 ---
 
 # digest — show only what genuinely needs this viewer
@@ -17,10 +17,10 @@ Self-report which tier was used:
 1. **Helper available.** Use the bundled reducer only when it exposes the GitHub-native schema/interface. Trust its set logic, then inspect linked objects needed for presentation.
 
    ```
-   node plugins/relay/skills/digest/scripts/compute-state.mjs --repo OWNER/REPO --for LOGIN
+   node plugins/relay/skills/digest/scripts/compute-state.mjs --repo OWNER/REPO --for LOGIN [--policy FILE]
    ```
 
-   `--repo` and `--for` are both optional — omitted, they resolve to the authenticated `gh` session's current repository and login. `--input FILE` replaces live collection with a fixture JSON file (`source: 'fixture'` in the output) for offline/deterministic runs. When `--for` names someone other than the authenticated `gh` account, the output carries `"caveat": "permissions-of-authenticated-viewer"` plus `authenticatedViewer` — that run's obligations were computed with the authenticated account's permissions, not the named viewer's; self-report this caveat rather than presenting the digest as that viewer's own. The `--for` login itself is not validated against GitHub — a mistyped handle silently returns a well-formed empty digest carrying that same caveat, so an unexpected empty cross-viewer digest warrants re-checking the handle before trusting the emptiness.
+   `--repo` and `--for` are both optional — omitted, they resolve to the authenticated `gh` session's current repository and login. `--input FILE` replaces live collection with a fixture JSON file (`source: 'fixture'` in the output) for offline/deterministic runs. `--policy FILE` supplies workspace-owned overdue thresholds; without it the reducer still emits `stageEnteredAt` but never declares a stage overdue. When `--for` names someone other than the authenticated `gh` account, the output carries `"caveat": "permissions-of-authenticated-viewer"` plus `authenticatedViewer` — that run's obligations were computed with the authenticated account's permissions, not the named viewer's; self-report this caveat rather than presenting the digest as that viewer's own. The `--for` login itself is not validated against GitHub — a mistyped handle silently returns a well-formed empty digest carrying that same caveat, so an unexpected empty cross-viewer digest warrants re-checking the handle before trusting the emptiness.
 2. **Readable GitHub state without helper.** Query authenticated GitHub primitives directly and apply the semantic contract below. This is valid but slower.
 3. **Unavailable or blocked.** If `gh`, authentication, permissions, or a required API surface is unavailable, report the exact blocked surface and what could not be determined. Never infer obligations from notification prose.
 
@@ -34,7 +34,7 @@ Include each obligation once. There is no Announcement object and no receipt-def
   - `awaiting-record` → `SETTLE record-decision` (the assignee — reassigned here by `settle`'s native promotion signal — is the recorder who owes the Decision file commit);
   - none of the above → `DECIDE/ACT act` (the unchanged default for plain assignment);
   - **conflicting labels** (more than one of the three present at once) are malformed: the reducer picks the *latest* stage in the order `needs-input < awaiting-acceptance < awaiting-record` for a deterministic obligation, and adds `malformed: ['conflicting-stage-labels']` to the entry — self-report this rather than presenting it as an ordinary obligation;
-  - a stage label on an Issue with **no assignee** produces no obligation for anyone — that is a conformance-tier concern (an unowned stage label), not a personal digest item;
+  - a stage label on an Issue with **no assignee** produces no obligation for anyone and a separate `stage-without-assignee` finding — never an invented owner;
 - a Q&A Discussion the viewer authored: `DECIDE/ACT accept-answer-or-follow-up` while open, unanswered, and someone else has commented; `SETTLE close-answered-question` once GitHub's native `isAnswered` is true and the Discussion is still open;
 - a requested PR verdict on the current revision;
 - a current-revision `Request changes` addressed back to the PR author until a new revision is pushed;
@@ -61,6 +61,30 @@ Exclude:
 - an unanswered Q&A Discussion where the viewer is only mentioned, not the author — that is a notice, not an obligation.
 
 If an otherwise-ready Core PR lacks verified enforcement, report it as blocked, not `SETTLE`. Policy-only review history is evidence but not a platform gate. Similarly, when the viewer owns settlement with satisfied approval but lacks merge authority (`viewerCanSettle` false), report it as blocked (`settlement-owner-cannot-merge`), not silent — see the invariant carve-out above.
+
+## Findings — lifecycle defects, never work assignment
+
+`findings` is separate from `obligations`. A finding says native workflow state is malformed,
+incomplete, or older than workspace policy; it never decides who should own a repair. V1 kinds:
+
+- `conflicting-stage-labels` — more than one stage is present. The obligation keeps schema-4's
+  `malformed` field for compatibility while the defect also appears here;
+- `stage-without-assignee` — a stage promises a baton but no native owner exists;
+- `multiple-action-owners` — a staged Issue has more than one assignee; plain multi-assignee
+  Issues remain legal because Relay promises one baton only for staged work;
+- `stage-age-unknown` — lifecycle events were collected but the current stage start cannot be
+  proved, including a truncated Issue timeline;
+- `overdue-stage` — `stageEnteredAt` exceeds an explicit `--policy` threshold. No policy means no
+  overdue finding.
+
+`stageEnteredAt` is the later of the current stage's latest label event and current assignee's
+latest assignment event; plain assigned work uses the current assignee event. Generic `updatedAt`
+never resets it, so comments and reminder output cannot make old responsibility look new. The
+policy shape is `{ "overdueAfterDays": { "default": 7, "needs-input": 3, ... } }`.
+
+Findings parse no settlement prose, Decision files, `Follow-ups:`, or arbitrary question text.
+Those checks belong to workspace conformance or a separately invoked semantic review. `digest`
+stays deterministic and mechanical-tier.
 
 ## Notices — awareness, never work owed
 
@@ -92,23 +116,23 @@ Present notices in their own section, clearly labeled as non-binding awareness, 
 
 ## Comment-scan cap
 
-The mention scan and the Q&A comment check read up to the most recent 50 comments per object. A comment with no resolvable author (deleted/ghost account) never counts as a "stranger" for the Q&A `accept-answer-or-follow-up` check — only a real, different login does. When an object's comment count exceeds the cap, the run does not fail — GitHub-collection failures stay reserved for the harder page caps on discussions/issues/PRs themselves, reactions, files, and review-request history, all of which the client still fails hard on. Instead the result carries a top-level `commentScanTruncated` array (object refs) naming every **open** object whose comment scan may have missed an older mention or answer — a closed object is excluded, since its undetected comments no longer matter to anyone's digest. Self-report this list rather than silently trusting emptiness beyond the cap.
+The mention scan and the Q&A comment check read up to the most recent 50 comments per object. A comment with no resolvable author (deleted/ghost account) never counts as a "stranger" for the Q&A `accept-answer-or-follow-up` check — only a real, different login does. When an object's comment count exceeds the cap, the run does not fail — GitHub-collection failures stay reserved for the harder page caps on discussions/issues/PRs themselves, reactions, files, and review-request history. Instead the result carries `commentScanTruncated` for each affected open object. Issue lifecycle timelines also degrade per object rather than failing the run: a truncated timeline yields `stageEnteredAt: null` plus `stage-age-unknown`.
 
 ## Present
 
-Group obligations by `DECIDE/ACT`, `REVIEW`, and `SETTLE`; then notices, separately labeled; then, if present, self-report `commentScanTruncated`. Full presentation format: `references/presentation-and-schema.md`.
+Lead with blockers/degradation; group obligations by `DECIDE/ACT`, `REVIEW`, and `SETTLE`; then lifecycle findings; then notices, separately labeled. Full presentation format: `references/presentation-and-schema.md`.
 
 ## Discipline
 
 - Read-only; never react, comment, assign, close, or merge.
 - Current revision matters: stale approval is not a valid verdict.
 - GitHub notifications are ambient awareness, not the authoritative digest.
-- Lead with blockers/degradation, then obligations, then notices, then an explicit `nothing needs you` when both obligations and notices are empty.
+- Lead with blockers/degradation, then obligations, findings, notices, then an explicit `nothing needs you` only when all three arrays are empty.
 - The digest never infers: no reply is not agreement; an approved PR is not a recorded Decision; a silent Discussion is not a finished one (blueprint section 10).
 
 ## Schema
 
-`schemaVersion: 4`. Full field-by-field shape: `references/presentation-and-schema.md`.
+`schemaVersion: 5`. Full field-by-field shape: `references/presentation-and-schema.md`.
 
 ## Communication style
 

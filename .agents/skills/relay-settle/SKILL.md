@@ -6,7 +6,7 @@ description: "Settle a Discussion or Issue, record a promoted Decision, merge an
 
 # settle — formally dispose of a whole object
 
-`reply` leaves my response. `settle` verifies authority, applies the settlement block, disposes of the object (close or merge), and — when the closure promotes to a Decision — carries the native promotion signal chain through to a recorded, linked-back Decision file.
+`reply` leaves my response. `settle` verifies authority, applies the settlement block, disposes of the object, and records any exact formal-memory delta already covered by that settlement through commit -> push -> remote read-back.
 
 ## Stance
 
@@ -16,7 +16,7 @@ description: "Settle a Discussion or Issue, record a promoted Decision, merge an
 
 Every close (Discussion or Issue) is preceded by the settlement block (template: `references/templates.md`), shown verbatim to the user before posting (author sign-off, below).
 
-`Follow-ups:` links where work continues elsewhere — including any Brief/Core PR triggered by a recorded Decision. **Brief/Core PRs are follow-ups and never block the original object's closure.** Settling does not mean derived views are updated or that follow-up work is done — only that this object's own disposition is settled.
+`Follow-ups:` links every independently completable child that continues elsewhere. A parent may close with open children because each has its own `Done when`; a child the parent's own completion still depends on leaves the parent open. Settling never implies those child scopes are done.
 
 ## The promotion test
 
@@ -27,7 +27,7 @@ Every Issue and Discussion must close with a `Resolution:`. Not every Resolution
 - **No** — pure execution of an existing Decision, a receipt confirmation, a duplicate, a factual lookup, ideas collected without a choice made — the closing Resolution comment **is** the formal record. `Decision required: No`. Close.
 - **Yes** — `Decision required: Yes`, name a `Recorder:`. Apply the native promotion signal chain (below) instead of closing yet.
 
-Getting this wrong in the direction of under-promoting is the accepted, judgment-bound residue of this design (blueprint section 7, hole 2) — a Brief PR later exposing "nothing to cite" is the safety net, not a reason to promote everything defensively.
+Getting this wrong in the direction of under-promoting is the accepted, judgment-bound residue of this design — a later derived view exposing "nothing to cite" is the safety net, not a reason to promote everything defensively.
 
 ## The native promotion signal chain (deliberately not an @mention)
 
@@ -37,27 +37,28 @@ When `Decision required: Yes`:
 
 **On a Discussion** (no assignee field) — the label carries the stage; the recorder **defaults to the settlement comment's own author** (a native field — whoever posted the settlement block, unless the block's `Recorder:` line names someone else, read tolerantly).
 
-**Completion of the chain:** the recorder commits the Decision → the object's closing comment links `Canonical record: decisions/D-0xx-<slug>.md` back to it → the `awaiting-record` label is removed → the object closes. The conformance sweep verifies both directions of that link. Only once this full chain completes is the object actually closed — a `Decision required: Yes` Issue or Discussion stays open, carrying `awaiting-record`, until its Decision is recorded.
+**Completion of the chain:** the recorder previews the exact delta, reconciles the target branch, commits and pushes it, reads the remote commit back, then the object's closing comment links `Canonical record: <commit URL> (<paths>)` → `awaiting-record` is removed → the object closes. Conformance verifies source-to-commit and commit-to-source provenance. Only once this chain completes is the object closed.
 
-## Recording the Decision (the recorder's half)
+## Recording settled formal memory (the recorder's half)
 
-The recorder is not necessarily the assignee who did the work — it is whoever holds settlement authority for *this* recording act (a Discussion's host, an Issue's acceptor). Recording is drafting and committing the Decision file, then closing the source object; it happens once the source is already marked `awaiting-record` and reassigned.
+The recorder is not necessarily the assignee who did the work — it is whoever holds settlement authority for this recording act. Recording may create a Decision and may update Brief/Core when the settlement covers those exact file deltas. It happens only after the source is explicitly settled and, for a promoted Issue, marked `awaiting-record` and reassigned.
 
-**Direct-commit fuses — all five required, no exceptions:**
+**Direct commit -> push fuses — all five required:**
 
 1. the source object is explicitly settled (a stated Resolution, not silence);
-2. the record adds no new semantics — excerpt, compress, structure the existing settlement, never widen it, never resolve an ambiguity the source left open, never write one person's view as if it were consensus;
-3. it links back — `Source:`, `Settled by:`, `Date:` in the Decision file's frontmatter;
-4. **the commit does only this** — no Brief/Core/other-rule edits riding along. **Exempted**: marking an older Decision's frontmatter `status: superseded` + `superseded-by: D-0xx` in the *same* commit as recording the new one is not a second, separate edit — it is mechanically part of the same recording act (the new Decision's existence is what makes the old one superseded), so it stays inside this fuse rather than tripping it;
-5. agent-drafted text passes the **author sign-off gate** before commit — "Is this what you mean?" (ADR-095).
+2. the exact file delta is covered by that settlement and adds no unresolved semantics — direction-only agreement is insufficient;
+3. every changed formal-memory file cites its source Decisions/object, and the source will link the pushed commit back;
+4. the commit contains only the exact deltas named in this settlement. Mechanical Decision supersession may share the commit because it is part of the same recording act;
+5. the exact diff passes author sign-off, the recorder fetches/reconciles concurrent changes, commits with the canonical author identity, pushes, and reads the remote SHA/files back before claiming success.
 
-**Escapes that force a PR instead of a direct commit:**
+**When direct push is not authorized:**
 
-- the exact wording IS the decision (an external statement, a rights/responsibility allocation) — precision here is the point, and a PR's review-before-merge is the appropriate gate;
-- the source has no clear settlement to record from;
-- the record would synthesize multiple objects — that is a Brief in disguise — hand-author it under `briefs/README.md`'s citation law, not here.
+- the source settles only direction, while wording/code still introduces choices;
+- the source has no clear settlement or the recorder lacks settlement authority;
+- the exact diff has not passed author sign-off;
+- repository protection rejects direct push.
 
-**Standing fuse, above all five:** the moment writing the record requires re-judging "what did we actually mean," it is no longer recording — stop and route it through a PR instead.
+**Standing fuse, above all five:** the moment writing requires re-judging "what did we actually mean," it is no longer recording — return to the source conversation. Use a PR only when the user explicitly requests diff review or repository protection requires it; never open one silently as duplicate ceremony.
 
 ### Decision file format
 
@@ -84,23 +85,23 @@ A closure that supersedes an earlier object names its successor in the closing c
 
 1. **Read the whole current state.** Open the object, completion criteria, evidence, linked Decisions, assignments, latest revision, reviews, and repository protection. Identify the claimed authority and whether this is an initial settlement (draft the block, run the promotion test) or a recording pass (the object is already `awaiting-record`, reassigned to you as recorder).
 2. **Validate authority.** See Ordinary lifecycle above for the non-Decision paths; see the promotion signal chain above for the Decision path.
-3. **Draft.** For an initial settlement: the settlement block (`Resolution:`/`Reason:`/`Decision required:`/`Recorder:`/`Follow-ups:`). For a recording pass: the Decision file, checked against all five fuses, or a note that an escape applies and this routes to a PR instead.
+3. **Draft.** For an initial settlement: the settlement block (`Resolution:`/`Reason:`/`Decision required:`/`Recorder:`/`Follow-ups:`). For a recording pass: the exact Decision/Brief/Core diff covered by settlement, checked against all five fuses; otherwise state what remains unsettled or which repository protection blocks direct push.
 4. **Author sign-off.** Show the exact text that will be posted or committed, verbatim, and ask: "Is this what you mean?" Post/commit only after they confirm; a rewrite goes through the same gate.
-5. **Apply and read back.** Post the block and close/leave-open per the promotion test; or commit the Decision, link back, remove `awaiting-record`, and close; or merge the approved PR / close the explicitly abandoned PR. Verify closed/merged state, actor, current revision, label state, and (for a Decision) both directions of the `Canonical record:` link.
+5. **Apply and read back.** Post the block and close/leave-open per the promotion test; or fetch/reconcile, commit, push, verify remote SHA/files, link back, remove `awaiting-record`, and close; or merge the explicitly reviewed PR / close the explicitly abandoned PR. Verify object state, actor, labels, remote commit, and both provenance directions.
 
 ## Accepted versus effective
 
-A Decision may be accepted (recorded) before it is effective. An ordinary change applies when its PR merges; a Core rule becomes binding only when its enforced PR merges. Closing an unmerged PR means abandonment, not successful completion. Closing an Issue or Discussion without a `Resolution:` is not settlement.
+A Decision may be accepted before it is effective. A directly recorded change becomes established when its pushed commit is remotely readable; its own Decision may name a later effective point. When a PR is explicitly used, the change applies only on merge. Closing an unmerged PR means abandonment, not completion. Closing an Issue or Discussion without a `Resolution:` is not settlement.
 
 ## Completion
 
-Done means a reader can understand who decided, what was decided, and when it became effective without rereading the thread — and, for a promoted closure, that the Decision file exists, is linked both ways, and carries the correct `status`.
+Done means a reader can understand who settled, what was settled, and when it became effective without rereading the thread — and, for repository recording, that the exact pushed commit is remotely readable, linked both ways, and every Decision carries the correct `status`.
 
 ## Discipline
 
 - Settle; do not re-decide. Disagreement returns to the object or a new linked object.
 - Never treat Comment as approval or reuse stale approval after a revision changes.
-- Never author/update a Brief, or substitute for the required reviewer.
+- Never author/update a Decision, Brief, or Core beyond the exact delta covered by settlement; a requested/required PR review is never bypassed.
 - Never let a Decision recording widen scope, resolve an ambiguity the source left open, or present one person's view as consensus — that is exactly what the five fuses and the standing fuse exist to block.
 - If resolution posting, Decision commit, or close/merge succeeds only partially, return the existing URL/commit and the missing step; resume it rather than duplicating.
 

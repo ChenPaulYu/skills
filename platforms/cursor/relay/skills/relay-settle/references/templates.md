@@ -16,6 +16,15 @@ Recorder: <@who — only when Decision required is Yes>
 Follow-ups: #42, #43
 ```
 
+After a direct recording push succeeds, the closing comment adds:
+
+```
+Canonical record: <commit URL> (<changed formal-memory paths>)
+```
+
+The commit message/body or changed Decision frontmatter links the source object in the other
+direction. Never post this line before the remote SHA and changed paths have been read back.
+
 ## Decision file format
 
 ```markdown
