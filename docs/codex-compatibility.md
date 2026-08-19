@@ -37,7 +37,7 @@ Install one compiled profile into a single active global root:
 
 ```bash
 # Cursor-safe dual-global (recommended when Cursor plugins are also installed)
-node scripts/build-codex.mjs --sync-global --profile all --global-root codex
+node scripts/build-codex.mjs --sync-global --profile build --global-root codex
 
 # Codex-only machines (default root)
 node scripts/build-codex.mjs --sync-global --profile build --global-root agents
@@ -58,6 +58,17 @@ node scripts/build-codex.mjs --sync-global --profile project-only
 ```
 
 `project-only` removes only the generator-owned global copies/runtime artifacts recorded in the receipt, leaving unrelated user files alone. The other-root cleanup checks the generated banner before deletion; it does not remove unrelated or hand-authored skills.
+
+Installed does not have to mean active. Codex's `/skills` manager persists enablement by exact path,
+so a specialist pack can stay on disk without paying the every-turn metadata cost. When this
+marketplace repo and a global profile overlap, disable the repo-scoped duplicate paths in this
+checkout (keeping the global copies), or use `project-only` (keeping the repo copies). Re-enable a
+specialist from `/skills` when its domain becomes active.
+
+When repository hooks call `scripts/sync-installed.sh`, the receipt's selected profile is preserved.
+A machine with no receipt starts at `minimal`; switch deliberately with
+`sh scripts/sync-installed.sh --codex-profile <name>`. Later hook runs refresh that profile without
+widening it back to `all`.
 
 ## Translation table
 

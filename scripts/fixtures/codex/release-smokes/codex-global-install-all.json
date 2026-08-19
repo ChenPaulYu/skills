@@ -4,6 +4,7 @@
   "profile": "all",
   "dedupe_global_roots": true,
   "verify_runtime_ownership_conflicts": true,
+  "verify_sync_profile_preservation": true,
   "verify_full_compat_exit": true,
   "seed_legacy_duplicates": [
     "nav-plan",

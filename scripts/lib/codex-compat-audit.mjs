@@ -692,6 +692,9 @@ function validateCodexGlobalInstallSmoke(root, fixture) {
       }
       errors.push(...validateRuntimeOwnershipConflictSmokes(root));
     }
+    if (fixture.verify_sync_profile_preservation === true) {
+      errors.push(...validateSyncProfilePreservationSmoke(root));
+    }
 
     for (const skill of fixture.expect_skills || []) {
       const skillMd = join(globalSkillsDir, skill, "SKILL.md");
@@ -723,6 +726,62 @@ function validateCodexGlobalInstallSmoke(root, fixture) {
 
   } finally {
     rmSync(tempHome, { recursive: true, force: true });
+  }
+
+  return errors;
+}
+
+function validateSyncProfilePreservationSmoke(root) {
+  const errors = [];
+  const selectedHome = mkdtempSync(join(tmpdir(), "skills-sync-profile-selected-"));
+  const freshHome = mkdtempSync(join(tmpdir(), "skills-sync-profile-fresh-"));
+  const runSync = (home, args = []) => spawnSync(
+    "sh",
+    ["scripts/sync-installed.sh", "--quiet", ...args],
+    {
+      cwd: root,
+      encoding: "utf8",
+      env: { ...process.env, HOME: home, USERPROFILE: home },
+    },
+  );
+  const receiptAt = (home) => join(home, ".codex", "skills", ".skills-marketplace-codex.json");
+
+  try {
+    const selected = runSync(selectedHome, ["--codex-profile", "build"]);
+    if (selected.error || selected.status !== 0) {
+      errors.push(`sync profile smoke explicit selection failed: ${summarizeSpawnFailure(selected)}`);
+      return errors;
+    }
+    const firstReceipt = readJson(receiptAt(selectedHome));
+    if (firstReceipt.profile !== "build") {
+      errors.push(`sync profile smoke explicit profile drifted: ${JSON.stringify(firstReceipt.profile)} !== "build"`);
+    }
+
+    const preserved = runSync(selectedHome);
+    if (preserved.error || preserved.status !== 0) {
+      errors.push(`sync profile smoke implicit refresh failed: ${summarizeSpawnFailure(preserved)}`);
+      return errors;
+    }
+    const secondReceipt = readJson(receiptAt(selectedHome));
+    if (secondReceipt.profile !== "build") {
+      errors.push(`sync profile smoke widened the receipt after refresh: ${JSON.stringify(secondReceipt.profile)} !== "build"`);
+    }
+    if (JSON.stringify(secondReceipt.skills) !== JSON.stringify(firstReceipt.skills)) {
+      errors.push("sync profile smoke changed the selected skill set during an implicit refresh");
+    }
+
+    const fresh = runSync(freshHome);
+    if (fresh.error || fresh.status !== 0) {
+      errors.push(`sync profile smoke fresh install failed: ${summarizeSpawnFailure(fresh)}`);
+      return errors;
+    }
+    const freshReceipt = readJson(receiptAt(freshHome));
+    if (freshReceipt.profile !== "minimal") {
+      errors.push(`sync profile smoke fresh default drifted: ${JSON.stringify(freshReceipt.profile)} !== "minimal"`);
+    }
+  } finally {
+    rmSync(selectedHome, { recursive: true, force: true });
+    rmSync(freshHome, { recursive: true, force: true });
   }
 
   return errors;

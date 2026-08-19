@@ -33,8 +33,9 @@
 #     git config core.hooksPath scripts/hooks
 #
 # Run by hand any time:
-#     sh scripts/sync-installed.sh          # verbose
-#     sh scripts/sync-installed.sh --quiet  # hook mode: silent unless something changed
+#     sh scripts/sync-installed.sh                         # preserve the selected Codex profile
+#     sh scripts/sync-installed.sh --codex-profile build   # switch profiles, then persist it
+#     sh scripts/sync-installed.sh --quiet                 # hook mode: silent unless something changed
 #
 # Safe to re-run; a no-op when everything is already current, and a no-op on a
 # machine that has neither `claude` nor `node`.
@@ -44,7 +45,28 @@ ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$ROOT"
 
 QUIET=0
-[ "$1" = "--quiet" ] && QUIET=1
+CODEX_PROFILE_OVERRIDE=
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --quiet)
+      QUIET=1
+      ;;
+    --codex-profile)
+      shift
+      [ "$#" -gt 0 ] || {
+        echo "✗ --codex-profile requires a profile name" >&2
+        exit 2
+      }
+      CODEX_PROFILE_OVERRIDE=$1
+      ;;
+    *)
+      echo "✗ unknown option: $1" >&2
+      echo "  usage: sh scripts/sync-installed.sh [--quiet] [--codex-profile <name>]" >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
 
 say() { [ "$QUIET" -eq 1 ] || echo "$@"; }
 
@@ -64,12 +86,33 @@ if command -v node >/dev/null 2>&1; then
 
   # ── Codex · opencode — the flat mirror at the dual-global root ──────────────
   CODEX_ROOT="$HOME/.codex/skills"
+  CODEX_PROFILE=$CODEX_PROFILE_OVERRIDE
+  CODEX_PROFILE_SOURCE=explicit
+  if [ -z "$CODEX_PROFILE" ]; then
+    CODEX_PROFILE_SOURCE="fresh default"
+    # The receipt is the owner of the user's install scope. Hooks refresh that
+    # scope; they must not silently widen it back to `all`. Check both roots so
+    # switching to the Cursor-safe Codex root preserves an earlier selection.
+    for receipt in \
+      "$HOME/.codex/skills/.skills-marketplace-codex.json" \
+      "$HOME/.agents/skills/.skills-marketplace-codex.json"
+    do
+      [ -f "$receipt" ] || continue
+      CODEX_PROFILE=$(sed -n 's/^[[:space:]]*"profile"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$receipt" | head -1)
+      if [ -n "$CODEX_PROFILE" ]; then
+        CODEX_PROFILE_SOURCE=receipt
+        break
+      fi
+    done
+  fi
+  [ -n "$CODEX_PROFILE" ] || CODEX_PROFILE=minimal
+  say "→ Codex install profile: $CODEX_PROFILE ($CODEX_PROFILE_SOURCE)"
   before=$(fingerprint "$CODEX_ROOT")
   # --sync-global installs the COMPILED mirror and prunes skills that left the
   # repo (a retirement that reaches the source but not the runtime has not
   # happened). --global-root codex keeps this marketplace out of
   # ~/.agents/skills, which Cursor scans — see ADR-118 in the header.
-  if out=$(node scripts/build-codex.mjs --sync-global --global-root codex 2>&1); then
+  if out=$(node scripts/build-codex.mjs --sync-global --profile "$CODEX_PROFILE" --global-root codex 2>&1); then
     say "$out"
     if [ "$QUIET" -eq 1 ]; then
       [ "$before" != "$(fingerprint "$CODEX_ROOT")" ] && echo "✓ Codex skill mirror updated → $CODEX_ROOT"
@@ -81,7 +124,7 @@ if command -v node >/dev/null 2>&1; then
     fi
   else
     echo "$out" >&2
-    echo "✗ Codex mirror sync failed — run \`node scripts/build-codex.mjs --sync-global --global-root codex\` by hand" >&2
+    echo "✗ Codex mirror sync failed — run \`sh scripts/sync-installed.sh --codex-profile $CODEX_PROFILE\` by hand" >&2
   fi
 
   # ── Cursor — native plugins, symlinked (ADR-118) ────────────────────────────

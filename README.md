@@ -149,10 +149,10 @@ Both auto-discover `.agents/skills/` — so **inside a clone of this repo there 
 
 ```bash
 git clone https://github.com/ChenPaulYu/skills.git && cd skills
-node scripts/build-codex.mjs --sync-global --profile all --global-root codex
+node scripts/build-codex.mjs --sync-global --profile build --global-root codex
 ```
 
-That installs compiled flat skills into `~/.codex/skills/`, runtime artifacts into `~/.codex/`, and prunes this marketplace from `~/.agents/skills/`. Default `--global-root agents` still targets `~/.agents/skills/` when Cursor is not in play. Skills surface under flat names (`nav-audit`, `shape-mockup`, …). Verify: Codex — `/skills`; opencode — `opencode debug skill`.
+That installs the `build` profile's compiled flat skills into `~/.codex/skills/`, runtime artifacts into `~/.codex/`, and prunes this marketplace from `~/.agents/skills/`. Default `--global-root agents` still targets `~/.agents/skills/` when Cursor is not in play. Use another named profile when needed; reserve `all` for a machine that truly needs every skill globally. Skills surface under flat names (`nav-audit`, `shape-mockup`, …). Verify: Codex — `/skills`; opencode — `opencode debug skill`.
 
 ### Cursor (native plugins)
 
@@ -221,8 +221,12 @@ Codex discovers `.agents/skills/` automatically when you open this repo (or copy
 Keep only one active copy of each Codex skill. For dual-global with Cursor, use `--global-root codex`; otherwise `--global-root agents` (default). The install always prunes this marketplace from the other global root:
 
 ```bash
-node scripts/build-codex.mjs --sync-global --profile all --global-root codex
+node scripts/build-codex.mjs --sync-global --profile build --global-root codex
 ```
+
+Hook-driven updates preserve the profile recorded by the last install instead of widening it back to
+`all`. On a fresh machine they start at `minimal`; switch the persistent selection with
+`sh scripts/sync-installed.sh --codex-profile <name>`.
 
 ## Cursor compatibility
 
