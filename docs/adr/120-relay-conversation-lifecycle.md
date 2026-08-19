@@ -66,7 +66,7 @@ semantic model runs inside mechanical-tier `digest`.
 
 Reminder thresholds are workspace policy, not reducer fact. A scheduled workspace job supplies
 that policy, rewrites one pinned report Issue as current state, and posts a fresh mention-bearing
-comment only for a new row or when that row's re-ping interval elapses. It never auto-reassigns,
+comment only for a new assigned `overdue-stage` row or when that row's re-ping interval elapses. It never auto-reassigns,
 auto-closes, or rewrites a source object.
 
 ### An exact settled repository change commits and pushes directly

@@ -1,6 +1,6 @@
 {
   "name": "relay",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Coordinate asynchronously through GitHub-native Discussions, Issues, pull requests, reviews, and commits, following the Accord memory model. Four daily verbs route independent follow-ups, expose native lifecycle findings and stage age, hand off the baton without moving settlement authority, and settle exact formal-memory changes by verified commit and push. Language-agnostic.",
   "author": {
     "name": "Paul",

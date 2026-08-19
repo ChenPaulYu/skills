@@ -1,6 +1,6 @@
 # Relay conversation lifecycle — implementation plan
 
-> Generated: 2026-08-19 · Spec source: Relay/Accord workflow review · Status: complete — Relay 2.5.0 released and the target workspace adopted
+> Generated: 2026-08-19 · Spec source: Relay/Accord workflow review · Status: complete — Relay 2.5.1 released after delivery-contract hardening and the target workspace adopted
 
 ## Outcome
 

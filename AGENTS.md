@@ -649,7 +649,8 @@ obligation.
 
 The reducer emits age as fact; a workspace supplies reminder thresholds as explicit policy. A
 scheduled workspace job owns delivery: one pinned report body carries current state, while fresh
-mention-bearing comments fire only for a new finding/obligation or when its re-ping cadence elapses.
+mention-bearing comments fire only for an assigned `overdue-stage` finding that is new or whose
+re-ping cadence elapsed.
 The schedule never auto-reassigns, auto-closes, or mutates a source object.
 
 **Closure semantics: every Discussion is closed by its initiator.** One closure-owner class, no split by category — a Discussion opened to converge something requires a summarizing final comment first (folded into its `Resolution:`); Q&A's accepted-answer signal is the reducer-visible special case of that same rule, not a separate one (ADR-096, general form unchanged).
