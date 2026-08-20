@@ -21,6 +21,15 @@ Full detail behind `audit`'s Stance summary — the check tables, the three-mode
 - Function: > 100 LOC = suspect
 - Imports per file: > 20 = wide caller surface
 
+> **A threshold is a signal to look, never a verdict to cut (ADR-122).** Every number above says
+> *examine this*, not *fix this* — report them as evidence, never as a to-do list. The question
+> that overrides any of them: **does this section have a name that lets its caller stop knowing
+> what is inside?** If the length comes from **surface width** (a wide CLI/flag/prop contract) or
+> from **step count**, the code is healthy and the finding is "no action". Measured 2026-08-20: an
+> audit list worked top-down produced one correct cut and one that grew two files by 284 lines,
+> pushed one across the *file* threshold, and left the function count unmoved — see the
+> Frequently-misjudged entry below.
+
 ## Three modes — read first
 
 Modes 1 and 2 differ by **scope + framing**; Mode 3 differs by **depth** (single-pass vs fan-out) and defaults to Mode 1's scope. See [ADR-043](docs/adr/043-audit-deep-mode-domain-fanout.md).
@@ -167,3 +176,12 @@ Group findings by rule number. Within each rule, sort by severity: error > warn 
 - A **wide-surface store** (20-member object) is fine *if it's a store*; the wide surface lets gesture hooks take it as one prop and stay narrow (rule ⑤). Stores are a deliberate exception to rule ①.
 - A **single-renderer facade** (one impl behind an `index.ts`) is still valuable — the door is the value, not the count of implementations (rule ②).
 - An **old module imported once** is not dead. "Dead" = zero inbound imports (excluding tests + entry point).
+- A **200-line function is not automatically a split candidate** — measure what the length is *made
+  of* before reporting it as one. A CLI command with 20 flags carries ~20 lines of signature and a
+  long docstring before any logic; that is contract width, not hidden complexity (rule ④'s
+  fragmentation half). The tell that a split IS warranted: the function contains **several things
+  that each have their own name** — the field case was a 226-line registrar holding four whole CLI
+  commands, which cut cleanly to 11 lines. The tell that it is NOT: the only names available for
+  the parts are execution phases (`preflight`/`resolve`/`land`/`execute`) — that is temporal
+  decomposition (rule ①), and the extracted helpers will each have exactly one caller and a wide
+  parameter list, i.e. shallow modules that hide nothing. Full case: ADR-122.

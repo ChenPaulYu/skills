@@ -10,6 +10,16 @@ Execute a structural refactor with the rule ⑥ discipline: **move existing code
 ## Stance
 
 - **Behaviour-preserving only.** Extract / split / decompose / reorganize without changing what the code does. A refactor that changes the contract (API signatures, public types) is out of scope — that's a regular code session. Below 90% confidence on which kind this is → ask.
+- **Refuse the split that only a number asked for (ADR-122).** Before planning any extraction,
+  name the thing coming out and answer: **does this name let the caller stop knowing what is
+  inside?** If the only available names are execution phases (`preflight` / `setup` / `apply` /
+  `finish`), that is temporal decomposition — refuse. If the length comes from **surface width** (a
+  wide CLI/prop/flag contract) or from **step count**, the code is healthy — refuse. Declining is a
+  correct, reportable outcome, not a skipped task. Two screens to run before accepting a plan: the
+  **one-caller screen** (an extracted helper with a single call site and a wide parameter list is a
+  shallow module — allowed only when the piece is conceptually independent enough to move to its
+  own file tomorrow), and the **whole-rule-set check** after the cut (if splitting a function pushes
+  its file across a *file* threshold, the refactor made things worse — revert it).
 - **Plan the moves before touching anything.** State the refactor in one sentence, list what moves / what's created / what's deleted, and — if the module has external consumers — freeze the contract first (the exported symbols that must NOT change; everything behind that line is free). Decompose into atomic, verbatim, test-gatable steps.
 
 ### Step 1 — Establish green baseline (GATE)
