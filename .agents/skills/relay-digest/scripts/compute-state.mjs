@@ -3,7 +3,8 @@
 // Collection is intentionally separate from the deterministic reducer: fixture JSON
 // exercises semantics without network access, while live use shells out only to `gh`.
 //
-// SCHEMA_VERSION 5 (ADR-120): lifecycle facts and native-only findings are additive
+// SCHEMA_VERSION 6 (ADR-121): the inbox summary and generated triage-wrapper tier are
+// additive to lifecycle facts, findings, obligations, and notices.
 // to ADR-100's Accord-memory-model obligations. Responsibility still derives only
 // from native fields; findings diagnose state but never invent an owner.
 //
@@ -21,7 +22,7 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-export const SCHEMA_VERSION = 5;
+export const SCHEMA_VERSION = 6;
 
 const loginOf = (actor) => typeof actor === 'string' ? actor : actor?.login || actor?.slug || null;
 const sameLogin = (left, right) => Boolean(left && right && left.toLowerCase() === right.toLowerCase());
@@ -30,6 +31,17 @@ const hasLabel = (object, label) => (object.labels || []).some((value) =>
   (typeof value === 'string' ? value : value?.name)?.toLowerCase() === label.toLowerCase());
 const isOpen = (object) => object.closed !== true && (!object.state || object.state.toUpperCase() === 'OPEN');
 const objectKey = (object) => object.id || object.url || object.number;
+const isRelayTriageObject = (object) => object.type === 'issue' && hasLabel(object, 'relay-triage');
+
+function emptyInbox() {
+  return {
+    openObligationCount: 0,
+    overdueCount: 0,
+    oldestOverdue: null,
+    firstAction: null,
+    triageCount: 0,
+  };
+}
 
 function objectRef(object) {
   return {
@@ -58,6 +70,17 @@ function finding(code, object, extra = {}) {
     code,
     ...objectRef(object),
     ...extra,
+  };
+}
+
+function triageWrapper(object, viewer) {
+  return {
+    id: `triage:${objectKey(object)}`,
+    kind: 'TRIAGE',
+    ...objectRef(object),
+    assignee: viewer,
+    action: 'process-linked-obligations',
+    reasons: ['relay-triage-wrapper'],
   };
 }
 
@@ -348,6 +371,56 @@ function mergeObligation(existing, incoming) {
   return existing;
 }
 
+function overdueForViewer(findings, viewer) {
+  return findings
+    .filter((entry) => entry.code === 'overdue-stage' && sameLogin(entry.assignee, viewer))
+    .sort((a, b) => Number(b.ageDays || 0) - Number(a.ageDays || 0));
+}
+
+function inboxAction(entry) {
+  return {
+    id: entry.id,
+    objectType: entry.objectType,
+    number: entry.number,
+    title: entry.title,
+    url: entry.url,
+    kind: entry.kind,
+    action: entry.action,
+    ...(entry.stageEnteredAt !== undefined ? { stageEnteredAt: entry.stageEnteredAt } : {}),
+  };
+}
+
+function buildInboxSummary(obligations, findings, triage, viewer) {
+  const overdue = overdueForViewer(findings, viewer);
+  const overdueAge = new Map(overdue.map((entry) => [entry.url, Number(entry.ageDays || 0)]));
+  const ordered = [...obligations].sort((a, b) => {
+    const overdueOrder = Number(overdueAge.has(b.url)) - Number(overdueAge.has(a.url));
+    if (overdueOrder) return overdueOrder;
+    if (overdueAge.has(a.url) && overdueAge.has(b.url)) {
+      const ageOrder = overdueAge.get(b.url) - overdueAge.get(a.url);
+      if (ageOrder) return ageOrder;
+    }
+    const order = new Map(['DECIDE/ACT', 'REVIEW', 'SETTLE'].map((kind, index) => [kind, index]));
+    return (order.get(a.kind) - order.get(b.kind)) || String(a.url || a.id).localeCompare(String(b.url || b.id));
+  });
+  const oldest = overdue[0] || null;
+  return {
+    openObligationCount: obligations.length,
+    overdueCount: overdue.length,
+    oldestOverdue: oldest ? {
+      ...objectRef(oldest),
+      code: oldest.code,
+      stage: oldest.stage,
+      assignee: oldest.assignee,
+      stageEnteredAt: oldest.stageEnteredAt,
+      ageDays: oldest.ageDays,
+      thresholdDays: oldest.thresholdDays,
+    } : null,
+    firstAction: ordered[0] ? inboxAction(ordered[0]) : null,
+    triageCount: triage.length,
+  };
+}
+
 /** Reduce normalized GitHub primitives to one actionable item per object, plus a separate
  * notices tier: awareness signals that are never presented as work owed (see digest/SKILL.md). */
 export function reduceObligations(input) {
@@ -364,6 +437,8 @@ export function reduceObligations(input) {
       findings: [],
       obligations: [],
       notices: [],
+      triage: [],
+      inbox: emptyInbox(),
     };
   }
   const viewer = input.viewer;
@@ -378,6 +453,8 @@ export function reduceObligations(input) {
       findings: [],
       obligations: [],
       notices: [],
+      triage: [],
+      inbox: emptyInbox(),
     };
   }
 
@@ -387,6 +464,7 @@ export function reduceObligations(input) {
   const objectsWithObligations = new Set();
   const objectsWithBlockers = new Set();
   const noticesById = new Map();
+  const triageById = new Map();
 
   function record(item, object) {
     byId.set(item.id, mergeObligation(byId.get(item.id), item));
@@ -414,6 +492,12 @@ export function reduceObligations(input) {
 
   for (const object of input.objects || []) {
     if (!isOpen(object)) continue; // closed objects produce neither an obligation nor a notice
+
+    if (isRelayTriageObject(object)) {
+      const assigned = (object.assignees || []).map(loginOf).some((login) => sameLogin(login, viewer));
+      if (assigned) triageById.set(objectKey(object), triageWrapper(object, viewer));
+      continue; // wrapper state is surfaced separately; source Issues remain the obligations
+    }
 
     const isFyiObject = object.isFYI || hasLabel(object, 'fyi');
     if (!isFyiObject) {
@@ -590,10 +674,14 @@ export function reduceObligations(input) {
     }
   }
 
+  const triage = [...triageById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));
+  const findings = [...findingsById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));
+  const overdueAge = new Map(overdueForViewer(findings, viewer).map((entry) => [entry.url, Number(entry.ageDays || 0)]));
   const order = new Map(['DECIDE/ACT', 'REVIEW', 'SETTLE'].map((kind, index) => [kind, index]));
   const obligations = [...byId.values()].sort((a, b) =>
+    (Number(overdueAge.has(b.url)) - Number(overdueAge.has(a.url))) ||
+    (overdueAge.has(a.url) && overdueAge.has(b.url) ? overdueAge.get(b.url) - overdueAge.get(a.url) : 0) ||
     (order.get(a.kind) - order.get(b.kind)) || String(a.url || a.id).localeCompare(String(b.url || b.id)));
-  const findings = [...findingsById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));
   const notices = [...noticesById.values()].sort((a, b) => String(a.url || a.id).localeCompare(String(b.url || b.id)));
   // Self-report rather than silently drop: the comment scan is capped (see graphQlQuery),
   // so an object whose comments connection exceeded the cap may hide an undetected mention.
@@ -613,6 +701,8 @@ export function reduceObligations(input) {
     findings,
     obligations,
     notices,
+    triage,
+    inbox: buildInboxSummary(obligations, findings, triage, viewer),
     ...(commentScanTruncated.length ? { commentScanTruncated } : {}),
     ...(input.caveat ? { caveat: input.caveat, authenticatedViewer: input.authenticatedViewer } : {}),
   };
@@ -820,6 +910,8 @@ export function runCli(args = process.argv.slice(2)) {
       findings: [],
       obligations: [],
       notices: [],
+      triage: [],
+      inbox: emptyInbox(),
     }, null, 2)}\n`);
     return 2;
   }

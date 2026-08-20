@@ -33,7 +33,7 @@
       "name": "relay",
       "source": "./plugins/relay",
       "description": "Coordinate asynchronously through a verified GitHub workspace under the Accord memory model. Route independent follow-ups, expose native lifecycle findings and stage age, hand off the current baton without moving settlement authority, and commit exact settled memory directly. Language-agnostic.",
-      "version": "2.5.1"
+      "version": "2.5.2"
     }
   ]
 }

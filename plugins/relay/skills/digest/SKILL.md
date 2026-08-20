@@ -1,7 +1,7 @@
 ---
 name: digest
 model: sonnet
-description: "Show what actually needs you in a Relay workspace, read from GitHub — open obligations, native lifecycle findings and stage age, plus separate non-binding notices. Fires on \"what needs me\", \"有什麼要我看的\", \"對方有回我嗎\", \"relay 有東西嗎\". Read-only; never infers responsibility from prose."
+description: "Show what actually needs you in a Relay workspace, read from GitHub — an inbox-first preflight with open obligations, native lifecycle findings and stage age, plus separate non-binding notices. Fires on \"what needs me\", \"有什麼要我看的\", \"對方有回我嗎\", \"relay 有東西嗎\", or when entering a workspace with relay.yml before unrelated work. Read-only; never infers responsibility from prose."
 ---
 
 # digest — show only what genuinely needs this viewer
@@ -9,6 +9,14 @@ description: "Show what actually needs you in a Relay workspace, read from GitHu
 Compute an actionable view from GitHub state without writing anything.
 
 > **Cost tier:** this is a mechanical read-only scan, so it uses the mechanical-tier model for this turn.
+
+## Session preflight
+
+When the current workspace contains `relay.yml`, run this skill once at the start of a new
+session before unrelated work. Lead with the `inbox` summary: open source obligations, overdue
+source obligations, the oldest overdue Issue, the first native action, and any generated triage
+wrapper. Then take the first native action — reply, close, hand off, or state a blocker. A
+natural-language "seen" or "I will handle it" does not complete an obligation.
 
 ## Consumption tiers
 
@@ -35,6 +43,7 @@ Include each obligation once. There is no Announcement object and no receipt-def
   - none of the above → `DECIDE/ACT act` (the unchanged default for plain assignment);
   - **conflicting labels** (more than one of the three present at once) are malformed: the reducer picks the *latest* stage in the order `needs-input < awaiting-acceptance < awaiting-record` for a deterministic obligation, and adds `malformed: ['conflicting-stage-labels']` to the entry — self-report this rather than presenting it as an ordinary obligation;
   - a stage label on an Issue with **no assignee** produces no obligation for anyone and a separate `stage-without-assignee` finding — never an invented owner;
+- an open Issue carrying the native `relay-triage` label is a generated wrapper, not a source obligation. If assigned to the viewer, return it in `triage` with `process-linked-obligations`; do not count it in `obligations` and do not scan it for notices. Its linked source Issues remain ordinary obligations;
 - a Q&A Discussion the viewer authored: `DECIDE/ACT accept-answer-or-follow-up` while open, unanswered, and someone else has commented; `SETTLE close-answered-question` once GitHub's native `isAnswered` is true and the Discussion is still open;
 - a requested PR verdict on the current revision;
 - a current-revision `Request changes` addressed back to the PR author until a new revision is pushed;
@@ -55,6 +64,7 @@ A `fyi`-labeled object opts every obligation above out for anyone — a durable,
 Exclude:
 
 - `fyi`-labeled objects — the explicit opt-out;
+- `relay-triage` wrapper Issues from the source-obligation set — they are returned in `triage` instead;
 - ordinary notifications;
 - Comment-only PR rounds presented as verdict completion;
 - closed/resolved items and obligations completed on the current revision;
@@ -120,7 +130,7 @@ The mention scan and the Q&A comment check read up to the most recent 50 comment
 
 ## Present
 
-Lead with blockers/degradation; group obligations by `DECIDE/ACT`, `REVIEW`, and `SETTLE`; then lifecycle findings; then notices, separately labeled. Full presentation format: `references/presentation-and-schema.md`.
+Lead with blockers/degradation, then the `inbox` summary and `triage` wrappers; group source obligations by `DECIDE/ACT`, `REVIEW`, and `SETTLE`; then lifecycle findings; then notices, separately labeled. Full presentation format: `references/presentation-and-schema.md`.
 
 ## Discipline
 
@@ -132,7 +142,7 @@ Lead with blockers/degradation; group obligations by `DECIDE/ACT`, `REVIEW`, and
 
 ## Schema
 
-`schemaVersion: 5`. Full field-by-field shape: `references/presentation-and-schema.md`.
+`schemaVersion: 6`. Full field-by-field shape: `references/presentation-and-schema.md`.
 
 ## Communication style
 

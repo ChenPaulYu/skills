@@ -471,7 +471,7 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 # relay — GitHub-native coordination semantics
 
-> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [ADR-115](docs/adr/115-relay-condenses-to-four.md), [ADR-120](docs/adr/120-relay-conversation-lifecycle.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
+> This file owns Relay's operative contract. Design rationale lives in [ADR-090](docs/adr/090-relay-github-native.md), [ADR-091](docs/adr/091-relay-awareness-review-task-evidence.md), [ADR-092](docs/adr/092-relay-native-lifecycle-completion.md), [ADR-093](docs/adr/093-relay-obligations-vs-notices.md), [ADR-094](docs/adr/094-relay-entry-templates.md), [ADR-095](docs/adr/095-relay-author-signoff-outbound-prose.md), [ADR-096](docs/adr/096-relay-closure-semantics.md), [ADR-097](docs/adr/097-relay-receipt-default.md), [ADR-098](docs/adr/098-relay-upstream-nursery-routing.md), [ADR-099](docs/adr/099-relay-decision-reversal-consent.md), [ADR-100](docs/adr/100-relay-adopts-the-accord-memory-model.md), [ADR-101](docs/adr/101-relay-attested-reference-roster.md), [ADR-102](docs/adr/102-relay-migrate-generalizes.md), [ADR-115](docs/adr/115-relay-condenses-to-four.md), [ADR-120](docs/adr/120-relay-conversation-lifecycle.md), [ADR-121](docs/adr/121-relay-active-digest-inbox-and-triage.md), [the design](docs/design/relay.md), and the design record itself: [`blueprints/plans/2026-07-22-accord-memory-model.md`](blueprints/plans/2026-07-22-accord-memory-model.md) (the "blueprint"). Each skill restates the rules it needs.
 
 ## Governing principle: progressive disclosure
 
@@ -648,9 +648,12 @@ arbitrary comments is advisory only, never runs inside `digest`, and never creat
 obligation.
 
 The reducer emits age as fact; a workspace supplies reminder thresholds as explicit policy. A
-scheduled workspace job owns delivery: one pinned report body carries current state, while fresh
-mention-bearing comments fire only for an assigned `overdue-stage` finding that is new or whose
-re-ping cadence elapsed.
+new session begins with the digest's inbox preflight: source obligation count, overdue count,
+oldest overdue item, first native action, and generated triage wrappers. A scheduled workspace
+job owns delivery: one pinned report body carries current state, while fresh mention-bearing
+comments fire only for an assigned `overdue-stage` finding that is new or whose re-ping cadence
+elapsed. An open Issue labeled `relay-triage` is a generated wrapper returned in schema-6's
+`triage` tier, not a duplicate source obligation; linked source Issues remain authoritative.
 The schedule never auto-reassigns, auto-closes, or mutates a source object.
 
 **Closure semantics: every Discussion is closed by its initiator.** One closure-owner class, no split by category — a Discussion opened to converge something requires a summarizing final comment first (folded into its `Resolution:`); Q&A's accepted-answer signal is the reducer-visible special case of that same rule, not a separate one (ADR-096, general form unchanged).
@@ -721,7 +724,7 @@ Every writing verb that posts prose into a GitHub object or commits a Decision f
 
 Use GitHub primitives directly through authenticated `gh`/API operations and ordinary branches/PRs, plus direct commits for Decision recording under the five-fuse discipline above. There is no Relay database, status frontmatter, project file, or thought stream beyond the `decisions/`/`briefs/`/`core/` formal-memory files themselves — each of those is itself plain Markdown plus frontmatter/citations plus git history, never a parallel state store. The forbidden thing is a machine-consumed parallel **state** store, not a PR-attested **reference** file (`relay.yml`) or a deletable local **routing preference** (`~/.config/relay/repo`). Neither participates in obligation computation.
 
-The deterministic GitHub obligation reducer belongs to `digest`. It collects native GitHub primitives, reduces them without inventing state, and returns a machine-readable blocker when collection is incomplete. One-off legacy adoption (above) performs semantic inventory by hand; the legacy frontmatter linter is retired.
+The deterministic GitHub obligation reducer belongs to `digest`. It collects native GitHub primitives, reduces them without inventing state, and returns a machine-readable blocker when collection is incomplete. Schema 6 adds the inbox summary and the separate generated-wrapper tier without changing source obligation semantics. One-off legacy adoption (above) performs semantic inventory by hand; the legacy frontmatter linter is retired.
 
 ## Cost and invocation
 

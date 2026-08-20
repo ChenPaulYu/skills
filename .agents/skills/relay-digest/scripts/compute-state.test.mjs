@@ -28,10 +28,56 @@ test('live GraphQL query closes every selection set', () => {
   assert.equal(depth, 0);
 });
 
-test('schema 5 keeps lifecycle findings separate from obligations and notices', () => {
+test('schema 6 keeps lifecycle findings, triage wrappers, and inbox summary separate', () => {
   const result = reduceObligations(base([]));
-  assert.equal(result.schemaVersion, 5);
+  assert.equal(result.schemaVersion, 6);
   assert.deepEqual(result.findings, []);
+  assert.deepEqual(result.triage, []);
+  assert.deepEqual(result.inbox, {
+    openObligationCount: 0,
+    overdueCount: 0,
+    oldestOverdue: null,
+    firstAction: null,
+    triageCount: 0,
+  });
+});
+
+test('a relay-triage Issue is surfaced as a wrapper, not duplicated as a source obligation', () => {
+  const wrapper = item('I90', 'issue', {
+    title: 'Relay triage · @reviewer-one',
+    labels: ['relay-triage'],
+    assignees: [{ login: viewer }],
+  });
+  const source = item('I91', 'issue', { assignees: [{ login: viewer }] });
+  const result = reduceObligations(base([wrapper, source]));
+
+  assert.deepEqual(result.obligations.map((entry) => entry.number), [91]);
+  assert.deepEqual(result.triage.map((entry) => [entry.number, entry.action]), [[90, 'process-linked-obligations']]);
+  assert.equal(result.inbox.triageCount, 1);
+});
+
+test('inbox summary leads with the oldest overdue source obligation', () => {
+  const newer = item('I92', 'issue', {
+    assignees: [{ login: viewer }],
+    lifecycleCollected: true,
+    lifecycleEvents: [{ type: 'ASSIGNED_EVENT', assignee: viewer, createdAt: '2026-08-19T12:00:00Z' }],
+  });
+  const older = item('I93', 'issue', {
+    assignees: [{ login: viewer }],
+    lifecycleCollected: true,
+    lifecycleEvents: [{ type: 'ASSIGNED_EVENT', assignee: viewer, createdAt: '2026-08-10T12:00:00Z' }],
+  });
+  const result = reduceObligations({
+    ...base([newer, older]),
+    collectedAt: '2026-08-20T12:00:00Z',
+    policy: { overdueAfterDays: { default: 7 } },
+  });
+
+  assert.equal(result.inbox.openObligationCount, 2);
+  assert.equal(result.inbox.overdueCount, 1);
+  assert.equal(result.inbox.oldestOverdue.number, 93);
+  assert.equal(result.inbox.firstAction.number, 93);
+  assert.equal(result.inbox.firstAction.action, 'act');
 });
 
 test('post-migration: an [ACK]-titled Discussion is just a Discussion', () => {
@@ -418,7 +464,7 @@ test('blocked output matches the declared schema exactly — no leaked collector
   });
   const result = reduceObligations(collected);
   assert.deepEqual(Object.keys(result).sort(), [
-    'blocked', 'blockers', 'findings', 'notices', 'obligations', 'repository', 'schemaVersion', 'source', 'viewer',
+    'blocked', 'blockers', 'findings', 'inbox', 'notices', 'obligations', 'repository', 'schemaVersion', 'source', 'triage', 'viewer',
   ].sort());
   assert.equal('objects' in result, false);
 });
@@ -1346,7 +1392,7 @@ test('CLI applies overdue thresholds only from an explicit policy file', () => {
   assert.equal(result.findings.some((entry) => entry.code === 'overdue-stage'), true);
 });
 
-test('CLI read failure preserves the complete schema-5 result shape', () => {
+test('CLI read failure preserves the complete schema-6 result shape', () => {
   let output = '';
   const originalWrite = process.stdout.write;
   process.stdout.write = (chunk) => { output += chunk; return true; };
@@ -1357,9 +1403,17 @@ test('CLI read failure preserves the complete schema-5 result shape', () => {
   }
 
   const result = JSON.parse(output);
-  assert.equal(result.schemaVersion, 5);
+  assert.equal(result.schemaVersion, 6);
   assert.deepEqual(result.blockers, []);
   assert.deepEqual(result.findings, []);
   assert.deepEqual(result.obligations, []);
   assert.deepEqual(result.notices, []);
+  assert.deepEqual(result.triage, []);
+  assert.deepEqual(result.inbox, {
+    openObligationCount: 0,
+    overdueCount: 0,
+    oldestOverdue: null,
+    firstAction: null,
+    triageCount: 0,
+  });
 });
