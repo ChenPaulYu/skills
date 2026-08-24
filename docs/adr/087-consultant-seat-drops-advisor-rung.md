@@ -1,6 +1,6 @@
 # ADR 087 — Consultant seat drops the host-advisor rung
 
-**Status**: accepted — amends [ADR-067](067-dispatch-tiers-consultant-seat.md)'s resolution order
+**Status**: superseded by [ADR-122](122-consultant-seat-drops-the-subagent-rung.md) — the promoted sub-agent rung this ADR created was itself dropped; kept for history
 **Date**: 2026-07-17
 **Source**: owner ruling in-session ("不要依賴 advisor tool"), after the tool's
 empirical availability reached ~zero.
