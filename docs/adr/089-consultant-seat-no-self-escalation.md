@@ -1,6 +1,6 @@
 # ADR 089 — Consultant seat: no self-escalation
 
-**Status**: superseded by [ADR-122](122-consultant-seat-drops-the-subagent-rung.md) — the sub-agent-reviewer rung this ADR guarded no longer exists, so its no-self-escalation clause is moot; kept for history
+**Status**: superseded by [ADR-123](123-consultant-seat-drops-the-subagent-rung.md) — the sub-agent-reviewer rung this ADR guarded no longer exists, so its no-self-escalation clause is moot; kept for history
 **Date**: 2026-07-17
 **Source**: owner-reported runaway nesting in a live session, diagnosed and fixed
 in the same sitting.

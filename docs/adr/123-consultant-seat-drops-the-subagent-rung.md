@@ -1,4 +1,4 @@
-# ADR 122 — Consultant seat drops the sub-agent rung; stuck calls go straight to the user
+# ADR 123 — Consultant seat drops the sub-agent rung; stuck calls go straight to the user
 
 **Status**: accepted — supersedes [ADR-087](087-consultant-seat-drops-advisor-rung.md) and [ADR-089](089-consultant-seat-no-self-escalation.md); amends [ADR-067](067-dispatch-tiers-consultant-seat.md)'s resolution order
 **Date**: 2026-08-24
