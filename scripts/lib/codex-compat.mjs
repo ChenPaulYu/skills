@@ -277,7 +277,7 @@ export const CODEX_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Codex
 > Missing custom-agent runtime or artifact is an inline fallback, **not** \`MISSING-TOOL\`. Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
 
 const BROWSER_VERIFY_ANCHORS = {
-  "shape-mockup": "## The render step is per-project — the browser-verify slot",
+  "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-124)",
   "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
 };
 

@@ -64,8 +64,9 @@ structure*; dogfood critiques *the built experience*.
      toggle**, flipped in place.
    Either way: a single standalone HTML file — inline everything, deterministic data, zero
    build, no external assets.
-3. **Render + show.** Open at the right grain and capture what the user sees. (Render mechanics
-   = a **per-project verify helper**, see below.)
+3. **Render + show.** Activate it (open / serve a URL) and hand the user a clickable link at the
+   right grain — that's the confirmation. (Activation mechanics below; the browser-verify slot is
+   **opt-in**, not a default step — see below.)
 4. **Let the user point — and watch for the reframe.** They look / click / flip / pick. Stay
    alert for the artifact revealing the *question was wrong* (the element shouldn't exist; text
    beats the icon; two stages should be one). Surface it; don't just answer the surface ask.
@@ -204,20 +205,23 @@ writing, **activate it and surface a clickable URL in the chat**, the way a good
 - Prefer a real origin over a screenshot: the whole point is that the user can hover / click /
   flip the live thing. A screenshot is a transient supplement, never the hand-off.
 
-## The render step is per-project — the browser-verify slot
+## The browser-verify slot is opt-in, not automatic (ADR-124)
 
-"Render + capture" uses shape's shared **browser-verify capability slot** (defined once in
-`the plugin conventions`, shared with `align`): a named default (`agent-browser`) +
-detect + fail-helpfully if missing + per-project override. Open the file / running system,
-locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a
-tool — name the capability.
+`mockup` and `align` share a **browser-verify capability slot** (defined once in
+`the plugin conventions`): a named default (`agent-browser`) + detect + fail-helpfully if
+missing + per-project override — the mechanics below apply whenever the slot IS invoked. But for
+`mockup`, invoking it is **not the default step** (2026-08-24, cut for token cost — a
+`browser-verifier` dispatch was running to confirm every routine render). The default hand-off is
+activation only: open the file / running system at the right grain and hand the user a clickable
+link (see "Activate it" below) — the user looking at the live artifact **is** the confirmation.
 
-**Agent-side capture runs in the `browser-verifier` subagent (cost tier, ADR-058).** When the
-capture/verify is mechanical — confirming the artifact renders, checking a behaviour responds —
-dispatch this plugin's `browser-verifier` agent via `Task` with `subagent_type: "browser-verifier"` with the file/URL + what to
-confirm, and take back verdict + screenshot path; the image tokens stay out of the main context.
-Confirm a render **once**, not per iteration. The user-facing hand-off is unchanged: a live
-clickable origin, opened for the user — that part stays inline.
+**Reach for the slot only when there's a concrete reason to distrust the render sight-unseen:**
+the handfeel/gesture case (a synthetic interaction needs verifying with faithful input — see the
+grounded-replica discipline above), or the user explicitly asks for a confirm pass. When it is
+invoked, capture runs in the `browser-verifier` subagent (cost tier, ADR-058) — dispatch the
+plugin's `browser-verifier` agent (mechanical-tier executor) with the file/URL + what to confirm, and take
+back verdict + screenshot path; the image tokens stay out of the main context. Confirm **once**,
+not per iteration, on the rare occasion the slot is used at all.
 
 ## After the pick — offer the next step: track it · build it (don't auto-run)
 

@@ -23,11 +23,9 @@ Converge a decision by confronting the user with a **real, disposable, interacti
 
 Full protocol — the firing boundary detail (incl. the `/shape:dogfood` sibling distinction), the default (light) and escalate (heavy) render steps, a worked example, the grounded-replica discipline (handfeel + mocked-text-input caveats), activation mechanics, the browser-verify slot + `browser-verifier` subagent dispatch, the post-pick offer mapping, and the anti-pattern table: `references/mockup-protocol.md`.
 
-## The render step is per-project — the browser-verify slot
+## The browser-verify slot is opt-in, not automatic (ADR-124)
 
-"Render + capture" uses shape's shared **browser-verify capability slot** (defined once in `plugins/shape/CLAUDE.md`, shared with `align`): a named default (`agent-browser`) + detect + fail-helpfully if missing + per-project override. Open the file / running system, locate the target, screenshot / interact. Keep the core environment-agnostic; don't hardcode a tool — name the capability.
-
-**Agent-side capture runs in the `browser-verifier` subagent (cost tier, ADR-058).** When the capture/verify is mechanical — confirming the artifact renders, checking a behaviour responds — dispatch the plugin's `browser-verifier` agent (model: sonnet) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context. Confirm a render **once**, not per iteration. The user-facing hand-off is unchanged: a live clickable origin, opened for the user — that part stays inline.
+Default hand-off: write the file, **activate it** (open locally, or serve a URL on a remote/headless box — see the reference doc), and hand the user a clickable link. The user opening it *is* the confirmation — don't spend a dispatch confirming an ordinary mockup renders (2026-08-24: cut for token cost). Reach for the slot (defined once in `plugins/shape/CLAUDE.md`, shared with `align`) only when there's a concrete reason to distrust the render sight-unseen — chiefly the handfeel/gesture case (a synthetic interaction needs verifying with faithful input, see the reference doc) — or the user asks for a confirm pass: dispatch the plugin's `browser-verifier` agent (model: sonnet) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context.
 
 ## After the pick — offer the next step: track it · build it (don't auto-run)
 

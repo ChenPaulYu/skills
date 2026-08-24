@@ -33,7 +33,7 @@ const INTERACTIVE_CHOICE_CONSUMERS = {
 };
 
 const BROWSER_VERIFY_ANCHORS = {
-  "shape-mockup": "## The render step is per-project — the browser-verify slot",
+  "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-124)",
   "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
 };
 
