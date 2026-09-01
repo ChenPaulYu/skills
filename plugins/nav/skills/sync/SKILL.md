@@ -1,11 +1,11 @@
 ---
 name: sync
-description: "Keep a codebase navigable at both scales: re-sync file-top headers (per-file, continuous — \"sync the headers\", after restructuring) or render the bilingual codebase map (per-repo, periodic — \"refresh the codebase map\", \"整理一下 codebase 的導覽\"). Header diffs are gated; the map reads the headers."
+description: "Keep a codebase navigable at both scales: re-sync file-top headers (per-file, continuous — \"sync the headers\", after restructuring), render the bilingual codebase map (per-repo, periodic — \"refresh the codebase map\", \"整理一下 codebase 的導覽\"), or check whether human-facing docs (README, install steps) still match the code (on-demand — \"is the README up to date\", \"README 有沒有到最新\"). All three legs are gated diffs; the map and docs legs read the maintained headers."
 ---
 
 # Sync — the navigability door
 
-Keep the repo readable without reading it: **headers** make `head -12` answer "what is this file?"; the **map** (`docs/codebase-map/index.html`, bilingual) makes one HTML answer "what is this repo?". Two cadences, one door — headers refresh every time code is touched (light, like a lint); the map re-renders on request after a wave of change (heavy, a teaching projection). The map reads the headers, so when both are stale, headers go first.
+Keep the repo readable without reading it: **headers** make `head -12` answer "what is this file?"; the **map** (`docs/codebase-map/index.html`, bilingual) makes one HTML answer "what is this repo?"; **docs** makes README (and any other hand-maintained human-facing doc) answer "does this still match the code?" without you having to remember to check. Three cadences, one door — headers refresh every time code is touched (light, like a lint); the map re-renders on request after a wave of change (heavy, a teaching projection); docs checks on demand, whenever you ask whether a doc has drifted. The map reads the headers, so when both are stale, headers go first; docs reads whichever ground-truth source (manifest, directory, code) the claim it's checking actually depends on.
 
 > One door again by evidence: ADR-019 merged these, ADR-029 re-split them by cadence, and 11 months of transcripts showed the split created a second door nobody opened (map: 0 direct fires). ADR-108 folds it back — cadence is a *scheduling fact* the body handles, not an *interface fact* worth a second always-resident description.
 
@@ -19,15 +19,19 @@ Keep the repo readable without reading it: **headers** make `head -12` answer "w
 - **Note smells, don't fix them.** A giant file or layer violation surfaced while grounding goes to the report (→ `/nav:refactor`), never absorbed inline.
 - **Ground every map claim.** Real import edges only; below 90% → mark `(uncertain)`, never fabricate (rules ③⑦). Ship the map bilingual (EN + zh-Hant); browser-verify before done — a stale or broken map is a lie.
 - **Don't auto-render the map after every header pass.** Offer it when it's stale; render it when asked. The cadence difference survives inside the door.
+- **Docs never invents ground truth — it reads it.** A doc's claim (a version, a roster, an install step) is checked against the repo's actual source for that fact (a manifest, a directory listing, a skill file) — never against another doc, and never guessed. Below 90% confidence on which source governs a claim → ask, don't assert drift.
+- **Tolerant reader for the check itself.** If the repo's own CLAUDE.md documents an explicit doc-consistency gate (naming exactly which doc, which facts, which source), follow it verbatim. If not, fall back to the universal checks (version mentions, roster/feature lists, install commands, dead links) and self-report which tier you read from.
+- **Docs is diff-gated like headers, never auto-applied.** Report the drift, show the proposed doc edit as a diff, wait for OK — same gate as a header change, because both mutate a file a human reads.
 
 ## Process
 
 1. **Ground** (reuse `/nav:audit`'s inventory if it ran this session): detect stack, bound scope, inventory domains + load-bearing files, `head -15` each.
 2. **Headers** — classify (missing / wrong-format / good), compose per convention, **gated diff**, apply, test gate. Full procedure: `references/header-render.md`.
 3. **Map** (when asked, or offered when stale) — render `docs/codebase-map/index.html` per `references/map-render.md` + `references/visual-spec.md`; refresh its audit block; browser-verify (zero console errors, lang toggle flips).
-4. **Report** — files touched / skipped, smells noted, `head -12 <file>` to verify. Do NOT commit unless asked; on the default branch, suggest branching first.
+4. **Docs** (on demand — "is the README up to date?") — per `references/docs-render.md`: find the repo's declared doc-consistency gate (its CLAUDE.md) or fall back to universal checks, ground each doc claim against its real source, report drift, gated diff to fix.
+5. **Report** — files touched / skipped, smells noted, `head -12 <file>` to verify. Do NOT commit unless asked; on the default branch, suggest branching first.
 
-The 8 nav rules and the full anti-pattern tells live in `references/header-render.md` (headers) and `references/map-render.md` (map) — read the one for the leg you're running.
+The 8 nav rules and the full anti-pattern tells live in `references/header-render.md` (headers), `references/map-render.md` (map), and `references/docs-render.md` (docs) — read the one for the leg you're running.
 
 ## Companion skills
 
@@ -35,6 +39,7 @@ The 8 nav rules and the full anti-pattern tells live in `references/header-rende
 - **`/nav:refactor`** — executes any structural move the grounding surfaces (separate session).
 - **`/fathom:repo`** — studies a repository into a mental model; consumes the map as grounding when present, routes back here when it's stale.
 - **`/shape:align`** — reads the headers as its cheapest "is this implemented?" signal.
+- **`/nav:compose`** — restructures a document's prose/shape; the docs leg here only checks and patches individual factual claims (a version, a roster row, a link) against ground truth, it doesn't rewrite structure.
 
 ## Communication style
 

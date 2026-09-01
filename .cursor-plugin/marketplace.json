@@ -24,7 +24,7 @@
       "name": "nav",
       "source": "nav",
       "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (verbatim move + test gates), sync (file-top headers, plus the bilingual codebase map as its map leg), plan (spec → grounded plan), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
-      "version": "0.17.0"
+      "version": "0.18.0"
     },
     {
       "name": "relay",
