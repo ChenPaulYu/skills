@@ -25,7 +25,7 @@ Codex always sees every installed skill's `name` and `description`; it loads the
 2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged. Whenever a Claude skill's routing semantics or frontmatter description changes, review its Codex sidecar in the same change; leaving the sidecar text unchanged is a deliberate review result, never an omission.
 3. **Front-load discrimination.** State the object, action, and strongest trigger first. Put examples, anti-triggers, sibling boundaries, and procedure in the body.
 4. **Budget mechanically.** Every description is at most 240 characters and the full marketplace sidecar is at most 7,000 characters. The validator rejects missing, stale, or oversized entries.
-5. **Install by need.** Use `minimal`, `build`, `research`, or `collaboration`; reserve `all` for environments that truly need the full roster. Use `project-only` to clear generator-managed global copies when a project's own `.agents/skills` is sufficient.
+5. **Install by need.** Use `minimal`, `build`, `research`, or `collaboration`; reserve `all` for environments that truly need the full roster. Use `all-without-fathom` when the full working roster is wanted without the guided repository-study workflow, or `project-only` to clear generator-managed global copies when a project's own `.agents/skills` is sufficient.
 
 Audit the current projection and global duplicates:
 

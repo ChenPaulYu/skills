@@ -88,6 +88,15 @@
       "skills": [
         "*"
       ]
+    },
+    "all-without-fathom": {
+      "summary": "Every generated skill except the Fathom study family.",
+      "skills": [
+        "frame-*",
+        "nav-*",
+        "relay-*",
+        "shape-*"
+      ]
     }
   },
   "capabilities": [
