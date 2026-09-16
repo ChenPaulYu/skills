@@ -211,7 +211,7 @@ export function useSelection(...) {
 4. **Right grain — neither giant nor fragmented** — don't header thin files (Button / icons / tiny barrels / 2-line modules). Don't force a header where the name already says it.
 5. **Fit the framework** — standard doc-comment syntax per language; no exotic `@tag`s.
 6. **Rearrange, don't rewrite** — restructuring an existing top comment into the convention preserves its substance; never paraphrase or shorten.
-7. **Below 90% confidence → ask** — about scope, which files are load-bearing, intent.
+7. **Resolve consequential uncertainty** — inspect evidence first; ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Label unsupported claims rather than presenting guesses as facts.
 8. **Agent-navigability is the audit** — *every place you struggle to write a file's one-line header is a deep-module failure signal* — that file's interface isn't clear yet (often: it does too much). Note it; it usually means the file, not the header, needs work.
 
 
@@ -224,4 +224,3 @@ export function useSelection(...) {
 | Paraphrase an existing top comment while reshaping it | Move the comment's substance verbatim into the convention's shape — rule ⑥. Tell: the new header says the same thing in different words instead of the original words in the new shape. |
 | "While I'm here, let me also refactor X" | Route the refactor to `nav-refactor` — it needs its own narrow scope and discipline. Tell: the diff is restructuring code, not just adding or updating a header comment. |
 | Regenerate the codebase map in the same breath | Run the map leg separately (on request / periodic) — same door, different cadence (ADR-108 folded the former `/nav:map` back into sync). Tell: about to touch `docs/codebase-map/` during what started as a header sync, without being asked. |
-

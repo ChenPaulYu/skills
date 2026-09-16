@@ -8,9 +8,9 @@
 
 ## Why this skill exists
 
-Deep-module discipline applies to **any accreting artifact, not just code** — the docs an agent writes (ADRs, design notes, reports, observations, READMEs, specs) go un-navigable the same way a codebase does: the point buried mid-paragraph, the same decision re-explained in three files, a doc that grew to cover five concerns. `sync` already applies the convention to one artifact (**file-top headers on code files**); `compose` applies the **same eight rules to the whole body of a prose document**.
+Deep-module discipline applies to **any accreting artifact, not just code** — the docs an agent writes (ADRs, design notes, reports, observations, READMEs, specs) go un-navigable the same way a codebase does: the point buried mid-paragraph, the same decision re-explained in three files, a doc that grew to cover five concerns. `sync` maintains file-top headers, codebase maps, and factual alignment of existing docs; `compose` applies the **same eight rules to the structure of a prose document**.
 
-It is the prose-document sibling of `sync` (ADR-049): `sync` = the interface line atop a code file; `compose` = the structure of a file that *is* prose. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
+It is the prose-document sibling of `sync` (ADR-049): `sync` maintains code headers, renders the codebase map, and checks existing docs against their sources; `compose` authors or restructures prose documents. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
 
 ## Scope
 
@@ -30,14 +30,14 @@ This skill **writes/edits the document**. It owns structure, not sentence-craft 
 4. **Right grain — neither giant nor fragmented** — a doc covering many unrelated concerns gets split; trivia that needs no doc doesn't get one. **Group by knowledge, not by chronology** — "what I did Monday / Tuesday" is temporal decomposition; organize by concern/topic so each section owns one idea. *At the paragraph scale: one paragraph, one topic. At the word scale: omit needless words — the sentence-level form of a narrow interface (see *Sentence-level craft* in the SKILL.md body for the rest of the distilled keystones).*
 5. **Fit the framework** — use the genre's idiom (ADR → Context/Decision/Consequences; report → its buckets; README → quick-start first). Don't fight the document type's conventions. *This is the seam between two orthogonal axes: compose owns the **navigation** axis (gist → detail — lead-with-point, headings-as-interface, head-able) and **delegates the grounding axis** (how a claim is backed — evidence, examples) to the genre's idiom. A consumer asking compose for an evidence→example shape is asking the wrong owner: compose gives navigation, the genre gives grounding.*
 6. **Rearrange, don't rewrite** — restructuring an existing draft **moves its substance verbatim** into the better shape; never paraphrase, shorten, or embellish while reshaping.
-7. **Below 90% confidence → ask** — about the document's type, audience, or its single point.
+7. **Resolve consequential uncertainty** — inspect evidence first; ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Label unsupported claims rather than presenting guesses as facts.
 8. **Agent-navigability is the audit** — *if you cannot write the document's one-line lead / TL;DR, the document has no clear point yet* — that is the failure signal (it is trying to say too much, or its content isn't decided). Note it; usually the content, not the wording, needs work.
 
 ## Step 1 — Frame
 
 Reuse-via-transcript: if an upstream skill (e.g. `/shape:elicit`) already converged the content earlier in the session, reuse it as the source — don't re-derive.
 
-Establish three things (rule ⑦ — below 90% on any, ask):
+Establish these from the request and available evidence; ask only if an unresolved choice would change the document:
 - **Type** — ADR / design doc / report / observation / README / spec / …
 - **Audience** — who reads it, and what they need to grasp in the first ten seconds.
 - **The single point** — one sentence. If you can't write it, the content isn't decided (rule ⑧) → surface it; the gap routes to `/shape:elicit`, not to inventing filler.
@@ -62,7 +62,7 @@ If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name 
 - **Never invent content to fill a structure.** An empty section means the point isn't decided (rule ⑧) → `/shape:elicit`, not filler.
 - **Link, don't duplicate** (rule ①). A fact owned by another doc is referenced, never re-explained.
 - **Restructure = verbatim move** (rule ⑥). Reshaping a draft preserves its substance; no paraphrase.
-- **Rule ⑦ applies.** Below 90% on type / audience / the point → ask.
+- **Rule ⑦ applies.** Ask if an unresolved type, audience, or central point would change what you write; reuse answers already supplied.
 
 ## Anti-patterns (refuse these)
 

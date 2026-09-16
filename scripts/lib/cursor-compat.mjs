@@ -13,23 +13,16 @@ const MODEL_SONNET_LINE_RE = /^model:\s*sonnet\s*$/m;
 const EXECUTION_TIER_NOTE =
   "> **Mechanical-tier skill.** The work here is mechanical (a sweep, format, scan, or render from an already-structured source) rather than open-ended judgment. Dispatch it via `Task` on a cheap model when a worker is available; otherwise run it inline and note the degradation in your report.";
 
-export const CURSOR_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contract (Cursor).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them with the \`AskQuestion\` tool as mutually exclusive options and label a recommendation only when that section does. Preserve its save/done/later opt-out.
+export const CURSOR_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contract (Cursor).** Do not force an end-of-turn next-action menu. If the user already authorized a scoped action, continue within that scope without asking them to choose again.
 >
-> After calling \`AskQuestion\`, end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked \`disable-model-invocation: true\` counts as that continuation's explicit invocation.`;
+> Ask only when a consequential choice or missing authorization blocks the next action. Use the applicable source-owned options when they exist, but do not invent a generic menu or opt-out. Use \`AskQuestion\` only when a structured chooser is available and allowed for that question; otherwise ask one concise direct question in chat. If scope or authority is still unknown, stop after the concise question and do not perform downstream effects.`;
 
 export const CURSOR_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Cursor).** When this plugin's \`agents/browser-verifier.md\` is loaded, dispatch the pass via \`Task\` with \`subagent_type: "browser-verifier"\`. Otherwise execute the identical pass directly in the current session. In either mode, first check for a project browser-verify override; absent one, use \`agent-browser\`, and verify the chosen helper is present before driving anything.
 >
 > Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
 
 const INTERACTIVE_CHOICE_CONSUMERS = {
-  "nav-do": "3. **Verify gate \u2014 the verification is unconditional; only its *auto-execution* is gated (ADR-114).**",
-  "nav-plan": "### Stage 4 — Offer next action (don't make the user type the next command)",
-  "nav-refactor": "### Step 8 — Offer next action (don't make the user type the next command)",
-  "shape-elicit": "## Offer the next step (don't auto-run)",
-  "shape-mockup": "## After the pick — offer the next step: track it · build it (don't auto-run)",
-  "shape-dogfood": "## After the session — offer to route the findings (don't fix in place, don't auto-run)",
-  "frame-first-principles": "## After the analysis — offer to route it (don't decide, don't auto-run)",
-  "frame-dialectic": "## After the trial — offer to route it (don't decide, don't auto-run)",
+  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
 };
 
 const BROWSER_VERIFY_ANCHORS = {

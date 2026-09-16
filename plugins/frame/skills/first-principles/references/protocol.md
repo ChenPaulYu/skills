@@ -1,7 +1,7 @@
 # first-principles — walk-through, worked example, anti-patterns
 
 > Moved verbatim from the pre-ADR-109 SKILL.md body. The SKILL.md Stance carries the operative
-> discipline (the forced five-part structure + the plain-language landing gate); everything here
+> discipline (strip assumptions, rebuild from grounded base truths, compare the divergence); everything here
 > is the elaborated procedure, loaded on demand.
 
 ## The walk
@@ -31,6 +31,6 @@ The note turns "everyone has a rate-limiter service" into "we need a shared atom
 | Reverse-engineer axioms to reach the answer you already wanted | Rebuild *forgetting* the conventional answer and let the axioms lead. Tell: you picked which axioms to list only after knowing where you wanted to land. |
 | Assert an axiom you didn't ground | Verify physical/factual axioms and mark the uncertain ones *uncertain* — a fabricated premise yields a confident wrong answer. Tell: you can't point to why the axiom is true, only that the derivation needs it. |
 | Skip the divergence (just present a tidy derivation) | State the divergence (rebuilt ≠ convention) explicitly — that comparison is the payload, and "no divergence" is a valid result only if said out loud. Tell: the output reads like a derivation with no sentence comparing it back to convention. |
-| Decide or implement here | Reason + route — the decision is `/shape:elicit`, the build is `/nav:plan`. Tell: the reply starts proposing an implementation instead of offering the route. |
+| Decide or implement here | Stop at the rebuilt conclusion unless the larger user task already authorized continuation. If the next step is undecided, suggest one likely route in plain language. Tell: the reply starts changing the plan or code from an analysis-only request. |
 | Fire on any hard question in passing | Wait for an explicit "reason from first principles / challenge the assumptions" request. Tell: about to run the full strip-and-rebuild on a question that was just asked in passing. |
-| End on a jargon sentence ("the axiom is X, so the rebuilt conclusion is Y") | Close with a plain-words conclusion + analogy as the actual last word. Tell: the final sentence needs "axiom" or "first principles" to parse. |
+| Hide behind jargon ("the axiom is X, so the rebuilt conclusion is Y") | Give a plain-words takeaway after the technical reasoning. Use an analogy only if it helps. Tell: the conclusion relies on unexplained terms the user does not understand. |

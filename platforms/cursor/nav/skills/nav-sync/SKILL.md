@@ -18,9 +18,9 @@ Keep the repo readable without reading it: **headers** make `head -12` answer "w
 - **Preserve substance verbatim** when reshaping an existing top comment (rule ⑥); never paraphrase.
 - **Skip thin files and say so** (rule ④) — buttons / icons / 2-line barrels don't earn a header.
 - **Note smells, don't fix them.** A giant file or layer violation surfaced while grounding goes to the report (→ `nav-refactor`), never absorbed inline.
-- **Ground every map claim.** Real import edges only; below 90% → mark `(uncertain)`, never fabricate (rules ③⑦). Ship the map bilingual (EN + zh-Hant); browser-verify before done — a stale or broken map is a lie.
+- **Ground every map claim.** Real import edges only; unsupported edges → mark `(uncertain)`, never fabricate (rules ③⑦). Ship the map bilingual (EN + zh-Hant); browser-verify before done — a stale or broken map is a lie.
 - **Don't auto-render the map after every header pass.** Offer it when it's stale; render it when asked. The cadence difference survives inside the door.
-- **Docs never invents ground truth — it reads it.** A doc's claim (a version, a roster, an install step) is checked against the repo's actual source for that fact (a manifest, a directory listing, a skill file) — never against another doc, and never guessed. Below 90% confidence on which source governs a claim → ask, don't assert drift.
+- **Docs never invents ground truth — it reads it.** A doc's claim (a version, a roster, an install step) is checked against the repo's actual source for that fact (a manifest, a directory listing, a skill file) — never against another doc, and never guessed. If the governing source cannot be identified from evidence, report the uncertainty and ask before changing the claim.
 - **Tolerant reader for the check itself.** If the repo's own CLAUDE.md documents an explicit doc-consistency gate (naming exactly which doc, which facts, which source), follow it verbatim. If not, fall back to the universal checks (version mentions, roster/feature lists, install commands, dead links) and self-report which tier you read from.
 - **Docs is diff-gated like headers, never auto-applied.** Report the drift, show the proposed doc edit as a diff, wait for OK — same gate as a header change, because both mutate a file a human reads.
 
@@ -38,7 +38,6 @@ The 8 nav rules and the full anti-pattern tells live in `references/header-rende
 
 - **`nav-audit`** — read-only health check; its inventory is this skill's grounding when fresh.
 - **`nav-refactor`** — executes any structural move the grounding surfaces (separate session).
-- **`/fathom:repo`** — studies a repository into a mental model; consumes the map as grounding when present, routes back here when it's stale.
 - **`shape-align`** — reads the headers as its cheapest "is this implemented?" signal.
 - **`nav-compose`** — restructures a document's prose/shape; the docs leg here only checks and patches individual factual claims (a version, a roster row, a link) against ground truth, it doesn't rewrite structure.
 

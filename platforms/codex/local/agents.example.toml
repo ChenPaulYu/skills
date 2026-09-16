@@ -27,11 +27,3 @@ model_reasoning_effort = "medium"
 [explorer]
 model = "gpt-5.4"
 model_reasoning_effort = "low"
-
-# --- reviewer ------------------------------------------------------------------------
-# Usually mechanical (rerun the stated commands, diff the stated scope) — same tier as
-# executor/explorer. Escalate a specific review to the root session's model (gpt-5.6) by
-# hand when a verdict itself is a judgment call, rather than raising this default.
-[reviewer]
-model = "gpt-5.4"
-model_reasoning_effort = "medium"

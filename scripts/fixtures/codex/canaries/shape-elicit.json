@@ -3,14 +3,23 @@
   "mode": "generated",
   "file": ".agents/skills/shape-elicit/SKILL.md",
   "reject": [
-    { "category": "ask_user_question" }
+    {
+      "category": "ask_user_question"
+    }
+  ],
+  "reject_text": [
+    "**Interactive choice contract (Codex).**",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "just leave it, I'll continue later",
+    "Three consecutive validations",
+    "your next reply IS the diagnosis",
+    "find **2–3 real primary sources**"
   ],
   "expect_text": [
-    "**Interactive choice contract (Codex).**",
-    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
-    "Execute nothing downstream until the user makes an explicit choice.",
-    "offer to run the **survey leg** right there, at the stuck fork",
-    "just leave it, I'll continue later",
-    "This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it."
+    "**Agree when warranted; challenge when there is a reason.**",
+    "**Treat hesitation as a clue, not a diagnosis.**",
+    "**Use the smallest helpful response.**",
+    "A diagnosis-only request does not authorize code changes.",
+    "No mandatory next-action menu."
   ]
 }

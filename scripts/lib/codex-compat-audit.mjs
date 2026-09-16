@@ -791,6 +791,8 @@ function validateRuntimeOwnershipConflictSmokes(root) {
   const errors = [];
   const firstHome = mkdtempSync(join(tmpdir(), "skills-codex-runtime-conflict-first-"));
   const editedHome = mkdtempSync(join(tmpdir(), "skills-codex-runtime-conflict-edited-"));
+  const managedReviewerHome = mkdtempSync(join(tmpdir(), "skills-codex-runtime-reviewer-managed-"));
+  const editedReviewerHome = mkdtempSync(join(tmpdir(), "skills-codex-runtime-reviewer-edited-"));
   try {
     const firstEnv = { ...process.env, HOME: firstHome, USERPROFILE: firstHome };
     const userAgent = "name = \"user-executor\"\ndescription = \"preserve me\"\n";
@@ -916,9 +918,74 @@ function validateRuntimeOwnershipConflictSmokes(root) {
     if (readFileSync(join(editedHome, ".codex", "hooks.json"), "utf8") !== userHookConfig) {
       errors.push("runtime ownership smoke changed user hooks.json during prune");
     }
+
+    const reviewerAgent = "name = \"reviewer\"\ndescription = \"retired reviewer role\"\n";
+    const reviewerReceipt = {
+      profile: "all",
+      globalRoot: "agents",
+      skills: [],
+      runtime: { portableAgents: ["reviewer.toml"], generatedAgents: [] },
+      runtimeOwnership: {
+        files: { "agents/reviewer.toml": sha256Fixture(reviewerAgent) },
+      },
+      runtimePreserved: {},
+    };
+
+    const managedReviewerEnv = { ...process.env, HOME: managedReviewerHome, USERPROFILE: managedReviewerHome };
+    writeTextFile(join(managedReviewerHome, ".codex", "agents", "reviewer.toml"), reviewerAgent);
+    writeTextFile(
+      join(managedReviewerHome, ".agents", "skills", ".skills-marketplace-codex.json"),
+      `${JSON.stringify(reviewerReceipt, null, 2)}\n`,
+    );
+    const managedReviewer = spawnSync(
+      process.execPath,
+      ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"],
+      { cwd: root, encoding: "utf8", env: managedReviewerEnv },
+    );
+    if (managedReviewer.status !== 0) {
+      errors.push(`runtime ownership smoke reviewer managed upgrade failed: ${summarizeSpawnFailure(managedReviewer)}`);
+    }
+    if (existsSync(join(managedReviewerHome, ".codex", "agents", "reviewer.toml"))) {
+      errors.push("runtime ownership smoke kept the retired managed reviewer.toml");
+    }
+    const managedReviewerReceipt = readJson(join(managedReviewerHome, ".agents", "skills", ".skills-marketplace-codex.json"));
+    if (managedReviewerReceipt.runtimeOwnership?.files?.["agents/reviewer.toml"]) {
+      errors.push("runtime ownership smoke carried retired reviewer.toml ownership into the current receipt");
+    }
+
+    const editedReviewerEnv = { ...process.env, HOME: editedReviewerHome, USERPROFILE: editedReviewerHome };
+    const userReviewerAgent = `${reviewerAgent}\n# user edit\n`;
+    writeTextFile(join(editedReviewerHome, ".codex", "agents", "reviewer.toml"), userReviewerAgent);
+    writeTextFile(
+      join(editedReviewerHome, ".agents", "skills", ".skills-marketplace-codex.json"),
+      `${JSON.stringify(reviewerReceipt, null, 2)}\n`,
+    );
+    const editedReviewer = spawnSync(
+      process.execPath,
+      ["scripts/build-codex.mjs", "--sync-global", "--profile", "all"],
+      { cwd: root, encoding: "utf8", env: editedReviewerEnv },
+    );
+    if (editedReviewer.status !== 0) {
+      errors.push(`runtime ownership smoke reviewer edited upgrade failed: ${summarizeSpawnFailure(editedReviewer)}`);
+    }
+    const editedReviewerPath = join(editedReviewerHome, ".codex", "agents", "reviewer.toml");
+    if (!existsSync(editedReviewerPath)) {
+      errors.push("runtime ownership smoke DELETED a user-edited retired reviewer.toml during upgrade");
+    } else if (readFileSync(editedReviewerPath, "utf8") !== userReviewerAgent) {
+      errors.push("runtime ownership smoke changed a user-edited retired reviewer.toml during upgrade");
+    }
+    const editedReviewerReceipt = readJson(join(editedReviewerHome, ".agents", "skills", ".skills-marketplace-codex.json"));
+    if (!editedReviewerReceipt.runtimePreserved?.["agents/reviewer.toml"]) {
+      errors.push("runtime ownership smoke did not record preserved retired reviewer.toml in the receipt");
+    }
+    if (editedReviewerReceipt.runtimeOwnership?.files?.["agents/reviewer.toml"]) {
+      errors.push("runtime ownership smoke still claims ownership of preserved retired reviewer.toml");
+    }
   } finally {
     rmSync(firstHome, { recursive: true, force: true });
     rmSync(editedHome, { recursive: true, force: true });
+    rmSync(managedReviewerHome, { recursive: true, force: true });
+    rmSync(editedReviewerHome, { recursive: true, force: true });
   }
   return errors;
 }
@@ -1093,7 +1160,7 @@ function validateCodexCoverage(root, manifest) {
     }
 
     validateGeneratedPolicyMarkers(source, generated, capabilitiesForSkill, errors);
-    validateGeneratedContractMarkers(generated, capabilitiesForSkill, errors);
+    validateGeneratedContractMarkers(root, generated, capabilitiesForSkill, errors);
 
     rows.push({
       flat,
@@ -1298,7 +1365,7 @@ function validateGeneratedPolicyMarkers(source, generated, capabilitiesForSkill,
   }
 }
 
-function validateGeneratedContractMarkers(generated, capabilitiesForSkill, errors) {
+function validateGeneratedContractMarkers(root, generated, capabilitiesForSkill, errors) {
   const activeMarkers = new Map();
   for (const capability of capabilitiesForSkill) {
     for (const marker of capability.generated_contract_markers || []) {
@@ -1307,11 +1374,17 @@ function validateGeneratedContractMarkers(generated, capabilitiesForSkill, error
         errors.push(`Phase 5: generated ${capability.id} contract marker is missing in ${generated.path}`);
       }
     }
+    if (capability.bundled_reference && capability.generated_contract_markers?.some((marker) => generated.content.includes(marker))) {
+      const reference = join(dirname(generated.path), capability.bundled_reference);
+      if (!existsSync(join(root, reference))) {
+        errors.push(`Phase 5: generated ${capability.id} bundled reference is missing in ${generated.path}: ${capability.bundled_reference}`);
+      }
+    }
   }
 
   for (const marker of [
     "> **Interactive choice contract (Codex).**",
-    "## Worker dispatch contract (Codex)",
+    "> **Worker dispatch reference (Codex).**",
     "> **Browser-verify contract (Codex).**",
     "architecture enrichment adds detail once code exists.",
   ]) {

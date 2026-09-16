@@ -10,11 +10,11 @@ Make a small, already-decided, **behaviour-changing** change happen **now** — 
 
 ## Stance
 
-- **In scope: a small, decided, behaviour-changing change** you can hold in your head without a written plan. **Out of scope**: behaviour-preserving restructuring (→ `nav-refactor`), big/ambiguous work (→ `nav-plan`), or anything not yet decided (→ `shape-elicit`/`shape-mockup`). Below 90% confidence on what's wanted → rule ⑦, ask.
+- **In scope: a small, decided, behaviour-changing change** you can hold in your head without a written plan. **Out of scope**: behaviour-preserving restructuring (→ `nav-refactor`), substantial work (→ `nav-plan`), or an unresolved product decision. Read the code and existing decisions first; ask only if missing intent would change scope, behavior, or a material trade-off.
 
 ### The kernel — 乙 always on, 甲 enforced
 
-**乙 — awareness, continuous.** Throughout writing, the deep-module sense rides along: right grain, the header convention, the N+1 trigger, the LOC thresholds (file > ~500 LOC = warn / > ~700 = act; function > ~100; component > 5 `useState` + 5 `useRef` + 30 inner fns; `return (` > ~300 lines JSX; > 20 imports), and a **live-LLM-cost signal** — this change wires up, un-mocks, or raises the fan-out/turn budget of a path that calls a live LLM API (an agent-spawn tool re-enabled, an SDK client no longer stubbed, an effort/turn/researcher-count knob raised). When a smell trips **while** you work, surface it — don't silently restructure (that would be a `refactor`, a separate move); the live-LLM-cost signal surfaces at the verify gate below, not mid-write.
+**乙 — awareness, continuous.** Watch cohesion, existing owners, and changed file roles. Length is an inspection signal, never an automatic split or rollback trigger. Surface unrelated structural concerns without expanding the task. Notice when the change enables a live LLM path or raises its fan-out/turn budget; account for that cost before exercising it.
 
 **甲 — the enforced thin bracket.** Three beats, no artifact:
 
@@ -25,29 +25,33 @@ Make a small, already-decided, **behaviour-changing** change happen **now** — 
 - Confirm placement — at BOTH scales: which existing module does this deepen, and which package/group does that module sit in? A change that widens a group's façade is the same grain decision one level up. If the honest answer is "it widens an interface / needs a new module", say so before writing.
 
 #### execute — make the change
-Write the behaviour-changing code, placed per the inject pass. Keep moves and additions separate: if you must relocate existing code to make room, do that part verbatim (rule ⑥) as its own step, *then* add the new behaviour — don't rewrite-while-moving.
+Write the behavior-changing code, placed per the inject pass. Keep structural preparation reviewable separately from new behavior. Prefer verbatim moves where sufficient; necessary internal rewrites must preserve the existing contract and have corresponding verification.
 
 #### check (←) — four gates before "done"
 1. **Header hygiene** — a new load-bearing file (≥150 LOC · domain leader · subsystem barrel) carries a header in the project's convention; a file whose role / main imports / load-bearing status changed has its header updated **in the same change** (stale header = lie).
 2. **N+1** — did this add a second consumer of an inline util? Extract the primitive; don't ship the copy. Did it bypass a barrel/facade, or shove a new concern into one? Read the seam rule at *intent*, not as a wall. **N+1 fires on *values* too, in any *layer*** — a 2nd raw copy of a color / constant / config value (code OR CSS / prompt / config) = reference its owner, don't re-express it. And a *new* distinct design value must earn its distinctness vs the nearest existing one: a sub-JND near-duplicate is drift, not a new level/category (the justification is **perceptually vetoable** — a stated reason doesn't survive an imperceptible difference). This is the *cheap per-change half*; it's structurally blind to leakage that only shows in aggregate — the guarantee is `nav-audit`'s value-leakage check ([ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md)).
-> **Interactive choice contract (Cursor).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them with the `AskQuestion` tool as mutually exclusive options and label a recommendation only when that section does. Preserve its save/done/later opt-out.
->
-> After calling `AskQuestion`, end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked `disable-model-invocation: true` counts as that continuation's explicit invocation.
+3. **Verify the changed behavior.** Choose checks that expose the likely failure: focused tests,
+   type/lint checks, CLI input/output, integration checks, or a browser flow for interactions
+   not covered automatically. Add or adjust tests when they provide meaningful regression
+   coverage; reversible low-impact changes do not need tests that merely mirror implementation.
+   Complete repository-required checks. Repeat or broaden only for new changes, failures, or
+   unresolved concerns.
 
-3. **Verify gate — the verification is unconditional; only its *auto-execution* is gated (ADR-114).** Tests *change* here (unlike refactor, where they stay identical): add/adjust a test for the new behaviour where the suite supports it. Then classify the check and act:
+   **Honor existing authorization.** Run ordinary in-scope checks without re-confirming them.
+   Before an unapproved external effect or additional paid-LLM run, describe the target and
+   cost and obtain the missing authority. A previous approval for that same scope still counts.
+   A fixed interaction count or general difficulty is not an approval boundary.
 
-   **Run it without asking** — the cheap, machine-graded legs: typecheck · lint · the test suite · a backend/integration run · a CLI install-path check (e.g. Python `uv tool install .` with temporary `UV_TOOL_DIR`/`UV_TOOL_BIN_DIR`, then run the bare executable). Also: **a browser pass you can state up front as ≤5 interactions** (open → walk the one changed path → screenshot → confirm).
-
-   **Ask first, every time — as a real `AskQuestion`, one for the whole verification batch, not a sentence buried in prose** — (a) anything that spends **live LLM tokens** (an un-mocked SDK client, a fan-out, a raised turn/researcher budget) — name what would be hit and roughly how expensive, and offer the cheaper substitute (mock the client, pin the cost knob to its floor) that proves the same logic, reserving one full-cost run for final confirmation; (b) **frontend / computer-use automation** beyond that ≤5-interaction pass; (c) anything you judge **hard to verify** — if you cannot state the check up front, you cannot budget it, so it is not yours to start; (d) **everything in between — the default is ask.** Auto is the carve-out, not the rule.
-
-   **If the user declines, record it — never silently skip.** The report says *"shipped unverified at your call: \<what wasn't checked\>"*. A declined verification is a known debt, not an absent step; the next `shape-baton` or `shape-align` pass must be able to see it. **No test suite at all → flag it loudly** — behaviour-changing work with no verification is guessing, and that stays true whoever decided to skip.
+   **Report evidence and limits accurately.** If no suite exists, seek a reproducible runtime or
+   input/output check. If adequate verification is unavailable, name exactly what is unverified;
+   do not call it a pass or attribute a skip to the user unless they actually declined it.
 4. **Board sync (blueprints carve-out — the push half of ADR-086)** — if the repo has a `blueprints/plan.md` board and this change closes or materially advances one of its 🚧/▶ items, update that item **in the same change**: move it to ✅ Shipped with a one-line evidence pointer, or annotate the progress. A stale board entry is the same lie as a stale header, one tier up — and the board has no other push-side writer (measured: one project's sweep found 5 of 7 "Next" items already shipped, every one shipped via an execution verb that never touched the board). Scope discipline: touch ONLY the item(s) this change actually moved — re-triaging, reordering, or dropping items is `shape-align`'s job, with the user. No board, or the change maps to no item → gate passes vacuously.
 
-Full rationale, the 8 rules, the process checklist, the boundary table against sibling verbs, the anti-pattern table, and escalation triggers: `references/do-protocol.md`.
+Scope decisions, ownership checks, and examples of risk-proportional verification: `references/do-protocol.md`.
 
 ## Companion skills
 
-- **`nav-plan`** — when the change is big/ambiguous enough to warrant a written, reviewed plan first; its Stage-4 sub-agent dispatch follows *this* skill's discipline.
+- **`nav-plan`** — when a substantial change warrants a grounded plan first; already-authorized execution then follows this skill's discipline.
 - **`nav-refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`nav-audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
 - **`nav-sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and re-render sync's codebase map leg if that role change is worth reflecting there).

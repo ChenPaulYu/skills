@@ -10,9 +10,7 @@
   "expect_text": [
     "one message, multiple read-only explorer worker dispatches — read-only is the point",
     "Reconnaissance workers default to cheap tier (the mechanical-tier executor role)",
-    "## Worker dispatch contract (Codex)",
-    "each explorer worker's brief IS the work packet below",
-    "**Base SHA** — the commit/state it started from, so the returned diff has something to diff against.",
-    "The dispatching agent never accepts `status: done` at face value"
+    "> **Worker dispatch reference (Codex).**",
+    "Tasks that do not dispatch workers do not load that reference."
   ]
 }

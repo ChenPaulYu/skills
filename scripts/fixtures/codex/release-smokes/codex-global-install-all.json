@@ -14,22 +14,17 @@
     "nav-plan",
     "relay-digest"
   ],
-  "expect_skill_count": 27,
+  "expect_skill_count": 23,
   "expect_skills": [
     "nav-plan",
     "relay-digest",
-    "shape-baton",
-    "shape-migrate",
-    "fathom-index",
-    "fathom-guide",
-    "fathom-quiz",
-    "fathom-dive",
-    "fathom-compile"
+    "shape-park",
+    "shape-catchup",
+    "shape-migrate"
   ],
   "expect_runtime_files": [
     ".codex/agents/executor.toml",
     ".codex/agents/explorer.toml",
-    ".codex/agents/reviewer.toml",
     ".codex/agents/browser-verifier.toml"
   ]
 }

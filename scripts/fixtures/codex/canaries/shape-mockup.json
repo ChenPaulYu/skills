@@ -6,15 +6,16 @@
     { "category": "ask_user_question" },
     { "category": "legacy_browser_subagent" }
   ],
-  "expect_text": [
+  "reject_text": [
     "**Interactive choice contract (Codex).**",
-    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
     "Execute nothing downstream until the user makes an explicit choice.",
+    "just record the pick, I'll continue later"
+  ],
+  "expect_text": [
     "**Browser-verify contract (Codex).**",
     "When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent.",
     "Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`.",
     "dispatch the generated `.codex/agents/browser-verifier.toml` custom agent (mechanical-tier executor)",
-    "**Track it → `shape-align`**",
-    "just record the pick, I'll continue later"
+    "The browser-verify slot is opt-in, not automatic"
   ]
 }

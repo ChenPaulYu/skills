@@ -15,9 +15,9 @@ Take a feature you've built (or roughed out) that **feels off to use but you can
 - **Intent-driven, not aimless clicking.** Drive from a short list of *what users are trying to do* — this is what lets hands-on use catch an *absence* (a whole intent with no surface). Enumerate human purposes, not every `state × action` cell.
 - **Every finding is shown, not asserted.** A friction claim carries its screenshot or clip; a backend finding quotes the real response. "Trust me, it's clunky" floats.
 - **Caveat — discount the harness's own artifacts.** The capture rig is not the user's conditions: a headless browser's default viewport is often unusually short/narrow, synthetic fixtures are sparser than real data, a scripted pointer lacks momentum. So a finding can be an artifact of the harness, not the feature. Before routing a finding to a fix, **re-confirm it at realistic conditions** (resize to a normal viewport, use representative data); tag the ones you couldn't reproduce as *suspected-harness-artifact* rather than shipping a fix for a non-problem.
-- **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. Flag it once up front — name the call path and its rough cost knobs (model, turn/fan-out count) — then drive most of the intent list at the feature's own cheapest sufficient setting, reserving one full-cost pass for the final "does it feel right" check.
+- **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. State the paid call path and intended budget before exercising it. Honor existing approval for that exact scope; use the cheapest sufficient representative setting. Run a full-cost pass only when necessary and explicitly authorized within that budget, never as an automatic finale.
 - **Render is demoted to an optional hand-off, not the output.** The default deliverable is the evidence-rich friction report; only when a friction idea is big enough to be a *redesign* does it get handed to `/shape:mockup`.
-- **Surface and route; never fix in place.** dogfood does not redesign or implement — offer the next step per finding kind, guarded + one-shot, always with a "just leave the report, I'll route later" opt-out.
+- **Report before changing the product.** Dogfood itself produces findings, not fixes. If the broader request already includes fixing confirmed issues, return to that execution workflow afterward; otherwise stop with the report or a useful suggestion.
 - **Lands in a project-local, git-ignored `dogfood/<date>-<feature>/`** — add `dogfood/` to `.gitignore` on first run if missing (mirrors mockup's `mockups/` convention).
 
 Full session steps, the report shape, the three boundaries (vs `/verify`, `/shape:mockup`, `/shape:elicit`), storage format, a worked example, and the anti-pattern table: `references/dogfood-protocol.md`.
@@ -26,7 +26,7 @@ Full session steps, the report shape, the three boundaries (vs `/verify`, `/shap
 
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real build** and records it.
 
-0. **Get one `AskUserQuestion` confirmation before driving anything (ADR-114).** dogfood is computer-use automation by construction, so it sits squarely in the ask-first class. Once the intent list exists, present the run's shape as a real structured choice — roughly how many interactions, whether any intent touches a live-LLM path, and a scoped-down option (drive the top N intents, not all) alongside the full run. Scoping down is a normal answer, not a refusal. **Declined outright → the intent list itself is the deliverable**, and say plainly that nothing was driven, so an unrun session is never mistaken for a clean one.
+0. **Establish the authorized run scope before driving.** State the target and intent list; account for external effects, destructive operations, and paid-LLM paths. Honor approval already given for that scope. If consequential scope or authority is missing, ask only for that missing decision or permission, with a smaller run when useful; no mandatory full-run/scoped-run menu. Do not exercise unapproved effects. If a run is declined or unavailable, deliver the intent list and report unrun intents clearly.
 
 1. **List the user intents (the test script).** What is someone *trying to achieve*? — "keep a private copy", "find it again later", "undo without losing context". Include the intents the feature implies but you never designed for; this list is the floor that keeps the session bounded.
 2. **Drive the real interface to attempt each intent, capturing the evidence.** Frontend → Driving the frontend uses shape's shared **browser-verify slot** (named default `agent-browser`; detect + fail-helpfully + per-project override): actually click the flow; **screenshot at each friction point and dead-end** — the moments that become findings — not every routine step, and **record video only when the user explicitly asks for it** (verify economy, ADR-058: a capture is evidence, not a progress note; captures go to disk and are referenced by path, never pasted into the chat). Backend / CLI → `curl` the endpoint or run the command and **save the actual request/response**. **Don't reason from the doc or from memory** — a belief about how your own feature behaves is often false; confirm it by doing it.
@@ -35,17 +35,21 @@ This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses 
 
 > **Caveat — discount the harness's own artifacts.** The capture rig is not the user's conditions: a headless browser's default viewport is often unusually short/narrow, synthetic fixtures are sparser than real data, a scripted pointer lacks momentum. So a finding can be an **artifact of the harness, not the feature** (field case: "the primary action is below the fold" was true only at the rig's 569px height; at a normal 900px it was fully visible — only the *other* two findings were real). Before routing a finding to a fix, **re-confirm it at realistic conditions** (resize to a normal viewport, use representative data); tag the ones you couldn't reproduce as *suspected-harness-artifact* rather than shipping a fix for a non-problem.
 
-> **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. Flag it once up front — name the call path and its rough cost knobs (model, turn/fan-out count) — then drive most of the intent list at the feature's own cheapest sufficient setting (a mock, or its lowest effort/turn knob), reserving one full-cost pass for the final "does it feel right" check.
+> **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. State the paid call path and intended budget before exercising it. Honor existing approval for that exact scope; use the cheapest sufficient representative setting. Run a full-cost pass only when necessary and explicitly authorized within that budget, never as an automatic finale.
 
-## After the session — offer to route the findings (don't fix in place, don't auto-run)
+## Continue within the requested scope
 
-dogfood surfaces and reports; it does **not** redesign or implement. Once the report is up, *offer* — never auto-call — the next step **per each finding's kind**, via `AskUserQuestion` (offer-next-action, ADR-007/015):
+A completed result needs no next-action menu. If the broader request already
+includes implementation or tracking and the relevant decision is settled, return
+to that authorized workflow with its normal checks, without asking again.
+A pick or diagnosis alone does not authorize a build. When a consequential
+choice or permission is still missing, ask that specific question; otherwise
+suggest a next step only when useful. Do not invent a follow-up task or invoke
+another skill automatically.
 
-- **A friction idea the user wants to pursue** → a *tweak* → `/nav:plan` (ground it) + `/nav:do`/`/nav:refactor`; a *redesign* → `/shape:mockup` (render the new shape) or `/shape:elicit` (if the premise is in question).
-- **A direction-level gap (missing intent)** → `/shape:elicit` (is the premise wrong? — a *new decision*, out of scope) and/or `/shape:mockup`.
-- **An incomplete gap (dead-end path)** → `/nav:plan` to ground the missing path, then `/nav:do`/`/nav:refactor`.
-
-**Guarded + one-shot:** compose the options from what was actually found, always include a **"just leave the report, I'll route later"** opt-out, and don't re-offer after the pick. Offers, not calls — skills don't invoke each other.
+For authorized work, shape-align handles durable priorities, nav-do small decided
+changes, and nav-plan substantial builds. Unresolved product choices can use
+shape-elicit or shape-mockup when available.
 
 ## Companion skills
 

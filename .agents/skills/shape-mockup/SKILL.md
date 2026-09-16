@@ -20,9 +20,9 @@ Converge a decision by confronting the user with a **real, disposable, interacti
 - **A written file isn't a decidable artifact until activated** — open it (or serve it on a remote/headless box) and hand over a clickable URL; never hand off just a screenshot.
 - **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `shape-align`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
 - **Storage:** the blueprints tree's `mockups/<date>-<topic>/`, committed by default (watch the depth-unanchored `mockups/` gitignore trap).
-- **After a pick, offer — never auto-run — the next step**: track it (`shape-align`) and/or build it (`nav-do` small · `nav-plan` bigger), guarded + one-shot, only the branch(es) that apply.
+- **After a pick, honor the requested scope.** A settled pick ends exploration; continue an already-authorized build, or stop after the mockup when that was all the user requested.
 
-Full protocol — the firing boundary detail (incl. the `shape-dogfood` sibling distinction), the default (light) and escalate (heavy) render steps, a worked example, the grounded-replica discipline (handfeel + mocked-text-input caveats), activation mechanics, the browser-verify slot + `browser-verifier` subagent dispatch, the post-pick offer mapping, and the anti-pattern table: `references/mockup-protocol.md`.
+Full protocol — the firing boundary detail (incl. the `shape-dogfood` sibling distinction), the default (light) and escalate (heavy) render steps, a worked example, the grounded-replica discipline (handfeel + mocked-text-input caveats), activation mechanics, the browser-verify slot + `browser-verifier` subagent dispatch, scope-aware continuation, and the anti-pattern table: `references/mockup-protocol.md`.
 
 > **Browser-verify contract (Codex).** When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent. Otherwise execute the identical pass directly in the current session. In either mode, first check for a project browser-verify override; absent one, use `agent-browser`, and verify the chosen helper is present before driving anything.
 >
@@ -32,18 +32,19 @@ Full protocol — the firing boundary detail (incl. the `shape-dogfood` sibling 
 
 Default hand-off: write the file, **activate it** (open locally, or serve a URL on a remote/headless box — see the reference doc), and hand the user a clickable link. The user opening it *is* the confirmation — don't spend a dispatch confirming an ordinary mockup renders (2026-08-24: cut for token cost). Reach for the slot (defined once in `AGENTS.md`, shared with `align`) only when there's a concrete reason to distrust the render sight-unseen — chiefly the handfeel/gesture case (a synthetic interaction needs verifying with faithful input, see the reference doc) — or the user asks for a confirm pass: dispatch the generated `.codex/agents/browser-verifier.toml` custom agent (mechanical-tier executor) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context.
 
-> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
->
-> When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.
+## Continue within the requested scope
 
-## After the pick — offer the next step: track it · build it (don't auto-run)
+A completed result needs no next-action menu. If the broader request already
+includes implementation or tracking and the relevant decision is settled, return
+to that authorized workflow with its normal checks, without asking again.
+A pick or diagnosis alone does not authorize a build. When a consequential
+choice or permission is still missing, ask that specific question; otherwise
+suggest a next step only when useful. Do not invent a follow-up task or invoke
+another skill automatically.
 
-A pick has two natural next steps, and the offer should name **both** (ADR-028) — the Codex interactive chooser with a "just record the pick, I'll continue later" opt-out (offer-next-action, ADR-007/015):
-
-- **Track it → `shape-align`** — triage the decision into `plan.md` (now/next/later). `align` is collaborative, so it runs **in-session** (it needs this conversation's decision), not a clean worker. Offer this branch only when a `blueprints/` board exists (or scaffolding one is wanted).
-- **Build it now** — when the pick is a concrete, decided, *behaviour-changing* build, route by scope: small · holdable-in-head → **`nav-do`** (its check bracket — inject↔execute↔verify — is the point; don't flow into the build on ambient discipline and skip it); bigger / ambiguous / wants a written plan → **`nav-plan`**; driving multiple `plan.md` items → the manual path (`nav-plan` per item → `nav-do`/`nav-refactor` → `shape-align`, ADR-110). This is the seam "make it functional" flows through — name the verb so the agent routes to its check instead of winging the build.
-
-**Guarded + one-shot:** don't re-offer / nag across a rapid series of mockups; show only the branch(es) that apply (a disposable visual tweak with nothing to track *and* nothing to build → skip the offer entirely). An offer, **never a call** — skills don't invoke each other.
+For authorized work, shape-align handles durable priorities, nav-do small decided
+changes, and nav-plan substantial builds. Unresolved product choices can use
+shape-elicit or shape-mockup when available.
 
 ## Communication style
 

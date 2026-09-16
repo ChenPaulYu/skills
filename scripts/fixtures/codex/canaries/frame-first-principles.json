@@ -5,11 +5,14 @@
   "reject": [
     { "category": "ask_user_question" }
   ],
-  "expect_text": [
+  "reject_text": [
     "**Interactive choice contract (Codex).**",
-    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
     "Execute nothing downstream until the user makes an explicit choice.",
-    "**Execute a small, decided fix** → `nav-do`",
     "just leave the note, I'll take it from here"
+  ],
+  "expect_text": [
+    "After the analysis.",
+    "If the larger task already authorized continuation, return to that workflow.",
+    "If the next action is genuinely undecided, optionally offer a concise helpful suggestion"
   ]
 }

@@ -6,42 +6,17 @@ description: "Audit codebase architecture against deep-module principles. Use fo
 
 # Deep-module audit
 
+> **Worker dispatch reference (Codex).** Only when dispatching explorer or executor workers, read `references/codex-worker-dispatch.md` before preparing briefs or accepting returns. Tasks that do not dispatch workers do not load that reference.
+
 Honestly assess any codebase against 8 deep-module principles — not bug correctness, but shape: does the code expose narrow interfaces over hidden complexity, can a new reader (human or agent) navigate it without drowning? Report what's working, what's drifting, what's broken, and where the agent itself struggled to describe a module — that struggle is a first-class signal of failed abstraction (rule ⑧).
 
 ## Stance
 
-- **Three modes, chosen by scope + framing.** Mode 1 (no target — broad health check across all domains) · Mode 2 (a spec/plan/feature description — gap analysis scoped to the domains it touches; read-only quick check) · Mode 3 (explicit "deep audit" / "徹底掃描", or accepted from Mode 1's auto-suggest — fan-out one worker per domain instead of one pass). Mode 3 is never auto-run — the fan-out costs N× a normal audit, so the spend is always the user's call. Its dispatch is read-only by construction — one message, multiple read-only explorer worker dispatches — read-only is the point — each brief injected per `references/deep-sweep.md`.
-
-## Worker dispatch contract (Codex)
-
-`references/deep-sweep.md`'s D2 inject and D3–D5 check are this contract, lowered to Codex vocabulary: each explorer worker's brief IS the work packet below (Scope = its assigned domain's files only; Constraints = read-only, no writes; Verification = read-only greps/finds, never a mutating command); its findings + self-eval IS the worker return below. D3's merge/dedup and D5's completeness critic are the root agent applying the rejection rule at the end of this section — an under-covered or unsupported domain gets re-dispatched, not accepted.
-
-**Work packet** (what the dispatching agent injects):
-
-- **Goal** — the one-sentence outcome this worker must achieve.
-- **Scope and owned files** — exactly which files/paths it may touch; everything outside that scope is out of bounds.
-- **Inputs and source of truth** — what to read before acting, and which document or state wins if sources disagree.
-- **Constraints and forbidden actions** — house rules it must not break (read-only, no scope creep, no mid-batch tests, etc.).
-- **done_when** — the concrete condition that makes "done" true, not a feeling.
-- **Verification commands** — the exact command(s) it must run and report the result of.
-- **Base SHA** — the commit/state it started from, so the returned diff has something to diff against.
-- **Return schema** — a pointer to the worker return contract below; its final message must follow it exactly.
-
-**Worker return** (what the worker must report back):
-
-- **status** — `done` | `partial` | `blocked`. Never claim `done` without satisfying done_when.
-- **Files changed** — the full list, matching the work packet's owned-files scope.
-- **Diff summary** — what actually changed, in prose, not just a file list.
-- **Commands and results** — every verification command it ran, with the actual output/exit status.
-- **Assumptions** — anything it inferred rather than was told.
-- **Unresolved risks** — anything left uncertain, deferred, or worth a second look.
-- **Current SHA** — the state after its change, so the read-the-diff step is exact.
-
-The dispatching agent never accepts `status: done` at face value: it reads the returned diff against Base SHA and reruns the Verification commands itself before treating the item as closed. A worker that reports `done` without a passing verification command is rejected and re-dispatched, not trusted. Reconnaissance workers default to cheap tier (the mechanical-tier executor role); a domain whose judgment call is unusually dense can be escalated on the spot (see root AGENTS.md's Dispatch tiers).
+- **Three modes, chosen by scope + framing.** Mode 1 (no target — broad health check across all domains) · Mode 2 (a spec/plan/feature description — gap analysis scoped to the domains it touches; read-only quick check) · Mode 3 (explicit "deep audit" / "徹底掃描", or accepted from Mode 1's auto-suggest — fan-out one worker per domain instead of one pass). Mode 3 is never auto-run — the fan-out costs N× a normal audit, so the spend is always the user's call. Its dispatch is read-only by construction — one message, multiple read-only explorer worker dispatches — read-only is the point — each brief injected per `references/deep-sweep.md`. Reconnaissance workers default to cheap tier (the mechanical-tier executor role); workers return evidence; interpretation and acceptance stay with the session model. Resolve missing user intent with the user, never a reviewer worker.
 - **Auto-suggest Mode 3 when the codebase looks large/legacy** (many domains, no file-top headers, no barrels) — finish the Mode 1 pass first, then offer the deep sweep; don't jump straight to it.
 - **Language-agnostic.** Universal checks run on every codebase; stack-specific heuristics (TS/React, Python, Go, Rust) layer on top when detected. An unrecognized stack still gets the universal pass — say so in the report, don't bail.
 - **Rule ⑧ is the heart of the audit.** For every load-bearing file, try to write a one-sentence description without reading the body; the struggle itself (must enumerate, must guess, must list > 6 imports) IS the finding.
-- **Honesty over flattery.** Name a real finding; mark anything below 90% confidence `(uncertain)` rather than asserting it — the user wants signal, not reassurance.
+- **Honesty over flattery.** Name a real finding; mark claims without sufficient evidence `(uncertain)` rather than asserting it — the user wants signal, not reassurance.
 - **Cite evidence.** Every finding gets a file path (and line range where applicable) — no abstract claims.
 - **Distinguish fact from judgment.** ✓ / ⚠ / ❌ for graded findings; a separate self-eval bucket for rule ⑧'s subjective struggle.
 - **Read-only.** Never write or modify files — point the user at `nav-sync` (fix headers) or `nav-refactor` (execute moves) for action.

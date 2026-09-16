@@ -5,7 +5,7 @@ description: "Author a new document, or restructure a messy one, into deep-modul
 
 # compose — documents as deep modules
 
-Write a **document** the way nav writes code: as a deep module. The act of putting words clearly is sentence-craft (the `writing-clearly-and-concisely` skill owns that); **compose owns the STRUCTURE** — organizing a document so a reader (or agent) grasps its point from the top and drills into the body only as needed. A doc that buries its point, restates a fact that lives elsewhere, or sprawls across concerns is a *shallow module* in prose form. It is `sync`'s prose sibling (ADR-049): `sync` = the interface line atop a code file; `compose` = the structure of a file that *is* prose.
+Write a **document** the way nav writes code: as a deep module. The act of putting words clearly is sentence-craft (the `writing-clearly-and-concisely` skill owns that); **compose owns the STRUCTURE** — organizing a document so a reader (or agent) grasps its point from the top and drills into the body only as needed. A doc that buries its point, restates a fact that lives elsewhere, or sprawls across concerns is a *shallow module* in prose form. It is `sync`'s prose sibling (ADR-049): `sync` maintains code headers, renders the codebase map, and checks existing docs against their sources; `compose` authors or restructures prose documents.
 
 ## Stance
 
@@ -30,7 +30,7 @@ Full rationale, the 8-rule restatement, Frame/Report step detail, the Discipline
 ## Companion skills
 
 - **`writing-clearly-and-concisely`** (optional, external — not bundled with nav) — a deep sentence-craft reference: grammar/punctuation, the commonly-misused-words catalogue, and the maintained list of AI-prose tells. compose distills the durable keystones inline (above) and does **not** depend on it; reach for it only when a deep copyedit needs the long-tail.
-- **`/nav:sync`** — the code-file sibling: file-top headers on code. compose is the whole-prose-document analog (ADR-049).
+- **`/nav:sync`** — maintains code headers, renders the codebase map, and checks existing docs against their sources. Use compose to author or restructure the document itself (ADR-049/108/125).
 - **`/nav:audit`** — assesses code shape (read-only); compose authors docs.
 - **`/shape:elicit`** — where undecided content goes when a rule-⑧ signal shows the point isn't settled.
 - **Consumers** — `/shape`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).

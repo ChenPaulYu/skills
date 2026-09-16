@@ -2,27 +2,18 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-09-01 (rev 129)
+  Last audit: 2026-09-16 (rev 135)
 ═══════════════════════════════════════════════════════════════════════════
 
-  This file is generated commentary — the marketplace itself is the source
-  of truth. Every factual claim below was checked against this repo on the
-  audit date. Drift will happen; re-audit when content stales.
+  The marketplace source owns current facts. The current checks below were
+  refreshed for this revision; inherited grounding notes and revision logs
+  are historical context, not claims that every old workflow remains active.
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
-    • Five plugins: nav (6 skills) + fathom (5 skills) + shape (7 skills) +
-      frame (5 skills) + relay (4 skills) — 27 skills total; see plugins/*/.claude-plugin/plugin.json + .claude-plugin/marketplace.json
-    • nav skills: audit, refactor, sync (headers + bilingual codebase map + on-demand docs-vs-ground-truth check, three cadences one door — ADR-125), plan, do, compose
-    • fathom skills: index (anchor the pin + release distance, collapse
-      judgment, the growing index.md file:line index, a measured trust
-      verdict — grounds without teaching), guide (the five-level climb
-      Repository → Runtime → System → Behavior → Code: calibrate on the
-      learner's background, knowledge-matched forms, dwell, verbalization
-      gate, cursor + understanding.md learner model), quiz (spaced retention
-      checking against understanding.md, advances nothing), dive (one topic as deep
-      as the learner wants, no ladder movement), atlas (compile the study
-      into a guided multi-scale code map; re-runnable — ADR-119) — ADR-116
+    • Current versions, skill counts, and rosters are generated in catalog-data
+      from plugin manifests and skill frontmatter (ADR-130), not copied here.
+  HISTORICAL GROUNDING NOTES (inherited context, not the current inventory)
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought; gatekeeper offers three branches when a volley stalls,
       ADR-076 — fuzzy-but-known: keep grilling; missing terrain: run the
@@ -90,7 +81,7 @@
       overwritten goal · done · now · open · next, at blueprints/baton.md (no-tree
       fallback: root HANDOFF.md). Merges reflect's former catchup (take) + park
       (pass) into one door over one artifact; retrace retires (its provenance-
-      labelling discipline lands in fathom/CLAUDE.md instead). The reflect plugin
+      labelling discipline is preserved as historical design evidence). The reflect plugin
       had no other members, so it dissolves: marketplace 6 plugins → 5, 27 → 25
       skills. Summon-only (disable-model-invocation: true).
     • relay skills: four daily verbs, following the ACCORD MEMORY MODEL
@@ -156,7 +147,7 @@
       design record: blueprints/plans/2026-08-19-relay-conversation-lifecycle.md).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
-    • 121 ADRs in docs/adr/ — 001..121, no duplicates (the 114 collision between
+    • At revision 134: 130 ADRs in docs/adr/ — 001..130, no duplicates (the 114 collision between
       two concurrent sessions was resolved 2026-08-13: first-to-land kept 114, the
       fathom split renumbered to 116) with cross-supersede / refine links
     • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
@@ -168,8 +159,8 @@
       nav sync itself deliberately NOT tiered (it authors the
       headers everything else reads; rule ⑧ — describing IS diagnosing).
     • Findings (2 seed entries) + observations (scaffold) under docs/
-    • Codex mirror: .agents/skills/ (27 flat skills: nav-* / relay-* /
-      shape-* / frame-* / fathom-*) + root AGENTS.md, generated from plugins/ by
+    • Codex mirror: .agents/skills/ (22 flat skills: nav-* / relay-* /
+      shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
       scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; `node scripts/build-codex.mjs
@@ -194,9 +185,54 @@
       each Claude Code plugin natively (source "claude-code" in agy plugin
       list) — same SKILL.md format, same /<plugin>:<skill> namespace, no
       conversion. agy also reads .agents/skills/ project-level (flat names,
-      shared with Codex). Verified live 2026-06-11 (all 4 plugins imported).
+      shared with Codex). Verified live 2026-06-11; current roster is 4 plugins.
 
-  ⚠ FIXED in this revision (rev 129)
+  ⚠ FIXED in this revision (rev 135)
+    • Corrected live sync/compose anatomy descriptions: sync owns headers, maps,
+      and source-grounded documentation checks; no handoff to retired nav-map.
+      Historical audit notes below remain dated evidence.
+
+  ⚠ FIXED in rev 134 (kept for history)
+    • ADR-130 generates README and bilingual site catalog blocks from source;
+      editorial prose remains hand-owned. Exact drift checks replace token scans.
+      Skill totals exclude supporting documents.
+
+  ⚠ FIXED in rev 133 (kept for history)
+    • ADR-129 changes elicit from compulsory friction to grounded clarification:
+      hesitation is contextual; small gaps are explained inline; surveys and
+      reading pauses are optional; source verification and user authority remain.
+    1. ADR-128 removes forced next-action menus from frame and shape.
+       Substantive reasoning checks stay, but visible worksheets, tables, and
+       headings are proportional to the question. Plain language remains the
+       style, not a zero-jargon ban: technical words are allowed when useful and
+       glossed when needed; metaphors are optional except when /frame:analogize
+       is explicitly requested, where the analogy remains checked. Already-
+       authorized continuation resumes the ordinary workflow; analysis-only or
+       mockup-only requests do not grant build authority. dogfood keeps only a
+       conditional missing-run-authority gate and never starts an automatic paid
+       full-cost pass. frame 0.14.0; shape 0.22.0; current roster remains 4
+       plugins / 23 skills.
+
+  ⚠ FIXED in rev 131 (kept for history)
+    1. ADR-127 splits the former shape handoff door into two explicit
+       entrances over one shared file: /shape:catchup reads/reconstructs
+       current session state, and /shape:park writes the handoff. Both use
+       the same five fields in blueprints/baton.md (root HANDOFF.md fallback).
+       catchup tolerates absent, mismatched, or ad-hoc inputs and self-reports
+       the tier it read; cleanup is conservative, deleting only verified
+       consumed state while retaining the rationale durably. park previews
+       the overwrite and honors existing authorization. shape 0.21.0; current
+       roster is now 8 shape skills / 23 skills total.
+
+  ⚠ FIXED in rev 130 (kept for history)
+    1. Skill renovation (ADR-126): Fathom retires from the current roster
+       (5 skills removed), nav moves to 0.19.0, and the public surfaces now
+       show 4 plugins / 22 skills. Nav planning/refactoring now carries
+       existing implementation authority, avoids forced next-step menus, and
+       uses evidence-based, risk-proportional verification. The independent
+       reviewer judgment role is retired.
+
+  ⚠ FIXED in rev 129 (kept for history)
     1. nav 0.18.0: /nav:sync gains a third, on-demand leg — docs (ADR-125).
        Checks a hand-maintained human-facing doc (README, install steps)
        against real ground truth (manifest, directory, code); tolerant-reader
@@ -2937,7 +2973,7 @@
     <a href="#conv" data-t="nav_conv">Conventions</a>
     <div class="meta">
       <div data-t="meta_about">Hand-curated · stale = lie. Re-audit when content drifts.</div>
-      <div class="updated">Updated 2026-06-11</div>
+      <div class="updated">Updated 2026-09-16</div>
     </div>
   </nav>
 
@@ -2954,9 +2990,9 @@
       <h2 data-t="install_title">Install — one source tree, five agents</h2>
       <p class="lede" data-t="install_lede">Three channels: <b>Claude Code</b> and <b>agy</b> import the plugins natively (namespaced <code>/&lt;plugin&gt;:&lt;verb&gt;</code>); <b>Codex</b> and <b>opencode</b> auto-discover the flat mirror <code>.agents/skills/</code>; <b>Cursor</b> installs generated Cursor Plugins. Shortcut for any harness — tell your agent: <i>“Fetch and follow instructions from <code>https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md</code>”</i>. Or by hand, in Claude Code:</p>
       <pre class="cmd"><code>/plugin marketplace add ChenPaulYu/skills
-/plugin install nav@skills        # + shape@skills · frame@skills · fathom@skills · relay@skills</code></pre>
+/plugin install nav@skills        # + shape@skills · frame@skills · relay@skills</code></pre>
       <p class="lede" data-t="install_agy_lede">In <b>Antigravity CLI</b> (<code>agy</code>) — native Claude Code plugin import, same namespace, no conversion. Clone the repo, then:</p>
-      <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/frame · plugins/fathom · plugins/relay</code></pre>
+      <pre class="cmd"><code>agy plugin install plugins/nav    # + plugins/shape · plugins/frame · plugins/relay</code></pre>
       <p class="small muted" data-t="install_codex_note"><b>Codex</b> and <b>opencode</b> need no install step inside this repo — both auto-discover the generated flat mirror <code>.agents/skills/</code> (<code>nav:audit</code> → <code>nav-audit</code>). For global use, run <code>node scripts/build-codex.mjs --sync-global --profile build --dedupe-global-roots</code>. See <a href="https://github.com/ChenPaulYu/skills#codex-compatibility" target="_blank">README → Codex compatibility</a>.</p>
       <p class="small muted" data-t="install_more">Two more routes: the <a href="https://skills.sh/" target="_blank">skills.sh</a> CLI (<code>npx skills add ChenPaulYu/skills</code> — pick the prefixed skill set), and Cursor's native plugins — <code>node scripts/build-cursor.mjs --sync-local</code> (flattened names inside generated Cursor Plugins; not the Codex mirror). Full guides: <a href="https://github.com/ChenPaulYu/skills#install" target="_blank">README → Install</a>.</p>
       <p class="small muted" data-t="install_note">Iterating on this marketplace itself? Use a local absolute path instead of the GitHub handle — see <a href="https://github.com/ChenPaulYu/skills#local-development-paul-only" target="_blank">README → Local development</a>.</p>
@@ -2975,12 +3011,12 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 940 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Five plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame), fathom (study an unfamiliar repository into a mental model), relay (GitHub-native coordination). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup); the rest are standalone. See ADR-012.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Four plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame), relay (GitHub-native coordination). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame and relay are standalone. See ADR-012/128.</span></div>
     </section>
 
     <section id="rules">
       <h2 data-t="rules_title">Design rules — the bar every skill clears</h2>
-      <p class="lede" data-t="rules_lede">Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. Every <code>SKILL.md</code> embeds these verbatim; this is the canonical list.</p>
+      <p class="lede" data-t="rules_lede">Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. This is the current live summary; historical audit entries below may quote older versions.</p>
       <div class="rules" id="rulesEl"></div>
     </section>
 
@@ -2999,25 +3035,25 @@
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
         <span data-t="navanat_title">nav anatomy — assess, transform, describe, plan, execute</span>
       </h2>
-      <div class="lede" data-t="navanat_lede">Six skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class="anat-list"><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Move</b> · <code>refactor</code> — verbatim move + test-gate, behaviour-preserving (heavy-touch, narrow scope).</li><li><b>Add</b> · <code>do</code> — execute a small behaviour-<i>changing</i> change, disciplined, no artifact; refactor's twin. The inject↔check sub-agent bracket promoted to a standalone verb (ADR-023).</li><li><b>Describe</b> · <code>sync</code> — file-top headers (per-file, continuous) plus the bilingual codebase map as its map leg (per-repo, periodic) — two cadences, one door (ADR-108).</li><li><b>Docs</b> · <code>compose</code> — author/restructure a prose document as a deep module; <code>sync</code>'s prose sibling (sync = the code-file header, compose = the prose body). ADR-049.</li><li><b>Meta</b> · <code>plan</code> — the lone orchestrator: grounds a spec → clarifies → writes a plan artifact you review before executing.</li></ul>(<code>tour</code> retired — <code>/fathom:guide</code> succeeds it, ADR-111.)</div>
+      <div class="lede" data-t="navanat_lede">Six skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class="anat-list"><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Move</b> · <code>refactor</code> — behaviour-preserving structural change with risk-proportional verification.</li><li><b>Add</b> · <code>do</code> — execute a small behaviour-<i>changing</i> change, disciplined, no artifact; refactor's twin. The inject↔check sub-agent bracket promoted to a standalone verb (ADR-023).</li><li><b>Describe</b> · <code>sync</code> — file-top headers (per-file, continuous) plus the bilingual codebase map as its map leg (per-repo, periodic) — two cadences, one door (ADR-108).</li><li><b>Docs</b> · <code>compose</code> — author/restructure a prose document as a deep module; <code>sync</code>'s prose sibling (sync = the code-file header, compose = the prose body). ADR-049.</li><li><b>Meta</b> · <code>plan</code> — grounds a spec, carries existing implementation authority, and writes a plan artifact when planning is the requested outcome.</li></ul>(<code>tour</code> retired in ADR-111; its historical successor has now retired in ADR-126.)</div>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
       </div>
-      <div class="callout" data-t="navanat_callout">The meta-skill (<code>plan</code>) doesn't auto-act on what it surfaces — it writes a plan artifact the user reads before executing. It inlines <code>audit</code>'s protocol but follows the "scan transcript first" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated) or <code>/nav:refactor</code>. For a small, already-decided behaviour change, <code>/nav:do</code> executes it directly — same deep-module/header discipline, no plan artifact.</div>
+      <div class="callout" data-t="navanat_callout">The planning skill (<code>plan</code>) grounds the work before acting: if this turn asked for a plan, it stops at the artifact; if implementation was already authorized, it can carry that authority into the build path. It inlines <code>audit</code>'s protocol but follows the "scan transcript first" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated), <code>/nav:refactor</code>, or <code>/nav:do</code> as the change shape requires.</div>
     </section>
 
     <section id="shape-anatomy">
       <h2>
         <span class="layer-chip ui" data-t="layer_plugin">plugin</span>
-        <span data-t="shape_anat_title">shape anatomy — converge · project · reconcile</span>
+      <span data-t="shape_anat_title">shape anatomy — converge · project · handoff</span>
       </h2>
-      <div class="lede" data-t="shape_anat_lede">Skills grouped by verb around a <code>blueprints/</code> hub.<ul class="anat-list"><li><b>converge</b> · <code>mockup</code> (render-to-decide) · <code>elicit</code> (grounded grill → a principle; gatekeeper runs a survey leg in place when a volley hits missing terrain, folded from the retired standalone <code>survey</code>, ADR-110) · <code>probe</code> (design + run a minimal experiment when a fork can't be settled by argument; summoned or the destination of frame:dialectic's guarded offer; ADR-075) · <code>dogfood</code> (use the built feature for real → friction + coverage gaps; borrows /verify·/run, ADR-033) · <code>position</code> (canon-authoring campaign → core docs; graduation-grown, mirror of reconcile; ADR-035).</li><li><b>project</b> · <code>align</code> — decide now/next/later WITH the user → <code>plan.md</code> + regenerate <code>overview.html</code> (the mirror of <code>/nav:sync</code>'s map).</li><li><b>reconcile</b> · amend a stale fact in place, prune/consolidate a wholly-stale doc, or retire a shipped-decision mockup (salvage → prune, git = deep archive; ADR-037); write-gated. A decision-change → <code>/shape:elicit</code>. · <code>migrate</code> — bring a blueprints/core tree to the current convention version; summon-only (ADR-110).</li></ul></div>
+      <div class="lede" data-t="shape_anat_lede">Skills grouped by verb around a <code>blueprints/</code> hub.<ul class="anat-list"><li><b>converge</b> · <code>mockup</code> (render-to-decide; always interactive HTML) · <code>elicit</code> (grounded clarification; no compulsory friction, phrase-based diagnosis, or reading quota; optional focused survey, ADR-129) · <code>probe</code> (design + run a minimal experiment when a fork can't be settled by argument; summoned or already-authorized from analysis; ADR-075/128) · <code>dogfood</code> (use the built feature for real → friction + coverage gaps; asks only for missing run authority; no automatic paid full-cost pass).</li><li><b>project</b> · <code>align</code> — decide now/next/later WITH the user → the single maintained <code>plan.md</code>; human views render on demand.</li><li><b>handoff</b> · <code>catchup</code> reads/reconstructs the current state from the shared handoff file; <code>park</code> previews and writes it before stepping away. Both use goal · done · now · open · next in <code>blueprints/baton.md</code> (root <code>HANDOFF.md</code> fallback). · <code>migrate</code> — bring a blueprints/core tree to the current convention version; summon-only.</li></ul></div>
       <div class="graphwrap">
         <svg class="graph" id="shapeGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="shapePanel"></div>
       </div>
-      <div class="callout" data-t="shape_anat_callout">Forward-motion half (nav = maintenance half). Three seams, one-way (shape → nav): blueprints/ hands off to /nav:plan; reconcile reads /nav:sync; the build loop is now manual — /nav:plan → /nav:do·/nav:refactor → /shape:align (ADR-110).</div>
+      <div class="callout" data-t="shape_anat_callout">Forward-motion half (nav = maintenance half). The durable board belongs to align; the explicit handoff pair is short-lived: catchup reads and conservatively cleans consumed state, park previews and overwrites the next handoff. The build loop is manual — /nav:plan → /nav:do·/nav:refactor → /shape:align (ADR-110/127).</div>
     </section>
 
 
@@ -3060,9 +3096,9 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description. Five plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame), fathom (study an unfamiliar repository into a mental model), relay (GitHub-native coordination). shape hard-depends on nav (shape → nav — the edge shows it); nav may soft-recommend shape back (guarded offers, e.g. nav:plan → shape:mockup); the rest are standalone. See ADR-012.",
+    pluginsmap_howread: "click a node for its description. Four plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame), relay (GitHub-native coordination). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame and relay are standalone. See ADR-012/128.",
     rules_title: 'Design rules — the bar every skill clears',
-    rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. Every <code>SKILL.md</code> embeds these verbatim; this is the canonical list.',
+    rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. This is the current live summary; historical audit entries below may quote older versions.',
     map_title: 'Skill list — search & expand',
     map_lede: '★ marks load-bearing / read-first. The skill name is the slash command you invoke (<code>/&lt;plugin&gt;:&lt;skill&gt;</code>).',
     map_placeholder: 'Filter plugins & skills…',
@@ -3072,8 +3108,8 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav anatomy — assess, transform, describe, plan, execute',
-    navanat_lede: "Six skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class='anat-list'><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Move</b> · <code>refactor</code> — verbatim move + test-gate, behaviour-preserving (heavy-touch, narrow scope).</li><li><b>Add</b> · <code>do</code> — execute a small behaviour-<i>changing</i> change, disciplined, no artifact; refactor's twin. The inject↔check sub-agent bracket promoted to a standalone verb (ADR-023).</li><li><b>Describe</b> · <code>sync</code> — file-top headers (per-file, continuous) plus the bilingual codebase map as its map leg (per-repo, periodic) — two cadences, one door (ADR-108).</li><li><b>Docs</b> · <code>compose</code> — author/restructure a prose document as a deep module; <code>sync</code>'s prose sibling (sync = the code-file header, compose = the prose body). ADR-049.</li><li><b>Meta</b> · <code>plan</code> — the lone orchestrator: grounds a spec → clarifies → writes a plan artifact you review before executing.</li></ul>(<code>tour</code> retired — <code>/fathom:guide</code> succeeds it, ADR-111.)",
-    navanat_callout: "The meta-skill (<code>plan</code>) doesn't auto-act on what it surfaces — it writes a plan artifact the user reads before executing. It inlines <code>audit</code>'s protocol but follows the \"scan transcript first\" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated) or <code>/nav:refactor</code>. For a small, already-decided behaviour change, <code>/nav:do</code> executes it directly — same deep-module/header discipline, no plan artifact.",
+    navanat_lede: "Six skills, one verb each — <code>audit</code> is the read-only source of truth that <code>plan</code> (and <code>sync</code>'s grounding pass) inlines.<ul class='anat-list'><li><b>Source</b> · <code>audit</code> — assess against the 8 rules (read-only).</li><li><b>Move</b> · <code>refactor</code> — behaviour-preserving structural change with risk-proportional verification.</li><li><b>Add</b> · <code>do</code> — execute a small behaviour-<i>changing</i> change, disciplined, no artifact; refactor's twin. The inject↔check sub-agent bracket promoted to a standalone verb (ADR-023).</li><li><b>Describe</b> · <code>sync</code> — file-top headers (per-file, continuous) plus the bilingual codebase map as its map leg (per-repo, periodic) — two cadences, one door (ADR-108).</li><li><b>Docs</b> · <code>compose</code> — author/restructure a prose document as a deep module; <code>sync</code>'s prose sibling (sync = the code-file header, compose = the prose body). ADR-049.</li><li><b>Meta</b> · <code>plan</code> — grounds a spec, carries existing implementation authority, and writes a plan artifact when planning is the requested outcome.</li></ul>(<code>tour</code> retired in ADR-111; its historical successor has now retired in ADR-126.)",
+    navanat_callout: "The planning skill (<code>plan</code>) grounds the work before acting: if this turn asked for a plan, it stops at the artifact; if implementation was already authorized, it can carry that authority into the build path. It inlines <code>audit</code>'s protocol but follows the \"scan transcript first\" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated), <code>/nav:refactor</code>, or <code>/nav:do</code> as the change shape requires.",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
     // panel labels
@@ -3087,15 +3123,15 @@ const T = {
     nav_default_h3: 'nav plugin anatomy',
     nav_default_role: 'Seven skills — plan the orchestrator. Click any node for its role + what it wires to.',
     nav_default_click_label: 'tip',
-    nav_default_click_text: 'audit is the read-only source of truth; plan inlines it to ground a spec into a plan artifact. sync refreshes file-top headers (per-file, gated); map renders the repo map (sync offers it at the end). refactor stays standalone. do executes a small behaviour-changing change directly, no plan (refactor twin). Click any node for its role.',
+    nav_default_click_text: 'audit is the read-only source of truth; plan inlines it to ground a spec and either stop at a plan or carry existing build authority. sync has three legs: headers, repo map, and docs-vs-ground-truth. refactor preserves observable contracts with risk-proportional verification. do executes a small behaviour-changing change directly, no plan. Click any node for its role.',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    shape_anat_title: 'shape anatomy — converge · project · reconcile',
-    shape_anat_lede: "Skills grouped by verb around a <code>blueprints/</code> hub.<ul class='anat-list'><li><b>converge</b> · <code>mockup</code> (render-to-decide) · <code>elicit</code> (grounded grill → a principle; gatekeeper runs a survey leg in place when a volley hits missing terrain, folded from the retired standalone <code>survey</code>, ADR-110) · <code>probe</code> (design + run a minimal experiment when a fork can't be settled by argument; summoned or the destination of frame:dialectic's guarded offer; ADR-075) · <code>dogfood</code> (use the built feature for real → friction + coverage gaps; borrows /verify·/run, ADR-033) · <code>position</code> (canon-authoring campaign → core docs; graduation-grown, mirror of reconcile; ADR-035).</li><li><b>project</b> · <code>align</code> — decide now/next/later WITH the user → <code>plan.md</code> + regenerate <code>overview.html</code> (the mirror of <code>/nav:sync</code>'s map).</li><li><b>reconcile</b> · amend a stale fact in place, prune/consolidate a wholly-stale doc, or retire a shipped-decision mockup (salvage → prune, git = deep archive; ADR-037); write-gated. A decision-change → <code>/shape:elicit</code>. · <code>migrate</code> — bring a blueprints/core tree to the current convention version; summon-only (ADR-110).</li></ul>",
-    shape_anat_callout: "shape is the <b>forward-motion</b> half; <code>nav</code> is the maintenance half. Through-line: converge by a real disposable instance, never a description; its standing form is the blueprints board (one state, two renders — agent reads markdown, human reads the HTML projection), and its terminus is now the manual build path (ADR-110). Three **hard** seams, one-way (<b>shape → nav</b>): <code>blueprints/</code> → <code>/nav:plan</code>; <code>reconcile</code> ← <code>/nav:sync</code>; the build loop is now manual — <code>/nav:plan</code> → <code>/nav:do</code>·<code>/nav:refactor</code> → <code>/shape:align</code>. nav may **soft-recommend** shape back (guarded, e.g. nav:plan → shape:mockup). See ADR-010/011/012/110.",
+    shape_anat_title: 'shape anatomy — converge · project · handoff',
+    shape_anat_lede: "Skills grouped by verb around a <code>blueprints/</code> hub.<ul class='anat-list'><li><b>converge</b> · <code>mockup</code> (render-to-decide; always interactive HTML) · <code>elicit</code> (grounded clarification; no compulsory friction, phrase-based diagnosis, or reading quota; optional focused survey, ADR-129) · <code>probe</code> (design + run a minimal experiment when a fork can't be settled by argument; summoned or already-authorized from analysis; ADR-075/128) · <code>dogfood</code> (use the built feature for real → friction + coverage gaps; asks only for missing run authority; no automatic paid full-cost pass).</li><li><b>project</b> · <code>align</code> — decide now/next/later WITH the user → the single maintained <code>plan.md</code>; human views render on demand.</li><li><b>handoff</b> · <code>catchup</code> reads/reconstructs the current state from the shared handoff file; <code>park</code> previews and writes it before stepping away. Both use goal · done · now · open · next in <code>blueprints/baton.md</code> (root <code>HANDOFF.md</code> fallback). · <code>migrate</code> — bring a blueprints/core tree to the current convention version; summon-only.</li></ul>",
+    shape_anat_callout: "Forward-motion half (nav = maintenance half). The durable board belongs to align; the explicit handoff pair is short-lived: catchup reads and conservatively cleans consumed state, park previews and overwrites the next handoff. The build loop is manual — /nav:plan → /nav:do·/nav:refactor → /shape:align (ADR-110/127).",
     shape_default_h3: 'shape plugin anatomy',
-    shape_default_role: 'Verb-grouped skills around a blueprints hub: mockup, elicit (converge) · align (project) · reconcile. Click a node for its role.',
+    shape_default_role: 'Verb-grouped skills around a blueprints hub: mockup, elicit, probe, dogfood (converge) · align (project) · catchup/park (handoff) · migrate. Click a node for its role.',
     shape_default_click_label: 'tip',
-    shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. doctor (orchestrator) is deferred until the family proves out.',
+    shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. The shared handoff file is blueprints/baton.md, with root HANDOFF.md as the no-tree fallback.',
     leg_decide: 'converge', leg_project: 'project', leg_reconcile: 'reconcile', leg_artifact: 'blueprints (convention)',
     // legend
     leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe', leg_execute: 'execute',
@@ -3129,7 +3165,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述。五個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)、nav(可導覽性,維護那半)、frame(套用具名的思考框架)、fathom(讀懂陌生 repository、建心智模型)、relay(GitHub 原生協作)。shape 硬依賴 nav(shape → nav —— 連線標出來了);nav 可軟推薦回 shape(guarded offer,如 nav:plan → shape:mockup);其餘獨立。見 ADR-012。',
+    pluginsmap_howread: '點 node 看描述。四個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)、nav(可導覽性,維護那半)、frame(套用具名的思考框架)、relay(GitHub 原生協作)。shape 硬依賴 nav(shape → nav —— 連線標出來了);當決策需要成形時 nav 可建議回 shape,但已授權的工作不再強迫跳出固定下一步選單。frame 與 relay 獨立。見 ADR-012/128。',
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -3141,8 +3177,8 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃、執行',
-    navanat_lede: '六個 skill,各一動詞 —— <code>audit</code> 是唯讀的真理之源,<code>plan</code>(與 <code>sync</code> 的 grounding pass)內嵌它。<ul class="anat-list"><li><b>真理之源</b> · <code>audit</code> —— 對照 8 規則評估(唯讀)。</li><li><b>搬移</b> · <code>refactor</code> —— 原文搬移 + test-gate,行為不變(重觸、須窄範圍)。</li><li><b>新增</b> · <code>do</code> —— 直接執行一個小的、會改變行為的變更,有紀律、不留 artifact;refactor 的雙生。把 inject↔check 的 sub-agent bracket 獨立成動詞(ADR-023)。</li><li><b>描述</b> · <code>sync</code> —— 檔首 header(每檔、連續)加上雙語 codebase map 作為它的 map leg(每 repo、週期)—— 兩種 cadence、一道門(ADR-108)。</li><li><b>Docs</b> · <code>compose</code> —— 把 prose 文件寫/重構成 deep module;<code>sync</code> 的文件版手足(sync = code 檔的 header,compose = prose 的全身)。ADR-049。</li><li><b>Meta</b> · <code>plan</code> —— 唯一的 orchestrator:以 spec 為底 ground → 釐清 → 寫出 plan 檔給你看過再執行。</li></ul>(<code>tour</code> 已退役 —— 由 <code>/fathom:guide</code> 接任,ADR-111。)',
-    navanat_callout: '唯一的 meta-skill(<code>plan</code>)不會自動執行它發現的事 —— 它寫出 plan 檔給 user 看過再執行。它內嵌 <code>audit</code> 的 protocol,但遵守「先掃 transcript」的 preamble —— 同 session 跑過 audit 就 reuse,不重新 grep(ADR-006)。<code>audit</code> 本身唯讀;要動手就跑 <code>/nav:sync</code>(gated)或 <code>/nav:refactor</code>。針對小的、已決定的行為變更,<code>/nav:do</code> 直接執行 —— 同樣的 deep-module/header 紀律,不寫 plan 檔。',
+    navanat_lede: '六個 skill,各一動詞 —— <code>audit</code> 是唯讀的真理之源,<code>plan</code>(與 <code>sync</code> 的 grounding pass)內嵌它。<ul class="anat-list"><li><b>真理之源</b> · <code>audit</code> —— 對照 8 規則評估(唯讀)。</li><li><b>搬移</b> · <code>refactor</code> —— 保持行為不變的結構調整,驗證強度按風險決定。</li><li><b>新增</b> · <code>do</code> —— 直接執行一個小的、會改變行為的變更,有紀律、不留 artifact;refactor 的雙生。把 inject↔check 的 sub-agent bracket 獨立成動詞(ADR-023)。</li><li><b>描述</b> · <code>sync</code> —— 檔首 header(每檔、連續)加上雙語 codebase map 作為它的 map leg(每 repo、週期)—— 兩種 cadence、一道門(ADR-108)。</li><li><b>Docs</b> · <code>compose</code> —— 把 prose 文件寫/重構成 deep module;<code>sync</code> 的文件版手足(sync = code 檔的 header,compose = prose 的全身)。ADR-049。</li><li><b>Meta</b> · <code>plan</code> —— 以 spec 為底 ground,承接既有實作授權,在這輪目標是規劃時寫出 plan 檔。</li></ul>(<code>tour</code> 已在 ADR-111 退役;它當時的後繼也已在 ADR-126 退役。)',
+    navanat_callout: 'plan skill 先把工作接地再動手:這輪若只要 plan,它停在 artifact;若已經授權實作,它可以把這個授權帶進 build path。它內嵌 <code>audit</code> 的 protocol,但遵守「先掃 transcript」的 preamble —— 同 session 跑過 audit 就 reuse,不重新 grep(ADR-006)。<code>audit</code> 本身唯讀;要動手就依變更形狀跑 <code>/nav:sync</code>(gated)、<code>/nav:refactor</code> 或 <code>/nav:do</code>。',
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
     role_label: '角色', wires_label: '指向', used_by_label: '被指向', view_anatomy: '前往解剖',
@@ -3154,15 +3190,15 @@ const T = {
     nav_default_h3: 'nav plugin 解剖',
     nav_default_role: '七個 skill —— plan 是 orchestrator。點任一 node 看角色與指向。',
     nav_default_click_label: '提示',
-    nav_default_click_text: 'audit 是唯讀的真理之源;plan 內嵌它、把 spec ground 成 plan 檔。sync 刷新檔首 header(每檔、gated);map 渲染 repo map(sync 結尾會 offer)。refactor 維持獨立。do 直接執行一個小的、會改變行為的變更,不寫 plan(refactor 雙生)。點任一 node 看角色。',
+    nav_default_click_text: 'audit 是唯讀的真理之源;plan 內嵌它來 ground spec,這輪只要規劃就停在 plan,已授權實作就承接到 build path。sync 有三條腿:headers、repo map、docs-vs-ground-truth。refactor 保留可觀察契約,驗證按風險調整。do 直接執行小型行為變更,不寫 plan。點任一 node 看角色。',
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    shape_anat_title: 'shape 解剖 —— 收斂 · 投影 · 對賬',
-    shape_anat_lede: '依動詞分組,圍著 <code>blueprints/</code> hub。<ul class="anat-list"><li><b>收斂</b> · <code>mockup</code>(render 即決策)· <code>elicit</code>(grounded grill → 一條原則;守門人在 volley 卡到缺地形時就地跑 survey leg,從退役的獨立 <code>survey</code> 折進來,ADR-110)· <code>probe</code>(當分岔吵不出結果時設計並跑一個最小實驗;召喚或是 frame:dialectic guarded offer 的目的地;ADR-075)· <code>dogfood</code>(親自用 built feature → 摩擦 + coverage gap;借 /verify·/run,ADR-033)。</li><li><b>投影</b> · <code>align</code> —— 跟 user 定 now/next/later → <code>plan.md</code> + 重生 <code>overview.html</code>(<code>/nav:sync</code> 的 map 對應)。</li><li><b>對賬</b> · <code>reconcile</code> —— 就地 amend 過時事實,prune/合併整份過時的,或退役已 ship 決策的 mockup(salvage → prune,git = deep archive;ADR-037);write-gated。決定變了 → <code>/shape:elicit</code>。· <code>migrate</code> —— 把 blueprints/core 樹遷到現行慣例版本;summon-only(ADR-110)。</li></ul>',
-    shape_anat_callout: 'shape 是<b>往前推</b>那半;<code>nav</code> 是維護那半。Through-line:用真實、可丟的 instance 收斂,不用描述;常駐形式是 blueprints 看板(單一現況、兩種 render —— agent 讀 markdown,人讀 HTML 投影),終點現在是手動的 build 路徑(ADR-110)。三條**硬**縫、單向(<b>shape → nav</b>):<code>blueprints/</code> → <code>/nav:plan</code>;<code>reconcile</code> ← <code>/nav:sync</code>;build 迴圈現在是手動的 —— <code>/nav:plan</code> → <code>/nav:do</code>·<code>/nav:refactor</code> → <code>/shape:align</code>。nav 可**軟推薦**回 shape(guarded,如 nav:plan → shape:mockup)。見 ADR-010/011/012/110。',
+    shape_anat_title: 'shape 解剖 —— 收斂 · 投影 · 交接',
+    shape_anat_lede: '依動詞分組,圍著 <code>blueprints/</code> hub。<ul class="anat-list"><li><b>收斂</b> · <code>mockup</code>(render 即決策;永遠是互動 HTML)· <code>elicit</code>(接地釐清；不強制製造摩擦、不靠單句判定狀態、不規定閱讀篇數；需要時才擴大調查，ADR-129)· <code>probe</code>(當分岔吵不出結果時設計並跑一個最小實驗;明確召喚或由已授權的分析工作接續;ADR-075/128)· <code>dogfood</code>(親自用 built feature → 摩擦 + coverage gap;只在缺少操作授權時才詢問,不自動啟動完整付費測試)。</li><li><b>投影</b> · <code>align</code> —— 跟 user 定 now/next/later → 唯一維護的 <code>plan.md</code>;需要給人看的 view 才即時 render。</li><li><b>交接</b> · <code>catchup</code> 從共享 handoff 檔讀取/重建目前狀態;<code>park</code> 在離開前預覽並寫入。兩者共用 goal · done · now · open · next 五欄,落在 <code>blueprints/baton.md</code>(無樹時 fallback 到根目錄 <code>HANDOFF.md</code>)。· <code>migrate</code> —— 把 blueprints/core 樹遷到現行慣例版本;summon-only。</li></ul>',
+    shape_anat_callout: 'shape 是往前推那半(nav = 維護那半)。耐久看板歸 align;明確召喚的 handoff pair 是短暫層:catchup 讀取並保守清掉已消費狀態,park 預覽並覆寫下一份 handoff。build 迴圈現在是手動的 —— /nav:plan → /nav:do·/nav:refactor → /shape:align(ADR-110/127)。',
     shape_default_h3: 'shape plugin 解剖',
-    shape_default_role: '依動詞分組、圍著 blueprints hub:mockup、elicit(收斂)· align(投影)· reconcile。點 node 看角色。',
+    shape_default_role: '依動詞分組、圍著 blueprints hub:mockup、elicit、probe、dogfood(收斂)· align(投影)· catchup/park(交接)· migrate。點 node 看角色。',
     shape_default_click_label: '提示',
-    shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。doctor(orchestrator)等家族成熟再加。',
+    shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。共享 handoff 檔是 blueprints/baton.md;沒有 blueprints 樹時 fallback 到根目錄 HANDOFF.md。',
     leg_decide: '收斂', leg_project: '投影', leg_reconcile: '對賬', leg_artifact: 'blueprints(約定)',
     leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述', leg_execute: '執行',
     leg_plugin: 'plugin',
@@ -3191,94 +3227,330 @@ const RULES = [
   {n:'①', name:{en:'Deep modules via information hiding', zh:'深模組(資訊隱藏)'}, desc:{en:'A simple interface hiding significant complexity, usable without reading the body. The technique is information hiding: encapsulate each design decision (data structures, formats, assumptions) so it never surfaces in the interface. Red flag: information leakage (same knowledge in ≥2 modules), often from temporal decomposition (boundaries by execution order, not knowledge).', zh:'簡單介面藏住大量複雜度,不讀內部即可使用。手段是資訊隱藏:把每個設計決策(資料結構、格式、假設)封進單一 module,不讓它出現在介面。紅旗:資訊洩漏(同一知識散在 ≥2 個 module),常由時序分解(邊界順執行順序而非知識切)造成。'}},
   {n:'②', name:{en:'Interface-first at every scale', zh:'各尺度皆介面優先'}, desc:{en:'One door, surfaced progressively: a module interface, a subsystem barrel/facade (index.ts), the whole-codebase index/map. Drill in only as needed.', zh:'一道門、漸進揭露:模組介面、子系統 barrel/facade(index.ts)、整個 codebase 的索引/地圖。有需要再深入。'}},
   {n:'③', name:{en:'Explicit dependencies', zh:'依賴明示'}, desc:{en:'Functions deterministic; deps explicit in the signature, not ambient.', zh:'函式可決定;依賴寫在簽名,非環境變數。'}},
-  {n:'④', name:{en:'Right grain — neither giant nor fragmented', zh:'正確顆粒度 —— 不巨也不碎'}, desc:{en:'No mega-module or mega-function (a 700-line render counts); equally, no needless abstraction. The giant↔fragment tension is the balance.', zh:'無巨型模組或函式(700 行 render 算);同樣,也不過度抽象。巨物↔碎片之間就是要平衡的張力。'}},
+  {n:'④', name:{en:'Right grain — neither giant nor fragmented', zh:'正確顆粒度 —— 不巨也不碎'}, desc:{en:'Avoid mega-modules and needless fragmentation by reading cohesion, interface weight, and change pressure; size is evidence, not an automatic verdict.', zh:'避免巨型模組與無謂碎片化,判斷依 cohesion、interface 重量與變更壓力;大小是證據,不是自動判決。'}},
   {n:'⑤', name:{en:'Fit the framework', zh:'順從框架'}, desc:{en:"Idiomatic patterns; pass store/hook objects, not 20 loose props; don\'t fight the ecosystem.", zh:'用框架慣用模式;傳 store/hook 物件,不用 20 個鬆散 props;別跟生態系作對。'}},
-  {n:'⑥', name:{en:"Rearrange, don\'t rewrite", zh:'重組勿重寫'}, desc:{en:'Refactor = verbatim move + rewire; behaviour stays identical; test-gate each step.', zh:'重構 = 原文搬移 + 重接線;行為完全不變;每步 test gate。'}},
-  {n:'⑦', name:{en:'Below 90% → ask', zh:'信心低於 90% 就問'}, desc:{en:'When unsure about scope, boundaries, intent: stop and clarify.', zh:'不確定範圍、邊界、意圖時停下來問。'}},
+  {n:'⑥', name:{en:'Preserve observable contracts', zh:'保留可觀察契約'}, desc:{en:'A refactor preserves behavior and public contracts while allowing necessary verified internal rewrites; verification scales with risk and touched surface.', zh:'重構保留行為與公開契約,但允許必要且已驗證的內部改寫;驗證強度依風險與觸及面調整。'}},
+  {n:'⑦', name:{en:'Evidence, then authority', zh:'先證據,再權限'}, desc:{en:'Use available evidence first; ask when the remaining uncertainty changes user intent, scope, authority, external effects, or verification cost.', zh:'先用手上證據推進;只有剩下的不確定會改變使用者意圖、範圍、授權、外部影響或驗證成本時才停下來問。'}},
   {n:'⑧', name:{en:'Agent-navigability is the audit', zh:'代理可導覽性即審計'}, desc:{en:'Struggle-to-describe IS the deep-module failure signal.', zh:'描述困難就是 deep-module 失敗訊號。'}},
 ];
 
-const DOMAINS = {
-  nav: {
-    layer: 'state',
-    path: 'plugins/nav/',
-    blurb: {en:'Keep any codebase navigable as it grows. 6 skills, one verb each. Language-agnostic. audit gains the root-flatness check — a flat pile of loose modules at source root with unfoldered families is a composition failure (the inverse of the barrel check). sync now covers file-top headers (per-file, continuous), the bilingual codebase map (per-repo, periodic), and an on-demand docs leg checking hand-maintained human-facing docs like README against real ground truth — three cadences, one door (ADR-108 folded map back; ADR-125 added docs). tour retired by ADR-111 (single-altitude delivery, no layered ladder) — /fathom:guide succeeds it. v0.18.0; see <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.', zh:'讓任何 codebase 長大後仍可導覽。6 個 skill,各一動詞。跨語言。audit 新增 root-flatness 檢查——套件根一大攤鬆散模組、家族沒有房間 = 組合失敗(barrel 檢查的反面)。sync 現在涵蓋檔首 header(每檔、連續)、雙語 codebase map(每 repo、週期),以及一條 on-demand 的 docs 腿,檢查 README 這類人讀的文件是否還跟真正的事實來源一致——三種 cadence、一道門(ADR-108 把 map 折回來;ADR-125 加上 docs)。tour 已依 ADR-111 退役(單一高度交付、沒有分層階梯)——由 /fathom:guide 接任。v0.18.0;plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。'},
-    files: [
-      ['/nav:audit', '', {en:'★ Assess codebase shape against the 8 rules — unconditional health, or read-only quick-check against a target spec. Read-only.', zh:'★ 對照 8 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。'}],
-      ['/nav:refactor', '', {en:'★ Structural refactor: verbatim move + test gate after every step + real-app pass at the end. Behaviour stays identical.', zh:'★ 結構重構:原文搬移 + 每步 test gate + 結尾真實 app pass。行為完全不變。'}],
-      ['/nav:sync', '', {en:'Keep a codebase navigable at both scales, plus its docs honest — one door, three legs: re-sync file-top headers (any language, <code>head -12</code> = role + key deps) inline against the code, gated diff — per-file navigability, continuous/per-change cadence; render the bilingual codebase map (<code>docs/codebase-map/index.html</code>, anatomy graphs + click-to-reveal + audit block) — per-repo navigability, periodic/batched cadence, reads the maintained headers; or check a hand-maintained human-facing doc (README, install steps) against its real ground truth (manifest, directory, code) — on-demand cadence, gated diff to fix, tolerant-reader for a repo-declared gate (ADR-071) or a universal fallback checklist. Keeps <code>references/header-render.md</code> + <code>references/map-render.md</code> + <code>references/docs-render.md</code> + <code>visual-spec.md</code>. ADR-108 folds the header/map legs back into one door (ADR-019 merged them, ADR-029 re-split them by cadence, the split door drew 0 direct fires in 11 months); ADR-125 adds the docs leg, generalizing this marketplace\'s own README gate into a repo-agnostic check.', zh:'一道門、三條腿,兩種尺度都可導覽,順便顧好文件:就地把檔首 header(任何語言,<code>head -12</code> 即角色 + 關鍵依賴)對 code 刷新、gated diff —— 每檔可導覽,連續/隨改的 cadence;渲染雙語 codebase map(<code>docs/codebase-map/index.html</code>,anatomy 圖 + click-to-reveal + audit block)—— 每 repo 可導覽,週期/批次 cadence,讀維護中的 header;或是把一份人讀的文件(README、安裝步驟)對照真正的事實來源(manifest、目錄、程式碼)核對 —— on-demand cadence,gated diff 才修,repo 有自訂 gate 就照走、沒有就退回通用檢查清單(tolerant-reader,ADR-071)。擁有 <code>references/header-render.md</code> + <code>references/map-render.md</code> + <code>references/docs-render.md</code> + <code>visual-spec.md</code>。ADR-108 把 header/map 兩條腿折回一道門(ADR-019 曾合併、ADR-029 依 cadence 再拆、拆出去的門 11 個月零直接呼叫);ADR-125 加上 docs 腿,把這個 marketplace 自己的 README gate 通用化成任何 repo 都能用的檢查。'}],
-      ['/nav:plan', '', {en:'★ Ground a spec against the code, clarify ambiguity (3-5 questions), write a plan artifact (Context · Approach · Critical files · Verification). Reuses /nav:audit Mode 2 output if it ran in this session. Stage 4 offers execution + a guarded /shape:mockup visual summary (ADR-012). Writes into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/), so the grounded plan co-locates with the intent — ADR-017.', zh:'★ 以 codebase 為基底處理 spec,釐清不明處(3-5 問),寫出 plan 檔(Context · Approach · Critical files · Verification)。同 session 跑過 /nav:audit Mode 2 會 reuse。Stage 4 offer 執行 + 一個 guarded 的 /shape:mockup 視覺 summary(ADR-012)。有 blueprints/ 樹時寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/),讓 grounded plan 跟 intent 同處 —— ADR-017。'}],
-      ['/nav:do', '', {en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md artifact. Deep-module/header/N+1 awareness throughout + a thin bracket: inject (head -12 + reuse-grep) → execute → check (header · N+1 · unconditional verify gate · board sync: a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The inject↔check sub-agent discipline (ADR-008) as a standalone verb; refactor twin (refactor preserves behaviour, do changes it) — ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不留 plan.md。全程 deep-module/header/N+1 awareness + 一道薄 bracket:inject(head -12 + reuse-grep)→ execute → check(header · N+1 · 無條件 verify gate · board sync:出貨若關掉 blueprints/plan.md 某條目,同 commit 更新它,ADR-086)。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞;refactor 雙生(refactor 保行為,do 改行為)—— ADR-023。'}],
-      ['/nav:compose', '', {en:'Author or restructure a PROSE document as a deep module — lead with the point (head-able top), one fact one owner (link, don\'t restate), group by knowledge not chronology, right grain. Two modes (author from intent/notes · restructure an existing draft verbatim), diff-gated. The prose-document sibling of <code>/nav:sync</code>: sync = the header line atop a CODE file, compose = the body of a file that IS prose. Deep-prose extracted as the single owner its many consumers (shape · reflect · research · the ADRs · the forthcoming relay) were missing — the N+1 trigger. The self-sufficient writing door: document structure + the durable sentence keystones distilled inline; the bulky/volatile long-tail (grammar, misused-words, the perishable AI-tell list) stays in the optional external writing-clearly-and-concisely. ADR-049.', zh:'把一份 PROSE 文件 author 或 restructure 成 deep module —— 先講重點(head 得到的開頭)、一事一主(連結、不重抄)、按知識而非時序分組、right grain。兩種模式(從意圖/筆記 author · 把現有草稿逐字 restructure),diff-gated。<code>/nav:sync</code> 的文件版手足:sync = CODE 檔頂那行 header,compose = 一個本身就是 prose 的檔的全身。把 deep-prose 抽成單一擁有者(shape · reflect · research · ADR · 即將到來的 relay 等消費者本來各自重述)—— N+1 trigger。自足的寫作門:文件結構 + 就地萃取的耐久句子原則;笨重/會過期的長尾(文法、誤用字、會過時的 AI 字清單)留在可選的外部 writing-clearly-and-concisely。ADR-049。'}],
-    ],
-  },
-  fathom: {
-    layer: 'foundation',
-    path: 'plugins/fathom/',
-    blurb: {en:'Study an unfamiliar repository into a predictive mental model. **5 verbs over one shared study state** (ADR-116, ADR-119) — the flow is not fixed, so files rather than call order connect them: <code>index.md</code> records how deep the repository is, <code>understanding.md</code> how deep the learner is, <code>progress.md</code> is the cursor. <b>index</b> grounds without teaching (anchor + release distance · collapse judgment · the growing file:line index · a measured trust verdict closing in a read-it-like-this instruction). <b>guide</b> runs the climb (Repository → Runtime → System → Behavior → Code): calibrate on the learner background, teach with knowledge-matched forms — spatial map, run playback, claim expansion, classification tree, weighted graph — dwell for questions, gate by verbalization. <b>quiz</b> checks what stuck, ranked by decay risk. <b>dive</b> follows one topic as deep as wanted, advancing nothing. <b>compile</b> turns the study into its artifacts — horizon (repo dashboard), tides (state board), atlas (code map) — re-runnable, so they enrich as the study deepens. To fathom = to deeply understand; the root is the nautical depth unit, measured line by line downward. v0.15.0; see <code>plugins/fathom/CLAUDE.md</code>.', zh:'把一個陌生 repository 讀成可預測的心智模型。**五個動詞、共用一份 study 狀態**(ADR-116、ADR-119)——流程本來就不固定,所以連接組織是檔案而不是呼叫順序:<code>index.md</code> 記 repo 有多深、<code>understanding.md</code> 記學習者到哪、<code>progress.md</code> 是游標。<b>index</b> 只接地不教學(錨定＋release 距離 · 塌縮判斷 · 會長大的 file:line 索引 · 一份量測過的可信度總評,收在「所以你該怎麼讀它」)。<b>guide</b> 帶爬階梯(Repository → Runtime → System → Behavior → Code):依學習者背景校準,按知識種類配形式——空間圖、執行播放、主張展開、分類樹、加權 graph——先 dwell 追問,再用語言化 gate 驗收。<b>quiz</b> 依衰退風險抽問看什麼留下來了。<b>dive</b> 把一個主題追到學習者想要的深度,不推進任何層級。<b>compile</b> 把 study 編成它的產物——horizon(儀表板)、tides(狀態板)、atlas(地圖)——可重跑,隨理解加深而變厚。fathom = 深入理解;字源是水深單位,一噚一噚往下量。v0.15.0;見 <code>plugins/fathom/CLAUDE.md</code>。'},
-    files: [
-      ['/fathom:index', '', {en:'Take the soundings before anyone gets in: anchor the upstream URL + full SHA + release distance (latest tag / published version vs the pin — a pin far ahead of release is itself a finding), judge how many ladder levels this repo needs (collapse rules), then land index.md — the agent-facing file:line anchor index that answers behavior questions, grows downward as the study descends, and never annotates the pinned clone. Closes with a measured trust verdict: maintenance intensity, test investment, doc staleness, churn, product gap — ending in a read-it-like-this instruction. Grounds; does not teach. ADR-114.', zh:'在任何人下水前先測深:錨定 upstream URL + 完整 SHA + release 距離(最新 tag／已發佈版本 vs 你的 pin——pin 遠超前 release 本身就是發現),判斷這個 repo 需要幾層階梯(塌縮規則),然後產出 index.md——給 agent 的 file:line 錨點索引,只答 behavior 問題、隨研究往下長、絕不註記釘住的 clone。收尾是一份量測過的可信度總評:維護強度、測試投入、文件過期程度、核心變動率、產品落差——最後給一句「所以你該怎麼讀它」。只接地,不教學。ADR-114。'}],
-      ['/fathom:guide', '', {en:'The teaching climb: reuse (or inline) the sounding, calibrate on the learner BACKGROUND — never repo familiarity — to set the gloss list, contrast anchor and chapter compression, then teach one level at a time with knowledge-matched forms (interactive guided mockup at Repository; terminal-first mid-ladder), dwell for the learner questions, and gate by VERBALIZATION — they narrate their own model, the agent repairs only the exposed gap. Writes three files: the cursor, understanding.md (the learner model), and any anchor newly traced. ADR-114.', zh:'教學的爬梯:重用(或就地執行)測深,依學習者的「背景知識」校準——絕不問對這個 repo 熟不熟——以決定 gloss 清單、對照錨與章節壓縮,然後一次教一層,按知識種類配形式(Repository 層預設互動 guided mockup;中段層級 terminal 優先),先 dwell 讓學習者追問,再用「語言化 gate」驗收——由他自己講出模型,agent 只修暴露出來的那塊。寫三份檔案:游標、understanding.md(學習者模型)、以及新追出來的錨點。ADR-114。'}],
-      ['/fathom:quiz', '', {en:'Find out what actually stuck: read understanding.md, rank by decay risk (corrected entries first — a repaired misconception regresses toward its original shape; then aged Confirmed entries, the learner own Open flags, and what was shown but never probed), ask for narration rather than recall, and write back what the answers revealed — held / decayed / never landed / newly exposed. Advances no level; may fire days after any teaching. ADR-114.', zh:'查出到底什麼留下來了:讀 understanding.md,依衰退風險排序(修正過的優先——被修好的誤解會朝原本的形狀回歸;再來是放久的 Confirmed、學習者自己標的 Open、以及看過但沒考過的),要求他用自己的話講而不是背誦,再把答案揭露的東西寫回去——留住了／退化了／從來沒進去／新暴露的洞。不推進任何層級;可以在教學結束好幾天後才跑。ADR-114。'}],
-      ['/fathom:dive', '', {en:'Chase one thread as deep as it goes: the learner names a topic and keeps asking, every load-bearing claim resolving to file:line at the pin (soundings first, source when the index does not reach), anything ungrounded labelled inferred or unknown. The ladder does not move — a dive never marks a level passed. Residue on exit: new anchors into index.md, what the questions revealed into understanding.md, unsettled items into the cursor, and a breadcrumb restoring position. The unbounded cousin of guide dwell. ADR-114.', zh:'把一條線追到底:學習者指定主題、無限追問,每個承重主張都回錨到 pin 上的 file:line(先查 soundings,索引不夠再讀源碼),接不到地的一律標記為推論或未知。階梯不動——dive 絕不標記任何層級通過。離開時的殘留:新錨點寫回 index.md、問題揭露的理解寫回 understanding.md、沒解決的進游標,最後用麵包屑把人放回原位。是 guide 裡 dwell 的無界表親。ADR-114。'}],
-      ['/fathom:compile', '', {en:'Turn the study into its artifacts — horizon (repo-level dashboard: boundary row, counted trust verdict, capability tree, import topology), tides (system/state board), atlas (behavior/code map: repo poster down to function-level routes with call/return/signal edges and cargo labels). Each is a purely semantic fixture rendered by a fixture-driven shell — no coordinates in the data, the shell owns layout. The recorded study gate decides which artifacts may exist; a re-compile re-renders current understanding with stable identity, so artifacts enrich as the study deepens and un-studied territory stays honest fog. Two-pass loop: create, structural gate, source-grounded verify. ADR-119.', zh:'把 study 編成它的產物——horizon(repo 級儀表板:邊界列、量測過的可信度總評、能力樹、import 拓撲)、tides(system/state 狀態板)、atlas(behavior/code 地圖:模組海報下探到函式級路線,含 call/return/signal 邊與貨物標籤)。每個都是純語意 fixture,由吃 fixture 的殼渲染——資料裡沒有座標,版面歸殼管。study 記錄的關卡決定哪些產物可以存在;重編是用穩定身分重新渲染當前理解,所以產物隨 study 加深而變厚,沒讀過的地方誠實留白。兩段式迴圈:創作、結構閘門、對源碼驗證。ADR-119。'}],
-    ],
-  },
-  shape: {
-    layer: 'ui',
-    path: 'plugins/shape/',
-    blurb: {en:'Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, then hand off to be built by hand. nav is the maintenance half; shape depends on nav one-way (shape → nav). Skills by verb around a blueprints/ hub: converge (mockup, elicit — including its survey leg, probe) + dogfood (experience critique) · project + compact (align) · session cursor (baton) · migrate. elicit\'s gatekeeper (ADR-076) diagnoses a stalled volley: missing terrain → runs the survey leg in place (folded from the retired standalone /shape:survey, ADR-110) · unmeasured fact → offers probe. probe designs and runs a minimal experiment when a fork can\'t be settled by argument — summoned, or the destination of frame:dialectic\'s guarded offer. blueprints/ = artifact convention (not a skill); board currency is push-primary (execution verbs update plan.md at ship time), align is the every-item-verified pull safety net (ADR-086). decisions are born durable in thoughts/ with a Status line — the canon and precedents tiers retired (ADR-112). The durable-why tier is precedents/ (dated files + index + overruled; bindingness over agency), the convention is versioned, and migrate — now summon-only, an episodic author-driven event — is its upgrade verb (ADR-105). build retired (ADR-110, zero fires ever): the manual path /nav:plan → /nav:do·/nav:refactor → /shape:align replaces it. v0.20.1; see shape/CLAUDE.md + ADR-010/011/074/075/076/086/104/105/110.', zh:'往前推:用真實、可丟的 instance 收斂(不用描述)、把決定記得清楚、保持現況,再交給人手動做成真的。nav 是維護那半;shape 單向依賴 nav(shape → nav)。依動詞分組、圍著 blueprints/ hub:收斂(mockup、elicit——含它的 survey leg、probe)+ dogfood(體驗批評)· 投影+壓縮(align)· session 游標(baton)· migrate。elicit 的守門人(ADR-076)診斷卡住的 volley:缺地形 → 就地跑 survey leg(從退役的獨立 /shape:survey 折進來,ADR-110)· 誰都沒測過 → offer probe。probe 設計並跑一個最小實驗,當分岔吵不出結果時 —— 召喚,或是 frame:dialectic guarded offer 的目的地。blueprints/ = artifact 約定(非 skill);板子現況推為主(執行動詞出貨時同 commit 更新 plan.md)、align 是逐條驗證的拉側安全網(ADR-086)。決定在 thoughts/ 一出生就是耐久形、帶 Status 行 —— canon 與 precedents 層已退役(ADR-112)。durable-why 層改為 precedents/(一判例一檔 + index + overruled;拘束力優先於能動性),慣例本身有版本,migrate —— 現在 summon-only,是插曲式、由作者驅動的事件 —— 是它的升級動詞(ADR-105)。build 已退役(ADR-110,從未被呼叫過):手動路徑 /nav:plan → /nav:do·/nav:refactor → /shape:align 取代它。v0.20.1;見 shape/CLAUDE.md + ADR-010/011/074/075/076/086/104/105/110。'},
-    files: [
-      ['/shape:mockup', '', {en:'Converge a visual / structural decision by generating + rendering real, disposable candidates — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; it activates the artifact + hands over a URL.', zh:'用 generate + render 一組真實、可丟的候選收斂視覺/結構決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。'}],
-      ['/shape:dogfood', '', {en:"Dogfood a built feature that feels unsmooth — use it for real (agent-browser / curl / CLI) against a list of user intents, capturing the run. Deliverable is an evidence-rich report (friction-point screenshots + real responses; video opt-in — ADR-058): friction (works but clunky → a UX idea) + the coverage gaps that fall out (an intent with no path → a logic hole). Experience-first; borrows /verify·/run's drive-the-real-app method but asks 'is it smooth + what's missing', not 'is it correct'. A gap's layer routes it (direction → /shape:elicit·/shape:mockup; incomplete → /nav:plan·/nav:do). ADR-033 (supersedes ADR-020).", zh:"Dogfood 一個用起來不順的 built feature —— 親自用真的那個(agent-browser / curl / CLI)、帶 user intent 清單操作並記錄。交付是證據豐富的報告(friction 點截圖 + 真實 response;錄影需明說才錄 — ADR-058):friction(能用但卡 → UX idea)+ 掉出來的 coverage gap(想做卻沒路 → 邏輯洞)。體驗優先;借 /verify·/run 的開真 app 方法,但問「順不順 + 缺什麼」、不是「對不對」。gap 落在哪層就怎麼 route(方向 → /shape:elicit·/shape:mockup;沒做完 → /nav:plan·/nav:do)。ADR-033(supersede ADR-020)。"}],
-      ['/shape:align', '', {en:'Decide what to build next — read thoughts/ + verify the real state against the code (EVERY carried 🚧/▶ item needs evidence before triage, fanned out to cheap sub-agents when the board is long; no item vanishes silently — ADR-086), decide now/next/later WITH the user, write the single maintained plan.md (a human view renders on demand via /shape:mockup, never a standing HTML). A status SYNC, not a re-render. The pre-build mirror of /nav:sync\'s map; scaffolds blueprints/ on first run. (item-status sync and doc-currency both live in align — ADR-112.)', zh:'決定接下來做什麼 —— 讀 thoughts/ + 對 code 驗證現況(每條 🚧/▶ 都要附證據才進 triage,板子長就派便宜 sub-agent 平行查;條目不准無聲消失 —— ADR-086),跟 user 一起定 now/next/later,寫唯一維護的 plan.md(人要看就用 /shape:mockup 即時 render,不留常駐 HTML)。是狀態 SYNC、不是 re-render。/nav:sync 的 map pre-build 對應;首跑 scaffold blueprints/。(item-status sync 與 doc-currency 現在同住 align —— ADR-112。)'}],
-      ['/shape:baton', '', {en:"Take or pass the session baton — ONE overwritten cursor holding goal · done · now · open · next, at decision level (never file lists or diffs). Take it on arrival: rebuilt from durable state (git · diff · files · plan) so it survives /clear, tiered and self-reported (matching SHA = primary · mismatched = possibly stale · absent = fall back to plan.md/thoughts/git), then enriched from live context for the why; a read cursor is a used cursor, so it's deleted after reporting. Pass it before stepping away: the five sections written while the why is still in the room, naming REJECTED paths explicitly (measured: mistaking an abandoned approach for live work was the reader's biggest error source), write-gated, always overwriting, SHA re-read at write time. Lives at blueprints/baton.md — the tree's ephemeral tier; root HANDOFF.md is the no-tree fallback, never scaffold a tree just to pass one. Summoned only. ADR-113 (merged from the dissolved reflect's catchup + park).", zh:'接棒或交棒 —— 一份會被覆寫的游標,裝 goal · done · now · open · next,決策層級(絕不放檔案清單或 diff)。到了就接:從 durable state(git · diff · 檔案 · plan)重建,所以 /clear 之後照樣有效;信任分層且自報(SHA 相符 = 主要來源 · 不符 = 可能過期 · 沒有 = 退回 plan.md/thoughts/git),再從活的對話補「為何」;讀過的游標就是用過的游標,報告完即刪。走之前就交:趁「為何」還在場把五段寫下來,並明確點名被放棄的路(實測:把已放棄的方向誤認為還沒做完的活,是讀者最大的錯誤來源),寫前先給看、永遠覆寫、SHA 現場重抓。住在 blueprints/baton.md —— 樹的短暫層;沒有樹時退回根目錄 HANDOFF.md,絕不為了交棒先 scaffold 一棵樹。僅召喚。ADR-113(由解散的 reflect 的 catchup + park 合併而來)。'}],
-      ['/shape:migrate', '', {en:'Migrate a blueprints/core document tree to the current convention version (ADR-105). The convention is a versioned interface with living instances — detect the version BY STRUCTURE (precedents/index.md = v2 · decisions.md = v1), propose the full mapping (per-section target files, dates from git -L, every inbound reference), then execute verbatim gated transforms: tracked-check hard gate, one transform at a time, reference integrity across the whole repo, verify then delete (git is the archive — no tombstone by default). Append-only migration ledger (M1: decisions.md → precedents/); the standing rule: a convention change is not complete until its migration entry exists — spec and M<n> ship in one commit. Never judges staleness (align) or authors content (elicit). Summon-only (disable-model-invocation: true) — an episodic, author-driven convention upgrade with zero model-routing value; capability stays intact behind /shape:migrate (ADR-110).', zh:'把專案的 blueprints/core 文件樹遷到現行慣例版本(ADR-105)。慣例是有版本的介面 —— 以結構偵測版本(precedents/index.md = v2 · decisions.md = v1),先提出完整對映(每節的目標檔、git -L 取日期、全部入站引用),再逐字、gated 執行:tracked-check 硬閘、一次一個 transform、全 repo 引用完整性、驗證後才刪(git 是檔案庫,預設不留墓碑)。append-only 遷移帳(M1:decisions.md → precedents/);站規:改慣例必須同 commit 附上它的遷移條目。不判斷時效(align)、不寫內容(elicit)。現在 summon-only(disable-model-invocation: true)—— 插曲式、由作者驅動的慣例升級,對 model 路由零價值;能力仍在 /shape:migrate 背後(ADR-110)。'}],
-      ['/shape:elicit', '', {en:'Converge a conceptual question by a summoned grounded grill — AI proposes refutable structure, you refine/pick, a volley lands a one-liner as a thoughts/ doc. One engine, two objects: a forward decision ("what should X be") OR a backward root-cause ("why is X wrong" — diagnostic mode: symptom vs real impl → candidate causes → reframe local→structural). Core: weight-adaptive exit. Gatekeeper (ADR-076): when a volley stalls, diagnoses fuzzy-but-known (keep grilling) vs missing terrain (runs the survey leg in place — folded from the retired standalone /shape:survey, ADR-110) vs unmeasured fact (offer /shape:probe) — the ruling never leaves elicit. Sibling of mockup; render-decidable → mockup; broad smell-scan → /nav:audit.', zh:'用召喚式的 grounded grill 收斂概念問題 —— AI 立結構、你 refine/挑,一場 volley 把一句話落成 thoughts/。一個引擎、兩種對象:forward decision(X 該是什麼)或 backward root-cause(X 為什麼錯 —— diagnostic mode:症狀對真實作 → 候選病因 → 局部 reframe 成結構)。Core:weight-adaptive exit。守門人(ADR-076):volley 卡住時,分辨你有但糊(續 grill)vs 缺地形(就地跑 survey leg —— 從退役的獨立 /shape:survey 折進來,ADR-110)vs 誰都沒測過(offer /shape:probe)—— 裁決權絕不離開 elicit。mockup 的姊妹;render 能定的 → mockup;廣掃 smell → /nav:audit。'}],
-      ['/shape:probe', '', {en:"Design and run a minimal experiment when a fork can't be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment's definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062) for paid-LLM fan-out. Read-only toward product code — only the findings doc persists. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), NOT /shape:dogfood (built-feature friction), NOT /verify (a known change's correctness). ADR-075.", zh:"當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062),處理實驗內的付費 LLM fan-out。對產品 code 唯讀 —— 只有 findings 檔會留下。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。NOT /shape:mockup(用 render 收斂偏好;這用實驗收斂事實)、NOT /shape:dogfood(已建功能的摩擦)、NOT /verify(已知變更的正確性)。ADR-075。"}],
-    ],
-  },
-  frame: {
-    layer: 'foundation',
-    path: 'plugins/frame/',
-    blurb: {en:'Apply an explicit, named frame that forces a structure the default skips — to a problem (for the agent\'s own understanding) or to an answer already in hand (for the user\'s). 3 reasoning lenses — two take a problem apart, one puts a claim on trial: first-principles (down — reduce + rebuild), orthogonal (sideways — factor into mutually-independent axes), and dialectic (on trial — steelman both sides, name the experiment that would decide it; verdict three-way; closing offer now includes a guarded /shape:probe to actually run the named experiment). All 3 now end on a mandatory plain-language landing step — one zero-jargon conclusion sentence + one deliberately-chosen analogy (analogize\'s discipline borrowed by protocol), each banning its own terms of art in that closing line — ADR-077. A 4th faces the other direction: analogize (build a deliberately stress-tested analogy so an already-settled concept lands in plain language; itself untouched by the landing-step addition). The 3 lenses feed shape one-way, in-chat (an insight → a thought / mockup / plan); analogize does not (nothing left to converge). A 5th also faces the user: draw — picture something already understood, as two decisions in order (FORM, then MEDIUM: terminal ASCII · markdown table · mermaid in a doc · annotated real output · interactive via shape:mockup). Its form table is now cut by the RELATIONSHIP a drawing asserts (order · condition · lifetime · position · connection · membership · difference · choice · quantity) rather than by an unordered list of questions — re-derived after surveying the chart-choice, engineering-notation and InfoVis-task traditions, which turn out to be disjoint and to share names with different referents; side-by-side diff and the misconception table have no name in either, because both assume a reader with no prior model. Standalone. Renamed from think. v0.13.1; see frame/CLAUDE.md + ADR-034/045/046/047/075/077 + the rename ADR.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在一個問題上(為了 agent 自己理解),或套在一個已經有的答案上(為了讓使用者理解)。3 個推理 lens —— 兩個把問題拆開、一個把主張送審:first-principles(往下 —— 化約+重建)、orthogonal(往旁 —— 拆成互相獨立的軸)、dialectic(送審 —— 正反兩面都 steelman,點出能分勝負的實驗;三向判決;收尾 offer 現在多了一個 guarded /shape:probe,真的去跑那個實驗)。3 個現在都在結尾強制多一步人話落地 —— 一句零行話結論 + 一個刻意挑過的比喻(借 analogize 的紀律,依協定借用),各自禁用自己的術語 —— ADR-077。第 4 個面向相反方向:analogize(建一個刻意壓力測試過的類比,讓一個已經確定的概念用白話講得通;這次的落地步驟改動不動它)。3 個 lens 單向餵 shape、in-chat(洞見 → thought / mockup / plan);analogize 不會(沒有需要收斂的東西)。第 5 個 draw 也面向使用者:把已經懂的東西畫出來,拆成有先後的兩個決定(先 FORM、再 MEDIUM:terminal ASCII · markdown 表 · 文件裡的 mermaid · 標註真實輸出 · 互動則借 shape:mockup)。它的 form 表現在改用「一張圖在主張什麼關係」來切(順序 · 狀態 · 生命週期 · 位置 · 連線 · 歸屬 · 差異 · 選擇 · 數量),不再是一串沒有次序的問題 —— 這是掃過 chart-choice、工程繪圖記法、InfoVis 任務三個傳統後重新推導的;三者彼此不相通,同一個字在不同傳統指不同東西,而 side-by-side diff 與誤解對照表在任一傳統裡都沒有名字,因為它們都假設讀者腦中原本一片空白 —— 解釋則永遠有一個舊模型要推翻。獨立。由 think 改名。v0.13.1;見 frame/CLAUDE.md + ADR-034/045/046/047/075/077 + 改名 ADR。'},
-    files: [
-      ['/frame:first-principles', '', {en:"Reason a question from first principles — name the conventional answer + the assumptions it inherits, strip to the irreducible axioms (physics / math / definition / verified fact), rebuild the answer from those alone, then surface where it DIVERGES from convention (the payload), and close on a mandatory plain-language landing step (one zero-jargon conclusion + one deliberately-chosen analogy, banning \"axiom\"/\"first principles\" in that line; ADR-077). Forces a fixed structure default reasoning skips: assumptions · axioms · rebuilt · divergence · landing. Analysis, not decision — offers to route (/shape:elicit converge · /shape:mockup render · /nav:do small decided fix · /nav:plan ground bigger work). Distinct from /shape:elicit (which draws the answer OUT of you; this DERIVES it from the problem's base truths). ADR-034/057/077.", zh:"從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的公理(物理 / 數學 / 定義 / 已驗事實),只用公理重建答案,再標出它跟慣例的 DIVERGENCE(payload),結尾強制一步人話落地(一句零行話結論 + 一個刻意挑過的比喻,該句禁用「axiom / 公理 / first principles」;ADR-077)。逼出預設推理會跳過的固定結構:假設 · 公理 · 重建 · 分歧 · 落地。是分析、不是決定 —— offer route(/shape:elicit 收斂 · /shape:mockup render · /nav:do 執行小而已決定的修法 · /nav:plan 接大一點的工作)。跟 /shape:elicit 不同(那是把答案從你身上引出來;這是從問題的根本事實推導出來)。ADR-034/057/077。"}],
-      ['/frame:orthogonal', '', {en:"Factor a tangled phenomenon into mutually-INDEPENDENT (orthogonal) axes — the dimensions it actually varies along independently — then VERIFY the independence (move one, the others must not move) and name what was conflated (one word hiding N problems) or falsely decoupled, closing on a mandatory plain-language landing step (one zero-jargon conclusion + one deliberately-chosen analogy, banning \"orthogonal\"/\"axis\"/\"軸\" in that line; ADR-077). Forces a structure the default skips: tangle · candidate axes · independence check · true degrees of freedom · payload · landing. In-chat; offers to route to shape. Distinct from /frame:first-principles (down to axioms + rebuild; orthogonal factors sideways). ADR-046/077.", zh:"把一個糾結的現象拆成互相獨立(正交)的軸 —— 它真正獨立變動的維度 —— 再驗證獨立性(動一個,其他不能動),點出被混為一談(一個詞藏 N 個問題)或假性分開的東西,結尾強制一步人話落地(一句零行話結論 + 一個刻意挑過的比喻,該句禁用「orthogonal / 正交 / axis / 軸」;ADR-077)。逼出預設會跳過的結構:糾結點 · 候選軸 · 獨立性檢查 · 真自由度 · payload · 落地。in-chat;offer route 到 shape。跟 /frame:first-principles 不同(那是往下到公理+重建;orthogonal 往旁拆)。ADR-046/077。"}],
-      ['/frame:dialectic', '', {en:"Put a claim ON TRIAL — build its strongest case (steelman) AND its strongest attack (devil's advocate, also steelmanned — never a strawman, until it worries you), surface the single deepest load-bearing assumption, then name the one experiment that would decide it. Forces a structure the default skips: Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment, plus a THREE-WAY verdict (refuted / unsettled-owned-bet / supported) — for a frontier claim 'no evidence yet' is an owned bet, not a refutation — and closes on a mandatory plain-language landing row (one zero-jargon conclusion + one deliberately-chosen analogy, banning \"steelman\"/\"dialectic\" in that row; ADR-077). Built for paradigm-class questions with no standard answer. In-chat; offers to route to shape. Distinct from /research:critique (which audits an external doc's EXISTING evidence; dialectic stress-tests YOUR OWN forming claim, where the decider doesn't exist yet). ADR-047/077.", zh:"把一個主張送上審判台 —— 建出它最強的正方(steelman)跟最強的反方(devil's advocate,反方也要 steelman —— 絕不是 strawman,要強到讓你不安),點出整個主張賴以成立、最深的那個承重假設,再講出一個能分勝負的實驗。逼出預設會跳過的結構:Claim · Steelman · Devil's Advocate · Missing Evidence · Killer Experiment,加上三向判決(refuted / unsettled-owned-bet / supported)—— 對前沿主張,『還沒有證據』是一個看清楚並扛下的賭注,不是被推翻 —— 再加一列強制的人話落地(一句零行話結論 + 一個刻意挑過的比喻,該列禁用「steelman / dialectic」;ADR-077)。為沒有標準答案的 paradigm 問題而生。in-chat;offer route 到 shape。跟 /research:critique 不同(那審外部文件裡『已存在』的證據;dialectic 壓測你自己還在成形的主張,決定性證據還不存在)。ADR-047/077。"}],
-      ['/frame:analogize', '', {en:"Build a deliberately stress-tested analogy to make an already-understood concept land in plain language — generate 2-3 candidate analogies from different source domains, check the mapping point-by-point against the target's real structure (not just surface resemblance), pick on fit rather than which came first, then name where even the winner breaks down. Output is always: one plain sentence · the analogy spelled out · precise/technical detail layered after, only as needed · where it breaks. Summoned — heavier than the standing ambient plain-language-with-metaphor default; reach for it when a concept isn't landing through that default alone. In-chat; writes no file; does NOT feed shape (nothing left to converge — the object was already settled, only its legibility was in question). Distinct from /frame:first-principles (derives an answer FROM axioms; analogize re-expresses an answer already held) and /shape:elicit (draws an answer OUT of the user; analogize delivers one INTO the user). New — trigger phrasing is a first cut, expected to sharpen with use.", zh:"為一個已經懂的概念,建一個刻意壓力測試過的類比,讓它用白話講得通 —— 從不同來源領域生出 2-3 個候選類比,逐點檢查映射是否對上目標的真實結構(不只是表面像),依貼合度而非先後順序挑選,再講出就連贏家也會在哪裡失真。輸出固定:一句大白話 · 展開的類比 · 需要時才補的精確技術細節 · 在哪裡會破。是主動召喚的 —— 比現有「預設順手比喻+白話」更重的版本,當一個概念用預設風格講不通時才動用。in-chat;不寫檔;不會餵給 shape(沒有需要收斂的東西 —— 概念本身已經定案,問題只在講不講得懂)。跟 /frame:first-principles 不同(那是從公理推導出答案;analogize 是把已經有的答案重新表達)、跟 /shape:elicit 不同(那是把答案從使用者身上引出來;analogize 是把答案送進使用者腦裡)。新技能 —— 觸發措辭是第一版,預期會隨實際使用調整。"}],
-      ['/frame:draw', '', {en:'Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — \'it would look nicer\' is not a threshold. Owns the grammar /fathom:guide borrows (ADR-117). Sibling of analogize: same outward direction, picture instead of comparison. NOT /shape:mockup, which renders candidates so a decision can be picked.', zh:'把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。它擁有 /fathom:guide 借用的那套文法(ADR-117)。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /shape:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。'}],
-    ],
-  },
-  relay: {
-    layer: 'foundation',
-    path: 'plugins/relay/',
-    blurb: {en:'GitHub-native asynchronous coordination under the Accord memory model (ADR-100/120/121, v2.5.2). GitHub owns collaboration state; decisions/, briefs/, and core/ are formal memory. Four verbs keep the object boundaries clean: report forks independently completable follow-ups into reciprocally linked child Issues and states whether the parent may settle; digest starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and derives stage age from label/assignment events; reply answers, clarifies, or hands off the current baton without moving settlement authority or escaping protected stages; settle closes with authority and commits/pushes an exact settled formal-memory delta with remote read-back. A PR remains optional when the wording itself still needs review. 4 installed skills — report · digest · reply · settle. Standalone. See relay/CLAUDE.md, ADR-090..102/115/120/121, docs/design/relay.md, and blueprints/plans/2026-08-19-relay-conversation-lifecycle.md.', zh:'依 Accord 記憶模型運作的 GitHub-native 非同步協調（ADR-100/120/121，v2.5.2）。GitHub 擁有協作狀態；decisions/、briefs/、core/ 是正式記憶。四個動詞守住物件邊界：report 把有獨立完成條件的 follow-up 拆成雙向連結的 child Issue，並說清楚 parent 能不能獨立 settle；digest 先做 inbox preflight，再把 source obligation、原生生命週期 finding 與 generated triage wrapper 分開，從 label/assignment event 推導 stage age；reply 回答、釐清或交接目前 baton，但不移動 settlement authority，也不能跳出受保護 stage；settle 以正確權限結案，對 wording 已確定的正式記憶差異直接 commit、push 並做 remote read-back。只有 wording 尚待 review 時才選用 PR。共 4 個 skill：report · digest · reply · settle。獨立。見 relay/CLAUDE.md、ADR-090..102/115/120/121、docs/design/relay.md 與 blueprints/plans/2026-08-19-relay-conversation-lifecycle.md。'},
-    files: [
-      ['/relay:report', '', {en:'Route Issue-default after resolving the workspace and recipient. A follow-up with its own completion condition becomes a reciprocally linked child Issue; record whether the parent may settle while it remains open. Exact-diff review may use a PR. ADR-090/098/100/101/120.', zh:'解析 workspace 與收件人後採 Issue-default 路由。有自己完成條件的 follow-up 會拆成雙向連結的 child Issue，並記錄 parent 能否在它仍開啟時 settle。精確 diff 的 review 可以選用 PR。ADR-090/098/100/101/120。'}],
-      ['/relay:digest', '', {en:'Read-only inbox-first actionable view: show open/overdue counts, oldest overdue source Issue, first native action, and generated triage wrappers before separating source obligations, lifecycle findings, and notices. Findings cover conflicting stages, missing assignees, multiple staged owners, unknown stage age, and policy-driven overdue stages. Age comes only from native label/assignment events. ADR-090/093/100/120/121; schema 6.', zh:'唯讀、inbox-first 的行動視圖：先顯示 open/逾期數量、最老逾期 source Issue、第一個 native action 與 generated triage wrapper，再分開 source obligation、生命週期 finding 與 notice。finding 包含 stage 衝突、無 assignee、多個 staged owner、stage age 不可知，以及依 policy 判定的逾期 stage；age 只來自原生 label/assignment event。ADR-090/093/100/120/121；schema 6。'}],
-      ['/relay:reply', '', {en:'Answer or clarify in place, hand off ordinary/needs-input work through native labels and assignment, or route an independent follow-up to report. Settlement authority stays stable; generic handoff cannot escape awaiting-acceptance or awaiting-record. ADR-090/100/120.', zh:'原地回答或釐清；透過原生 label 與 assignment 交接 ordinary/needs-input 工作；獨立 follow-up 則交給 report。settlement authority 保持不變，generic handoff 不能跳出 awaiting-acceptance 或 awaiting-record。ADR-090/100/120。'}],
-      ['/relay:settle', '', {en:'Verify settlement authority, close with a structured settlement block, and promote durable memory when required. Exact settled Decision/Brief/Core wording commits and pushes directly with remote read-back; unsettled wording may use a PR. ADR-090/100/120.', zh:'驗證 settlement authority，以結構化 settlement block 結案，必要時升等成正式記憶。已確定的 Decision/Brief/Core 文字直接 commit、push 並做 remote read-back；文字尚未確定時可以使用 PR。ADR-090/100/120。'}],
-    ],
-  },
+// BEGIN GENERATED catalog-data
+const CATALOG_COUNTS = {
+  "plugins": 4,
+  "skills": 23
 };
-
+const DOMAINS = {
+  "nav": {
+    "layer": "state",
+    "path": "plugins/nav/",
+    "version": "0.19.2",
+    "skillCount": 6,
+    "blurb": {
+      "en": "Keep any codebase navigable as it grows. Language-agnostic. audit gains the root-flatness check — a flat pile of loose modules at source root with unfoldered families is a composition failure (the inverse of the barrel check). sync covers file-top headers (per-file, continuous), the bilingual codebase map (per-repo, periodic), and an on-demand docs leg checking hand-maintained human-facing docs like README against real ground truth — three cadences, one door (ADR-108 folded map back; ADR-125 added docs). plan carries existing implementation authority; refactor uses risk-proportional verification while preserving behavior; see \u003Ccode>plugins/nav/CLAUDE.md\u003C/code> for plugin-level conventions. (v0.19.2; 6 skills)",
+      "zh": "讓任何 codebase 長大後仍可導覽。各一動詞。跨語言。audit 新增 root-flatness 檢查——套件根一大攤鬆散模組、家族沒有房間 = 組合失敗(barrel 檢查的反面)。sync 涵蓋檔首 header(每檔、連續)、雙語 codebase map(每 repo、週期),以及一條 on-demand 的 docs 腿,檢查 README 這類人讀的文件是否還跟真正的事實來源一致——三種 cadence、一道門(ADR-108 把 map 折回來;ADR-125 加上 docs)。plan 承接既有實作授權;refactor 保持行為不變,驗證強度按風險決定；plugin 層級的約定見 \u003Ccode>plugins/nav/CLAUDE.md\u003C/code>。（v0.19.2；6 個 skills）"
+    },
+    "files": [
+      [
+        "/nav:audit",
+        "",
+        {
+          "en": "★ Assess codebase shape against the 8 rules — unconditional health, or read-only quick-check against a target spec. Read-only.",
+          "zh": "★ 對照 8 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。"
+        }
+      ],
+      [
+        "/nav:refactor",
+        "",
+        {
+          "en": "★ Structural refactor that preserves observable behavior and public contracts while allowing necessary verified internal rewrites. Verification scales with risk and touched surface.",
+          "zh": "★ 結構重構:保留可觀察行為與公開契約,但允許必要且已驗證的內部改寫。驗證強度依風險與觸及面調整。"
+        }
+      ],
+      [
+        "/nav:sync",
+        "",
+        {
+          "en": "Keep a codebase navigable at both scales, plus its docs honest — one door, three legs: re-sync file-top headers (any language, \u003Ccode>head -12\u003C/code> = role + key deps) inline against the code, gated diff — per-file navigability, continuous/per-change cadence; render the bilingual codebase map (\u003Ccode>docs/codebase-map/index.html\u003C/code>, anatomy graphs + click-to-reveal + audit block) — per-repo navigability, periodic/batched cadence, reads the maintained headers; or check a hand-maintained human-facing doc (README, install steps) against its real ground truth (manifest, directory, code) — on-demand cadence, gated diff to fix, tolerant-reader for a repo-declared gate (ADR-071) or a universal fallback checklist. Keeps \u003Ccode>references/header-render.md\u003C/code> + \u003Ccode>references/map-render.md\u003C/code> + \u003Ccode>references/docs-render.md\u003C/code> + \u003Ccode>visual-spec.md\u003C/code>. ADR-108 folds the header/map legs back into one door (ADR-019 merged them, ADR-029 re-split them by cadence, the split door drew 0 direct fires in 11 months); ADR-125 adds the docs leg, generalizing this marketplace's own README gate into a repo-agnostic check.",
+          "zh": "一道門、三條腿,兩種尺度都可導覽,順便顧好文件:就地把檔首 header(任何語言,\u003Ccode>head -12\u003C/code> 即角色 + 關鍵依賴)對 code 刷新、gated diff —— 每檔可導覽,連續/隨改的 cadence;渲染雙語 codebase map(\u003Ccode>docs/codebase-map/index.html\u003C/code>,anatomy 圖 + click-to-reveal + audit block)—— 每 repo 可導覽,週期/批次 cadence,讀維護中的 header;或是把一份人讀的文件(README、安裝步驟)對照真正的事實來源(manifest、目錄、程式碼)核對 —— on-demand cadence,gated diff 才修,repo 有自訂 gate 就照走、沒有就退回通用檢查清單(tolerant-reader,ADR-071)。擁有 \u003Ccode>references/header-render.md\u003C/code> + \u003Ccode>references/map-render.md\u003C/code> + \u003Ccode>references/docs-render.md\u003C/code> + \u003Ccode>visual-spec.md\u003C/code>。ADR-108 把 header/map 兩條腿折回一道門(ADR-019 曾合併、ADR-029 依 cadence 再拆、拆出去的門 11 個月零直接呼叫);ADR-125 加上 docs 腿,把這個 marketplace 自己的 README gate 通用化成任何 repo 都能用的檢查。"
+        }
+      ],
+      [
+        "/nav:plan",
+        "",
+        {
+          "en": "★ Ground a spec against the code, clarify consequential ambiguity, then either write a plan artifact when planning is the requested outcome or carry already-granted implementation authority into the build path. Reuses /nav:audit Mode 2 output if it ran in this session. Writes plan artifacts into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/) — ADR-017/126.",
+          "zh": "★ 以 codebase 為基底處理 spec,釐清會影響結果的不明處;這輪若目標是規劃就寫 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 /nav:audit Mode 2 會 reuse。有 blueprints/ 樹時 plan artifact 寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。"
+        }
+      ],
+      [
+        "/nav:do",
+        "",
+        {
+          "en": "Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md artifact. Deep-module/header/N+1 awareness throughout + a thin bracket: inject (head -12 + reuse-grep) → execute → check (header · N+1 · unconditional verify gate · board sync: a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The inject↔check sub-agent discipline (ADR-008) as a standalone verb; refactor twin (refactor preserves behaviour, do changes it) — ADR-023.",
+          "zh": "直接執行一個小的、已決定的、會改變行為的變更 —— 不留 plan.md。全程 deep-module/header/N+1 awareness + 一道薄 bracket:inject(head -12 + reuse-grep)→ execute → check(header · N+1 · 無條件 verify gate · board sync:出貨若關掉 blueprints/plan.md 某條目,同 commit 更新它,ADR-086)。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞;refactor 雙生(refactor 保行為,do 改行為)—— ADR-023。"
+        }
+      ],
+      [
+        "/nav:compose",
+        "",
+        {
+          "en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Show the draft or diff before applying unless already authorized. nav-compose owns document structure; nav-sync maintains code headers, renders the codebase map, and checks existing docs against their sources.",
+          "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。套用前先展示草稿或差異，已授權的範圍不用再問。nav-compose 負責文件結構；nav-sync 維護程式檔首說明、產生 codebase 導覽圖，並核對既有文件是否符合來源。"
+        }
+      ]
+    ]
+  },
+  "shape": {
+    "layer": "ui",
+    "path": "plugins/shape/",
+    "version": "0.23.0",
+    "skillCount": 8,
+    "blurb": {
+      "en": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, then hand off to be built by hand. nav is the maintenance half; shape depends on nav one-way (shape → nav). by verb around a blueprints/ hub: converge (mockup, elicit — including its survey leg, probe) + dogfood (experience critique) · project + compact (align) · explicit handoff (catchup reads/reconstructs, park previews/writes) · migrate. ADR-128 removes forced next-action menus: already-authorized continuation resumes the ordinary workflow; analysis-only or mockup-only requests stop there unless build/track scope was granted; missing choices or missing run authority get a concise question, not a generic menu. dogfood keeps only that conditional missing-run-authority gate and never starts an automatic paid full-cost pass. catchup/park share blueprints/baton.md (root HANDOFF.md fallback) and the same five fields (ADR-127); see shape/CLAUDE.md + ADR-010/011/074/075/076/086/104/105/110/126/127/128. (v0.23.0; 8 skills)",
+      "zh": "往前推:用真實、可丟的 instance 收斂(不用描述)、把決定記得清楚、保持現況,再交給人手動做成真的。nav 是維護那半;shape 單向依賴 nav(shape → nav)。 依動詞分組、圍著 blueprints/ hub:收斂(mockup、elicit——含它的 survey leg、probe)+ dogfood(體驗批評)· 投影+壓縮(align)· 明確交接(catchup 讀取/重建,park 預覽/寫入)· migrate。ADR-128 移除固定下一步選單:已授權的接續回到原本流程;只要求分析或 mockup 不等於授權 build/track;缺決策或缺少操作授權時只問精簡問題,不丟通用選單。dogfood 只在缺少操作授權時才詢問,不自動啟動完整付費測試。catchup/park 共用 blueprints/baton.md(無樹時 root HANDOFF.md)與同一組五欄(ADR-127)；見 shape/CLAUDE.md + ADR-010/011/074/075/076/086/104/105/110/126/127/128。（v0.23.0；8 個 skills）"
+    },
+    "files": [
+      [
+        "/shape:elicit",
+        "",
+        {
+          "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-129.",
+          "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-129。"
+        }
+      ],
+      [
+        "/shape:mockup",
+        "",
+        {
+          "en": "Converge a visual / structural decision by generating + rendering real, disposable candidates — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; it activates the artifact + hands over a URL. A mockup-only request stops at the artifact unless build/track scope was already authorized. ADR-128.",
+          "zh": "用 generate + render 一組真實、可丟的候選收斂視覺/結構決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。只要求 mockup 就停在 artifact;除非已授權 build/track scope。ADR-128。"
+        }
+      ],
+      [
+        "/shape:probe",
+        "",
+        {
+          "en": "Design and run a minimal experiment when a fork can't be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment's definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062) for paid-LLM fan-out. Read-only toward product code — only the findings doc persists. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), NOT /shape:dogfood (built-feature friction), NOT /verify (a known change's correctness). ADR-075.",
+          "zh": "當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062),處理實驗內的付費 LLM fan-out。對產品 code 唯讀 —— 只有 findings 檔會留下。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。NOT /shape:mockup(用 render 收斂偏好;這用實驗收斂事實)、NOT /shape:dogfood(已建功能的摩擦)、NOT /verify(已知變更的正確性)。ADR-075。"
+        }
+      ],
+      [
+        "/shape:dogfood",
+        "",
+        {
+          "en": "Dogfood a built feature that feels unsmooth — use it for real (browser only when available/authorized; otherwise curl / CLI) against a list of user intents, capturing the run. Deliverable is an evidence-rich report: friction + the coverage gaps that fall out. Experience-first; asks only for missing run authority, records unrun intents, and never starts an automatic paid full-cost pass. A gap's layer routes ordinary follow-up only when that continuation is already authorized or the user chooses it. ADR-033/128.",
+          "zh": "Dogfood 一個用起來不順的 built feature —— 用真的介面操作(瀏覽器只有在可用且已授權時;否則 curl / CLI),帶 user intent 清單並記錄。交付是證據豐富的報告:friction + 掉出來的 coverage gap。體驗優先;只在缺少操作授權時才詢問,記錄未跑的 intents,絕不自動啟動完整付費測試。gap 落層後,只有已授權或使用者選擇時才接後續流程。ADR-033/128。"
+        }
+      ],
+      [
+        "/shape:align",
+        "",
+        {
+          "en": "Decide what to build next — read thoughts/ + verify the real state against the code (EVERY carried 🚧/▶ item needs evidence before triage, fanned out to cheap sub-agents when the board is long; no item vanishes silently — ADR-086), decide now/next/later WITH the user, write the single maintained plan.md (a human view renders on demand via /shape:mockup, never a standing HTML). A status SYNC, not a re-render. The pre-build mirror of /nav:sync's map; scaffolds blueprints/ on first run. (item-status sync and doc-currency both live in align — ADR-112.)",
+          "zh": "決定接下來做什麼 —— 讀 thoughts/ + 對 code 驗證現況(每條 🚧/▶ 都要附證據才進 triage,板子長就派便宜 sub-agent 平行查;條目不准無聲消失 —— ADR-086),跟 user 一起定 now/next/later,寫唯一維護的 plan.md(人要看就用 /shape:mockup 即時 render,不留常駐 HTML)。是狀態 SYNC、不是 re-render。/nav:sync 的 map pre-build 對應;首跑 scaffold blueprints/。(item-status sync 與 doc-currency 現在同住 align —— ADR-112。)"
+        }
+      ],
+      [
+        "/shape:catchup",
+        "",
+        {
+          "en": "Read and reconstruct current session state from the shared handoff file: goal · done · now · open · next in blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports the trust tier. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. Explicit-only. ADR-127.",
+          "zh": "從共享 handoff 檔讀取並重建目前 session 狀態:blueprints/baton.md 裡的 goal · done · now · open · next,沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任層級。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。僅明確召喚。ADR-127。"
+        }
+      ],
+      [
+        "/shape:park",
+        "",
+        {
+          "en": "Write the session handoff before stepping away: the same five fields, concise at decision level, in blueprints/baton.md with root HANDOFF.md fallback. Previews the overwrite and honors existing authorization; does not force a new menu when the next action is already authorized. Explicit-only. ADR-127.",
+          "zh": "離開前寫 session handoff:同一組五欄,保持 decision-level 精簡,落在 blueprints/baton.md,沒有樹時 fallback 到根目錄 HANDOFF.md。會預覽覆寫並尊重既有授權;下一步已授權時不強迫再開選單。僅明確召喚。ADR-127。"
+        }
+      ],
+      [
+        "/shape:migrate",
+        "",
+        {
+          "en": "Migrate a blueprints/core document tree to the current convention version (ADR-105). The convention is a versioned interface with living instances — detect the version BY STRUCTURE (precedents/index.md = v2 · decisions.md = v1), propose the full mapping (per-section target files, dates from git -L, every inbound reference), then execute verbatim gated transforms: tracked-check hard gate, one transform at a time, reference integrity across the whole repo, verify then delete (git is the archive — no tombstone by default). Append-only migration ledger (M1: decisions.md → precedents/); the standing rule: a convention change is not complete until its migration entry exists — spec and M\u003Cn> ship in one commit. Never judges staleness (align) or authors content (elicit). Summon-only (disable-model-invocation: true) — an episodic, author-driven convention upgrade with zero model-routing value; capability stays intact behind /shape:migrate (ADR-110).",
+          "zh": "把專案的 blueprints/core 文件樹遷到現行慣例版本(ADR-105)。慣例是有版本的介面 —— 以結構偵測版本(precedents/index.md = v2 · decisions.md = v1),先提出完整對映(每節的目標檔、git -L 取日期、全部入站引用),再逐字、gated 執行:tracked-check 硬閘、一次一個 transform、全 repo 引用完整性、驗證後才刪(git 是檔案庫,預設不留墓碑)。append-only 遷移帳(M1:decisions.md → precedents/);站規:改慣例必須同 commit 附上它的遷移條目。不判斷時效(align)、不寫內容(elicit)。現在 summon-only(disable-model-invocation: true)—— 插曲式、由作者驅動的慣例升級,對 model 路由零價值;能力仍在 /shape:migrate 背後(ADR-110)。"
+        }
+      ]
+    ]
+  },
+  "frame": {
+    "layer": "foundation",
+    "path": "plugins/frame/",
+    "version": "0.14.0",
+    "skillCount": 5,
+    "blurb": {
+      "en": "Apply an explicit, named frame that forces a useful reasoning check the default skips — to a problem, or to an answer already in hand. 3 reasoning lenses remain substantive: first-principles strips assumptions and rebuilds; orthogonal factors independent axes; dialectic steelmans both sides and names the deciding experiment. ADR-128 removes forced visible worksheets, tables, and next-action menus: output structure scales to the question, technical words are allowed with useful glosses, and metaphors are optional unless /frame:analogize is explicitly requested. analogize remains the checked-analogy skill; draw pictures an already-understood thing, with interactive output only when interaction matters or the user asks. Analysis-only requests do not grant build authority; already-authorized continuation resumes ordinary workflow. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + the rename ADR. (v0.14.0; 5 skills)",
+      "zh": "套用一個明講的框架,逼出預設會跳過但有用的 reasoning check —— 套在問題上,或套在已經有的答案上。3 個推理 lens 仍保留實質檢查:first-principles 拆假設並重建;orthogonal 拆獨立軸;dialectic 讓正反都 steelman 並命名決定性實驗。ADR-128 移除強迫可見 worksheet/table/next-action menu:輸出結構按問題大小調整,技術詞可用、需要時補 gloss,比喻是選項,只有明確呼叫 /frame:analogize 時才必須做 checked analogy。analogize 仍是檢查過的類比 skill;draw 畫出已理解的東西,只有互動本身有用或使用者要求時才升級互動輸出。只要求分析不等於授權 build;已授權接續回普通 workflow。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + 改名 ADR。（v0.14.0；5 個 skills）"
+    },
+    "files": [
+      [
+        "/frame:first-principles",
+        "",
+        {
+          "en": "Reason a question from first principles — name the conventional answer + inherited assumptions, strip to irreducible base facts, rebuild from those alone, and surface the divergence from convention. The reasoning check remains; the visible worksheet/headings scale to the question. Plain language is the style, not a zero-jargon ban: use technical terms when useful and gloss them when needed. Analysis-only stays in chat unless continuation was already authorized. ADR-034/057/077/128.",
+          "zh": "從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的基礎事實,只用這些重建答案,再標出它跟慣例的分歧。reasoning check 保留;可見 worksheet/headings 按問題大小調整。白話是風格,不是零術語禁令:技術詞有用就用,需要時補 gloss。只要求分析就留在對話內,除非已授權接續。ADR-034/057/077/128。"
+        }
+      ],
+      [
+        "/frame:orthogonal",
+        "",
+        {
+          "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-046/077/128.",
+          "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-046/077/128。"
+        }
+      ],
+      [
+        "/frame:dialectic",
+        "",
+        {
+          "en": "Put a claim on trial — build its strongest case and strongest attack, surface the deepest load-bearing assumption, then name the one experiment that would decide it. Steelman/devil's-advocate checks and the three-way verdict remain; the visible table is proportional, not mandatory ceremony. It names experiments; it runs them only when that continuation is already authorized. ADR-047/077/128.",
+          "zh": "把一個主張送審 —— 建出最強正方與最強反方,點出最深的承重假設,再命名一個能分勝負的實驗。steelman/devil's-advocate 檢查與三向判決保留;可見 table 按需要出現,不是強制儀式。它命名實驗;只有已授權接續時才真的跑。ADR-047/077/128。"
+        }
+      ],
+      [
+        "/frame:analogize",
+        "",
+        {
+          "en": "Explain an understood concept with a structurally checked analogy. Compare alternatives privately, deliver only the useful mapping and relevant limitations. Presentation scales to the question; no fixed four-part output. The analogy is requested, not an automatic addition to other skills. ADR-128.",
+          "zh": "用檢查過結構對應的比喻解釋已理解的概念。先比較候選，再交付有用的對應與必要限制；依問題大小決定長度，不強制四段格式。比喻是這個 skill 的明確任務，不是其他 skill 每次都要加上的結尾。ADR-128。"
+        }
+      ],
+      [
+        "/frame:draw",
+        "",
+        {
+          "en": "Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — 'it would look nicer' is not a threshold. Sibling of analogize: same outward direction, picture instead of comparison. NOT /shape:mockup, which renders candidates so a decision can be picked.",
+          "zh": "把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /shape:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。"
+        }
+      ]
+    ]
+  },
+  "relay": {
+    "layer": "foundation",
+    "path": "plugins/relay/",
+    "version": "2.5.2",
+    "skillCount": 4,
+    "blurb": {
+      "en": "GitHub-native asynchronous coordination under the Accord memory model (ADR-100/120/121, ). GitHub owns collaboration state; decisions/, briefs/, and core/ are formal memory. Four verbs keep the object boundaries clean: report forks independently completable follow-ups into reciprocally linked child Issues and states whether the parent may settle; digest starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and derives stage age from label/assignment events; reply answers, clarifies, or hands off the current baton without moving settlement authority or escaping protected stages; settle closes with authority and commits/pushes an exact settled formal-memory delta with remote read-back. A PR remains optional when the wording itself still needs review. — report · digest · reply · settle. Standalone. See relay/CLAUDE.md, ADR-090.102/115/120/121, docs/design/relay.md, and blueprints/plans/2026-08-19-relay-conversation-lifecycle.md. (v2.5.2; 4 skills)",
+      "zh": "依 Accord 記憶模型運作的 GitHub-native 非同步協調（ADR-100/120/121，）。GitHub 擁有協作狀態；decisions/、briefs/、core/ 是正式記憶。四個動詞守住物件邊界：report 把有獨立完成條件的 follow-up 拆成雙向連結的 child Issue，並說清楚 parent 能不能獨立 settle；digest 先做 inbox preflight，再把 source obligation、原生生命週期 finding 與 generated triage wrapper 分開，從 label/assignment event 推導 stage age；reply 回答、釐清或交接目前 baton，但不移動 settlement authority，也不能跳出受保護 stage；settle 以正確權限結案，對 wording 已確定的正式記憶差異直接 commit、push 並做 remote read-back。只有 wording 尚待 review 時才選用 PR。共 ：report · digest · reply · settle。獨立。見 relay/CLAUDE.md、ADR-090.102/115/120/121、docs/design/relay.md 與 blueprints/plans/2026-08-19-relay-conversation-lifecycle.md。（v2.5.2；4 個 skills）"
+    },
+    "files": [
+      [
+        "/relay:report",
+        "",
+        {
+          "en": "Route Issue-default after resolving the workspace and recipient. A follow-up with its own completion condition becomes a reciprocally linked child Issue; record whether the parent may settle while it remains open. Exact-diff review may use a PR. ADR-090/098/100/101/120.",
+          "zh": "解析 workspace 與收件人後採 Issue-default 路由。有自己完成條件的 follow-up 會拆成雙向連結的 child Issue，並記錄 parent 能否在它仍開啟時 settle。精確 diff 的 review 可以選用 PR。ADR-090/098/100/101/120。"
+        }
+      ],
+      [
+        "/relay:digest",
+        "",
+        {
+          "en": "Read-only inbox-first actionable view: show open/overdue counts, oldest overdue source Issue, first native action, and generated triage wrappers before separating source obligations, lifecycle findings, and notices. Findings cover conflicting stages, missing assignees, multiple staged owners, unknown stage age, and policy-driven overdue stages. Age comes only from native label/assignment events. ADR-090/093/100/120/121; schema 6.",
+          "zh": "唯讀、inbox-first 的行動視圖：先顯示 open/逾期數量、最老逾期 source Issue、第一個 native action 與 generated triage wrapper，再分開 source obligation、生命週期 finding 與 notice。finding 包含 stage 衝突、無 assignee、多個 staged owner、stage age 不可知，以及依 policy 判定的逾期 stage；age 只來自原生 label/assignment event。ADR-090/093/100/120/121；schema 6。"
+        }
+      ],
+      [
+        "/relay:reply",
+        "",
+        {
+          "en": "Answer or clarify in place, hand off ordinary/needs-input work through native labels and assignment, or route an independent follow-up to report. Settlement authority stays stable; generic handoff cannot escape awaiting-acceptance or awaiting-record. ADR-090/100/120.",
+          "zh": "原地回答或釐清；透過原生 label 與 assignment 交接 ordinary/needs-input 工作；獨立 follow-up 則交給 report。settlement authority 保持不變，generic handoff 不能跳出 awaiting-acceptance 或 awaiting-record。ADR-090/100/120。"
+        }
+      ],
+      [
+        "/relay:settle",
+        "",
+        {
+          "en": "Verify settlement authority, close with a structured settlement block, and promote durable memory when required. Exact settled Decision/Brief/Core wording commits and pushes directly with remote read-back; unsettled wording may use a PR. ADR-090/100/120.",
+          "zh": "驗證 settlement authority，以結構化 settlement block 結案，必要時升等成正式記憶。已確定的 Decision/Brief/Core 文字直接 commit、push 並做 remote read-back；文字尚未確定時可以使用 PR。ADR-090/100/120。"
+        }
+      ]
+    ]
+  }
+};
 const CB_NODES = [
-  {id:'nav', kind:'plugin', x:50, y:150, w:120, link:'nav-anatomy', role:{en:'navigability', zh:'可導覽性'}, desc:{en:'Keep existing code navigable as it grows (post-build). 6 skills, language-agnostic; sync carries the codebase map as its map leg (ADR-108) and an on-demand docs leg checking README-style docs against ground truth (ADR-125). audit catches flat-pile roots (rule ① recursive). tour retired — /fathom:guide succeeds it (ADR-111). v0.18.0.', zh:'讓既有 code 長大後仍可導覽(post-build)。6 個 skill,跨語言;sync 以 map leg 兼管 codebase map(ADR-108),再加一條 on-demand 的 docs leg 核對 README 類文件是否跟事實一致(ADR-125)。audit 抓 flat-pile 根目錄。tour 退役——由 /fathom:guide 接任(ADR-111)。v0.18.0。'}},
-  {id:'shape', kind:'plugin', x:225, y:150, w:120, link:'shape-anatomy', role:{en:'intent → built', zh:'意圖 → 做出來'}, desc:{en:'Forward motion: give intent its form, then hand it to the manual build path. Converge (mockup/elicit — including its survey leg/probe) → dogfood the built result → plan + compact (align) → migrate for convention upgrades. elicit is the gatekeeper — a stalled volley gets diagnosed: missing terrain runs the survey leg in place (folded from the retired standalone survey, ADR-110), unmeasured fact offers probe (ADR-076); probe designs and runs a minimal experiment when a fork can\'t be settled by argument, summoned or the destination of frame:dialectic\'s guarded offer (ADR-075). 7 skills around a blueprints/ convention, now including baton (the ephemeral session cursor, merged from the dissolved reflect\'s catchup + park, ADR-113); doctor (orchestrator) deferred; build retired, zero fires ever (ADR-110) — the manual path /nav:plan → /nav:do·/nav:refactor → /shape:align replaces it. Depends on nav one-way (shape → nav). decisions are born durable in thoughts/ with a Status line — the canon and precedents tiers retired (ADR-112). v0.20.1.', zh:'往前推:把意圖給形狀,再交給手動的 build 路徑。收斂(mockup/elicit——含它的 survey leg/probe)→ dogfood 做出來的結果 → 計畫+壓縮(align)→ migrate 管慣例升版。elicit 是守門人 —— volley 卡住時先診斷:缺地形就地跑 survey leg(從退役的獨立 survey 折進來,ADR-110),誰都沒測過就 offer probe(ADR-076);probe 設計並跑一個最小實驗,當分岔吵不出結果時,召喚或是 frame:dialectic guarded offer 的目的地(ADR-075)。7 個 skill 圍著 blueprints/ 約定,現在多了 baton(短暫的 session 游標,由已解散的 reflect 的 catchup + park 合併而來,ADR-113);doctor(orchestrator)待加;build 已退役,從未被呼叫過(ADR-110)——手動路徑 /nav:plan → /nav:do·/nav:refactor → /shape:align 取代它。單向依賴 nav(shape → nav)。決定在 thoughts/ 出生即耐久、帶 Status 行(ADR-112);precedents/ 是 durable 層,migrate——現在 summon-only——是升級動詞(ADR-105)。v0.20.1。'}},
-  {id:'fathom', kind:'plugin', x:400, y:45, w:120, role:{en:'study a repo', zh:'讀懂陌生 repo'}, desc:{en:'Study an unfamiliar repository into a predictive mental model — 5 verbs over one shared study state (ADR-116, ADR-119): index (ground: anchor + file:line index + trust verdict), guide (the five-level teaching climb with dwell and verbalization gates), quiz (spaced retention checking), dive (one topic as deep as wanted), compile (turn the study into horizon/tides/atlas artifacts). Files connect them, so the order is free. Succeeds the retired nav:tour (ADR-111); consumes nav:sync map as grounding when studying your own codebase, never writes it. Standalone. v0.15.0.', zh:'把一個陌生 repository 讀成可預測的心智模型——五個動詞、共用一份 study 狀態(ADR-116、ADR-119):index(接地:錨定＋file:line 索引＋可信度總評)、guide(五層教學爬梯,含 dwell 與語言化 gate)、quiz(依衰退風險抽問)、dive(把一個主題追到底)、compile(把 study 編成 horizon/tides/atlas 產物)。用檔案連接,所以順序自由。接替退役的 nav:tour(ADR-111);讀自己的 codebase 時消費 nav:sync 的 map 當底料、絕不寫它。獨立。v0.15.0。'}},
-  {id:'frame', kind:'plugin', x:585, y:150, w:120, role:{en:'apply a frame', zh:'套用框架'}, desc:{en:'Apply an explicit, named frame that forces a structure the default skips — to a problem, or to an answer already in hand. 3 reasoning lenses: first-principles (decompose down) + orthogonal (decompose sideways into mutually-independent axes) + dialectic (put a claim on trial — steelman both sides, name the deciding experiment; closing offer now includes a guarded /shape:probe to run it, ADR-075). All 3 now close on a mandatory plain-language landing step (zero-jargon conclusion + one deliberately-chosen analogy, borrowing analogize\'s discipline by protocol; ADR-077). A 4th, analogize, faces the user instead: build a stress-tested analogy so an already-settled concept lands in plain language — untouched by the landing-step addition. A 5th, draw, also faces the user: picture something already understood — FORM first, then MEDIUM (ADR-117). Its form table is now cut by the relationship a drawing asserts (order · condition · lifetime · position · connection · membership · difference · choice · quantity), re-derived from a survey of the chart-choice, engineering-notation and InfoVis-task traditions. Standalone — the 3 lenses feed shape one-way; analogize does not; reasons/explains in-chat, no file. v0.13.1. Renamed from think.', zh:'套用一個明講的框架,逼出預設會跳過的結構 —— 套在問題上,或套在一個已經有的答案上。3 個推理 lens:first-principles(往下拆)+ orthogonal(往旁拆成互相獨立的軸)+ dialectic(把主張送審 —— 正反都 steelman,點出分勝負的實驗;收尾 offer 現在多了一個 guarded /shape:probe 去真的跑它,ADR-075)。3 個現在結尾都強制多一步人話落地(零行話結論 + 一個刻意挑過的比喻,依協定借用 analogize 的紀律;ADR-077)。第 4 個 analogize 面向使用者:建一個壓力測試過的類比,讓已經確定的概念用白話講得通 —— 這次落地步驟的改動不動它。獨立 —— 3 個 lens 單向餵 shape;analogize 不會;in-chat 推理/解釋、不寫檔。第 5 個 draw 也面向使用者:把已經懂的東西畫出來,先選 FORM 再選 MEDIUM——它擁有 fathom 借用的那套文法(ADR-117)。form 表已改用「一張圖在主張什麼關係」重切(順序 · 狀態 · 生命週期 · 位置 · 連線 · 歸屬 · 差異 · 選擇 · 數量),是掃過 chart-choice、工程繪圖記法、InfoVis 任務三個傳統後重新推導的;medium 表也多了 D2。v0.13.1。由 think 改名。'}},
-  {id:'relay', kind:'plugin', x:400, y:255, w:120, role:{en:'async coordination', zh:'非同步協調'}, desc:{en:'GitHub-native coordination under the Accord memory model. Independent follow-ups become linked child Issues; native findings expose broken lifecycle state and stage age; digest starts with an inbox preflight and separates source obligations from generated triage wrappers; baton ownership can move without moving settlement authority; exact settled formal memory commits and pushes directly. PR is optional for unsettled wording. 4 skills — report · digest · reply · settle. Standalone. v2.5.2; ADR-090..102/115/120/121.', zh:'依 Accord 記憶模型運作的 GitHub-native 協調。獨立 follow-up 會拆成相連的 child Issue；原生 finding 顯示壞掉的生命週期狀態與 stage age；digest 先做 inbox preflight，並把 source obligation 與 generated triage wrapper 分開；baton owner 可以改變而不移動 settlement authority；已確定的正式記憶直接 commit、push。文字尚未確定時才選用 PR。4 個 skill：report · digest · reply · settle。獨立。v2.5.2；ADR-090..102/115/120/121。'}},
+  {
+    "id": "nav",
+    "label": "nav",
+    "kind": "plugin",
+    "x": 50,
+    "y": 150,
+    "w": 120,
+    "link": "nav-anatomy",
+    "role": {
+      "en": "navigability",
+      "zh": "可導覽性"
+    },
+    "desc": {
+      "en": "Keep existing code navigable as it grows (post-build). language-agnostic; sync carries the codebase map as its map leg (ADR-108) and an on-demand docs leg checking README-style docs against ground truth (ADR-125). audit catches flat-pile roots (rule ① recursive). plan carries existing implementation authority; refactor uses risk-proportional verification while preserving behavior. (v0.19.2; 6 skills)",
+      "zh": "讓既有 code 長大後仍可導覽(post-build)。跨語言;sync 以 map leg 兼管 codebase map(ADR-108),再加一條 on-demand 的 docs leg 核對 README 類文件是否跟事實一致(ADR-125)。audit 抓 flat-pile 根目錄。plan 承接既有實作授權;refactor 保持行為不變,驗證強度按風險決定。。（v0.19.2；6 個 skills）"
+    }
+  },
+  {
+    "id": "shape",
+    "label": "shape",
+    "kind": "plugin",
+    "x": 225,
+    "y": 150,
+    "w": 120,
+    "link": "shape-anatomy",
+    "role": {
+      "en": "intent → built",
+      "zh": "意圖 → 做出來"
+    },
+    "desc": {
+      "en": "Work around the blueprints convention. No compulsory next-action menu: continue an already-authorized workflow once its decision is settled, ask only for missing consequential choices or authority. Mockup still delivers interactive HTML; dogfood requires evidence and never automatically adds a paid full-cost run. Park/catchup share one handoff convention; ADR-127/128. (v0.23.0; 8 skills)",
+      "zh": "圍繞 blueprints 慣例協作。不強制下一步選單；決定已定、流程已授權就接續，只詢問仍缺少的重要決策或權限。mockup 仍交付互動 HTML；dogfood 必須有實測證據，不自動追加完整付費測試。park／catchup 共用一份交接規則。；ADR-127/128。（v0.23.0；8 個 skills）"
+    }
+  },
+  {
+    "id": "frame",
+    "label": "frame",
+    "kind": "plugin",
+    "x": 585,
+    "y": 150,
+    "w": 120,
+    "role": {
+      "en": "apply a frame",
+      "zh": "套用框架"
+    },
+    "desc": {
+      "en": "Reasoning and delivery: first-principles grounds premises and rebuilds; orthogonal checks independence; dialectic tests both sides and names deciding evidence; analogize checks a requested analogy; draw chooses a useful visual form and medium. Reasoning checks remain, but output scales to the question. No required worksheet, closing menu, metaphor, or banned technical vocabulary. Analysis alone grants no build authority; an already-authorized workflow may continue; ADR-128. (v0.14.0; 5 skills)",
+      "zh": "推理與表達：first-principles 分清前提與慣例後重新推導；orthogonal 檢查不同因素是否獨立；dialectic 檢驗雙方論證與關鍵證據；analogize 提供檢查過的比喻；draw 選擇適合的圖形與媒介。保留實質檢查，呈現隨問題大小調整，不強制工作表、結尾選單、比喻或禁詞。單純分析不授權實作；已授權的流程可以接續。；ADR-128。（v0.14.0；5 個 skills）"
+    }
+  },
+  {
+    "id": "relay",
+    "label": "relay",
+    "kind": "plugin",
+    "x": 400,
+    "y": 255,
+    "w": 120,
+    "role": {
+      "en": "async coordination",
+      "zh": "非同步協調"
+    },
+    "desc": {
+      "en": "GitHub-native coordination under the Accord memory model. Independent follow-ups become linked child Issues; native findings expose broken lifecycle state and stage age; digest starts with an inbox preflight and separates source obligations from generated triage wrappers; baton ownership can move without moving settlement authority; exact settled formal memory commits and pushes directly. PR is optional for unsettled wording. — report · digest · reply · settle. Standalone; ADR-090.102/115/120/121. (v2.5.2; 4 skills)",
+      "zh": "依 Accord 記憶模型運作的 GitHub-native 協調。獨立 follow-up 會拆成相連的 child Issue；原生 finding 顯示壞掉的生命週期狀態與 stage age；digest 先做 inbox preflight，並把 source obligation 與 generated triage wrapper 分開；baton owner 可以改變而不移動 settlement authority；已確定的正式記憶直接 commit、push。文字尚未確定時才選用 PR。：report · digest · reply · settle。獨立。；ADR-090.102/115/120/121。（v2.5.2；4 個 skills）"
+    }
+  }
 ];
+// END GENERATED catalog-data
 const CB_EDGES = [['shape','nav']];
 
 const NAV_NODES = [
-  {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'ground + plan', zh:'底料 + 規劃'}, desc:{en:'Spec-grounded planning — inlines audit (Mode 2) on spec-touched domains, clarifies ambiguity via 3-5 questions, writes a plan artifact. Reuses prior audit output if it ran this session. Output lands in blueprints/plans/ when that tree exists (soft nav→shape; else docs/plans/) — ADR-017.', zh:'以 spec 為目標的規劃 —— 內嵌 audit Mode 2 在受影響 domains,以 3-5 問釐清不明,寫出 plan 檔。同 session 跑過 audit 會 reuse。有 blueprints/ 樹時輸出落 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017。'}},
+  {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'ground + plan', zh:'底料 + 規劃'}, desc:{en:'Spec-grounded planning and build handoff — inlines audit (Mode 2) on spec-touched domains, clarifies consequential ambiguity, then stops at a plan artifact when planning is the requested outcome or carries already-granted implementation authority into the build path. Reuses prior audit output if it ran this session. Plan artifacts land in blueprints/plans/ when that tree exists (soft nav→shape; else docs/plans/) — ADR-017/126.', zh:'以 spec 為目標的規劃與 build handoff —— 內嵌 audit Mode 2 在受影響 domains,釐清會影響結果的不明處;這輪若目標是規劃就停在 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 audit 會 reuse。有 blueprints/ 樹時 plan artifact 落 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。'}},
   {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
-  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Verbatim move + test gate after every step + real-app pass, behaviour-preserving. Syncs each touched file header inline in the same change (ADR-025, like do); the repo map regen stays sync job. plan recommends it; you invoke separately.', zh:'原文搬移 + 每步 test gate + 真實 app pass,行為不變。被動到的檔 header 在同一步 inline 同步(ADR-025,同 do);repo map 重生仍交給 sync。plan 會推薦;你自行呼叫。'}},
-  {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{en:'Per-file navigability — file-top headers (per-language syntax; head -12 = role + Reads), refreshed inline, gated diff. Continuous, per-change cadence. Owns references/header-render.md; offers /nav:map at the end. Re-split from the former one-door sync (headers + map merged in ADR-019) by cadence — ADR-029. Gained a third, on-demand leg (references/docs-render.md, ADR-125): check a hand-maintained doc like README against real ground truth, tolerant-reader for a repo-declared gate.', zh:'每檔可導覽 —— 檔首 header(syntax 隨語言;head -12 即角色 + Reads),就地刷新、gated diff。連續、隨改的 cadence。擁有 references/header-render.md;結尾 offer /nav:map。從前身的一道門 sync(headers + map 在 ADR-019 合併)依 cadence 再拆 —— ADR-029。新增第三條 on-demand 腿(references/docs-render.md,ADR-125):對照真正的事實來源核對 README 這類人讀的文件,repo 有自訂 gate 就照走(tolerant-reader)。'}},
+  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Behavior-preserving structural change: public contracts and observable behavior stay stable, while necessary internal rewrites are allowed when verified. Syncs each touched file header inline in the same change (ADR-025, like do); repo map regen stays sync job. Verification scales with risk and touched surface.', zh:'保持行為的結構調整:公開契約與可觀察行為維持穩定,必要的內部改寫可做但要驗證。被動到的檔 header 在同一步 inline 同步(ADR-025,同 do);repo map 重生仍交給 sync。驗證強度依風險與觸及面調整。'}},
+  {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{"en":"Keep code and its documentation navigable through three tasks: refresh file-top headers as code changes, render the bilingual codebase map when requested, and check existing docs against their actual sources on demand. The map reads maintained headers; refreshing headers does not automatically render a map. nav-sync owns all three tasks; nav-map is retired (ADR-108/125).","zh":"用三種工作維持程式與文件的可讀性：隨程式變更更新檔首說明、需要時產生雙語 codebase 導覽圖，以及按需求核對既有文件和真正來源。導覽圖讀取已維護的檔首說明；更新檔首不會自動產圖。三種工作都由 nav-sync 負責，nav-map 已退役（ADR-108/125）。"}},
   {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md. The inject↔check sub-agent discipline (ADR-008) promoted to a standalone verb: continuous deep-module/header/N+1/LOC awareness + a thin bracket (inject: head -12 + grep for a reusable impl → execute → check: header · N+1 · unconditional verify gate · board sync — a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The behaviour-changing twin of refactor (refactor preserves behaviour; do changes it). ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不寫 plan.md。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞:全程 deep-module/header/N+1/LOC awareness + 一道薄 bracket(inject:head -12 + grep 既有可重用實作 → execute → check:header · N+1 · 無條件 verify gate · board sync —— 出貨若關掉 blueprints/plan.md 條目,同 commit 更新它,ADR-086)。refactor 的行為改變雙生(refactor 保行為,do 改行為)。ADR-023。'}},
-  {id:'compose', kind:'describe', x:690, y:130, w:120, role:{en:'author (prose doc)', zh:'撰寫(文件)'}, desc:{en:'Author or restructure a PROSE document as a deep module — lead with the point (head-able), one fact one owner (link, don\'t restate), group by knowledge not chronology, right grain. Two modes (author / restructure-verbatim), diff-gated. sync\'s prose-document sibling: sync = the header line atop a CODE file, compose = the body of a file that IS prose. Deep-prose extracted as the single owner its many consumers (shape/reflect/research/the ADRs, the forthcoming relay) were missing — the N+1 trigger. The self-sufficient writing door: owns document structure + the durable sentence keystones (active voice, omit needless words, be specific); the bulky/volatile long-tail (grammar, misused-words, the perishable AI-tell list) is left to the optional external writing-clearly-and-concisely. ADR-049.', zh:'把一份 PROSE 文件 author 或 restructure 成 deep module —— 先講重點(head 得到)、一事一主(連結、不重抄)、按知識而非時序分組、right grain。兩種模式(author / 逐字 restructure),diff-gated。sync 的文件版手足:sync = CODE 檔頂那行 header,compose = 一個本身就是 prose 的檔的全身。把 deep-prose 抽成單一擁有者(shape/reflect/research/ADR、以及即將到來的 relay 等消費者本來各自重述)—— N+1 trigger。自足的寫作門:擁有文件結構 + 耐久的句子原則(主動語態、刪廢字、要具體);笨重/會過期的長尾(文法、誤用字、會過時的 AI 字清單)留給可選的外部 writing-clearly-and-concisely。ADR-049。'}},
+  {id:'compose', kind:'describe', x:690, y:130, w:120, role:{en:'author (prose doc)', zh:'撰寫(文件)'}, desc:{"en":"Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Show the draft or diff before applying unless already authorized. nav-compose owns document structure; nav-sync maintains code headers, renders the codebase map, and checks existing docs against their sources.","zh":"撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。套用前先展示草稿或差異，已授權的範圍不用再問。nav-compose 負責文件結構；nav-sync 維護程式檔首說明、產生 codebase 導覽圖，並核對既有文件是否符合來源。"}},
 ];
 
 const NAV_EDGES = [
@@ -3290,16 +3562,18 @@ const NAV_EDGES = [
 ];
 
 const SHAPE_NODES = [
-  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{en:'Summoned grounded grill: AI proposes refutable structure, you refine/pick, a volley converges to a one-liner. The 6 moves (mirror → drill → named fork → friction → versions → short turns); core = weight-adaptive exit. One engine, two objects: a forward decision OR a backward root-cause (diagnostic mode — ground symptom vs real impl, forks = candidate causes, reframe local-bug → structural-cause; read-only, hands the fix to mockup or the manual build path). Gatekeeper (ADR-076): when a volley stalls, diagnoses which of three stalls it is — fuzzy-but-known (keep grilling, unchanged) · missing terrain (runs the survey leg in place — folded from the retired standalone /shape:survey, ADR-110) · unmeasured fact (offer /shape:probe); the survey leg runs inline and resumes the volley, ruling stays in elicit. Lands a thoughts/ doc, then OFFERS the next step (guarded, one-shot, never auto-call; ADR-015): /shape:mockup if the decision turned out render-decidable, else /shape:align to triage it in. Diagnostic mode offers /shape:dogfood to surface the coverage gaps before judging.', zh:'召喚式 grounded grill:AI 立結構、你 refine/挑,volley 收斂成一句。六個 move(mirror → 鑽 → 命名 fork → friction → 版本 → 短回合);core = weight-adaptive exit。一個引擎、兩種對象:forward decision 或 backward root-cause(diagnostic mode —— 症狀對真實作、fork = 候選病因、局部 bug reframe 成結構病因;read-only,修法交 mockup 或手動的 build 路徑)。守門人(ADR-076):volley 卡住時分辨三種卡法 —— 你有但糊(續 grill,不變)· 缺地形(就地跑 survey leg —— 從退役的獨立 /shape:survey 折進來,ADR-110)· 誰都沒測過(offer /shape:probe);survey leg 就地跑完接著回到 volley,裁決留在 elicit。落成 thoughts/,接著 OFFER 下一步(guarded、一次性、不 auto-call;ADR-015):決定其實是 render 能定的 → /shape:mockup,否則 → /shape:align triage 進去。diagnostic mode 會 offer /shape:dogfood 先把 coverage gap 撈出來再判。'}},
+  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{"en":"Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. v0.23.0; ADR-129.","zh":"用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。v0.23.0；ADR-129。"}},
   {id:'probe', kind:'decide', x:200, y:0, w:120, role:{en:'converge (experiment)', zh:'收斂(實驗)'}, desc:{en:"Design and run a minimal experiment when a fork can\'t be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment\'s definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062). Read-only toward product code. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). Evidence feeds back to elicit\'s next volley, or the user directly. ADR-075.", zh:"當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062)。對產品 code 唯讀。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。證據回流到 elicit 的下一輪,或直接回給使用者。ADR-075。"}},
-  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{en:'Converge a decision by a real, disposable, interactive artifact — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; activates it + hands over a URL. Lands in mockups/; when the pick settles something trackable, OFFERS /shape:align to triage it in (guarded, not auto; ADR-015).', zh:'用真實、可丟、可互動的 artifact 收斂決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。落在 mockups/;當 pick 定下值得追蹤的決定,OFFER /shape:align 把它 triage 進去(guarded、非 auto;ADR-015)。'}},
+  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{"en":"Converge a visual or structural decision through a real, disposable interactive HTML artifact, served at a clickable URL. Stop exploring once the user picks. Continue a build only when the broader request already authorizes it; no compulsory track/build chooser. ADR-128.","zh":"用真實、可丟棄的互動 HTML 收斂視覺或結構決定，提供可點開的網址。使用者選定就停止探索；只有原本請求已授權實作時才接續，不再強制選擇追蹤或建置。ADR-128。"}},
   {id:'dogfood', kind:'decide', x:200, y:130, w:130, role:{en:'critique (experience)', zh:'批評(體驗)'}, desc:{en:"Dogfood a built feature that feels unsmooth: use the REAL interface (agent-browser / curl / CLI) against a list of user intents, capturing the run. Reports friction (works but clunky → a UX idea) + the coverage gaps that fall out (an intent with no path → a logic hole) — experience-first, coverage as a byproduct. Evidence is the captured session (friction-point screenshots + responses; recording on explicit request — ADR-058), not a synthesized mockup. A gap\'s layer IS the diagnosis — missing intent = direction (redesign), dead-end = incomplete (finish) — handed to /shape:elicit\'s diagnostic fork. Borrows /verify·/run\'s drive-the-real-app method (asks 'is it smooth + what\'s missing', not 'is it correct'). ADR-033 (supersedes ADR-020).", zh:"Dogfood 一個用起來不順的 built feature:用真的介面(agent-browser / curl / CLI)、帶 user intent 清單操作並記錄。回報 friction(能用但卡 → UX idea)+ 掉出來的 coverage gap(想做卻沒路 → 邏輯洞)—— 體驗優先,coverage 是副產品。證據是記錄下來的 session(friction 點截圖 + response;錄影需明說才錄 — ADR-058),不是合成 mockup。gap 落在哪層就是診斷 —— 缺 intent = 方向(重想)、dead-end = 沒做完(補完)—— 交給 /shape:elicit 的 diagnostic fork。借 /verify·/run 的開真 app 方法(問「順不順 + 缺什麼」、不是「對不對」)。ADR-033(supersede ADR-020)。"}},
-  {id:'baton', kind:'project', x:400, y:130, w:120, role:{en:'session cursor', zh:'session 游標'}, desc:{en:'The ephemeral tier: one overwritten cursor (blueprints/baton.md) handed between sessions — taken on arrival, passed before leaving. align owns the durable record; baton owns the note between. ADR-113.', zh:'短暫層:一份會被覆寫的游標(blueprints/baton.md)在 session 之間傳遞 —— 到了就接,走前就交。align 管耐久紀錄,baton 管中間那張便條。ADR-113。'}},
+  {id:'catchup', kind:'project', x:390, y:130, w:120, role:{en:'read handoff', zh:'讀交接'}, desc:{en:'Explicit-only handoff reader: reconstructs goal · done · now · open · next from blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports trust. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. ADR-127.', zh:'明確召喚的交接讀取器:從 blueprints/baton.md 重建 goal · done · now · open · next;沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任度。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。ADR-127。'}},
+  {id:'park', kind:'project', x:530, y:130, w:120, role:{en:'write handoff', zh:'寫交接'}, desc:{en:'Explicit-only handoff writer: before stepping away, previews and overwrites the shared handoff file with the same five fields at decision level. It honors existing authorization instead of forcing a next-action menu when the next step is already settled. ADR-127.', zh:'明確召喚的交接寫入器:離開前以同一組五欄、decision-level 精簡地預覽並覆寫共享 handoff 檔。下一步已拍板時尊重既有授權,不強迫再開 next-action 選單。ADR-127。'}},
   {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{en:'Read thoughts/ + VERIFY the real state against the code (a status sync, not a read-only re-render — confirm 待驗/TBD items, move shipped ones to Shipped) → decide now/next/later WITH the user → write plan.md (agent) + regenerate overview.html (human, click-to-reveal). The pre-build mirror of /nav:sync\'s map. Scaffolds blueprints/ on first run. Boundary: item-status sync = align; doc-currency (amend/prune) also = align (ADR-112).', zh:'讀 thoughts/ + 對 code 驗證現況(是狀態 sync、非唯讀 re-render —— 待驗/TBD 去確認,做完的移 Shipped)→ 跟 user 一起定 now/next/later → 寫 plan.md(agent)+ 重生 overview.html(人,click-to-reveal)。/nav:sync 的 map pre-build 對應。首跑順手 scaffold blueprints/。邊界:item-status sync = align;doc-currency(amend/prune)也是 align(ADR-112)。'}},
   {id:'blueprints', kind:'artifact', x:290, y:185, w:180, role:{en:'artifact convention', zh:'artifact 約定'}, desc:{en:'NOT a skill — the container the verbs read/write: thoughts/ (committed design) · plan.md (agent index) · overview.html (human projection) · mockups/ (committed decision artifacts — Pick logs + ratified samples). One current state, two renders; deps point downstream only. Hand-off artifact to /nav:plan.', zh:'非 skill —— 各動詞讀寫的容器:thoughts/(已 commit 的設計)· plan.md(agent index)· overview.html(人的投影)· mockups/(已 commit 的決策 artifact —— Pick 記錄+定稿樣本)。單一現況、兩種 render;依賴只往下游。也是交給 /nav:plan 的 hand-off artifact。'}},
 ];
 const SHAPE_EDGES = [
-  ['baton', 'blueprints'],
+  ['catchup', 'blueprints'],
+  ['park', 'blueprints'],
   ['probe', 'blueprints'],
   ['probe', 'elicit'],
   ['elicit', 'blueprints'],
@@ -3315,7 +3589,7 @@ const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},
   {label:{en:'Plugin name = topic', zh:'Plugin 名 = 主題'}, desc:{en:'<code>nav</code>, <code>spec</code>, <code>craft</code> — never generic. ADR-005.', zh:'<code>nav</code>、<code>spec</code>、<code>craft</code> —— 絕不取通用名。ADR-005。'}},
   {label:{en:'Skill name = bare verb', zh:'Skill 名 = 裸動詞'}, desc:{en:"Just <code>audit</code>, not <code>nav-audit</code>. Namespace lives in the plugin name; don\'t pay twice. ADR-005.", zh:'就 <code>audit</code>,不是 <code>nav-audit</code>。命名空間在 plugin 名;別付兩次。ADR-005。'}},
-  {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill embeds the 8 rules verbatim. No shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 內嵌 8 規則。SKILL.md 之間不互引。ADR-001 #3。'}},
+  {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill carries the current rules it needs and remains usable without shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 攜帶自己需要的現行規則,不依賴 SKILL.md 之間互相 import。ADR-001 #3。'}},
   {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-004.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-004。'}},
   {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (sync, refactor, plan) shows the change before applying.', zh:'任何會改檔的 skill(sync、refactor、plan)套用前先示差異。'}},
   {label:{en:'Stack-neutral examples', zh:'範例 stack-中性'}, desc:{en:'Every SKILL.md example reads standalone — no past-project domain nouns. Use generic placeholders (UserList, useSelection). A skill that needs Project X context is leaky.', zh:'每個 SKILL.md 範例都能單看就懂 —— 不帶過去專案的領域詞。用通用 placeholder(UserList、useSelection)。需要 Project X 背景才看得懂的 skill 就是漏的。'}},
@@ -3337,7 +3611,7 @@ const KIND_COLOR = {
   orchestrator: '#2a211c',  // plan — ink
   assess: '#7a9e6e',        // audit — green
   transform: '#6c8fb5',     // refactor — blue
-  describe: '#b5894e',      // sync (file headers) + map (repo map) — caramel
+  describe: '#b5894e',      // sync (headers, map, docs) + compose — caramel
   plugin: '#7a9e6e',        // top-level plugin node — green (state-layer color)
   decide: '#a86b9e',        // shape: mockup / elicit — converge (violet)
   project: '#3f8fa3',       // shape: align — project the plan (teal)
@@ -3385,7 +3659,7 @@ let domEls = {}, allFiles = 0;
 function renderDomains(){
   const domWrap = $('#domains'); domWrap.innerHTML = ''; domEls = {}; allFiles = 0;
   Object.entries(DOMAINS).forEach(([key, D]) => {
-    allFiles += D.files.length;
+    allFiles += D.skillCount;
     const det = el('details', 'dom'); det.dataset.key = key;
     const lc = getComputedStyle(document.documentElement).getPropertyValue('--' + D.layer);
     det.innerHTML = `<summary><span class="caret">▸</span><span class="nm">${key}/</span><span class="pth">${D.path}</span><span class="lyr" style="background:${lc}"></span></summary>

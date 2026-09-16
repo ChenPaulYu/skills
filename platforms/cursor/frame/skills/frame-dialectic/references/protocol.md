@@ -1,7 +1,7 @@
 # dialectic — worked example, anti-patterns
 
 > Moved verbatim from the pre-ADR-109 SKILL.md body. The SKILL.md Stance carries the operative
-> discipline (the five-part trial table + the plain-language landing gate); this is the worked
+> discipline (strongest case, strongest attack, missing evidence, deciding test, verdict); this is the worked
 > example and the full refuse-these table, loaded on demand.
 
 ## Anti-patterns (refuse these)
@@ -14,8 +14,8 @@
 | Kill an unproven frontier claim with "no evidence" | Return a three-way verdict — refuted / unsettled-owned-bet / supported — since "not yet tested" ≠ "refuted." Tell: the verdict collapses evidence-absent and evidence-against into the same "no". |
 | Let awareness excuse broken logic or existing counter-evidence | Reserve "I'm aware it's unproven" for genuine unknowns only — not a snapped chain, not a result that already contradicts it. Tell: you're using the word "unproven" to describe something that's actually been tested and failed. |
 | Invent a convenient opponent / a result to win | Ground the opposition in what the field actually holds and mark *uncertain* where you can't verify — fabrication makes the trial theater. Tell: you can't point to where the opposing view actually comes from. |
-| Decide the claim's fate or start building | Try + route — the commit is `shape-elicit`, the build is `nav-plan`. Tell: the reply ends with "so we should build X" instead of an offer to route. |
-| End on a jargon sentence ("verdict: unsettled — owned bet") | Close with a plain-words conclusion + analogy as the actual last word, not the five-part table alone. Tell: the final sentence needs "steelman" or "dialectic" to parse. |
+| Decide the claim's fate or start building | Stop at the verdict unless the larger user task already authorized continuation. If the next step is undecided, suggest one likely route in plain language. Tell: the reply turns the trial into "so we should build X" without permission. |
+| Hide behind jargon ("verdict: unsettled — owned bet") | Give a plain-words takeaway after the technical verdict. Use an analogy only if it helps. Tell: the conclusion relies on unexplained terms the user does not understand. |
 
 ## Example — the move (domain-neutral)
 

@@ -155,7 +155,7 @@
     },
     {
       "date": "2026-07-14",
-      "reason": "codex-compatibility Phase 3 ports the interactive supervision gate without changing frozen Claude sources. lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs in skill, bundled-text, and shared-guidance profiles; injectInteractiveChoiceContract hard-fails on anchor drift and adds the single canonical request_user_input/direct-question fallback contract to all nine current choice consumers. Source-owned labels, routing consequences, recommendations, opt-outs, one-shot behavior, and explicit-invocation semantics remain in their original offer sections. The denylist rule remains active for future regressions while all generated counts ratchet to zero.",
+      "reason": "codex-compatibility Phase 3 ports the interactive supervision gate without changing frozen Claude sources. lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs in skill, bundled-text, and shared-guidance profiles; injectInteractiveChoiceContract hard-fails on anchor drift and adds the single canonical request_user_input/direct-question fallback contract to source choice consumers. Source-owned labels, routing consequences, recommendations, opt-outs, one-shot behavior, and explicit-invocation semantics remain in their original offer sections. The denylist rule remains active for future regressions while all generated counts ratchet to zero.",
       "drops": {
         "ask_user_question": {
           ".agents/skills/frame-dialectic/SKILL.md": "1->0",
@@ -191,7 +191,7 @@
     },
     {
       "date": "2026-08-13",
-      "reason": "ADR-113: reflect dissolves (catchup + park merge into shape:baton, retrace retires). .agents/skills/reflect-catchup, reflect-park, reflect-retrace are deleted outright, so their prior zeroed counts simply stop existing rather than dropping further. The new .agents/skills/shape-baton carries disable-model-invocation: true in its source frontmatter, same as every other explicit_invocation_only member; lowerFrontmatter strips it and injects the equivalent body-level policy paragraph exactly as it already does for shape-migrate and relay-migrate, so the generated file's disable_model_invocation count is 0, same as the existing zero ceiling. No per_file_max_counts change needed.",
+      "reason": "ADR-113: reflect dissolves (catchup + park merge into shape-baton, retrace retires). .agents/skills/reflect-catchup, reflect-park, reflect-retrace are deleted outright, so their prior zeroed counts simply stop existing rather than dropping further. Shape-baton later split back into explicit shape-park and shape-catchup entrances while preserving the same baton/HANDOFF disk paths; both carry disable-model-invocation: true in source frontmatter, same as every other explicit_invocation_only member. lowerFrontmatter strips it and injects the equivalent body-level policy paragraph exactly as it already does for shape-migrate, so the generated files' disable_model_invocation counts stay 0. No per_file_max_counts change needed.",
       "bumps": {}
     }
   ]

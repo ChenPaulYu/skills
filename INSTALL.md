@@ -10,9 +10,9 @@ There are three channels (five agents):
 
 | Channel | Harnesses | Skill names |
 |---|---|---|
-| Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/fathom:compile` |
-| Flat mirror `.agents/skills/` | Codex · opencode · (agy project-level fallback) | flat — `nav-audit`, `fathom-compile` |
-| Native Cursor Plugins (`platforms/cursor/`) | Cursor — **not** the Codex mirror (ADR-118) | flat inside plugins — `nav-audit`, `fathom-compile` |
+| Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/shape:mockup` |
+| Flat mirror `.agents/skills/` | Codex · opencode · (agy project-level fallback) | flat — `nav-audit`, `shape-mockup` |
+| Native Cursor Plugins (`platforms/cursor/`) | Cursor — **not** the Codex mirror (ADR-118) | flat inside plugins — `nav-audit`, `shape-mockup` |
 
 Edit only `plugins/`. After a skill change, regenerate with
 `node scripts/build-manifests.mjs && node scripts/build-codex.mjs && node scripts/build-cursor.mjs`,
@@ -23,13 +23,12 @@ then `node scripts/validate-codex-skills.mjs`.
 ```
 /plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
-/plugin install fathom@skills
 /plugin install shape@skills
 /plugin install frame@skills
 /plugin install relay@skills
 ```
 
-**Verify:** `/plugin` lists the five plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
+**Verify:** `/plugin` lists the four plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
 
 ## Antigravity CLI (`agy`)
 
@@ -37,14 +36,12 @@ then `node scripts/validate-codex-skills.mjs`.
 git clone https://github.com/ChenPaulYu/skills.git
 cd skills
 agy plugin install plugins/nav
-agy plugin install plugins/fathom
 agy plugin install plugins/shape
 agy plugin install plugins/frame
 agy plugin install plugins/relay
 ```
 
-**Verify:** `agy plugin list` shows all five with source `claude-code`
-(including `/fathom:compile` after fathom ≥ 0.13.0).
+**Verify:** `agy plugin list` shows all four with source `claude-code`.
 
 Note: prefer `agy plugin install` (namespaced under `~/.gemini/config/plugins/`). If a flat materialize into `~/.agents/skills/` appears, it collides with Cursor's scan of that directory — use Codex `--global-root codex` and keep marketplace flat copies out of `~/.agents/skills`. AGY hooks / MCP belong in `~/.gemini/config/` (machine-local), not in this repo.
 
@@ -73,7 +70,7 @@ Both auto-discover `.agents/skills/` (project) and Codex also reads `~/.codex/sk
 
 **Verify:**
 
-- Codex — `/skills` lists `nav-audit`, `fathom-index`, `shape-elicit`, …
+- Codex — `/skills` lists `nav-audit`, `shape-elicit`, `relay-report`, …
 - opencode — `opencode debug skill` lists them (project `.agents/skills/` and/or global agents root).
 
 ## Cursor

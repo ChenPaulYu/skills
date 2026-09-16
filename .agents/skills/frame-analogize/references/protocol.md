@@ -1,7 +1,7 @@
 # analogize — full discipline, worked examples, anti-patterns
 
-> Moved verbatim from the pre-ADR-109 SKILL.md body. The SKILL.md Stance carries the operative
-> discipline + the output shape; this is the elaborated numbered walk-through, the two worked
+> Examples retained from the pre-ADR-109 body; presentation revised in ADR-128. The SKILL.md Stance carries the operative
+> discipline + proportional presentation; this is the elaborated numbered walk-through, the two worked
 > examples, and the full refuse-these table, loaded on demand.
 
 ## Core — the discipline (this IS the skill)
@@ -14,7 +14,7 @@
 
 ## Worked examples (what "good" looks like)
 
-Two examples of the finished shape — the candidate-comparison step is shown here only for teaching purposes; a real delivery skips straight to the four-part output (rule 5 above).
+Two examples of the finished shape — the candidate-comparison step is shown here only for teaching purposes; a real delivery shows only the useful explanation and its relevant limitations (rule 5 above).
 
 **Example — a multi-layer system, mapped onto a person playing a sport**
 
@@ -49,5 +49,5 @@ Two examples of the finished shape — the candidate-comparison step is shown he
 | Ship the first analogy that comes to mind | Generate 2–3 candidates and pick on structural fit — that's the ambient default, not this skill; the comparison against alternatives is the value. Tell: the first comparison that popped to mind is also the one about to ship. |
 | An analogy that only resembles on vibes | Check the mapping point-by-point before handing it over — if the structure doesn't map, it will mislead the moment the user pushes on it. Tell: you can say it "feels similar" but can't name what part maps to what part. |
 | Never naming where it breaks | Say explicitly where the mapping stops holding — silence here is what lets the user over-extend a leaky mapping later. Tell: the explanation reads as complete with no "but it stops working when…" sentence. |
-| Narrating the whole candidate search to the user | Keep the comparison internal and hand over only the clean four-part output — the discipline is internal, not the deliverable. Tell: the reply opens with "I considered a few analogies before landing on…". |
-| Reaching for jargon "for precision" before the plain sentence | Lead with the plain sentence; layer in technical detail only after, and only if it adds something the analogy didn't already convey — plain-first is the point. Tell: the opening sentence needs a term the user would have to look up. |
+| Narrating the whole candidate search to the user | Keep the comparison internal and hand over only the useful explanation and relevant limitations — the discipline is internal, not the deliverable. Tell: the reply opens with "I considered a few analogies before landing on…". |
+| Reaching for technical terms before the user has a handle | Lead with the plain sentence; layer in technical detail after, and explain the first important term briefly when needed. Tell: the opening sentence needs a term the user would have to look up. |

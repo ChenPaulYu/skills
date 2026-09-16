@@ -2,6 +2,7 @@
 
 > **Source**: mattpocock/skills' `writing-great-skills` skill + its `GLOSSARY.md` (fetched via WebFetch, definitions here are paraphrased, not verbatim quotes) — same lineage as [ADR-001](docs/adr/001-plugin-shape-and-naming.md) ("Following Matt Pocock's `mattpocock/skills`"), borrowed a second time: first for plugin-naming convention, now for the vocabulary of how skill/doc **prose itself** fails. Adopted by [ADR-069](docs/adr/069-adopt-prose-failure-vocabulary-plus-the-tell-column.md).
 > **Loaded by**: `nav-compose` when authoring or restructuring skill prose (on demand, not every invocation — this file is a reference, not the SKILL.md body).
+> **Historical examples**: quoted instructions and line numbers below describe the ADR-069-era sources. ADR-126 removed nav's fixed menus and location-confirmation ritual; those quotations are evidence of past prose, not current workflow requirements.
 
 Five failure modes name how an instruction reads fine but stops working. Two more entries name devices that prevent the most common one. Every entry below is one repo-instance case, not an exhaustive audit — several are explicitly flagged as assumptions or single-grep observations, not proof.
 
@@ -59,7 +60,7 @@ Five failure modes name how an instruction reads fine but stops working. Two mor
 
 **Definition**: a compact term the model already understands from pretraining ("tight loop", "red-green", "tracer bullet") used in place of repeated prose — cheaper on tokens and anchors behavior more consistently than re-describing the same idea each time.
 
-**Repo instance (already in use, just not named as one technique until now)**: this repo already reuses several such terms verbatim rather than re-describing them in prose each time — *"summoned, not automatic"* (`plugins/shape/skills/baton/SKILL.md`, `shape-elicit`, and others, reused verbatim), *"one fact one owner"* (`AGENTS.md` cites `nav-compose`'s discipline by this phrase rather than re-defining it), *"right grain"* (the standing name for rule ④'s whole paragraph), *"stop on the snap"* (elicit's convergence-exit criterion), *"inject → check"* (the worker hand-off protocol, one term standing in for the whole bracket). This document only makes explicit that these are all instances of the same rhetorical device, worth reusing deliberately rather than re-prosing each time.
+**Repo instance (already in use, just not named as one technique until now)**: this repo already reuses several such terms verbatim rather than re-describing them in prose each time — *"summoned, not automatic"* (`plugins/shape/skills/park/SKILL.md`, `shape-elicit`, and others, reused verbatim), *"one fact one owner"* (`AGENTS.md` cites `nav-compose`'s discipline by this phrase rather than re-defining it), *"right grain"* (the standing name for rule ④'s whole paragraph), *"stop on the snap"* (elicit's convergence-exit criterion), *"inject → check"* (the worker hand-off protocol, one term standing in for the whole bracket). This document only makes explicit that these are all instances of the same rhetorical device, worth reusing deliberately rather than re-prosing each time.
 
 **The tell (derived)**: the same concept gets a fresh paragraph of prose every time it's mentioned somewhere new, instead of the same short handle.
 

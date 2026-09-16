@@ -8,12 +8,19 @@
   ],
   "expect_text": [
     "**Interactive choice contract (Codex).**",
-    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
-    "Execute nothing downstream until the user makes an explicit choice.",
+    "If the user already authorized a scoped action, continue within that scope without asking them to choose again.",
+    "Ask only when a consequential choice or missing authorization blocks the next action.",
+    "Codex permission requests stay in plain chat.",
+    "If scope or authority is still unknown, stop after the concise question and do not perform downstream effects.",
     "**Browser-verify contract (Codex).**",
     "When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent.",
     "Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`.",
-    "**An incomplete gap (dead-end path)** → `nav-plan`",
-    "just leave the report, I'll route later"
+    "The session — use it for real, capture as you go",
+    "report unrun intents"
+  ],
+  "reject_text": [
+    "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "**An incomplete gap (dead-end path)** → `nav-plan`"
   ]
 }

@@ -11,7 +11,10 @@
  *     description, author} — never hand-edit it (it is overwritten).
  *   - the root marketplace.json entry's `version` is synced from the owner; its
  *     `description` stays hand-owned (it is a separate marketplace-facing blurb).
- * Re-run after any plugin.json version/description/author edit; `scripts/validate-codex-skills.mjs`
+ *   - shared skill references are bundled from their single editable owner into
+ *     self-contained skill directories (mapping in lib/shared-skill-references.mjs).
+ *   - README/site catalog blocks derive from manifests, skills, and editorial copy.
+ * Re-run after any catalog-source or plugin.json edit; `scripts/validate-codex-skills.mjs`
  * gates drift the same way it gates the Codex mirror.
  *
  * Reads: node:fs · node:path (plugins/<p>/.claude-plugin/plugin.json · .claude-plugin/marketplace.json)
@@ -19,6 +22,8 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildSharedSkillReferences } from "./lib/shared-skill-references.mjs";
+import { buildPublicCatalog } from "./lib/catalog.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLUGINS_DIR = join(ROOT, "plugins");
@@ -65,6 +70,8 @@ function syncMarketplaceVersions(owners) {
 }
 
 function main() {
+  buildPublicCatalog(ROOT);
+  buildSharedSkillReferences(ROOT);
   const owners = ownerManifests();
   for (const owner of owners) writeCursorProjection(owner);
   syncMarketplaceVersions(owners);

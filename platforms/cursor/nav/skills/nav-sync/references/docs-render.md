@@ -70,7 +70,7 @@ Same gate as the header leg: propose the doc edit as a diff (which lines change,
 
 ### Step 6 — Apply + report
 
-Apply the confirmed edits. Report: which tier was used (declared gate vs. universal fallback), what was checked, what drifted, what was fixed, what was skipped and why (e.g. "below 90% confidence whether X still applies — left alone, flagged for you").
+Apply the confirmed edits. Report: which tier was used (declared gate vs. universal fallback), what was checked, what drifted, what was fixed, what was skipped and why (e.g. "no evidence establishing whether X still applies — left alone, flagged for you").
 
 ## Discipline (do not skip)
 
@@ -78,7 +78,7 @@ Apply the confirmed edits. Report: which tier was used (declared gate vs. univer
 - **Never treat one doc as another doc's ground truth.** Two docs agreeing with each other proves nothing; both could be stale together. Always trace to the manifest/directory/code.
 - **Tier 1 beats Tier 2.** A repo's own declared gate is more specific than the universal checklist — follow it verbatim rather than layering a generic check on top.
 - **Diff-gated, always.** Same as headers — a doc is read by humans; show the change before it lands.
-- **Below 90% confidence → ask**, don't assert drift on a hunch (rule ⑦).
+- **Ground drift in evidence.** If the governing source remains ambiguous, ask before changing the claim (rule ⑦).
 - **On-demand only.** This leg does not run automatically after every code change — it runs when the user asks whether a doc is current. Don't fold it into the header leg's continuous cadence.
 
 ## The 8 rules (the through-line of every nav skill)
@@ -89,7 +89,7 @@ Apply the confirmed edits. Report: which tier was used (declared gate vs. univer
 4. **Right grain** — don't invent a Tier-1-style rigid checklist for a repo that never asked for one; use the lighter Tier 2 fallback and say so.
 5. **Fit the framework** — read whatever consistency convention the repo already declared (CLAUDE.md, a linter, a doc-gate script) rather than imposing an external one.
 6. **Rearrange, don't rewrite** — a fix patches the drifted fact in place; it doesn't restructure the doc's prose (that's `nav-compose`'s job).
-7. **Below 90% confidence → ask** — about which source governs a claim, or whether something really drifted.
+7. **Resolve consequential uncertainty** — inspect evidence first; ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Label unsupported claims rather than presenting guesses as facts.
 8. **Agent-navigability is the audit** — struggling to find *any* ground truth for a claim (no manifest, no registry, nothing to check against) is itself a signal: that fact has no single owner in this repo, which is the rule ① smell this leg exists to surface.
 
 ## Anti-patterns (refuse these)

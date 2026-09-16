@@ -6,8 +6,8 @@ under `platforms/codex/agents/` or any generated skill in `.agents/skills/` read
 references it. See [ADR-068](../../../docs/adr/068-codex-freeze-scoped-to-workstream.md)
 and the plan's resolved-questions table
 (`blueprints/plans/2026-07-13-codex-compatibility.md`) for why the split exists: the
-public marketplace stays model-neutral (roles only — supervisor / executor / explorer /
-reviewer), because a different Codex user's entitlements and model choices are their own.
+public marketplace stays model-neutral (roles only — supervisor / executor / explorer),
+because a different Codex user's entitlements and model choices are their own.
 See `docs/adr/068-codex-freeze-scoped-to-workstream.md`.
 
 ## What lives here
@@ -21,7 +21,7 @@ See `docs/adr/068-codex-freeze-scoped-to-workstream.md`.
 ## How the mapping works
 
 The portable templates (`platforms/codex/agents/executor.toml`,
-`explorer.toml`, `reviewer.toml`) define role behavior — the developer instructions,
+`explorer.toml`) define role behavior — the developer instructions,
 the sandbox posture, the return-contract expectations — with `model` deliberately
 omitted. Codex custom-agent files support a `model` field per the official docs
 (`https://developers.openai.com/codex/subagents`); a personal or project install
@@ -34,7 +34,6 @@ Paul's current mapping for this workspace (per the plan's resolved-questions tab
 | Root session (supervisor) | GPT-5.6 | Planning, arbitration, and independent verification stay on the strongest available reasoner — same principle as this repo's own dispatch-tier rule (root `CLAUDE.md`'s "Dispatch tiers": judgment stays on the session model). |
 | `executor` | GPT-5.4 | Scoped code writes under a work packet — mechanical/disciplined execution, not open-ended judgment. |
 | `explorer` | GPT-5.4 | Read-only reconnaissance/exploration — same tier as executor; cheap and parallelizable. |
-| `reviewer` | GPT-5.4 (escalate to GPT-5.6 on a low-confidence verdict) | Independent verification is usually mechanical (rerun the commands, diff the scope); escalate only when the verdict itself is a judgment call the cheap tier can't settle. |
 
 ## To install this mapping
 
@@ -47,7 +46,7 @@ Paul's current mapping for this workspace (per the plan's resolved-questions tab
    is a starting point, not a contract.
 3. Nothing in the generated Codex skill mirror (`.agents/skills/**`) or `AGENTS.md`
    needs to change or know about this mapping — the skills describe roles
-   (supervisor/executor/explorer/reviewer), never model names.
+   (supervisor/executor/explorer), never model names.
 
 ## Gitignore note
 

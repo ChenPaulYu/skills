@@ -1,6 +1,6 @@
 {
   "schema_version": "2",
-  "adapter_release": "1.0.4",
+  "adapter_release": "1.0.8",
   "release_policy": {
     "adapter_versioning": "independent-semver",
     "schema_versioning": "increment-on-required-contract-change",
@@ -61,7 +61,8 @@
       "skills": [
         "nav-do",
         "nav-plan",
-        "shape-baton"
+        "shape-park",
+        "shape-catchup"
       ]
     },
     "build": {
@@ -90,12 +91,9 @@
       ]
     },
     "all-without-fathom": {
-      "summary": "Every generated skill except the Fathom study family.",
+      "summary": "Backward-compatible alias for the all profile after the Fathom study family retirement.",
       "skills": [
-        "frame-*",
-        "nav-*",
-        "relay-*",
-        "shape-*"
+        "*"
       ]
     }
   },
@@ -103,12 +101,17 @@
     {
       "id": "interactive_choice",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs with host-neutral chooser terminology in every compiled profile. #injectInteractiveChoiceContract inserts the canonical executable contract for all nine choice consumers: use request_user_input when callable; otherwise ask one concise direct question and end the turn; never execute before an explicit choice; preserve source-owned choices, recommendations, opt-outs, one-shot behavior, and explicit-invocation semantics. Ratcheted to zero across all generated output (codex-compatibility Phase 3).",
+      "summary": "scripts/lib/codex-compat.mjs#lowerInteractiveChoiceProse replaces exact AskUserQuestion prose constructs with host-neutral chooser terminology in every compiled profile. #injectInteractiveChoiceContract inserts the canonical executable contract only where a source still needs a host-side missing-choice/authorization guard: proceed without re-choice when scoped work is already authorized; ask one concise question only when a consequential choice or missing authority blocks the next action; use request_user_input only when a structured chooser is available and allowed (Codex permission requests stay plain chat); perform no downstream effects while scope is unknown. Ratcheted to zero across generated unsupported tokens (codex-compatibility Phase 3).",
       "source_signals": [
         {
           "id": "ask_user_question",
           "kind": "literal",
           "pattern": "AskUserQuestion"
+        },
+        {
+          "id": "authorized_run_scope",
+          "kind": "literal",
+          "pattern": "Establish the authorized run scope before driving."
         }
       ],
       "generated_contract_markers": [
@@ -116,20 +119,13 @@
       ],
       "interactive_choice_contract": "scripts/lib/codex-compat.mjs#CODEX_INTERACTIVE_CHOICE_CONTRACT",
       "contract_consumers": [
-        ".agents/skills/frame-dialectic/SKILL.md",
-        ".agents/skills/frame-first-principles/SKILL.md",
-        ".agents/skills/nav-do/SKILL.md",
-        ".agents/skills/nav-plan/SKILL.md",
-        ".agents/skills/nav-refactor/SKILL.md",
-        ".agents/skills/shape-dogfood/SKILL.md",
-        ".agents/skills/shape-elicit/SKILL.md",
-        ".agents/skills/shape-mockup/SKILL.md"
+        ".agents/skills/shape-dogfood/SKILL.md"
       ]
     },
     {
       "id": "worker_dispatch",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 adds the concrete supervision/dispatch machinery on top: scripts/lib/codex-compat.mjs#injectWorkerDispatchContract appends a 'Worker dispatch contract (Codex)' section — the canonical work-packet contract (#CODEX_WORK_PACKET_CONTRACT: goal / scope+owned files / inputs+source of truth / constraints / done_when / verification commands / base SHA / return schema) and worker return contract (#CODEX_WORKER_RETURN_CONTRACT: status done|partial|blocked / files changed / diff summary / commands+results / assumptions / unresolved risks / current SHA) — to the three dispatch-heavy skills (nav-audit, nav-plan, nav-refactor), each referencing that skill's own existing inject/check prose rather than duplicating it.",
+      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 keeps ordinary skill bodies light: scripts/lib/codex-compat.mjs#injectWorkerDispatchPointer inserts a short conditional pointer into the three dispatch-heavy skills (nav-audit, nav-plan, nav-refactor), while scripts/build-codex.mjs bundles references/codex-worker-dispatch.md with the canonical work-packet and worker-return contracts.",
       "source_signals": [
         {
           "id": "agent_call",
@@ -146,12 +142,18 @@
           "id": "research_document_worker",
           "kind": "literal",
           "pattern": "Dispatch a sub-agent per document"
+        },
+        {
+          "id": "worker_dispatch_reference",
+          "kind": "literal",
+          "pattern": "references/worker-dispatch.md"
         }
       ],
       "work_packet_contract": "scripts/lib/codex-compat.mjs#CODEX_WORK_PACKET_CONTRACT",
       "worker_return_contract": "scripts/lib/codex-compat.mjs#CODEX_WORKER_RETURN_CONTRACT",
+      "bundled_reference": "references/codex-worker-dispatch.md",
       "generated_contract_markers": [
-        "## Worker dispatch contract (Codex)"
+        "> **Worker dispatch reference (Codex).**"
       ],
       "contract_consumers": [
         ".agents/skills/nav-audit/SKILL.md",
@@ -160,8 +162,7 @@
       ],
       "agents": [
         "platforms/codex/agents/executor.toml",
-        "platforms/codex/agents/explorer.toml",
-        "platforms/codex/agents/reviewer.toml"
+        "platforms/codex/agents/explorer.toml"
       ],
       "local_mapping": "platforms/codex/local/README.md"
     },
@@ -181,7 +182,8 @@
         "> **Explicitly invoked only.**"
       ],
       "contract_consumers": [
-        ".agents/skills/shape-baton/SKILL.md",
+        ".agents/skills/shape-park/SKILL.md",
+        ".agents/skills/shape-catchup/SKILL.md",
         ".agents/skills/shape-migrate/SKILL.md"
       ]
     },

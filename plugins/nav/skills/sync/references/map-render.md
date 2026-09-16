@@ -151,7 +151,7 @@ At the top of `index.html`, in an HTML comment, record:
 4. **Right grain — neither giant nor fragmented** — don't draw a fake anatomy for a 2-file domain (use a Module-map row); don't force structure where there isn't any.
 5. **Fit the framework** — the map describes idiomatic patterns; it doesn't invent an exotic taxonomy over them.
 6. **Rearrange, don't rewrite** — refreshing a stale map updates the drifted facts; it doesn't re-author what's still true.
-7. **Below 90% confidence → ask** — about scope, which domains are load-bearing, intent. Mark `(uncertain)` rather than asserting a fake edge.
+7. **Resolve consequential uncertainty** — inspect evidence first; ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Label unsupported claims rather than presenting guesses as facts.
 8. **Agent-navigability is the audit** — *rendering the map IS the audit.* Every place you struggle to write a domain's or file's one-liner is a deep-module failure signal; it goes in the map's audit block (and usually means that file lacks a usable header → hand back to `/nav:sync`).
 
 
@@ -164,4 +164,3 @@ At the top of `index.html`, in an HTML comment, record:
 | Assert an import edge you didn't verify | Mark it `(uncertain)` unless it's a real, checked import — rule ③/⑦. Tell: you're drawing an edge because it "should" exist, not because you grepped for the import. |
 | Ship the map monolingual | Ship bilingual (EN + zh-Hant) by default — removing it later is harder than including it now. Tell: about to publish a map with only one language filled in. |
 | Regenerate the map on every code change | Save it for the periodic pass — that's the header leg's cadence, not the map's. Tell: reaching for the map leg right after a single small edit instead of after a batch of changes. |
-

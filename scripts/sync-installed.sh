@@ -84,6 +84,14 @@ if command -v node >/dev/null 2>&1; then
     } | cksum
   }
 
+  # Shared references and public catalog must be current before platform lowering.
+  if out=$(node scripts/build-manifests.mjs 2>&1); then
+    say "$out"
+  else
+    echo "$out" >&2
+    exit 1
+  fi
+
   # ── Codex · opencode — the flat mirror at the dual-global root ──────────────
   CODEX_ROOT="$HOME/.codex/skills"
   CODEX_PROFILE=$CODEX_PROFILE_OVERRIDE
@@ -212,7 +220,9 @@ done
 for cached in "$CACHE"/*/; do
   [ -d "$cached" ] || continue
   p=$(basename "$cached")
-  [ -d "plugins/$p" ] && continue
+  # A tracked-file retirement can leave empty directories in a working checkout.
+  # The source manifest, not the directory, determines whether a plugin is live.
+  [ -f "plugins/$p/.claude-plugin/plugin.json" ] && continue
   echo "→ $p is installed but no longer in the repo — uninstalling…"
   claude plugin uninstall "$p@skills" >/dev/null 2>&1 || true
   rm -rf "$cached"                       # the CLI can exit 0 without removing the snapshot

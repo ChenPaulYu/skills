@@ -18,9 +18,9 @@ if ! node scripts/validate-codex-skills.mjs; then
   cat >&2 <<'MSG'
 ✗ pre-commit blocked: generated artifacts are out of sync with their sources.
   Fix (usually):
+      node scripts/build-manifests.mjs   # manifests + shared references + public catalog
       node scripts/build-codex.mjs       # .agents/skills/ + AGENTS.md
       node scripts/build-cursor.mjs      # platforms/cursor/ + .cursor-plugin/marketplace.json
-      node scripts/build-manifests.mjs   # plugins/*/.cursor-plugin + marketplace.json versions
   then `git add` the regenerated files and commit again.
   To bypass deliberately: git commit --no-verify
 MSG

@@ -1,0 +1,310 @@
+{
+  "plugins": {
+    "nav": {
+      "readme": {
+        "summary": "**Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, the bilingual codebase map, and on-demand README-vs-ground-truth checks (three cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles.",
+        "skills": {
+          "audit": "assess codebase shape (or read-only quick-check against a target spec)",
+          "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
+          "sync": "keep a codebase navigable at both scales, plus its docs honest: sync file-top headers to the code (per-file navigability; continuous, per-change, gated diff), render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads the maintained headers), or check whether a hand-maintained human-facing doc (README, install steps) still matches its ground truth (on-demand, gated diff to fix) — three cadences, one door (ADR-108, ADR-125)",
+          "plan": "ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu",
+          "do": "execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin",
+          "compose": "author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling"
+        }
+      },
+      "site": {
+        "layer": "state",
+        "blurb": {
+          "en": "Keep any codebase navigable as it grows. Language-agnostic. audit gains the root-flatness check — a flat pile of loose modules at source root with unfoldered families is a composition failure (the inverse of the barrel check). sync covers file-top headers (per-file, continuous), the bilingual codebase map (per-repo, periodic), and an on-demand docs leg checking hand-maintained human-facing docs like README against real ground truth — three cadences, one door (ADR-108 folded map back; ADR-125 added docs). plan carries existing implementation authority; refactor uses risk-proportional verification while preserving behavior; see <code>plugins/nav/CLAUDE.md</code> for plugin-level conventions.",
+          "zh": "讓任何 codebase 長大後仍可導覽。各一動詞。跨語言。audit 新增 root-flatness 檢查——套件根一大攤鬆散模組、家族沒有房間 = 組合失敗(barrel 檢查的反面)。sync 涵蓋檔首 header(每檔、連續)、雙語 codebase map(每 repo、週期),以及一條 on-demand 的 docs 腿,檢查 README 這類人讀的文件是否還跟真正的事實來源一致——三種 cadence、一道門(ADR-108 把 map 折回來;ADR-125 加上 docs)。plan 承接既有實作授權;refactor 保持行為不變,驗證強度按風險決定；plugin 層級的約定見 <code>plugins/nav/CLAUDE.md</code>。"
+        },
+        "skills": {
+          "audit": [
+            "",
+            {
+              "en": "★ Assess codebase shape against the 8 rules — unconditional health, or read-only quick-check against a target spec. Read-only.",
+              "zh": "★ 對照 8 規則評估 codebase 形狀 —— 無條件健康,或對應 spec 的唯讀快檢。唯讀。"
+            }
+          ],
+          "refactor": [
+            "",
+            {
+              "en": "★ Structural refactor that preserves observable behavior and public contracts while allowing necessary verified internal rewrites. Verification scales with risk and touched surface.",
+              "zh": "★ 結構重構:保留可觀察行為與公開契約,但允許必要且已驗證的內部改寫。驗證強度依風險與觸及面調整。"
+            }
+          ],
+          "sync": [
+            "",
+            {
+              "en": "Keep a codebase navigable at both scales, plus its docs honest — one door, three legs: re-sync file-top headers (any language, <code>head -12</code> = role + key deps) inline against the code, gated diff — per-file navigability, continuous/per-change cadence; render the bilingual codebase map (<code>docs/codebase-map/index.html</code>, anatomy graphs + click-to-reveal + audit block) — per-repo navigability, periodic/batched cadence, reads the maintained headers; or check a hand-maintained human-facing doc (README, install steps) against its real ground truth (manifest, directory, code) — on-demand cadence, gated diff to fix, tolerant-reader for a repo-declared gate (ADR-071) or a universal fallback checklist. Keeps <code>references/header-render.md</code> + <code>references/map-render.md</code> + <code>references/docs-render.md</code> + <code>visual-spec.md</code>. ADR-108 folds the header/map legs back into one door (ADR-019 merged them, ADR-029 re-split them by cadence, the split door drew 0 direct fires in 11 months); ADR-125 adds the docs leg, generalizing this marketplace's own README gate into a repo-agnostic check.",
+              "zh": "一道門、三條腿,兩種尺度都可導覽,順便顧好文件:就地把檔首 header(任何語言,<code>head -12</code> 即角色 + 關鍵依賴)對 code 刷新、gated diff —— 每檔可導覽,連續/隨改的 cadence;渲染雙語 codebase map(<code>docs/codebase-map/index.html</code>,anatomy 圖 + click-to-reveal + audit block)—— 每 repo 可導覽,週期/批次 cadence,讀維護中的 header;或是把一份人讀的文件(README、安裝步驟)對照真正的事實來源(manifest、目錄、程式碼)核對 —— on-demand cadence,gated diff 才修,repo 有自訂 gate 就照走、沒有就退回通用檢查清單(tolerant-reader,ADR-071)。擁有 <code>references/header-render.md</code> + <code>references/map-render.md</code> + <code>references/docs-render.md</code> + <code>visual-spec.md</code>。ADR-108 把 header/map 兩條腿折回一道門(ADR-019 曾合併、ADR-029 依 cadence 再拆、拆出去的門 11 個月零直接呼叫);ADR-125 加上 docs 腿,把這個 marketplace 自己的 README gate 通用化成任何 repo 都能用的檢查。"
+            }
+          ],
+          "plan": [
+            "",
+            {
+              "en": "★ Ground a spec against the code, clarify consequential ambiguity, then either write a plan artifact when planning is the requested outcome or carry already-granted implementation authority into the build path. Reuses /nav:audit Mode 2 output if it ran in this session. Writes plan artifacts into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/) — ADR-017/126.",
+              "zh": "★ 以 codebase 為基底處理 spec,釐清會影響結果的不明處;這輪若目標是規劃就寫 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 /nav:audit Mode 2 會 reuse。有 blueprints/ 樹時 plan artifact 寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。"
+            }
+          ],
+          "do": [
+            "",
+            {
+              "en": "Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md artifact. Deep-module/header/N+1 awareness throughout + a thin bracket: inject (head -12 + reuse-grep) → execute → check (header · N+1 · unconditional verify gate · board sync: a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The inject↔check sub-agent discipline (ADR-008) as a standalone verb; refactor twin (refactor preserves behaviour, do changes it) — ADR-023.",
+              "zh": "直接執行一個小的、已決定的、會改變行為的變更 —— 不留 plan.md。全程 deep-module/header/N+1 awareness + 一道薄 bracket:inject(head -12 + reuse-grep)→ execute → check(header · N+1 · 無條件 verify gate · board sync:出貨若關掉 blueprints/plan.md 某條目,同 commit 更新它,ADR-086)。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞;refactor 雙生(refactor 保行為,do 改行為)—— ADR-023。"
+            }
+          ],
+          "compose": [
+            "",
+            {
+              "en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Show the draft or diff before applying unless already authorized. nav-compose owns document structure; nav-sync maintains code headers, renders the codebase map, and checks existing docs against their sources.",
+              "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。套用前先展示草稿或差異，已授權的範圍不用再問。nav-compose 負責文件結構；nav-sync 維護程式檔首說明、產生 codebase 導覽圖，並核對既有文件是否符合來源。"
+            }
+          ]
+        },
+        "files": [],
+        "graph": {
+          "x": 50,
+          "y": 150,
+          "w": 120,
+          "link": "nav-anatomy",
+          "role": {
+            "en": "navigability",
+            "zh": "可導覽性"
+          },
+          "desc": {
+            "en": "Keep existing code navigable as it grows (post-build). language-agnostic; sync carries the codebase map as its map leg (ADR-108) and an on-demand docs leg checking README-style docs against ground truth (ADR-125). audit catches flat-pile roots (rule ① recursive). plan carries existing implementation authority; refactor uses risk-proportional verification while preserving behavior.",
+            "zh": "讓既有 code 長大後仍可導覽(post-build)。跨語言;sync 以 map leg 兼管 codebase map(ADR-108),再加一條 on-demand 的 docs leg 核對 README 類文件是否跟事實一致(ADR-125)。audit 抓 flat-pile 根目錄。plan 承接既有實作授權;refactor 保持行為不變,驗證強度按風險決定。。"
+          }
+        }
+      }
+    },
+    "shape": {
+      "readme": {
+        "summary": "**Push work forward** — converge a decision (grounded clarification, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, keep the `blueprints/` board honest against the code, and move the explicit session handoff through `catchup` and `park`. The build itself is handed to `nav`, and already-authorized continuation resumes the ordinary workflow without a forced menu.",
+        "skills": {
+          "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
+          "mockup": "converge a look / structure decision by a real, disposable, interactive HTML artifact; a mockup-only request stops at the artifact unless build/track scope was already authorized",
+          "probe": "design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user",
+          "dogfood": "dogfood a built feature that feels unsmooth — drive the real interface (`browser` only when available/authorized, otherwise `curl` / CLI) against user intents, report friction + coverage gaps, and ask only for missing run authority; no automatic paid full-cost pass",
+          "align": "one pass, on compaction pressure: verify every carried item against the code, compact what drifted (amend stale facts, prune/consolidate stale `thoughts/` + `plans/`), then decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)",
+          "catchup": "read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably",
+          "park": "write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level",
+          "migrate": "bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)"
+        }
+      },
+      "site": {
+        "layer": "ui",
+        "blurb": {
+          "en": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, keep them current, then hand off to be built by hand. nav is the maintenance half; shape depends on nav one-way (shape → nav). by verb around a blueprints/ hub: converge (mockup, elicit — including its survey leg, probe) + dogfood (experience critique) · project + compact (align) · explicit handoff (catchup reads/reconstructs, park previews/writes) · migrate. ADR-128 removes forced next-action menus: already-authorized continuation resumes the ordinary workflow; analysis-only or mockup-only requests stop there unless build/track scope was granted; missing choices or missing run authority get a concise question, not a generic menu. dogfood keeps only that conditional missing-run-authority gate and never starts an automatic paid full-cost pass. catchup/park share blueprints/baton.md (root HANDOFF.md fallback) and the same five fields (ADR-127); see shape/CLAUDE.md + ADR-010/011/074/075/076/086/104/105/110/126/127/128.",
+          "zh": "往前推:用真實、可丟的 instance 收斂(不用描述)、把決定記得清楚、保持現況,再交給人手動做成真的。nav 是維護那半;shape 單向依賴 nav(shape → nav)。 依動詞分組、圍著 blueprints/ hub:收斂(mockup、elicit——含它的 survey leg、probe)+ dogfood(體驗批評)· 投影+壓縮(align)· 明確交接(catchup 讀取/重建,park 預覽/寫入)· migrate。ADR-128 移除固定下一步選單:已授權的接續回到原本流程;只要求分析或 mockup 不等於授權 build/track;缺決策或缺少操作授權時只問精簡問題,不丟通用選單。dogfood 只在缺少操作授權時才詢問,不自動啟動完整付費測試。catchup/park 共用 blueprints/baton.md(無樹時 root HANDOFF.md)與同一組五欄(ADR-127)；見 shape/CLAUDE.md + ADR-010/011/074/075/076/086/104/105/110/126/127/128。"
+        },
+        "skills": {
+          "mockup": [
+            "",
+            {
+              "en": "Converge a visual / structural decision by generating + rendering real, disposable candidates — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; it activates the artifact + hands over a URL. A mockup-only request stops at the artifact unless build/track scope was already authorized. ADR-128.",
+              "zh": "用 generate + render 一組真實、可丟的候選收斂視覺/結構決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。只要求 mockup 就停在 artifact;除非已授權 build/track scope。ADR-128。"
+            }
+          ],
+          "dogfood": [
+            "",
+            {
+              "en": "Dogfood a built feature that feels unsmooth — use it for real (browser only when available/authorized; otherwise curl / CLI) against a list of user intents, capturing the run. Deliverable is an evidence-rich report: friction + the coverage gaps that fall out. Experience-first; asks only for missing run authority, records unrun intents, and never starts an automatic paid full-cost pass. A gap's layer routes ordinary follow-up only when that continuation is already authorized or the user chooses it. ADR-033/128.",
+              "zh": "Dogfood 一個用起來不順的 built feature —— 用真的介面操作(瀏覽器只有在可用且已授權時;否則 curl / CLI),帶 user intent 清單並記錄。交付是證據豐富的報告:friction + 掉出來的 coverage gap。體驗優先;只在缺少操作授權時才詢問,記錄未跑的 intents,絕不自動啟動完整付費測試。gap 落層後,只有已授權或使用者選擇時才接後續流程。ADR-033/128。"
+            }
+          ],
+          "align": [
+            "",
+            {
+              "en": "Decide what to build next — read thoughts/ + verify the real state against the code (EVERY carried 🚧/▶ item needs evidence before triage, fanned out to cheap sub-agents when the board is long; no item vanishes silently — ADR-086), decide now/next/later WITH the user, write the single maintained plan.md (a human view renders on demand via /shape:mockup, never a standing HTML). A status SYNC, not a re-render. The pre-build mirror of /nav:sync's map; scaffolds blueprints/ on first run. (item-status sync and doc-currency both live in align — ADR-112.)",
+              "zh": "決定接下來做什麼 —— 讀 thoughts/ + 對 code 驗證現況(每條 🚧/▶ 都要附證據才進 triage,板子長就派便宜 sub-agent 平行查;條目不准無聲消失 —— ADR-086),跟 user 一起定 now/next/later,寫唯一維護的 plan.md(人要看就用 /shape:mockup 即時 render,不留常駐 HTML)。是狀態 SYNC、不是 re-render。/nav:sync 的 map pre-build 對應;首跑 scaffold blueprints/。(item-status sync 與 doc-currency 現在同住 align —— ADR-112。)"
+            }
+          ],
+          "catchup": [
+            "",
+            {
+              "en": "Read and reconstruct current session state from the shared handoff file: goal · done · now · open · next in blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports the trust tier. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. Explicit-only. ADR-127.",
+              "zh": "從共享 handoff 檔讀取並重建目前 session 狀態:blueprints/baton.md 裡的 goal · done · now · open · next,沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任層級。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。僅明確召喚。ADR-127。"
+            }
+          ],
+          "park": [
+            "",
+            {
+              "en": "Write the session handoff before stepping away: the same five fields, concise at decision level, in blueprints/baton.md with root HANDOFF.md fallback. Previews the overwrite and honors existing authorization; does not force a new menu when the next action is already authorized. Explicit-only. ADR-127.",
+              "zh": "離開前寫 session handoff:同一組五欄,保持 decision-level 精簡,落在 blueprints/baton.md,沒有樹時 fallback 到根目錄 HANDOFF.md。會預覽覆寫並尊重既有授權;下一步已授權時不強迫再開選單。僅明確召喚。ADR-127。"
+            }
+          ],
+          "migrate": [
+            "",
+            {
+              "en": "Migrate a blueprints/core document tree to the current convention version (ADR-105). The convention is a versioned interface with living instances — detect the version BY STRUCTURE (precedents/index.md = v2 · decisions.md = v1), propose the full mapping (per-section target files, dates from git -L, every inbound reference), then execute verbatim gated transforms: tracked-check hard gate, one transform at a time, reference integrity across the whole repo, verify then delete (git is the archive — no tombstone by default). Append-only migration ledger (M1: decisions.md → precedents/); the standing rule: a convention change is not complete until its migration entry exists — spec and M<n> ship in one commit. Never judges staleness (align) or authors content (elicit). Summon-only (disable-model-invocation: true) — an episodic, author-driven convention upgrade with zero model-routing value; capability stays intact behind /shape:migrate (ADR-110).",
+              "zh": "把專案的 blueprints/core 文件樹遷到現行慣例版本(ADR-105)。慣例是有版本的介面 —— 以結構偵測版本(precedents/index.md = v2 · decisions.md = v1),先提出完整對映(每節的目標檔、git -L 取日期、全部入站引用),再逐字、gated 執行:tracked-check 硬閘、一次一個 transform、全 repo 引用完整性、驗證後才刪(git 是檔案庫,預設不留墓碑)。append-only 遷移帳(M1:decisions.md → precedents/);站規:改慣例必須同 commit 附上它的遷移條目。不判斷時效(align)、不寫內容(elicit)。現在 summon-only(disable-model-invocation: true)—— 插曲式、由作者驅動的慣例升級,對 model 路由零價值;能力仍在 /shape:migrate 背後(ADR-110)。"
+            }
+          ],
+          "elicit": [
+            "",
+            {
+              "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-129.",
+              "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-129。"
+            }
+          ],
+          "probe": [
+            "",
+            {
+              "en": "Design and run a minimal experiment when a fork can't be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment's definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062) for paid-LLM fan-out. Read-only toward product code — only the findings doc persists. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), NOT /shape:dogfood (built-feature friction), NOT /verify (a known change's correctness). ADR-075.",
+              "zh": "當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062),處理實驗內的付費 LLM fan-out。對產品 code 唯讀 —— 只有 findings 檔會留下。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。NOT /shape:mockup(用 render 收斂偏好;這用實驗收斂事實)、NOT /shape:dogfood(已建功能的摩擦)、NOT /verify(已知變更的正確性)。ADR-075。"
+            }
+          ]
+        },
+        "files": [],
+        "graph": {
+          "x": 225,
+          "y": 150,
+          "w": 120,
+          "link": "shape-anatomy",
+          "role": {
+            "en": "intent → built",
+            "zh": "意圖 → 做出來"
+          },
+          "desc": {
+            "en": "Work around the blueprints convention. No compulsory next-action menu: continue an already-authorized workflow once its decision is settled, ask only for missing consequential choices or authority. Mockup still delivers interactive HTML; dogfood requires evidence and never automatically adds a paid full-cost run. Park/catchup share one handoff convention; ADR-127/128.",
+            "zh": "圍繞 blueprints 慣例協作。不強制下一步選單；決定已定、流程已授權就接續，只詢問仍缺少的重要決策或權限。mockup 仍交付互動 HTML；dogfood 必須有實測證據，不自動追加完整付費測試。park／catchup 共用一份交接規則。；ADR-127/128。"
+          }
+        }
+      }
+    },
+    "frame": {
+      "readme": {
+        "summary": "**Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`.",
+        "skills": {
+          "first-principles": "strip a question to its irreducible axioms, rebuild from them, and surface where that diverges from convention; analysis stays in-chat unless continuation was already authorized",
+          "orthogonal": "factor a tangled phenomenon into mutually-independent (orthogonal) axes; verify the independence (move one, the others stay put) and name what was conflated; in-chat",
+          "dialectic": "put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat",
+          "analogize": "on explicit request, build a checked analogy for a concept you already understand: compare candidates, verify the mapping against the real structure, pick on fit, and name where the winner breaks; in-chat",
+          "draw": "render something you already understand so it lands for someone else, with the form chosen by the kind of knowledge; terminal-first, escalating to an interactive artifact only when interaction changes visible state or the user asks. Distinct from `/shape:mockup`, which renders candidates so a decision can be picked — here the artifact is the explanation"
+        }
+      },
+      "site": {
+        "layer": "foundation",
+        "blurb": {
+          "en": "Apply an explicit, named frame that forces a useful reasoning check the default skips — to a problem, or to an answer already in hand. 3 reasoning lenses remain substantive: first-principles strips assumptions and rebuilds; orthogonal factors independent axes; dialectic steelmans both sides and names the deciding experiment. ADR-128 removes forced visible worksheets, tables, and next-action menus: output structure scales to the question, technical words are allowed with useful glosses, and metaphors are optional unless /frame:analogize is explicitly requested. analogize remains the checked-analogy skill; draw pictures an already-understood thing, with interactive output only when interaction matters or the user asks. Analysis-only requests do not grant build authority; already-authorized continuation resumes ordinary workflow. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + the rename ADR.",
+          "zh": "套用一個明講的框架,逼出預設會跳過但有用的 reasoning check —— 套在問題上,或套在已經有的答案上。3 個推理 lens 仍保留實質檢查:first-principles 拆假設並重建;orthogonal 拆獨立軸;dialectic 讓正反都 steelman 並命名決定性實驗。ADR-128 移除強迫可見 worksheet/table/next-action menu:輸出結構按問題大小調整,技術詞可用、需要時補 gloss,比喻是選項,只有明確呼叫 /frame:analogize 時才必須做 checked analogy。analogize 仍是檢查過的類比 skill;draw 畫出已理解的東西,只有互動本身有用或使用者要求時才升級互動輸出。只要求分析不等於授權 build;已授權接續回普通 workflow。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + 改名 ADR。"
+        },
+        "skills": {
+          "first-principles": [
+            "",
+            {
+              "en": "Reason a question from first principles — name the conventional answer + inherited assumptions, strip to irreducible base facts, rebuild from those alone, and surface the divergence from convention. The reasoning check remains; the visible worksheet/headings scale to the question. Plain language is the style, not a zero-jargon ban: use technical terms when useful and gloss them when needed. Analysis-only stays in chat unless continuation was already authorized. ADR-034/057/077/128.",
+              "zh": "從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的基礎事實,只用這些重建答案,再標出它跟慣例的分歧。reasoning check 保留;可見 worksheet/headings 按問題大小調整。白話是風格,不是零術語禁令:技術詞有用就用,需要時補 gloss。只要求分析就留在對話內,除非已授權接續。ADR-034/057/077/128。"
+            }
+          ],
+          "orthogonal": [
+            "",
+            {
+              "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-046/077/128.",
+              "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-046/077/128。"
+            }
+          ],
+          "dialectic": [
+            "",
+            {
+              "en": "Put a claim on trial — build its strongest case and strongest attack, surface the deepest load-bearing assumption, then name the one experiment that would decide it. Steelman/devil's-advocate checks and the three-way verdict remain; the visible table is proportional, not mandatory ceremony. It names experiments; it runs them only when that continuation is already authorized. ADR-047/077/128.",
+              "zh": "把一個主張送審 —— 建出最強正方與最強反方,點出最深的承重假設,再命名一個能分勝負的實驗。steelman/devil's-advocate 檢查與三向判決保留;可見 table 按需要出現,不是強制儀式。它命名實驗;只有已授權接續時才真的跑。ADR-047/077/128。"
+            }
+          ],
+          "analogize": [
+            "",
+            {
+              "en": "Explain an understood concept with a structurally checked analogy. Compare alternatives privately, deliver only the useful mapping and relevant limitations. Presentation scales to the question; no fixed four-part output. The analogy is requested, not an automatic addition to other skills. ADR-128.",
+              "zh": "用檢查過結構對應的比喻解釋已理解的概念。先比較候選，再交付有用的對應與必要限制；依問題大小決定長度，不強制四段格式。比喻是這個 skill 的明確任務，不是其他 skill 每次都要加上的結尾。ADR-128。"
+            }
+          ],
+          "draw": [
+            "",
+            {
+              "en": "Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — 'it would look nicer' is not a threshold. Sibling of analogize: same outward direction, picture instead of comparison. NOT /shape:mockup, which renders candidates so a decision can be picked.",
+              "zh": "把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /shape:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。"
+            }
+          ]
+        },
+        "files": [],
+        "graph": {
+          "x": 585,
+          "y": 150,
+          "w": 120,
+          "role": {
+            "en": "apply a frame",
+            "zh": "套用框架"
+          },
+          "desc": {
+            "en": "Reasoning and delivery: first-principles grounds premises and rebuilds; orthogonal checks independence; dialectic tests both sides and names deciding evidence; analogize checks a requested analogy; draw chooses a useful visual form and medium. Reasoning checks remain, but output scales to the question. No required worksheet, closing menu, metaphor, or banned technical vocabulary. Analysis alone grants no build authority; an already-authorized workflow may continue; ADR-128.",
+            "zh": "推理與表達：first-principles 分清前提與慣例後重新推導；orthogonal 檢查不同因素是否獨立；dialectic 檢驗雙方論證與關鍵證據；analogize 提供檢查過的比喻；draw 選擇適合的圖形與媒介。保留實質檢查，呈現隨問題大小調整，不強制工作表、結尾選單、比喻或禁詞。單純分析不授權實作；已授權的流程可以接續。；ADR-128。"
+          }
+        }
+      }
+    },
+    "relay": {
+      "readme": {
+        "summary": "**Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent.",
+        "skills": {
+          "report": "resolve the workspace and a verified recipient before author sign-off; route Issue-default, and fork any independently completable follow-up into a linked child Issue while stating whether the parent may settle independently; exact-diff review remains an optional PR path",
+          "digest": "start with an inbox preflight, then show source obligations separately from native lifecycle findings and generated `relay-triage` wrappers; expose conflicting stages, staged work without an assignee, multiple staged owners, unknown stage age, and policy-driven overdue stages; stage age comes from native label/assignment events, never prose or `updatedAt`; read-only and deterministic (schema 6, ADR-121)",
+          "reply": "answer or clarify in place, hand off ordinary/`needs-input` work with a native label-and-assignment transition, or route an independent follow-up to `report`; settlement authority stays stable, and protected acceptance/recording stages cannot be escaped by a generic handoff",
+          "settle": "verify settlement authority, apply the settlement block, close an Issue/Discussion, or merge/abandon a PR; a promoted Decision/Brief/Core delta whose exact wording is already settled is committed and pushed directly with remote read-back, while unsettled wording may use a PR"
+        }
+      },
+      "site": {
+        "layer": "foundation",
+        "blurb": {
+          "en": "GitHub-native asynchronous coordination under the Accord memory model (ADR-100/120/121, ). GitHub owns collaboration state; decisions/, briefs/, and core/ are formal memory. Four verbs keep the object boundaries clean: report forks independently completable follow-ups into reciprocally linked child Issues and states whether the parent may settle; digest starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and derives stage age from label/assignment events; reply answers, clarifies, or hands off the current baton without moving settlement authority or escaping protected stages; settle closes with authority and commits/pushes an exact settled formal-memory delta with remote read-back. A PR remains optional when the wording itself still needs review. — report · digest · reply · settle. Standalone. See relay/CLAUDE.md, ADR-090.102/115/120/121, docs/design/relay.md, and blueprints/plans/2026-08-19-relay-conversation-lifecycle.md.",
+          "zh": "依 Accord 記憶模型運作的 GitHub-native 非同步協調（ADR-100/120/121，）。GitHub 擁有協作狀態；decisions/、briefs/、core/ 是正式記憶。四個動詞守住物件邊界：report 把有獨立完成條件的 follow-up 拆成雙向連結的 child Issue，並說清楚 parent 能不能獨立 settle；digest 先做 inbox preflight，再把 source obligation、原生生命週期 finding 與 generated triage wrapper 分開，從 label/assignment event 推導 stage age；reply 回答、釐清或交接目前 baton，但不移動 settlement authority，也不能跳出受保護 stage；settle 以正確權限結案，對 wording 已確定的正式記憶差異直接 commit、push 並做 remote read-back。只有 wording 尚待 review 時才選用 PR。共 ：report · digest · reply · settle。獨立。見 relay/CLAUDE.md、ADR-090.102/115/120/121、docs/design/relay.md 與 blueprints/plans/2026-08-19-relay-conversation-lifecycle.md。"
+        },
+        "skills": {
+          "report": [
+            "",
+            {
+              "en": "Route Issue-default after resolving the workspace and recipient. A follow-up with its own completion condition becomes a reciprocally linked child Issue; record whether the parent may settle while it remains open. Exact-diff review may use a PR. ADR-090/098/100/101/120.",
+              "zh": "解析 workspace 與收件人後採 Issue-default 路由。有自己完成條件的 follow-up 會拆成雙向連結的 child Issue，並記錄 parent 能否在它仍開啟時 settle。精確 diff 的 review 可以選用 PR。ADR-090/098/100/101/120。"
+            }
+          ],
+          "digest": [
+            "",
+            {
+              "en": "Read-only inbox-first actionable view: show open/overdue counts, oldest overdue source Issue, first native action, and generated triage wrappers before separating source obligations, lifecycle findings, and notices. Findings cover conflicting stages, missing assignees, multiple staged owners, unknown stage age, and policy-driven overdue stages. Age comes only from native label/assignment events. ADR-090/093/100/120/121; schema 6.",
+              "zh": "唯讀、inbox-first 的行動視圖：先顯示 open/逾期數量、最老逾期 source Issue、第一個 native action 與 generated triage wrapper，再分開 source obligation、生命週期 finding 與 notice。finding 包含 stage 衝突、無 assignee、多個 staged owner、stage age 不可知，以及依 policy 判定的逾期 stage；age 只來自原生 label/assignment event。ADR-090/093/100/120/121；schema 6。"
+            }
+          ],
+          "reply": [
+            "",
+            {
+              "en": "Answer or clarify in place, hand off ordinary/needs-input work through native labels and assignment, or route an independent follow-up to report. Settlement authority stays stable; generic handoff cannot escape awaiting-acceptance or awaiting-record. ADR-090/100/120.",
+              "zh": "原地回答或釐清；透過原生 label 與 assignment 交接 ordinary/needs-input 工作；獨立 follow-up 則交給 report。settlement authority 保持不變，generic handoff 不能跳出 awaiting-acceptance 或 awaiting-record。ADR-090/100/120。"
+            }
+          ],
+          "settle": [
+            "",
+            {
+              "en": "Verify settlement authority, close with a structured settlement block, and promote durable memory when required. Exact settled Decision/Brief/Core wording commits and pushes directly with remote read-back; unsettled wording may use a PR. ADR-090/100/120.",
+              "zh": "驗證 settlement authority，以結構化 settlement block 結案，必要時升等成正式記憶。已確定的 Decision/Brief/Core 文字直接 commit、push 並做 remote read-back；文字尚未確定時可以使用 PR。ADR-090/100/120。"
+            }
+          ]
+        },
+        "files": [],
+        "graph": {
+          "x": 400,
+          "y": 255,
+          "w": 120,
+          "role": {
+            "en": "async coordination",
+            "zh": "非同步協調"
+          },
+          "desc": {
+            "en": "GitHub-native coordination under the Accord memory model. Independent follow-ups become linked child Issues; native findings expose broken lifecycle state and stage age; digest starts with an inbox preflight and separates source obligations from generated triage wrappers; baton ownership can move without moving settlement authority; exact settled formal memory commits and pushes directly. PR is optional for unsettled wording. — report · digest · reply · settle. Standalone; ADR-090.102/115/120/121.",
+            "zh": "依 Accord 記憶模型運作的 GitHub-native 協調。獨立 follow-up 會拆成相連的 child Issue；原生 finding 顯示壞掉的生命週期狀態與 stage age；digest 先做 inbox preflight，並把 source obligation 與 generated triage wrapper 分開；baton owner 可以改變而不移動 settlement authority；已確定的正式記憶直接 commit、push。文字尚未確定時才選用 PR。：report · digest · reply · settle。獨立。；ADR-090.102/115/120/121。"
+          }
+        }
+      }
+    }
+  }
+}

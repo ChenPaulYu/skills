@@ -25,7 +25,7 @@ Codex always sees every installed skill's `name` and `description`; it loads the
 2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged. Whenever a Claude skill's routing semantics or frontmatter description changes, review its Codex sidecar in the same change; leaving the sidecar text unchanged is a deliberate review result, never an omission.
 3. **Front-load discrimination.** State the object, action, and strongest trigger first. Put examples, anti-triggers, sibling boundaries, and procedure in the body.
 4. **Budget mechanically.** Every description is at most 240 characters and the full marketplace sidecar is at most 7,000 characters. The validator rejects missing, stale, or oversized entries.
-5. **Install by need.** Use `minimal`, `build`, `research`, or `collaboration`; reserve `all` for environments that truly need the full roster. Use `all-without-fathom` when the full working roster is wanted without the guided repository-study workflow, or `project-only` to clear generator-managed global copies when a project's own `.agents/skills` is sufficient.
+5. **Install by need.** Use `minimal`, `build`, `research`, or `collaboration`; reserve `all` for environments that truly need the full roster. `all-without-fathom` remains as a backward-compatible alias of `all` after the Fathom study workflow retirement, and `project-only` clears generator-managed global copies when a project's own `.agents/skills` is sufficient.
 
 Audit the current projection and global duplicates:
 
@@ -93,11 +93,12 @@ Portable skills speak in roles, not personal model names:
 
 - `supervisor`: decomposes work, owns user decisions, arbitrates ambiguity, inspects returned diffs, and performs final verification.
 - `executor`: reads code, explores, implements a scoped packet, runs mechanical checks, and returns evidence; it does not self-approve.
-- `reviewer`: independently verifies behavior and risks.
 
 For Paul's Codex environment, the intended mapping is GPT-5.6 for the root supervisor and GPT-5.4 for executor/explorer work. This mapping is Codex-only local/project policy. Until an emitted Codex agent configuration has been verified against the installed client, the adapter must report that the mapping is not runtime-enforced rather than claiming it switched models.
 
 The portable templates live in `platforms/codex/agents/*.toml`; Paul's local mapping remains documented, but non-portable, in `platforms/codex/local/README.md`.
+
+When a skill dispatches workers, the generated skill body points to its bundled `references/codex-worker-dispatch.md`. That reference carries the full packet and return schema so ordinary skill use does not load the dispatch machinery.
 
 Every delegated work packet carries:
 

@@ -95,6 +95,9 @@ template (`goal · done · now · open · next` + the git-SHA metadata line) `HA
 used; only its location and owner move, from a root file written/read by the now-dissolved
 `reflect` plugin's `park`/`catchup` to a `blueprints/` tier written/read by `shape-baton`.
 
+ADR-127 restores shape-park / shape-catchup as the two entrances; this migration's
+target path and file format are unchanged. A rename alone does not run M3.
+
 **Mapping:**
 - **Tree exists** → the source file moves **verbatim**, content untouched: `git mv HANDOFF.md
   blueprints/baton.md` if tracked, a plain `mv` if not (park's own doctrine already treats it as

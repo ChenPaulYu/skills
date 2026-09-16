@@ -1,0 +1,44 @@
+{
+  "id": "coverage-missing-bundled-worker-reference",
+  "scenario": "coverage_contract",
+  "expect_only": true,
+  "manifest": {
+    "coverage_policy": {
+      "baseline_classes": ["A", "B"],
+      "capability_class": "C",
+      "degradation_class": "D",
+      "source_frontmatter_allowlist": ["name", "description", "model", "disable-model-invocation"],
+      "generated_frontmatter_allowlist": ["name", "description"],
+      "allowed_statuses": ["lowered", "degraded", "unsupported"]
+    },
+    "capabilities": [
+      {
+        "id": "worker_dispatch",
+        "status": "lowered",
+        "source_signals": [
+          {
+            "id": "worker_dispatch_reference",
+            "kind": "literal",
+            "pattern": "references/worker-dispatch.md"
+          }
+        ],
+        "generated_contract_markers": [
+          "> **Worker dispatch reference (Codex).**"
+        ],
+        "bundled_reference": "references/codex-worker-dispatch.md",
+        "contract_consumers": [
+          ".agents/skills/test-demo/SKILL.md"
+        ]
+      }
+    ],
+    "generated_destinations": [".agents/skills"]
+  },
+  "files": {
+    "plugins/test/skills/demo/SKILL.md": "---\nname: demo\ndescription: \"demo\"\n---\n# demo\nRead `references/worker-dispatch.md` at dispatch time.\n",
+    ".agents/skills/test-demo/SKILL.md": "---\nname: test-demo\ndescription: \"demo\"\n---\n# demo\n\n> **Worker dispatch reference (Codex).** Only when dispatching explorer or executor workers, read `references/codex-worker-dispatch.md` before preparing briefs or accepting returns.\n"
+  },
+  "expect_errors": [
+    "generated worker_dispatch bundled reference is missing",
+    "missing inline path target in .agents/skills/test-demo/SKILL.md: references/codex-worker-dispatch.md"
+  ]
+}

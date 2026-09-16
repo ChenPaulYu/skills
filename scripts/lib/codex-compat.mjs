@@ -27,19 +27,17 @@
  *   injectBrowserVerifyContract()  — Phase 4: injects one executable browser-verify contract
  *                                  before each browser-verify consumer section, using the source
  *                                  heading verbatim as the exact unique anchor.
- *   injectWorkerDispatchContract() — Phase 2: for the dispatch-heavy skills only, appends a
- *                                  concrete "Worker dispatch contract" section (the canonical
- *                                  work-packet / worker-return contracts below) right after that
- *                                  skill's own existing inject/check prose — it references that
- *                                  prose by name rather than duplicating it. No-op for every other
- *                                  skill (returns text unchanged when the flat name isn't configured).
+ *   injectWorkerDispatchPointer() — Phase 2: for the dispatch-heavy skills only, inserts a
+ *                                  short conditional pointer to the bundled Codex worker-dispatch
+ *                                  reference. The heavy contract stays out of the always-read skill
+ *                                  body until the agent is actually dispatching workers.
  *   detectUnsupported()           — scans compiled text for any remaining denylisted Claude-only
  *                                  token, sharing the manifest-driven rule list with
  *                                  scripts/lib/codex-compat-audit.mjs (no duplicated rule list).
  *
  * Capability table this module implements (see blueprints/plans/2026-07-13-codex-compatibility.md):
  *   explicit_invocation_only, mechanical_model_tier  → lowerFrontmatter + lowerWorkerProse
- *   worker_dispatch (Agent/subagent_type/sub-agent)  → lowerWorkerProse + injectWorkerDispatchContract
+ *   worker_dispatch (Agent/subagent_type/sub-agent)  → lowerWorkerProse + injectWorkerDispatchPointer
  *   interactive_choice (AskUserQuestion)             → lowerInteractiveChoiceProse +
  *                                                       injectInteractiveChoiceContract
  *   browser_verify                                   → injectBrowserVerifyContract
@@ -181,23 +179,16 @@ export function lowerInteractiveChoiceProse(text) {
 // injectInteractiveChoiceContract — Phase 3 executable chooser/fallback contract
 // ---------------------------------------------------------------------------
 
-/** The ONE Codex-side execution contract surrounding source-owned next-action choices. */
-export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contract (Codex).** Build the choices from the source-owned option labels and consequences in the offer section below; do not invent generic replacements. Present them as mutually exclusive choices and label a recommendation only when that section does. Preserve its save/done/later opt-out, and accept the free-form alternative the host supplies.
+/** The ONE Codex-side execution contract for missing user choice/authority. */
+export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contract (Codex).** Do not force an end-of-turn next-action menu. If the user already authorized a scoped action, continue within that scope without asking them to choose again.
 >
-> When \`request_user_input\` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately. Execute nothing downstream until the user makes an explicit choice. This offer is one-shot: after a choice, decline, or opt-out, do not re-offer it. Selecting a continuation whose generated skill is marked **Explicitly invoked only** counts as that continuation's explicit invocation.`;
+> Ask only when a consequential choice or missing authorization blocks the next action. Use the applicable source-owned options when they exist, but do not invent a generic menu or opt-out. Use \`request_user_input\` only when a structured chooser is available and allowed for that question; Codex permission requests stay in plain chat. If scope or authority is still unknown, stop after the concise question and do not perform downstream effects.`;
 
-/** Exact offer-section starts in compiled text. Insertion happens before the source-owned section,
+/** Exact pre-run section starts in compiled text. Insertion happens before the source-owned section,
  * so the compiler adds behavior without copying any choice content. Missing or duplicate anchors
  * are hard generation failures: source drift must never silently remove a supervision gate. */
 const INTERACTIVE_CHOICE_CONSUMERS = {
-  "nav-do": "3. **Verify gate \u2014 the verification is unconditional; only its *auto-execution* is gated (ADR-114).**",
-  "nav-plan": "### Stage 4 — Offer next action (don't make the user type the next command)",
-  "nav-refactor": "### Step 8 — Offer next action (don't make the user type the next command)",
-  "shape-elicit": "## Offer the next step (don't auto-run)",
-  "shape-mockup": "## After the pick — offer the next step: track it · build it (don't auto-run)",
-  "shape-dogfood": "## After the session — offer to route the findings (don't fix in place, don't auto-run)",
-  "frame-first-principles": "## After the analysis — offer to route it (don't decide, don't auto-run)",
-  "frame-dialectic": "## After the trial — offer to route it (don't decide, don't auto-run)",
+  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
 };
 
 export function injectInteractiveChoiceContract(text, flat) {
@@ -386,8 +377,8 @@ export function createProjectGuidanceLowerer({ plugins, skills }) {
 }
 
 // ---------------------------------------------------------------------------
-// injectWorkerDispatchContract — Phase 2: work-packet + worker-return contracts,
-// owned once here, injected into the dispatch-heavy skills only.
+// injectWorkerDispatchPointer — Phase 2: short conditional pointer in the skill body,
+// with the full work-packet + worker-return contracts bundled as an on-demand reference.
 // ---------------------------------------------------------------------------
 
 /**
@@ -421,68 +412,56 @@ export const CODEX_WORKER_RETURN_CONTRACT = `- **status** — \`done\` | \`parti
 const CODEX_DISPATCH_REJECTION_CLOSE =
   'The dispatching agent never accepts `status: done` at face value: it reads the returned diff against Base SHA and reruns the Verification commands itself before treating the item as closed. A worker that reports `done` without a passing verification command is rejected and re-dispatched, not trusted.';
 
-function genericContractBlock(intro) {
-  return [
-    intro,
-    "",
-    "**Work packet** (what the dispatching agent injects):",
-    "",
-    CODEX_WORK_PACKET_CONTRACT,
-    "",
-    "**Worker return** (what the worker must report back):",
-    "",
-    CODEX_WORKER_RETURN_CONTRACT,
-    "",
-    CODEX_DISPATCH_REJECTION_CLOSE,
-  ].join("\n");
+export const CODEX_WORKER_DISPATCH_REFERENCE = [
+  "# Codex Worker Dispatch",
+  "",
+  "Read this only when the current task actually dispatches explorer or executor workers. Tasks that do not dispatch workers do not need this reference.",
+  "",
+  "## Work Packet",
+  "",
+  "Every dispatched worker brief must include:",
+  "",
+  CODEX_WORK_PACKET_CONTRACT,
+  "",
+  "## Worker Return",
+  "",
+  "Every dispatched worker's final message must include:",
+  "",
+  CODEX_WORKER_RETURN_CONTRACT,
+  "",
+  "## Acceptance Gate",
+  "",
+  CODEX_DISPATCH_REJECTION_CLOSE,
+  "",
+].join("\n");
+
+export const CODEX_WORKER_DISPATCH_REFERENCE_FILE = "references/codex-worker-dispatch.md";
+
+const CODEX_WORKER_DISPATCH_POINTER =
+  `> **Worker dispatch reference (Codex).** Only when dispatching explorer or executor workers, read \`${CODEX_WORKER_DISPATCH_REFERENCE_FILE}\` before preparing briefs or accepting returns. Tasks that do not dispatch workers do not load that reference.`;
+
+const WORKER_DISPATCH_POINTER_CONSUMERS = new Set(["nav-audit", "nav-plan", "nav-refactor"]);
+
+/**
+ * Inserts the conditional worker-dispatch pointer for the given flat skill name immediately after
+ * the first H1. No-op for any flat name not configured above. This deliberately does not depend on
+ * nav-plan/nav-refactor's old next-action menu text, which is source-owned and can change shape.
+ */
+export function injectWorkerDispatchPointer(text, flat) {
+  if (!WORKER_DISPATCH_POINTER_CONSUMERS.has(flat)) return text;
+  if (text.includes(CODEX_WORKER_DISPATCH_POINTER)) return text;
+
+  const headingMatch = text.match(/^# .+$/m);
+  if (!headingMatch || headingMatch.index === undefined) {
+    throw new Error(`worker-dispatch pointer anchor missing for ${flat}: first H1`);
+  }
+
+  const insertAt = headingMatch.index + headingMatch[0].length;
+  return `${text.slice(0, insertAt)}\n\n${CODEX_WORKER_DISPATCH_POINTER}${text.slice(insertAt)}`;
 }
 
-/**
- * Per-skill anchor + body config. `after` is an EXACT substring already present in the compiled
- * text (post lowerWorkerProse) — the section is inserted immediately after it, at the next
- * paragraph boundary. `body` is the section content (without the heading, added by the caller).
- * Every entry references the skill's own inject/check prose by name rather than restating it —
- * see the plan's injection-strategy note (Phase 2, deliverable B).
- */
-const WORKER_DISPATCH_SECTIONS = {
-  "nav-audit": {
-    after:
-      "each brief injected per `references/deep-sweep.md`.",
-    body: genericContractBlock(
-      "`references/deep-sweep.md`'s D2 inject and D3–D5 check are this contract, lowered to Codex vocabulary: each explorer worker's brief IS the work packet below (Scope = its assigned domain's files only; Constraints = read-only, no writes; Verification = read-only greps/finds, never a mutating command); its findings + self-eval IS the worker return below. D3's merge/dedup and D5's completeness critic are the root agent applying the rejection rule at the end of this section — an under-covered or unsupported domain gets re-dispatched, not accepted.",
-    ),
-  },
-  "nav-plan": {
-    after:
-      "The dispatched worker defaults to cheap tier (the mechanical-tier executor role); a judgment-dense single step can be escalated on the spot (see root AGENTS.md's Dispatch tiers).",
-    body: genericContractBlock(
-      "Stage 4 option 1's inject/check bullets above are this contract in practice: the inject list (plan file path, step scope, Verification expectation, Critical files + reusable seams, the N+1 trigger) supplies the work packet below; the check list (diff read, integration pass, header hygiene) is the root agent applying the worker return contract before accepting \"done\".",
-    ),
-  },
-  "nav-refactor": {
-    after:
-      "See [ADR-007](docs/adr/007-offer-next-action-pattern.md) for the pattern's rationale.",
-    body: genericContractBlock(
-      "Step 8 option 2's inject/check bullets above are this contract in practice: the inject (extracted file paths, the move-vs-improve discipline, deferred simplifications, the surrounding seam, the N+1 trigger) supplies the work packet below; the check (diff read for a parallel impl, header hygiene, the verify gate) is the root agent applying the worker return contract before accepting \"done\".",
-    ),
-  },
-};
-
-/**
- * Inserts the "Worker dispatch contract" section for the given flat skill name, right after its
- * configured anchor's paragraph. No-op (returns text unchanged) for any flat name not configured
- * above — this only touches the three dispatch-heavy skills the plan names (Phase 2, deliverable B).
- */
-export function injectWorkerDispatchContract(text, flat) {
-  const config = WORKER_DISPATCH_SECTIONS[flat];
-  if (!config) return text;
-
-  const anchorIndex = text.indexOf(config.after);
-  if (anchorIndex === -1) return text; // anchor drifted out of source; fail open, not silently wrong
-
-  const insertAt = anchorIndex + config.after.length;
-  const section = `\n\n## Worker dispatch contract (Codex)\n\n${config.body}`;
-  return `${text.slice(0, insertAt)}${section}${text.slice(insertAt)}`;
+export function needsWorkerDispatchReference(flat) {
+  return WORKER_DISPATCH_POINTER_CONSUMERS.has(flat);
 }
 
 // ---------------------------------------------------------------------------

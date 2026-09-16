@@ -223,27 +223,10 @@ plugin's `browser-verifier` agent (model: sonnet) with the file/URL + what to co
 back verdict + screenshot path; the image tokens stay out of the main context. Confirm **once**,
 not per iteration, on the rare occasion the slot is used at all.
 
-## After the pick — offer the next step: track it · build it (don't auto-run)
+## Continuation
 
-A pick has two natural next steps, and the offer should name **both** (ADR-028) — an
-an `AskUserQuestion` with a "just record the pick, I'll continue later" opt-out (offer-next-action,
-ADR-007/015):
-
-- **Track it → `/shape:align`** — triage the decision into `plan.md` (now/next/later). `align`
-  is collaborative, so it runs **in-session** (it needs this conversation's decision), not a
-  clean sub-agent. Offer this branch only when a `blueprints/` board exists (or scaffolding one
-  is wanted).
-- **Build it now** — when the pick is a concrete, decided, *behaviour-changing* build, route by
-  scope: small · holdable-in-head → **`/nav:do`** (its check bracket — inject↔execute↔verify — is
-  the point; don't flow into the build on ambient discipline and skip it); bigger / ambiguous /
-  wants a written plan → **`/nav:plan`**; driving multiple `plan.md` items → the manual path
-  (`/nav:plan` per item → `/nav:do`/`/nav:refactor` → `/shape:align`, ADR-110).
-  This is the seam "make it functional" flows through — name the verb so the agent routes to its
-  check instead of winging the build.
-
-**Guarded + one-shot:** don't re-offer / nag across a rapid series of mockups; show only the
-branch(es) that apply (a disposable visual tweak with nothing to track *and* nothing to build →
-skip the offer entirely). An offer, **never a call** — skills don't invoke each other.
+The SKILL.md body owns continuation and authorization boundaries. Use its scope
+check after reporting the result; this reference adds no closing menu.
 
 ## Anti-patterns (refuse these)
 
@@ -269,6 +252,4 @@ skip the offer entirely). An offer, **never a call** — skills don't invoke eac
 - A recorded pick; most artifacts then discarded.
 - A visual-lock only as a rare, stamped exception (structural-level).
 - (Escalation, rare) multiple files + a decision note.
-- (When the pick settles something actionable) a guarded, one-shot **offer** of the next step —
-  **track it** (`/shape:align`) and/or **build it** (`/nav:do` small · `/nav:plan` bigger,
-  ADR-028) — never an auto-call.
+- A useful next-step suggestion when needed; no compulsory tracking/build menu.

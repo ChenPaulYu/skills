@@ -2,7 +2,7 @@
 
 Machinery sunk from the SKILL.md body per ADR-109 (three-layer re-homing). The Stance section
 in SKILL.md carries the behavior-changing rules (the harness-artifact caveat, the live-LLM-cost
-caveat, the render-demoted-to-optional rule, the guarded offer); this file carries the full
+caveat, the render-demoted-to-optional rule, the scope-aware continuation); this file carries the full
 session steps, the report shape, the three boundaries, storage format, a worked example, and
 the anti-pattern table.
 
@@ -18,6 +18,9 @@ clip — these three spots snag, here's an idea for each, and one of them isn't 
 path you never built."
 
 ## The session — use it for real, capture as you go
+
+Apply the body's pre-run scope check first: honor existing scoped approval, ask for
+missing authority before external/destructive/paid effects, and report unrun intents.
 
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real
 build** and records it.
@@ -54,23 +57,10 @@ of holes. Lead with the evidence; for each finding:
   so the whole run is watchable end-to-end; by default the evidence is the friction-point stills
   + saved responses.
 
-## After the session — offer to route the findings (don't fix in place, don't auto-run)
+## Continuation
 
-dogfood surfaces and reports; it does **not** redesign or implement. Once the report is up,
-*offer* — never auto-call — the next step **per each finding's kind**, via `AskQuestion`
-(offer-next-action, ADR-007/015):
-
-- **A friction idea the user wants to pursue** → a *tweak* → `nav-plan` (ground it) +
-  `nav-do`/`nav-refactor`; a *redesign* → `shape-mockup` (render the new shape) or `shape-elicit` (if
-  the premise is in question).
-- **A direction-level gap (missing intent)** → `shape-elicit` (is the premise wrong? — a *new
-  decision*, out of scope) and/or `shape-mockup`.
-- **An incomplete gap (dead-end path)** → `nav-plan` to ground the missing path, then
-  `nav-do`/`nav-refactor`.
-
-**Guarded + one-shot:** compose the options from what was actually found, always include a
-**"just leave the report, I'll route later"** opt-out, and don't re-offer after the pick.
-Offers, not calls — skills don't invoke each other.
+The SKILL.md body owns continuation and authorization boundaries. Use its scope
+check after reporting the result; this reference adds no closing menu.
 
 ## When it fires — and the three boundaries
 
@@ -139,11 +129,11 @@ two things you can't actually do — one's a direction question, one's just unfi
 | Click around aimlessly | Drive from the intent list — aimless clicking misses the *absent* paths (nothing to stumble on) and only finds shallow friction. Tell: the session has no list of intents it's working through. |
 | Enumerate every `state × action` cell | Use human intents instead — they have a floor; a full state×action matrix is a QA exercise that explodes. Tell: the session is generating combinations instead of walking realistic user goals. |
 | Make rendering a mockup the mandatory output | Render only when a finding is a genuine redesign worth `shape-mockup` — the real output is an evidence-rich report + ideas. Tell: about to build a mockup before any friction has actually been found. |
-| Only report friction, ignore the gaps that fall out | Report and tag both — a clunky path AND an intent with no path at all. Tell: the report lists friction but has no section for missing coverage. |
+| Only report friction, ignore the gaps that fall out | Report and tag both — a clunky path AND an intent with no path at all. Tell: a missing user intent observed during the run was omitted from the findings. |
 | Redesign or implement the fix in place | Surface + route — the redesign is `shape-elicit`/`shape-mockup`, the finish is `nav-plan` + `nav-do`/`nav-refactor`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
 | Confuse it with `/verify` | Keep the question separate — verify checks correctness, dogfood critiques experience + coverage. Tell: the session is checking "does this work" instead of "does this feel right / is anything missing." |
 | Fire on a passing mention of a feature | Wait for a "try it / it feels off / show me where it's clunky" request. Tell: about to start a dogfood session off an incidental mention of a feature, not an actual ask. |
-| Keep going after the feature feels smooth | Exit when friction is captured + named + routed, or the user has what they need. Tell: continuing to poke at a flow after nothing new has surfaced for a while. |
+| Keep going after the feature feels smooth | Exit when the evidence and findings answer the request; routing is optional. Tell: continuing to poke at a flow after nothing new has surfaced for a while. |
 
 ## Output
 
@@ -155,6 +145,4 @@ two things you can't actually do — one's a direction question, one's just unfi
   routed: direction → `shape-elicit`/`shape-mockup`; incomplete → `nav-plan` + `nav-do`/`nav-refactor`.
 - (Optional) a hand-off to `shape-mockup` for any finding big enough to be a *redesign* — not
   the default.
-- (When the session settles something trackable — e.g. "archive is deliberately one-way") a
-  guarded, one-shot **offer** to run `shape-align` and triage it in — never an auto-call
-  (ADR-007/015).
+- A useful tracking suggestion when needed, not a required closing menu.

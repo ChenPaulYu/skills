@@ -7,20 +7,9 @@
  * - Codex mirror lives under .agents/skills/<plugin>-<skill>/SKILL.md.
  * - Cursor plugins live under platforms/cursor/<plugin>/ (flattened skill folders).
  * - Those mirrors must be exactly what scripts/build-codex.mjs / build-cursor.mjs generate.
- * - Every skill is REGISTERED in both human surfaces (README + site map) — gate #3.
- *   Without this the validator is blind to a half-registered skill (one whose SKILL.md
- *   + mirror are committed but whose README/site-map entries are missing); it ships
- *   green. The mechanical fix for the failure that shipped think:dialectic unregistered.
- * - Each plugin's CURRENT VERSION (plugins/<plugin>/.claude-plugin/plugin.json) is
- *   quoted correctly in docs/site/index.html's two live per-plugin blocks (the
- *   DOMAINS card blurb + the graph-node blurb). This is the narrow, mechanically
- *   checkable slice of gate #3's "stale surface lies silently" risk — the site map
- *   duplicates version/skill-count prose across 3 places (VERIFIED-list narrative +
- *   these two) with no single owner, and the free-form narrative isn't regular enough
- *   to gate, but the version token in these two fixed-shape blocks is. Doesn't check
- *   skill counts or verb lists — phrasing varies too much across plugins ("Four
- *   skills" vs "4 lenses" vs "7 skills, one verb each") to regex reliably; that stays
- *   a human/agent judgment call. Caught a real drift on 2026-07-03 (site map rev 62).
+ * - Public catalog blocks in README + site map derive from manifests, skill
+ *   frontmatter, and docs/catalog-copy.json. Exact regeneration catches roster,
+ *   version, count, invocation-category, and editorial-copy drift (gate #3).
  */
 import {
   cpSync,
@@ -35,6 +24,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, join, relative } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { SHARED_SKILL_REFERENCES } from "./lib/shared-skill-references.mjs";
 import {
   formatCodexCompatAudit,
   formatCodexCoverageReport,
@@ -116,8 +106,6 @@ function main() {
   validateCursorMirror(pluginSkills, ROOT);
   validateGeneratedDrift();
   validateManifestDrift();
-  validateRegistration(pluginSkills);
-  validateSiteMapVersions();
   validateAdrNumbers();
   const compat = validateCodexCompatPhase0(ROOT, {
     worktreeFreeze: process.argv.includes("--codex-compat"),
@@ -509,6 +497,14 @@ function validateManifestDrift() {
     });
 
     const hint = "node scripts/build-manifests.mjs";
+    for (const surface of ["README.md", "docs/site/index.html"]) {
+      compareFiles(join(tempRoot, surface), join(ROOT, surface), surface, hint);
+    }
+    for (const { destinations } of SHARED_SKILL_REFERENCES) {
+      for (const destination of destinations) {
+        compareFiles(join(tempRoot, destination), join(ROOT, destination), destination, hint);
+      }
+    }
     for (const plugin of sortedDirs(PLUGINS_DIR)) {
       const cursor = join(plugin, ".cursor-plugin", "plugin.json");
       if (!existsSync(join(PLUGINS_DIR, cursor))) continue;
@@ -558,104 +554,6 @@ function validateAdrNumbers() {
     }
   }
 }
-/**
- * Registration gate (#3): every skill must be named in BOTH human-facing surfaces —
- * README.md and docs/site/index.html. The unambiguous token both carry is the
- * invocation form `/<plugin>:<skill>` (README skills list + site map command card),
- * which avoids the short-slug false positives a bare-name grep would hit. This is the
- * one check the rest of the validator can't give: it compares generated artifacts to
- * sources and is otherwise blind to whether a human ever wrote the skill down.
- */
-function validateRegistration(pluginSkills) {
-  for (const [label, path] of [
-    ["README.md", join(ROOT, "README.md")],
-    ["docs/site/index.html", join(ROOT, "docs", "site", "index.html")],
-  ]) {
-    if (!existsSync(path)) {
-      errors.push(`${label} is missing; cannot verify skill registration (gate #3)`);
-      continue;
-    }
-    const content = readFileSync(path, "utf8");
-    for (const item of pluginSkills) {
-      const token = `/${item.plugin}:${item.skill}`;
-      if (!content.includes(token)) {
-        errors.push(
-          `${item.plugin}:${item.skill} is not registered in ${label} (no "${token}") — see CLAUDE.md gate #3 registration table`,
-        );
-      }
-    }
-  }
-}
-
-/**
- * Version-in-site-map gate: docs/site/index.html states each plugin's version twice
- * more, outside the VERIFIED-list narrative — once in its DOMAINS card blurb, once in
- * its graph-node blurb. Both are single-line entries in the current file shape, so a
- * plain per-line scan finds them without an HTML/JS parser. Reports every mismatch it
- * finds (not just the first) so a fix pass sees the whole list at once.
- */
-function validateSiteMapVersions() {
-  const sitePath = join(ROOT, "docs", "site", "index.html");
-  if (!existsSync(sitePath)) return; // already flagged by validateRegistration
-
-  const lines = readFileSync(sitePath, "utf8").split("\n");
-  const label = "docs/site/index.html";
-
-  for (const plugin of sortedDirs(PLUGINS_DIR)) {
-    const pluginJsonPath = join(PLUGINS_DIR, plugin, ".claude-plugin", "plugin.json");
-    if (!existsSync(pluginJsonPath)) continue;
-    const { version } = JSON.parse(readFileSync(pluginJsonPath, "utf8"));
-    const versionToken = `v${version}`;
-
-    const domainsLine = findLineAfter(lines, new RegExp(`^\\s*${plugin}:\\s*\\{\\s*$`), (l) =>
-      l.includes("blurb: {en:"),
-    );
-    checkBilingualVersion(domainsLine, "blurb: {en:", `DOMAINS.${plugin}.blurb`, versionToken, plugin, label);
-
-    const nodeLine = lines.find((l) => l.includes(`{id:'${plugin}', kind:'plugin'`));
-    checkBilingualVersion(nodeLine, "desc:{en:", `graph-node blurb for '${plugin}'`, versionToken, plugin, label);
-  }
-}
-
-/**
- * A blurb line always carries both `en:'...'` and `zh:'...'` — checking the raw line
- * for the version token would pass as long as EITHER language still had it, missing a
- * one-language-only edit (an agent updating English and forgetting Chinese, or vice
- * versa). Node lines also carry an earlier, unrelated `role:{en:..., zh:...}` pair
- * before the `desc:` field, so we can't just split the whole line on the first "zh:" —
- * that would grab role's zh, not desc's. Slice from fieldMarker first, then split.
- */
-function checkBilingualVersion(line, fieldMarker, label, versionToken, plugin, fileLabel) {
-  if (!line) return;
-  const fieldIdx = line.indexOf(fieldMarker);
-  if (fieldIdx === -1) return;
-  const field = line.slice(fieldIdx);
-
-  const zhIdx = field.indexOf("zh:");
-  const enPart = zhIdx === -1 ? field : field.slice(0, zhIdx);
-  const zhPart = zhIdx === -1 ? "" : field.slice(zhIdx);
-
-  if (!enPart.includes(versionToken)) {
-    errors.push(
-      `${fileLabel}: ${label} (en) doesn't mention ${versionToken} (from plugins/${plugin}/.claude-plugin/plugin.json) — site map version prose is stale, see CLAUDE.md gate #3`,
-    );
-  }
-  if (zhPart && !zhPart.includes(versionToken)) {
-    errors.push(
-      `${fileLabel}: ${label} (zh) doesn't mention ${versionToken} (from plugins/${plugin}/.claude-plugin/plugin.json) — site map version prose is stale, see CLAUDE.md gate #3`,
-    );
-  }
-}
-
-function findLineAfter(lines, startRegex, matchFn, windowSize = 10) {
-  const startIdx = lines.findIndex((l) => startRegex.test(l));
-  if (startIdx === -1) return null;
-  for (let i = startIdx + 1; i < Math.min(startIdx + 1 + windowSize, lines.length); i++) {
-    if (matchFn(lines[i])) return lines[i];
-  }
-  return null;
-}
-
 function readPluginSkillsFrom(root) {
   const originalRoot = ROOT;
   const pluginSkills = [];

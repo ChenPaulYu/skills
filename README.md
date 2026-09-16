@@ -15,22 +15,24 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
 | See where we are, compact drift, decide what's next（重新整理） | `/shape:align` |
-| Study an unfamiliar repository into a mental model（帶我理解陌生 repo） | `/fathom:guide` |
-| Compile a study into its artifacts（把讀過的 repo 編成儀表板與地圖） | `/fathom:compile` |
-| Take or pass the session cursor before/after stepping away（交接記事本） | `/shape:baton` |
+| Reconstruct where the session is after returning（回來接續） | `/shape:catchup` |
+| Write the session handoff before stepping away（離開前交接） | `/shape:park` |
 | Report progress to a counterpart over relay | `/relay:report` |
 
 ## What's in here
 
-| Plugin | What it covers |
-|---|---|
-| [`nav`](plugins/nav/) | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, the bilingual codebase map, and on-demand README-vs-ground-truth checks (three cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
-| [`fathom`](plugins/fathom/) | **Study an unfamiliar repository** — five verbs over one shared study state: `index` (anchor the pin, land a file:line index, deliver a measured trust verdict), `guide` (the teaching climb Repository → Runtime → System → Behavior → Code — calibrate, teach with knowledge-matched forms, dwell, gate on the learner's own narration), `quiz` (spaced retention checking), `dive` (follow one topic as deep as they want, advancing nothing), `atlas` (compile the study into a guided multi-scale code map). Files, not call order, connect them — so the flow is free. |
-| [`shape`](plugins/shape/) | **Push work forward** — converge a decision (a grounded grill, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, keep the `blueprints/` board honest against the code, and hand the ephemeral session cursor (`baton`) between sessions. Seven verbs; the build itself is handed to `nav`. |
-| [`frame`](plugins/frame/) | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Four reasoning-and-delivery verbs. Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (a stress-tested analogy) and `draw` (render it, form chosen by the kind of knowledge — the grammar `fathom` borrows). Lenses feed `shape`; the outward pair doesn't. Renamed from `think`. |
-| [`relay`](plugins/relay/) | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
+<!-- BEGIN GENERATED catalog-plugins -->
+Catalog: 4 plugins · 23 skills.
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **fathom** (study a repository you don't yet hold a model of — a persistent, cross-session learning campaign), **frame** (apply a frame to a problem or to an answer), and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+| Plugin | Version | Skills | What it covers |
+|---|---:|---:|---|
+| [`nav`](plugins/nav/) | 0.19.2 | 6 | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, the bilingual codebase map, and on-demand README-vs-ground-truth checks (three cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
+| [`shape`](plugins/shape/) | 0.23.0 | 8 | **Push work forward** — converge a decision (grounded clarification, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, keep the `blueprints/` board honest against the code, and move the explicit session handoff through `catchup` and `park`. The build itself is handed to `nav`, and already-authorized continuation resumes the ordinary workflow without a forced menu. |
+| [`frame`](plugins/frame/) | 0.14.0 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
+| [`relay`](plugins/relay/) | 2.5.2 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
+<!-- END GENERATED catalog-plugins -->
+
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer) and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -40,50 +42,57 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
 Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-direction-law-inventory.md)): **model-invoked** — the agent fires them off your phrasing — and **user-invoked** — summoned only by typing the command, never auto-fired. Each plugin's list below buckets them.
 
-**`nav` — keep code healthy:**
+Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
+
+<!-- BEGIN GENERATED catalog-skills -->
+Catalog skills: 23 active skills.
+
+### `nav`
+
+*Model-invoked:*
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
-- `/nav:refactor` — execute a structural refactor with verbatim-move + test-gate discipline
+- `/nav:refactor` — execute a behavior-preserving structural refactor with risk-proportional verification
 - `/nav:sync` — keep a codebase navigable at both scales, plus its docs honest: sync file-top headers to the code (per-file navigability; continuous, per-change, gated diff), render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads the maintained headers), or check whether a hand-maintained human-facing doc (README, install steps) still matches its ground truth (on-demand, gated diff to fix) — three cadences, one door (ADR-108, ADR-125)
-- `/nav:plan` — ground a spec against the code, clarify ambiguity, write a plan artifact (lands in `blueprints/plans/` when present)
+- `/nav:plan` — ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
 
-**`fathom` — study an unfamiliar repository:**
+### `shape`
 
-- `/fathom:index` — index a repo you don’t know: anchor the pin (plus its distance from the latest release), judge how deep the ladder needs to be, land a growing `index.md` `file:line` anchor index, and deliver a measured **trust verdict** (maintenance, test investment, doc staleness, churn) closing with a read-it-like-this instruction; grounds, never teaches
-- `/fathom:guide` — climb the five gated levels (Repository → Runtime → System → Behavior → Code): calibrate on the learner's background (gloss list · contrast anchor · chapter compression), teach with knowledge-matched forms (guided interactive mockup at Repository; terminal-first mid-ladder), dwell for their questions, gate on their own narration, and keep a cursor + learner model on disk so the climb resumes across sessions
-- `/fathom:quiz` — check what actually stuck: read `understanding.md`, probe what is most likely to have decayed (corrected entries first), ask for narration rather than recall, and write back what the answers revealed; advances no level
-- `/fathom:dive` — follow one topic as deep as the learner wants, answered against pinned `file:line` evidence, without moving the ladder; residue lands in `index.md` + `understanding.md` and the breadcrumb restores position
-- `/fathom:compile` — turn the study into its artifacts: horizon (repo-level dashboard), tides (system/state board), atlas (behavior/code map) — each a semantic fixture rendered by a fixture-driven shell; the gate decides what may exist, and a re-compile enriches as the study deepens; needs an existing study, does not teach
+*Model-invoked:*
 
-**`shape` — push work forward** (skills grouped by verb around a `blueprints/` convention):
-
-- `/shape:elicit` — converge a conceptual decision by a grounded grill — or root-cause a logic flaw (diagnostic mode)
-- `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive artifact
+- `/shape:elicit` — clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority
+- `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive HTML artifact; a mockup-only request stops at the artifact unless build/track scope was already authorized
 - `/shape:probe` — design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user
-- `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (browser / `curl` / CLI) against user intents, report the friction + the coverage gaps that fall out
+- `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (`browser` only when available/authorized, otherwise `curl` / CLI) against user intents, report friction + coverage gaps, and ask only for missing run authority; no automatic paid full-cost pass
 - `/shape:align` — one pass, on compaction pressure: verify every carried item against the code, compact what drifted (amend stale facts, prune/consolidate stale `thoughts/` + `plans/`), then decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)
 
 *User-invoked:*
 
-- `/shape:baton` — take or pass the session baton — one overwritten cursor holding goal · done · now · open · next; take it on arrival, pass it before stepping away; lives at `blueprints/baton.md` (no-tree fallback: root `HANDOFF.md`)
+- `/shape:catchup` — read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably
+- `/shape:park` — write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level
 - `/shape:migrate` — bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)
 
-**`frame` — apply an explicit frame, to a problem or to an answer:**
+### `frame`
 
-- `/frame:first-principles` — strip a question to its irreducible axioms, rebuild the answer from them, surface where that diverges from convention; analysis stays in-chat (route to `shape` to persist)
+*Model-invoked:*
+
+- `/frame:first-principles` — strip a question to its irreducible axioms, rebuild from them, and surface where that diverges from convention; analysis stays in-chat unless continuation was already authorized
 - `/frame:orthogonal` — factor a tangled phenomenon into mutually-independent (orthogonal) axes; verify the independence (move one, the others stay put) and name what was conflated; in-chat
 - `/frame:dialectic` — put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat
-- `/frame:analogize` — build a deliberately stress-tested analogy for a concept you already understand: generate multiple candidates, check the mapping against the real structure, pick on fit, name where the winner breaks; delivers to the user rather than deriving for the agent, so it doesn't feed `shape`; in-chat
-- `/frame:draw` — render something you already understand so it lands for someone else, with the form chosen by the KIND of knowledge (ownership → spatial map · process → playback · state over time → stepper · delta from what they know → claim expansion · taxonomy → grouped map · structure → weighted graph · lifecycle → canonical-run diagram); terminal-first, escalating to an interactive artifact only when interaction changes visible state. Owns the form grammar that `/fathom:guide` borrows. Distinct from `/shape:mockup`, which renders candidates so a decision can be PICKED — here the artifact IS the explanation
+- `/frame:analogize` — on explicit request, build a checked analogy for a concept you already understand: compare candidates, verify the mapping against the real structure, pick on fit, and name where the winner breaks; in-chat
+- `/frame:draw` — render something you already understand so it lands for someone else, with the form chosen by the kind of knowledge; terminal-first, escalating to an interactive artifact only when interaction changes visible state or the user asks. Distinct from `/shape:mockup`, which renders candidates so a decision can be picked — here the artifact is the explanation
 
-**`relay` — coordinate with a counterpart through GitHub, following the Accord memory model** (four daily model-invoked skills; standalone; `report`/`reply`/`settle` show outbound object text verbatim and ask "Is this what you mean?" before posting, ADR-095/100/120):
+### `relay`
+
+*Model-invoked:*
 
 - `/relay:report` — resolve the workspace and a verified recipient before author sign-off; route Issue-default, and fork any independently completable follow-up into a linked child Issue while stating whether the parent may settle independently; exact-diff review remains an optional PR path
 - `/relay:digest` — start with an inbox preflight, then show source obligations separately from native lifecycle findings and generated `relay-triage` wrappers; expose conflicting stages, staged work without an assignee, multiple staged owners, unknown stage age, and policy-driven overdue stages; stage age comes from native label/assignment events, never prose or `updatedAt`; read-only and deterministic (schema 6, ADR-121)
 - `/relay:reply` — answer or clarify in place, hand off ordinary/`needs-input` work with a native label-and-assignment transition, or route an independent follow-up to `report`; settlement authority stays stable, and protected acceptance/recording stages cannot be escaped by a generic handoff
 - `/relay:settle` — verify settlement authority, apply the settlement block, close an Issue/Discussion, or merge/abandon a PR; a promoted Decision/Brief/Core delta whose exact wording is already settled is committed and pushed directly with remote read-back, while unsettled wording may use a PR
+<!-- END GENERATED catalog-skills -->
 
 ## Install
 
@@ -112,13 +121,12 @@ Or by hand. In Claude Code:
 ```bash
 /plugin marketplace add ChenPaulYu/skills
 /plugin install nav@skills
-/plugin install fathom@skills
 /plugin install shape@skills
 /plugin install frame@skills
 /plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/fathom:*`, `/shape:*`, `/frame:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `fathom`, `frame`, and `relay` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/shape:*`, `/frame:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `frame` and `relay` are independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 
@@ -129,13 +137,12 @@ Antigravity CLI natively imports Claude Code plugins — same `SKILL.md` format,
 ```bash
 git clone https://github.com/ChenPaulYu/skills.git && cd skills
 agy plugin install plugins/nav
-agy plugin install plugins/fathom
 agy plugin install plugins/shape
 agy plugin install plugins/frame
 agy plugin install plugins/relay
 ```
 
-Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/fathom:compile`, `/shape:mockup`, …).
+Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:mockup`, `/relay:report`, …).
 
 AGY-only automation (hooks, MCP) stays in `~/.gemini/config/` on the machine — never commit it here, so Claude / Codex / Cursor stay untouched.
 
@@ -200,15 +207,17 @@ After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the
 Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. Codex gets a separate, short, trigger-first metadata projection from `platforms/codex/descriptions.json`; Claude descriptions remain unchanged. A repo-root [`AGENTS.md`](AGENTS.md) is synthesised from all plugin `CLAUDE.md` files. The adapter now has its own release line in `platforms/codex/manifest.json` (`adapter_release` + `schema_version`, independent from Claude plugin versions). The full translation/install contract is in [`docs/codex-compatibility.md`](docs/codex-compatibility.md).
 
 ```bash
+node scripts/build-manifests.mjs   # manifests, shared references, README/site catalog
 node scripts/build-codex.mjs       # re-run after editing any SKILL.md
 node scripts/build-cursor.mjs      # re-run after editing any SKILL.md (Cursor plugins)
-node scripts/build-manifests.mjs   # re-run after editing any plugin version/description/author
 node scripts/validate-codex-skills.mjs --release-smoke
 node scripts/validate-codex-skills.mjs
 node scripts/validate-codex-skills.mjs --metadata-audit
 ```
 
-The validator checks both sides of the contract: Claude Code source skills under `plugins/` must have valid YAML frontmatter, and the Codex mirror under `.agents/skills/` must be regenerated and YAML-safe. It also gates Codex sidecar coverage, the per-skill/total metadata budget, install-profile references, and **manifest drift**. See the repo-root [`CLAUDE.md`](CLAUDE.md) for the full single-owner rule.
+The validator checks both sides of the contract: Claude Code source skills under `plugins/` must have valid YAML frontmatter, and the Codex mirror under `.agents/skills/` must be regenerated and YAML-safe. It also gates Codex sidecar coverage, the per-skill/total metadata budget, install-profile references, **manifest drift**, and **public catalog drift**. See the repo-root [`CLAUDE.md`](CLAUDE.md) for the full single-owner rule.
+
+The marked README and site catalog blocks are generated, including versions, counts, skill membership, and invocation categories. Edit [`docs/catalog-copy.json`](docs/catalog-copy.json) for editorial prose and layout hints; absent copy falls back to source descriptions. Keep quick lookups and anatomy explanations current by hand. See [ADR-130](docs/adr/130-source-derived-public-catalog.md).
 
 Enable the pre-commit hook once per clone so this runs automatically before every commit:
 
