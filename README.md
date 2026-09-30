@@ -28,8 +28,8 @@ Catalog: 4 plugins · 24 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.20.3 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.25.1 | 9 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
+| [`nav`](plugins/nav/) | 0.20.4 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
+| [`shape`](plugins/shape/) | 0.25.3 | 9 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
 | [`frame`](plugins/frame/) | 0.14.1 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
 | [`relay`](plugins/relay/) | 2.5.4 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
 <!-- END GENERATED catalog-plugins -->
@@ -277,6 +277,11 @@ Four natural-prompt variants extend that catalog. Eight fresh gpt-6-luna executi
 (one rejected setup) exposed routing, retention, and reporting defects; the resulting
 instruction repairs passed offline checks but have not been rerun through the model.
 See [the observed outcomes and limits](docs/findings/2026-09-30-low-cue-skill-trials.md).
+
+One two-turn dogfood case brings the opt-in catalog to 13 cases. The bounded post-repair
+follow-up separates a passing existing-measurement sample from failed tree retention,
+partial goal continuity, and a corrected capture allowlist. See
+[the follow-up evidence and remaining limits](docs/findings/2026-09-30-probe-and-roster-followup.md).
 
 ## Cursor compatibility
 

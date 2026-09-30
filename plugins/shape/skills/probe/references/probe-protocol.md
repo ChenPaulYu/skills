@@ -1,8 +1,20 @@
 # Probe protocol — the full design chain, shapes, and output shape
 
 > The implementation layer behind `/shape:probe`'s stance. The SKILL.md body carries the stance;
-> everything here is loaded when a probe is actually being designed or a boundary call is unclear.
-> Moved verbatim from the pre-ADR-109 SKILL.md body; the machinery is unchanged, only re-homed.
+> Read for existing-evidence assessment, new experiment design, or an unclear boundary.
+
+## Choose the evidence branch
+
+**Existing measurements:** locate the pending decision, original method, inputs, comparison,
+and verdict criteria. Report missing criteria or preregistration as absent; assess what the
+data supports under those limits. Separate component quality, workflow completion, and
+timing, and name confounds and unmeasured outcomes. Use that evidence before proposing
+new work. A retrospective assessment is not a preregistered trial and does not itself
+authorize running a follow-up.
+
+**New trials:** use the design chain below, fix the verdict rule before collecting data,
+and execute only within the authorized scope. If existing results leave a question open,
+design only the smallest follow-up that could resolve it; mark an unrun design as unrun.
 
 ## Why this skill exists
 
@@ -32,7 +44,7 @@ These three are canonical, not exhaustive — but a proposed fourth shape should
 
 ## Execution discipline
 
-- **Pre-register the verdict rule before running anything.** Write down, before the first trial: what result maps to which conclusion. If you can't state this in one sentence before seeing data, the experiment isn't designed yet — don't run it.
+- **Pre-register new trials.** Before the first new trial, state what result maps to which conclusion. Existing-data assessment reports the original rule or its absence; it never invents retrospective preregistration.
 - **Smallest N that can actually discriminate.** More trials than needed to tell the shapes apart is budget wasted on certainty nobody asked for; fewer trials than needed produces a coin flip dressed as a finding. Size N to the effect you're trying to detect, not to a round number.
 - **Report negative or ambiguous results honestly.** An experiment that fails to discriminate between the candidates is itself a finding — it means the load-bearing assumption from step 1 wasn't as load-bearing as thought, or the test wasn't sharp enough. Report it as exactly that, never quietly reframe it into a win.
 
@@ -67,7 +79,11 @@ Per the dispatch-tiers convention (ADR-067): designing the experiment (steps 1-3
 
 ## Live-LLM-cost signal — probe's own instance (ADR-062)
 
-This is a **new instance** of the signal, not inherited from `nav:do`'s verify gate: if the experiment itself fans out calls to a paid LLM — multiple independent judges, N repeated trials, a multi-agent behavior probe — state the expected scale (which model, how many calls, roughly how many trials) and get a nod from the user **before running**, the same aware-while-writing-notify-at-the-gate posture ADR-062 established elsewhere. `probe` doesn't get to silently pick a cheaper path either — it names the cost, the user decides.
+For paid-LLM fanout, state the selected model, call/trial scale, and intended budget.
+Honor approval already given for the same scope, including the user's tier choice.
+Ask only for missing authority or a material increase in cost/effects. Keep execution
+within the approved bound; neither extra repetitions nor a full-cost finale are automatic.
+Recorded-data assessment does not launch paid trials merely to complete a report.
 
 ## Read-only toward product code
 
@@ -97,11 +113,11 @@ The doc states explicitly, near the top, that **the evidence feeds the pending d
 |---|---|
 | Test the surface phrasing instead of the load-bearing assumption | Run step 1 of the design chain first — testing the phrasing wastes the experiment on a wording dispute nobody needed settled. Tell: the experiment's outcome wouldn't actually change anyone's next decision. |
 | Vary two things at once | Change one axis at a time — varying two pollutes the evidence, since you can't attribute the result to either. Tell: the experiment design has two independent variables moving in the same trial. |
-| Decide the verdict rule after seeing the data | Pre-register the verdict rule before the first trial, no exceptions — deciding after is rationalization wearing an experiment's clothes. Tell: about to define "what counts as a win" only after looking at the results. |
+| Present retrospective criteria as preregistered | Fix the rule before a new trial; report original criteria or absence for existing data. Tell: claiming a rule was chosen before data without evidence of that sequence. |
 | Let the experiment sprawl past minimal | Keep it to what the discriminating question needs — extra trials/variants buy false confidence, not better evidence. Tell: adding another variant "just to be thorough" when the core question is already answerable. |
 | Edit product code to force a result | Stay read-only toward source — if the "experiment" needs the thing under test changed, it isn't an experiment. Tell: about to modify the code being tested instead of just observing it. |
 | Hide an ambiguous or negative result | Report it as a finding — an assumption that wasn't load-bearing, or a test that wasn't sharp, is still worth knowing. Tell: tempted to omit a result because it doesn't support the expected direction. |
-| Fan out paid-LLM calls without the cost nod | Name the scale and get the nod before running (ADR-062). Tell: about to launch a multi-call fan-out without having surfaced its cost to the user first. |
+| Extend paid fanout beyond approval | State scale, reuse matching approval, and ask for any missing authority or increased cost/effects. Tell: adding repetitions or changing the selected tier beyond the approved run. |
 
 ## Companion skills
 

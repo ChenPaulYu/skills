@@ -16,6 +16,7 @@
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
+2026-09-30：**probe 協定與生成名單一致性**（ADR-135）——判讀既有量測不再受新試驗判準限制，付費範圍沿用同意；catalog／Codex／Cursor 共用真正 SKILL.md 的發現規則，空目錄回歸通過。3 個 gpt-6-luna 情境共 4 回合：probe 路由通過，舊產物排除仍失敗，dogfood 多輪目標維持部分成立；保留 capture allowlist 的案例瑕疵，保存規則再次補強但未重跑模型。128 個離線測試、相容性驗證通過；nav 0.20.4／Shape 0.25.3／Codex 1.0.12／Cursor 1.0.4，本機副本同步。見 `docs/findings/2026-09-30-probe-and-roster-followup.md`。
 2026-09-30：**少提示行為試跑與缺口修正**——gpt-6-luna 共 8 次執行，排除 1 次環境準備錯誤；既有量測誤走 compose、強制追蹤被忽略的報告、漏查舊產物及錯誤行號均留下實際證據。補強 probe 的既有量測入口、compose 共用保存規則、產物整棵樹檢查、未定原因歸屬與逐檔行號。nav 0.20.3／shape 0.25.1，126 個離線測試及完整相容性檢查通過，本機副本同步；修正後模型行為尚未重跑，不宣稱整包改善。見 `docs/findings/2026-09-30-low-cue-skill-trials.md` 與 `plans/2026-09-30-low-cue-skill-trials.md`。
 2026-09-30：**開發產物排除與實驗判讀**（ADR-134）——共用規則預設讓 blueprints／mockup／dogfood／一次性實驗留本機，分別查 ignore、追蹤與暫存狀態，保留專案明訂例外與唯一資料；probe 區分元件品質、工作流程與受干擾測速，dogfood 守住工具評估目標並及時提示已知問題。新增四個案例與 Git 狀態檢查，126 個離線測試及相容性驗證通過；nav 0.20.2／shape 0.25.0，本機副本同步。尚未 commit／push，未跑新模型案例；證據：`docs/findings/2026-09-30-development-artifacts-and-evidence-checks.md`。
 2026-09-30：**提交內容驗證與四個實際任務案例**（ADR-133）——pre-commit 改驗 Git 暫存區快照，未暫存修改不再干擾結果；新增文件整批同步、reconcile、只檢查、直接修改四個可重跑案例，模型試跑維持手動啟動。修正過期 Relay 契約說明與瀏覽器工具固定選單；shape 0.24.3。123 個離線測試、實際暫存內容驗證與四個案例核心行為通過，兩個回報瑕疵保留在 `docs/findings/2026-09-30-behavior-cases.md`。

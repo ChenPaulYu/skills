@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-09-30 (rev 140)
+  Last audit: 2026-09-30 (rev 141)
 ═══════════════════════════════════════════════════════════════════════════
 
   The marketplace source owns current facts. The current checks below were
@@ -187,7 +187,12 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11; current roster is 4 plugins.
 
-  ⚠ FIXED in this revision (rev 140)
+  ⚠ FIXED in this revision (rev 141)
+    • ADR-135: probe's detailed protocol distinguishes existing measurements from new
+      trials and carries matching paid-scope approval forward. Catalog and both platform
+      generators share source-file skill discovery, ignoring retired directory residue.
+
+  ⚠ FIXED in rev 140 (kept for history)
     • Low-cue follow-up: probe admits existing-measurement assessment; compose bundles
       retention policy; artifact-tree coverage, unresolved attribution, and source anchors
       are clarified. Eight gpt-6-luna runs include one rejected setup; findings retain limits.
@@ -3273,11 +3278,11 @@ const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.20.3",
+    "version": "0.20.4",
     "skillCount": 6,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.20.3; 6 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.20.3；6 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.20.4; 6 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.20.4；6 個 skills）"
     },
     "files": [
       [
@@ -3333,11 +3338,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.25.1",
+    "version": "0.25.3",
     "skillCount": 9,
     "blurb": {
-      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.25.1; 9 skills)",
-      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.25.1；9 個 skills）"
+      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.25.3; 9 skills)",
+      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.25.3；9 個 skills）"
     },
     "files": [
       [
@@ -3525,8 +3530,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.20.3; 6 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.20.3；6 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.20.4; 6 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.20.4；6 個 skills）"
     }
   },
   {
@@ -3542,8 +3547,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.25.1; 9 skills)",
-      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.25.1；9 個 skills）"
+      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.25.3; 9 skills)",
+      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.25.3；9 個 skills）"
     }
   },
   {

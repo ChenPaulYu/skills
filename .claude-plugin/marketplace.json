@@ -9,13 +9,13 @@
       "name": "nav",
       "source": "./plugins/nav",
       "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
-      "version": "0.20.3"
+      "version": "0.20.4"
     },
     {
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Converge decisions, align priorities, reconcile project records, and hand off sessions.",
-      "version": "0.25.1"
+      "version": "0.25.3"
     },
     {
       "name": "frame",

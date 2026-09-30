@@ -1,5 +1,5 @@
 /**
- * catalog.mjs — source-owned plugin catalog discovery and public-surface rendering.
+ * catalog.mjs — source skill-directory discovery and public-surface rendering.
  * Reads: plugins/<plugin>/.claude-plugin/plugin.json · plugins/<plugin>/skills/<skill>/SKILL.md · docs/catalog-copy.json.
  */
 import {
@@ -160,17 +160,27 @@ export function buildPublicCatalog(root) {
   writeFileSync(sitePath, nextSite);
 }
 
+// Shared by catalog registration and platform conversion/emission. A leftover
+// directory or resource bundle cannot change the namespace of active skills.
+export function discoverSkillDirectories(skillsDir) {
+  if (!existsSync(skillsDir)) return [];
+  return readdirSync(skillsDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter((name) => {
+      const skillMd = join(skillsDir, name, "SKILL.md");
+      return existsSync(skillMd) && statSync(skillMd).isFile();
+    })
+    .sort();
+}
+
 function discoverSkills(root, pluginName, pluginDir, pluginCopy) {
   const skillsDir = join(pluginDir, "skills");
-  if (!existsSync(skillsDir)) return [];
-  const skillDirs = readdirSync(skillsDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name);
+  const skillDirs = discoverSkillDirectories(skillsDir);
   const skills = [];
   for (const skillSlug of skillDirs) {
     validateSlug(skillSlug, SKILL_SLUG, `skill directory "${pluginName}/${skillSlug}"`);
     const skillMd = join(skillsDir, skillSlug, "SKILL.md");
-    if (!existsSync(skillMd) || !statSync(skillMd).isFile()) continue;
     const frontmatter = parseSkillFrontmatter(readFileSync(skillMd, "utf8"), rel(root, skillMd));
     if (frontmatter.name !== skillSlug) {
       throw new Error(`${rel(root, skillMd)} name "${frontmatter.name}" must match skill directory "${skillSlug}"`);

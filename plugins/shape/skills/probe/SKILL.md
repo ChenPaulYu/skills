@@ -5,7 +5,8 @@ description: "Design a minimal experiment or assess existing measurements for an
 
 # Probe — test a claim, interpret the evidence
 
-Take a fork that arguing longer cannot settle — not because nobody's tried hard enough, but because the answer doesn't live in anyone's head or in any document — and **design the smallest experiment that can discriminate**, run it, and read the verdict honestly. `probe` is the verb for the moment a decision stops being a reasoning problem and becomes a measurement problem.
+Resolve an empirical claim through measurements: assess existing evidence or design the
+smallest discriminating experiment, run within scope, and read the verdict honestly.
 
 When measurements already exist, assess their method, criteria, and limits first. Reuse
 the evidence that answers the decision; design a follow-up only for what remains unknown,
@@ -20,11 +21,13 @@ the empirical decision into a prose-structure task.
 - **Pick the shape that matches the uncertainty** — A/B comparison, blind judgment test, or behavior probe — don't default to one out of habit; a fourth shape earns its place only by recurring real use.
 - **Size N to the effect, not to a round number**, and **report a negative or ambiguous result as a finding**, never quietly reframed into a win.
 - **Design and verdict-reading stay with the session model; execution legs (running variants, tallying results) can dispatch to cheap tier** — reporting back grounded in fact, never an impression.
-- **Cost nod before running.** If the experiment fans out paid-LLM calls (multiple judges, N trials, a multi-agent probe), name the scale and get the user's nod first — never silently pick a cheaper path either.
+- **Paid scope before running.** State the model, call/trial scale, and intended budget for paid fanout. Reuse existing approval for that same scope; ask only for missing authority or increased cost/effects. Honor the user's tier choice and stop at the approved bound rather than adding an automatic finale.
 - **Read-only toward product code.** Keep fixtures/harness scripts disposable; retain findings according to project policy. Before creating artifacts, read `references/development-artifacts.md` for storage and Git checks.
 - **Write-gated.** Show the doc's content before writing it.
 
-Full machinery — the design-chain detail, the three canonical experiment shapes with examples, the output/tolerant-reader shape, and the boundary detail: `references/probe-protocol.md`. Read it when actually designing a probe or when a boundary call is unclear.
+Read `references/probe-protocol.md` when assessing measurements, designing a new trial,
+or deciding an unclear boundary. It carries the branch-specific procedure, experiment
+shapes, output convention, and detailed scope checks.
 
 ## Companion skills
 

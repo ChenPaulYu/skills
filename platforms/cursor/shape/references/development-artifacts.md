@@ -11,10 +11,14 @@ blueprints (thoughts, plans, board, handoff), mockups, dogfood captures, and one
 experiment scripts/results local and Git-ignored. A dated filename or a useful result
 does not make a process artifact a production deliverable.
 
-When that policy covers an artifact tree, check its existing local records too; ignoring
-only the newly created file/subdirectory leaves the policy incomplete. Identify retained
-deliverable exceptions before choosing the ignore scope. Report existing tracking without
-expanding the task into unauthorized index cleanup.
+Resolve coverage at the existing process-artifact root before narrowing to the requested
+output: for example, inventory `blueprints/` thoughts, plans, board, handoff, and mockups.
+Identify explicit retained deliverables in that root, then choose an ignore scope that
+covers every excluded existing/new record. Default-local records elsewhere in the same
+root are part of this check even when the requested output is in one subdirectory.
+Completion requires verifying those records as well as the new output, or reporting the
+remaining exception. Report existing tracking without expanding authority into index
+cleanup; preserve every existing file.
 
 Judge purpose, not names: maintained product documentation, adopted ADRs, reusable
 examples, regression tests, and necessary fixtures may be tracked under project policy.

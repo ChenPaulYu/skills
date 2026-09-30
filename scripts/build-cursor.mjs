@@ -7,6 +7,8 @@
  * skill folders `nav-audit`, not bare `audit` — Cursor does not namespace plugin skills)
  * plus a repo-root `.cursor-plugin/marketplace.json`. Re-run after any skill edit; never
  * hand-edit the generated output.
+ * Source skill membership is shared with the catalog and Codex builder.
+ * Reads: plugins/ sources · scripts/lib/catalog.mjs · Cursor adapter manifest.
  *
  *   node scripts/build-cursor.mjs              # generate
  *   node scripts/build-cursor.mjs --sync-local # generate + symlink into ~/.cursor/plugins/local
@@ -26,6 +28,7 @@ import {
 import { join, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
+import { discoverSkillDirectories } from "./lib/catalog.mjs";
 import {
   createCursorGuidanceLowerer,
   injectCursorBrowserVerifyContract,
@@ -63,9 +66,7 @@ const PLUGINS = readdirSync(PLUGINS_DIR)
 const SKILLS = [
   ...new Set(
     PLUGINS.flatMap((plugin) =>
-      readdirSync(join(PLUGINS_DIR, plugin, "skills")).filter((skill) =>
-        statSync(join(PLUGINS_DIR, plugin, "skills", skill)).isDirectory(),
-      ),
+      discoverSkillDirectories(join(PLUGINS_DIR, plugin, "skills")),
     ),
   ),
 ].sort();
@@ -177,11 +178,9 @@ function emitPluginExtras(plugin, outPluginDir) {
 function emitSkills(plugin, outPluginDir) {
   const skillsDir = join(PLUGINS_DIR, plugin, "skills");
   const emitted = [];
-  for (const skill of readdirSync(skillsDir).sort()) {
+  for (const skill of discoverSkillDirectories(skillsDir)) {
     const srcSkillDir = join(skillsDir, skill);
-    if (!statSync(srcSkillDir).isDirectory()) continue;
     const srcSkillMd = join(srcSkillDir, "SKILL.md");
-    if (!existsSync(srcSkillMd)) continue;
 
     const flat = `${plugin}-${skill}`;
     const outSkillDir = join(outPluginDir, "skills", flat);

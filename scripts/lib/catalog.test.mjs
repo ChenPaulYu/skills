@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   buildCatalog,
   buildPublicCatalog,
+  discoverSkillDirectories,
   renderReadmePlugins,
   renderReadmeSkills,
   renderSiteData,
@@ -65,6 +66,20 @@ test("buildCatalog counts active manifests and skills, with versions and explici
     ["audit", false],
     ["plan", true],
   ]);
+}));
+
+test("source registration ignores empty/resource-only directories and non-file SKILL.md", () => withRoot((root) => {
+  const dir = join(root, "plugins", "shape", "skills");
+  assert.deepEqual(discoverSkillDirectories(dir), []);
+  plugin(root, "shape");
+  skill(root, "shape", "probe");
+  mkdirSync(join(dir, "retired-empty"), { recursive: true });
+  write(root, "plugins/shape/skills/resource-only/references/history.md", "Historical resource\n");
+  mkdirSync(join(dir, "malformed", "SKILL.md"), { recursive: true });
+  assert.deepEqual(discoverSkillDirectories(dir), ["probe"]);
+  assert.deepEqual(buildCatalog(root).plugins[0].skills.map(item => item.name), ["probe"]);
+  skill(root, "shape", "added");
+  assert.deepEqual(discoverSkillDirectories(dir), ["added", "probe"]);
 }));
 
 test("editorial copy orders matching plugins and skills, stale copy cannot create entries", () => withRoot((root) => {

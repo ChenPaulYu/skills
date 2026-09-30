@@ -7,19 +7,21 @@
  * repo-root `AGENTS.md` with shared rules and on-demand plugin-guide links. Re-run after any
  * skill edit; never hand-edit the generated output (it is overwritten).
  *
- * This file owns ONLY filesystem discovery/copy/walk plus writing generated destinations.
+ * This file owns filesystem copying/walking and generated destinations; source skill
+ * membership comes from scripts/lib/catalog.mjs.
  * Every Codex-specific text transform (frontmatter lowering, interactive-choice/browser-verify/
  * worker-dispatch contracts, browser runtime-ownership lowering, project-guidance/namespace
  * rewrites, the unsupported-token scan)
  * lives in scripts/lib/codex-compat.mjs — the compiler this script calls once per file. See
  * blueprints/plans/2026-07-13-codex-compatibility.md Phases 1-4.
  *
- * Reads: node:fs · node:path (plugins/ tree · plugins/<p>/CLAUDE.md)
+ * Reads: node:fs · node:path · catalog discovery (plugins/ tree · plugins/<p>/CLAUDE.md)
  */
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync, existsSync, statSync, cpSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { discoverSkillDirectories } from "./lib/catalog.mjs";
 import {
   codexDescription,
   findInstalledSkillCopies,
@@ -71,9 +73,7 @@ const PLUGINS = readdirSync(PLUGINS_DIR)
 const SKILLS = [
   ...new Set(
     PLUGINS.flatMap((plugin) =>
-      readdirSync(join(PLUGINS_DIR, plugin, "skills")).filter((skill) =>
-        statSync(join(PLUGINS_DIR, plugin, "skills", skill)).isDirectory(),
-      ),
+      discoverSkillDirectories(join(PLUGINS_DIR, plugin, "skills")),
     ),
   ),
 ].sort();
@@ -160,11 +160,9 @@ function build() {
   for (const plugin of PLUGINS) {
     const skillsDir = join(PLUGINS_DIR, plugin, "skills");
     if (!existsSync(skillsDir)) continue;
-    for (const skill of readdirSync(skillsDir)) {
+    for (const skill of discoverSkillDirectories(skillsDir)) {
       const srcSkillDir = join(skillsDir, skill);
-      if (!statSync(srcSkillDir).isDirectory()) continue;
       const srcSkillMd = join(srcSkillDir, "SKILL.md");
-      if (!existsSync(srcSkillMd)) continue;
 
       const flat = `${plugin}-${skill}`;
       const outSkillDir = join(OUT_DIR, flat);
