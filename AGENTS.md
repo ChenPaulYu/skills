@@ -97,7 +97,10 @@ node scripts/validate-codex-skills.mjs
 
 It must print `... ok`; it regenerates artifacts in a temporary tree and compares them.
 Enable hooks once per clone with `git config core.hooksPath scripts/hooks`. The pre-commit
-hook enforces validation; post-commit, post-merge, and post-rewrite refresh installed copies.
+hook runs these checks plus the blueprint check against the exact staged snapshot, through
+`node scripts/validate-staged.mjs`; unstaged repairs cannot hide a broken commit. Use the normal
+validator while editing, then stage complete changes before the commit gate. The hook leaves
+unstaged and untracked work untouched; post-commit, post-merge, and post-rewrite refresh installed copies.
 A deliberate bypass is `git commit --no-verify`.
 
 ### 0. Installed copies follow the repo automatically — `git pull` is the ritual
@@ -163,7 +166,7 @@ mechanical roster/version refreshes do not require another hand-copied inventory
 
 ## Authoring conventions (every plugin, every skill)
 
-- **★ Contracts vs conventions** — the two enforced disk contracts are relay thought frontmatter and the manifest/generated-artifact set. Blueprints, boards, handoffs, headers, and document layout are conventions: tolerate non-standard or absent forms instead of treating them as malformed contracts. Decisions live in `thoughts/` with a `Status:` line; the former core freeze protocol is retired (ADR-071/112).
+- **★ Contracts vs conventions** — the manifest/generated-artifact set is mechanically enforced in this marketplace. Relay's old thought-frontmatter linter is retired (ADR-115); current Relay invariants belong to its native-state reducer and result schema, not a legacy thought-file format. Blueprints, boards, handoffs, headers, and document layout are conventions: tolerate non-standard or absent forms instead of treating them as malformed contracts. Decisions live in `thoughts/` with a `Status:` line; the former core freeze protocol is retired (ADR-071/112).
 - **★ Tolerant reader — three states, self-reported** — every verb that reads a convention-owned structure (above) handles three states: **standard shape** → consume directly; **non-standard/ad-hoc shape** → tolerate, consume what's readable; **absent** → degrade gracefully and **self-report which tier it read from**, so the user can judge how much to trust the result. Canonical instance: `plugins/shape/skills/catchup/SKILL.md`'s reconstruction steps. [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md).
 - **★ Invocation category is visible, not just in frontmatter** — a skill's invocation axis (model-invoked by default, or summoned-only via `explicit-invocation-only: true`) already has one owner, the frontmatter field; `README.md`'s Invocation section should additionally bucket entries by category (User-invoked / Model-invoked) so the fact is scannable by a human, not just greppable in frontmatter. Inventory + what's still an open question: [ADR-072](docs/adr/072-invocation-direction-law-inventory.md).
 - **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `frame`'s reasoning lenses use canonical names — `first-principles` — for discoverability, while its `analogize` member uses a bare verb); document the divergence in that plugin's CLAUDE.md.

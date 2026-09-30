@@ -46,6 +46,10 @@ This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses 
 
 > **Caveat — a live-LLM-cost signal.** If the feature under dogfood itself calls a live paid LLM (especially a fan-out/multi-agent path), driving every intent at full cost multiplies fast. State the paid call path and intended budget before exercising it. Honor existing approval for that exact scope; use the cheapest sufficient representative setting. Run a full-cost pass only when necessary and explicitly authorized within that budget, never as an automatic finale.
 
+If the default browser tool is unavailable, use an available project-bound equivalent.
+Otherwise report the blocked check; ask only for missing installation authority or a
+consequential scope choice. Reuse existing authorization instead of a fixed chooser.
+
 ## Continue within the requested scope
 
 A completed result needs no next-action menu. If the broader request already

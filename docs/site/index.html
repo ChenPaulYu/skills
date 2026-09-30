@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-09-30 (rev 137)
+  Last audit: 2026-09-30 (rev 138)
 ═══════════════════════════════════════════════════════════════════════════
 
   The marketplace source owns current facts. The current checks below were
@@ -187,7 +187,14 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11; current roster is 4 plugins.
 
-  ⚠ FIXED in this revision (rev 137)
+  ⚠ FIXED in this revision (rev 138)
+    • ADR-133: pre-commit validates staged bytes; four opt-in isolated skill task cases
+      complement offline checks. Core behavior passed with two reporting defects recorded.
+    • Retired Relay contract wording corrected; shape uses available browser equivalents
+      and asks only for missing authority or consequential scope choices.
+    • 133 ADRs; 24 skill entrances retained; generated catalog follows shape 0.24.3.
+
+  ⚠ FIXED in rev 137 (kept for history)
     • ADR-132: shared root guidance with on-demand family guides; reconcile drops render bundles.
     • Compose honors authorized edits; frame keeps its reasoning checks in compact bodies;
       digest loads full classifier semantics only for fallback/diagnosis.
@@ -3315,11 +3322,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.24.2",
+    "version": "0.24.3",
     "skillCount": 9,
     "blurb": {
-      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.24.2; 9 skills)",
-      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.24.2；9 個 skills）"
+      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.24.3; 9 skills)",
+      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.24.3；9 個 skills）"
     },
     "files": [
       [
@@ -3524,8 +3531,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.24.2; 9 skills)",
-      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.24.2；9 個 skills）"
+      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131). (v0.24.3; 9 skills)",
+      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.24.3；9 個 skills）"
     }
   },
   {

@@ -15,7 +15,7 @@
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Converge decisions, align priorities, reconcile project records, and hand off sessions.",
-      "version": "0.24.2"
+      "version": "0.24.3"
     },
     {
       "name": "frame",

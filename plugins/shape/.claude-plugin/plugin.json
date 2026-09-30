@@ -1,6 +1,6 @@
 {
   "name": "shape",
-  "version": "0.24.2",
+  "version": "0.24.3",
   "description": "Give intent its form, record decisions, and keep project work current. Nine skills: mockup, elicit, probe, dogfood, align (verified board and priorities), reconcile (design-record cleanup with rationale preserved), park, catchup, and migrate. Reader-document accuracy belongs to nav-sync; decisions remain durable in thoughts/.",
   "author": {
     "name": "Paul",

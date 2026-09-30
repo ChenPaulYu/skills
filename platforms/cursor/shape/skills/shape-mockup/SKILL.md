@@ -32,6 +32,10 @@ Full protocol — the firing boundary detail (incl. the `shape-dogfood` sibling 
 
 Default hand-off: write the file, **activate it** (open locally, or serve a URL on a remote/headless box — see the reference doc), and hand the user a clickable link. The user opening it *is* the confirmation — don't spend a dispatch confirming an ordinary mockup renders (2026-08-24: cut for token cost). Reach for the slot (defined once in `the plugin conventions`, available for requested browser verification) only when there's a concrete reason to distrust the render sight-unseen — chiefly the handfeel/gesture case (a synthetic interaction needs verifying with faithful input, see the reference doc) — or the user asks for a confirm pass: dispatch this plugin's `browser-verifier` agent via `Task` with `subagent_type: "browser-verifier"` with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context.
 
+If the default browser tool is unavailable, use an available project-bound equivalent.
+Otherwise report the blocked check; ask only for missing installation authority or a
+consequential scope choice. Reuse existing authorization instead of a fixed chooser.
+
 ## Continue within the requested scope
 
 A completed result needs no next-action menu. If the broader request already

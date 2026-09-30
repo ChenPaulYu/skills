@@ -29,7 +29,7 @@ Catalog: 4 plugins · 24 skills.
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
 | [`nav`](plugins/nav/) | 0.20.1 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.24.2 | 9 | **Push work forward** — converge decisions, verify and prioritize the board with align, reconcile stale design records while preserving reasons, and hand sessions over through catchup and park. The build itself belongs to nav. |
+| [`shape`](plugins/shape/) | 0.24.3 | 9 | **Push work forward** — converge decisions, verify and prioritize the board with align, reconcile stale design records while preserving reasons, and hand sessions over through catchup and park. The build itself belongs to nav. |
 | [`frame`](plugins/frame/) | 0.14.1 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
 | [`relay`](plugins/relay/) | 2.5.4 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
 <!-- END GENERATED catalog-plugins -->
@@ -222,7 +222,8 @@ The validator checks both sides of the contract: Claude Code source skills under
 
 The marked README and site catalog blocks are generated, including versions, counts, skill membership, and invocation categories. Edit [`docs/catalog-copy.json`](docs/catalog-copy.json) for editorial prose and layout hints; absent copy falls back to source descriptions. Keep quick lookups and anatomy explanations current by hand. See [ADR-130](docs/adr/130-source-derived-public-catalog.md).
 
-Enable the pre-commit hook once per clone so this runs automatically before every commit:
+Enable the pre-commit hook once per clone. It validates the complete staged snapshot,
+including its validator scripts, while leaving unstaged and untracked work untouched:
 
 ```bash
 git config core.hooksPath scripts/hooks
@@ -239,6 +240,33 @@ node scripts/build-codex.mjs --sync-global --profile build --global-root codex
 Hook-driven updates preserve the profile recorded by the last install instead of widening it back to
 `all`. On a fresh machine they start at `minimal`; switch the persistent selection with
 `sh scripts/sync-installed.sh --codex-profile <name>`.
+
+## Validation
+
+Run offline regression tests with:
+
+```bash
+node --test scripts/lib/*.test.mjs plugins/relay/skills/digest/scripts/*.test.mjs
+node scripts/validate-staged.mjs   # check the staged commit candidate without committing
+```
+
+Real skill-task checks are opt-in. The helper prepares a small isolated Git project and
+checks observable results; it never starts a model or paid job:
+
+```bash
+node scripts/skill-behavior.mjs list
+trial_root="$(mktemp -d)"
+node scripts/skill-behavior.mjs prepare docs-batch "$trial_root/docs-batch"
+# Give a fresh executor only the returned workspace, skill, and prompt.
+# After it finishes:
+node scripts/skill-behavior.mjs check "$trial_root/docs-batch"
+```
+
+Use a fresh workspace for each case. Keep the adjacent baseline receipt intact and outside
+the executor's task scope. A mechanical pass still requires the returned `reviewRequired`
+checks: inspect the artifacts, final response, and actual tool actions. Unchanged final
+hashes cannot establish that no transient write occurred. Do not supply expected answers
+from the case catalog to the executor. See [the first four runs and their limits](docs/findings/2026-09-30-behavior-cases.md).
 
 ## Cursor compatibility
 

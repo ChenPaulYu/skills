@@ -13,5 +13,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node --test plugins/relay/skills/digest/scripts/*.test.mjs
+      - run: node --test scripts/lib/*.test.mjs plugins/relay/skills/digest/scripts/*.test.mjs
       - run: node scripts/validate-codex-skills.mjs
