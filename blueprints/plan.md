@@ -3,8 +3,8 @@
 > 2026-07-13 · status index (one layer, by status). Only "what to do + which doc".
 > design in `thoughts/`; a visual view renders on demand via `/shape:mockup`.
 
-## 🚧 In progress —— 暫無
-- **目前沒有在飛的板子需要掛在 In progress。**
+## 🚧 In progress
+- 無。
 
 ## ▶ Next —— 接下來
 - ~~**reflect:retro（第 5 成員）**~~ — **取消**（ADR-113,2026-08-13):reflect plugin 已解散,catchup/park 併為 `/shape:baton`、retrace 退役。「評價過程摩擦、開一條改進」這個槽位仍未被任何 verb 佔據——真的需要時重新開案,不掛在一個不存在的家族底下。
@@ -16,6 +16,8 @@
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
+2026-09-30：**少提示行為試跑與缺口修正**——gpt-6-luna 共 8 次執行，排除 1 次環境準備錯誤；既有量測誤走 compose、強制追蹤被忽略的報告、漏查舊產物及錯誤行號均留下實際證據。補強 probe 的既有量測入口、compose 共用保存規則、產物整棵樹檢查、未定原因歸屬與逐檔行號。nav 0.20.3／shape 0.25.1，126 個離線測試及完整相容性檢查通過，本機副本同步；修正後模型行為尚未重跑，不宣稱整包改善。見 `docs/findings/2026-09-30-low-cue-skill-trials.md` 與 `plans/2026-09-30-low-cue-skill-trials.md`。
+2026-09-30：**開發產物排除與實驗判讀**（ADR-134）——共用規則預設讓 blueprints／mockup／dogfood／一次性實驗留本機，分別查 ignore、追蹤與暫存狀態，保留專案明訂例外與唯一資料；probe 區分元件品質、工作流程與受干擾測速，dogfood 守住工具評估目標並及時提示已知問題。新增四個案例與 Git 狀態檢查，126 個離線測試及相容性驗證通過；nav 0.20.2／shape 0.25.0，本機副本同步。尚未 commit／push，未跑新模型案例；證據：`docs/findings/2026-09-30-development-artifacts-and-evidence-checks.md`。
 2026-09-30：**提交內容驗證與四個實際任務案例**（ADR-133）——pre-commit 改驗 Git 暫存區快照，未暫存修改不再干擾結果；新增文件整批同步、reconcile、只檢查、直接修改四個可重跑案例，模型試跑維持手動啟動。修正過期 Relay 契約說明與瀏覽器工具固定選單；shape 0.24.3。123 個離線測試、實際暫存內容驗證與四個案例核心行為通過，兩個回報瑕疵保留在 `docs/findings/2026-09-30-behavior-cases.md`。
 2026-09-30：**skill 載入瘦身**（ADR-132）——AGENTS.md 只載共用規則，家族說明按需讀取；reconcile 移除無用模板；compose 承接既有授權；四個 frame 本文保留推理檢查並精簡；digest 完整語意移至備援參考。24 個入口維持，舊 mockup 副本移出搜尋範圍並備份。驗證見 `docs/findings/2026-09-30-skill-runtime-slimming-checks.md`。
 2026-09-30：**reconcile 回歸，sync 統一說明校準**（ADR-131）——align 聚焦工作板與優先順序；reconcile 整理設計紀錄並保留理由；nav-sync 支援檔頭與整批 README／docs，逐份交代處理結果。常駐 codebase map 產生流程退役。nav 0.20.0／shape 0.24.1，本機安裝副本同步；驗證與限制見 `docs/findings/2026-09-30-reconcile-and-sync-checks.md`。

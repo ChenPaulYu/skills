@@ -21,7 +21,8 @@ compatible, which existing parts to reuse, and how completion will be demonstrat
 3. **Produce a reviewable plan.** If the request or repository policy forbids file changes,
    present it in chat until writing is authorized. Otherwise follow the repository's convention: prefer its
    `blueprints/plans/` when present, otherwise an established plans directory or `docs/plans/`.
-   State the selected path; a conventional location needs no separate confirmation. Include
+   Before writing, read `references/development-artifacts.md` for project retention policy
+   and Git checks. State the selected path; a conventional location needs no separate confirmation. Include
    Context, Approach, Critical files, and Verification. Read `references/plan-protocol.md` for
    the grounding checklist and template when drafting.
 4. **Continue according to the user's scope.** A plan-only or do-not-implement request ends with

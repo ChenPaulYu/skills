@@ -28,8 +28,8 @@ Catalog: 4 plugins · 24 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.20.1 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.24.3 | 9 | **Push work forward** — converge decisions, verify and prioritize the board with align, reconcile stale design records while preserving reasons, and hand sessions over through catchup and park. The build itself belongs to nav. |
+| [`nav`](plugins/nav/) | 0.20.3 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
+| [`shape`](plugins/shape/) | 0.25.1 | 9 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
 | [`frame`](plugins/frame/) | 0.14.1 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
 | [`relay`](plugins/relay/) | 2.5.4 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
 <!-- END GENERATED catalog-plugins -->
@@ -56,7 +56,7 @@ Catalog skills: 24 active skills.
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a behavior-preserving structural refactor with risk-proportional verification
 - `/nav:sync` — check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)
-- `/nav:plan` — ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu
+- `/nav:plan` — ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu; process records follow project retention policy (ADR-134)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval
 
@@ -65,9 +65,9 @@ Catalog skills: 24 active skills.
 *Model-invoked:*
 
 - `/shape:elicit` — clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority
-- `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive HTML artifact; a mockup-only request stops at the artifact unless build/track scope was already authorized
-- `/shape:probe` — design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user
-- `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (`browser` only when available/authorized, otherwise `curl` / CLI) against user intents, report friction + coverage gaps, and ask only for missing run authority; no automatic paid full-cost pass
+- `/shape:mockup` — converge a look / structure decision with disposable interactive HTML; follow project retention policy and verify ignore rules, tracking, and staging independently
+- `/shape:probe` — design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials
+- `/shape:dogfood` — drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries
 - `/shape:align` — verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup
 - `/shape:reconcile` — reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)
 
@@ -267,6 +267,16 @@ the executor's task scope. A mechanical pass still requires the returned `review
 checks: inspect the artifacts, final response, and actual tool actions. Unchanged final
 hashes cannot establish that no transient write occurred. Do not supply expected answers
 from the case catalog to the executor. See [the first four runs and their limits](docs/findings/2026-09-30-behavior-cases.md).
+
+Four further cases cover local artifact retention, ignored-but-tracked cleanup, probe
+evidence limits, and assisted tool evaluation. Their offline positive/negative checker
+tests and unrun model trials are documented in
+[the evidence checks](docs/findings/2026-09-30-development-artifacts-and-evidence-checks.md).
+
+Four natural-prompt variants extend that catalog. Eight fresh gpt-6-luna executions
+(one rejected setup) exposed routing, retention, and reporting defects; the resulting
+instruction repairs passed offline checks but have not been rerun through the model.
+See [the observed outcomes and limits](docs/findings/2026-09-30-low-cue-skill-trials.md).
 
 ## Cursor compatibility
 

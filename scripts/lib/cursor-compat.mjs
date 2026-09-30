@@ -22,12 +22,12 @@ export const CURSOR_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Curs
 > Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
 
 const INTERACTIVE_CHOICE_CONSUMERS = {
-  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
+  "shape-dogfood": "## Workflow",
 };
 
 const BROWSER_VERIFY_ANCHORS = {
   "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-124)",
-  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
+  "shape-dogfood": "## Workflow",
 };
 
 const WORKER_DISPATCH_RULES = [

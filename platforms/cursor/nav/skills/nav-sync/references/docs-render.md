@@ -37,6 +37,9 @@ corrections and verification; do not end at a list of suggestions.
 
 Read each target document, including examples and limitations, and trace its reader-facing
 claims to evidence. Use filenames and line anchors in findings.
+Build anchors from per-file line numbering and verify them against the original file.
+A combined `nl` dump can carry cumulative offsets across files; omit unverified line
+numbers rather than presenting those offsets as file locations.
 
 | Claim kind | Evidence to inspect |
 |---|---|

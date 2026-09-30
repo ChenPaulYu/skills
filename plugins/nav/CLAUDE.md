@@ -59,3 +59,9 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 - **Changing the 8 rules**: update every affected skill and bundled rule restatement in the same change, and record the decision in an ADR.
 - **The 8 rules apply to nav's own files too**: inspect long files for hidden decisions and useful boundaries; length alone never requires a split.
+
+## Process artifact retention
+
+nav-plan and nav-compose bundle the shared development-artifact policy owned by Shape. A plan location
+is a convention, not an instruction to commit process notes; explicit project retention
+policy governs. See ADR-134.

@@ -43,7 +43,7 @@ Supersession stays in place; there is no graduation tier or mandatory move.
 `mockup`'s own rule — detail-level artifacts **retire on ship**, structural locks carry a
 freshness stamp — has its enforcement point *here*: at mockup time nothing is shipped yet, and
 no other verb returns to `mockups/` post-ship. Without this sweep, `mockups/` grows monotonically
-(committed-by-default makes every decision leave a folder nothing deletes) — the same unbounded
+(the former committed-by-default policy left folders with no retirement path) — the same unbounded
 growth this pass's `thoughts/` pruning guards against, one tier down.
 
 **A mockup exists to represent what the running system cannot yet represent; once code absorbs
@@ -67,15 +67,14 @@ round, not three (ADR-039).
 
 | situation | action |
 |---|---|
-| ①②③ all pass | **prune** — git is the deep archive; `git log --follow -- <path>` + `git checkout <sha> -- <path>` restores it |
-| ② fails — the pick or a deferred branch lives only in the mockup | **salvage → then prune**: write the line into the owning doc, incl. a pointer (`rendered candidates: git history at mockups/<date>-<topic>/`), verify it landed, then prune — consolidate's merge → verify → remove, pointed at a mockup |
+| ①②③ all pass | **prune** within authority after verifying committed recovery or preserved content; verify the exact content at its recorded commit before relying on Git restoration |
+| ② fails — the pick or a deferred branch lives only in the mockup | **salvage → then prune**: write the line into the owning doc, incl. a pointer to a verified retained location or committed snapshot, verify it landed, then prune — consolidate's merge → verify → remove, pointed at a mockup |
 | whole decision parked (plan's *later*) | **keep + parked stamp** ("parked, intent as of `<date>`") — the converge job is dormant, not done; re-rendering on un-park is waste (= code won't absorb it for now — the deferred intent still needs a representative) |
 | decision in-flight | **keep**, untouched (= code hasn't absorbed it yet) |
-| folder untracked | **hard gate** — resolve tracked status before any other action; untracked never entered git, so prune would be permanent destruction |
+| folder untracked | **hard gate** — resolve tracked status before any other action; untracked content has no guaranteed Git recovery; preserve its unique content before removal |
 
 **Tracked-check discipline:** ask git's ledger, not the disk — `git ls-files`, never `ls`. The
-depth-unanchored `mockups/` gitignore trap means a folder can sit on disk looking committed
-while git never held it (field case: 65 untracked mockup folders in one repo).
+local retention policies mean a folder can sit on disk without ever entering Git (field case: 65 untracked mockup folders in one repo).
 
 **Salvage respects the amend boundary:** it *relocates* a recorded pick/deferral, never authors
 one. If ② fails because the design judgment itself is unclear — stop, recommend

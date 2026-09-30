@@ -3,6 +3,7 @@
  * Prepare isolated skill tasks and check observable outcomes without invoking a model.
  * Expectations and baseline receipts stay outside the worker's task directory.
  * Reads: fixtures/behavior/cases.json, generated skills, Git, node:fs/crypto.
+ * Checks file content and Git retention separately; model rubrics remain manual.
  */
 import { createHash } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
@@ -34,12 +35,13 @@ export function prepareCase(id, destination) {
   git(workspace, "config", "core.hooksPath", join(workspace, ".git/no-hooks"));
   git(workspace, "config", "core.excludesFile", "/dev/null");
   git(workspace, "add", ".");
+  for (const path of project.trackedDespiteIgnore || []) git(workspace, "add", "-f", "--", path);
   git(workspace, "-c", "user.name=Behavior Fixture", "-c", "user.email=fixture@example.invalid",
     "commit", "--no-gpg-sign", "-qm", "Behavior fixture baseline");
   for (const [path, content] of Object.entries(project.untracked || {})) writeTaskFile(workspace, path, content);
   writeFileSync(receipt, JSON.stringify({
     schema: 1, case: id, catalogHash: hash(readFileSync(CATALOG)), workspace,
-    head: git(workspace, "rev-parse", "HEAD"), files: snapshot(workspace),
+    head: git(workspace, "rev-parse", "HEAD"), indexTree: git(workspace, "write-tree"), files: snapshot(workspace),
   }, null, 2) + "\n");
   // No acceptance criteria or expected edits in this packet.
   return { case: id, workspace, skill: join(workspace, skill, "SKILL.md"), prompt: task.prompt };
@@ -60,6 +62,25 @@ export function checkCase(destination) {
   for (const path of changed) if (!task.allowChanges.includes(path)) failures.push(`Unexpected file change: ${path}`);
   for (const path of task.mustChange) if (!changed.includes(path)) failures.push(`Required file was not updated: ${path}`);
   if (git(workspace, "rev-parse", "HEAD") !== baseline.head) failures.push("Task created a commit despite the request.");
+  if (task.git?.unchangedIndex && git(workspace, "write-tree") !== baseline.indexTree) {
+    failures.push("Task changed the Git index despite the request.");
+  }
+  for (const path of task.git?.untracked || []) {
+    if (git(workspace, "ls-files", "--", path)) failures.push(`Excluded artifact remains tracked: ${path}`);
+  }
+  for (const path of task.git?.tracked || []) {
+    if (!git(workspace, "ls-files", "--", path)) failures.push(`Required deliverable is no longer tracked: ${path}`);
+  }
+  for (const path of task.git?.ignored || []) {
+    const result = spawnSync("git", ["check-ignore", "--no-index", "-q", "--", path], { cwd: workspace, env: gitEnv, encoding: "utf8" });
+    if (result.error || result.status !== 0) failures.push(`Artifact is not ignored: ${path}`);
+  }
+  for (const path of task.git?.notStaged || []) {
+    // Authorized cached removals are valid; additions and updates are not.
+    if (git(workspace, "diff", "--cached", "--name-only", "--diff-filter=ACMRTUXB", "--", path)) {
+      failures.push(`Excluded artifact is staged for addition/update: ${path}`);
+    }
+  }
   for (const check of task.checks) {
     const path = join(workspace, check.file);
     if (!existsSync(path)) { failures.push(`Missing result file: ${check.file}`); continue; }

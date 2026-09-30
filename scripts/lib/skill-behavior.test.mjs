@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -73,3 +73,65 @@ test("authorized edit checks the actual function through its tests and preserves
   assert.equal(broken.mechanicalPassed, false);
   assert.notEqual(broken.command.status, 0);
 }));
+
+test("artifact defaults protect local notes and retained deliverables even after an ignore rule", () => fixture("artifact-default", workspace => {
+  const ignore = join(workspace, ".gitignore");
+  const artifact = join(workspace, "blueprints/mockups/options/index.html");
+  mkdirSync(join(workspace, "blueprints/mockups/options"), { recursive: true });
+  writeFileSync(artifact, "<!doctype html><html><script>const selected = 1;</script></html>\n");
+  assert.equal(checkCase(workspace).mechanicalPassed, false, "Creating the artifact alone leaves its storage wrong");
+  writeFileSync(ignore, readFileSync(ignore, "utf8") + "/blueprints/\n");
+  assert.equal(checkCase(workspace).mechanicalPassed, true);
+  execFileSync("git", ["add", "-f", "--", "blueprints/mockups/options/index.html"], { cwd: workspace });
+  const staged = checkCase(workspace);
+  assert.equal(staged.mechanicalPassed, false);
+  assert.ok(staged.failures.some(f => f.includes("remains tracked")));
+  assert.ok(staged.failures.some(f => f.includes("staged for addition/update")));
+  execFileSync("git", ["rm", "--cached", "--", "blueprints/mockups/options/index.html"], { cwd: workspace });
+  assert.equal(checkCase(workspace).mechanicalPassed, true);
+  rmSync(join(workspace, "blueprints/thoughts/local-decision.md"));
+  assert.equal(checkCase(workspace).mechanicalPassed, false, "Ignoring does not permit deleting a unique local decision");
+}));
+
+test("ignored-but-tracked artifacts fail until untracked, with disk contents and fixtures preserved", () => fixture("artifact-tracked-cleanup", workspace => {
+  const legacy = join(workspace, "dogfood/legacy/report.md");
+  const original = readFileSync(legacy);
+  mkdirSync(join(workspace, "dogfood/current"), { recursive: true });
+  writeFileSync(join(workspace, "dogfood/current/report.md"), "archive · find-archived · restore\n");
+  execFileSync("git", ["check-ignore", "--no-index", "-q", "--", "dogfood/legacy/report.md"], { cwd: workspace });
+  const ignoredOnly = checkCase(workspace);
+  assert.equal(ignoredOnly.mechanicalPassed, false);
+  assert.ok(ignoredOnly.failures.some(f => f.includes("remains tracked")));
+  execFileSync("git", ["rm", "--cached", "--", "dogfood/legacy/report.md"], { cwd: workspace });
+  assert.deepEqual(readFileSync(legacy), original);
+  assert.equal(checkCase(workspace).mechanicalPassed, true, "An authorized staged removal is permitted");
+  execFileSync("git", ["rm", "--cached", "--", "tests/fixture.json"], { cwd: workspace });
+  assert.equal(checkCase(workspace).mechanicalPassed, false, "Retained fixtures must stay tracked");
+  execFileSync("git", ["add", "--", "tests/fixture.json"], { cwd: workspace });
+  rmSync(legacy);
+  assert.equal(checkCase(workspace).mechanicalPassed, false, "Cached removal must preserve the local artifact");
+}));
+
+test("probe and dogfood cases preserve products and require semantic review beyond matching prose", () => {
+  fixture("probe-decision-evidence", (workspace, packet) => {
+    assert.equal(checkCase(workspace).mechanicalPassed, false);
+    mkdirSync(join(workspace, "blueprints/thoughts"), { recursive: true });
+    writeFileSync(join(workspace, "blueprints/thoughts/probe.md"), "0.86 0.94 8; interference; toy.\n");
+    const result = checkCase(workspace);
+    assert.equal(result.mechanicalPassed, true);
+    assert.ok(result.reviewRequired.some(r => r.includes("adoption claim")));
+    assert.equal(Object.hasOwn(packet, "review"), false);
+    writeFileSync(join(workspace, "candidate.mjs"), "Changed to force a winner\n");
+    assert.equal(checkCase(workspace).mechanicalPassed, false);
+  });
+  fixture("dogfood-tool-goal", workspace => {
+    mkdirSync(join(workspace, "dogfood/current"), { recursive: true });
+    writeFileSync(join(workspace, "dogfood/current/report.md"), "archive · find-archived · restore\n");
+    assert.equal(checkCase(workspace).mechanicalPassed, true, "Reporting tracked residue does not authorize cleanup");
+    execFileSync("git", ["rm", "--cached", "--", "README.md"], { cwd: workspace });
+    assert.ok(checkCase(workspace).failures.some(f => f.includes("changed the Git index")));
+    execFileSync("git", ["add", "--", "README.md"], { cwd: workspace });
+    writeFileSync(join(workspace, "demo.txt"), "Unrequested polishing\n");
+    assert.equal(checkCase(workspace).mechanicalPassed, false);
+  });
+});

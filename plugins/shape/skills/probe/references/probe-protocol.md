@@ -36,6 +36,31 @@ These three are canonical, not exhaustive — but a proposed fourth shape should
 - **Smallest N that can actually discriminate.** More trials than needed to tell the shapes apart is budget wasted on certainty nobody asked for; fewer trials than needed produces a coin flip dressed as a finding. Size N to the effect you're trying to detect, not to a round number.
 - **Report negative or ambiguous results honestly.** An experiment that fails to discriminate between the candidates is itself a finding — it means the load-bearing assumption from step 1 wasn't as load-bearing as thought, or the test wasn't sharp enough. Report it as exactly that, never quietly reframe it into a win.
 
+## Inputs, comparisons, and measurement limits
+
+Map the verdict to the pending decision: functional correctness, output quality, and
+workflow benefit need their own evidence. A more accurate component alone does not
+prove a new API is necessary or that users/agents complete the task better. Use a
+workflow comparison when that is the actual uncertainty; a fresh-agent trial is an
+option, not a mandatory addition to every experiment. Existing results can be assessed
+without rerunning them; identify their original criteria or absence rather than inventing
+a pre-registered rule after seeing the data.
+
+Choose representative real inputs when the decision concerns real use. Synthetic
+fixtures isolate a mechanism; label what they cannot establish. Keep input selection,
+versions, settings, and comparison conditions visible. Examples chosen to make a
+difference obvious are demonstrations, not an estimate of average performance.
+
+For timing, control competing CPU/GPU work and comparable warmup/cache/startup states.
+Record interference; contaminated timings cannot establish a winner and need a clean
+rerun only if timing still affects the decision. Distinguish elapsed time from tokens,
+accuracy, and user effort. Publish only observed numbers with their measurement source.
+
+When the user needs firsthand judgment, deliver the smallest usable comparison: matched
+outputs, an interactive path, or audio aligned to the same excerpt. Describe what to
+inspect and expose the original/expected result when useful. A metric table alone is not
+proof of perceptual quality or workflow fit. Follow the session's artifact-serving policy.
+
 ## Dispatch — design and verdict stay with the session model
 
 Per the dispatch-tiers convention (ADR-067): designing the experiment (steps 1-3 above) and reading the verdict against the pre-registered rule is the judgment-dense part — it stays with the session model. The **execution legs** — running each variant, collecting the raw outputs, tallying results — can go to cheap-tier delegated agents, reporting back grounded in fact (the actual output, the actual number), never an impression of how it went.
@@ -46,7 +71,9 @@ This is a **new instance** of the signal, not inherited from `nav:do`'s verify g
 
 ## Read-only toward product code
 
-`probe` never edits source to make an experiment work. Fixtures, harness scripts, and transcripts produced while running an experiment are disposable — they live in a scratch or throwaway location, never committed as if they were the deliverable. The thing that lands and persists is the **findings doc**, not the harness that produced it.
+`probe` never edits source to make an experiment work. Fixtures, harness scripts, and transcripts produced while running an experiment are disposable — they live in a scratch or throwaway location, never committed as if they were the deliverable. Retain the findings according to project policy; apply `references/development-artifacts.md`
+for storage, Git checks, and recovery. A reusable harness becomes a tracked regression
+test only through an explicitly adopted project deliverable.
 
 ## Output
 

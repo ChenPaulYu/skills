@@ -54,7 +54,7 @@ project's notes/registry when it cited nothing — say so rather than invent).
   survives · pointer to the overturning precedent).
 - Build `index.md`: one row per file — name + the standing in one line, distilled from the file's
   own opening (never newly authored prose).
-- The source file is **deleted** after verification (git is the archive). A pointer tombstone is
+- The source file is **deleted** after verification and confirmed recovery/preservation. A pointer tombstone is
   optional and only on request — a prescriptive placeholder left behind is the same lock ADR-104
   named in `core/`.
 
@@ -93,7 +93,7 @@ promotion step, no freeze gate.
 **Shape of the target:** no format change — `blueprints/baton.md` is the exact same five-section
 template (`goal · done · now · open · next` + the git-SHA metadata line) `HANDOFF.md` already
 used; only its location and owner move, from a root file written/read by the now-dissolved
-`reflect` plugin's `park`/`catchup` to a `blueprints/` tier written/read by `/shape:baton`.
+`reflect` plugin's `park`/`catchup` to a `blueprints/` tier written/read by `shape-baton`.
 
 ADR-127 restores shape-park / shape-catchup as the two entrances; this migration's
 target path and file format are unchanged. A rename alone does not run M3.
@@ -114,6 +114,16 @@ target path and file format are unchanged. A rename alone does not run M3.
   naming sweep, not a structural transform — out of scope for this entry; migrate moves content,
   it doesn't rewrite prose that names the old skill.
 
+### M4 — process-artifact retention policy (v3 layout unchanged) · ADR-134, 2026-09-30
+
+This is a policy adoption, not a directory or document-format migration. A current v3
+fingerprint stays current; the new default does not automatically untrack old records.
+On an explicit request to adopt the retention policy, read
+`references/development-artifacts.md`, inventory tracked/staged exceptions, preserve
+local content and inbound references, then apply only the authorized Git cleanup.
+Existing explicit project retention choices continue to govern. Do not rewrite historical
+content, force-add local notes, or remove files merely because the default changed.
+
 ## Protocol
 
 1. **Detect + report (read-only).** Version fingerprint, section inventory, inbound-reference
@@ -121,7 +131,7 @@ target path and file format are unchanged. A rename alone does not run M3.
    structure's name and anchors. Present the full mapping — per section: target filename, date
    and its provenance, references that will be re-pointed. **User confirms before any write.**
 2. **Tracked-check (hard gate).** `git ls-files` on every source — untracked content has no
-   recovery path; resolve tracked status before any transform. Never chain a destructive `rm`
+   guaranteed Git recovery; verify preservation and authorized scope before any transform. Never chain a destructive `rm`
    after an unverified move.
 3. **Execute, one transform at a time.** Content moves verbatim; added structure only as the
    ledger entry specifies. Re-check between steps; don't batch destructive ops behind one
@@ -156,7 +166,7 @@ target path and file format are unchanged. A rename alone does not run M3.
 | Improve prose while moving it | Verbatim or nothing — a migration diff should be `git mv`-shaped plus mechanical structure. Tell: a moved sentence reads better than its source. |
 | Migrate and reconcile staleness in one pass | Migrate first, offer `shape-reconcile` after. Tell: about to drop a section because it "looks stale" mid-move. |
 | Invent a date or an evidence pointer | Mark it approximate in the Status line. Tell: a `established <date>` no git query produced. |
-| Leave a prescriptive tombstone by default | Delete the source; git archives it. Tell: writing a file whose only content is "this moved". |
+| Leave a prescriptive tombstone by default | Verify destination and recovery, then remove within authority. Tell: writing a file whose only content is "this moved". |
 | Ship a convention change without its `M<n>` | Block it — rule 2. Tell: a spec/ADR edit renames a structure and this ledger gained nothing. |
 
 ## Output

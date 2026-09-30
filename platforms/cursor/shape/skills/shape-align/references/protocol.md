@@ -49,8 +49,8 @@ See [`blueprints-spec.md`](references/blueprints-spec.md) for the full conventio
 
 ```
 blueprints/
-  thoughts/      ← committed decisions (agent-facing; dated, Status-tagged — align reads; shape-reconcile maintains lifecycle)
-  mockups/       ← committed disposable HTML (owned by shape-mockup) — including, on request, a board snapshot
+  thoughts/      ← decision records (agent-facing; dated, Status-tagged — align reads; shape-reconcile maintains lifecycle)
+  mockups/       ← disposable HTML (owned by shape-mockup) — including, on request, a board snapshot
   plan.md        ← align writes: lean status index (agent AND human read this directly)
 ```
 
@@ -62,9 +62,9 @@ Find `blueprints/` (commonly `docs/blueprints/`). A project that already carries
 `CLAUDE.md` priming block — skip to Step 2. Otherwise you're **adopting an existing repo** into
 the workflow, and this first run scaffolds it (there is deliberately no `shape:init`):
 - Follow an established location; ask once only when a consequential location choice remains. For an authorized first-run setup, create `blueprints/thoughts/` + `blueprints/mockups/` +
-  `blueprints/plans/`, and seed `plan.md` from the template. **Commit `mockups/`** (it carries
-  Pick logs + ratified samples that thoughts link into — per `blueprints-spec.md`); only a
-  *root-level* scratch `/mockups/` is gitignored, never the blueprints one.
+  `blueprints/plans/`, and seed `plan.md` from the template. Apply the retention policy in
+  `references/development-artifacts.md`; check ignore rules, tracking, and staging independently.
+  Preserve the Pick and reasons in the owning decision record.
 - **Also install the priming layer the project lacks** (the reason adoption felt un-smooth):
   ensure the `## Dev workflow` block from [`dev-workflow-stub.md`](references/dev-workflow-stub.md) exists
   in the repo's `CLAUDE.md` (sentinel-delimited, idempotent) — workflow-verb table + standing

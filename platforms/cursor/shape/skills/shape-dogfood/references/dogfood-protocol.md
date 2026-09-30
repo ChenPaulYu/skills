@@ -25,7 +25,7 @@ missing authority before external/destructive/paid effects, and report unrun int
 This is what dogfood adds. It does **not** synthesize a mockup to walk; it uses the **real
 build** and records it.
 
-1. **List the user intents (the test script).** What is someone *trying to achieve*? — "keep a
+1. **Name the tool and evaluation target, then list user intents.** What is someone *trying to achieve*? — "keep a
    private copy", "find it again later", "undo without losing context". Include the intents the
    feature implies but you never designed for; this list is the floor that keeps the session
    bounded.
@@ -44,11 +44,20 @@ build** and records it.
 4. **Classify each gap by layer** — missing intent (direction) vs dead-end scenario (incomplete)
    — so the report shows them distinctly and the hand-off is pre-sorted.
 
+## Attribution and intervention
+
+Keep tool limitations separate from agent misuse, demo-output quality, and capture-rig
+artifacts. In assisted use, disclose known problems promptly. In explicitly agreed
+independent observation, log hints and interventions; coached runs do not establish
+unaided capability. End when the tool evaluation has enough evidence, rather than
+iterating the demonstration as a new product task.
+
 ## The report — evidence-rich, with ideas (not a mockup)
 
 The output is a **friction report grounded in the captured session** — *not* a rendered mockup
 of holes. Lead with the evidence; for each finding:
 
+- **Target and method** → tool, evaluation goal, assisted/independent mode, and any interventions.
 - **Friction** → *where it snagged · what it felt like · one concrete improvement idea*, each
   **embedding its screenshot** (and a clip timestamp from the recording where there is one).
 - **Coverage gap** → the intent that had no path + its layer tag (direction / incomplete), with
@@ -82,13 +91,11 @@ feature — not auto-fired because a feature got mentioned. Three neighbors to s
 
 ## Storage & format
 
-Lands in a project-local, **git-ignored** `dogfood/` directory by default — the artifacts are
-disposable evidence, not source, and the recording can be large, so on first run **add
-`dogfood/` to the project's `.gitignore`** if it isn't already (mirrors mockup's `mockups/`
-convention). One **dated topic subfolder** per session: `dogfood/<date>-<feature>/`, holding
-the **friction report** (`report.md`), the **session recording** (`session.mp4` / `.webm` where
-captured), the **screenshots** (`shots/`), and **saved responses** (`responses/`). (Exact
-location is a per-project setting; the default is a git-ignored `dogfood/`.) The report's top
+Use the project's `dogfood/<date>-<feature>/` or established location. Read
+`references/development-artifacts.md` before writing; it owns retention and the separate
+ignore, tracking, and staging checks. Store the report (`report.md`), requested recording,
+friction-point screenshots (`shots/`), and actual responses (`responses/`) together.
+The report's top
 states **what feature was dogfooded · the intents driven · a link to the recording · the
 friction found · the coverage gaps (by layer) · what's been routed**, so an agent grasps it
 from `head`. Driving the frontend uses shape's shared **browser-verify slot** (named default

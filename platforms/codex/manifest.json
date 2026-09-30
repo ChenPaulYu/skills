@@ -1,6 +1,6 @@
 {
   "schema_version": "2",
-  "adapter_release": "1.0.10",
+  "adapter_release": "1.0.11",
   "release_policy": {
     "adapter_versioning": "independent-semver",
     "schema_versioning": "increment-on-required-contract-change",
@@ -111,7 +111,7 @@
         {
           "id": "authorized_run_scope",
           "kind": "literal",
-          "pattern": "Establish the authorized run scope before driving."
+          "pattern": "**Establish scope and conditions.**"
         }
       ],
       "generated_contract_markers": [
@@ -220,7 +220,7 @@
         {
           "id": "shape_dogfood_browser_slot",
           "kind": "literal",
-          "pattern": "Driving the frontend uses shape's shared **browser-verify slot**"
+          "pattern": "Frontend driving uses shape's browser-verify slot"
         }
       ],
       "generated_contract_markers": [

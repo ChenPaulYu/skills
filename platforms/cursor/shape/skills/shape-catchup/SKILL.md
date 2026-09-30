@@ -13,6 +13,8 @@ Summoned, not automatic. Scope the reconstruction to the requested project or ar
 Before consuming the handoff, read `references/session-handoff.md` for its location,
 five fields, and evidence rules. This bundled reference is shared with shape-park;
 neither skill depends on the other being installed.
+Before writing or clearing artifacts, read `references/development-artifacts.md` for
+retention policy, Git checks, and local recovery limits.
 
 ## Reconstruct, then report
 

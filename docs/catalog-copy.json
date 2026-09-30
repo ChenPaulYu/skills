@@ -7,7 +7,7 @@
           "audit": "assess codebase shape (or read-only quick-check against a target spec)",
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
           "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
-          "plan": "ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu",
+          "plan": "ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu; process records follow project retention policy (ADR-134)",
           "do": "execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin",
           "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval"
         }
@@ -43,8 +43,8 @@
           "plan": [
             "",
             {
-              "en": "★ Ground a spec against the code, clarify consequential ambiguity, then either write a plan artifact when planning is the requested outcome or carry already-granted implementation authority into the build path. Reuses /nav:audit Mode 2 output if it ran in this session. Writes plan artifacts into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/) — ADR-017/126.",
-              "zh": "★ 以 codebase 為基底處理 spec,釐清會影響結果的不明處;這輪若目標是規劃就寫 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 /nav:audit Mode 2 會 reuse。有 blueprints/ 樹時 plan artifact 寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。"
+              "en": "★ Ground a spec against the code, clarify consequential ambiguity, then either write a plan artifact when planning is the requested outcome or carry already-granted implementation authority into the build path. Reuses /nav:audit Mode 2 output if it ran in this session. Writes plan artifacts into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/) — ADR-017/126. Plan retention follows the bundled development-artifact policy (ADR-134).",
+              "zh": "★ 以 codebase 為基底處理 spec,釐清會影響結果的不明處;這輪若目標是規劃就寫 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 /nav:audit Mode 2 會 reuse。有 blueprints/ 樹時 plan artifact 寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。 計畫保存方式遵循打包的開發產物政策（ADR-134）。"
             }
           ],
           "do": [
@@ -81,12 +81,12 @@
     },
     "shape": {
       "readme": {
-        "summary": "**Push work forward** — converge decisions, verify and prioritize the board with align, reconcile stale design records while preserving reasons, and hand sessions over through catchup and park. The build itself belongs to nav.",
+        "summary": "**Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134).",
         "skills": {
           "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
-          "mockup": "converge a look / structure decision by a real, disposable, interactive HTML artifact; a mockup-only request stops at the artifact unless build/track scope was already authorized",
-          "probe": "design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user",
-          "dogfood": "dogfood a built feature that feels unsmooth — drive the real interface (`browser` only when available/authorized, otherwise `curl` / CLI) against user intents, report friction + coverage gaps, and ask only for missing run authority; no automatic paid full-cost pass",
+          "mockup": "converge a look / structure decision with disposable interactive HTML; follow project retention policy and verify ignore rules, tracking, and staging independently",
+          "probe": "design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials",
+          "dogfood": "drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries",
           "align": "verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup",
           "catchup": "read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably",
           "park": "write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level",
@@ -104,15 +104,15 @@
           "mockup": [
             "",
             {
-              "en": "Converge a visual / structural decision by generating + rendering real, disposable candidates — a UI mockup, or an interactive diagram for backend/agent/data/flow — never a description. Output is always an interactive HTML; it activates the artifact + hands over a URL. A mockup-only request stops at the artifact unless build/track scope was already authorized. ADR-128.",
-              "zh": "用 generate + render 一組真實、可丟的候選收斂視覺/結構決策 —— UI mockup,或後端/agent/資料/流程的互動 diagram —— 不用描述。output 永遠是互動 HTML;會自動開啟 + 給 URL。只要求 mockup 就停在 artifact;除非已授權 build/track scope。ADR-128。"
+              "en": "Converge visual, structural, or flow choices through disposable interactive HTML. Use the existing artifact location, default process artifacts to local/Git-ignored storage unless project policy says otherwise, and verify ignore rules, tracked content, and staging independently. Preserve the Pick and reasons before retirement (ADR-134).",
+              "zh": "用可操作的 HTML 收斂視覺、結構或流程選擇。沿用既有產物位置；開發產物預設留本機並排除 Git，專案另有政策時依政策處理。分別確認忽略規則、已追蹤內容與暫存內容，清理前保存選擇及理由（ADR-134）。"
             }
           ],
           "dogfood": [
             "",
             {
-              "en": "Dogfood a built feature that feels unsmooth — use it for real (browser only when available/authorized; otherwise curl / CLI) against a list of user intents, capturing the run. Deliverable is an evidence-rich report: friction + the coverage gaps that fall out. Experience-first; asks only for missing run authority, records unrun intents, and never starts an automatic paid full-cost pass. A gap's layer routes ordinary follow-up only when that continuation is already authorized or the user chooses it. ADR-033/128.",
-              "zh": "Dogfood 一個用起來不順的 built feature —— 用真的介面操作(瀏覽器只有在可用且已授權時;否則 curl / CLI),帶 user intent 清單並記錄。交付是證據豐富的報告:friction + 掉出來的 coverage gap。體驗優先;只在缺少操作授權時才詢問,記錄未跑的 intents,絕不自動啟動完整付費測試。gap 落層後,只有已授權或使用者選擇時才接後續流程。ADR-033/128。"
+              "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-134).",
+              "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-134）。"
             }
           ],
           "align": [
@@ -139,8 +139,8 @@
           "migrate": [
             "",
             {
-              "en": "Migrate a blueprints/core document tree to the current convention version (ADR-105). The convention is a versioned interface with living instances — detect the version BY STRUCTURE (precedents/index.md = v2 · decisions.md = v1), propose the full mapping (per-section target files, dates from git -L, every inbound reference), then execute verbatim gated transforms: tracked-check hard gate, one transform at a time, reference integrity across the whole repo, verify then delete (git is the archive — no tombstone by default). Append-only migration ledger (M1: decisions.md → precedents/); the standing rule: a convention change is not complete until its migration entry exists — spec and M<n> ship in one commit. Never judges staleness (reconcile) or authors content (elicit). Summon-only (disable-model-invocation: true) — an episodic, author-driven convention upgrade with zero model-routing value; capability stays intact behind /shape:migrate (ADR-110).",
-              "zh": "把專案的 blueprints/core 文件樹遷到現行慣例版本(ADR-105)。慣例是有版本的介面 —— 以結構偵測版本(precedents/index.md = v2 · decisions.md = v1),先提出完整對映(每節的目標檔、git -L 取日期、全部入站引用),再逐字、gated 執行:tracked-check 硬閘、一次一個 transform、全 repo 引用完整性、驗證後才刪(git 是檔案庫,預設不留墓碑)。append-only 遷移帳(M1:decisions.md → precedents/);站規:改慣例必須同 commit 附上它的遷移條目。不判斷時效(reconcile)、不寫內容(elicit)。現在 summon-only(disable-model-invocation: true)—— 插曲式、由作者驅動的慣例升級,對 model 路由零價值;能力仍在 /shape:migrate 背後(ADR-110)。"
+              "en": "Migrate a blueprints/core document tree to the current convention version (ADR-105). The convention is a versioned interface with living instances — detect the version BY STRUCTURE (precedents/index.md = v2 · decisions.md = v1), propose the full mapping (per-section target files, dates from git -L, every inbound reference), then execute verbatim gated transforms: tracked-check hard gate, one transform at a time, reference integrity across the whole repo, verify then delete (verify committed recovery or local preservation before removal). Append-only migration ledger (M1–M4; M4 changes retention policy without changing the v3 layout); the standing rule: a convention change is not complete until its migration entry exists — spec and M<n> ship in one commit. Never judges staleness (reconcile) or authors content (elicit). Summon-only (disable-model-invocation: true) — an episodic, author-driven convention upgrade with zero model-routing value; capability stays intact behind /shape:migrate (ADR-110).",
+              "zh": "把專案的 blueprints/core 文件樹遷到現行慣例版本(ADR-105)。慣例是有版本的介面 —— 以結構偵測版本(precedents/index.md = v2 · decisions.md = v1),先提出完整對映(每節的目標檔、git -L 取日期、全部入站引用),再逐字、gated 執行:tracked-check 硬閘、一次一個 transform、全 repo 引用完整性、驗證後才刪(先確認 Git 可還原或本機內容已保存)。append-only 遷移帳(M1–M4；M4 更新保存政策、不改 v3 結構);站規:改慣例必須同 commit 附上它的遷移條目。不判斷時效(reconcile)、不寫內容(elicit)。現在 summon-only(disable-model-invocation: true)—— 插曲式、由作者驅動的慣例升級,對 model 路由零價值;能力仍在 /shape:migrate 背後(ADR-110)。"
             }
           ],
           "elicit": [
@@ -153,8 +153,8 @@
           "probe": [
             "",
             {
-              "en": "Design and run a minimal experiment when a fork can't be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment's definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062) for paid-LLM fan-out. Read-only toward product code — only the findings doc persists. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), NOT /shape:dogfood (built-feature friction), NOT /verify (a known change's correctness). ADR-075.",
-              "zh": "當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062),處理實驗內的付費 LLM fan-out。對產品 code 唯讀 —— 只有 findings 檔會留下。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。NOT /shape:mockup(用 render 收斂偏好;這用實驗收斂事實)、NOT /shape:dogfood(已建功能的摩擦)、NOT /verify(已知變更的正確性)。ADR-075。"
+              "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-134).",
+              "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-134）。"
             }
           ],
           "reconcile": [

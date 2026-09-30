@@ -1,6 +1,6 @@
 {
   "name": "nav",
-  "version": "0.20.1",
+  "version": "0.20.3",
   "description": "Keep code navigable: audit structure, refactor without changing behavior, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose clear documents. Six skills built on deep-module principles.",
   "author": {
     "name": "Paul",

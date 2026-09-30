@@ -8,6 +8,9 @@ description: "Clarify an undecided conceptual choice or a specific root cause th
 Resolve the uncertainty that actually matters, not a quota of questions or objections.
 Use the user's context and relevant evidence; keep the choice theirs.
 
+Before persisting or retiring process artifacts, read `references/development-artifacts.md`
+for retention policy, Git checks, and preservation of local evidence.
+
 ## Stance
 
 - **Ask only what changes the decision.** Start from what the user already said.

@@ -1,7 +1,7 @@
 /**
  * Shared skill references: one editable owner, self-contained packaged consumers.
  * build-manifests materializes them; the validator checks every destination for drift.
- * Reads: node:fs · node:path · shared handoff convention owner.
+ * Reads: node:fs · node:path · shared handoff and development-artifact owners.
  * Removes retired bundles only when they bear this builder's exact ownership marker.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -12,6 +12,14 @@ export const SHARED_SKILL_REFERENCES = [{
   destinations: [
     "plugins/shape/skills/park/references/session-handoff.md",
     "plugins/shape/skills/catchup/references/session-handoff.md",
+  ],
+}, {
+  source: "plugins/shape/references/development-artifacts.md",
+  destinations: [
+    ...["align", "catchup", "dogfood", "elicit", "migrate", "mockup", "park", "probe", "reconcile"]
+      .map(skill => `plugins/shape/skills/${skill}/references/development-artifacts.md`),
+    "plugins/nav/skills/plan/references/development-artifacts.md",
+    "plugins/nav/skills/compose/references/development-artifacts.md",
   ],
 }];
 

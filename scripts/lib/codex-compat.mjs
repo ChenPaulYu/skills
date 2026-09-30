@@ -188,7 +188,7 @@ export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contrac
  * so the compiler adds behavior without copying any choice content. Missing or duplicate anchors
  * are hard generation failures: source drift must never silently remove a supervision gate. */
 const INTERACTIVE_CHOICE_CONSUMERS = {
-  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
+  "shape-dogfood": "## Workflow",
 };
 
 export function injectInteractiveChoiceContract(text, flat) {
@@ -269,7 +269,7 @@ export const CODEX_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Codex
 
 const BROWSER_VERIFY_ANCHORS = {
   "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-124)",
-  "shape-dogfood": "## The session — use it for real, capture as you go (dogfood's own front)",
+  "shape-dogfood": "## Workflow",
 };
 
 function countExact(text, needle) {

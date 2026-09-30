@@ -8,22 +8,25 @@ The container where converged pre-build decisions land and stay legible to **bot
 
 A description floats; a real artifact is decidable. blueprints is the standing version of shape's spine: the plan isn't a paragraph you re-read, it's a real board you point at — and when a visual is actually wanted, `shape-mockup` renders it fresh rather than align maintaining a second copy.
 
+Retention and Git checks live in `references/development-artifacts.md`; read it before
+writing. The layout below describes purpose, not an instruction to commit the tree.
+
 ## Layout
 
 ```
 blueprints/
-  thoughts/          ← committed. one .md per decision, permanent. dated, Status-tagged (in force / superseded by <file> / shipped) — no promotion step, no separate durable tier.
-  plans/             ← committed. one .md per grounded code-level plan from nav-plan (the build-side render of a thought).
-  mockups/           ← committed. interactive HTML decision artifacts from shape-mockup (Pick logs + ratified samples) — plus, on request, a disposable board snapshot rendering plan.md for a human to browse.
-  plan.md            ← committed. the lean status index — agent AND human read this directly.
-  baton.md           ← usually untracked (local-only cursor by default; committing it is the user's call for cross-machine work). the ephemeral tier, below plan.md — overwritten, single-use, written by shape-park, read by shape-catchup. No tree → root HANDOFF.md is the fallback.
+  thoughts/          ← process record. one .md per decision, permanent. dated, Status-tagged (in force / superseded by <file> / shipped) — no promotion step, no separate durable tier.
+  plans/             ← process record. one .md per grounded code-level plan from nav-plan (the build-side render of a thought).
+  mockups/           ← process record. interactive HTML decision artifacts from shape-mockup (Pick logs + ratified samples) — plus, on request, a disposable board snapshot rendering plan.md for a human to browse.
+  plan.md            ← process record. the lean status index — agent AND human read this directly.
+  baton.md           ← session cursor. the ephemeral tier, below plan.md — overwritten, single-use, written by shape-park, read by shape-catchup. No tree → root HANDOFF.md is the fallback.
 ```
 
 > **`plan.md` (singular) vs `plans/` (plural)** are different things, deliberately: `plan.md` is align's lean *status index* (now/next/later); `plans/` holds nav-plan's *grounded implementation plans* (one per item, Context · Approach · Critical files · Verification). Intent → status → grounded-how.
 
-- **`thoughts/`** — the single decision tier, **permanent**. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these directly — a board snapshot (rendered on demand by `shape-mockup`) distils them into plain language when wanted. A thought is **born in durable form** — there is no "hot working set" to graduate out of, no genre gap between a live design and what binds: the same file carries both, distinguished only by its `Status:` line (`in force` / `superseded by <file>` / `shipped`). Growth is bounded by the Status filter (a question of "what binds" reads only `in force` files) plus `shape-reconcile`'s curation pass, using the **curation criterion**: **keep what git makes expensive to recover (a live call's why + rejected alternatives), drop what git makes cheap.**
+- **`thoughts/`** — the single decision tier, **permanent**. Each file = one decision, dated, `YYYY-MM-DD-<topic>.md`. Written for the agent that will build it; density is allowed. The human normally does **not** read these directly — a board snapshot (rendered on demand by `shape-mockup`) distils them into plain language when wanted. A thought is **born in durable form** — there is no "hot working set" to graduate out of, no genre gap between a live design and what binds: the same file carries both, distinguished only by its `Status:` line (`in force` / `superseded by <file>` / `shipped`). Growth is bounded by the Status filter (a question of "what binds" reads only `in force` files) plus `shape-reconcile`'s curation pass, using the **curation criterion**: **preserve live reasons and rejected alternatives; retire redundant material only after verifying its destination and recovery route.**
 - **`plans/`** — the grounding layer (owned by `nav-plan`). Each file = one item grounded into a code-level implementation plan, dated `YYYY-MM-DD-<slug>.md`. It's the build-side render of a thought; lives here so the whole arc (decision → status → grounded-how) stays in one tree. `shape-reconcile` keeps these current alongside `thoughts/` (completion changes status; governing reasons remain useful after the implementation ships).
-- **`mockups/`** — visual-decision artifacts (owned by `shape-mockup`), **committed**: they carry Pick logs and ratified samples, and thoughts/ link into them — untracked means a single-disk record and dead links on clone. Individual artifacts remain *disposable in spirit* (most are superseded and never reopened), but the record stays in git. Root-level scratch may be ignored via a root-scoped `/mockups/`.
+- **`mockups/`** — disposable visual-decision artifacts (owned by `shape-mockup`). Preserve the Pick and useful samples in the decision's designated owner before retirement; sharing or retaining the render follows the project's artifact policy.
 - **`plan.md`** — what to do, grouped by status. The agent's index — and, since it's plain markdown, directly human-readable too. Lean: only "what + which thought", no prose essays.
 - **`baton.md`** — the **ephemeral** tier, below `plan.md`. One overwritten file: the session cursor — a five-section goal · done · now · open · next note, written on the way out and read on the way in, written by shape-park and read by shape-catchup. Not a decision and not a status entry — it never enters `thoughts/` or `plan.md`, and it is retained while work is live or its reasons are not recorded durably; shape-catchup clears only verified consumed state. **No tree → root `HANDOFF.md`** is the fallback location; never scaffold a tree just to pass a baton, and the skill self-reports which location it used (tolerant reader, ADR-071).
 
@@ -31,7 +34,7 @@ Where `blueprints/` itself lives is per-project (commonly `docs/blueprints/`). R
 
 ## Supersession is an edit, not a move
 
-When a later decision overturns an earlier one, the new thought file **names the file it supersedes**, and the old file's own `Status:` line changes to `superseded by <new-file>` — **in the same commit** ("stale surface = lie" applies here too). There is no `overruled.md` and no move: the record of what was overturned lives in the superseded file itself, in place, not exiled to a separate graveyard file.
+When a later decision overturns an earlier one, the new thought file **names the file it supersedes**, and the old file's own `Status:` line changes to `superseded by <new-file>` — **in the same change** ("stale surface = lie" applies here too). There is no `overruled.md` and no move: the record of what was overturned lives in the superseded file itself, in place, not exiled to a separate graveyard file.
 
 ## Thought-doc shape — the durable thought template (progressive disclosure, agent-scannable)
 

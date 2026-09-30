@@ -9,6 +9,9 @@ description: "Reconcile stale project thoughts, completed plans, and redundant m
 Find what is still live, what has shipped, and what can safely be consolidated. The
 deliverable is an evidence-backed cleanup or proposal, without reprioritizing the project.
 
+Before persisting or retiring process artifacts, read `references/development-artifacts.md`
+for retention policy, Git checks, and preservation of local evidence.
+
 ## Workflow
 
 1. **Bound the inventory.** Locate the existing blueprints tree or readable equivalent;

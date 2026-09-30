@@ -13,6 +13,8 @@ not automatic: no end-of-turn or context-percentage trigger.
 Before reading or writing the handoff, read `references/session-handoff.md` for its
 location, five fields, and evidence rules. This bundled reference is shared with
 shape-catchup; neither skill depends on the other being installed.
+Before writing or clearing artifacts, read `references/development-artifacts.md` for
+retention policy, Git checks, and local recovery limits.
 
 ## Write the handoff
 

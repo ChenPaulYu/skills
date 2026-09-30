@@ -9,6 +9,9 @@ description: "Verify the plan.md board against current evidence and decide prior
 Leave a lean, truthful `plan.md` with priorities the user actually chose. Ground the
 items needed for that decision; a complete document cleanup is not a prerequisite.
 
+Before persisting or retiring process artifacts, read `references/development-artifacts.md`
+for retention policy, Git checks, and preservation of local evidence.
+
 ## Workflow
 
 1. **Locate the board and its supporting decisions.** Consume the project's existing

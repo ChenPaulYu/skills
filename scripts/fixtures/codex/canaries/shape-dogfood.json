@@ -15,8 +15,10 @@
     "**Browser-verify contract (Codex).**",
     "When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent.",
     "Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`.",
-    "The session — use it for real, capture as you go",
-    "report unrun intents"
+    "## Workflow",
+    "Report declined/unavailable intents honestly.",
+    "In normal user assistance, disclose a",
+    "Distinguish tool design, agent misuse/knowledge, demonstration quality, and harness"
   ],
   "reject_text": [
     "When `request_user_input` is callable, use that structured chooser. Otherwise ask one concise direct question in chat with the same applicable choices, then end the turn immediately.",

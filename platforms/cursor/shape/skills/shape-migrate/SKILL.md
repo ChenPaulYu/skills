@@ -9,12 +9,15 @@ description: "Upgrade a blueprints tree to the current convention version — de
 
 The blueprints artifact convention is a **versioned interface with living instances** (ADR-105 → ADR-112). When the convention evolves, existing project trees keep speaking the old dialect — valid, readable by every version-tolerant skill, but drifting from what new trees look like. migrate is the one verb that upgrades a tree: detect the version, propose the mapping, execute **verbatim, gated, reference-safe** transforms, verify nothing dangles.
 
+Before persisting or retiring process artifacts, read `references/development-artifacts.md`
+for retention policy, Git checks, and preservation of local evidence.
+
 ## Stance
 
 - **Migrate is a verbatim reorganizer.** It moves recorded content into the new structure and repairs every reference — it never judges whether content is stale (that's `shape-reconcile`), never authors or re-decides content (that's `shape-elicit`), and never "improves prose while it's in there." The one thing it may *add* is structure the new convention requires (headers, a status line), each derived mechanically from what the content already says.
 - **A convention change is not complete until its migration entry exists.** Any ADR that changes the blueprints convention lands its `M<n>` entry in `references/migration-ledger.md` **in the same commit**. A spec change without a migration is a fleet-orphaning event — refuse to let one merge quietly.
 - **Detect by structure, never a marker file** — the version fingerprint is what files exist (a `Status:` line in `thoughts/*.md` vs `precedents/index.md` vs `decisions.md`), not a version stamp. Detection is idempotent: re-running on a current tree reports "already current, nothing to do."
-- **Tracked-check is a hard gate.** `git ls-files` on every source before any transform — untracked content has no recovery path. Never chain a destructive `rm` after an unverified move.
+- **Tracked-check is a hard gate.** `git ls-files` on every source before any transform — untracked content has no guaranteed Git recovery; verify preservation and authorized scope. Never chain a destructive `rm` after an unverified move.
 - **User confirms before any write**, and execution proceeds one transform at a time, re-checked between steps — never batch destructive ops behind a single confirmation.
 - **Verify, then delete.** Every source section must be accounted for in the target and a repo-wide grep for the old name must return zero non-historical hits *before* the source is removed.
 

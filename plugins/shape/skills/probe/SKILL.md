@@ -1,21 +1,27 @@
 ---
 name: probe
-description: "Design and run a minimal experiment when nobody can settle a fork by argument: an A/B comparison, a blind judgment test, or a behavior probe that lets reality vote. Fires on \"run a small experiment to find out whether X\" / \"probe 一下\", \"we don't know — let's test it\", or offered when a fork is undecidable by argument. NOT /shape:mockup (converges a PREFERENCE by render; this converges a FACT by experiment), /shape:dogfood (probes a built feature's friction), or /verify (checks a change did what it claims)."
+description: "Design a minimal experiment or assess existing measurements for an undecided empirical claim. Use for probe 一下, testing whether X, or judging what recorded results support; preferences belong to /shape:mockup and built-feature friction to /shape:dogfood."
 ---
 
-# Probe — design a minimal experiment, let reality vote
+# Probe — test a claim, interpret the evidence
 
 Take a fork that arguing longer cannot settle — not because nobody's tried hard enough, but because the answer doesn't live in anyone's head or in any document — and **design the smallest experiment that can discriminate**, run it, and read the verdict honestly. `probe` is the verb for the moment a decision stops being a reasoning problem and becomes a measurement problem.
 
+When measurements already exist, assess their method, criteria, and limits first. Reuse
+the evidence that answers the decision; design a follow-up only for what remains unknown,
+and run it only within the user's authorized scope. Writing the assessment does not turn
+the empirical decision into a prose-structure task.
+
 ## Stance
 
-- **Refuse to run without a pre-registered verdict rule.** Write down, before the first trial, what result maps to which conclusion — deciding after seeing the data is rationalization wearing an experiment's clothes.
+- **New trials require a pre-registered verdict rule.** Write down, before the first trial, what result maps to which conclusion. When interpreting existing results, report their original criteria or absence; never claim retrospective preregistration.
+- **Test the decision's claim.** Separate correctness, output quality, and workflow value; proving one does not prove the others. Use representative inputs and a comparison the user can inspect. For timing, isolate competing work and comparable cache/warmup conditions; mark contaminated results inconclusive.
 - **Design chain, borrowed by protocol, never by call:** locate the load-bearing assumption (`frame:dialectic`'s move) → strip it to the smallest falsifiable claim (`frame:first-principles`') → vary exactly that one axis, lock the rest identical (`frame:orthogonal`'s independence check — verbatim the definition of a controlled experiment). Budget goes to the load-bearing point, never the surface phrasing the fork was argued in.
 - **Pick the shape that matches the uncertainty** — A/B comparison, blind judgment test, or behavior probe — don't default to one out of habit; a fourth shape earns its place only by recurring real use.
 - **Size N to the effect, not to a round number**, and **report a negative or ambiguous result as a finding**, never quietly reframed into a win.
 - **Design and verdict-reading stay with the session model; execution legs (running variants, tallying results) can dispatch to cheap tier** — reporting back grounded in fact, never an impression.
 - **Cost nod before running.** If the experiment fans out paid-LLM calls (multiple judges, N trials, a multi-agent probe), name the scale and get the user's nod first — never silently pick a cheaper path either.
-- **Read-only toward product code.** Fixtures/harness scripts are disposable; only the findings doc persists.
+- **Read-only toward product code.** Keep fixtures/harness scripts disposable; retain findings according to project policy. Before creating artifacts, read `references/development-artifacts.md` for storage and Git checks.
 - **Write-gated.** Show the doc's content before writing it.
 
 Full machinery — the design-chain detail, the three canonical experiment shapes with examples, the output/tolerant-reader shape, and the boundary detail: `references/probe-protocol.md`. Read it when actually designing a probe or when a boundary call is unclear.

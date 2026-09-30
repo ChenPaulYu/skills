@@ -8,6 +8,10 @@ description: "Author or restructure a document so its point leads and each fact 
 
 Write a **document** the way nav writes code: as a deep module. The act of putting words clearly is sentence-craft (the `writing-clearly-and-concisely` skill owns that); **compose owns the STRUCTURE** — organizing a document so a reader (or agent) grasps its point from the top and drills into the body only as needed. A doc that buries its point, restates a fact that lives elsewhere, or sprawls across concerns is a *shallow module* in prose form. It is `sync`'s prose sibling (ADR-049): `sync` maintains code headers and checks reader documents against implementation; `compose` authors or restructures prose documents.
 
+Before writing process notes or experiment assessments, read
+`references/development-artifacts.md` for retention and Git checks. Follow the artifact's
+policy when inspecting changes; an ignored new file can be verified directly on disk.
+
 ## Stance
 
 - **Two modes, both preview the intended structure or diff.** **Author** — turn intent / notes / a decision into a new document in deep-module shape. **Restructure** — improve organization while preserving claims, decisions, qualifications, and sources. Prefer moves; concise rewrites are allowed when they improve the requested structure without inventing content. Keep quotations exact.

@@ -52,5 +52,5 @@ establishes what is committed; conversation or recorded decisions establish inte
 Mark inference and unknowns instead of treating one kind of evidence as another.
 
 This note is a temporary stopping point, not a second project board or a permanent
-decision record. It is local-only by default; committing for cross-machine use is
-the user's choice. Neither entrance commits it automatically.
+decision record. Storage, sharing, and Git checks follow `references/development-artifacts.md`.
+Neither entrance commits it automatically or claims a local-only note is shared.

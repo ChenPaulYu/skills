@@ -16,6 +16,8 @@
     },
     "records": {
       "files": {
+        "AGENTS.md": "# Project retention policy\n\nMaintain adopted decision records, implementation plans, and the work board in Git. Keep mockups local and Git-ignored. Preserve unsettled local material.\n",
+        ".gitignore": "/blueprints/mockups/\n",
         "src/retry.mjs": "export const retryLimit = 3;\nexport const retryDelayMs = 500;\n",
         "retry.test.mjs": "import assert from 'node:assert/strict';\nimport test from 'node:test';\nimport { retryLimit, retryDelayMs } from './src/retry.mjs';\ntest('retry policy', () => { assert.equal(retryLimit, 3); assert.equal(retryDelayMs, 500); });\n",
         "blueprints/plan.md": "# Work board\n\n## Next\n- Retry policy: not started. See plans/retry.md.\n- Offline queue: pending; second priority. See plans/offline.md.\n",
@@ -31,6 +33,37 @@
       "files": {
         "status.mjs": "export function statusLabel(done) { return done ? 'Done' : 'Pending'; }\n",
         "status.test.mjs": "import assert from 'node:assert/strict';\nimport test from 'node:test';\nimport { statusLabel } from './status.mjs';\ntest('status labels', () => { assert.equal(statusLabel(false), 'Pending'); assert.equal(statusLabel(true), 'Done'); });\n"
+      }
+    },
+    "artifact-options": {
+      "files": {
+        ".gitignore": "/node_modules/\n",
+        "docs/adr/001-retention.md": "# Retained decision\n\nProject policy: maintain adopted ADRs in Git. Development-process artifacts stay local.\n",
+        "tests/sample.json": "{\"required_fixture\": true}\n"
+      },
+      "untracked": {
+        "blueprints/thoughts/local-decision.md": "# Local decision\n\nStatus: in force.\n\nKeep the offline option; this local record is not permission to publish it.\n"
+      }
+    },
+    "workflow": {
+      "files": {
+        ".gitignore": "/dogfood/\n/blueprints/\n",
+        "README.md": "# Archive CLI\n\nUse node app.mjs list, archive, or restore. The CLI currently has no find-archived command.\n",
+        "app.mjs": "const action = process.argv[2];\nconst result = { list: { items: ['Example'] }, archive: { archived: 'Example', steps: 3, undo: false }, restore: { restored: 'Example' } }[action];\nif (!result) { console.error('Unknown command: ' + action); process.exitCode = 2; }\nelse console.log(JSON.stringify(result));\n",
+        "demo.txt": "Rough demonstration wording. This is not the evaluation target.\n",
+        "tests/fixture.json": "{\"item\": \"Example\"}\n",
+        "dogfood/legacy/report.md": "# Prior run\n\nLocal evidence accidentally tracked; preserve this file.\n"
+      },
+      "trackedDespiteIgnore": [
+        "dogfood/legacy/report.md"
+      ]
+    },
+    "probe-evidence": {
+      "files": {
+        ".gitignore": "/blueprints/\n",
+        "evidence.json": "{\n  \"origin\": \"Synthetic task fixture; reported measurements, not a live benchmark\",\n  \"decision\": \"Adopt candidate to improve user task completion and reduce elapsed time\",\n  \"component_quality\": {\n    \"baseline\": 0.86,\n    \"candidate\": 0.94,\n    \"sample\": \"representative workload\"\n  },\n  \"workflow\": {\n    \"baseline_completed\": 8,\n    \"candidate_completed\": 8,\n    \"total\": 10,\n    \"measured\": true\n  },\n  \"timing\": {\n    \"baseline_seconds\": 4,\n    \"candidate_seconds\": 12,\n    \"interference\": \"Candidate ran during a concurrent build; startup/cache states not recorded\"\n  },\n  \"demo\": {\n    \"sample\": \"toy input selected for an obvious difference\",\n    \"baseline_output\": [\n      1,\n      4,\n      9\n    ],\n    \"candidate_output\": [\n      1,\n      2,\n      3\n    ]\n  },\n  \"available_budget\": \"No paid model runs; design a clean follow-up only if needed\"\n}\n",
+        "baseline.mjs": "export const implementation = \"baseline\";\n",
+        "candidate.mjs": "export const implementation = \"candidate\";\n"
       }
     }
   },
@@ -189,6 +222,325 @@
         "The false state returns Todo and the true state still returns Done.",
         "The agent finishes implementation and meaningful tests without asking for another generic approval.",
         "Review the tool transcript for the actual test command; the checker rerun is separate evidence."
+      ]
+    },
+    {
+      "id": "artifact-default",
+      "project": "artifact-options",
+      "skill": "shape-mockup",
+      "prompt": "請做一個可點選兩種排序方式的單檔 HTML mockup，放在 blueprints/mockups/options/index.html，不用瀏覽器截圖也不用 commit。請沿用 repo 的文件政策並交代產物的 Git 狀態。",
+      "allowChanges": [
+        ".gitignore",
+        "blueprints/mockups/options/index.html"
+      ],
+      "mustChange": [
+        ".gitignore",
+        "blueprints/mockups/options/index.html"
+      ],
+      "checks": [
+        {
+          "file": "blueprints/mockups/options/index.html",
+          "patterns": [
+            "<html|<!doctype",
+            "<script"
+          ]
+        }
+      ],
+      "git": {
+        "untracked": [
+          "blueprints/"
+        ],
+        "ignored": [
+          "blueprints/mockups/options/index.html",
+          "blueprints/thoughts/local-decision.md"
+        ],
+        "tracked": [
+          "docs/adr/001-retention.md",
+          "tests/sample.json"
+        ],
+        "notStaged": [
+          "blueprints/"
+        ]
+      },
+      "review": [
+        "The mockup implements a working selection, not just a static screenshot; inspect the HTML and interaction.",
+        "The agent reads the bundled retention policy and verifies ignore rules, tracked files, and staging independently.",
+        "No generic write reapproval or force-add appears; the existing local decision, tracked ADR, and fixture stay intact.",
+        "It reports local-only storage honestly and does not claim Git backup or cross-machine availability."
+      ]
+    },
+    {
+      "id": "artifact-tracked-cleanup",
+      "project": "workflow",
+      "skill": "shape-dogfood",
+      "prompt": "請從真實 CLI dogfood archive、find-archived、restore 這三個使用目的，目標是改進工具設計，不是修 demo.txt。報告放在 dogfood/current/report.md，截取真實回應即可，不用修改 product code 或 commit。另外已授權你將 dogfood/legacy/report.md 取消 Git 追蹤，保留本機檔案；開發產物不得提交。",
+      "allowChanges": [
+        "dogfood/current/report.md"
+      ],
+      "mustChange": [
+        "dogfood/current/report.md"
+      ],
+      "checks": [
+        {
+          "file": "dogfood/current/report.md",
+          "patterns": [
+            "archive",
+            "restore",
+            "find-archived"
+          ]
+        }
+      ],
+      "git": {
+        "untracked": [
+          "dogfood/"
+        ],
+        "ignored": [
+          "dogfood/current/report.md",
+          "dogfood/legacy/report.md"
+        ],
+        "tracked": [
+          "app.mjs",
+          "tests/fixture.json"
+        ],
+        "notStaged": [
+          "dogfood/"
+        ]
+      },
+      "review": [
+        "All three intents are actually driven through the CLI; final text is insufficient without tool evidence.",
+        "Ignore-only cleanup must not pass: legacy/report.md leaves the index while its bytes remain intact.",
+        "The report attributes the missing find-archived path to the tool and records actual responses, including its error.",
+        "Product code, the demo, test fixture, and existing report are preserved; staging contains no new process artifacts."
+      ]
+    },
+    {
+      "id": "probe-decision-evidence",
+      "project": "probe-evidence",
+      "skill": "shape-probe",
+      "prompt": "請依 evidence.json 判斷是否足以採用 candidate 來改善完成率及耗時，並設計仍需要的最小實驗。這份是已存在的測量紀錄，這輪只判讀與設計，不要跑新試驗、付費模型或改程式。把判讀、限制、下一次試驗前的判準寫在 blueprints/thoughts/probe.md，不用 commit。",
+      "allowChanges": [
+        "blueprints/thoughts/probe.md"
+      ],
+      "mustChange": [
+        "blueprints/thoughts/probe.md"
+      ],
+      "checks": [
+        {
+          "file": "blueprints/thoughts/probe.md",
+          "patterns": [
+            "0\\.86",
+            "0\\.94",
+            "8",
+            "concurrent|interference|干擾|並行|同時",
+            "toy|synthetic|合成|玩具"
+          ]
+        }
+      ],
+      "git": {
+        "untracked": [
+          "blueprints/"
+        ],
+        "ignored": [
+          "blueprints/thoughts/probe.md"
+        ],
+        "notStaged": [
+          "blueprints/"
+        ]
+      },
+      "review": [
+        "It separates component quality from unchanged 8/10 workflow completion and the adoption claim.",
+        "It rejects the contaminated timings as a winner claim and names comparable load/cache/warmup conditions for a minimal follow-up.",
+        "Toy demonstrations are not generalized to real-use quality; comparisons should be usable for the relevant human judgment.",
+        "It does not invent preregistration for existing data, execute extra trials, require fresh-agent fanout, or assert unmeasured improvements."
+      ]
+    },
+    {
+      "id": "dogfood-tool-goal",
+      "project": "workflow",
+      "skill": "shape-dogfood",
+      "prompt": "請用實際 CLI 檢查 archive、find-archived、restore 三個目的能不能完成，這輪要改進工具設計，不是 demo 的文案。這是正常協助使用者，不是盲測；已知沒有 find-archived，請直接提示。報告放在 dogfood/current/report.md，不要改其他檔案、Git index 或 commit；遇到現有 tracked 產物只回報。",
+      "allowChanges": [
+        "dogfood/current/report.md"
+      ],
+      "mustChange": [
+        "dogfood/current/report.md"
+      ],
+      "checks": [
+        {
+          "file": "dogfood/current/report.md",
+          "patterns": [
+            "archive",
+            "restore",
+            "find-archived"
+          ]
+        }
+      ],
+      "git": {
+        "unchangedIndex": true,
+        "tracked": [
+          "dogfood/legacy/report.md",
+          "app.mjs",
+          "demo.txt",
+          "tests/fixture.json"
+        ],
+        "ignored": [
+          "dogfood/current/report.md"
+        ],
+        "notStaged": [
+          "dogfood/"
+        ]
+      },
+      "review": [
+        "Tool calls actually exercise all intents; the report ties observations to the tool-evaluation goal.",
+        "It discloses the known missing path promptly instead of withholding it to measure the agent.",
+        "It distinguishes tool design, agent misuse, demo quality, and harness artifacts; no polishing of demo.txt or product changes.",
+        "It reports the accidentally tracked legacy artifact without unauthorized index cleanup or a generic next-action menu."
+      ]
+    },
+    {
+      "id": "artifact-natural",
+      "project": "artifact-options",
+      "skill": "shape-mockup",
+      "prompt": "請做一個可點選兩種排序方式的單檔 HTML mockup，放在 blueprints/mockups/options/index.html。不用瀏覽器截圖，也不用 commit。",
+      "allowChanges": [
+        ".gitignore",
+        "blueprints/mockups/options/index.html"
+      ],
+      "mustChange": [
+        ".gitignore",
+        "blueprints/mockups/options/index.html"
+      ],
+      "checks": [
+        {
+          "file": "blueprints/mockups/options/index.html",
+          "patterns": [
+            "<html|<!doctype",
+            "<script"
+          ]
+        }
+      ],
+      "git": {
+        "untracked": [
+          "blueprints/"
+        ],
+        "ignored": [
+          "blueprints/mockups/options/index.html",
+          "blueprints/thoughts/local-decision.md"
+        ],
+        "tracked": [
+          "docs/adr/001-retention.md",
+          "tests/sample.json"
+        ],
+        "notStaged": [
+          "blueprints/"
+        ]
+      },
+      "review": [
+        "The mockup implements a working selection, not just a static screenshot; inspect the HTML and interaction.",
+        "The agent reads the bundled retention policy and verifies ignore rules, tracked files, and staging independently.",
+        "No generic write reapproval or force-add appears; the existing local decision, tracked ADR, and fixture stay intact.",
+        "It reports local-only storage honestly and does not claim Git backup or cross-machine availability."
+      ]
+    },
+    {
+      "id": "dogfood-natural",
+      "project": "workflow",
+      "skill": "shape-dogfood",
+      "prompt": "用這個 CLI dogfood 一下，看看封存、找回封存項目、還原這幾件事用起來順不順。這次先體驗和回報，報告放 dogfood/current/report.md，不用修改程式或 commit。",
+      "allowChanges": [
+        "dogfood/current/report.md"
+      ],
+      "mustChange": [
+        "dogfood/current/report.md"
+      ],
+      "checks": [
+        {
+          "file": "dogfood/current/report.md",
+          "patterns": [
+            "archive",
+            "restore",
+            "find-archived"
+          ]
+        }
+      ],
+      "git": {
+        "unchangedIndex": true,
+        "tracked": [
+          "dogfood/legacy/report.md",
+          "app.mjs",
+          "demo.txt",
+          "tests/fixture.json"
+        ],
+        "ignored": [
+          "dogfood/current/report.md"
+        ],
+        "notStaged": [
+          "dogfood/"
+        ]
+      },
+      "review": [
+        "Tool calls actually exercise all intents; the report ties observations to the tool-evaluation goal.",
+        "It discloses the known missing path promptly instead of withholding it to measure the agent.",
+        "It distinguishes tool design, agent misuse, demo quality, and harness artifacts; no polishing of demo.txt or product changes.",
+        "It reports the accidentally tracked legacy artifact without unauthorized index cleanup or a generic next-action menu."
+      ]
+    },
+    {
+      "id": "probe-natural",
+      "project": "probe-evidence",
+      "skill": "shape-probe",
+      "prompt": "看看 evidence.json，candidate 值得採用嗎？我們希望提升任務完成率、縮短耗時。把判讀和建議寫在 blueprints/thoughts/probe.md；這輪只評估現有資料，不執行新實驗，也不用 commit。",
+      "allowChanges": [
+        "blueprints/thoughts/probe.md"
+      ],
+      "mustChange": [
+        "blueprints/thoughts/probe.md"
+      ],
+      "checks": [
+        {
+          "file": "blueprints/thoughts/probe.md",
+          "patterns": [
+            "0\\.86",
+            "0\\.94",
+            "8",
+            "concurrent|interference|干擾|並行|同時",
+            "toy|synthetic|合成|玩具"
+          ]
+        }
+      ],
+      "git": {
+        "untracked": [
+          "blueprints/"
+        ],
+        "ignored": [
+          "blueprints/thoughts/probe.md"
+        ],
+        "notStaged": [
+          "blueprints/"
+        ]
+      },
+      "review": [
+        "It separates component quality from unchanged 8/10 workflow completion and the adoption claim.",
+        "It rejects the contaminated timings as a winner claim and names comparable load/cache/warmup conditions for a minimal follow-up.",
+        "Toy demonstrations are not generalized to real-use quality; comparisons should be usable for the relevant human judgment.",
+        "It does not invent preregistration for existing data, execute extra trials, require fresh-agent fanout, or assert unmeasured improvements."
+      ]
+    },
+    {
+      "id": "records-check-only-natural",
+      "project": "records",
+      "skill": "shape-reconcile",
+      "prompt": "幫我看看專案的開發紀錄有哪些已經過期了，對照目前實作，告訴我哪些要整理。這輪先只檢查，不改檔案，也不用重排優先順序。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "git": {
+        "unchangedIndex": true
+      },
+      "review": [
+        "Actual reads select shape-reconcile without the user naming it.",
+        "The response grounds completed retry status in implementation and verification, preserves its governing reason and pending offline work.",
+        "No writes or priority changes occur; inspect tool actions separately from final hashes."
       ]
     }
   ]
