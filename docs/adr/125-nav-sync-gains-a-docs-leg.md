@@ -1,6 +1,8 @@
 # ADR 125 — `nav:sync` gains a third, on-demand `docs` leg
 
-**Status**: accepted
+**Status**: partially superseded
+**2026-09-30 amendment**: [ADR-131](docs/adr/131-reconcile-and-one-sync.md) supersedes the three-leg roster, narrow document checklist, and unconditional second approval. This record preserves the original reasoning.
+
 **Date**: 2026-09-01
 **Source**: Paul asked directly — he keeps hand-asking an agent to check whether his docs (README first) are current, and wants that folded into a skill instead of repeated ad hoc. Confirmed scope in-session: this marketplace only (not a cross-project claim), landing on `nav:sync` (recommended over a standalone skill), on-demand trigger only (not a commit-time gate).
 **Precedent cited**: [ADR-108](docs/adr/108-retire-research-fold-map-into-sync.md) (sync's two-leg, one-door shape) · [ADR-071](docs/adr/071-contracts-vs-conventions-tolerant-reader.md) (tolerant reader: standard / non-standard / absent, self-reported) · root [`CLAUDE.md`](CLAUDE.md) gate #3 (the manual precedent this ADR generalizes).

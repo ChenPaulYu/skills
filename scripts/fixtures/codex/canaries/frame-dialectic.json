@@ -3,7 +3,9 @@
   "mode": "generated",
   "file": ".agents/skills/frame-dialectic/SKILL.md",
   "reject": [
-    { "category": "ask_user_question" }
+    {
+      "category": "ask_user_question"
+    }
   ],
   "reject_text": [
     "**Interactive choice contract (Codex).**",
@@ -11,9 +13,11 @@
     "just leave the table, I'll take it from here"
   ],
   "expect_text": [
-    "After the trial.",
-    "unless the larger user task already authorized that continuation",
-    "If the next action is genuinely undecided, optionally offer a concise helpful suggestion",
-    "`shape-probe`"
+    "Analysis does not authorize writing files, implementation, or running the experiment.",
+    "only within the larger task's existing scope",
+    "shape-probe is available for a requested experiment.",
+    "Missing evidence alone is not refutation.",
+    "**Unsettled — an owned bet:**",
+    "strongest case and strongest grounded attack."
   ]
 }

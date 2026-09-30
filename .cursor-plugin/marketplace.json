@@ -12,25 +12,25 @@
       "name": "frame",
       "source": "frame",
       "description": "Apply an explicit, named frame that adds substantive reasoning checks without a fixed output worksheet — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.14.0"
+      "version": "0.14.1"
     },
     {
       "name": "nav",
       "source": "nav",
-      "description": "Keep any codebase navigable as it grows — audit (assess + feasibility + deep legacy sweep via domain fan-out), refactor (behaviour-preserving structural change with risk-proportional verification), sync (file-top headers, plus the bilingual codebase map as its map leg), plan (spec → grounded plan, carrying existing implementation authority), do (execute a small behaviour-changing change, disciplined, no artifact), compose (author/restructure a prose document as a deep module). Language-agnostic. Built on Ousterhout's deep-module principles (deep modules via information hiding).",
-      "version": "0.19.2"
+      "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
+      "version": "0.20.1"
     },
     {
       "name": "relay",
       "source": "relay",
       "description": "Coordinate asynchronously through a verified GitHub workspace under the Accord memory model. Route independent follow-ups, expose native lifecycle findings and stage age, hand off the current baton without moving settlement authority, and commit exact settled memory directly. Language-agnostic.",
-      "version": "2.5.2"
+      "version": "2.5.4"
     },
     {
       "name": "shape",
       "source": "shape",
-      "description": "Forward motion: give intent its form via real disposable instances (not descriptions), record decisions legibly, and keep them current, then hand off to be built. Sibling to nav. Skills: park (save the session stopping point), catchup (recover current work from the handoff and evidence), mockup (render-to-decide), elicit (grounded clarification of a decision or cause, with an optional focused survey and no compulsory friction or reading detour), probe (a minimal experiment when nobody can settle a fork by argument), dogfood (use a built feature for real → friction + coverage gaps), align (verify → compact → triage in one pass, then render the plan), migrate (summon-only); doctor deferred. Language-agnostic.",
-      "version": "0.23.0"
+      "description": "Converge decisions, align priorities, reconcile project records, and hand off sessions.",
+      "version": "0.24.2"
     }
   ]
 }

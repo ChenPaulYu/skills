@@ -1,31 +1,24 @@
 ---
 name: first-principles
-description: "Strip a question to its irreducible axioms, rebuild from them, and surface where that DIVERGES from convention. Fires on \"reason this from first principles\", \"從第一性原理想\". In-chat, no file."
+description: "Rebuild a question from verified constraints and distinguish the result from convention. Use for first-principles reasoning or 從第一性原理想; this analyzes the user's problem rather than auditing a source document."
 ---
 
-# First-principles — strip a question to its axioms, rebuild from them
+# First principles — rebuild from what must hold
 
-Take a question, belief, or decision and **reason it from the ground up** — not from "how it's done" or "what's analogous", but from the irreducible truths that survive when every inherited assumption is removed. Most reasoning runs on **analogy and convention** ("competitors price per-seat, so we price per-seat") — fast, usually fine, but it silently inherits assumptions that may not hold for *your* problem, and the model's default "think about it" inherits them too. The point is not to restate the conventional answer in fancier words; it's to **rebuild the answer from axioms** and see *where that rebuilt answer diverges from convention* — that gap is where first-principles reasoning earns its keep.
+Use this pass when the user asks to reason from first principles or challenge assumptions;
+a hard question alone does not summon it.
 
-## Stance
+1. Name the conventional answer and the assumptions it inherits.
+2. Separate base truths from habits: physical or mathematical limits, definitions, and
+   verified constraints of this problem can ground the answer. Test each assumption with
+   “must this hold, or is it usually done?” Check factual claims and label uncertainty.
+3. Rebuild from those base truths without steering them toward a preferred answer.
+4. State the result and where it agrees with or diverges from convention. Do not invent
+   a novel conclusion merely to make the exercise appear useful.
 
-- **Core: name the conventional answer + the assumptions it inherits → strip to the irreducible axioms → rebuild the answer from the axioms alone → surface the divergence.** A complete pass must preserve those checks, but the visible output can be compact for small questions and fuller for consequential ones. If you can't separate an axiom from an assumption, you haven't stripped far enough. Every assumption gets the test **"true, or just usually done?"** — an assumption holds because of habit/analogy/market norm and could be otherwise; an axiom is a physical limit, mathematical fact, definition, or verified constraint of *this* problem. Rebuild ignores the conventional path — reason UP from the axioms as if you'd never seen the standard answer; don't reverse-engineer axioms to land back on convention. Ground the axioms: an axiom claimed physical/factual must be checkable — verify where you can, mark *uncertain* where you can't.
-- **Output proportional to the question.** For a quick assumption check, state the conventional answer, the few base truths that matter, the rebuilt conclusion, and the divergence. For larger decisions, make each part explicit. Use plain language for the takeaway; technical words such as "axiom" or "first principles" are allowed when useful, with a brief explanation if needed. Use an analogy only when it genuinely makes the divergence easier to hold.
-- **After the analysis.** Do not decide, write files, or start implementation from an analysis-only request. If the larger task already authorized continuation, return to that workflow. If the next action is genuinely undecided, optionally offer a concise helpful suggestion such as converging the divergence with the user, rendering the option, or grounding the conclusion into execution/planning.
-- **When it fires.** Summoned on a "reason this from the ground up / challenge the assumptions" request — not auto-fired because a hard question appeared. **vs `/shape:elicit` (the line to hold):** elicit draws the answer **out of you** by a grounded grill — *you* hold it, elicit is maieutic. first-principles **derives** an answer from the problem's base truths — the agent applies the frame. elicit extracts; first-principles derives. They pair: run first-principles to get a grounded divergence, then `/shape:elicit` to converge it into a decision *with you*. **vs `/frame:orthogonal`:** first-principles decomposes **down** to axioms and rebuilds up (depth); `orthogonal` factors **sideways** into mutually-independent axes (separation). **NOT for auditing an external document's argument** — just ask for a referee-style review; first-principles reasons about *your problem* from scratch, no source text to audit.
+Show enough reasoning for the user to check the conclusion, proportional to the stakes.
+Explain unfamiliar terms briefly. Use an analogy only if it makes the result clearer.
+An analysis-only request writes nothing and authorizes no implementation; otherwise return
+to the larger task's existing scope.
 
-Worked example + anti-pattern table: `references/protocol.md`.
-
-## Companion skills
-
-- **`/shape:elicit`** — converge the divergence into a decision *with the user* (first-principles derives the input; elicit draws out the call). The pairing partner.
-- **`/shape:mockup`** — render the rebuilt option when it's decided by seeing it.
-- **`/nav:do`** — execute the rebuilt answer directly when it's a small, decided, one-sentence code fix (ADR-057) — the common shape for a root-cause finding that turns out to be "swap this mechanism," not a redesign.
-- **`/nav:plan`** — ground the rebuilt answer into a code-level plan once settled (bigger/ambiguous work `/nav:do` doesn't fit).
-- **`/frame:orthogonal`** — the separation lens (factor sideways into mutually-independent axes); first-principles is the depth lens. The two decomposition moves.
-
-## Communication style
-
-- Explain in the user's language with simple, direct wording.
-- Lead each reply with one plain sentence; use a metaphor when it clarifies the concept.
-- Put precise technical detail after the plain explanation and only where it's needed.
+Read `references/protocol.md` for an example or a suspected reasoning failure.

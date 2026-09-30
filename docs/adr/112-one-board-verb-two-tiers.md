@@ -1,6 +1,8 @@
 # ADR 112 — One board verb, two tiers: retire `position` and the `core/` canon layer, merge `reconcile` into `align`
 
-**Status**: accepted
+**Status**: partially superseded
+**2026-09-30 amendment**: [ADR-131](docs/adr/131-reconcile-and-one-sync.md) supersedes the reconcile-into-align merge. This record preserves the original reasoning.
+
 **Date**: 2026-08-13
 **Source**: ratified by Paul 2026-08-13, from his own report — 「shape:position 也很惱人」…「設立 core 之後常常會讓他變得很重很難以繼續執行」…「precedents 這個詞其實也很難懂」…「會不會我們其實只需要一個動詞」.
 **Precedent**: [ADR-108](docs/adr/108-retire-research-fold-map-into-sync.md) / [ADR-110](docs/adr/110-shape-slims-to-eight.md) (a mode is not a door) · [ADR-109](docs/adr/109-deep-module-skills-three-layers.md) (depth = behavior delta ÷ resident tokens) · [ADR-041](docs/adr/041-canon-single-writer-freeze-gate.md) (the freeze protocol, retired here) · [ADR-105](docs/adr/105-precedents-tier-and-versioned-convention.md) (the precedents tier, retired here; its versioned-convention half survives).

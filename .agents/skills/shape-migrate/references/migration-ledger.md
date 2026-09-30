@@ -85,7 +85,7 @@ promotion step, no freeze gate.
   ledger file is then deleted.
 - The ADR-041 freeze protocol and the `/shape:position` write-door retire with this migration —
   no replacement door. Any verb may edit a `thoughts/` file's `Status:` line directly going
-  forward (`shape-align` for a fact reality already settled, `shape-elicit` for a reconsidered
+  forward (`shape-reconcile` for a fact reality already settled, `shape-elicit` for a reconsidered
   call).
 
 ### M3 — root `HANDOFF.md` → `blueprints/baton.md` (joins v3's ephemeral tier) · ADR-113, 2026-08-13
@@ -93,7 +93,7 @@ promotion step, no freeze gate.
 **Shape of the target:** no format change — `blueprints/baton.md` is the exact same five-section
 template (`goal · done · now · open · next` + the git-SHA metadata line) `HANDOFF.md` already
 used; only its location and owner move, from a root file written/read by the now-dissolved
-`reflect` plugin's `park`/`catchup` to a `blueprints/` tier written/read by `shape-baton`.
+`reflect` plugin's `park`/`catchup` to a `blueprints/` tier written/read by `/shape:baton`.
 
 ADR-127 restores shape-park / shape-catchup as the two entrances; this migration's
 target path and file format are unchanged. A rename alone does not run M3.
@@ -134,15 +134,15 @@ target path and file format are unchanged. A rename alone does not run M3.
    *then* remove the source. Run the project's test/lint gate if one exists — migration must not
    break a build that greps docs.
 6. **Report.** What moved where, every re-pointed reference, anything marked approximate, and a
-   one-line suggestion to run `shape-align` next — migration preserves staleness faithfully, so a
-   stale source section is now a stale target entry, and finding that is align's compaction pass's
+   one-line suggestion to run `shape-reconcile` next — migration preserves staleness faithfully, so a
+   stale source section is now a stale target entry, and finding that is reconcile's
    job.
 
 ## Boundaries
 
-- **vs `shape-align`'s compaction pass** — that pass judges *currency* (is this doc still true?)
+- **vs `shape-reconcile`** — that pass judges *currency* (is this doc still true?)
   with per-file gates; migrate transforms *structure* (which convention does this tree speak?)
-  with a whole-tree mapping. Migrate runs first when both are wanted: align's compaction pass then
+  with a whole-tree mapping. Migrate runs first when both are wanted: reconcile then
   operates on the current convention.
 - **vs relay's legacy adoption** — different object entirely (GitHub workspace history, not a
   `blueprints/`/`core/` tree). No longer a verb on relay's side — it retired to a hand-driven
@@ -154,7 +154,7 @@ target path and file format are unchanged. A rename alone does not run M3.
 | Temptation | Instead — and the tell |
 |---|---|
 | Improve prose while moving it | Verbatim or nothing — a migration diff should be `git mv`-shaped plus mechanical structure. Tell: a moved sentence reads better than its source. |
-| Migrate and reconcile staleness in one pass | Migrate first, offer `shape-align`'s compaction pass after. Tell: about to drop a section because it "looks stale" mid-move. |
+| Migrate and reconcile staleness in one pass | Migrate first, offer `shape-reconcile` after. Tell: about to drop a section because it "looks stale" mid-move. |
 | Invent a date or an evidence pointer | Mark it approximate in the Status line. Tell: a `established <date>` no git query produced. |
 | Leave a prescriptive tombstone by default | Delete the source; git archives it. Tell: writing a file whose only content is "this moved". |
 | Ship a convention change without its `M<n>` | Block it — rule 2. Tell: a spec/ADR edit renames a structure and this ledger gained nothing. |
@@ -164,4 +164,4 @@ target path and file format are unchanged. A rename alone does not run M3.
 - A migration report: version detected, mapping executed, references re-pointed, approximations
   flagged.
 - The tree at the current convention version, contents verbatim, zero dangling references.
-- A one-shot suggestion to run `shape-align` (never auto-invoked).
+- A one-shot suggestion to run `shape-reconcile` (never auto-invoked).

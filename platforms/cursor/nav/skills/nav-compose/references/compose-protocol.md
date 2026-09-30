@@ -1,24 +1,22 @@
 # Compose protocol — the full machinery behind structure-as-deep-module
 
-> The implementation layer behind `nav-compose`'s Stance. The SKILL.md body carries the stance,
-> the sentence-level craft keystones, and the gated compose/restructure step verbatim; everything
-> here is loaded on demand — the full rationale, the 8 rules, the Frame/Report steps, the
-> Discipline restatement, and the anti-pattern table. Moved verbatim from the pre-ADR-109 SKILL.md
-> body; the machinery is unchanged, only re-homed.
+> On-demand rationale, rule examples, and failure checks for `nav-compose`.
+> The body owns its operative gates; ADR-132 aligns this reference with authorized continuation
+> and preservation of meaning during restructuring.
 
 ## Why this skill exists
 
-Deep-module discipline applies to **any accreting artifact, not just code** — the docs an agent writes (ADRs, design notes, reports, observations, READMEs, specs) go un-navigable the same way a codebase does: the point buried mid-paragraph, the same decision re-explained in three files, a doc that grew to cover five concerns. `sync` maintains file-top headers, codebase maps, and factual alignment of existing docs; `compose` applies the **same eight rules to the structure of a prose document**.
+Deep-module discipline applies to **any accreting artifact, not just code** — the docs an agent writes (ADRs, design notes, reports, observations, READMEs, specs) go un-navigable the same way a codebase does: the point buried mid-paragraph, the same decision re-explained in three files, a doc that grew to cover five concerns. `sync` maintains file-top headers and factual alignment of reader documents; `compose` applies the **same eight rules to the structure of a prose document**.
 
-It is the prose-document sibling of `sync` (ADR-049): `sync` maintains code headers, renders the codebase map, and checks existing docs against their sources; `compose` authors or restructures prose documents. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
+It is the prose-document sibling of `sync` (ADR-049): `sync` maintains code headers and checks reader documents against implementation; `compose` authors or restructures prose documents. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
 
 ## Scope
 
 **Language- and genre-agnostic.** The convention (lead with the point · one owner per fact · group by knowledge · right grain · head-able top) applies to any document type, with the genre's own idiom flexed in (an ADR's Context/Decision/Consequences, a report's buckets, a README's quick-start). Degrades gracefully on an unfamiliar genre to the universal rules + flags what it assumed.
 
-Two modes, both **gated by a diff/draft before applying**:
+Two modes, both preview the intended structure or diff:
 - **Author** — turn intent / notes / a decision into a new document in deep-module shape.
-- **Restructure** — reshape an existing draft into the convention, moving its substance **verbatim** (never paraphrasing or inflating).
+- **Restructure** — reshape an existing draft while preserving its claims, decisions, qualifications, and sources. Prefer moves; concise rewrites may clarify the requested structure. Keep quotations exact.
 
 This skill **writes/edits the document**. It owns structure, not sentence-craft and not content it doesn't have (see Discipline).
 
@@ -29,7 +27,7 @@ This skill **writes/edits the document**. It owns structure, not sentence-craft 
 3. **Explicit dependencies** — a document names what it builds on and links its sources, rather than leaning on ambient "as we discussed" / unstated context.
 4. **Right grain — neither giant nor fragmented** — a doc covering many unrelated concerns gets split; trivia that needs no doc doesn't get one. **Group by knowledge, not by chronology** — "what I did Monday / Tuesday" is temporal decomposition; organize by concern/topic so each section owns one idea. *At the paragraph scale: one paragraph, one topic. At the word scale: omit needless words — the sentence-level form of a narrow interface (see *Sentence-level craft* in the SKILL.md body for the rest of the distilled keystones).*
 5. **Fit the framework** — use the genre's idiom (ADR → Context/Decision/Consequences; report → its buckets; README → quick-start first). Don't fight the document type's conventions. *This is the seam between two orthogonal axes: compose owns the **navigation** axis (gist → detail — lead-with-point, headings-as-interface, head-able) and **delegates the grounding axis** (how a claim is backed — evidence, examples) to the genre's idiom. A consumer asking compose for an evidence→example shape is asking the wrong owner: compose gives navigation, the genre gives grounding.*
-6. **Rearrange, don't rewrite** — restructuring an existing draft **moves its substance verbatim** into the better shape; never paraphrase, shorten, or embellish while reshaping.
+6. **Preserve meaning while improving structure** — prefer moves; rewrite concisely when needed for the requested organization. Preserve claims, decisions, qualifications, sources, and exact quotations. Never invent missing content.
 7. **Resolve consequential uncertainty** — inspect evidence first; ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Label unsupported claims rather than presenting guesses as facts.
 8. **Agent-navigability is the audit** — *if you cannot write the document's one-line lead / TL;DR, the document has no clear point yet* — that is the failure signal (it is trying to say too much, or its content isn't decided). Note it; usually the content, not the wording, needs work.
 
@@ -53,26 +51,26 @@ Summarize to chat:
 - Any rule-⑧ signals: <sections whose point wasn't clear → content undecided>
 ```
 
-If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name it and route the undecided content to `shape-elicit`. Do NOT commit unless the user asks; if on the default branch, suggest branching first.
+If a rule-⑧ signal surfaced (couldn't write a clean lead for a section), name it and route the undecided content to `shape-elicit`. Commit and publication authority remain separate from the requested edit.
 
 ## Discipline (do not skip)
 
-- **The diff/draft is the gate.** compose writes to disk; the user sees the document before it lands.
+- **Show the intended structure or diff, then honor scope.** Already-authorized writing proceeds; review-only requests do not modify files.
 - **Structure, not sentence-craft.** Wording polish is the `writing-clearly-and-concisely` skill's job — note it / hand off; don't absorb it.
 - **Never invent content to fill a structure.** An empty section means the point isn't decided (rule ⑧) → `shape-elicit`, not filler.
 - **Link, don't duplicate** (rule ①). A fact owned by another doc is referenced, never re-explained.
-- **Restructure = verbatim move** (rule ⑥). Reshaping a draft preserves its substance; no paraphrase.
+- **Restructure preserves meaning** (rule ⑥). Prefer moves; allow necessary concise rewriting while retaining claims, caveats, sources, and exact quotations.
 - **Rule ⑦ applies.** Ask if an unresolved type, audience, or central point would change what you write; reuse answers already supplied.
 
 ## Anti-patterns (refuse these)
 
 | Temptation | Instead — and the tell |
 |---|---|
-| Skip the diff, just write the file | Show the diff first, unless the user said "just write it" — compose mutates the doc. Tell: about to call the write tool before the user has seen what changes. |
+| Insert another generic approval into an authorized writing task | Show the approach or diff and complete the scoped edit. Tell: the request already says to update the document, but the agent stops at a proposal. |
 | Bury the point in paragraph 3 | Lead with the point — rule ②, the top is the interface. Tell: a reader has to scroll past scene-setting to find the actual claim. |
 | Re-explain a decision that lives in another doc | Link to the owner, don't copy the fact — rule ①. Tell: the same decision's rationale is spelled out here as well as in its source doc. |
 | Organize by "what happened when" | Group by concern instead — rule ④, temporal decomposition is the trap. Tell: the section headings are dates or phase names, not topics. |
-| Paraphrase a draft while restructuring it | Move the substance verbatim — rule ⑥. Tell: the reorganized version says the same thing in different words instead of the same words in a new place. |
+| Change meaning while reorganizing | Preserve decisions, claims, caveats, sources, and exact quotations. Tell: the shorter version silently removes a limitation or adds an unsupported promise. |
 | Invent prose to fill an empty section | Route to `shape-elicit` — rule ⑧, the content isn't decided yet. Tell: about to write a sentence that states a decision nobody has actually made. |
 | Pad the doc with puffery / AI-promo vocab (`seamless`, `robust`, `leverage`, `delve`…) or over-format (bullets / bold on everything) | Be specific — say what it actually does; the *living* denylist is owned by `writing-clearly-and-concisely`, point to it rather than copying it. Tell: a sentence would still be true with the adjective deleted. |
 | "While I'm here, let me deep line-edit every sentence" | Apply only the durable keystones in *Sentence-level craft*; route a deep copyedit to the external `writing-clearly-and-concisely`. Tell: about to touch a sentence whose meaning wasn't in question, only its grammar. |

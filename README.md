@@ -14,7 +14,9 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Make a small, already-decided change | `/nav:do` |
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
-| See where we are, compact drift, decide what's next（重新整理） | `/shape:align` |
+| Verify the board and decide what comes next（排優先順序） | `/shape:align` |
+| Clean stale thoughts, completed plans, and mockups（整理設計紀錄） | `/shape:reconcile` |
+| Update README and/or docs as one batch, or refresh source headers（同步說明） | `/nav:sync` |
 | Reconstruct where the session is after returning（回來接續） | `/shape:catchup` |
 | Write the session handoff before stepping away（離開前交接） | `/shape:park` |
 | Report progress to a counterpart over relay | `/relay:report` |
@@ -22,14 +24,14 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 ## What's in here
 
 <!-- BEGIN GENERATED catalog-plugins -->
-Catalog: 4 plugins · 23 skills.
+Catalog: 4 plugins · 24 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.19.2 | 6 | **Keep code healthy** — audit shape, refactor with discipline, sync file-top headers, the bilingual codebase map, and on-demand README-vs-ground-truth checks (three cadences, one door), ground a spec into a plan, compose docs as deep modules. Built on Ousterhout's deep-module principles. |
-| [`shape`](plugins/shape/) | 0.23.0 | 8 | **Push work forward** — converge a decision (grounded clarification, a rendered interactive artifact, or a minimal experiment), record it as a dated `thoughts/` doc that is born durable, keep the `blueprints/` board honest against the code, and move the explicit session handoff through `catchup` and `park`. The build itself is handed to `nav`, and already-authorized continuation resumes the ordinary workflow without a forced menu. |
-| [`frame`](plugins/frame/) | 0.14.0 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
-| [`relay`](plugins/relay/) | 2.5.2 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
+| [`nav`](plugins/nav/) | 0.20.1 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
+| [`shape`](plugins/shape/) | 0.24.2 | 9 | **Push work forward** — converge decisions, verify and prioritize the board with align, reconcile stale design records while preserving reasons, and hand sessions over through catchup and park. The build itself belongs to nav. |
+| [`frame`](plugins/frame/) | 0.14.1 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
+| [`relay`](plugins/relay/) | 2.5.4 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
 <!-- END GENERATED catalog-plugins -->
 
 `nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer) and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
@@ -45,7 +47,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
 
 <!-- BEGIN GENERATED catalog-skills -->
-Catalog skills: 23 active skills.
+Catalog skills: 24 active skills.
 
 ### `nav`
 
@@ -53,10 +55,10 @@ Catalog skills: 23 active skills.
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a behavior-preserving structural refactor with risk-proportional verification
-- `/nav:sync` — keep a codebase navigable at both scales, plus its docs honest: sync file-top headers to the code (per-file navigability; continuous, per-change, gated diff), render/refresh the bilingual codebase map `docs/codebase-map/index.html` (per-repo navigability; periodic, reads the maintained headers), or check whether a hand-maintained human-facing doc (README, install steps) still matches its ground truth (on-demand, gated diff to fix) — three cadences, one door (ADR-108, ADR-125)
+- `/nav:sync` — check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)
 - `/nav:plan` — ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
-- `/nav:compose` — author or restructure a prose document as a deep module (lead with the point, one fact one owner, group by concern, head-able top), gated diff — `sync`'s prose-document sibling
+- `/nav:compose` — author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval
 
 ### `shape`
 
@@ -66,7 +68,8 @@ Catalog skills: 23 active skills.
 - `/shape:mockup` — converge a look / structure decision by a real, disposable, interactive HTML artifact; a mockup-only request stops at the artifact unless build/track scope was already authorized
 - `/shape:probe` — design and run a minimal experiment (A/B, blind judgment test, or behavior probe) when a fork can't be settled by argument — the deciding experiment `/frame:dialectic` names, actually run; verdict feeds back to elicit or the user
 - `/shape:dogfood` — dogfood a built feature that feels unsmooth — drive the real interface (`browser` only when available/authorized, otherwise `curl` / CLI) against user intents, report friction + coverage gaps, and ask only for missing run authority; no automatic paid full-cost pass
-- `/shape:align` — one pass, on compaction pressure: verify every carried item against the code, compact what drifted (amend stale facts, prune/consolidate stale `thoughts/` + `plans/`), then decide now/next/later *with you* → the single maintained `blueprints/plan.md` status board (no silent drops — ADR-086; a visual view renders on demand via `/shape:mockup`)
+- `/shape:align` — verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup
+- `/shape:reconcile` — reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)
 
 *User-invoked:*
 
@@ -204,7 +207,7 @@ After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the
 
 ## Codex compatibility
 
-Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. Codex gets a separate, short, trigger-first metadata projection from `platforms/codex/descriptions.json`; Claude descriptions remain unchanged. A repo-root [`AGENTS.md`](AGENTS.md) is synthesised from all plugin `CLAUDE.md` files. The adapter now has its own release line in `platforms/codex/manifest.json` (`adapter_release` + `schema_version`, independent from Claude plugin versions). The full translation/install contract is in [`docs/codex-compatibility.md`](docs/codex-compatibility.md).
+Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. Codex gets a separate, short, trigger-first metadata projection from `platforms/codex/descriptions.json`; Claude descriptions remain unchanged. The generated repo-root [`AGENTS.md`](AGENTS.md) carries shared editing rules and links to family maintainer guides, loaded only when that family is edited. The adapter now has its own release line in `platforms/codex/manifest.json` (`adapter_release` + `schema_version`, independent from Claude plugin versions). The full translation/install contract is in [`docs/codex-compatibility.md`](docs/codex-compatibility.md).
 
 ```bash
 node scripts/build-manifests.mjs   # manifests, shared references, README/site catalog

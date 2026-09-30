@@ -1,18 +1,18 @@
 ---
 name: compose
-description: "Author a new document, or restructure a messy one, into deep-module shape: lead with the point, one fact one owner, grouped by knowledge not chronology. Fires on \"author an ADR / design doc / spec / README\", \"turn these notes into a document\" / \"clean up this prose\", or \"整理這份文件\" / \"幫我整理 docs\" (restructure mode). For file-top headers on CODE files use /nav:sync — compose is their prose-document sibling; writes/edits the document, gated by a diff."
+description: "Author or restructure a document so its point leads and each fact has one owner. Use for turning notes into a document or 整理這份文件; checking README/docs against implementation belongs to /nav:sync."
 ---
 
 # compose — documents as deep modules
 
-Write a **document** the way nav writes code: as a deep module. The act of putting words clearly is sentence-craft (the `writing-clearly-and-concisely` skill owns that); **compose owns the STRUCTURE** — organizing a document so a reader (or agent) grasps its point from the top and drills into the body only as needed. A doc that buries its point, restates a fact that lives elsewhere, or sprawls across concerns is a *shallow module* in prose form. It is `sync`'s prose sibling (ADR-049): `sync` maintains code headers, renders the codebase map, and checks existing docs against their sources; `compose` authors or restructures prose documents.
+Write a **document** the way nav writes code: as a deep module. The act of putting words clearly is sentence-craft (the `writing-clearly-and-concisely` skill owns that); **compose owns the STRUCTURE** — organizing a document so a reader (or agent) grasps its point from the top and drills into the body only as needed. A doc that buries its point, restates a fact that lives elsewhere, or sprawls across concerns is a *shallow module* in prose form. It is `sync`'s prose sibling (ADR-049): `sync` maintains code headers and checks reader documents against implementation; `compose` authors or restructures prose documents.
 
 ## Stance
 
-- **Two modes, both gated by a diff/draft before applying.** **Author** — turn intent / notes / a decision into a new document in deep-module shape. **Restructure** — reshape an existing draft into the convention, moving its substance **verbatim**, never paraphrasing or inflating. compose owns structure, not sentence-craft and not content it doesn't have.
+- **Two modes, both preview the intended structure or diff.** **Author** — turn intent / notes / a decision into a new document in deep-module shape. **Restructure** — improve organization while preserving claims, decisions, qualifications, and sources. Prefer moves; concise rewrites are allowed when they improve the requested structure without inventing content. Keep quotations exact.
 - **Frame first (rule ⑦): type, audience, and the single point — one sentence.** If you can't write that sentence, the content isn't decided yet; surface it and route to `/shape:elicit` rather than inventing filler. Reuse-via-transcript: if an upstream skill already converged the content this session, reuse it instead of re-deriving.
-- **Compose or restructure, then show the diff/draft and wait for the user's OK (batch-OK fine; auto-apply only on explicit "just write it").** This is the gate — compose writes to disk, so the user sees the document before it lands. Lead with the point (rule ②), then sections grouped by concern (rule ④); a fact that lives in another doc gets a **link**, not a restated copy (rule ①); fit the genre's idiom (rule ⑤).
-- **Report the point and any rule-⑧ signal** — a section whose lead you couldn't write cleanly means its content isn't decided, not that the wording needs polish. Don't commit unless asked; suggest branching first on the default branch.
+- **Show the intended structure or diff, then honor the request.** An authorized authoring/restructuring task includes writing the result; continue without another generic approval. Review-only stays read-only. Ask only for missing consequential decisions or new authority. Lead with the point (rule ②), then sections grouped by concern (rule ④); a fact that lives in another doc gets a **link**, not a restated copy (rule ①); fit the genre's idiom (rule ⑤).
+- **Report the point and any rule-⑧ signal** — a section whose lead you couldn't write cleanly means its content isn't decided, not that the wording needs polish. Publication and commits follow the user's authority; do not interrupt an authorized edit with a generic branching offer.
 
 **Sentence-level craft (distilled — the durable keystones).** Beyond structure, compose carries the few **durable** sentence principles an agent most often flubs, so it is the self-sufficient prose-writing door — no second skill needed for everyday work:
 
@@ -30,7 +30,7 @@ Full rationale, the 8-rule restatement, Frame/Report step detail, the Discipline
 ## Companion skills
 
 - **`writing-clearly-and-concisely`** (optional, external — not bundled with nav) — a deep sentence-craft reference: grammar/punctuation, the commonly-misused-words catalogue, and the maintained list of AI-prose tells. compose distills the durable keystones inline (above) and does **not** depend on it; reach for it only when a deep copyedit needs the long-tail.
-- **`/nav:sync`** — maintains code headers, renders the codebase map, and checks existing docs against their sources. Use compose to author or restructure the document itself (ADR-049/108/125).
+- **`/nav:sync`** — maintains code headers and checks reader documents against implementation. Use compose to author or restructure the document itself (ADR-049/125/131).
 - **`/nav:audit`** — assesses code shape (read-only); compose authors docs.
 - **`/shape:elicit`** — where undecided content goes when a rule-⑧ signal shows the point isn't settled.
 - **Consumers** — `/shape`, `/research`, and the repo's ADRs author their documents to compose's discipline (it is the single owner of deep-prose, per the N+1 trigger).

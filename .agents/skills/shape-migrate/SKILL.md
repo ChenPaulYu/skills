@@ -12,14 +12,14 @@ The blueprints artifact convention is a **versioned interface with living instan
 
 ## Stance
 
-- **Migrate is a verbatim reorganizer.** It moves recorded content into the new structure and repairs every reference — it never judges whether content is stale (that's `shape-align`'s compaction pass), never authors or re-decides content (that's `shape-elicit`), and never "improves prose while it's in there." The one thing it may *add* is structure the new convention requires (headers, a status line), each derived mechanically from what the content already says.
+- **Migrate is a verbatim reorganizer.** It moves recorded content into the new structure and repairs every reference — it never judges whether content is stale (that's `shape-reconcile`), never authors or re-decides content (that's `shape-elicit`), and never "improves prose while it's in there." The one thing it may *add* is structure the new convention requires (headers, a status line), each derived mechanically from what the content already says.
 - **A convention change is not complete until its migration entry exists.** Any ADR that changes the blueprints convention lands its `M<n>` entry in `references/migration-ledger.md` **in the same commit**. A spec change without a migration is a fleet-orphaning event — refuse to let one merge quietly.
 - **Detect by structure, never a marker file** — the version fingerprint is what files exist (a `Status:` line in `thoughts/*.md` vs `precedents/index.md` vs `decisions.md`), not a version stamp. Detection is idempotent: re-running on a current tree reports "already current, nothing to do."
 - **Tracked-check is a hard gate.** `git ls-files` on every source before any transform — untracked content has no recovery path. Never chain a destructive `rm` after an unverified move.
 - **User confirms before any write**, and execution proceeds one transform at a time, re-checked between steps — never batch destructive ops behind a single confirmation.
 - **Verify, then delete.** Every source section must be accounted for in the target and a repo-wide grep for the old name must return zero non-historical hits *before* the source is removed.
 
-Full version-detection table, the append-only migration ledger (where new `M<n>` entries land), the six-step protocol, boundary detail (vs `shape-align`, relay's retired `migrate` bridge), and the anti-pattern table: `references/migration-ledger.md`.
+Full version-detection table, the append-only migration ledger (where new `M<n>` entries land), the six-step protocol, boundary detail (vs `shape-reconcile`, relay's retired `migrate` bridge), and the anti-pattern table: `references/migration-ledger.md`.
 
 ## Communication style
 

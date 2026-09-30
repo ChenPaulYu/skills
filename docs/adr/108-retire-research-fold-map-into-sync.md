@@ -1,6 +1,8 @@
 # ADR 108 — Roster triage: retire the `research` plugin, fold `nav:map` back into `nav:sync`
 
-**Status**: accepted
+**Status**: partially superseded
+**2026-09-30 amendment**: [ADR-131](docs/adr/131-reconcile-and-one-sync.md) supersedes Decision 2’s retained map-render leg. This record preserves the original reasoning.
+
 **Date**: 2026-08-12
 **Source**: ratified by Paul 2026-08-12, as the structural round of the roster triage that followed ADR-107's audit. Paul's own hypothesis opened it: 「我的感覺是可能完全不需要有 research?」 The evidence agreed.
 **Precedent cited**: [ADR-021](docs/adr/021-retire-nav-doctor.md) / [ADR-079](docs/adr/079-retire-reflect-summarize.md) (the razor) · [ADR-107](docs/adr/107-retirement-round-four-verbs.md) (the audit + the zero-has-three-causes discipline) · [ADR-019](docs/adr/019-sync-collapses-headers-and-map.md) / [ADR-029](docs/adr/029-resplit-sync-and-map-by-cadence.md) (the sync/map history this ADR closes).

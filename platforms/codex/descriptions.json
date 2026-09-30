@@ -9,22 +9,23 @@
     "frame-first-principles": "Rebuild a question or decision from irreducible axioms, separating necessity from convention. Use to challenge assumptions or reason from first principles.",
     "frame-orthogonal": "Factor a tangled problem into independent axes and verify that moving one leaves the others fixed. Use to expose conflated or falsely coupled dimensions.",
     "nav-audit": "Audit codebase architecture against deep-module principles. Use for health, smells, feature-readiness, or full-domain reviews; read-only.",
-    "nav-compose": "Author or restructure prose as a navigable deep module: lead with the point, group by knowledge, and keep each fact owned once.",
+    "nav-compose": "Author or restructure prose: lead with the point, group by knowledge, and preserve claims and sources. Checking README/docs against implementation belongs to nav-sync.",
     "nav-do": "Implement a small, decided behavior change without a plan artifact. Use for quick features or fixes, not refactors or ambiguous work.",
     "nav-plan": "Write a codebase-grounded implementation plan for a substantial feature. Resolve consequential ambiguity; a plan-only request stops at the plan, while an already-authorized build continues.",
     "nav-refactor": "Execute a behavior-preserving structural refactor with risk-proportional verification. Use to extract, split, or reorganize code without changing observable contracts.",
-    "nav-sync": "Refresh load-bearing files' top headers to describe their purpose, details, and dependencies after code changes.",
+    "nav-sync": "Check or batch-update README and docs, or refresh code-file headers against current implementation. Verify claims and missing reader workflows. Project-record cleanup belongs to shape-reconcile.",
     "relay-digest": "Show the viewer's GitHub obligations: assigned work, reviews/re-reviews, settlement, and requesting a reviewer for an unreviewed PR. Read-only; mentions are notices.",
     "relay-reply": "Respond on an existing GitHub object with input, acceptance, an answer, comment, PR Comment, Approve, or Request changes. Never closes the object.",
     "relay-report": "Route a tell, owned question, review request, or memory change under the Issue-default Accord model. Previews writes and verifies responsibility.",
     "relay-settle": "Settle a Discussion or Issue, record a promoted Decision, merge an approved PR, or abandon one with reason. Requires authority and preserves Core gates.",
-    "shape-align": "Decide with the user what is In progress, Next, and Future, then maintain a lean plan.md board. Use to align priorities or refresh what comes next.",
+    "shape-align": "Verify the plan.md board against current evidence and decide priorities with the user. Use for what is next; design-record cleanup belongs to shape-reconcile.",
     "shape-park": "Save the session's goal, progress, reasons, and next action before stepping away. Explicitly invoked; one overwritten handoff, not the durable project board.",
     "shape-catchup": "Reconstruct where this project's work stopped and what comes next from its handoff and current evidence. Explicitly invoked; not a repo tour or permission to start implementing.",
     "shape-dogfood": "Use a completed feature like a real user via browser or CLI, record evidence, and identify workflow friction or missing intent coverage.",
     "shape-elicit": "Clarify an undecided conceptual choice or specific root cause through grounded conversation. Ask only what changes the decision; explain small gaps inline. Not a visual comparison or permission to implement.",
     "shape-migrate": "Migrate a project's blueprints/core document tree to the current convention version: detect the version by structure, propose the mapping, then execute gated verbatim transforms with reference integrity (M1: decisions.md to precedents/).",
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
-    "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction."
+    "shape-probe": "Design and run a minimal experiment when argument cannot settle a fork. Use to test an undecided claim, not preference or workflow friction.",
+    "shape-reconcile": "Reconcile stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; priorities to shape-align."
   }
 }

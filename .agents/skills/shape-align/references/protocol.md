@@ -1,7 +1,7 @@
 # Align — full protocol
 
-Machinery sunk from the SKILL.md body per ADR-109 (three-layer re-homing). The Stance section
-in SKILL.md carries the behavior-changing gates (sync-confirm, no-item-vanishes, write-gated);
+Machinery sunk from the SKILL.md body per ADR-109 (three-layer re-homing). The workflow
+in SKILL.md carries the behavior-changing gates (verify-before-triage, no-item-vanishes, authorized writes);
 this file carries the full step sequence, the scaffolding mechanics, and the boundary rationale.
 
 ## Why this skill exists
@@ -12,13 +12,11 @@ point at**: `plan.md`, grouped by status, that the agent executes against direct
 exactly one maintained copy of the truth — no second, HTML-rendered story that can quietly
 drift out of sync with it.
 
-It is the pre-build mirror of `nav-sync`'s codebase map (its map leg): where the map projects
-the *existing code*, align projects the *planned work*.
+Align records the planned work and its verified status; nav-sync keeps explanations
+of existing implementation current.
 
-> **Cost tier (ADR-059):** this skill declares the mechanical-tier executor role in its frontmatter — the bulk of
-> the work (scan the tree, rewrite `plan.md`) is mechanical, so it runs on the cheaper model for
-> that turn; the session model resumes on the next prompt. Deciding now/next/later stays *with
-> the user* — the tier changes the model, never the collaboration or the write gate.
+Planning and acceptance stay on the session model. Evidence gathering may be delegated
+without delegating priority judgment.
 
 ## The shape spine (restated)
 
@@ -51,7 +49,7 @@ See [`blueprints-spec.md`](.agents/skills/shape-align/references/blueprints-spec
 
 ```
 blueprints/
-  thoughts/      ← committed decisions (agent-facing; dated, Status-tagged — align reads + writes via the compaction pass)
+  thoughts/      ← committed decisions (agent-facing; dated, Status-tagged — align reads; shape-reconcile maintains lifecycle)
   mockups/       ← committed disposable HTML (owned by shape-mockup) — including, on request, a board snapshot
   plan.md        ← align writes: lean status index (agent AND human read this directly)
 ```
@@ -63,7 +61,7 @@ blueprints/
 Find `blueprints/` (commonly `docs/blueprints/`). A project that already carries the tree + the
 `AGENTS.md` priming block — skip to Step 2. Otherwise you're **adopting an existing repo** into
 the workflow, and this first run scaffolds it (there is deliberately no `shape:init`):
-- Ask **once** where it should live, then create `blueprints/thoughts/` + `blueprints/mockups/` +
+- Follow an established location; ask once only when a consequential location choice remains. For an authorized first-run setup, create `blueprints/thoughts/` + `blueprints/mockups/` +
   `blueprints/plans/`, and seed `plan.md` from the template. **Commit `mockups/`** (it carries
   Pick logs + ratified samples that thoughts link into — per `blueprints-spec.md`); only a
   *root-level* scratch `/mockups/` is gitignored, never the blueprints one.
@@ -75,29 +73,28 @@ the workflow, and this first run scaffolds it (there is deliberately no `shape:i
 
 ### Step 2 — Ground in current reality
 
-Two inputs, both required — never plan in a vacuum:
+Use both inputs when available; report absent/nonstandard records and ground the missing
+side in code, Git, and the conversation:
 - **What binds** — read `thoughts/*.md` and filter to `Status: in force` (the durable why, for
   the 🧭 layer; legacy trees: the `precedents/` tier or `decisions.md` — see
   `blueprints-spec.md`'s Convention versions). What currently binds?
 - **The actual state — verify against the code; don't trust the plan's own claims.** What's
-  already built? Grep the codebase for the features the thoughts describe; lean on `head -12`
-  file headers (`nav-sync`) + `git log` to read implementation status cheaply.
+  already built? Use file headers/search and `git log` to locate the implementation, then inspect source
+  and relevant tests before assigning status.
 
-(The sync-confirm and mechanical-verification gates for this step are stated in full, verbatim,
-in the SKILL.md body's Stance section — ADR-086.)
+(The evidence and verification gates for this step are stated in full, verbatim,
+in the SKILL.md body — ADR-086.)
 
 ### Step 3 — Triage *with the user* into now / next / later
 
 Propose a split: **🚧 In progress** (the current batch's tail) · **▶ Next** (what to pick up) ·
 **⏸ Future** (decided but deferred, with the blocker/why) · **✅ Shipped** (current baseline).
 Surface it and let the user move items, add, cut. This is the alignment — don't skip the
-dialog. If the grounding surfaced a thought that looks already-implemented or stale, **flag it
-for the compaction pass rather than cleaning it inline mid-triage** — the
-inventory/gather/present/write sequence in `reconcile-protocol.md` (run within this same
-skill).
+decision: already-stated priorities count and do not need to be asked again. If grounding surfaces stale design material, flag it for shape-reconcile.
+Keep board-item verification here; a full document cleanup is not required before triage.
 
 (The no-item-vanishes gate for this step is stated in full, verbatim, in the SKILL.md body's
-Stance section — ADR-086.)
+workflow — ADR-086.)
 
 ### Step 4 — Write `plan.md` (the agent index — and the only maintained artifact)
 
@@ -105,7 +102,7 @@ Lean, one layer, grouped by status. Each entry = **what to do + which thought to
 prose essays. Shape per the spec's `plan.md` template.
 
 **If the user wants to *see* the board right now**, that's not this skill's job: point them at
-(or invoke) `shape-mockup` to render an on-demand board snapshot from the current `plan.md` +
+(when useful) `shape-mockup` to render an on-demand board snapshot from the current `plan.md` +
 `thoughts/` (filtered to `Status: in force`) — see blueprints-spec.md's board-snapshot contract.
 align stops at writing `plan.md`; it never generates or maintains an HTML file.
 
@@ -131,6 +128,6 @@ honest daily, pull keeps it honest against undisciplined writers.
 - `blueprints/plan.md` — lean, status-grouped index (created or refreshed); the single
   maintained artifact, agent- and human-readable.
 - (First run) the scaffolded `blueprints/` tree.
-- A chat summary: what moved between now/next/later, anything flagged as possibly-stale (→ the
-  compaction pass), and — if the user wants a visual view — a pointer to run `shape-mockup` for
+- A chat summary: what moved between now/next/later, anything flagged as possibly-stale (→
+  shape-reconcile), and — if the user wants a visual view — a pointer to run `shape-mockup` for
   an on-demand board snapshot.

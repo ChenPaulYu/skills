@@ -21,6 +21,11 @@ One source owns the method; the adapter owns only the host translation.
 
 Codex always sees every installed skill's `name` and `description`; it loads the body only after a skill triggers. Treat metadata as a shared, bounded index.
 
+The repo-root `AGENTS.md` embeds shared marketplace editing rules and links to native family
+maintainer guides. Read only the affected family's guide before editing its source. Those
+links remain source paths; runtime skill guidance still undergoes normal host translation
+(ADR-132).
+
 1. **One active copy per skill.** Never install the same generated name in both `~/.agents/skills` and `~/.codex/skills`. Prefer `--global-root codex` when Cursor plugins are also global (Cursor scans `~/.agents/skills` by default). Project and global copies also overlap while that project is open, so prefer a small global profile when not using the Cursor-safe root.
 2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged. Whenever a Claude skill's routing semantics or frontmatter description changes, review its Codex sidecar in the same change; leaving the sidecar text unchanged is a deliberate review result, never an omission.
 3. **Front-load discrimination.** State the object, action, and strongest trigger first. Put examples, anti-triggers, sibling boundaries, and procedure in the body.

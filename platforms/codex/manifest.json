@@ -1,6 +1,6 @@
 {
   "schema_version": "2",
-  "adapter_release": "1.0.8",
+  "adapter_release": "1.0.10",
   "release_policy": {
     "adapter_versioning": "independent-semver",
     "schema_versioning": "increment-on-required-contract-change",
@@ -203,8 +203,7 @@
         "> **Mechanical-tier skill.**"
       ],
       "contract_consumers": [
-        ".agents/skills/relay-digest/SKILL.md",
-        ".agents/skills/shape-align/SKILL.md"
+        ".agents/skills/relay-digest/SKILL.md"
       ]
     },
     {

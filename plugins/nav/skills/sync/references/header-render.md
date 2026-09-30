@@ -25,7 +25,7 @@ The **content shape** is identical across all of them — only the comment chara
 
 ## The convention
 
-Every load-bearing file's top 8-12 lines must match this template:
+Use the project's readable header convention; this template is the fallback for load-bearing files:
 
 ```ts
 /**
@@ -64,7 +64,7 @@ For each load-bearing file, `head -15` it and classify:
 | State | Action |
 |---|---|
 | No top comment at all | **Add new header** before line 1 |
-| Has `/** */` at top, matches convention | **Skip** (already correct) |
+| Has a readable header | **Verify its claims against code**; retain it if current, correct only stale claims |
 | Has `/** */` at top, wrong format | **Restructure** verbatim into convention (preserve substance) |
 | Has `// ...` line comments at top | **Add header** above; preserve `//` comments if they explain specific code below |
 | Has redundant `// src/path/file.tsx` path marker | **Remove path marker** + add header |
@@ -74,27 +74,23 @@ For each load-bearing file, `head -15` it and classify:
 
 For each file getting a new/restructured header:
 
-1. Read enough of the file to write the description (top 30-50 lines usually; full file if dense)
+1. Inspect the implementation and relevant tests deeply enough to support each claim; do not stop at an arbitrary line count
 2. Look at the file's imports → derive `Reads:` (the ≤ 6 load-bearing ones, not every transitive)
 3. Write the header following the template
 
-**Rule ⑥ applies**: if there's existing top comment substance, **preserve it** — restructure into the convention's shape, don't paraphrase or shorten.
+**Rule ⑥ applies** to restructuring: preserve existing substance. Correct evidence-backed stale claims rather than carrying a false statement forward verbatim.
 
 ### Step 4 — Show diff before applying
 
-Output the proposed headers as a diff (file by file). Ask the user to confirm OR apply automatically if the user invoked with explicit "just apply" intent. **This is the gate** — the header diff is reviewed before applying (headers mutate source); a later map render then reads the freshly-written headers.
+Show the proposed header diff. A check-only request stops here; an authorized update
+applies the scoped corrections without another generic approval.
 
-### Step 5 — Apply
+### Step 5 — Apply and verify
 
-Write the headers. Run a sanity check:
-
-```bash
-pnpm typecheck   # should still pass — headers are comments, no impact
-pnpm lint        # same
-pnpm test --run  # behaviour unchanged
-```
-
-If anything breaks → something went wrong (probably a stray syntax error in a header). Fix or revert.
+Write the headers without displacing shebangs, encoding markers, or required legal notices.
+Check the actual language's syntax/lint where relevant and run repository-required checks.
+Use the repository's commands, not an assumed package manager. Inspect the diff to confirm
+that executable behavior did not change. Fix any comment syntax error before completion.
 
 ### Step 6 — Update CLAUDE.md (if convention isn't documented)
 
@@ -197,11 +193,11 @@ export function useSelection(...) {
 
 ## Discipline (do not skip)
 
-- **Show diff first.** Headers are not refactors; the user reviews before applying. This diff is the gate before anything lands.
+- **Show the diff and honor scope.** Existing update authority is sufficient; checks remain read-only.
 - **Skip thin files explicitly + list them.** Don't pretend they don't exist; document the deliberate omission.
 - **Preserve substance.** When restructuring existing doc comments, move the content into the convention's shape — never paraphrase.
 - **Test gate after applying.** Headers shouldn't break anything; if they do, revert + fix.
-- **Update CLAUDE.md.** Otherwise the convention is invisible to future agents/humans.
+- **Document a newly adopted convention only within scope.** Reuse an existing readable convention.
 
 ## The 8 rules (the through-line of every nav skill)
 
@@ -223,4 +219,4 @@ export function useSelection(...) {
 | Header every file uniformly | Skip the ones that don't need one — rule ④, buttons/icons/barrels don't earn a header. Tell: about to write a header for a one-line re-export file. |
 | Paraphrase an existing top comment while reshaping it | Move the comment's substance verbatim into the convention's shape — rule ⑥. Tell: the new header says the same thing in different words instead of the original words in the new shape. |
 | "While I'm here, let me also refactor X" | Route the refactor to `/nav:refactor` — it needs its own narrow scope and discipline. Tell: the diff is restructuring code, not just adding or updating a header comment. |
-| Regenerate the codebase map in the same breath | Run the map leg separately (on request / periodic) — same door, different cadence (ADR-108 folded the former `/nav:map` back into sync). Tell: about to touch `docs/codebase-map/` during what started as a header sync, without being asked. |
+| Expand a header correction into another artifact | Stay within the requested surface. Tell: generating a standing HTML map or rewriting the README during a header-only request. |

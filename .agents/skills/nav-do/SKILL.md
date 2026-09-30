@@ -54,7 +54,7 @@ Scope decisions, ownership checks, and examples of risk-proportional verificatio
 - **`nav-plan`** — when a substantial change warrants a grounded plan first; already-authorized execution then follows this skill's discipline.
 - **`nav-refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`nav-audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
-- **`nav-sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header (and re-render sync's codebase map leg if that role change is worth reflecting there).
+- **`nav-sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header. Include affected reader documents when the change alters their claims or usage.
 - **`shape-elicit` · `shape-mockup`** — when the change isn't actually decided yet; converge first, then `do`.
 
 ## Communication style

@@ -1,0 +1,100 @@
+# Digest semantics — direct-state fallback
+
+Read when the helper is unavailable, its schema is incompatible, or a specific result needs
+diagnosis. The normal helper path trusts the reducer rather than recomputing these sets.
+
+## Obligation contract (Accord memory model, ADR-100)
+
+Include each obligation once. There is no Announcement object and no receipt-default (ADR-097 retired): a tell that needs a receipt is an Issue, and a fact that needs no receipt gets no obligation — a passing heads-up is a plain `@mention`, caught only by the notices tier below.
+
+- an Issue assigned to the viewer owes exactly **one** obligation, whose action derives from its stage labels — labels are stages, not stacking claims:
+  - `needs-input` → `DECIDE/ACT provide-requested-input` (someone is waiting on information only the assignee has);
+  - `awaiting-acceptance` → `DECIDE/ACT accept-or-dispose` (the assignee — reassigned here by `reply`'s baton flip when they delivered requested input — must accept or dispose of what came back);
+  - `awaiting-record` → `SETTLE record-decision` (the assignee — reassigned here by `settle`'s native promotion signal — is the recorder who owes the Decision file commit);
+  - none of the above → `DECIDE/ACT act` (the unchanged default for plain assignment);
+  - **conflicting labels** (more than one of the three present at once) are malformed: the reducer picks the *latest* stage in the order `needs-input < awaiting-acceptance < awaiting-record` for a deterministic obligation, and adds `malformed: ['conflicting-stage-labels']` to the entry — self-report this rather than presenting it as an ordinary obligation;
+  - a stage label on an Issue with **no assignee** produces no obligation for anyone and a separate `stage-without-assignee` finding — never an invented owner;
+- an open Issue carrying the native `relay-triage` label is a generated wrapper, not a source obligation. If assigned to the viewer, return it in `triage` with `process-linked-obligations`; do not count it in `obligations` and do not scan it for notices. Its linked source Issues remain ordinary obligations;
+- a Q&A Discussion the viewer authored: `DECIDE/ACT accept-answer-or-follow-up` while open, unanswered, and someone else has commented; `SETTLE close-answered-question` once GitHub's native `isAnswered` is true and the Discussion is still open;
+- a requested PR verdict on the current revision;
+- a current-revision `Request changes` addressed back to the PR author until a new revision is pushed;
+- re-review when a changed revision invalidated approval or requires a new request;
+- the viewer's own open, non-draft PR where nobody has a live claim on review — no active review request, no current-revision verdict that either satisfies required approval or comes from a historically-designated reviewer, and no historically-designated reviewer (active or withdrawn request) has a verdict on any *other* revision (their stale verdict routes THEM a re-review obligation instead, never suppressing this one silently): `DECIDE/ACT request-reviewer` for the author. A `COMMENTED` review never counts as a claim, from anyone, and neither does a never-requested volunteer's current-revision approval when required approval is not actually satisfied (a protected repo's aggregate `REVIEW_REQUIRED` doesn't recognize that approval as sufficient, so Relay must not either);
+- an approved current-revision ordinary PR waiting for its author, or its single assignee when one names the merger, to merge (`merge-pull-request` when mergeable now, `resolve-conflicts-then-merge` when conflicting, `prepare-branch-then-merge` for any other non-mergeable state — behind, blocked, unstable, or still being computed);
+- an approved current-revision Core PR only when required review, stale-approval dismissal, and bypass enforcement are verified (`merge-core` when mergeable now, otherwise the same `resolve-conflicts-then-merge`/`prepare-branch-then-merge` split as an ordinary PR).
+
+A `fyi`-labeled object opts every obligation above out for anyone — a durable, explicit opt-out available on any object type. The LEGACY `[ACK]`-titled-Discussion compatibility path (ADR-100) retired 2026-07-22 once migration completed with zero live legacy objects remaining; an `[ACK]`-titled Discussion is now just a Discussion — see ADR-100's Legacy-compatibility section.
+
+**Ratified invariant:** an open, non-draft PR is never obligation-free. At every moment, either a reviewer owes a verdict, the author owes changes, the settlement owner owes a merge, the author owes a reviewer request, or a `settlement-owner-cannot-merge` blocker is visible (below). Four carve-outs are named, not silently swallowed:
+
+- an `fyi`-labeled PR is a deliberate opt-out — the whole obligation block is skipped for it, same as any other FYI object;
+- a ghost/deleted author has no native owner to route to, so a PR in that state sits outside the invariant — a rare edge, not a bug;
+- per-viewer data cannot reveal another account's merge authority. When the viewer *is* the settlement owner and approval is satisfied but they personally lack merge authority (`viewerCanSettle` is false), that closes the author side honestly as a **blocker** (`settlement-owner-cannot-merge`), not a silent zero — see Blockers below. Some other account may still be able to merge it; this run cannot see that;
+- a review requested from a **team**, not an individual, is outside v1: the reducer matches a requested reviewer against individual viewer logins, so a team-only request never resolves to a REVIEW obligation for any member, and no request-reviewer obligation fires for the author either (an active request already exists, just not to a person) — the PR is invisible to everyone's digest until an individual reviewer is added. `/relay:report` is the place this is prevented, not here.
+
+Exclude:
+
+- `fyi`-labeled objects — the explicit opt-out;
+- `relay-triage` wrapper Issues from the source-obligation set — they are returned in `triage` instead;
+- ordinary notifications;
+- Comment-only PR rounds presented as verdict completion;
+- closed/resolved items and obligations completed on the current revision;
+- an unanswered Q&A Discussion where the viewer is only mentioned, not the author — that is a notice, not an obligation.
+
+If an otherwise-ready Core PR lacks verified enforcement, report it as blocked, not `SETTLE`. Policy-only review history is evidence but not a platform gate. Similarly, when the viewer owns settlement with satisfied approval but lacks merge authority (`viewerCanSettle` false), report it as blocked (`settlement-owner-cannot-merge`), not silent — see the invariant carve-out above.
+
+## Findings — lifecycle defects, never work assignment
+
+`findings` is separate from `obligations`. A finding says native workflow state is malformed,
+incomplete, or older than workspace policy; it never decides who should own a repair. V1 kinds:
+
+- `conflicting-stage-labels` — more than one stage is present. The obligation keeps schema-4's
+  `malformed` field for compatibility while the defect also appears here;
+- `stage-without-assignee` — a stage promises a baton but no native owner exists;
+- `multiple-action-owners` — a staged Issue has more than one assignee; plain multi-assignee
+  Issues remain legal because Relay promises one baton only for staged work;
+- `stage-age-unknown` — lifecycle events were collected but the current stage start cannot be
+  proved, including a truncated Issue timeline;
+- `overdue-stage` — `stageEnteredAt` exceeds an explicit `--policy` threshold. No policy means no
+  overdue finding.
+
+`stageEnteredAt` is the later of the current stage's latest label event and current assignee's
+latest assignment event; plain assigned work uses the current assignee event. Generic `updatedAt`
+never resets it, so comments and reminder output cannot make old responsibility look new. The
+policy shape is `{ "overdueAfterDays": { "default": 7, "needs-input": 3, ... } }`.
+
+Findings parse no settlement prose, Decision files, `Follow-ups:`, or arbitrary question text.
+Those checks belong to workspace conformance or a separately invoked semantic review. `digest`
+stays deterministic and mechanical-tier.
+
+## Notices — awareness, never work owed
+
+`notices` is a separate array from `obligations`. A notice means something is worth the viewer's attention; it never means work is owed, and it must never be presented, sorted, or counted alongside an obligation. One kind today:
+
+- `mentioned-in-prose` — the viewer's login is `@mentioned` anywhere in the title, body, or a comment of an open Discussion, Issue, or PR, with no formal obligation signal (no assignment or review request). Under the Accord memory model this is the **default landing spot for almost every plain `@mention`** — with no Announcement object and no receipt-default, naming someone in ordinary prose is notice-tier by construction, not the exception. This is the safety net for a prose "@person please respond" that never became a native obligation — the same rule blueprint section 8 states as the minimum: "a message that needs action never rides on an @mention alone." A question with a stateable owner and completion rule belongs in a `needs-input` Issue instead (see `report/SKILL.md`).
+
+A `mentioned-in-prose` notice clears once the object closes — every Discussion closes only through its initiator (ADR-096). It can also clear earlier, on viewer engagement, but the rule differs by **where** the mention lives — this split matters, and getting it wrong silently re-opens the exact hole the notices tier exists to close:
+
+- **Title/body mention — atemporal.** A body/title edit carries no per-mention timestamp, so "the viewer has looked at this object at some point" is the only signal available: any prior engagement suppresses it for good — the viewer authored any comment on the object, or (Discussions only) left an `👀` reaction.
+- **Comment-borne mention — temporal.** A mention inside a comment carries that comment's own `createdAt`, so suppression compares timestamps: it is suppressed only when the viewer's own last comment on the object is at-or-after that mention's comment. **A mention that arrives AFTER the viewer's last comment still fires** — the viewer has not seen it yet, even though they once engaged with the same thread. This is deliberate, not a gap: an unbounded "any engagement, ever, suppresses everything after it" reading would silence a later "@person please respond" forever in any thread the person had ever once commented in, which is exactly the founding scenario the notices tier (ADR-093) exists to catch. An `👀` reaction carries no timestamp in the collected data, so it **never** suppresses a comment-borne mention — only a title/body one. A comment mention with no `createdAt` at all (a legacy fixture) is treated as older than everything, so it is suppressed once the viewer has commented on the object at all, regardless of relative order — this keeps old fixtures meaningful rather than silently never-suppressing.
+
+**Deliberate asymmetry (unrelated to the temporal split above):** Issues and PRs carry no reaction query in the current collector, so only comment-engagement ever suppresses their mentions; a Discussion mention can additionally clear via `👀` (title/body only, per above). This is not an oversight — comment-engagement already covers the suppression need for Issues/PRs, so the collector is not extended to fetch reactions there too.
+
+A mention notice is suppressed in four cases, so it never becomes standing noise:
+
+- the object already carries an **obligation** for the viewer — the obligation supersedes the weaker signal;
+- the object already carries a **blocker** for the viewer (e.g. `settlement-owner-cannot-merge`, `core-enforcement-unverified`) — same reasoning, a blocker is more informative than a bare mention;
+- the object carries a **formal signal** for the viewer regardless of completion state, for a TITLE/BODY mention only — the viewer is or was a requested reviewer (active or withdrawn history), or is an assignee. A *completed* round (verdict already given) must not resurface as a standing title/body mention notice forever just because the object still names the viewer in its text — that reopens the exact noise problem ADR-090 retired the old startup-digest hook to fix. **This suppression never extends to a comment-borne mention on the same object** (fable I2) — see below;
+- the viewer has **engaged** with the object, per the atemporal/temporal split above — again, title/body only: a comment-borne mention is governed *solely* by the temporal rule, independent of any formal signal on the object. A viewer who already gave their own `👀` is not deaf to a *later* "@them please respond" comment. An **OPEN** obligation on the object still suppresses everything, comment-borne included (unchanged) — it is specifically the completed/no-obligation case where formal-signal history must not gate a comment mention.
+
+State this plainly, since it is easy to misreport: **a comment-borne mention that arrives after your last engagement with the object DOES fire — even for a viewer who already holds a completed formal signal (a finished review or assignment) on that same object; one that arrives before your last engagement does not.** "You once looked at this thread" is never read as "you have seen everything anyone will ever say in it."
+
+A mention is also never counted from text the viewer authored themselves — a comment naming yourself is not someone pinging you. Attribution: title/body → the object's author; a comment → that comment's author. A source with no resolvable author is never treated as self-authored (it still counts).
+
+An unreviewed own PR is **not** a notice — see `request-reviewer` in the obligation contract above. Anything that needs review is captured as an obligation, never demoted to awareness.
+
+Present notices in their own section, clearly labeled as non-binding awareness, after obligations.
+
+## Comment-scan cap
+
+The mention scan and the Q&A comment check read up to the most recent 50 comments per object. A comment with no resolvable author (deleted/ghost account) never counts as a "stranger" for the Q&A `accept-answer-or-follow-up` check — only a real, different login does. When an object's comment count exceeds the cap, the run does not fail — GitHub-collection failures stay reserved for the harder page caps on discussions/issues/PRs themselves, reactions, files, and review-request history. Instead the result carries `commentScanTruncated` for each affected open object. Issue lifecycle timelines also degrade per object rather than failing the run: a truncated timeline yields `stageEnteredAt: null` plus `stage-age-unknown`.

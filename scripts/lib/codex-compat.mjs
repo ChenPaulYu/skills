@@ -357,10 +357,6 @@ export function createProjectGuidanceLowerer({ plugins, skills }) {
    * then soften the /init assumption. */
   function lowerSkillGuidance(text) {
     const rewritten = rewriteCommon(text)
-      .replace(
-        /plugins\/nav\/skills\/sync\/references\/visual-spec\.md/g,
-        "references/visual-spec.md",
-      )
       .replace(REF_PATH, ".agents/skills/$1-$2/references/")
       .replace(/CLAUDE\.md/g, "AGENTS.md");
     return lowerInitAssumption(rewritten);

@@ -16,6 +16,8 @@
 - **frontmatter `model:` 豁口的 validator 檢查** — `thoughts/2026-07-13-dispatch-tiers-consultant-seat.md` §待決
 
 ## ✅ Shipped
+2026-09-30：**skill 載入瘦身**（ADR-132）——AGENTS.md 只載共用規則，家族說明按需讀取；reconcile 移除無用模板；compose 承接既有授權；四個 frame 本文保留推理檢查並精簡；digest 完整語意移至備援參考。24 個入口維持，舊 mockup 副本移出搜尋範圍並備份。驗證見 `docs/findings/2026-09-30-skill-runtime-slimming-checks.md`。
+2026-09-30：**reconcile 回歸，sync 統一說明校準**（ADR-131）——align 聚焦工作板與優先順序；reconcile 整理設計紀錄並保留理由；nav-sync 支援檔頭與整批 README／docs，逐份交代處理結果。常駐 codebase map 產生流程退役。nav 0.20.0／shape 0.24.1，本機安裝副本同步；驗證與限制見 `docs/findings/2026-09-30-reconcile-and-sync-checks.md`。
 2026-09-16：**翻新收尾驗證**——修正 compose 本文與參考中的 sync 舊邊界，nav 更新至 0.19.2。兩個可寫隔離案例分別驗證「直接改」完成修改並通過測試、「先不要改」只分析且檔案雜湊不變；發布 smoke 2/2、單元測試 19 項與相容性檢查通過。證據與模型限制見 `docs/findings/2026-09-16-conversation-smoke.md`。
 2026-09-16：**對齊全域表達規則與現行說明**——比喻和術語解釋改為按需要；總覽的 sync／compose 說明不再把 sync 當成只管檔首、或導向已退役的 nav-map。三個唯讀對話樣本沒有多餘確認或固定選單，但仍全部使用比喻，快取推理有過度概括；不算完整行為驗證。證據：`docs/findings/2026-09-16-conversation-smoke.md`。
 2026-09-16：**公開目錄改由來源生成**（ADR-130）——README 與總覽的版本、數量、名單和召喚分類讀取 manifest／skill frontmatter；介紹文字與版面提示留在 `docs/catalog-copy.json`。既有 build／sync 接線，驗證改為重建比對；測試、過期產物反例、雙語頁面檢查通過。計畫見 `plans/2026-09-16-catalog-generation.md`。
