@@ -16,7 +16,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
 | Verify the board and decide what comes next（排優先順序） | `/shape:align` |
-| Clean stale thoughts, completed plans, and mockups（整理設計紀錄） | `/shape:reconcile` |
+| Clean stale thoughts, completed plans, and mockups（整理設計紀錄） | `/shape:tidy` |
 | Update README and/or docs as one batch, or refresh source headers（同步說明） | `/nav:sync` |
 | Reconstruct where the session is after returning（回來接續） | `/shape:catchup` |
 | Write the session handoff before stepping away（離開前交接） | `/shape:park` |
@@ -28,8 +28,8 @@ Catalog: 3 plugins · 24 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.22.2 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.29.0 | 11 | **Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140). |
+| [`nav`](plugins/nav/) | 0.22.3 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
+| [`shape`](plugins/shape/) | 0.29.1 | 11 | **Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140). |
 | [`frame`](plugins/frame/) | 0.17.1 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
@@ -69,7 +69,7 @@ Catalog skills: 24 active skills.
 - `/shape:probe` — design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials
 - `/shape:dogfood` — drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries
 - `/shape:align` — verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup
-- `/shape:reconcile` — reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)
+- `/shape:tidy` — tidy stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)
 - `/shape:idea` — save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice
 - `/shape:status` — read original project tasks and fresh mapped-repository evidence without mutating state or priorities
 

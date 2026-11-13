@@ -20,7 +20,7 @@ export const SHARED_SKILL_REFERENCES = [{
 }, {
   source: "plugins/shape/references/development-artifacts.md",
   destinations: [
-    ...["align", "catchup", "dogfood", "elicit", "mockup", "park", "probe", "reconcile"]
+    ...["align", "catchup", "dogfood", "elicit", "mockup", "park", "probe", "tidy"]
       .map(skill => `plugins/shape/skills/${skill}/references/development-artifacts.md`),
     "plugins/nav/skills/plan/references/development-artifacts.md",
     "plugins/nav/skills/compose/references/development-artifacts.md",

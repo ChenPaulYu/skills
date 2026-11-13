@@ -1,4 +1,4 @@
-# Reconcile — evidence and cleanup protocol
+# Tidy — evidence and cleanup protocol
 
 The skill body owns authority, preservation, and completion gates. This reference supplies
 the inventory and retirement mechanics, extracted from align (ADR-131).
@@ -78,7 +78,7 @@ local retention policies mean a folder can sit on disk without ever entering Git
 
 **Salvage respects the amend boundary:** it *relocates* a recorded pick/deferral, never authors
 one. If ② fails because the design judgment itself is unclear — stop, recommend
-`/shape:elicit`.
+`shape-elicit`.
 
 ## Handoffs and legacy views
 
@@ -95,7 +95,7 @@ Re-read changed records, inspect the diff, resolve inbound links, and account fo
 record. Update directly affected board facts if that update is authorized; preserve priorities.
 Report retained material, unknowns, and coverage limits. There is no automatic align finale.
 
-Code headers from /nav:sync are useful locators, not proof or a prerequisite. Read code directly
-when headers are absent. /nav:sync checks reader documents such as README; /shape:align
-decides priorities; the convention structure is upgraded by hand following the migration ledger bundled with /shape:align. Reuse fresh evidence
+Code headers from nav-sync are useful locators, not proof or a prerequisite. Read code directly
+when headers are absent. nav-sync checks reader documents such as README; shape-align
+decides priorities; the convention structure is upgraded by hand following the migration ledger bundled with shape-align. Reuse fresh evidence
 between these tasks without requiring or invoking another skill.

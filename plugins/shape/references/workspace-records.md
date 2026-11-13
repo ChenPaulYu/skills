@@ -71,7 +71,7 @@ Completing a task may complete its plan, but does not expire an adopted thought.
 A concluded probe may remain inconclusive and authorize no task. A saved idea does
 not imply approved work. Keep deferred and rejected distinct. Superseded decisions
 link their successors; preserve useful rejected alternatives and evidence locators.
-Reconcile owns consolidation/retirement; status and wrap do not delete history or
+Tidy owns consolidation/retirement; status and wrap do not delete history or
 move files into archives. Closed items disappear from active views through status.
 
 Follow the selected storage repo's policy. A private home repo may explicitly commit

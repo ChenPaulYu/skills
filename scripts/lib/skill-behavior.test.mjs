@@ -18,7 +18,7 @@ test("preparation gives only task inputs and refuses to overwrite an existing tr
   assert.deepEqual(Object.keys(packet).sort(), ["case", "prompt", "skill", "workspace"]);
   assert.throws(() => prepareCase("reconcile", workspace), /Refusing to overwrite/);
   assert.throws(() => prepareCase("reconcile", fileURLToPath(new URL("../forbidden-trial", import.meta.url))), /outside the source repository/);
-  assert.match(readFileSync(packet.skill, "utf8"), /Reconcile/);
+  assert.match(readFileSync(packet.skill, "utf8"), /Tidy/);
 }));
 
 test("check-only detects changed, added, and transiently restored final-state limitations", () => fixture("docs-check-only", workspace => {

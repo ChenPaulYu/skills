@@ -1,4 +1,4 @@
-# Reconcile — evidence and cleanup protocol
+# Tidy — evidence and cleanup protocol
 
 The skill body owns authority, preservation, and completion gates. This reference supplies
 the inventory and retirement mechanics, extracted from align (ADR-131).

@@ -98,7 +98,7 @@
           "align": "verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup",
           "catchup": "read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably",
           "park": "write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level",
-          "reconcile": "reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)",
+          "tidy": "tidy stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)",
           "idea": "save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice",
           "status": "read original project tasks and fresh mapped-repository evidence without mutating state or priorities",
           "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint"
@@ -128,8 +128,8 @@
           "align": [
             "",
             {
-              "en": "Verify carried board items against source and tests, decide priorities with the user, and update plan.md. No silent drops and no mandatory document-cleanup pass. Reconcile owns design-record lifecycle; nav-sync owns reader-document accuracy (ADR-131).",
-              "zh": "以程式與測試核對板上進度，跟使用者決定優先順序，再更新 plan.md。條目不能無聲消失，也不用先整理整棵文件樹。設計紀錄由 reconcile 整理；人讀的說明由 nav-sync 校準（ADR-131）。"
+              "en": "Verify carried board items against source and tests, decide priorities with the user, and update plan.md. No silent drops and no mandatory document-cleanup pass. Tidy owns design-record lifecycle; nav-sync owns reader-document accuracy (ADR-131).",
+              "zh": "以程式與測試核對板上進度，跟使用者決定優先順序，再更新 plan.md。條目不能無聲消失，也不用先整理整棵文件樹。設計紀錄由 tidy 整理；人讀的說明由 nav-sync 校準（ADR-131）。"
             }
           ],
           "catchup": [
@@ -160,10 +160,10 @@
               "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-134）。"
             }
           ],
-          "reconcile": [
+          "tidy": [
             "",
             {
-              "en": "Reconcile stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-131).",
+              "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-131).",
               "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-131）。"
             }
           ]

@@ -20,7 +20,7 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 | You want to… | Verb |
 |---|---|
 | Decide what to work on next / refresh the board | `/shape:align` → `docs/blueprints/plan.md` |
-| Reconcile completed/stale design notes, plans, and mockups | `/shape:reconcile` |
+| Reconcile completed/stale design notes, plans, and mockups | `/shape:tidy` |
 | Check/update README, setup, usage, or architecture docs against code | `/nav:sync` |
 | See the board rendered visually | `/shape:mockup` → an on-demand board snapshot |
 | Scope a feature against the actual code | `/nav:plan` → `docs/blueprints/plans/` |

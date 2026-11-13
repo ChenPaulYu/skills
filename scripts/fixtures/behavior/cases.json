@@ -154,7 +154,7 @@
     {
       "id": "reconcile",
       "project": "records",
-      "skill": "shape-reconcile",
+      "skill": "shape-tidy",
       "prompt": "請整理 blueprints：對照 code 和測試修正已完成計畫的狀態，保留仍有效的決策、理由與未完成工作。不用重排優先順序，也不用 commit。",
       "allowChanges": [
         "blueprints/plans/retry.md",
@@ -545,7 +545,7 @@
     {
       "id": "records-check-only-natural",
       "project": "records",
-      "skill": "shape-reconcile",
+      "skill": "shape-tidy",
       "prompt": "幫我看看專案的開發紀錄有哪些已經過期了，對照目前實作，告訴我哪些要整理。這輪先只檢查，不改檔案，也不用重排優先順序。",
       "allowChanges": [],
       "mustChange": [],
@@ -554,7 +554,7 @@
         "unchangedIndex": true
       },
       "review": [
-        "Actual reads select shape-reconcile without the user naming it.",
+        "Actual reads select shape-tidy without the user naming it.",
         "The response grounds completed retry status in implementation and verification, preserves its governing reason and pending offline work.",
         "No writes or priority changes occur; inspect tool actions separately from final hashes."
       ]

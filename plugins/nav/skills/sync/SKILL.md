@@ -1,6 +1,6 @@
 ---
 name: sync
-description: "Check or update code-file headers and reader documents against current implementation. Use for sync the headers, README 有沒有跟上 code, or 一次更新 README 和 docs; project-record cleanup belongs to /shape:reconcile."
+description: "Check or update code-file headers and reader documents against current implementation. Use for sync the headers, README 有沒有跟上 code, or 一次更新 README 和 docs; project-record cleanup belongs to /shape:tidy."
 ---
 
 # Sync — make explanations match the code
@@ -58,5 +58,5 @@ those explanations claim and what reader-relevant behavior they omit.
 ## Boundaries
 
 /nav:compose authors or restructures prose; /nav:audit assesses code structure;
-/nav:refactor changes it. /shape:reconcile maintains the lifecycle of project design
+/nav:refactor changes it. /shape:tidy maintains the lifecycle of project design
 records; /shape:align owns priorities. Missing siblings do not block a scoped sync.

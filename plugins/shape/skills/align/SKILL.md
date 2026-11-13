@@ -1,6 +1,6 @@
 ---
 name: align
-description: "Decide what to work on next and refresh the plan.md board with the user, verifying carried items against current evidence. Use for priorities, 下一步做什麼, or returning to a project's work; document cleanup belongs to /shape:reconcile and README/code consistency to /nav:sync."
+description: "Decide what to work on next and refresh the plan.md board with the user, verifying carried items against current evidence. Use for priorities, 下一步做什麼, or returning to a project's work; document cleanup belongs to /shape:tidy and README/code consistency to /nav:sync."
 ---
 
 # Align — verify the board, decide what's next
@@ -30,7 +30,7 @@ for retention policy, Git checks, and preservation of local evidence.
    an already-authorized update; a review-only request stops at the proposal. Keep entries
    to what to do plus the supporting document. Preserve untracked content and unrelated edits.
 5. **Report the outcome.** Name the changed priorities, verified progress, and unresolved
-   items. Flag stale design documents for /shape:reconcile and reader-document drift for
+   items. Flag stale design documents for /shape:tidy and reader-document drift for
    /nav:sync; neither sweep runs automatically. Report a legacy convention and point to
    `references/migration-ledger.md` without migrating during alignment.
 
@@ -41,7 +41,7 @@ for retention policy, Git checks, and preservation of local evidence.
 - `plan.md` owns durable status. An on-demand /shape:mockup can display it; align does not
   maintain a second HTML board or generate a code implementation plan (that's /nav:plan).
 - Document consolidation, mockup retirement, and stale handoff cleanup belong to
-  /shape:reconcile. A new product/design decision belongs in a thought, not a board entry.
+  /shape:tidy. A new product/design decision belongs in a thought, not a board entry.
 - Execution verbs keep their same-change updates to affected board items. Align verifies
   the whole carried board when summoned; it does not require a prior reconciliation run.
 

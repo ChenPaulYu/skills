@@ -49,7 +49,7 @@ See [`blueprints-spec.md`](.agents/skills/shape-align/references/blueprints-spec
 
 ```
 blueprints/
-  thoughts/      ← decision records (agent-facing; dated, Status-tagged — align reads; shape-reconcile maintains lifecycle)
+  thoughts/      ← decision records (agent-facing; dated, Status-tagged — align reads; shape-tidy maintains lifecycle)
   mockups/       ← disposable HTML (owned by shape-mockup) — including, on request, a board snapshot
   plan.md        ← align writes: lean status index (agent AND human read this directly)
 ```
@@ -90,7 +90,7 @@ in the SKILL.md body — ADR-086.)
 Propose a split: **🚧 In progress** (the current batch's tail) · **▶ Next** (what to pick up) ·
 **⏸ Future** (decided but deferred, with the blocker/why) · **✅ Shipped** (current baseline).
 Surface it and let the user move items, add, cut. This is the alignment — don't skip the
-decision: already-stated priorities count and do not need to be asked again. If grounding surfaces stale design material, flag it for shape-reconcile.
+decision: already-stated priorities count and do not need to be asked again. If grounding surfaces stale design material, flag it for shape-tidy.
 Keep board-item verification here; a full document cleanup is not required before triage.
 
 (The no-item-vanishes gate for this step is stated in full, verbatim, in the SKILL.md body's
@@ -129,5 +129,5 @@ honest daily, pull keeps it honest against undisciplined writers.
   maintained artifact, agent- and human-readable.
 - (First run) the scaffolded `blueprints/` tree.
 - A chat summary: what moved between now/next/later, anything flagged as possibly-stale (→
-  shape-reconcile), and — if the user wants a visual view — a pointer to run `shape-mockup` for
+  shape-tidy), and — if the user wants a visual view — a pointer to run `shape-mockup` for
   an on-demand board snapshot.
