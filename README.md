@@ -12,6 +12,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Audit my codebase's architecture / find smells | `/nav:audit` |
 | Plan a spec or feature against the actual code | `/nav:plan` |
 | Make a small, already-decided change | `/nav:do` |
+| Land finished work: commit, push, merge, clean up branches（收尾）| `/nav:ship` |
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
 | Verify the board and decide what comes next（排優先順序） | `/shape:align` |
@@ -23,16 +24,16 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 ## What's in here
 
 <!-- BEGIN GENERATED catalog-plugins -->
-Catalog: 3 plugins · 20 skills.
+Catalog: 3 plugins · 21 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.21.0 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
+| [`nav`](plugins/nav/) | 0.22.0 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
 | [`shape`](plugins/shape/) | 0.28.0 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
 | [`frame`](plugins/frame/) | 0.17.0 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (the understanding family: lenses to see a problem, forms to present an answer, and `unfold` to walk through a subject one layer at a time) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync) and lands it (plan → do → ship). **frame** (the understanding family: lenses to see a problem, forms to present an answer, and `unfold` to walk through a subject one layer at a time) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -42,10 +43,10 @@ Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
 Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-direction-law-inventory.md)): **model-invoked** — the agent fires them off your phrasing — and **user-invoked** — summoned only by typing the command, never auto-fired. Each plugin's list below buckets them.
 
-Ask `/frame:unfold` for a layered walkthrough ("用 progressive disclosure 帶我認識 X", "walk me through X") and `/frame:tinker` for an object you can poke; a single explanation or ELI5 stays with `/frame:analogize`. Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
+Ask `/nav:ship` to land finished work ("幫我 commit -> push -> merge，然後把沒在用的 branch 刪一刪"); it merges into main by default, opens a PR only when the project requires one, deletes only merged branches, and runs the tail documented in the project's `## Ship` section (ADR-139). Ask `/frame:unfold` for a layered walkthrough ("用 progressive disclosure 帶我認識 X", "walk me through X") and `/frame:tinker` for an object you can poke; a single explanation or ELI5 stays with `/frame:analogize`. Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
 
 <!-- BEGIN GENERATED catalog-skills -->
-Catalog skills: 20 active skills.
+Catalog skills: 21 active skills.
 
 ### `nav`
 
@@ -57,6 +58,7 @@ Catalog skills: 20 active skills.
 - `/nav:plan` — ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu; process records follow project retention policy (ADR-134)
 - `/nav:do` — execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin
 - `/nav:compose` — author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval
+- `/nav:ship` — land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)
 
 ### `shape`
 

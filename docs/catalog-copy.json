@@ -2,21 +2,22 @@
   "plugins": {
     "nav": {
       "readme": {
-        "summary": "**Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules.",
+        "summary": "**Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules.",
         "skills": {
           "audit": "assess codebase shape (or read-only quick-check against a target spec)",
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
           "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
           "plan": "ground a spec against the code, resolve consequential ambiguity, and write a plan artifact (lands in `blueprints/plans/` when present); plan-only stops there, while an already-authorized build continues without another next-action menu; process records follow project retention policy (ADR-134)",
           "do": "execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin",
-          "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval"
+          "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval",
+          "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)"
         }
       },
       "site": {
         "layer": "state",
         "blurb": {
-          "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131).",
-          "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。"
+          "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131).",
+          "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。"
         },
         "skills": {
           "audit": [
@@ -60,6 +61,13 @@
               "en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Preserve claims, qualifications, and sources; preview the structure or diff and complete authorized edits. nav-sync owns factual checks against implementation.",
               "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。保留主張、限制與來源；展示結構或差異後完成已授權的修改，不重複詢問。nav-sync 負責對照實作核對內容。"
             }
+          ],
+          "ship": [
+            "",
+            {
+              "en": "Land finished work and leave the repo clean: read state first, commit only this task's changes, push, merge into the main branch (or open a PR when main is protected, the remote is someone else's, or the user asks), delete only merged or gone branches and clean worktrees, then run the project's documented `## Ship` tail. Publishing or deploying needs explicit authority; the report ends with a verification line. NOT making the change itself: that is /nav:do. ADR-139.",
+              "zh": "把做完的工作收尾並讓 repo 保持乾淨：先讀狀態，只 commit 這次任務的改動，push，merge 進主分支（主分支受保護、remote 是別人的 repo、或你要求時改開 PR），只刪已 merge 或 gone 的 branch 與乾淨的 worktree，再照專案文件的 `## Ship` 段跑尾巴（版本號、rebuild、alias、部署）。發佈或部署需要明確授權；回報結尾附一行驗證結果。NOT 寫變更本身——那是 /nav:do。ADR-139。"
+            }
           ]
         },
         "files": [],
@@ -73,8 +81,8 @@
             "zh": "可導覽性"
           },
           "desc": {
-            "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131).",
-            "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。"
+            "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131).",
+            "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。"
           }
         }
       }

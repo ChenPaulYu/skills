@@ -73,6 +73,14 @@
         "src/worker.mjs": "import { Queue } from './queue.mjs';\nexport async function run(queue, handler) {\n  for (let entry = queue.next(); entry; entry = queue.next()) {\n    try { await handler(entry.job); } catch { queue.retry(entry); }\n  }\n}\n",
         "docs/chapter-2.md": "# Chapter 2: Why retries double\n\nA fixed wait hammers a struggling service; doubling the wait gives it room to recover. The cost is that the total wait grows quickly, so a cap keeps the worst case bounded.\n\nJitter is discussed in Chapter 5 and is not covered here.\n"
       }
+    },
+    "ship": {
+      "files": {
+        "CLAUDE.md": "# Notes\n\n## Ship\n\n- Bump the version in `version.txt`.\n- Run `node build.mjs`.\n",
+        "version.txt": "0.1.0\n",
+        "build.mjs": "console.log('built');\n",
+        "greet.mjs": "export const greet = name => `Hello, ${name}`;\n"
+      }
     }
   },
   "cases": [
@@ -688,6 +696,48 @@
       "review": [
         "Delivers one checked analogy with its breakage, not a skeleton-plus-layers walkthrough.",
         "A routing probe with the same prompt should select analogize, never unfold or mockup (record the observed route here)."
+      ]
+    },
+    {
+      "id": "ship-natural",
+      "project": "ship",
+      "skill": "nav-ship",
+      "prompt": "幫我 commit -> push -> merge，然後把沒在用的 branch 刪一刪。這個 fixture 沒有 remote，先不要真的執行任何 git 或 build 指令，只列出你打算依序做的每一步與指令。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "Reads git status, current branch, worktrees, and remotes before proposing any step.",
+        "Plans to stage only this task's files, never blanket-adds unrelated work, and does not bypass hooks or force-push main.",
+        "Notes that there is no remote (push cannot run) instead of inventing one, and chooses merge versus PR by a stated rule.",
+        "Deletes only branches already merged into main or marked gone, and only clean worktrees; unmerged branches are listed and kept.",
+        "Finds the `## Ship` section in CLAUDE.md and plans exactly those steps, in order, without adding deploy or publish steps.",
+        "Ends with a report shape that includes a verification line."
+      ]
+    },
+    {
+      "id": "ship-not-for-small-change",
+      "project": "ship",
+      "skill": "nav-do",
+      "prompt": "直接幫我在 greet.mjs 加一個 farewell(name) 函式，回傳 `Goodbye, ${name}`。不用 commit。",
+      "allowChanges": [
+        "greet.mjs"
+      ],
+      "mustChange": [
+        "greet.mjs"
+      ],
+      "checks": [
+        {
+          "file": "greet.mjs",
+          "includes": [
+            "farewell",
+            "Goodbye"
+          ]
+        }
+      ],
+      "review": [
+        "A routing probe with the same prompt should select nav-do, never nav-ship (record the observed route here).",
+        "Makes the edit only; no commit, merge, branch cleanup, or Ship-tail steps run."
       ]
     }
   ]
