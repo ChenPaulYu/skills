@@ -12,7 +12,9 @@
 
 `idea`, `status`, and `wrap` trial task-owned working records in an explicitly located
 workspace. The shared convention owner is `plugins/shape/references/workspace-records.md`,
-bundled into each entrance. Idea capture is independent of elicitation; status reads
+bundled into each entrance. The read-only workspace reader is owned by
+`plugins/shape/skills/status/scripts/` and bundled verbatim into record consumers
+by the shared-resource builder. Home repos own data, not a second parser. Idea capture is independent of elicitation; status reads
 records plus fresh mapped code evidence; wrap updates original tasks without another
 handoff. Existing align/park/catchup remain for legacy projects until one real project
 can save and resume through a fresh agent. The following board/handoff spine describes

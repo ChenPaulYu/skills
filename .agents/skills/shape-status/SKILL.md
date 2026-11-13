@@ -15,6 +15,10 @@ When presenting work records, read `references/record-interface.md` for metadata
 opening conclusions and visible Relations. Report missing fields or conflicting
 projections without modifying records during a read-only request.
 
+Use the bundled read-only helper described in that reference when available; it
+accepts any explicitly selected home repo, not just My-wiki. Its JSON is evidence
+for reconstruction, not an automatic completion verdict.
+
 Verify the mapped code repositories with current files, HEAD, status, staged/unstaged
 diffs, and relevant history. Commit messages alone do not prove completion. Treat
 dirty/untracked files as live evidence; a recorded SHA may be stale even when it

@@ -4,7 +4,7 @@
  * Reads: node:fs · node:path · shared record, handoff, development-artifact, activation, and frame form owners.
  * Removes retired bundles only when they bear this builder's exact ownership marker.
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 const RECORD_CONSUMERS = [
@@ -14,7 +14,13 @@ const RECORD_CONSUMERS = [
     .map(skill => `plugins/nav/skills/${skill}`),
 ];
 
-export const SHARED_SKILL_REFERENCES = [{
+export const SHARED_SKILL_REFERENCES = [
+  ...["workspace", "workspace_records.py"].map(file => ({
+    source: `plugins/shape/skills/status/scripts/${file}`,
+    destinations: RECORD_CONSUMERS.filter(skill => skill !== "plugins/shape/skills/status")
+      .map(skill => `${skill}/scripts/${file}`),
+    verbatim: true,
+  })), {
   source: "plugins/shape/references/record-interface.md",
   destinations: RECORD_CONSUMERS.map(skill => `${skill}/references/record-interface.md`),
 }, {
@@ -56,12 +62,14 @@ export const SHARED_SKILL_REFERENCES = [{
 export function buildSharedSkillReferences(root) {
   const active = new Set(SHARED_SKILL_REFERENCES.flatMap(({ destinations }) => destinations));
   pruneRetiredBundles(root, active);
-  for (const { source, destinations } of SHARED_SKILL_REFERENCES) {
-    const content = `<!-- GENERATED from ${source} by scripts/build-manifests.mjs; do not hand-edit. -->\n\n${readFileSync(join(root, source), "utf8")}`;
+  for (const { source, destinations, verbatim } of SHARED_SKILL_REFERENCES) {
+    const original = readFileSync(join(root, source), "utf8");
+    const content = verbatim ? original : `<!-- GENERATED from ${source} by scripts/build-manifests.mjs; do not hand-edit. -->\n\n${original}`;
     for (const destination of destinations) {
       const path = join(root, destination);
       mkdirSync(dirname(path), { recursive: true });
       writeFileSync(path, content);
+      if (verbatim) chmodSync(path, statSync(join(root, source)).mode & 0o777);
     }
   }
 }

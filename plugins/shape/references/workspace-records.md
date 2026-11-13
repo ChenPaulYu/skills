@@ -110,3 +110,23 @@ Follow the selected storage repo's policy. A private home repo may explicitly co
 text working records while a public code repo excludes them. Media locators do not
 back up media bytes. No bulk migration, original deletion, or new binary retention
 policy follows from enabling the pilot.
+
+## Optional read-only helper
+
+Each bundled consumer carries `scripts/workspace`; resolve it inside the loaded skill
+package, independent of the working directory. It requires `uv`, Python 3.12 and PyYAML
+(the launcher selects these). Pass the home repository root containing workspace/ explicitly:
+
+```sh
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" projects
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" status <project>
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" show <project> <record-id>
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" graph <project>
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" check
+```
+
+The helper returns JSON records, relations/backlinks, diagnostics and mapped Git context.
+It does not write records, choose priorities, establish semantic completion or render a UI.
+If execution or dependencies are unavailable, read the records manually and report that
+fallback; the script is optional. Do not silently switch home roots. Shape status owns
+the implementation; other skill bundles are generated, not separately maintained.
