@@ -24,12 +24,12 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 ## What's in here
 
 <!-- BEGIN GENERATED catalog-plugins -->
-Catalog: 3 plugins · 21 skills.
+Catalog: 3 plugins · 24 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
 | [`nav`](plugins/nav/) | 0.22.2 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.28.2 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
+| [`shape`](plugins/shape/) | 0.29.0 | 11 | **Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140). |
 | [`frame`](plugins/frame/) | 0.17.1 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
@@ -46,7 +46,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 Ask `/nav:ship` to land finished work ("幫我 commit -> push -> merge，然後把沒在用的 branch 刪一刪"); it merges into main by default, opens a PR only when the project requires one, deletes only merged branches, and runs the tail documented in the project's `## Ship` section (ADR-139). Ask `/frame:unfold` for a layered walkthrough ("用 progressive disclosure 帶我認識 X", "walk me through X") and `/frame:tinker` for an object you can poke; a single explanation or ELI5 stays with `/frame:analogize`. Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
 
 <!-- BEGIN GENERATED catalog-skills -->
-Catalog skills: 21 active skills.
+Catalog skills: 24 active skills.
 
 ### `nav`
 
@@ -70,11 +70,14 @@ Catalog skills: 21 active skills.
 - `/shape:dogfood` — drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries
 - `/shape:align` — verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup
 - `/shape:reconcile` — reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)
+- `/shape:idea` — save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice
+- `/shape:status` — read original project tasks and fresh mapped-repository evidence without mutating state or priorities
 
 *User-invoked:*
 
 - `/shape:catchup` — read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably
 - `/shape:park` — write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level
+- `/shape:wrap` — save this round into the original tasks, preserving other open work; no separate handoff or checkpoint
 
 ### `frame`
 

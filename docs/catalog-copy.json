@@ -89,7 +89,7 @@
     },
     "shape": {
       "readme": {
-        "summary": "**Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134).",
+        "summary": "**Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140).",
         "skills": {
           "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
           "mockup": "converge a look / structure decision with disposable interactive HTML; follow project retention policy and verify ignore rules, tracking, and staging independently",
@@ -98,14 +98,17 @@
           "align": "verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup",
           "catchup": "read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably",
           "park": "write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level",
-          "reconcile": "reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)"
+          "reconcile": "reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)",
+          "idea": "save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice",
+          "status": "read original project tasks and fresh mapped-repository evidence without mutating state or priorities",
+          "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint"
         }
       },
       "site": {
         "layer": "ui",
         "blurb": {
-          "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131).",
-          "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。"
+          "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140).",
+          "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。"
         },
         "skills": {
           "mockup": [
@@ -176,8 +179,8 @@
             "zh": "意圖 → 做出來"
           },
           "desc": {
-            "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131).",
-            "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。"
+            "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140).",
+            "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。"
           }
         }
       }

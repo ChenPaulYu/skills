@@ -1,7 +1,7 @@
 {
   "name": "shape",
-  "version": "0.28.2",
-  "description": "Give intent its form, record decisions, and keep project work current. Eight skills: mockup, elicit, probe, dogfood, align (verified board and priorities), reconcile (design-record cleanup with rationale preserved), park, and catchup. Reader-document accuracy belongs to nav-sync; decisions remain durable in thoughts/.",
+  "version": "0.29.0",
+  "description": "Give intent its form and keep project work current. Trial idea, status, and wrap with task-owned workspace records; existing mockup, elicit, probe, dogfood, align, reconcile, park, and catchup remain compatible during the pilot.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

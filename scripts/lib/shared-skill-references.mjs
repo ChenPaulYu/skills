@@ -8,6 +8,10 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join } from "node:path";
 
 export const SHARED_SKILL_REFERENCES = [{
+  source: "plugins/shape/references/workspace-records.md",
+  destinations: ["idea", "status", "wrap"].map(skill =>
+    `plugins/shape/skills/${skill}/references/workspace-records.md`),
+}, {
   source: "plugins/shape/references/session-handoff.md",
   destinations: [
     "plugins/shape/skills/park/references/session-handoff.md",

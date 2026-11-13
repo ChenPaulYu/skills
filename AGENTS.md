@@ -17,6 +17,15 @@ plugin, read its source maintainer guide linked below. Other families need not b
 > Repo-wide rules for editing **this marketplace** — loaded for work anywhere in the repo, so a rule here is seen no matter which plugin you touch.
 > Each `plugins/<name>/CLAUDE.md` holds only what is **specific to that plugin** (its identity, roster, the design patterns / framework it owns). Read the affected family's guide before editing it; leave unrelated families unloaded. Shared authoring and maintenance rules live **here, once**.
 
+## This repository's workspace pilot
+
+On `experiment/workspace-graph`, this project's working-record locator is
+`workspace/skills/project.md` inside the owner's configured home repo. Resolve that
+home through the available My-wiki entry/configuration, never a committed machine
+path. Read the project before reconstructing this pilot from old blueprints. If
+the home repo is unavailable, report that and use readable local evidence. ADR-140
+owns the experiment's scope; this locator does not migrate other projects.
+
 ## ⚖ The three-layer law — every skill is a deep module (ADR-109)
 
 The first thing to know before touching any skill. A skill has three layers, and **each fact lives in the lowest layer that still fires it**:

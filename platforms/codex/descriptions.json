@@ -23,6 +23,9 @@
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
     "shape-park": "Save the session's goal, progress, reasons, and next action before stepping away. Explicitly invoked; one overwritten handoff, not the durable project board.",
     "shape-probe": "Design a minimal experiment or assess existing measurements for an undecided claim. Judge what data supports; preferences and built-feature friction belong to shape-mockup / shape-dogfood.",
-    "shape-reconcile": "Reconcile stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; priorities to shape-align."
+    "shape-reconcile": "Reconcile stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; priorities to shape-align.",
+    "shape-idea": "Capture or revisit a project idea, including something to consider later. Saving does not authorize implementation; clarifying a specific choice belongs to shape-elicit.",
+    "shape-status": "Recover current project work and next actions from task records and fresh code evidence. Reading status does not authorize implementation or priority changes.",
+    "shape-wrap": "Save this round’s progress and next actions into the original project tasks before stopping. Explicitly invoked; no separate handoff or checkpoint."
   }
 }

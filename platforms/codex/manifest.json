@@ -177,7 +177,8 @@
       ],
       "contract_consumers": [
         ".agents/skills/shape-park/SKILL.md",
-        ".agents/skills/shape-catchup/SKILL.md"
+        ".agents/skills/shape-catchup/SKILL.md",
+        ".agents/skills/shape-wrap/SKILL.md"
       ]
     },
     {
