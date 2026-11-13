@@ -30,7 +30,7 @@ build** and records it.
    feature implies but you never designed for; this list is the floor that keeps the session
    bounded.
 2. **Drive the real interface to attempt each intent, capturing the evidence.** Frontend → the
-   project's browser-verify slot (`agent-browser`): actually click the flow; **screenshot at
+   project's browser-verify slot (`agent-browser`; a desktop app → `agent-desktop`): actually click the flow; **screenshot at
    each friction point and dead-end** — the moments that become findings — not every routine
    step, and **record video only when the user explicitly asks for it** (verify economy,
    ADR-058: a capture is evidence, not a progress note; captures go to disk and are referenced
@@ -99,8 +99,8 @@ The report's top
 states **what feature was dogfooded · the intents driven · a link to the recording · the
 friction found · the coverage gaps (by layer) · what's been routed**, so an agent grasps it
 from `head`. Driving the frontend uses shape's shared **browser-verify slot** (named default
-`agent-browser`; detect + fail-helpfully + per-project override — defined once in
-`plugins/shape/CLAUDE.md`); video capture rides whatever that slot supports, falling back to
+`agent-browser`, or `agent-desktop` for a desktop app; detect + fail-helpfully + per-project
+override — defined once in `plugins/shape/CLAUDE.md`); video capture rides whatever that slot supports, falling back to
 screenshots.
 
 ## Example — the move (stack-neutral)

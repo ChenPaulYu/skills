@@ -28,7 +28,7 @@ Catalog: 3 plugins · 20 skills.
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
 | [`nav`](plugins/nav/) | 0.21.0 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.27.4 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
+| [`shape`](plugins/shape/) | 0.28.0 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
 | [`frame`](plugins/frame/) | 0.17.0 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 

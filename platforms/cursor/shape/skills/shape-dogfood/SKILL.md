@@ -56,7 +56,9 @@ tool; improving that output is a separate task unless the user requests it.
   preference pick does not authorize implementation, reprioritization, or a new paid run.
 
 Frontend driving uses shape's browser-verify slot (default `agent-browser`, with the
-project's override). If unavailable, use an available project-bound equivalent; otherwise
+project's override). A native desktop app (Tauri, Electron, or OS-native) is driven through
+its accessibility tree with `agent-desktop`; run `agent-desktop status` first, since missing
+Accessibility or Screen Recording permission blocks the drive. If unavailable, use an available project-bound equivalent; otherwise
 report the blocked check and ask only for missing installation authority or scope.
 
 ## Continuation
