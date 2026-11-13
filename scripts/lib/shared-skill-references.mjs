@@ -8,6 +8,14 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join } from "node:path";
 
 export const SHARED_SKILL_REFERENCES = [{
+  source: "plugins/shape/references/record-interface.md",
+  destinations: [
+    ...["idea", "elicit", "mockup", "probe", "dogfood", "status", "wrap", "tidy"]
+      .map(skill => `plugins/shape/skills/${skill}/references/record-interface.md`),
+    ...["plan", "do", "refactor", "compose", "ship"]
+      .map(skill => `plugins/nav/skills/${skill}/references/record-interface.md`),
+  ],
+}, {
   source: "plugins/shape/references/workspace-records.md",
   destinations: ["idea", "status", "wrap"].map(skill =>
     `plugins/shape/skills/${skill}/references/workspace-records.md`),

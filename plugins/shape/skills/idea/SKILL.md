@@ -9,6 +9,10 @@ Read `references/workspace-records.md` to locate the project's records and prese
 their ownership and lifecycle. This entrance is distinct from clarification: a spark
 can be worth saving before anyone knows the questions it raises.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 Search existing project records for the same topic and reasons. Extend an existing
 idea when it is the same thread; create a new one when it is independently useful.
 Preserve the user's words or identify your summary as such. Record why it matters,

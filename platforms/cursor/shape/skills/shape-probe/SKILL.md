@@ -9,6 +9,10 @@ description: "Design a minimal experiment or assess existing measurements for an
 Resolve an empirical claim through measurements: assess existing evidence or design the
 smallest discriminating experiment, run within scope, and read the verdict honestly.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 When measurements already exist, assess their method, criteria, and limits first. Reuse
 the evidence that answers the decision; design a follow-up only for what remains unknown,
 and run it only within the user's authorized scope. Writing the assessment does not turn

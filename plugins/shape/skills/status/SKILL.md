@@ -10,6 +10,10 @@ evidence tier and repository mapping, then read its priorities and open tasks. R
 linked thoughts, plans, probes, and deferred ideas when they explain this work; do
 not treat an inconclusive probe or a saved idea as an approved feature.
 
+When presenting work records, read `references/record-interface.md` for metadata,
+opening conclusions and visible Relations. Report missing fields or conflicting
+projections without modifying records during a read-only request.
+
 Verify the mapped code repositories with current files, HEAD, status, staged/unstaged
 diffs, and relevant history. Commit messages alone do not prove completion. Treat
 dirty/untracked files as live evidence; a recorded SHA may be stale even when it

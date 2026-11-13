@@ -30,6 +30,14 @@ that legacy path, not an instruction to create duplicate state in the pilot.
 
 **Resolve consequential uncertainty (shared with nav rule ⑦).** Read evidence and prior decisions first. Ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Routine implementation choices need no invented confidence percentage; label unsupported claims and continue independent work.
 
+## Work-record interface (ADR-142)
+
+`plugins/shape/references/record-interface.md` owns the common frontmatter/date,
+opening conclusion, visible Relations and detail layout. It is bundled into record
+readers/writers; workspace-records owns location and lifecycle. Mockup uses one
+Markdown record per decision, with HTML variants pointing to it. Project state is
+derived from tasks and actual repositories; Git owns committed revision history.
+
 ## Artifact retention
 
 `plugins/shape/references/development-artifacts.md` owns retention and Git checks,
@@ -74,7 +82,7 @@ Record the seams; don't blur them:
 
 > Repo-wide **authoring + maintenance** rules (naming, skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). Shape-specific:
 
-- **★ Progressive disclosure in every produced artifact** (so an agent scans fast, not just the human): a `thoughts/` doc opens with `# <title> — <one-line role>` + a ≤3-line TL;DR/status blockquote (`head -12` yields the gist without reading the body), sections lead with their point, enumerations go in tables, key terms bolded; a `mockup` artifact opens with a top-comment stating what it is · the candidates · the pick. This is `nav`'s interface-first (rule ②) applied to shape's outputs. Every skill that emits a doc/artifact (`elicit`, `mockup`, `align`) enforces it.
+- **★ Progressive disclosure in every produced artifact** (so an agent scans fast, not just the human): a `thoughts/` doc opens with `# <title> — <one-line role>` + a ≤3-line TL;DR/status blockquote (`head -12` yields the gist without reading the body), sections lead with their point, enumerations go in tables, key terms bolded; a `mockup` HTML opens with purpose · candidates · canonical Markdown record locator; the record owns mutable picks/status/dates. This is `nav`'s interface-first (rule ②) applied to shape's outputs. Every skill that emits a doc/artifact (`elicit`, `mockup`, `align`) enforces it.
 - **Scope-aware writes**: show the proposed changes and honor existing authority. A check-only request stays read-only. `tidy` additionally checks recoverability, preserves unique reasons, and resolves inbound links before destructive cleanup.
 - **Skills don't invoke each other**: they reference sibling protocols by name (e.g. align → "run `/shape:elicit`" for a decision-change it finds mid-pass), never re-implement or call them.
 - **Cost tier (ADR-058/059)**: shape has no whole-turn mechanical override today. `align` and `tidy` require judgment, as do the convergence verbs. Bounded execution can follow the repo's dispatch policy; the browser-verifier remains a mechanical executor when that slot is invoked.

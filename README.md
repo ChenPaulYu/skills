@@ -28,8 +28,8 @@ Catalog: 3 plugins · 24 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.22.3 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.29.1 | 11 | **Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140). |
+| [`nav`](plugins/nav/) | 0.23.0 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
+| [`shape`](plugins/shape/) | 0.30.0 | 11 | **Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140). |
 | [`frame`](plugins/frame/) | 0.17.1 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
@@ -65,7 +65,7 @@ Catalog skills: 24 active skills.
 *Model-invoked:*
 
 - `/shape:elicit` — clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority
-- `/shape:mockup` — converge a look / structure decision with disposable interactive HTML; follow project retention policy and verify ignore rules, tracking, and staging independently
+- `/shape:mockup` — converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record
 - `/shape:probe` — design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials
 - `/shape:dogfood` — drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries
 - `/shape:align` — verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup

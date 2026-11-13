@@ -11,6 +11,10 @@ description: "Execute a behavior-preserving structural refactor with risk-propor
 Improve the code's boundaries while keeping observable behavior and public contracts intact.
 The result should hide a real design decision behind a useful interface, not just shorten a file.
 
+When producing or updating an individual project work record, read
+`references/record-interface.md` for metadata, dates, opening conclusions and
+Relations. This does not change the format of product docs or force legacy-board migration.
+
 ## Decide the boundary
 
 - Name what becomes independently understandable and which callers benefit. Length thresholds

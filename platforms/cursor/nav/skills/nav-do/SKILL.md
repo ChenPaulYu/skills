@@ -8,6 +8,10 @@ description: "Make a small, already-decided, behaviour-changing code change dire
 
 Make a small, already-decided, **behaviour-changing** change happen **now** — and place it deep-module-correctly as you go, without the ceremony of a written plan. nav's execution verb: the only nav skill that writes new/changed feature code directly. It is the same inject↔check discipline a sub-agent already carries when `nav-plan` or `nav-refactor` dispatches it ([ADR-008](docs/adr/008-inject-check-at-handoff.md)), promoted to a standalone, plan-less verb.
 
+When producing or updating an individual project work record, read
+`references/record-interface.md` for metadata, dates, opening conclusions and
+Relations. This does not change the format of product docs or force legacy-board migration.
+
 ## Stance
 
 - **In scope: a small, decided, behaviour-changing change** you can hold in your head without a written plan. **Out of scope**: behaviour-preserving restructuring (→ `nav-refactor`), substantial work (→ `nav-plan`), or an unresolved product decision. Read the code and existing decisions first; ask only if missing intent would change scope, behavior, or a material trade-off.

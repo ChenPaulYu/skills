@@ -10,6 +10,10 @@ Drive the real interface against user intents and return findings tied to actual
 requests, responses, or screenshots. A demonstration output is evidence about the
 tool; improving that output is a separate task unless the user requests it.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 > **Interactive choice contract (Codex).** Do not force an end-of-turn next-action menu. If the user already authorized a scoped action, continue within that scope without asking them to choose again.
 >
 > Ask only when a consequential choice or missing authorization blocks the next action. Use the applicable source-owned options when they exist, but do not invent a generic menu or opt-out. Use `request_user_input` only when a structured chooser is available and allowed for that question; Codex permission requests stay in plain chat. If scope or authority is still unknown, stop after the concise question and do not perform downstream effects.

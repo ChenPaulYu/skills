@@ -22,6 +22,11 @@ write needs one that cannot be inferred. Reading status does not scaffold a work
 
 ## Small record convention
 
+For the common frontmatter, dates, visible Relations projection, and opening/detail
+layout, read `references/record-interface.md` when creating, updating or presenting
+work records. This file owns workspace location, type/status and lifecycle; that
+reference owns the shared document interface. Existing readable records remain valid.
+
 `project.md` has YAML frontmatter `id`, `title`, optional `repositories` (alias → path),
 and optional `priorities` (record IDs in user-chosen order). Its prose owns project
 purpose, constraints, and context. Keep per-task progress out of it.
@@ -75,6 +80,11 @@ not imply approved work. Keep deferred and rejected distinct. Superseded decisio
 link their successors; preserve useful rejected alternatives and evidence locators.
 Tidy owns consolidation/retirement; status and wrap do not delete history or
 move files into archives. Closed items disappear from active views through status.
+
+When a task closes, inspect its linked mockup/probe/plan records and state which
+artifacts remain live or are retirement candidates. Completion is a review signal,
+not an automatic delete: preserve pending choices, reasons and recovery before a
+separately authorized tidy. Do not require another skill invocation to mark a task done.
 
 Follow the selected storage repo's policy. A private home repo may explicitly commit
 text working records while a public code repo excludes them. Media locators do not

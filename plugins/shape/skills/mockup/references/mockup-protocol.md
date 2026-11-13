@@ -70,8 +70,12 @@ structure*; dogfood critiques *the built experience*.
 4. **Let the user point — and watch for the reframe.** They look / click / flip / pick. Stay
    alert for the artifact revealing the *question was wrong* (the element shouldn't exist; text
    beats the icon; two stages should be one). Surface it; don't just answer the surface ask.
-5. **Residue + disposal.** Record the pick. **Most artifacts are then discarded** — their job
-   (converging the decision) is done. Promote to a visual-lock only per the rule below (rare).
+5. **Record the decision and retirement condition.** Update the canonical mockup record
+   with the user’s pick, reasons, open/deferred alternatives and actual related work;
+   refresh its Relations projection and substantive-edit date. Keep adopted rationale
+   in the owning thought when one exists, linking to that decision rather than
+   maintaining a parallel canon in the card. A pick ends exploration, not automatically
+   preservation: retirement still requires the checks below.
 
 ## Example — the move in two shots
 
@@ -93,9 +97,9 @@ the **"don't" candidate** · the **reframe**.
 ## Escalate — heavy (rare exception)
 
 Only when the decision is load-bearing, spans many variants, or needs a durable comparison
-record: **multiple files + screenshots + a decision note** (shared scene · what each is ·
+record: **multiple rendered files + screenshots + deeper comparison detail** (shared scene · what each is ·
 build-cost · what's NOT in scope · fake-data note). Mark it the exception; (a)/(b) in one file
-is the default — a row of candidates is **not** heavy.
+is the default — a row of candidates and its lightweight Markdown record are **not** heavy.
 
 ## Visual-lock: retire-on-ship, stamp, don't maintain
 
@@ -117,6 +121,14 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
 
 ## Storage & format
 
+Apply `references/record-interface.md` to the canonical Markdown record: frontmatter,
+short conclusion, visible Relations, then question/candidates, pick/open choices,
+artifact links, retirement conditions and supporting evidence. The record is separate
+from the HTML render, not a second render or a mandatory History file. In an explicitly
+mapped workspace, use `records/` and keep one card per decision; otherwise use adjacent
+`mockup.md`. Reuse an existing card, keep actual related thought/task IDs or legacy
+paths, and group variants under it. Never create a fake task just to populate Relations.
+
 - **Where:** the existing blueprints tree's `mockups/<date>-<topic>/` or project-selected
   location. Apply `references/development-artifacts.md` before writing; that reference
   owns retention, ignore/tracking/staging checks, and recovery limits. Preserve the Pick
@@ -125,13 +137,15 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
 - **Format:** a **single self-contained interactive HTML file** (the non-negotiable) — inline
   styles + script, deterministic data, no build, no external assets. Screenshots are transient
   supplements, never the deliverable.
-- **Progressive disclosure (agent-scannable):** open the file with a top `<!-- -->` comment
-  stating **what it is · the candidates rendered · the pick (once decided)**, so an agent grasps
-  the artifact from `head` without parsing the whole DOM. Interface-first applies to the
-  throwaway too — a human points at the rendered thing; an agent reads the header. (Same rule as
-  the blueprints overview template's top comment.)
-- **Only thing that leaves the throwaway zone:** a promoted visual-lock (rare) — committed or
-  referenced from the project's CLAUDE.md, always stamped. Everything else is discarded.
+- **Progressive disclosure (agent-scannable):** the Markdown card is the door to mutable
+  metadata and decisions. Open the HTML with a short `<!-- -->` comment stating its
+  purpose/candidates and the card locator. Do not maintain another pick/status/date
+  history in the HTML. Preserve old header-only decisions into the record before
+  replacing a legacy header; no bulk retrofit follows from this rule.
+- **Separate retention purposes:** the Markdown working record follows the selected
+  storage policy and preserves intent/relations. The disposable render retires when
+  eligible; a promoted visual-lock is rare and stamped. A retained record is not an
+  instruction to commit every HTML render or screenshot.
 - **Lifecycle end:** disposable folders don't accumulate forever — `/shape:tidy` sweeps
   `mockups/` as part of its compaction pass (ADR-037), retiring a folder once its decision ships and the pick
   (+ any deferred branch) is verified recorded in the owning doc. Recovery depends on verified committed content or another preserved destination; record
@@ -231,7 +245,9 @@ check after reporting the result; this reference adds no closing menu.
 - **Always: an interactive HTML file** — the one non-negotiable. A row of generated candidates
   and/or one candidate with live toggles; UI mockup or interactive diagram, openable and
   interactive, grounded in the real thing.
-- A recorded pick; most artifacts then discarded.
+- One canonical Markdown record with dates, actual Relations, artifacts and a
+  pick/open question plus retirement condition. Git carries committed revisions;
+  do not create a separate History log or routine archive for Git-managed records.
 - A visual-lock only as a rare, stamped exception (structural-level).
 - (Escalation, rare) multiple files + a decision note.
 - A useful next-step suggestion when needed; no compulsory tracking/build menu.

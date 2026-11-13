@@ -8,6 +8,10 @@ description: "Author or restructure prose: lead with the point, group by knowled
 
 Write a **document** the way nav writes code: as a deep module. The act of putting words clearly is sentence-craft (the `writing-clearly-and-concisely` skill owns that); **compose owns the STRUCTURE** — organizing a document so a reader (or agent) grasps its point from the top and drills into the body only as needed. A doc that buries its point, restates a fact that lives elsewhere, or sprawls across concerns is a *shallow module* in prose form. It is `sync`'s prose sibling (ADR-049): `sync` maintains code headers and checks reader documents against implementation; `compose` authors or restructures prose documents.
 
+When producing or updating an individual project work record, read
+`references/record-interface.md` for metadata, dates, opening conclusions and
+Relations. This does not change the format of product docs or force legacy-board migration.
+
 Before writing process notes or experiment assessments, read
 `references/development-artifacts.md` for retention and Git checks. Follow the artifact's
 policy when inspecting changes; an ignored new file can be verified directly on disk.

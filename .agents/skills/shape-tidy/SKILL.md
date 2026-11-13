@@ -9,6 +9,10 @@ description: "Tidy stale project thoughts, completed plans, and redundant mockup
 Find what is still live, what has shipped, and what can safely be consolidated. The
 deliverable is an evidence-backed cleanup or proposal, without reprioritizing the project.
 
+When record cards exist, read `references/record-interface.md` and follow their
+canonical typed relations to decisions/tasks/artifacts before assessing retirement.
+Dates locate candidates; they do not authorize deletion. Preserve readable legacy inputs.
+
 Before persisting or retiring process artifacts, read `references/development-artifacts.md`
 for retention policy, Git checks, and preservation of local evidence.
 

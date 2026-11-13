@@ -92,7 +92,7 @@
         "summary": "**Push work forward** — converge decisions and keep project records honest. Opt-in workspace pilot: idea captures a spark, status reads tasks plus fresh code evidence, wrap saves into those same tasks. Existing board and handoff entrances remain compatible until the pilot is verified (ADR-140).",
         "skills": {
           "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
-          "mockup": "converge a look / structure decision with disposable interactive HTML; follow project retention policy and verify ignore rules, tracking, and staging independently",
+          "mockup": "converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record",
           "probe": "design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials",
           "dogfood": "drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries",
           "align": "verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup",
@@ -114,8 +114,8 @@
           "mockup": [
             "",
             {
-              "en": "Converge visual, structural, or flow choices through disposable interactive HTML. Use the existing artifact location, default process artifacts to local/Git-ignored storage unless project policy says otherwise, and verify ignore rules, tracked content, and staging independently. Preserve the Pick and reasons before retirement (ADR-134).",
-              "zh": "用可操作的 HTML 收斂視覺、結構或流程選擇。沿用既有產物位置；開發產物預設留本機並排除 Git，專案另有政策時依政策處理。分別確認忽略規則、已追蹤內容與暫存內容，清理前保存選擇及理由（ADR-134）。"
+              "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-142).",
+              "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-142）。"
             }
           ],
           "dogfood": [

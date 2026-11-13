@@ -9,6 +9,10 @@ description: "Turn a feature intent into a codebase-grounded implementation plan
 Turn intent into an executable plan grounded in actual code: what changes, what stays
 compatible, which existing parts to reuse, and how completion will be demonstrated.
 
+When producing or updating an individual project work record, read
+`references/record-interface.md` for metadata, dates, opening conclusions and
+Relations. This does not change the format of product docs or force legacy-board migration.
+
 ## Workflow
 
 1. **Ground the affected domains.** Reuse a recent matching audit from the conversation, then

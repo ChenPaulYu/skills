@@ -9,6 +9,10 @@ description: "Clarify an undecided conceptual choice or a specific root cause th
 Resolve the uncertainty that actually matters, not a quota of questions or objections.
 Use the user's context and relevant evidence; keep the choice theirs.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 Before persisting or retiring process artifacts, read `references/development-artifacts.md`
 for retention policy, Git checks, and preservation of local evidence.
 

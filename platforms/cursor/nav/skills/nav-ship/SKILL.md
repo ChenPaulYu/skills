@@ -10,6 +10,10 @@ Take work that is already done and verified, get it into the main branch, and le
 stray branches, worktrees, or half-finished release steps behind. The front half is the
 same in every repo; the tail (version bump, rebuild, alias, deploy) belongs to the project.
 
+When producing or updating an individual project work record, read
+`references/record-interface.md` for metadata, dates, opening conclusions and
+Relations. This does not change the format of product docs or force legacy-board migration.
+
 1. **Read the state before touching anything.** `git status`, current branch, `git worktree
    list`, remotes, the main branch name, and `git fetch`. Read the project's ship rules: a
    `## Ship` or release section in CLAUDE.md / AGENTS.md / CONTRIBUTING. If the work is not

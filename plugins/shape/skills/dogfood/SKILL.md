@@ -9,6 +9,10 @@ Drive the real interface against user intents and return findings tied to actual
 requests, responses, or screenshots. A demonstration output is evidence about the
 tool; improving that output is a separate task unless the user requests it.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 ## Workflow
 
 1. **Anchor the target.** State the tool/feature and what this run must reveal about it.

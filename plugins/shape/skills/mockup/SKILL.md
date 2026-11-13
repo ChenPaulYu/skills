@@ -7,6 +7,10 @@ description: "Converge a decision by generating and rendering a real, disposable
 
 Converge a decision by confronting the user with a **real, disposable, interactive artifact** — not a description of it. You **generate** the candidate space and render it; the user points. For look-and-feel decisions the artifact is a **UI mockup**; for backend / agent / data / structural decisions with no literal screen, it's an **interactive diagram / chart / graph / state-flow**. Same skill, same core.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 ## Stance
 
 > **Core: the unit of judgement is a real, rendered, disposable, *interactive* artifact — never a description.** The one non-negotiable: the output is always an *interactive* HTML — hover / click / flip / expand it. Never a static image, ASCII, an option list, or prose. Everything else flexes; this does not.
@@ -19,6 +23,11 @@ Converge a decision by confronting the user with a **real, disposable, interacti
 - **Past a disposable replica, hand off.** When the judgment needs the feature inside the real app — real components, real surrounding pages ("hifi", "差真實太多", "做一個 working prototype 讓我試") — that exceeds this skill's standalone-file stance: build an in-app prototype instead (e.g. the UI branch of an installed `prototype` skill such as `mattpocock-skills:prototype`), isolated behind a variant/fixture param, read-only, and cleaned out of the main branch once decided.
 - **A written file isn't a decidable artifact until activated** — open it (or serve it on a remote/headless box; decide which by checking `SSH_CONNECTION` / `DISPLAY`, never by assuming) and hand over a clickable URL; never hand off just a screenshot.
 - **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `/shape:tidy`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
+- **One decision, one record.** Reuse/create a Markdown mockup record with dates, actual
+  thought/task relations, a short conclusion, artifact locators and retirement conditions.
+  Prefer the mapped workspace record; otherwise use adjacent `mockup.md` in the
+  established artifact folder. Candidate HTML variants share that record. HTML headers
+  point to it instead of separately owning mutable picks/status/dates.
 - **Storage:** use the existing blueprints tree's `mockups/<date>-<topic>/` or project-selected location. Before writing, read `references/development-artifacts.md` for retention policy and independent ignore/tracking/staging checks.
 - **After a pick, honor the requested scope.** A settled pick ends exploration; continue an already-authorized build, or stop after the mockup when that was all the user requested.
 

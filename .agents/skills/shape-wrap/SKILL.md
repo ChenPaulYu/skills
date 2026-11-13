@@ -12,6 +12,10 @@ Run when asked to save progress or finish the round. Read
 `references/workspace-records.md`, then the project's records and current mapped
 repository evidence. Update the original touched tasks, not a new session summary.
 
+When creating or updating an individual working record, read
+`references/record-interface.md` for the shared frontmatter, honest dates, opening
+conclusion and visible Relations. Keep existing records readable; do not invent parents.
+
 For each touched task, keep the goal, actual progress, verification and its limits,
 remaining blockers/reasons, and one executable next action. Preserve unrelated open
 work and unique reasons already there. Store a new decision or deferred idea in its
