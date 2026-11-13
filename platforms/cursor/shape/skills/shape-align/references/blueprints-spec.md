@@ -141,7 +141,7 @@ with living instances; version is detected **by structure, never a marker file**
 Rules of coexistence: **readers are version-tolerant** (prefer a `Status:`-tagged `thoughts/` tree
 when present, else `precedents/`, else `decisions.md`); **writers write in-kind** (a new decision
 lands in whichever dialect the tree already speaks — never a half-migrated hybrid — and may
-mention the ledger once); **upgrading is a manual step** following `docs/design/blueprints-migration-ledger.md`
+mention the ledger once); **upgrading is a manual step** following shape-align's `references/migration-ledger.md`
 (the relevant `M<n>` entry). And the standing rule that keeps the fleet safe: **a convention change is
 not complete until its migration entry exists** — the spec change and its `M<n>` ship in the same
 commit.

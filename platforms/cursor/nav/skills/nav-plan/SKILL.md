@@ -36,6 +36,9 @@ compatible, which existing parts to reuse, and how completion will be demonstrat
   it; naming a helper without rewiring its consumers leaves dead architecture.
 - Use a visual comparison when an unresolved visual choice needs one and the capability is
   available. A mockup can settle appearance; real-engine behavior still needs runtime evidence.
+- Completion must be checkable. Translate a scored or open-ended target ("90 points", "do all
+  of it") into observable criteria, and mark steps that need the user's hands or judgment as
+  user-owned. The build is done when the criteria pass and only user-owned steps remain.
 - Verification is proportional to affected behavior, with repository-required gates intact.
   Include a real interface pass when tests do not cover the interaction at risk. Honor existing
   authorization; surface additional paid calls or external effects before undertaking them.

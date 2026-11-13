@@ -11,6 +11,7 @@ Make a small, already-decided, **behaviour-changing** change happen **now** — 
 ## Stance
 
 - **In scope: a small, decided, behaviour-changing change** you can hold in your head without a written plan. **Out of scope**: behaviour-preserving restructuring (→ `nav-refactor`), substantial work (→ `nav-plan`), or an unresolved product decision. Read the code and existing decisions first; ask only if missing intent would change scope, behavior, or a material trade-off.
+- **An open-ended target gets a finish line before work starts.** When the request is a loop with no checkable end ("keep optimizing until it's a 90", "finish everything left"), first state a short list of checkable completion criteria and separate the items only the user can do (logins, hardware, accounts, taste calls). Stop when the criteria pass or only user-owned items remain; hand those over as the remaining list instead of iterating on them.
 
 ### The kernel — 乙 always on, 甲 enforced
 

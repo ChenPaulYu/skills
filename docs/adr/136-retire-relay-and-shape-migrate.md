@@ -12,8 +12,7 @@ deletion.
 
 The authority is different: the owner attests that both are genuinely unclaimed, which
 is the third cause in ADR-107's three-causes check (never reachable, mis-triggered,
-or genuinely unclaimed). The owner no longer coordinates through the relay workflow and
-upgrades blueprints trees rarely enough to do it by hand.
+or genuinely unclaimed). After reviewing this usage evidence, the owner decided to delete both outright.
 
 ## Decision
 
@@ -26,8 +25,11 @@ upgrades blueprints trees rarely enough to do it by hand.
 3. The convention migration ledger is not deleted. `validate-blueprints.mjs` and
    `/shape:align` tell users how to upgrade legacy trees, so the ledger (version-detection
    table, protocol, `M<n>` entries) moves verbatim to
-   `docs/design/blueprints-migration-ledger.md`, with a short retirement note. Upgrading is
-   now manual, following that document. The rule that a convention change lands its `M<n>`
+   `plugins/shape/skills/align/references/migration-ledger.md`, with a short retirement
+   note. It is bundled with align rather than kept under `docs/` because a skill runs in
+   other projects and must carry its own references; a repo-relative `docs/` path would
+   resolve against the user's project and dangle. Upgrading is now manual, following that
+   document. The rule that a convention change lands its `M<n>`
    entry in the same commit still applies, now to the ledger file.
 4. Live references that named `/shape:migrate` (reconcile, align, blueprints-spec, the
    blueprints validator) point at the ledger document instead.

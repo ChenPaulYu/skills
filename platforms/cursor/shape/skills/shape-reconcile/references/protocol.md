@@ -97,5 +97,5 @@ Report retained material, unknowns, and coverage limits. There is no automatic a
 
 Code headers from nav-sync are useful locators, not proof or a prerequisite. Read code directly
 when headers are absent. nav-sync checks reader documents such as README; shape-align
-decides priorities; the convention structure is upgraded by hand via `docs/design/blueprints-migration-ledger.md`. Reuse fresh evidence
+decides priorities; the convention structure is upgraded by hand following the migration ledger bundled with shape-align. Reuse fresh evidence
 between these tasks without requiring or invoking another skill.

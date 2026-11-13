@@ -33,7 +33,7 @@ const LEGACY = [
 ];
 for (const [rel, what] of LEGACY) {
   if (existsSync(join(ROOT, rel))) {
-    errors.push(`${rel} exists — ${what}, retired by ADR-112. Upgrade by hand per docs/design/blueprints-migration-ledger.md (entry M2).`);
+    errors.push(`${rel} exists — ${what}, retired by ADR-112. Upgrade by hand per plugins/shape/skills/align/references/migration-ledger.md (entry M2).`);
   }
 }
 
@@ -58,7 +58,7 @@ if (existsSync(THOUGHTS) && statSync(THOUGHTS).isDirectory()) {
 if (errors.length) {
   console.error(`Blueprints convention check failed (${errors.length}):`);
   for (const e of errors) console.error(`- ${e}`);
-  console.error(`\nThe convention is versioned (ADR-105/112). Upgrade by hand — docs/design/blueprints-migration-ledger.md (append-only) holds the recipe.`);
+  console.error(`\nThe convention is versioned (ADR-105/112). Upgrade by hand — plugins/shape/skills/align/references/migration-ledger.md (append-only) holds the recipe.`);
   process.exit(1);
 }
 console.log("Blueprints convention ok: tree speaks the current version");

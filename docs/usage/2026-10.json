@@ -1,0 +1,239 @@
+{
+  "month": "2026-10",
+  "generatedAt": "2026-11-13",
+  "coverage": {
+    "claudeSessions": 31,
+    "codexSessions": 51,
+    "earliestEvent": "2026-10-09"
+  },
+  "skills": {
+    "frame:analogize": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 0
+      },
+      "claudeSubagent": 0,
+      "lastSeen": null
+    },
+    "frame:dialectic": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 1
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-14"
+    },
+    "frame:draw": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 0
+      },
+      "claudeSubagent": 0,
+      "lastSeen": null
+    },
+    "frame:first-principles": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 0
+      },
+      "claudeSubagent": 0,
+      "lastSeen": null
+    },
+    "frame:orthogonal": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 1
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-18"
+    },
+    "nav:audit": {
+      "claude": {
+        "model": 0,
+        "slash": 1,
+        "sessions": 1
+      },
+      "codex": {
+        "sessions": 3
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-31"
+    },
+    "nav:compose": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 3
+      },
+      "claudeSubagent": 1,
+      "lastSeen": "2026-10-25"
+    },
+    "nav:do": {
+      "claude": {
+        "model": 4,
+        "slash": 0,
+        "sessions": 4
+      },
+      "codex": {
+        "sessions": 16
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-31"
+    },
+    "nav:plan": {
+      "claude": {
+        "model": 8,
+        "slash": 0,
+        "sessions": 6
+      },
+      "codex": {
+        "sessions": 13
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-31"
+    },
+    "nav:refactor": {
+      "claude": {
+        "model": 2,
+        "slash": 1,
+        "sessions": 3
+      },
+      "codex": {
+        "sessions": 3
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-25"
+    },
+    "nav:sync": {
+      "claude": {
+        "model": 0,
+        "slash": 1,
+        "sessions": 1
+      },
+      "codex": {
+        "sessions": 1
+      },
+      "claudeSubagent": 1,
+      "lastSeen": "2026-10-30"
+    },
+    "shape:align": {
+      "claude": {
+        "model": 1,
+        "slash": 1,
+        "sessions": 2
+      },
+      "codex": {
+        "sessions": 5
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-30"
+    },
+    "shape:catchup": {
+      "claude": {
+        "model": 0,
+        "slash": 1,
+        "sessions": 1
+      },
+      "codex": {
+        "sessions": 2
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-30"
+    },
+    "shape:dogfood": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 3
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-19"
+    },
+    "shape:elicit": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 7
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-31"
+    },
+    "shape:mockup": {
+      "claude": {
+        "model": 5,
+        "slash": 0,
+        "sessions": 5
+      },
+      "codex": {
+        "sessions": 13
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-31"
+    },
+    "shape:park": {
+      "claude": {
+        "model": 0,
+        "slash": 1,
+        "sessions": 1
+      },
+      "codex": {
+        "sessions": 2
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-30"
+    },
+    "shape:probe": {
+      "claude": {
+        "model": 5,
+        "slash": 0,
+        "sessions": 5
+      },
+      "codex": {
+        "sessions": 5
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-26"
+    },
+    "shape:reconcile": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 2
+      },
+      "claudeSubagent": 0,
+      "lastSeen": "2026-10-21"
+    }
+  }
+}

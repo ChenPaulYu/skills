@@ -33,7 +33,7 @@ for retention policy, Git checks, and preservation of local evidence.
 5. **Report the outcome.** Name the changed priorities, verified progress, and unresolved
    items. Flag stale design documents for shape-reconcile and reader-document drift for
    nav-sync; neither sweep runs automatically. Report a legacy convention and point to
-   `docs/design/blueprints-migration-ledger.md` without migrating during alignment.
+   `references/migration-ledger.md` without migrating during alignment.
 
 ## Boundaries
 
