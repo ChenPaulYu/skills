@@ -1,6 +1,6 @@
 # Frame as the understanding family — unfold and tinker
 
-> **Status:** in progress — implemented in the commit "feat: frame becomes the understanding family (unfold, tinker)", forward test pending (2026-11-13) · owner approved direction and names in conversation.
+> **Status:** shipped (f885e2a) · forward test passed 2026-11-13 — see "Forward test results" at the end.
 > **TL;DR:** Recast `frame` as the family that helps someone understand something: lenses to see it
 > (`first-principles`, `orthogonal`), forms to present it (`analogize`, `draw`, new `tinker`), and
 > one rhythm-holding entry (`unfold`) that walks a learner through any subject by progressive
@@ -155,3 +155,19 @@ no restoration to a curriculum after a free dive.
 - An Elephant-Goldfish–style design review (deferred; would sit on the planning path and
   requires revisiting ADR-123).
 - Merging the wiki's `paper-review` draft — revisit after `unfold`'s document leg has use.
+
+## Forward test results (2026-11-13)
+
+Fresh headless sessions (`claude -p`, new plugin cache), real phrasings, no hints.
+
+| Case | Prompt (shape) | Routed to | Verdict |
+|---|---|---|---|
+| Repo, turn 1 | progressive-disclosure walkthrough of a public audio library | `frame:unfold` | pass — one-line point + analogy, five-minute skeleton, five named layers, none expanded, checkpoint separating verified facts from guesses |
+| Repo, turn 2 | "go to layer 1" | (same session) | pass — exactly one layer; corrected its own turn-1 guess from source; recorded/inferred/open labels; analogy with its break named; checkpoint |
+| Paper | chapter-by-chapter reading of a well-known ML paper, "don't lose information" | `frame:unfold` | pass — section-indexed layer map, skeleton only, flagged two internal inconsistencies in the source |
+| Tinker | "let me change it and see" about two rate-limiting patterns | `frame:tinker` | pass — one primary control, shared timeline with the before-state kept visible, folded secondary controls, simplifications named, activated URL; layout not browser-verified (stated) |
+| ELI5 | "ELI5 <distributed-data concept>" | `frame:analogize` | pass — one core idea, everyday analogy, where it breaks |
+| Negative | "mockup two settings layouts to compare" | `shape:mockup` | pass — not captured by `tinker` |
+
+Not yet observed: an override mid-walkthrough ("用圖講") and a non-text `draw` form chosen
+unprompted; watch for them in real use. Total test cost ≈ US$1.9.
