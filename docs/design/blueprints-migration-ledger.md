@@ -23,7 +23,7 @@ convention change it implements, runnable against any tree, any time, once.
 | **v3** (current, ADR-112 · extended ADR-113) | `blueprints/thoughts/*.md` carry a `Status:` line; no `precedents/` folder |
 | v2 (legacy, ADR-105) | `blueprints/precedents/index.md` exists |
 | v1 (legacy, ADR-026) | `blueprints/decisions.md` exists, no `precedents/` |
-| pre-blueprints | neither; possibly no `blueprints/` at all — nothing to migrate, point at `shape-align` to scaffold |
+| pre-blueprints | neither; possibly no `blueprints/` at all — nothing to migrate, point at `/shape:align` to scaffold |
 
 More than one fingerprint present = a half-migrated tree; report it as the finding and offer to
 complete the relevant `M<n>` (M1 for a v1 remnant, M2 for a v2 remnant, M3 for a root `HANDOFF.md`
@@ -85,7 +85,7 @@ promotion step, no freeze gate.
   ledger file is then deleted.
 - The ADR-041 freeze protocol and the `/shape:position` write-door retire with this migration —
   no replacement door. Any verb may edit a `thoughts/` file's `Status:` line directly going
-  forward (`shape-reconcile` for a fact reality already settled, `shape-elicit` for a reconsidered
+  forward (`/shape:reconcile` for a fact reality already settled, `/shape:elicit` for a reconsidered
   call).
 
 ### M3 — root `HANDOFF.md` → `blueprints/baton.md` (joins v3's ephemeral tier) · ADR-113, 2026-08-13
@@ -106,7 +106,7 @@ target path and file format are unchanged. A rename alone does not run M3.
   sections carry over exactly as written.
 - **No tree** → **left in place** at the project root. This is not a partial migration: root
   `HANDOFF.md` is the standing no-tree fallback (tolerant reader, ADR-071), not a legacy dialect
-  waiting to be moved. Only migrate it once a `blueprints/` tree is scaffolded (by `shape-align`
+  waiting to be moved. Only migrate it once a `blueprints/` tree is scaffolded (by `/shape:align`
   or otherwise) for some other reason — never scaffold a tree just to relocate a cursor.
 - No index/`overruled.md` equivalent — `baton.md` is a singleton with no cross-references to
   repoint, so this is the ledger's simplest entry: one file, one move, no fold-forward.
@@ -127,7 +127,7 @@ content, force-add local notes, or remove files merely because the default chang
 ## Protocol
 
 1. **Detect + report (read-only).** Version fingerprint, section inventory, inbound-reference
-   inventory: `grep -rn` the whole repo (docs, code, READMEs, AGENTS/AGENTS.md) for the old
+   inventory: `grep -rn` the whole repo (docs, code, READMEs, AGENTS/CLAUDE.md) for the old
    structure's name and anchors. Present the full mapping — per section: target filename, date
    and its provenance, references that will be re-pointed. **User confirms before any write.**
 2. **Tracked-check (hard gate).** `git ls-files` on every source — untracked content has no
@@ -137,26 +137,26 @@ content, force-add local notes, or remove files merely because the default chang
    ledger entry specifies. Re-check between steps; don't batch destructive ops behind one
    confirmation.
 4. **Reference integrity.** Re-point every inbound reference found in step 1 — standing pointers
-   in `plan.md` / `AGENTS.md` / `AGENTS.md` / READMEs included. Old anchors
+   in `plan.md` / `AGENTS.md` / `CLAUDE.md` / READMEs included. Old anchors
    (`decisions.md#<topic>`) map to their target file.
 5. **Verify, then delete.** Every source section accounted for in the target (diff the moved
    prose, not the line counts); repo-wide grep for the old name returns zero non-historical hits;
    *then* remove the source. Run the project's test/lint gate if one exists — migration must not
    break a build that greps docs.
 6. **Report.** What moved where, every re-pointed reference, anything marked approximate, and a
-   one-line suggestion to run `shape-reconcile` next — migration preserves staleness faithfully, so a
+   one-line suggestion to run `/shape:reconcile` next — migration preserves staleness faithfully, so a
    stale source section is now a stale target entry, and finding that is reconcile's
    job.
 
 ## Boundaries
 
-- **vs `shape-reconcile`** — that pass judges *currency* (is this doc still true?)
+- **vs `/shape:reconcile`** — that pass judges *currency* (is this doc still true?)
   with per-file gates; migrate transforms *structure* (which convention does this tree speak?)
   with a whole-tree mapping. Migrate runs first when both are wanted: reconcile then
   operates on the current convention.
 - **vs relay's legacy adoption** — different object entirely (GitHub workspace history, not a
   `blueprints/`/`core/` tree). No longer a verb on relay's side — it retired to a hand-driven
-  discipline in `AGENTS.md` (ADR-115) — but the name collision that motivated this
+  discipline in `plugins/relay/CLAUDE.md` (ADR-115) — but the name collision that motivated this
   note predates the retirement, so the boundary is worth stating once here too.
 
 ## Anti-patterns (refuse these)
@@ -164,7 +164,7 @@ content, force-add local notes, or remove files merely because the default chang
 | Temptation | Instead — and the tell |
 |---|---|
 | Improve prose while moving it | Verbatim or nothing — a migration diff should be `git mv`-shaped plus mechanical structure. Tell: a moved sentence reads better than its source. |
-| Migrate and reconcile staleness in one pass | Migrate first, offer `shape-reconcile` after. Tell: about to drop a section because it "looks stale" mid-move. |
+| Migrate and reconcile staleness in one pass | Migrate first, offer `/shape:reconcile` after. Tell: about to drop a section because it "looks stale" mid-move. |
 | Invent a date or an evidence pointer | Mark it approximate in the Status line. Tell: a `established <date>` no git query produced. |
 | Leave a prescriptive tombstone by default | Verify destination and recovery, then remove within authority. Tell: writing a file whose only content is "this moved". |
 | Ship a convention change without its `M<n>` | Block it — rule 2. Tell: a spec/ADR edit renames a structure and this ledger gained nothing. |
@@ -174,4 +174,15 @@ content, force-add local notes, or remove files merely because the default chang
 - A migration report: version detected, mapping executed, references re-pointed, approximations
   flagged.
 - The tree at the current convention version, contents verbatim, zero dangling references.
-- A one-shot suggestion to run `shape-reconcile` (never auto-invoked).
+- A one-shot suggestion to run `/shape:reconcile` (never auto-invoked).
+
+---
+
+## Retirement note — applied by hand (ADR-136)
+
+The `/shape:migrate` verb that once executed this ledger is retired (ADR-136). The ledger above,
+moved verbatim from the verb's reference, remains the append-only record of convention changes
+and their recipes: the version-detection table and the six-step protocol still describe how to
+upgrade a tree, now performed manually (or by an agent following this document). `scripts/validate-blueprints.mjs`
+and `/shape:align` point here when they find a legacy tree. Any future ADR that changes the
+blueprints convention still lands its `M<n>` entry in this file in the same commit.

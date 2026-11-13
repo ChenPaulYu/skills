@@ -15,19 +15,13 @@
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Converge decisions, align priorities, reconcile project records, and hand off sessions.",
-      "version": "0.25.3"
+      "version": "0.26.0"
     },
     {
       "name": "frame",
       "source": "./plugins/frame",
       "description": "Apply an explicit, named frame that adds substantive reasoning checks without a fixed output worksheet — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
       "version": "0.14.1"
-    },
-    {
-      "name": "relay",
-      "source": "./plugins/relay",
-      "description": "Coordinate asynchronously through a verified GitHub workspace under the Accord memory model. Route independent follow-ups, expose native lifecycle findings and stage age, hand off the current baton without moving settlement authority, and commit exact settled memory directly. Language-agnostic.",
-      "version": "2.5.4"
     }
   ]
 }

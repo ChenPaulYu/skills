@@ -19,22 +19,20 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 | Update README and/or docs as one batch, or refresh source headers（同步說明） | `/nav:sync` |
 | Reconstruct where the session is after returning（回來接續） | `/shape:catchup` |
 | Write the session handoff before stepping away（離開前交接） | `/shape:park` |
-| Report progress to a counterpart over relay | `/relay:report` |
 
 ## What's in here
 
 <!-- BEGIN GENERATED catalog-plugins -->
-Catalog: 4 plugins · 24 skills.
+Catalog: 3 plugins · 19 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
 | [`nav`](plugins/nav/) | 0.20.4 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.25.3 | 9 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
+| [`shape`](plugins/shape/) | 0.26.0 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
 | [`frame`](plugins/frame/) | 0.14.1 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
-| [`relay`](plugins/relay/) | 2.5.4 | 4 | **Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent. |
 <!-- END GENERATED catalog-plugins -->
 
-`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer) and **relay** (coordinate asynchronously with a counterpart over a shared repo) are independent toolkits that feed the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+`nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -47,7 +45,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
 
 <!-- BEGIN GENERATED catalog-skills -->
-Catalog skills: 24 active skills.
+Catalog skills: 19 active skills.
 
 ### `nav`
 
@@ -75,7 +73,6 @@ Catalog skills: 24 active skills.
 
 - `/shape:catchup` — read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably
 - `/shape:park` — write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level
-- `/shape:migrate` — bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)
 
 ### `frame`
 
@@ -86,15 +83,6 @@ Catalog skills: 24 active skills.
 - `/frame:dialectic` — put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat
 - `/frame:analogize` — on explicit request, build a checked analogy for a concept you already understand: compare candidates, verify the mapping against the real structure, pick on fit, and name where the winner breaks; in-chat
 - `/frame:draw` — render something you already understand so it lands for someone else, with the form chosen by the kind of knowledge; terminal-first, escalating to an interactive artifact only when interaction changes visible state or the user asks. Distinct from `/shape:mockup`, which renders candidates so a decision can be picked — here the artifact is the explanation
-
-### `relay`
-
-*Model-invoked:*
-
-- `/relay:report` — resolve the workspace and a verified recipient before author sign-off; route Issue-default, and fork any independently completable follow-up into a linked child Issue while stating whether the parent may settle independently; exact-diff review remains an optional PR path
-- `/relay:digest` — start with an inbox preflight, then show source obligations separately from native lifecycle findings and generated `relay-triage` wrappers; expose conflicting stages, staged work without an assignee, multiple staged owners, unknown stage age, and policy-driven overdue stages; stage age comes from native label/assignment events, never prose or `updatedAt`; read-only and deterministic (schema 6, ADR-121)
-- `/relay:reply` — answer or clarify in place, hand off ordinary/`needs-input` work with a native label-and-assignment transition, or route an independent follow-up to `report`; settlement authority stays stable, and protected acceptance/recording stages cannot be escaped by a generic handoff
-- `/relay:settle` — verify settlement authority, apply the settlement block, close an Issue/Discussion, or merge/abandon a PR; a promoted Decision/Brief/Core delta whose exact wording is already settled is committed and pushed directly with remote read-back, while unsettled wording may use a PR
 <!-- END GENERATED catalog-skills -->
 
 ## Install
@@ -126,10 +114,9 @@ Or by hand. In Claude Code:
 /plugin install nav@skills
 /plugin install shape@skills
 /plugin install frame@skills
-/plugin install relay@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, `/frame:*`, and `/relay:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `frame` and `relay` are independent — install alone or with the others.)
+That's it — the `/nav:*`, `/shape:*`, and `/frame:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `frame` is independent — install alone or with the others.)
 
 ### Antigravity CLI (`agy`)
 
@@ -142,10 +129,9 @@ git clone https://github.com/ChenPaulYu/skills.git && cd skills
 agy plugin install plugins/nav
 agy plugin install plugins/shape
 agy plugin install plugins/frame
-agy plugin install plugins/relay
 ```
 
-Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:mockup`, `/relay:report`, …).
+Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:mockup`, `/frame:analogize`, …).
 
 AGY-only automation (hooks, MCP) stays in `~/.gemini/config/` on the machine — never commit it here, so Claude / Codex / Cursor stay untouched.
 
@@ -246,7 +232,7 @@ Hook-driven updates preserve the profile recorded by the last install instead of
 Run offline regression tests with:
 
 ```bash
-node --test scripts/lib/*.test.mjs plugins/relay/skills/digest/scripts/*.test.mjs
+node --test scripts/lib/*.test.mjs
 node scripts/validate-staged.mjs   # check the staged commit candidate without committing
 ```
 

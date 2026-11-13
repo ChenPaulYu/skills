@@ -8,19 +8,17 @@
   "verify_full_compat_exit": true,
   "seed_legacy_duplicates": [
     "nav-plan",
-    "relay-digest"
+    "shape-park"
   ],
   "reject_legacy_duplicates": [
     "nav-plan",
-    "relay-digest"
+    "shape-park"
   ],
-  "expect_skill_count": 24,
+  "expect_skill_count": 19,
   "expect_skills": [
     "nav-plan",
-    "relay-digest",
     "shape-park",
-    "shape-catchup",
-    "shape-migrate"
+    "shape-catchup"
   ],
   "expect_runtime_files": [
     ".codex/agents/executor.toml",

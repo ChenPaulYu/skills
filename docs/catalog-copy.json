@@ -90,15 +90,14 @@
           "align": "verify carried board items against current code and decide now/next/later with the user; update the lean plan.md without requiring a full document cleanup",
           "catchup": "read and reconstruct the current session state from the shared handoff file (`blueprints/baton.md`, or root `HANDOFF.md` when no tree exists) using goal · done · now · open · next; absent, mismatched, or ad-hoc inputs are tolerated and self-reported, and cleanup only deletes verified consumed state with its rationale kept durably",
           "park": "write the session handoff before stepping away, previewing the overwrite and honoring existing authorization; uses the same five fields in `blueprints/baton.md` (fallback: root `HANDOFF.md`) and stays concise at decision level",
-          "migrate": "bring a blueprints/core tree to the current convention version — verbatim, gated, reference-safe structural transforms from an append-only migration ledger (ADR-105)",
           "reconcile": "reconcile stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)"
         }
       },
       "site": {
         "layer": "ui",
         "blurb": {
-          "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131).",
-          "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。"
+          "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131).",
+          "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。"
         },
         "skills": {
           "mockup": [
@@ -136,13 +135,6 @@
               "zh": "離開前寫 session handoff:同一組五欄,保持 decision-level 精簡,落在 blueprints/baton.md,沒有樹時 fallback 到根目錄 HANDOFF.md。會預覽覆寫並尊重既有授權;下一步已授權時不強迫再開選單。僅明確召喚。ADR-127。"
             }
           ],
-          "migrate": [
-            "",
-            {
-              "en": "Migrate a blueprints/core document tree to the current convention version (ADR-105). The convention is a versioned interface with living instances — detect the version BY STRUCTURE (precedents/index.md = v2 · decisions.md = v1), propose the full mapping (per-section target files, dates from git -L, every inbound reference), then execute verbatim gated transforms: tracked-check hard gate, one transform at a time, reference integrity across the whole repo, verify then delete (verify committed recovery or local preservation before removal). Append-only migration ledger (M1–M4; M4 changes retention policy without changing the v3 layout); the standing rule: a convention change is not complete until its migration entry exists — spec and M<n> ship in one commit. Never judges staleness (reconcile) or authors content (elicit). Summon-only (disable-model-invocation: true) — an episodic, author-driven convention upgrade with zero model-routing value; capability stays intact behind /shape:migrate (ADR-110).",
-              "zh": "把專案的 blueprints/core 文件樹遷到現行慣例版本(ADR-105)。慣例是有版本的介面 —— 以結構偵測版本(precedents/index.md = v2 · decisions.md = v1),先提出完整對映(每節的目標檔、git -L 取日期、全部入站引用),再逐字、gated 執行:tracked-check 硬閘、一次一個 transform、全 repo 引用完整性、驗證後才刪(先確認 Git 可還原或本機內容已保存)。append-only 遷移帳(M1–M4；M4 更新保存政策、不改 v3 結構);站規:改慣例必須同 commit 附上它的遷移條目。不判斷時效(reconcile)、不寫內容(elicit)。現在 summon-only(disable-model-invocation: true)—— 插曲式、由作者驅動的慣例升級,對 model 路由零價值;能力仍在 /shape:migrate 背後(ADR-110)。"
-            }
-          ],
           "elicit": [
             "",
             {
@@ -176,8 +168,8 @@
             "zh": "意圖 → 做出來"
           },
           "desc": {
-            "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff; migrate upgrades its surrounding convention. Nine verbs; no mandatory cleanup before prioritization (ADR-131).",
-            "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔，migrate 升級文件慣例。共九個動詞，排下一步前不必先做整批清理（ADR-131）。"
+            "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131).",
+            "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。"
           }
         }
       }
@@ -248,68 +240,6 @@
           "desc": {
             "en": "Reasoning and delivery: first-principles grounds premises and rebuilds; orthogonal checks independence; dialectic tests both sides and names deciding evidence; analogize checks a requested analogy; draw chooses a useful visual form and medium. Reasoning checks remain, but output scales to the question. No required worksheet, closing menu, metaphor, or banned technical vocabulary. Analysis alone grants no build authority; an already-authorized workflow may continue; ADR-128.",
             "zh": "推理與表達：first-principles 分清前提與慣例後重新推導；orthogonal 檢查不同因素是否獨立；dialectic 檢驗雙方論證與關鍵證據；analogize 提供檢查過的比喻；draw 選擇適合的圖形與媒介。保留實質檢查，呈現隨問題大小調整，不強制工作表、結尾選單、比喻或禁詞。單純分析不授權實作；已授權的流程可以接續。；ADR-128。"
-          }
-        }
-      }
-    },
-    "relay": {
-      "readme": {
-        "summary": "**Coordinate with a counterpart through GitHub, following the Accord memory model** — `report` routes independent follow-ups into linked Issues; `digest` starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and exposes stage age; `reply` hands off the current baton without moving settlement authority; `settle` closes the object and commits exact settled memory directly. GitHub owns state; Relay owns semantics and verification. Independent.",
-        "skills": {
-          "report": "resolve the workspace and a verified recipient before author sign-off; route Issue-default, and fork any independently completable follow-up into a linked child Issue while stating whether the parent may settle independently; exact-diff review remains an optional PR path",
-          "digest": "start with an inbox preflight, then show source obligations separately from native lifecycle findings and generated `relay-triage` wrappers; expose conflicting stages, staged work without an assignee, multiple staged owners, unknown stage age, and policy-driven overdue stages; stage age comes from native label/assignment events, never prose or `updatedAt`; read-only and deterministic (schema 6, ADR-121)",
-          "reply": "answer or clarify in place, hand off ordinary/`needs-input` work with a native label-and-assignment transition, or route an independent follow-up to `report`; settlement authority stays stable, and protected acceptance/recording stages cannot be escaped by a generic handoff",
-          "settle": "verify settlement authority, apply the settlement block, close an Issue/Discussion, or merge/abandon a PR; a promoted Decision/Brief/Core delta whose exact wording is already settled is committed and pushed directly with remote read-back, while unsettled wording may use a PR"
-        }
-      },
-      "site": {
-        "layer": "foundation",
-        "blurb": {
-          "en": "GitHub-native asynchronous coordination under the Accord memory model (ADR-100/120/121, ). GitHub owns collaboration state; decisions/, briefs/, and core/ are formal memory. Four verbs keep the object boundaries clean: report forks independently completable follow-ups into reciprocally linked child Issues and states whether the parent may settle; digest starts with an inbox preflight, separates source obligations from native lifecycle findings and generated triage wrappers, and derives stage age from label/assignment events; reply answers, clarifies, or hands off the current baton without moving settlement authority or escaping protected stages; settle closes with authority and commits/pushes an exact settled formal-memory delta with remote read-back. A PR remains optional when the wording itself still needs review. — report · digest · reply · settle. Standalone. See relay/CLAUDE.md, ADR-090.102/115/120/121, docs/design/relay.md, and blueprints/plans/2026-08-19-relay-conversation-lifecycle.md.",
-          "zh": "依 Accord 記憶模型運作的 GitHub-native 非同步協調（ADR-100/120/121，）。GitHub 擁有協作狀態；decisions/、briefs/、core/ 是正式記憶。四個動詞守住物件邊界：report 把有獨立完成條件的 follow-up 拆成雙向連結的 child Issue，並說清楚 parent 能不能獨立 settle；digest 先做 inbox preflight，再把 source obligation、原生生命週期 finding 與 generated triage wrapper 分開，從 label/assignment event 推導 stage age；reply 回答、釐清或交接目前 baton，但不移動 settlement authority，也不能跳出受保護 stage；settle 以正確權限結案，對 wording 已確定的正式記憶差異直接 commit、push 並做 remote read-back。只有 wording 尚待 review 時才選用 PR。共 ：report · digest · reply · settle。獨立。見 relay/CLAUDE.md、ADR-090.102/115/120/121、docs/design/relay.md 與 blueprints/plans/2026-08-19-relay-conversation-lifecycle.md。"
-        },
-        "skills": {
-          "report": [
-            "",
-            {
-              "en": "Route Issue-default after resolving the workspace and recipient. A follow-up with its own completion condition becomes a reciprocally linked child Issue; record whether the parent may settle while it remains open. Exact-diff review may use a PR. ADR-090/098/100/101/120.",
-              "zh": "解析 workspace 與收件人後採 Issue-default 路由。有自己完成條件的 follow-up 會拆成雙向連結的 child Issue，並記錄 parent 能否在它仍開啟時 settle。精確 diff 的 review 可以選用 PR。ADR-090/098/100/101/120。"
-            }
-          ],
-          "digest": [
-            "",
-            {
-              "en": "Read-only inbox-first actionable view: show open/overdue counts, oldest overdue source Issue, first native action, and generated triage wrappers before separating source obligations, lifecycle findings, and notices. Findings cover conflicting stages, missing assignees, multiple staged owners, unknown stage age, and policy-driven overdue stages. Age comes only from native label/assignment events. ADR-090/093/100/120/121; schema 6.",
-              "zh": "唯讀、inbox-first 的行動視圖：先顯示 open/逾期數量、最老逾期 source Issue、第一個 native action 與 generated triage wrapper，再分開 source obligation、生命週期 finding 與 notice。finding 包含 stage 衝突、無 assignee、多個 staged owner、stage age 不可知，以及依 policy 判定的逾期 stage；age 只來自原生 label/assignment event。ADR-090/093/100/120/121；schema 6。"
-            }
-          ],
-          "reply": [
-            "",
-            {
-              "en": "Answer or clarify in place, hand off ordinary/needs-input work through native labels and assignment, or route an independent follow-up to report. Settlement authority stays stable; generic handoff cannot escape awaiting-acceptance or awaiting-record. ADR-090/100/120.",
-              "zh": "原地回答或釐清；透過原生 label 與 assignment 交接 ordinary/needs-input 工作；獨立 follow-up 則交給 report。settlement authority 保持不變，generic handoff 不能跳出 awaiting-acceptance 或 awaiting-record。ADR-090/100/120。"
-            }
-          ],
-          "settle": [
-            "",
-            {
-              "en": "Verify settlement authority, close with a structured settlement block, and promote durable memory when required. Exact settled Decision/Brief/Core wording commits and pushes directly with remote read-back; unsettled wording may use a PR. ADR-090/100/120.",
-              "zh": "驗證 settlement authority，以結構化 settlement block 結案，必要時升等成正式記憶。已確定的 Decision/Brief/Core 文字直接 commit、push 並做 remote read-back；文字尚未確定時可以使用 PR。ADR-090/100/120。"
-            }
-          ]
-        },
-        "files": [],
-        "graph": {
-          "x": 400,
-          "y": 255,
-          "w": 120,
-          "role": {
-            "en": "async coordination",
-            "zh": "非同步協調"
-          },
-          "desc": {
-            "en": "GitHub-native coordination under the Accord memory model. Independent follow-ups become linked child Issues; native findings expose broken lifecycle state and stage age; digest starts with an inbox preflight and separates source obligations from generated triage wrappers; baton ownership can move without moving settlement authority; exact settled formal memory commits and pushes directly. PR is optional for unsettled wording. — report · digest · reply · settle. Standalone; ADR-090.102/115/120/121.",
-            "zh": "依 Accord 記憶模型運作的 GitHub-native 協調。獨立 follow-up 會拆成相連的 child Issue；原生 finding 顯示壞掉的生命週期狀態與 stage age；digest 先做 inbox preflight，並把 source obligation 與 generated triage wrapper 分開；baton owner 可以改變而不移動 settlement authority；已確定的正式記憶直接 commit、push。文字尚未確定時才選用 PR。：report · digest · reply · settle。獨立。；ADR-090.102/115/120/121。"
           }
         }
       }

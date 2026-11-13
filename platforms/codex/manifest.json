@@ -78,12 +78,6 @@
         "frame-*"
       ]
     },
-    "collaboration": {
-      "summary": "Relay coordination.",
-      "skills": [
-        "relay-*"
-      ]
-    },
     "all": {
       "summary": "Every generated skill; use only when the full roster is needed.",
       "skills": [
@@ -183,8 +177,7 @@
       ],
       "contract_consumers": [
         ".agents/skills/shape-park/SKILL.md",
-        ".agents/skills/shape-catchup/SKILL.md",
-        ".agents/skills/shape-migrate/SKILL.md"
+        ".agents/skills/shape-catchup/SKILL.md"
       ]
     },
     {
@@ -202,9 +195,7 @@
       "generated_policy_markers": [
         "> **Mechanical-tier skill.**"
       ],
-      "contract_consumers": [
-        ".agents/skills/relay-digest/SKILL.md"
-      ]
+      "contract_consumers": []
     },
     {
       "id": "browser_verify",

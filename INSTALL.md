@@ -25,10 +25,9 @@ then `node scripts/validate-codex-skills.mjs`.
 /plugin install nav@skills
 /plugin install shape@skills
 /plugin install frame@skills
-/plugin install relay@skills
 ```
 
-**Verify:** `/plugin` lists the four plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
+**Verify:** `/plugin` lists the three plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
 
 ## Antigravity CLI (`agy`)
 
@@ -38,10 +37,9 @@ cd skills
 agy plugin install plugins/nav
 agy plugin install plugins/shape
 agy plugin install plugins/frame
-agy plugin install plugins/relay
 ```
 
-**Verify:** `agy plugin list` shows all four with source `claude-code`.
+**Verify:** `agy plugin list` shows all three with source `claude-code`.
 
 Note: prefer `agy plugin install` (namespaced under `~/.gemini/config/plugins/`). If a flat materialize into `~/.agents/skills/` appears, it collides with Cursor's scan of that directory — use Codex `--global-root codex` and keep marketplace flat copies out of `~/.agents/skills`. AGY hooks / MCP belong in `~/.gemini/config/` (machine-local), not in this repo.
 
@@ -70,7 +68,7 @@ Both auto-discover `.agents/skills/` (project) and Codex also reads `~/.codex/sk
 
 **Verify:**
 
-- Codex — `/skills` lists `nav-audit`, `shape-elicit`, `relay-report`, …
+- Codex — `/skills` lists `nav-audit`, `shape-elicit`, `frame-analogize`, …
 - opencode — `opencode debug skill` lists them (project `.agents/skills/` and/or global agents root).
 
 ## Cursor

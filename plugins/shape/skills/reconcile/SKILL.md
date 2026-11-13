@@ -51,8 +51,8 @@ for retention policy, Git checks, and preservation of local evidence.
   untracked content needs explicit overwrite/delete authority or a non-destructive alternative.
 - **Handoffs remain while work or reasons are live.** A different SHA alone does not justify
   deleting `baton.md` or `HANDOFF.md`; verify consumption and durable preservation first.
-- **No automatic migration or implementation.** Report a legacy layout; /shape:migrate owns
-  structural conversion. /nav:sync owns source headers and reader-facing documents. Analysis, curation, and acceptance stay on the session model.
+- **No automatic migration or implementation.** Report a legacy layout; structural conversion is a manual
+  upgrade via `docs/design/blueprints-migration-ledger.md`. /nav:sync owns source headers and reader-facing documents. Analysis, curation, and acceptance stay on the session model.
 
 ## Completion
 
