@@ -1,10 +1,11 @@
-# Frame as the understanding family — unfold, tinker, eli5
+# Frame as the understanding family — unfold and tinker
 
 > **Status:** proposed (2026-11-13) · owner approved direction and names in conversation; implementation not yet started.
 > **TL;DR:** Recast `frame` as the family that helps someone understand something: lenses to see it
-> (`first-principles`, `orthogonal`), forms to present it (`analogize`, `draw`, new `eli5`, new
-> `tinker`), and one rhythm-holding entry (`unfold`) that walks a learner through any subject by
-> progressive disclosure, choosing a form per layer. `dialectic` retires separately (ADR-137).
+> (`first-principles`, `orthogonal`), forms to present it (`analogize`, `draw`, new `tinker`), and
+> one rhythm-holding entry (`unfold`) that walks a learner through any subject by progressive
+> disclosure, choosing a form per layer. `dialectic` retired separately (ADR-137). A separate
+> `eli5` was considered and dropped (see Roster).
 
 ## Context
 
@@ -44,10 +45,15 @@ can poke to see what changes.
 |---|---|---|
 | `unfold` | **entry** — holds the rhythm: skeleton → one layer at a time → checkpoint; tracks what the learner has, follows their questions; picks a form per layer | new (successor of the wiki's `codebase-walkthrough`, generalized) |
 | `first-principles` · `orthogonal` | **lenses** — see a problem's structure | unchanged |
-| `analogize` | **form** — connect to what the learner already knows (assimilation) | trigger narrowed: drop "ELI5" |
-| `eli5` | **form** — the simplest correct version: one core idea, no prerequisites, a concrete example | new; replaces the installed third-party `eli5` plugin |
-| `draw` | **form** — choose the picture and its medium | unchanged |
+| `analogize` | **form** — connect to what the learner already knows (assimilation) | keeps its "ELI5" trigger; adds one line: on an ELI5 request, also reduce to one core idea with no assumed prerequisites |
+| `draw` | **form** — choose the picture and its medium | unchanged (a polished infographic is one medium it can pick; not renamed — the skill also covers terminal ASCII, tables, mermaid) |
 | `tinker` | **form** — build a manipulable object to think with: one primary control, visible difference, layered reveal | new |
+
+**Why no `eli5` member.** ELI5 sets *depth* (one idea, no prerequisites), while analogize
+sets the *vehicle* (borrow a familiar domain). The depth knob is already owned twice: the
+standing plain-language reply rule for single explanations, and `unfold`'s skeleton layer for
+walkthroughs. A separate skill would add too little behavior for its resident description
+cost (ADR-109). The installed third-party `eli5` plugin is left to the owner's discretion.
 
 `frame` keeps its name: "applying a frame" already covers both seeing and presenting; the
 plugin's identity text changes from "explicit reasoning frames" to "understanding — see it,
@@ -65,6 +71,21 @@ Mechanism: each form's core discipline gets one owner file, and
 owner→consumer machinery shape uses for session-handoff). Each form remains its own
 standalone entrance ("用比喻解釋" goes straight to `analogize`). `unfold` never auto-runs a
 separate skill; it applies the bundled discipline inside its own turn.
+
+**Choosing a form per layer.** `unfold` picks the form the current layer's question asks for,
+defaulting to plain text; the learner can override at any time ("用圖講", "讓我試試").
+
+| The layer's question | Form |
+|---|---|
+| What is it, in one breath? (the skeleton) | plain text at ELI5 depth, optionally one analogy |
+| What is this unfamiliar abstraction like? | `analogize` discipline |
+| How do the parts relate / flow / sit? | `draw` discipline |
+| What changes if I change X? / why does it behave this way? | `tinker` discipline |
+| Exactly what does the source say? | quote and cite the source; no form |
+
+Each layer names the form it used in one short phrase, so the choice is visible and
+correctable (a lesson from the reading-app design: a hidden auto-choice gives the reader no
+handle to ask for another). No form is mandatory; at most one non-text form per layer.
 
 Open design point for implementation: whether the owner file for each form is the member's
 existing `references/protocol.md` (analogize, draw's `forms.md`) or a new compact
@@ -89,8 +110,7 @@ no restoration to a curriculum after a free dive.
 
 ### Boundaries to state in descriptions (one NOT-boundary each)
 
-- `unfold` vs `analogize`/`eli5`: multi-layer walkthrough vs a single explanation.
-- `eli5` vs `analogize`: strip to the simplest true version vs a checked structural mapping.
+- `unfold` vs `analogize`: multi-layer walkthrough vs a single explanation (including ELI5).
 - `tinker` vs `/shape:mockup`: render to *understand* (one object, poked) vs render to *decide*
   (candidates compared). Both produce interactive HTML; activation/serving mechanics are a
   second consumer of mockup's activation text → extract a shared owner rather than copy (N+1).
@@ -98,8 +118,8 @@ no restoration to a curriculum after a free dive.
 
 ## Critical files
 
-- `plugins/frame/skills/{unfold,eli5,tinker}/SKILL.md` + `references/` — new.
-- `plugins/frame/skills/analogize/SKILL.md` — description drops "ELI5".
+- `plugins/frame/skills/{unfold,tinker}/SKILL.md` + `references/` — new.
+- `plugins/frame/skills/analogize/SKILL.md` — one added line for ELI5 depth; trigger unchanged.
 - `plugins/frame/CLAUDE.md` — identity, roster, naming-idiom note (bare verbs for the new
   members, canonical names for the two lenses).
 - `plugins/frame/.claude-plugin/plugin.json` — description + minor version bump.
@@ -112,20 +132,20 @@ no restoration to a curriculum after a free dive.
 - `docs/adr/138-frame-understanding-family.md` — new skills (repo rule: ADR per new skill),
   supersession of the wiki method, why this is not fathom again.
 - Outside this repo, after ship: mark the wiki's `codebase-walkthrough` superseded by
-  `/frame:unfold`; uninstall the third-party `eli5` plugin.
+  `/frame:unfold`.
 
 ## Verification
 
 1. **Gates:** build-manifests → build-codex → build-cursor → `validate-codex-skills.mjs` ok;
    `node --test scripts/lib/*.test.mjs`.
 2. **Routing probe** using the owner's real phrasings: the eleven recorded "progressive
-   disclosure 帶我認識/導讀" prompts route to `unfold`; "用比喻解釋" to `analogize`; "ELI5 X" to
-   `eli5`; "讓我改改看 / 換個條件會怎樣" to `tinker`; "mockup 一下 / 哪個好" still to `shape:mockup`.
+   disclosure 帶我認識/導讀" prompts route to `unfold`; "用比喻解釋" and "ELI5 X" to `analogize`;
+   "讓我改改看 / 換個條件會怎樣" to `tinker`; "mockup 一下 / 哪個好" still to `shape:mockup`.
 3. **Forward test (real use, not a fixture):** one `unfold` session on an unfamiliar public
    repository and one on a paper chapter. Pass criteria: opens with the skeleton in ≤ one
    screen; introduces one layer per turn; glosses each new term at first use; stops at a
    checkpoint with the open questions named; picks at least one non-text form where the
-   layer is relational. Failure mode to watch: the 2026-09-21 correction ("step by step"
+   layer is relational, and names the form it chose; honors a mid-walkthrough override. Failure mode to watch: the 2026-09-21 correction ("step by step"
    instead of progressive disclosure).
 4. **Ledger:** next monthly `scripts/skill-usage.mjs` snapshot shows `unfold` fires; the
    ADR-109 watch list re-evaluates `analogize`/`draw` once they are reachable through `unfold`.
