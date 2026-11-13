@@ -149,6 +149,11 @@ printf '%s\n' "$REPOS" | while IFS= read -r line || [ -n "$line" ]; do
   pull_repo "$line"
 done
 
+# Surface a broken always-loaded instruction file in the same log (see the script).
+sh "$ROOT/scripts/check-global-instructions.sh" | while IFS= read -r line; do
+  path=${line#WARN }; log "${path%%:*}" WARN "${path#*: }"
+done
+
 if [ -f "$LOG" ] && [ "$(wc -l < "$LOG")" -gt "$MAX_LOG_LINES" ]; then
   tail -n "$MAX_LOG_LINES" "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
 fi

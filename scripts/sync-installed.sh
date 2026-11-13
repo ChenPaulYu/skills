@@ -229,4 +229,11 @@ for cached in "$CACHE"/*/; do
   echo "  ✓ $p uninstalled"
 done
 
+
+# Always-loaded instruction files. Printed even in hook (quiet) mode: a missing
+# global file is otherwise silent for weeks.
+sh "$ROOT/scripts/check-global-instructions.sh" | while IFS= read -r line; do
+  echo "⚠ ${line#WARN }" >&2
+done
+
 exit 0
