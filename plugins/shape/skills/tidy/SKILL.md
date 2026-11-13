@@ -11,6 +11,8 @@ deliverable is an evidence-backed cleanup or proposal, without reprioritizing th
 When record cards exist, read `references/record-interface.md` and follow their
 canonical typed relations to decisions/tasks/artifacts before assessing retirement.
 Dates locate candidates; they do not authorize deletion. Preserve readable legacy inputs.
+The optional workspace `review` helper lists advisory candidates shared with the human
+view. Unverified or unlinked work needs investigation, not automatic deletion or invented parents.
 
 Before persisting or retiring process artifacts, read `references/development-artifacts.md`
 for retention policy, Git checks, and preservation of local evidence.

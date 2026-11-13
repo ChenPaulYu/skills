@@ -87,6 +87,15 @@ unknown status is something to report, not permission to discard the record. Kee
 small piece of work together; split only when a part needs independent reuse, comparison,
 or execution. Do not manufacture six documents to satisfy the six types.
 
+## Observations during ongoing work
+
+Keep multiple debugging symptoms in the original task's `## Observations` section.
+Separate what was observed, a cause hypothesis, evidence, and the next check in prose;
+an observation is not a verified cause. Consolidate symptoms when evidence supports
+one cause. Split a task only when ownership, next action or completion needs to be
+independent; a deferred possibility can remain an idea. No additional record kind or
+mandatory observation schema is required.
+
 ## Updating and closing
 
 Re-read the original before editing, preserve unrelated tasks and live reasons, and
@@ -122,6 +131,7 @@ sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" projects
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" status <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" show <project> <record-id>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" graph <project>
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" review <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" check
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" view <project> --output <fresh-html-outside-home>
 ```
@@ -129,8 +139,18 @@ sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" view <project> --outp
 The helper returns JSON records, relations/backlinks, diagnostics and mapped Git context.
 It does not write records, choose priorities or establish semantic completion. Only
 explicit view export writes a new offline interactive HTML snapshot outside the home
-repo. It refuses existing output paths; serve private views on localhost. The snapshot
+repo. It refuses existing output paths; serve private views on localhost. Export includes
+only the selected project by default; `--all-projects` explicitly includes other projects
+and their bodies in the same file. The snapshot
 embeds selected record bodies and is private wherever those sources are private.
 If execution or dependencies are unavailable, read the records manually and report that
 fallback; the script is optional. Do not silently switch home roots. Shape status owns
 the implementation; other skill bundles are generated, not separately maintained.
+
+`review` supplies the same advisory facts used by the human view: unverified imports,
+work without canonical relations, and superseded records. These are review signals,
+not expiration or deletion verdicts. A standalone idea is valid; do not invent parent
+records to clear a warning. Dates alone never establish staleness. Inspect current
+reality, retained reasons, inbound links and recoverability before authorized tidy.
+The view starts with current tasks; search, relations, full text and source metadata
+are progressively disclosed. It neither edits records nor creates a second board.

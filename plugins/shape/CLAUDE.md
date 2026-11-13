@@ -33,6 +33,9 @@ Related record consumers carry generated standalone copies. A home repository
 owns private records, not another parser. HTML is an on-demand read-only snapshot,
 not an editor or the authority for decisions. Explicit output is outside the home
 repo and never overwrites an existing file. Read helpers are optional; report fallback.
+The reader's `review` projection supplies both agent and human review candidates;
+unverified, unlinked or superseded are signals to inspect, never deletion verdicts.
+Exports include one project unless `--all-projects` is explicitly requested.
 
 ## Legacy projects and maintenance
 

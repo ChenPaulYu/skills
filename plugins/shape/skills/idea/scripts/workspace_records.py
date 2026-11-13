@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -271,6 +272,32 @@ def _public_record(record: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in record.items() if not key.startswith("_")}
 
 
+def _review(project: dict[str, Any], records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Advisory work-quality facts shared by agents and the human view, never deletion verdicts."""
+    connected = {link["target"] for r in records for link in r["links"]}
+    connected.update(r["id"] for r in records if r["links"] and isinstance(r["id"], str))
+    counts = {"unverified": 0, "unlinked_work": 0, "superseded": 0}
+    candidates, observations = [], []
+    for record in records:
+        flags = []
+        if record["status"] == "unverified":
+            flags.append("unverified")
+        if record["type"] in ("task", "plan", "mockup", "probe") and (not isinstance(record["id"], str) or record["id"] not in connected):
+            flags.append("unlinked_work")
+        if record["status"] == "superseded":
+            flags.append("superseded")
+        for flag in flags:
+            counts[flag] += 1
+        if flags:
+            candidates.append({key: record[key] for key in ("id", "title", "type", "status", "path")} | {"flags": flags})
+        if record["type"] == "task":
+            match = re.search(r"^##\s+(?:Observations|觀察)[^\n]*\n(.*?)(?=^##\s|\Z)", record["body"], re.M | re.S | re.I)
+            if match:
+                observations.append({"id": record["id"], "path": record["path"], "text": match.group(1).strip()})
+    return {"project": project["id"], "counts": counts, "candidates": candidates, "observation_tasks": observations,
+            "advisory": "These are review signals, not completion, deletion or automatic parent-creation verdicts."}
+
+
 def run(root: Path, command: str, project_id: str | None = None, record_id: str | None = None) -> dict[str, Any]:
     projects, records, diagnostics = _load(root)
     def scoped_diagnostics(scope: str | None = None) -> list[dict[str, str]]:
@@ -301,6 +328,8 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
     scope = project["_scope"]
     mine = [r for r in records if r["_project_dir"] == scope]
     tier = _read_tier(projects, records, diagnostics, scope)
+    if command == "review":
+        return _review(project, mine) | {"diagnostics": scoped_diagnostics(scope), "read_tier": tier}
     if command == "show":
         matches = [r for r in mine if r["id"] == record_id]
         if not matches:
@@ -339,12 +368,13 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("projects")
     check = sub.add_parser("check")
     check.add_argument("project", nargs="?")
-    for name in ("status", "graph"):
+    for name in ("status", "graph", "review"):
         cmd = sub.add_parser(name)
         cmd.add_argument("project")
     view = sub.add_parser("view")
     view.add_argument("project")
     view.add_argument("--output", required=True, type=Path)
+    view.add_argument("--all-projects", action="store_true", help="Explicitly include other projects in this offline snapshot")
     cmd = sub.add_parser("show")
     cmd.add_argument("project")
     cmd.add_argument("id")
@@ -360,8 +390,14 @@ def main(argv: list[str] | None = None) -> int:
             projects, records, diagnostics = _load(args.root)
             project = _project(projects, args.project)
             graph = run(args.root, "graph", args.project)
-            selected = [_public_record(r) for r in records if r["_project_dir"] == project["_scope"]]
-            payload = export_view(args.root, {key: project[key] for key in ("id", "title", "priorities")}, graph, selected, args.output)
+            included = projects if args.all_projects else [project]
+            scopes = {p["_scope"] for p in included}
+            selected = [_public_record(r) | {"project_selector": r["_project_dir"]} for r in records if r["_project_dir"] in scopes]
+            project_data = [{key: p[key] for key in ("id", "title", "priorities")} | {"selector": p["_scope"]} for p in included]
+            graphs = {p["_scope"]: run(args.root, "graph", p["_scope"]) for p in included}
+            reviews = {p["_scope"]: run(args.root, "review", p["_scope"]) for p in included}
+            payload = export_view(args.root, {key: project[key] for key in ("id", "title", "priorities")} | {"selector": project["_scope"]}, graph, selected, args.output,
+                                  projects=project_data, graphs=graphs, reviews=reviews)
         else:
             payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None))
     except (WorkspaceError, OSError, ValueError) as exc:

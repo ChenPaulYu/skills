@@ -329,5 +329,50 @@ class WorkspaceViewTest(unittest.TestCase):
             self.assertTrue(payload["diagnostics"])
             self.assertEqual(payload["read_tier"], "non-standard readable records")
 
+class WorkspaceReviewTest(unittest.TestCase):
+    setUp = WorkspaceRecordsTest.setUp
+    tearDown = WorkspaceRecordsTest.tearDown
+    write = WorkspaceRecordsTest.write
+    git = WorkspaceRecordsTest.git
+    record = WorkspaceRecordsTest.record
+    export = WorkspaceViewTest.export
+
+    def test_review_signals_do_not_promote_or_delete_unknown_work(self):
+        self.write("workspace/demo/records/task-a.md", self.record("task-a", "task", "unverified", "## Observations\n\n- O1: Visible symptom\n- O2: Second symptom\n\n## Next check\nVerify the hypothesis"))
+        self.write("workspace/demo/records/idea.md", self.record("idea-a", "idea", "saved", "Independent idea"))
+        before = {str(p): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
+        result = run(self.root, "review", "demo")
+        flags = {r["id"]: r["flags"] for r in result["candidates"]}
+        self.assertEqual(result["counts"]["unverified"], 1)
+        self.assertEqual(flags["task-a"], ["unverified", "unlinked_work"])
+        self.assertNotIn("idea-a", flags)
+        self.assertIn("O2", result["observation_tasks"][0]["text"])
+        self.assertNotIn("Next check", result["observation_tasks"][0]["text"])
+        self.assertEqual(before, {str(p): p.read_bytes() for p in self.root.rglob("*") if p.is_file()})
+
+    def test_incoming_canonical_relation_counts_as_connected(self):
+        self.write("workspace/demo/records/plan.md", self.record("plan-a", "plan", "superseded", "Retain reason", "links:\n  - relation: implements\n    target: task-a\n"))
+        result = run(self.root, "review", "demo")
+        flags = {r["id"]: r["flags"] for r in result["candidates"]}
+        self.assertNotIn("task-a", flags)
+        self.assertEqual(flags["plan-a"], ["superseded"])
+        self.assertEqual(result["counts"]["superseded"], 1)
+
+    def test_all_projects_requires_explicit_export_flag(self):
+        self.write("workspace/private/project.md", "---\nid: private\ntitle: Private project\n---\n")
+        self.write("workspace/private/tasks/secret.md", self.record("secret", "task", "active", "Private body marker"))
+        with tempfile.TemporaryDirectory() as out:
+            first = Path(out) / "selected.html"
+            self.assertEqual(self.export(first)[0], 0)
+            self.assertNotIn("Private body marker", first.read_text())
+            second = Path(out) / "all.html"
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--root", str(self.root), "view", "demo", "--all-projects", "--output", str(second)]), 0)
+            data = json.loads(re.search(r'<script id="workspace-data" type="application/json">(.*?)</script>', second.read_text(), re.S)[1])
+            self.assertEqual(len(data["projects"]), 2)
+            self.assertIn("Private body marker", second.read_text())
+            self.assertEqual(data["reviews"]["demo"], run(self.root, "review", "demo"))
+            self.assertEqual(next(r for r in data["records"] if r["id"] == "secret")["project_selector"], "private")
+
 if __name__ == "__main__":
     unittest.main()
