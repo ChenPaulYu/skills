@@ -52,6 +52,14 @@ tool; improving that output is a separate task unless the user requests it.
 - **Evidence before product changes.** Dogfood reports findings. If the broader request
   already includes fixes, return to the execution workflow after confirming the cause;
   otherwise stop with the report. Better demo quality alone does not prove a missing API.
+- **Leave the user's world as you found it.** Every driving agent gets its own browser
+  session. Use a scratch copy of data, never the user's real documents, libraries, or
+  accounts. Start your own server on your own port, and stop only what you started —
+  never a server or app the user (or another agent) is running. Each of these has
+  already destroyed a user's working state once.
+- **A FAIL is a claim to verify.** Before reporting one, confirm it at the code level or
+  by a faithful manual repeat; synthetic events that never reach a handler read as
+  failures. Report unconfirmed ones as unconfirmed.
 - **Scope follows intent.** Report declined/unavailable intents honestly. A diagnosis or
   preference pick does not authorize implementation, reprioritization, or a new paid run.
 

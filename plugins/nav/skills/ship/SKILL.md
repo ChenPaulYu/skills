@@ -21,7 +21,8 @@ same in every repo; the tail (version bump, rebuild, alias, deploy) belongs to t
 3. **Integrate by the project's rule.** Default: bring the branch up to date with the latest
    main, merge into main (fast-forward when possible), push. Open a PR instead when main is
    protected, the remote is a fork of someone else's repo, the project says PR, or the user
-   asks. Never force-push main. A conflict you cannot resolve without guessing intent:
+   asks. A repo with no remote stops at the local commit or merge, and the report says
+   nothing was pushed. Never force-push main. A conflict you cannot resolve without guessing intent:
    stop, show it, ask.
 4. **Clean up only what is safe.** Delete branches already merged into main or marked
    `[gone]` with `git branch -d`. Remove a worktree only with plain `git worktree remove`
