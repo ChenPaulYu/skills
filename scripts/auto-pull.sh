@@ -19,6 +19,7 @@
 #
 #     sh scripts/auto-pull.sh             # pull every configured repo
 #     sh scripts/auto-pull.sh --dry-run   # report only, change nothing
+#     sh scripts/auto-pull.sh --if-stale 3600   # skip if the last run was <1h ago
 #
 # Exits 0 unless misused, so a scheduler never reports a failure spree.
 
@@ -29,6 +30,7 @@ LOG="$STATE_DIR/auto-pull.log"
 MAX_LOG_LINES=500
 FETCH_TIMEOUT=60
 DRY=0
+STALE=0
 
 usage() {
   sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
@@ -37,6 +39,10 @@ usage() {
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run) DRY=1 ;;
+    --if-stale)
+      shift
+      case "$1" in ''|*[!0-9]*) echo "auto-pull: --if-stale needs seconds" >&2; exit 2 ;; esac
+      STALE=$1 ;;
     -h|--help) usage; exit 0 ;;
     *) echo "auto-pull: unknown argument: $1 (try --help)" >&2; exit 2 ;;
   esac
@@ -44,6 +50,14 @@ while [ "$#" -gt 0 ]; do
 done
 
 mkdir -p "$STATE_DIR" || { echo "auto-pull: cannot create $STATE_DIR" >&2; exit 2; }
+
+# --if-stale: a cheap throttle for shell-startup triggers (macOS blocks launchd
+# jobs from reading ~/Desktop, so a terminal-launched run is the Mac path).
+STAMP="$STATE_DIR/last-run"
+if [ "$STALE" -gt 0 ] && [ -f "$STAMP" ]; then
+  last=$(stat -c %Y "$STAMP" 2>/dev/null || stat -f %m "$STAMP" 2>/dev/null || echo 0)
+  [ $(( $(date +%s) - last )) -lt "$STALE" ] && exit 0
+fi
 
 # One run at a time; a lock left by a dead process is reclaimed.
 LOCK="$STATE_DIR/lock"
@@ -58,6 +72,7 @@ if ! mkdir "$LOCK" 2>/dev/null; then
 fi
 echo "$$" > "$LOCK/pid"
 trap 'rm -rf "$LOCK"' EXIT INT TERM
+[ "$DRY" = 1 ] || touch "$STAMP"
 
 log() { # log <repo> <LEVEL> <message>
   line="$(date '+%Y-%m-%dT%H:%M:%S%z') $2 $1: $3"

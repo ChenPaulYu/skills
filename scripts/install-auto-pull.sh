@@ -4,6 +4,11 @@
 #     sh scripts/install-auto-pull.sh [install] [--interval SECONDS]   # default 3600
 #     sh scripts/install-auto-pull.sh uninstall
 #     sh scripts/install-auto-pull.sh status
+#     sh scripts/install-auto-pull.sh shell [--interval SECONDS]       # shell-startup trigger
+#
+# macOS note: launchd jobs cannot read ~/Desktop (privacy protection), so for repos
+# kept there use `shell`: each new terminal runs auto-pull in the background, at most
+# once per interval. `uninstall` removes both the scheduled job and the shell block.
 #
 # macOS → a launchd LaunchAgent; Linux → a systemd --user timer. Also seeds
 # ${XDG_CONFIG_HOME:-$HOME/.config}/auto-pull/repos with this repo if absent;
@@ -25,7 +30,7 @@ ACTION=install
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    install|uninstall|status) ACTION=$1 ;;
+    install|uninstall|status|shell) ACTION=$1 ;;
     --interval)
       shift
       [ "$#" -gt 0 ] || { echo "✗ --interval needs seconds" >&2; exit 2; }
@@ -53,6 +58,21 @@ status_log() {
   echo "--- last 10 log lines ($LOG)"
   if [ -f "$LOG" ]; then tail -n 10 "$LOG"; else echo "(no log yet)"; fi
 }
+
+RC="$HOME/.zshrc"; case "${SHELL:-}" in */bash) RC="$HOME/.bashrc" ;; esac
+BEGIN_MARK="# >>> auto-pull (skills repo) >>>"; END_MARK="# <<< auto-pull (skills repo) <<<"
+remove_shell_block() {
+  [ -f "$RC" ] && grep -qF "$BEGIN_MARK" "$RC" || return 0
+  awk -v b="$BEGIN_MARK" -v e="$END_MARK" '$0==b{skip=1;next} $0==e{skip=0;next} !skip' "$RC" > "$RC.auto-pull.tmp" && mv "$RC.auto-pull.tmp" "$RC"
+}
+if [ "$ACTION" = shell ]; then
+  seed_config
+  remove_shell_block
+  printf '%s\n( sh "%s" --if-stale %s >/dev/null 2>&1 & )\n%s\n' "$BEGIN_MARK" "$SCRIPT" "$INTERVAL" "$END_MARK" >> "$RC"
+  echo "✓ shell trigger added to $RC (at most once per ${INTERVAL}s, in the background)"
+  exit 0
+fi
+[ "$ACTION" = uninstall ] && remove_shell_block
 
 case "$OS:$ACTION" in
   Darwin:install)

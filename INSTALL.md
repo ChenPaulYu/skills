@@ -98,6 +98,8 @@ sh scripts/install-auto-pull.sh uninstall
 sh scripts/auto-pull.sh --dry-run                 # preview what a run would do
 ```
 
+**macOS with repos under `~/Desktop` or `~/Documents`:** launchd jobs are denied access there by macOS privacy protection (the log shows `Operation not permitted`). Use `sh scripts/install-auto-pull.sh shell` instead: each new terminal runs auto-pull in the background, at most once per interval (`--if-stale`). Agents launched from a terminal are covered; `uninstall` removes the shell block too.
+
 It runs launchd on macOS and a `systemd --user` timer on Linux (run `loginctl enable-linger "$USER"` so it fires without a login session). Repos to keep current are listed one per line in `${XDG_CONFIG_HOME:-$HOME/.config}/auto-pull/repos`, seeded with this repo; add other repos (for example a private notes repo) there. Log: `${XDG_STATE_HOME:-$HOME/.local/state}/auto-pull/auto-pull.log`.
 
 It will only `git fetch` and `git merge --ff-only`, so the post-merge hook refreshes installed copies. It will not push, rebase, stash, reset, or merge; a diverged branch or local changes in the way are left untouched and logged as `WARN`.
