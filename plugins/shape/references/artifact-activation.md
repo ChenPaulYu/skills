@@ -7,6 +7,10 @@ This is the editable owner of artifact activation (open or serve, then hand over
 A file written to disk is not yet a decidable artifact — the user has to *see* it. So after
 writing, **activate it and surface a clickable URL in the chat**, the way a good scaffold does:
 
+- **Decide by checking, not assuming:** run `echo "ssh=$SSH_CONNECTION display=$DISPLAY wayland=$WAYLAND_DISPLAY"`.
+  A non-empty `SSH_CONNECTION`, or (on Linux) empty `DISPLAY` and `WAYLAND_DISPLAY`, means the
+  user cannot see this machine's screen: serve the file and hand over a `http://localhost:<port>/`
+  URL. Never say a browser was opened unless an opener ran on a machine with a display.
 - **First check: local session or remote/headless one?** `open <file>` and a `file://` link only
   work when the agent shares a machine *with a display* with the human. On a remote server /
   cloud dev box / container (no local display — a `file://` path the user can't reach), don't

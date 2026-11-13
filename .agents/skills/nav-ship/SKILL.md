@@ -15,16 +15,21 @@ same in every repo; the tail (version bump, rebuild, alias, deploy) belongs to t
    `## Ship` or release section in AGENTS.md / AGENTS.md / CONTRIBUTING. If the work is not
    verified yet, say so and stop at that gap rather than shipping it.
 2. **Commit only this task's work.** Stage the files this task changed; list anything else
-   that is dirty and leave it unstaged. Follow the repo's message convention and run its
-   hooks — never `--no-verify` unless the user says so.
+   that is dirty and leave it unstaged. Never stage process artifacts — blueprints, plans,
+   experiment outputs, logs, local config — even when no ignore rule covers them. Follow
+   the repo's message convention and run its hooks — never `--no-verify` unless the user
+   says so.
 3. **Integrate by the project's rule.** Default: bring the branch up to date with the latest
    main, merge into main (fast-forward when possible), push. Open a PR instead when main is
    protected, the remote is a fork of someone else's repo, the project says PR, or the user
    asks. Never force-push main. A conflict you cannot resolve without guessing intent:
    stop, show it, ask.
 4. **Clean up only what is safe.** Delete branches already merged into main or marked
-   `[gone]`, and remove their worktrees when those are clean. Keep, and list, any branch that
-   is unmerged and any worktree with uncommitted changes — those need the user's word.
+   `[gone]` with `git branch -d`. Remove a worktree only with plain `git worktree remove`
+   — **never `--force`**, including the worktree you are standing in. If it refuses because
+   of modified or untracked files, keep the worktree and its branch and list those files:
+   untracked files are the user's work, however disposable they look. Keep and list any
+   unmerged branch too; deleting either needs the user's word.
 5. **Run the project's tail.** Do exactly the steps the project documents or the user named
    (bump version, rebuild, refresh an alias, deploy), in order. Publishing, deploying, or a
    PR on someone else's repository needs explicit authority. When the user keeps asking for

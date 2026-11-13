@@ -21,7 +21,7 @@ changing a condition and watching what moves (Papert's object-to-think-with).
 5. **Say where it simplifies.** One visible line naming what the object leaves out or
    bends relative to the source.
 6. **Activate it.** The output is one self-contained interactive HTML file, handed over as
-   a clickable URL: `references/artifact-activation.md`. Write it outside the project's
+   a clickable URL (check `SSH_CONNECTION` / `DISPLAY` first; a remote or headless box gets a served `localhost` URL, never a `file://` path): `references/artifact-activation.md`. Write it outside the project's
    tracked tree (session scratch space) unless the learner asks to keep it.
 
 Read `references/protocol.md` for choosing the control, a worked example, and failure modes.
