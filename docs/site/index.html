@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-11-13 (rev 142)
+  Last audit: 2026-11-13 (rev 143)
 ═══════════════════════════════════════════════════════════════════════════
 
   The marketplace source owns current facts. The current checks below were
@@ -187,7 +187,16 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11; current roster is 4 plugins.
 
-  ⚠ FIXED in this revision (rev 142)
+  ⚠ FIXED in this revision (rev 143)
+    • ADR-137: frame:dialectic retired on the owner's attestation that it is unclaimed
+      (ADR-107 third cause; zero Claude Code uses and two Codex sessions in the 5-week
+      window). Frame is two reasoning lenses (first-principles, orthogonal) plus analogize
+      and draw. shape:probe's design chain keeps its first step without naming a live
+      skill. The catalog blocks regenerate; the hand-owned site prose carried no
+      dialectic claims. Revision logs above and below are history and still describe
+      dialectic as it was.
+
+  ⚠ FIXED in rev 142 (kept for history)
     • ADR-136: relay plugin (digest/reply/report/settle) and shape:migrate retired on the
       owner's attestation that both are unclaimed (ADR-107 third cause). Marketplace is three
       plugins; shape is eight skills. The migration ledger lives on as
@@ -3281,7 +3290,7 @@ const RULES = [
 // BEGIN GENERATED catalog-data
 const CATALOG_COUNTS = {
   "plugins": 3,
-  "skills": 19
+  "skills": 18
 };
 const DOMAINS = {
   "nav": {
@@ -3347,11 +3356,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.27.0",
+    "version": "0.27.1",
     "skillCount": 8,
     "blurb": {
-      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131). (v0.27.0; 8 skills)",
-      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.27.0；8 個 skills）"
+      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131). (v0.27.1; 8 skills)",
+      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.27.1；8 個 skills）"
     },
     "files": [
       [
@@ -3423,11 +3432,11 @@ const DOMAINS = {
   "frame": {
     "layer": "foundation",
     "path": "plugins/frame/",
-    "version": "0.14.1",
-    "skillCount": 5,
+    "version": "0.15.0",
+    "skillCount": 4,
     "blurb": {
-      "en": "Apply an explicit, named frame that forces a useful reasoning check the default skips — to a problem, or to an answer already in hand. 3 reasoning lenses remain substantive: first-principles strips assumptions and rebuilds; orthogonal factors independent axes; dialectic steelmans both sides and names the deciding experiment. ADR-128 removes forced visible worksheets, tables, and next-action menus: output structure scales to the question, technical words are allowed with useful glosses, and metaphors are optional unless /frame:analogize is explicitly requested. analogize remains the checked-analogy skill; draw pictures an already-understood thing, with interactive output only when interaction matters or the user asks. Analysis-only requests do not grant build authority; already-authorized continuation resumes ordinary workflow. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + the rename ADR. (v0.14.1; 5 skills)",
-      "zh": "套用一個明講的框架,逼出預設會跳過但有用的 reasoning check —— 套在問題上,或套在已經有的答案上。3 個推理 lens 仍保留實質檢查:first-principles 拆假設並重建;orthogonal 拆獨立軸;dialectic 讓正反都 steelman 並命名決定性實驗。ADR-128 移除強迫可見 worksheet/table/next-action menu:輸出結構按問題大小調整,技術詞可用、需要時補 gloss,比喻是選項,只有明確呼叫 /frame:analogize 時才必須做 checked analogy。analogize 仍是檢查過的類比 skill;draw 畫出已理解的東西,只有互動本身有用或使用者要求時才升級互動輸出。只要求分析不等於授權 build;已授權接續回普通 workflow。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + 改名 ADR。（v0.14.1；5 個 skills）"
+      "en": "Apply an explicit, named frame that forces a useful reasoning check the default skips — to a problem, or to an answer already in hand. 2 reasoning lenses remain substantive: first-principles strips assumptions and rebuilds; orthogonal factors independent axes. ADR-128 removes forced visible worksheets, tables, and next-action menus: output structure scales to the question, technical words are allowed with useful glosses, and metaphors are optional unless /frame:analogize is explicitly requested. analogize remains the checked-analogy skill; draw pictures an already-understood thing, with interactive output only when interaction matters or the user asks. Analysis-only requests do not grant build authority; already-authorized continuation resumes ordinary workflow. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + the rename ADR. (v0.15.0; 4 skills)",
+      "zh": "套用一個明講的框架,逼出預設會跳過但有用的 reasoning check —— 套在問題上,或套在已經有的答案上。2 個推理 lens 仍保留實質檢查:first-principles 拆假設並重建;orthogonal 拆獨立軸。ADR-128 移除強迫可見 worksheet/table/next-action menu:輸出結構按問題大小調整,技術詞可用、需要時補 gloss,比喻是選項,只有明確呼叫 /frame:analogize 時才必須做 checked analogy。analogize 仍是檢查過的類比 skill;draw 畫出已理解的東西,只有互動本身有用或使用者要求時才升級互動輸出。只要求分析不等於授權 build;已授權接續回普通 workflow。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128 + 改名 ADR。（v0.15.0；4 個 skills）"
     },
     "files": [
       [
@@ -3444,14 +3453,6 @@ const DOMAINS = {
         {
           "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-046/077/128.",
           "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-046/077/128。"
-        }
-      ],
-      [
-        "/frame:dialectic",
-        "",
-        {
-          "en": "Put a claim on trial — build its strongest case and strongest attack, surface the deepest load-bearing assumption, then name the one experiment that would decide it. Steelman/devil's-advocate checks and the three-way verdict remain; the visible table is proportional, not mandatory ceremony. It names experiments; it runs them only when that continuation is already authorized. ADR-047/077/128.",
-          "zh": "把一個主張送審 —— 建出最強正方與最強反方,點出最深的承重假設,再命名一個能分勝負的實驗。steelman/devil's-advocate 檢查與三向判決保留;可見 table 按需要出現,不是強制儀式。它命名實驗;只有已授權接續時才真的跑。ADR-047/077/128。"
         }
       ],
       [
@@ -3504,8 +3505,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131). (v0.27.0; 8 skills)",
-      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.27.0；8 個 skills）"
+      "en": "Converge decisions with mockup, elicit, probe, and dogfood. Align verifies the board and priorities; reconcile independently maintains design records. Park/catchup share the session handoff. Eight verbs; no mandatory cleanup before prioritization (ADR-131). (v0.27.1; 8 skills)",
+      "zh": "用 mockup、elicit、probe、dogfood 收斂決策。align 核對工作板與優先順序；reconcile 獨立整理設計紀錄。park／catchup 共用交接檔。共八個動詞，排下一步前不必先做整批清理（ADR-131）。（v0.27.1；8 個 skills）"
     }
   },
   {
@@ -3520,8 +3521,8 @@ const CB_NODES = [
       "zh": "套用框架"
     },
     "desc": {
-      "en": "Reasoning and delivery: first-principles grounds premises and rebuilds; orthogonal checks independence; dialectic tests both sides and names deciding evidence; analogize checks a requested analogy; draw chooses a useful visual form and medium. Reasoning checks remain, but output scales to the question. No required worksheet, closing menu, metaphor, or banned technical vocabulary. Analysis alone grants no build authority; an already-authorized workflow may continue; ADR-128. (v0.14.1; 5 skills)",
-      "zh": "推理與表達：first-principles 分清前提與慣例後重新推導；orthogonal 檢查不同因素是否獨立；dialectic 檢驗雙方論證與關鍵證據；analogize 提供檢查過的比喻；draw 選擇適合的圖形與媒介。保留實質檢查，呈現隨問題大小調整，不強制工作表、結尾選單、比喻或禁詞。單純分析不授權實作；已授權的流程可以接續。；ADR-128。（v0.14.1；5 個 skills）"
+      "en": "Reasoning and delivery: first-principles grounds premises and rebuilds; orthogonal checks independence; analogize checks a requested analogy; draw chooses a useful visual form and medium. Reasoning checks remain, but output scales to the question. No required worksheet, closing menu, metaphor, or banned technical vocabulary. Analysis alone grants no build authority; an already-authorized workflow may continue; ADR-128. (v0.15.0; 4 skills)",
+      "zh": "推理與表達：first-principles 分清前提與慣例後重新推導；orthogonal 檢查不同因素是否獨立；analogize 提供檢查過的比喻；draw 選擇適合的圖形與媒介。保留實質檢查，呈現隨問題大小調整，不強制工作表、結尾選單、比喻或禁詞。單純分析不授權實作；已授權的流程可以接續。；ADR-128。（v0.15.0；4 個 skills）"
     }
   }
 ];

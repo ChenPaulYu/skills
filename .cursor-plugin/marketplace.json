@@ -12,7 +12,7 @@
       "name": "frame",
       "source": "frame",
       "description": "Apply an explicit, named frame that adds substantive reasoning checks without a fixed output worksheet — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.14.1"
+      "version": "0.15.0"
     },
     {
       "name": "nav",
@@ -24,7 +24,7 @@
       "name": "shape",
       "source": "shape",
       "description": "Converge decisions, align priorities, reconcile project records, and hand off sessions.",
-      "version": "0.27.0"
+      "version": "0.27.1"
     }
   ]
 }

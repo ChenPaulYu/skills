@@ -4,7 +4,6 @@
   "max_total_chars": 7000,
   "skills": {
     "frame-analogize": "Build and stress-test an analogy for a settled concept. Use for ELI5, metaphors, or 'explain differently'; compares candidates and names where the winner breaks.",
-    "frame-dialectic": "Put a forming claim on trial: steelman both sides, expose its load-bearing assumption, and name a deciding experiment. Use for devil's advocacy or thesis stress tests.",
     "frame-draw": "Decide how to picture something already understood: which form the question asks for, and which medium carries it (terminal, markdown, mermaid, interactive). Owns the strategy, not one format.",
     "frame-first-principles": "Rebuild a question or decision from irreducible axioms, separating necessity from convention. Use to challenge assumptions or reason from first principles.",
     "frame-orthogonal": "Factor a tangled problem into independent axes and verify that moving one leaves the others fixed. Use to expose conflated or falsely coupled dimensions.",

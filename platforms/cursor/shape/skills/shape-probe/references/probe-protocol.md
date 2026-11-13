@@ -22,11 +22,11 @@ The four-quadrant knowledge map behind this family ([ADR-075](docs/adr/075-shape
 
 The gap was real, not hypothetical: this repo has hand-rolled the deliverable `probe` now encodes at least three separate times, each time re-inventing the discipline from scratch — see ADR-075 for the citations. A verb that gets hand-produced three times without anyone naming it is exactly ADR-038's trigger condition ("if you're about to hand-roll a verb's deliverable, fire the verb instead").
 
-## Design chain — three lenses, borrowed by protocol (never by call)
+## Design chain — borrowed by protocol (never by call)
 
-`probe` doesn't invoke `frame-dialectic`, `frame-first-principles`, or `frame-orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern the now-retired `position` skill established for elicit/mockup/first-principles (ADR-008):
+`probe` doesn't invoke `frame-first-principles` or `frame-orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern the now-retired `position` skill established for elicit/mockup/first-principles (ADR-008):
 
-1. **Locate the load-bearing assumption** — `frame-dialectic`'s move. A fork usually has several plausible-sounding cruxes; only one is actually load-bearing (the assumption that, if it flips, flips the decision). Don't design an experiment around a surface disagreement — find the one thing the fork actually rests on. If dialectic already ran and named a "Missing Evidence" row, that *is* this step's output — reuse it, don't re-derive it.
+1. **Locate the load-bearing assumption.** A fork usually has several plausible-sounding cruxes; only one is actually load-bearing (the assumption that, if it flips, flips the decision). Don't design an experiment around a surface disagreement — find the one thing the fork actually rests on. If dialectic already ran and named a "Missing Evidence" row, that *is* this step's output — reuse it, don't re-derive it.
 2. **Strip it to the smallest testable claim** — `frame-first-principles`' move. Convention vs necessity: restate the load-bearing assumption as the smallest falsifiable statement, stripped of the surface phrasing that made it sound bigger or vaguer than it is. Test the necessity, never the wording ("does a graph database read faster" is testable; "is a graph database the right model" is not — reduce to the first before designing anything).
 3. **Control the variables** — `frame-orthogonal`'s move. Once the claim is stripped to size, vary exactly the one axis that claim is about and lock every other axis identical between conditions. Orthogonal's independence check — move one axis, the others must not move — **is, verbatim, the definition of a controlled experiment.** An experiment that lets two things vary at once never produced evidence about either.
 
@@ -122,7 +122,6 @@ The doc states explicitly, near the top, that **the evidence feeds the pending d
 ## Companion skills
 
 - **`shape-elicit`** — the fork that sends work here (a stuck volley) and the consumer of the evidence probe brings back.
-- **`frame-dialectic`** — names the deciding experiment at its own trial's end; `probe` is the verb that actually runs it, closing the hand-off dialectic used to leave open.
 - **`frame-first-principles`** — the strip-to-testable-claim move borrowed in design-chain step 2.
 - **`frame-orthogonal`** — the control-the-variables discipline borrowed in design-chain step 3; its independence check literally defines a controlled experiment.
 - **`shape-mockup`** — the preference-convergence sibling on the same spine; probe is its fact-convergence twin.

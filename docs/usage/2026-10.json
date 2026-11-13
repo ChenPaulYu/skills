@@ -19,18 +19,6 @@
       "claudeSubagent": 0,
       "lastSeen": null
     },
-    "frame:dialectic": {
-      "claude": {
-        "model": 0,
-        "slash": 0,
-        "sessions": 0
-      },
-      "codex": {
-        "sessions": 1
-      },
-      "claudeSubagent": 0,
-      "lastSeen": "2026-10-14"
-    },
     "frame:draw": {
       "claude": {
         "model": 0,

@@ -23,13 +23,13 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 ## What's in here
 
 <!-- BEGIN GENERATED catalog-plugins -->
-Catalog: 3 plugins · 19 skills.
+Catalog: 3 plugins · 18 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
 | [`nav`](plugins/nav/) | 0.21.0 | 6 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, and compose prose as deep modules. |
-| [`shape`](plugins/shape/) | 0.27.0 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
-| [`frame`](plugins/frame/) | 0.14.1 | 5 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Three lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence), `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes), `dialectic` (put a claim on trial — steelman both sides, name the experiment that would decide it); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
+| [`shape`](plugins/shape/) | 0.27.1 | 8 | **Push work forward** — converge decisions, verify and prioritize the board, reconcile design records while preserving reasons, and hand sessions over. Process artifacts default to local, Git-ignored storage; explicit project retention policies govern (ADR-134). |
+| [`frame`](plugins/frame/) | 0.15.0 | 4 | **Apply an explicit frame** — to a problem (for your own understanding) or to an answer you already have (for the user's). Two lenses: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes); plus two that face the audience: `analogize` (an explicitly requested, checked analogy) and `draw` (render it, form chosen by the kind of knowledge). Lenses feed `shape` only when continuation is already authorized or the user asks; the outward pair doesn't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
 `nav` and `shape` split the code lifecycle: **shape** pushes work forward (converge → plan → build), **nav** keeps the result healthy (audit → refactor → sync). **frame** (apply a frame to a problem or to an answer) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
@@ -45,7 +45,7 @@ Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-dire
 Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
 
 <!-- BEGIN GENERATED catalog-skills -->
-Catalog skills: 19 active skills.
+Catalog skills: 18 active skills.
 
 ### `nav`
 
@@ -80,7 +80,6 @@ Catalog skills: 19 active skills.
 
 - `/frame:first-principles` — strip a question to its irreducible axioms, rebuild from them, and surface where that diverges from convention; analysis stays in-chat unless continuation was already authorized
 - `/frame:orthogonal` — factor a tangled phenomenon into mutually-independent (orthogonal) axes; verify the independence (move one, the others stay put) and name what was conflated; in-chat
-- `/frame:dialectic` — put a claim on trial: steelman its strongest case AND its strongest attack, surface the deepest load-bearing assumption, name the experiment that would decide it (verdict is three-way — refuted / unsettled-owned-bet / supported); in-chat
 - `/frame:analogize` — on explicit request, build a checked analogy for a concept you already understand: compare candidates, verify the mapping against the real structure, pick on fit, and name where the winner breaks; in-chat
 - `/frame:draw` — render something you already understand so it lands for someone else, with the form chosen by the kind of knowledge; terminal-first, escalating to an interactive artifact only when interaction changes visible state or the user asks. Distinct from `/shape:mockup`, which renders candidates so a decision can be picked — here the artifact is the explanation
 <!-- END GENERATED catalog-skills -->

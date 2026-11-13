@@ -17,7 +17,7 @@ the empirical decision into a prose-structure task.
 
 - **New trials require a pre-registered verdict rule.** Write down, before the first trial, what result maps to which conclusion. When interpreting existing results, report their original criteria or absence; never claim retrospective preregistration.
 - **Test the decision's claim.** Separate correctness, output quality, and workflow value; proving one does not prove the others. Use representative inputs and a comparison the user can inspect. For timing, isolate competing work and comparable cache/warmup conditions; mark contaminated results inconclusive.
-- **Design chain, borrowed by protocol, never by call:** locate the load-bearing assumption (`frame:dialectic`'s move) → strip it to the smallest falsifiable claim (`frame:first-principles`') → vary exactly that one axis, lock the rest identical (`frame:orthogonal`'s independence check — verbatim the definition of a controlled experiment). Budget goes to the load-bearing point, never the surface phrasing the fork was argued in.
+- **Design chain, borrowed by protocol, never by call:** locate the load-bearing assumption → strip it to the smallest falsifiable claim (`frame:first-principles`') → vary exactly that one axis, lock the rest identical (`frame:orthogonal`'s independence check — verbatim the definition of a controlled experiment). Budget goes to the load-bearing point, never the surface phrasing the fork was argued in.
 - **Pick the shape that matches the uncertainty** — A/B comparison, blind judgment test, or behavior probe — don't default to one out of habit; a fourth shape earns its place only by recurring real use.
 - **Size N to the effect, not to a round number**, and **report a negative or ambiguous result as a finding**, never quietly reframed into a win.
 - **Design and verdict-reading stay with the session model; execution legs (running variants, tallying results) can dispatch to cheap tier** — reporting back grounded in fact, never an impression.
@@ -32,7 +32,7 @@ shapes, output convention, and detailed scope checks.
 ## Companion skills
 
 - **`/shape:elicit`** — the fork that sends work here (a stuck volley) and the consumer of the evidence probe brings back.
-- **`/frame:dialectic` · `/frame:first-principles` · `/frame:orthogonal`** — the three lenses the design chain borrows, by protocol not by call.
+- **`/frame:first-principles` · `/frame:orthogonal`** — the two lenses the design chain borrows, by protocol not by call.
 - **`/shape:mockup`** — the preference-convergence sibling on the same spine; probe is its fact-convergence twin.
 - **`/shape:dogfood`** — friction on a built feature, not an open unknown.
 - **`/verify`** — correctness of a known change, not an undecided fact.
