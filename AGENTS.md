@@ -105,6 +105,8 @@ A deliberate bypass is `git commit --no-verify`.
 
 ### 0. Installed copies follow the repo automatically — `git pull` is the ritual
 
+On a machine you rarely open, `sh scripts/install-auto-pull.sh` schedules a safe fast-forward-only pull (see INSTALL.md → Keep this machine current); the post-merge hook then does the rest.
+
 The repo is the source of truth; every tool that runs these skills reads a **copy**, and each copy rots in its own way:
 
 | Runtime | Reads | Rots because |

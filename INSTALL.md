@@ -87,6 +87,21 @@ Do not symlink `plugins/<name>` into `~/.cursor/plugins/local/`. For **both Curs
 
 **Verify:** `/nav-audit` (or `/` then search `nav-audit`) loads the deep-module audit.
 
+## Keep this machine current
+
+Installed copies only update when the repo is pulled. To pull on a schedule (works for every tool above, unlike a Claude Code hook):
+
+```bash
+sh scripts/install-auto-pull.sh                   # install; hourly (--interval SECONDS to change)
+sh scripts/install-auto-pull.sh status            # loaded? + last 10 log lines
+sh scripts/install-auto-pull.sh uninstall
+sh scripts/auto-pull.sh --dry-run                 # preview what a run would do
+```
+
+It runs launchd on macOS and a `systemd --user` timer on Linux (run `loginctl enable-linger "$USER"` so it fires without a login session). Repos to keep current are listed one per line in `${XDG_CONFIG_HOME:-$HOME/.config}/auto-pull/repos`, seeded with this repo; add other repos (for example a private notes repo) there. Log: `${XDG_STATE_HOME:-$HOME/.local/state}/auto-pull/auto-pull.log`.
+
+It will only `git fetch` and `git merge --ff-only`, so the post-merge hook refreshes installed copies. It will not push, rebase, stash, reset, or merge; a diverged branch or local changes in the way are left untouched and logged as `WARN`.
+
 ## After installing
 
 Ask the agent to run `nav-audit` (or `/nav:audit`) on any codebase — if it loads
