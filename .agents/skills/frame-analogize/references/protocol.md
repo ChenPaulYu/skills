@@ -6,11 +6,33 @@
 
 ## Core — the discipline (this IS the skill)
 
-1. **Generate 2–3 candidate analogies from different source domains.** Don't stop at the first one — different domains expose different parts of the target's structure, and comparing candidates is how you notice the first one was lazy.
+1. **Generate 2–3 candidate analogies from source domains the reader already holds** (see *Where candidates come from* below). Don't stop at the first one — different domains expose different parts of the target's structure, and comparing candidates is how you notice the first one was lazy.
 2. **Map the structure, not the surface.** For the leading candidate(s), check point-by-point: does each part of the source map to a real part of the target, in the same relationships (not just "these both feel similar")? A resemblance that's only vibes, not structure, doesn't survive this step.
 3. **Pick on fit, not on which arrived first.** The winner is whichever candidate's structure holds up longest under the mapping check — not the one that sounded best in isolation.
 4. **Name where it breaks.** Every analogy stops being true somewhere. Say so explicitly and briefly — this is what stops the user from over-extending it later. If a candidate breaks almost immediately, it wasn't a real candidate; drop it rather than force it into the output.
 5. **Do this thinking silently.** The candidate comparison is your discipline, not the deliverable — don't narrate "I considered three analogies and rejected two" unless the user asks to see alternatives. The delivered output is clean.
+
+## Where candidates come from — assimilation (Papert)
+
+Seymour Papert's foreword to *Mindstorms*, "The Gears of My Childhood", states the principle
+this skill's candidate search rests on: "Anything is easy if you can assimilate it to your
+collection of models. If you can't, anything can be painfully difficult." As a child he
+understood equations by putting the variables' relationships into gears he already knew —
+and he stresses the bond was affective as well as cognitive: he loved the gears.
+
+What that changes in practice:
+
+- **Familiar before clever.** A structurally perfect analogy from a domain the reader lacks
+  is two lessons, not one. Prefer, in order: the source's own examples; domains the reader is
+  known to work in or care about (stated in the conversation or their instructions); common
+  everyday experience. Structural fit still decides among those candidates.
+- **Affinity counts.** Between two fitting familiar domains, pick the one the reader has a
+  relationship with — it makes the new idea feel near, not merely clear.
+- **Don't invent the reader.** Use only personal context that is actually known; never
+  fabricate an interest to justify an analogy. With no known context, everyday experience is
+  the honest default.
+- **Swappable source.** When the chosen domain doesn't land, change the source domain while
+  keeping the concept fixed — the target being explained stays the same.
 
 ## Worked examples (what "good" looks like)
 
@@ -47,6 +69,7 @@ Two examples of the finished shape — the candidate-comparison step is shown he
 | Temptation | Instead — and the tell |
 |---|---|
 | Ship the first analogy that comes to mind | Generate 2–3 candidates and pick on structural fit — that's the ambient default, not this skill; the comparison against alternatives is the value. Tell: the first comparison that popped to mind is also the one about to ship. |
+| An analogy from a domain the reader doesn't know | Draw from the reader's own collection of models (assimilation, above). Tell: the analogy only works after you first explain the source domain. |
 | An analogy that only resembles on vibes | Check the mapping point-by-point before handing it over — if the structure doesn't map, it will mislead the moment the user pushes on it. Tell: you can say it "feels similar" but can't name what part maps to what part. |
 | Never naming where it breaks | Say explicitly where the mapping stops holding — silence here is what lets the user over-extend a leaky mapping later. Tell: the explanation reads as complete with no "but it stops working when…" sentence. |
 | Narrating the whole candidate search to the user | Keep the comparison internal and hand over only the useful explanation and relevant limitations — the discipline is internal, not the deliverable. Tell: the reply opens with "I considered a few analogies before landing on…". |

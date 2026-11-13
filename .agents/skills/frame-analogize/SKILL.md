@@ -10,8 +10,11 @@ Make an understood concept easier to grasp without giving the reader a false mod
 
 1. Ground the target in the actual mechanism, source, or evidence. Resolve gaps in your
    own understanding before translating it into an analogy.
-2. Consider two or three candidates from different domains. Map parts and relationships,
-   not just surface resemblance; choose the best structural fit. Keep this comparison
+2. Draw two or three candidates from models the reader already holds: the source's own
+   examples first, then domains the reader is known to work in or care about, then common
+   everyday experience. An analogy from a domain the reader doesn't know adds a second thing
+   to learn (assimilation — `references/protocol.md`). Map parts and relationships, not just
+   surface resemblance; choose the best structural fit among familiar candidates. Keep this comparison
    internal unless the user asks to see alternatives.
 3. Deliver the plain point, the chosen analogy, and the detail needed to use it. Briefly name where
    the analogy stops holding; keep the caveat proportional to the explanation.
