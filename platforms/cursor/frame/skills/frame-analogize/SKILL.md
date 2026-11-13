@@ -19,6 +19,9 @@ Make an understood concept easier to grasp without giving the reader a false mod
 3. Deliver the plain point, the chosen analogy, and the detail needed to use it. Briefly name where
    the analogy stops holding; keep the caveat proportional to the explanation.
 
+On an ELI5 request, first reduce the target to one core idea that assumes no prerequisites,
+then analogize that idea.
+
 Use this deliberate pass when a concept is not landing or the user requests an analogy.
 Ordinary clear explanations do not require loading it. Scale the output to the question.
 An analysis-only request writes nothing; return to already-authorized work when appropriate.

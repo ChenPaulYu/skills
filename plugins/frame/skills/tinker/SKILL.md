@@ -1,0 +1,26 @@
+---
+name: tinker
+description: "Build a small interactive object the learner can poke to understand why something behaves as it does: one control, a visible before/after. Use for 讓我改改看, 換個條件會怎樣, or let me play with it. Rendering candidates to choose between belongs to /shape:mockup; choosing a picture belongs to /frame:draw."
+---
+
+# Tinker — an object to think with
+
+Give the learner something to operate, not something to read. Understanding comes from
+changing a condition and watching what moves (Papert's object-to-think-with).
+
+1. **Ground, then pick the one question** the object answers ("what happens to X when I
+   change Y?"). Check the mechanism against the source before simplifying it.
+2. **One primary control, one visible difference.** Start in a state that already shows
+   the behavior; moving the control changes the result in the same view, with the
+   before-state still visible for comparison.
+3. **Reveal details as the learner asks.** Keep secondary controls, formulas, and "why"
+   notes folded away; answer a follow-up by extending this same object, not rebuilding it.
+4. **The object persists.** Edit one file in place across turns so later questions build
+   on what they have already poked.
+5. **Say where it simplifies.** One visible line naming what the object leaves out or
+   bends relative to the source.
+6. **Activate it.** The output is one self-contained interactive HTML file, handed over as
+   a clickable URL: `references/artifact-activation.md`. Write it outside the project's
+   tracked tree (session scratch space) unless the learner asks to keep it.
+
+Read `references/protocol.md` for choosing the control, a worked example, and failure modes.

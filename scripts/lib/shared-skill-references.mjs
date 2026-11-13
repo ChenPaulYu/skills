@@ -1,7 +1,7 @@
 /**
  * Shared skill references: one editable owner, self-contained packaged consumers.
  * build-manifests materializes them; the validator checks every destination for drift.
- * Reads: node:fs · node:path · shared handoff and development-artifact owners.
+ * Reads: node:fs · node:path · shared handoff, development-artifact, activation, and frame form owners.
  * Removes retired bundles only when they bear this builder's exact ownership marker.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -21,6 +21,23 @@ export const SHARED_SKILL_REFERENCES = [{
     "plugins/nav/skills/plan/references/development-artifacts.md",
     "plugins/nav/skills/compose/references/development-artifacts.md",
   ],
+}, {
+  source: "plugins/shape/references/artifact-activation.md",
+  destinations: [
+    "plugins/shape/skills/mockup/references/artifact-activation.md",
+    "plugins/frame/skills/tinker/references/artifact-activation.md",
+    "plugins/frame/skills/unfold/references/artifact-activation.md",
+  ],
+}, {
+  // unfold applies each form's discipline by protocol, never by calling the sibling skill.
+  source: "plugins/frame/skills/analogize/references/protocol.md",
+  destinations: ["plugins/frame/skills/unfold/references/forms/analogize.md"],
+}, {
+  source: "plugins/frame/skills/draw/references/forms.md",
+  destinations: ["plugins/frame/skills/unfold/references/forms/draw.md"],
+}, {
+  source: "plugins/frame/skills/tinker/references/protocol.md",
+  destinations: ["plugins/frame/skills/unfold/references/forms/tinker.md"],
 }];
 
 export function buildSharedSkillReferences(root) {

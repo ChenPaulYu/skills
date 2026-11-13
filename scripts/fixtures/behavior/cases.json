@@ -65,6 +65,14 @@
         "baseline.mjs": "export const implementation = \"baseline\";\n",
         "candidate.mjs": "export const implementation = \"candidate\";\n"
       }
+    },
+    "learn": {
+      "files": {
+        "README.md": "# Queue Kit\n\nA small job queue. Producers call `enqueue`, one worker loop calls `next`, and failed jobs are retried with a doubling wait up to a cap.\n",
+        "src/queue.mjs": "export class Queue {\n  #jobs = [];\n  enqueue(job) { this.#jobs.push({ job, attempts: 0 }); }\n  next() { return this.#jobs.shift(); }\n  retry(entry, base = 100, cap = 5000) {\n    entry.attempts += 1;\n    entry.waitMs = Math.min(cap, base * 2 ** entry.attempts);\n    this.#jobs.push(entry);\n    return entry.waitMs;\n  }\n}\n",
+        "src/worker.mjs": "import { Queue } from './queue.mjs';\nexport async function run(queue, handler) {\n  for (let entry = queue.next(); entry; entry = queue.next()) {\n    try { await handler(entry.job); } catch { queue.retry(entry); }\n  }\n}\n",
+        "docs/chapter-2.md": "# Chapter 2: Why retries double\n\nA fixed wait hammers a struggling service; doubling the wait gives it room to recover. The cost is that the total wait grows quickly, so a cap keeps the worst case bounded.\n\nJitter is discussed in Chapter 5 and is not covered here.\n"
+      }
     }
   },
   "cases": [
@@ -595,6 +603,92 @@
         "Separate response captures are legitimate evidence outputs; their content and ignored/index state need review, not just a matching filename."
       ],
       "followupPrompt": "剛剛的 demo.txt 排列看起來很亂，這樣不好用。你覺得下一步要先改什麼？這輪先評估就好，不要改程式或 demo；把判斷補到同一份報告。"
+    },
+    {
+      "id": "unfold-repo-natural",
+      "project": "learn",
+      "skill": "frame-unfold",
+      "prompt": "用 progressive disclosure 帶我認識這個 repo。先不要改任何檔案。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "Turn one is a skeleton (what it is, why it exists, the likely layers) in about one screen and explains no layer in depth.",
+        "Only one conceptual layer is introduced per turn, each new term is glossed at first use, and the turn ends at a checkpoint naming what is open.",
+        "Key claims point to a file and symbol and are marked as recorded in source, inferred, or unknown; nothing is inferred from file names alone.",
+        "It is not a step-by-step file tour, and no fixed level count, gate, or learner-state file appears."
+      ]
+    },
+    {
+      "id": "unfold-document-natural",
+      "project": "learn",
+      "skill": "frame-unfold",
+      "prompt": "帶我導讀 docs/chapter-2.md 這一章。先不要改任何檔案。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "Opens with the chapter's question, claim, and map before any detail, then proceeds one layer at a time.",
+        "Distinguishes what the text says (quoted or tightly paraphrased) from the agent's reading, and flags that jitter is outside this chapter rather than explaining it as if covered.",
+        "Does not review or grade the document; it guides the reader through it."
+      ]
+    },
+    {
+      "id": "unfold-override",
+      "project": "learn",
+      "skill": "frame-unfold",
+      "prompt": "walk me through this repo with progressive disclosure. No file changes.",
+      "followupPrompt": "我看不懂 retry 為什麼會越等越久，用圖講。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "The first turn follows the skeleton-first rhythm.",
+        "After the follow-up it answers that question before advancing, uses a picture as the single non-text form, names the form in a short phrase, and does not restart the walkthrough.",
+        "A later 'let me try it' request would be met by an object to poke rather than more text; no mandatory next layer is forced."
+      ]
+    },
+    {
+      "id": "tinker-natural",
+      "project": "learn",
+      "skill": "frame-tinker",
+      "prompt": "讓我改改看：src/queue.mjs 的 retry 換個條件，等待時間會怎樣？不要改 repo 內任何檔案。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "The object is one self-contained interactive HTML page with one primary control and a before/after difference that is visible at once.",
+        "Secondary details (cap, base) are folded away or added only on a follow-up, and the same object is extended rather than rebuilt.",
+        "A visible line states what it simplifies; the rule in the object matches the source.",
+        "The page was written outside the tracked project tree, was activated, and was handed over as a clickable URL; no repository file changed."
+      ]
+    },
+    {
+      "id": "analogize-eli5",
+      "project": "learn",
+      "skill": "frame-analogize",
+      "prompt": "ELI5：這個 repo 的 retry 為什麼要等越來越久？不要改任何檔案。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "Reduces the target to one core idea that assumes no prerequisites before analogizing, using the reader's known models or everyday experience.",
+        "Names where the analogy stops holding; the candidate comparison stays internal.",
+        "Stays a single explanation: no layered walkthrough, picture, or interactive object appears."
+      ]
+    },
+    {
+      "id": "analogize-not-unfold",
+      "project": "learn",
+      "skill": "frame-analogize",
+      "prompt": "用比喻解釋一下 retry 的 backoff。",
+      "allowChanges": [],
+      "mustChange": [],
+      "checks": [],
+      "review": [
+        "Delivers one checked analogy with its breakage, not a skeleton-plus-layers walkthrough.",
+        "A routing probe with the same prompt should select analogize, never unfold or mockup (record the observed route here)."
+      ]
     }
   ]
 }

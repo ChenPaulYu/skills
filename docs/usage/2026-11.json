@@ -55,6 +55,30 @@
       "claudeSubagent": 0,
       "lastSeen": "2026-11-12"
     },
+    "frame:tinker": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 0
+      },
+      "claudeSubagent": 0,
+      "lastSeen": null
+    },
+    "frame:unfold": {
+      "claude": {
+        "model": 0,
+        "slash": 0,
+        "sessions": 0
+      },
+      "codex": {
+        "sessions": 0
+      },
+      "claudeSubagent": 0,
+      "lastSeen": null
+    },
     "nav:audit": {
       "claude": {
         "model": 0,
@@ -89,7 +113,7 @@
         "sessions": 18
       },
       "claudeSubagent": 0,
-      "lastSeen": "2026-11-12"
+      "lastSeen": "2026-11-13"
     },
     "nav:plan": {
       "claude": {

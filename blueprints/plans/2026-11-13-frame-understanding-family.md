@@ -1,6 +1,6 @@
 # Frame as the understanding family — unfold and tinker
 
-> **Status:** proposed (2026-11-13) · owner approved direction and names in conversation; implementation not yet started.
+> **Status:** in progress — implemented in the commit "feat: frame becomes the understanding family (unfold, tinker)", forward test pending (2026-11-13) · owner approved direction and names in conversation.
 > **TL;DR:** Recast `frame` as the family that helps someone understand something: lenses to see it
 > (`first-principles`, `orthogonal`), forms to present it (`analogize`, `draw`, new `tinker`), and
 > one rhythm-holding entry (`unfold`) that walks a learner through any subject by progressive
