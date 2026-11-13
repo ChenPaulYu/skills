@@ -7,7 +7,8 @@ priorities; its current state is read from those tasks, not copied into a second
 ## Locate before reading or writing
 
 Use an explicit workspace/project path from the user or repository instructions. A
-home repo can hold `workspace/<project>/project.md`, `records/`, and optional `artifacts/`.
+home repo holds `workspace/<project>/project.md` as the sole entry and work in typed
+folders: `ideas/`, `thoughts/`, `tasks/`, `plans/`, `mockups/`, and `probes/`.
 Do not assume the code checkout contains its records. Resolve code repositories from
 the project's explicit mappings; report missing/unavailable mappings, never substitute
 the home repo's HEAD. Machine-local paths are locators, not portable identity.
@@ -27,9 +28,25 @@ reference owns the shared document interface. Existing readable records remain v
 
 `project.md` has YAML frontmatter `id`, `title`, optional `repositories` (alias → path),
 and optional `priorities` (record IDs in user-chosen order). Its prose owns project
-purpose, constraints, and context. Keep per-task progress out of it.
+purpose, constraints, context, and navigation to existing work folders. Keep per-task
+progress out of it. Do not add a competing `index.md` or `state.md`; render current
+state from the original work records and actual Git context when requested.
 
-Each independently reusable item in `records/` has YAML frontmatter:
+Each independently reusable item has YAML frontmatter. Store simple records as
+`ideas/<topic>.md`, `thoughts/<topic>.md`, `tasks/<topic>.md`, or `plans/<topic>.md`.
+A mockup decision lives in `mockups/<topic>/mockup.md` beside its HTML variants;
+a probe lives in `probes/<topic>/probe.md` beside results and supporting evidence.
+Do not mistake a supporting README, results.md, HTML or CSV for another record.
+Create only the folders actually needed. No extra `records/` or `artifacts/`
+container or promotion/move ceremony is required. Worthwhile references can stay
+at their original location and be linked directly.
+
+The former flat `records/*.md` layout remains a readable legacy shape; a reader
+may consume both layouts during an authorized transition, reporting conflicting
+IDs or folder/type mismatches instead of silently normalizing them. A physical
+move preserves IDs, status and substantive dates and repairs relative links.
+
+Example frontmatter:
 
 ```yaml
 ---

@@ -1,24 +1,25 @@
 /**
  * Shared skill references: one editable owner, self-contained packaged consumers.
  * build-manifests materializes them; the validator checks every destination for drift.
- * Reads: node:fs · node:path · shared handoff, development-artifact, activation, and frame form owners.
+ * Reads: node:fs · node:path · shared record, handoff, development-artifact, activation, and frame form owners.
  * Removes retired bundles only when they bear this builder's exact ownership marker.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
+const RECORD_CONSUMERS = [
+  ...["idea", "elicit", "mockup", "probe", "dogfood", "status", "wrap", "tidy"]
+    .map(skill => `plugins/shape/skills/${skill}`),
+  ...["plan", "do", "refactor", "compose", "ship"]
+    .map(skill => `plugins/nav/skills/${skill}`),
+];
+
 export const SHARED_SKILL_REFERENCES = [{
   source: "plugins/shape/references/record-interface.md",
-  destinations: [
-    ...["idea", "elicit", "mockup", "probe", "dogfood", "status", "wrap", "tidy"]
-      .map(skill => `plugins/shape/skills/${skill}/references/record-interface.md`),
-    ...["plan", "do", "refactor", "compose", "ship"]
-      .map(skill => `plugins/nav/skills/${skill}/references/record-interface.md`),
-  ],
+  destinations: RECORD_CONSUMERS.map(skill => `${skill}/references/record-interface.md`),
 }, {
   source: "plugins/shape/references/workspace-records.md",
-  destinations: ["idea", "status", "wrap"].map(skill =>
-    `plugins/shape/skills/${skill}/references/workspace-records.md`),
+  destinations: RECORD_CONSUMERS.map(skill => `${skill}/references/workspace-records.md`),
 }, {
   source: "plugins/shape/references/session-handoff.md",
   destinations: [

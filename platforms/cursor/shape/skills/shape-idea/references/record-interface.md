@@ -5,6 +5,8 @@
 Use the same reading interface for idea, thought, mockup, probe, task, and plan.
 Keep the record's established location, type/status vocabulary, and language.
 This is a writing convention, not permission to retrofit a legacy project.
+When an explicit project workspace is selected, read `references/workspace-records.md`
+for its typed locations and colocated artifacts; otherwise use the existing project convention.
 
 ## One glance, then deeper
 
@@ -102,7 +104,8 @@ a superseded decision names its successor and why it changed. Preserve unique
 reasons before replacing a record, without manufacturing a daily checkpoint chain.
 Uncommitted/ignored artifacts still need explicit preservation; Git is not their backup.
 
-`project.md` owns purpose, constraints, repository mappings and user-chosen priorities.
+`project.md` is the sole project entry/index. It owns purpose, constraints, repository
+mappings, navigation to existing work folders, and user-chosen priorities.
 It can use the same compact metadata/summary discipline, without inventing a single
 task status for the whole project. Its current **state** is a read: task-owned progress,
 relevant decisions/evidence, and actual mapped Git context. Render that view on demand;

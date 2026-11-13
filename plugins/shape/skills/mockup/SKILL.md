@@ -25,8 +25,8 @@ conclusion and visible Relations. Keep existing records readable; do not invent 
 - **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `/shape:tidy`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
 - **One decision, one record.** Reuse/create a Markdown mockup record with dates, actual
   thought/task relations, a short conclusion, artifact locators and retirement conditions.
-  Prefer the mapped workspace record; otherwise use adjacent `mockup.md` in the
-  established artifact folder. Candidate HTML variants share that record. HTML headers
+  In a mapped workspace, use `mockups/<topic>/mockup.md` beside the HTML; otherwise
+  use adjacent `mockup.md` in the established artifact folder. Candidate HTML variants share that record. HTML headers
   point to it instead of separately owning mutable picks/status/dates.
 - **Storage:** use the existing blueprints tree's `mockups/<date>-<topic>/` or project-selected location. Before writing, read `references/development-artifacts.md` for retention policy and independent ignore/tracking/staging checks.
 - **After a pick, honor the requested scope.** A settled pick ends exploration; continue an already-authorized build, or stop after the mockup when that was all the user requested.

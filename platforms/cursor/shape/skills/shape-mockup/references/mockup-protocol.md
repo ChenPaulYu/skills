@@ -125,8 +125,9 @@ Apply `references/record-interface.md` to the canonical Markdown record: frontma
 short conclusion, visible Relations, then question/candidates, pick/open choices,
 artifact links, retirement conditions and supporting evidence. The record is separate
 from the HTML render, not a second render or a mandatory History file. In an explicitly
-mapped workspace, use `records/` and keep one card per decision; otherwise use adjacent
-`mockup.md`. Reuse an existing card, keep actual related thought/task IDs or legacy
+mapped workspace, use `mockups/<topic>/mockup.md` beside its HTML and keep one card
+per decision; otherwise use adjacent `mockup.md`. Keep meaningful variants together;
+representativeness alone does not require a move to an artifacts container. Reuse an existing card, keep actual related thought/task IDs or legacy
 paths, and group variants under it. Never create a fake task just to populate Relations.
 
 - **Where:** the existing blueprints tree's `mockups/<date>-<topic>/` or project-selected

@@ -23,8 +23,9 @@ Relations. This does not change the format of product docs or force legacy-board
    material trade-off. Routine implementation choices are yours to make and explain. Record
    deferred questions with the step they block; continue independent work.
 3. **Produce a reviewable plan.** If the request or repository policy forbids file changes,
-   present it in chat until writing is authorized. Otherwise follow the repository's convention: prefer its
-   `blueprints/plans/` when present, otherwise an established plans directory or `docs/plans/`.
+   present it in chat until writing is authorized. Otherwise use `plans/` in an explicitly mapped project workspace (read
+   `references/workspace-records.md`); without one, follow the repository convention:
+   prefer `blueprints/plans/`, an established plans directory, or `docs/plans/`.
    Before writing, read `references/development-artifacts.md` for project retention policy
    and Git checks. State the selected path; a conventional location needs no separate confirmation. Include
    Context, Approach, Critical files, and Verification. Read `references/plan-protocol.md` for
