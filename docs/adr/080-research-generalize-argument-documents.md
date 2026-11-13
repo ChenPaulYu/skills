@@ -2,7 +2,7 @@
 
 **Status**: accepted
 **Date**: 2026-07-14
-**Source**: ratified by Paul 2026-07-14, via `/shape:elicit` — [`blueprints/thoughts/2026-07-14-research-generalize-argument-docs.md`](../../blueprints/thoughts/2026-07-14-research-generalize-argument-docs.md).
+**Source**: ratified by Paul 2026-07-14, via `/shape:elicit` — [`blueprints/thoughts/2026-07-14-research-generalize-argument-docs.md`](https://github.com/ChenPaulYu/skills/blob/e60bf6980718c2ecc67c914407f256b44ed2bcbb/blueprints/thoughts/2026-07-14-research-generalize-argument-docs.md).
 **Precedent cited**: [ADR-027](027-research-plugin.md) (research plugin charter — already named the framework domain-agnostic at birth); [ADR-012](012-nav-plan-offers-visual-summary.md)-pattern guarded offers (the seam convention this ADR instantiates three times).
 
 ## Context

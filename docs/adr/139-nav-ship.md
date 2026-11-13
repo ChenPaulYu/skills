@@ -1,6 +1,6 @@
 # ADR-139 — `nav:ship`: land finished work and leave the repo clean
 
-> 2026-11-13 · Status: accepted · Builds on ADR-126 (scope-aware continuation) and ADR-109 (three-layer law). Plan: `blueprints/plans/2026-11-13-nav-ship.md`.
+> 2026-11-13 · Status: accepted · Builds on ADR-126 (scope-aware continuation) and ADR-109 (three-layer law). Historical plan: [implementation record](https://github.com/ChenPaulYu/skills/blob/e60bf6980718c2ecc67c914407f256b44ed2bcbb/blueprints/plans/2026-11-13-nav-ship.md) (working copy is local-only).
 
 ## Context
 

@@ -1,6 +1,6 @@
 # ADR-138 — Frame becomes the understanding family (`unfold`, `tinker`)
 
-> 2026-11-13 · Status: accepted · Builds on ADR-111 and ADR-126 (retired predecessors); follows ADR-137's roster change. Plan: `blueprints/plans/2026-11-13-frame-understanding-family.md`.
+> 2026-11-13 · Status: accepted · Builds on ADR-111 and ADR-126 (retired predecessors); follows ADR-137's roster change. Historical plan: [implementation record](https://github.com/ChenPaulYu/skills/blob/e60bf6980718c2ecc67c914407f256b44ed2bcbb/blueprints/plans/2026-11-13-frame-understanding-family.md) (working copy is local-only).
 
 ## Context
 

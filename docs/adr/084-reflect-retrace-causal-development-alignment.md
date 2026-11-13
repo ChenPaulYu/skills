@@ -2,7 +2,7 @@
 
 **Status**: accepted
 **Date**: 2026-07-15
-**Source**: [`blueprints/thoughts/2026-07-15-reflect-retrace.md`](blueprints/thoughts/2026-07-15-reflect-retrace.md) · [`docs/observations/2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md`](docs/observations/2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md) · ratified by Paul 2026-07-15
+**Source**: [`blueprints/thoughts/2026-07-15-reflect-retrace.md`](https://github.com/ChenPaulYu/skills/blob/e60bf6980718c2ecc67c914407f256b44ed2bcbb/blueprints/thoughts/2026-07-15-reflect-retrace.md) · [`docs/observations/2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md`](docs/observations/2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md) · ratified by Paul 2026-07-15
 
 ## Context
 

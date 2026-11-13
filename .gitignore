@@ -23,3 +23,6 @@ venv/
 # Editor swap / backup
 *.swp
 *~
+
+# Private working records stay local
+/blueprints/
