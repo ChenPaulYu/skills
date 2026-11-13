@@ -3,7 +3,7 @@
 
 Reads ``workspace/<project>/project.md`` and typed work folders using YAML
 frontmatter; legacy flat ``records/*.md`` remains readable. Every root is explicit.
-This module never creates or updates workspace or Git files.
+Source records and Git are read-only; explicit view export writes a new HTML outside the home repository.
 """
 
 from __future__ import annotations
@@ -342,13 +342,29 @@ def main(argv: list[str] | None = None) -> int:
     for name in ("status", "graph"):
         cmd = sub.add_parser(name)
         cmd.add_argument("project")
+    view = sub.add_parser("view")
+    view.add_argument("project")
+    view.add_argument("--output", required=True, type=Path)
     cmd = sub.add_parser("show")
     cmd.add_argument("project")
     cmd.add_argument("id")
     args = parser.parse_args(argv)
     try:
-        payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None))
-    except (WorkspaceError, OSError) as exc:
+        if args.command == "view":
+            import importlib.util
+            view_path = Path(__file__).with_name("workspace_view.py")
+            spec = importlib.util.spec_from_file_location("_workspace_view", view_path)
+            module = importlib.util.module_from_spec(spec)
+            exec(compile(view_path.read_text(encoding="utf-8"), str(view_path), "exec"), module.__dict__)
+            export_view = module.export_view
+            projects, records, diagnostics = _load(args.root)
+            project = _project(projects, args.project)
+            graph = run(args.root, "graph", args.project)
+            selected = [_public_record(r) for r in records if r["_project_dir"] == project["_scope"]]
+            payload = export_view(args.root, {key: project[key] for key in ("id", "title", "priorities")}, graph, selected, args.output)
+        else:
+            payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None))
+    except (WorkspaceError, OSError, ValueError) as exc:
         print(json.dumps({"error": str(exc), "read_tier": getattr(exc, "read_tier", "absent")}, ensure_ascii=False))
         return 1
     print(json.dumps(payload, ensure_ascii=False, indent=2))

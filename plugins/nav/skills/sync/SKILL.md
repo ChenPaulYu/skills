@@ -59,4 +59,4 @@ those explanations claim and what reader-relevant behavior they omit.
 
 /nav:compose authors or restructures prose; /nav:audit assesses code structure;
 /nav:refactor changes it. /shape:tidy maintains the lifecycle of project design
-records; /shape:align owns priorities. Missing siblings do not block a scoped sync.
+records; /shape:status owns priorities. Missing siblings do not block a scoped sync.

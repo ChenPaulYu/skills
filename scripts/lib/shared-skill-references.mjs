@@ -15,7 +15,7 @@ const RECORD_CONSUMERS = [
 ];
 
 export const SHARED_SKILL_REFERENCES = [
-  ...["workspace", "workspace_records.py"].map(file => ({
+  ...["workspace", "workspace_records.py", "workspace_view.py", "workspace_graph.html"].map(file => ({
     source: `plugins/shape/skills/status/scripts/${file}`,
     destinations: RECORD_CONSUMERS.filter(skill => skill !== "plugins/shape/skills/status")
       .map(skill => `${skill}/scripts/${file}`),
@@ -29,13 +29,13 @@ export const SHARED_SKILL_REFERENCES = [
 }, {
   source: "plugins/shape/references/session-handoff.md",
   destinations: [
-    "plugins/shape/skills/park/references/session-handoff.md",
-    "plugins/shape/skills/catchup/references/session-handoff.md",
+    "plugins/shape/skills/status/references/session-handoff.md",
+    "plugins/shape/skills/wrap/references/session-handoff.md",
   ],
 }, {
   source: "plugins/shape/references/development-artifacts.md",
   destinations: [
-    ...["align", "catchup", "dogfood", "elicit", "mockup", "park", "probe", "tidy"]
+    ...["status", "wrap", "dogfood", "elicit", "mockup", "probe", "tidy"]
       .map(skill => `plugins/shape/skills/${skill}/references/development-artifacts.md`),
     "plugins/nav/skills/plan/references/development-artifacts.md",
     "plugins/nav/skills/compose/references/development-artifacts.md",

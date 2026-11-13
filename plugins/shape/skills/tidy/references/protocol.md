@@ -96,6 +96,6 @@ record. Update directly affected board facts if that update is authorized; prese
 Report retained material, unknowns, and coverage limits. There is no automatic align finale.
 
 Code headers from /nav:sync are useful locators, not proof or a prerequisite. Read code directly
-when headers are absent. /nav:sync checks reader documents such as README; /shape:align
-decides priorities; the convention structure is upgraded by hand following the migration ledger bundled with /shape:align. Reuse fresh evidence
+when headers are absent. /nav:sync checks reader documents such as README; /shape:status
+decides priorities; the convention structure is upgraded by hand following the migration ledger in references/migration-ledger.md. Reuse fresh evidence
 between these tasks without requiring or invoking another skill.

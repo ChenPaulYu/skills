@@ -125,10 +125,14 @@ sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" status <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" show <project> <record-id>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" graph <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" check
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" view <project> --output <fresh-html-outside-home>
 ```
 
 The helper returns JSON records, relations/backlinks, diagnostics and mapped Git context.
-It does not write records, choose priorities, establish semantic completion or render a UI.
+It does not write records, choose priorities or establish semantic completion. Only
+explicit view export writes a new offline interactive HTML snapshot outside the home
+repo. It refuses existing output paths; serve private views on localhost. The snapshot
+embeds selected record bodies and is private wherever those sources are private.
 If execution or dependencies are unavailable, read the records manually and report that
 fallback; the script is optional. Do not silently switch home roots. Shape status owns
 the implementation; other skill bundles are generated, not separately maintained.

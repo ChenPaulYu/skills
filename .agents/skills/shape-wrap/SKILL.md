@@ -16,8 +16,10 @@ When creating or updating an individual working record, read
 `references/record-interface.md` for the shared frontmatter, honest dates, opening
 conclusion and visible Relations. Keep existing records readable; do not invent parents.
 
-For each touched task, keep the goal, actual progress, verification and its limits,
-remaining blockers/reasons, and one executable next action. Preserve unrelated open
+For each touched task, keep the goal and why, actual progress, verification and its limits,
+remaining blockers/reasons, rejected approaches and why they were rejected, and one
+executable next action. Record a fresh code SHA when useful; label missing intent or
+Git evidence rather than fabricating it. Preserve unrelated open
 work and unique reasons already there. Store a new decision or deferred idea in its
 appropriate record only when it adds independent value; link it to the task.
 When the user explicitly puts unfinished work aside for later, mark it `paused`
@@ -35,3 +37,13 @@ If no task exists, use a readable existing work item; create a minimal task only
 when this is actual authorized work. A pure idea belongs in an idea record. Without
 a known write destination, request that missing locator instead of inventing a
 HANDOFF.md, dated checkpoint chain, or new durable progress board.
+
+## Legacy records
+
+Without mapped task records, read the existing board/work item and any baton/HANDOFF
+using `references/session-handoff.md`. Report the readable tier and retain unique live
+work/reasons from both notes when they conflict. Save into the original work item or
+create one minimal authorized task at the established work-record location; do not
+create or overwrite a new session cursor. Preserve legacy notes until verified durable
+transfer and recovery allow a separately authorized tidy. Re-read the target and show
+the intended delta before writing. Do not migrate the project during an ordinary save.

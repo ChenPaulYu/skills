@@ -1,8 +1,8 @@
-# Session handoff — one note, two entrances
+# Legacy handoff — consume without losing live context
 
-> Editable owner of the location and format shared by shape-park and shape-catchup.
-> `node scripts/build-manifests.mjs` bundles this reference into both skill folders.
-> The handoff itself is a tolerant convention, not a mandatory schema.
+Read existing baton/HANDOFF files during status reconstruction. Wrap saves into original
+work items rather than creating another session cursor. This reference describes existing
+inputs; the template below is a reading map, not an instruction to create a new note.
 
 ## Location
 
@@ -14,14 +14,13 @@ handoff. Report the selected location. The entrance rename does not rename data.
 When a tree exists but its note is absent and a legacy root `HANDOFF.md` remains,
 read and report that legacy note rather than silently ignore it. Do not migrate
 it as a side effect of catchup. If both files exist, inspect both and flag conflicting
-live content; do not silently discard one. Park updates the selected existing note
-until an explicit migration is requested, avoiding a second competing cursor.
+live content; do not silently discard one. Preserve both originals until their live work and reasons are explicitly transferred.
 
 ## Fields and evidence
 
 One overwritten note holds these five questions. Read older headings, translated
 headings, and ad-hoc notes for their meaning; missing sections are not a failure.
-For a new note, use this familiar shape (follow the project's document language):
+Recognize this familiar legacy shape:
 
 ```markdown
 # HANDOFF
@@ -51,4 +50,4 @@ Mark inference and unknowns instead of treating one kind of evidence as another.
 
 This note is a temporary stopping point, not a second project board or a permanent
 decision record. Storage, sharing, and Git checks follow `references/development-artifacts.md`.
-Neither entrance commits it automatically or claims a local-only note is shared.
+Neither a read nor a save claims that a local-only note is shared.

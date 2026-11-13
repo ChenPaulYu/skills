@@ -26,7 +26,7 @@ override; otherwise it triggers on the request.
 
 **Also fires on "show me the board" / "what's the status, visually"** — a request to *see* the
 blueprints board rather than decide something. Render per the board-snapshot contract in
-[`../align/references/blueprints-spec.md`](.agents/skills/shape-align/references/blueprints-spec.md): copy
+[`../status/references/legacy-blueprints.md`](.agents/skills/shape-status/references/legacy-blueprints.md): copy
 `overview-template.html`, fill it from the current `plan.md` + `thoughts/` (filtered to
 `Status: in force` — ADR-112), activate it per the usual protocol below. **Always disposable** — never write it back as a standing `overview.html`; `align` does
 not maintain one. This is the family's answer to "I want to *see* the plan": render it fresh,

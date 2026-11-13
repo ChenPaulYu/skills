@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-11-13 (rev 149)
+  Last audit: 2026-11-13 (rev 150)
 ═══════════════════════════════════════════════════════════════════════════
 
   The marketplace source owns current facts. The current checks below were
@@ -187,7 +187,12 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11; current roster is 4 plugins.
 
-  ⚠ FIXED in this revision (rev 149)
+  ⚠ FIXED in this revision (rev 150)
+    • ADR-146: Shape has eight entrances. Status/wrap absorb align/park/catchup;
+      legacy reads preserve live context. Skill-owned graph export derives real records.
+      Current roster/versions remain generated; inherited anatomy is historical.
+
+  ⚠ FIXED in rev 149 (kept for history)
     • ADR-143: project.md is the sole project index. Typed work folders replace
       the flat pilot container; mockup/probe cards stay with their artifacts. Legacy
       records stay readable; no artifacts-promotion tier or extra state/history file.
@@ -3331,17 +3336,17 @@ const RULES = [
 // BEGIN GENERATED catalog-data
 const CATALOG_COUNTS = {
   "plugins": 3,
-  "skills": 24
+  "skills": 21
 };
 const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.24.2",
+    "version": "0.25.1",
     "skillCount": 7,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.24.2; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.24.2；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.25.1; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.25.1；7 個 skills）"
     },
     "files": [
       [
@@ -3405,11 +3410,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.32.0",
-    "skillCount": 11,
+    "version": "0.33.1",
+    "skillCount": 8,
     "blurb": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.32.0; 11 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.32.0；11 個 skills）"
+      "en": "Eight entrances: capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; tolerant legacy reading remains. (v0.33.1; 8 skills)",
+      "zh": "八個入口：存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊文件仍可讀。（v0.33.1；8 個 skills）"
     },
     "files": [
       [
@@ -3445,30 +3450,6 @@ const DOMAINS = {
         }
       ],
       [
-        "/shape:align",
-        "",
-        {
-          "en": "Verify carried board items against source and tests, decide priorities with the user, and update plan.md. No silent drops and no mandatory document-cleanup pass. Tidy owns design-record lifecycle; nav-sync owns reader-document accuracy (ADR-131).",
-          "zh": "以程式與測試核對板上進度，跟使用者決定優先順序，再更新 plan.md。條目不能無聲消失，也不用先整理整棵文件樹。設計紀錄由 tidy 整理；人讀的說明由 nav-sync 校準（ADR-131）。"
-        }
-      ],
-      [
-        "/shape:catchup",
-        "",
-        {
-          "en": "Read and reconstruct current session state from the shared handoff file: goal · done · now · open · next in blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports the trust tier. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. Explicit-only. ADR-127.",
-          "zh": "從共享 handoff 檔讀取並重建目前 session 狀態:blueprints/baton.md 裡的 goal · done · now · open · next,沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任層級。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。僅明確召喚。ADR-127。"
-        }
-      ],
-      [
-        "/shape:park",
-        "",
-        {
-          "en": "Write the session handoff before stepping away: the same five fields, concise at decision level, in blueprints/baton.md with root HANDOFF.md fallback. Previews the overwrite and honors existing authorization; does not force a new menu when the next action is already authorized. Explicit-only. ADR-127.",
-          "zh": "離開前寫 session handoff:同一組五欄,保持 decision-level 精簡,落在 blueprints/baton.md,沒有樹時 fallback 到根目錄 HANDOFF.md。會預覽覆寫並尊重既有授權;下一步已授權時不強迫再開選單。僅明確召喚。ADR-127。"
-        }
-      ],
-      [
         "/shape:tidy",
         "",
         {
@@ -3488,8 +3469,8 @@ const DOMAINS = {
         "/shape:status",
         "plugins/shape/skills/status/SKILL.md",
         {
-          "en": "Recover a project&#39;s current work and next actions from its task records and fresh code evidence. Reading status is not permission to implement or change priorities.",
-          "zh": "Recover a project&#39;s current work and next actions from its task records and fresh code evidence. Reading status is not permission to implement or change priorities."
+          "en": "Recover current project work and next actions from original records and fresh code evidence. Set priorities only when explicitly requested; reading status never authorizes implementation.",
+          "zh": "Recover current project work and next actions from original records and fresh code evidence. Set priorities only when explicitly requested; reading status never authorizes implementation."
         }
       ],
       [
@@ -3577,8 +3558,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.24.2; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.24.2；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.25.1; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.25.1；7 個 skills）"
     }
   },
   {
@@ -3594,8 +3575,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.32.0; 11 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.32.0；11 個 skills）"
+      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.33.1; 8 skills)",
+      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.33.1；8 個 skills）"
     }
   },
   {

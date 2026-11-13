@@ -2,6 +2,9 @@
 
 from pathlib import Path
 import json
+import io
+import contextlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -13,7 +16,7 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "plugins/shape/skills/status/scripts"
 sys.path.insert(0, str(SCRIPTS))
-from workspace_records import WorkspaceError, run
+from workspace_records import WorkspaceError, run, main
 
 
 class WorkspaceRecordsTest(unittest.TestCase):
@@ -260,6 +263,71 @@ class WorkspaceRecordsTest(unittest.TestCase):
         self.assertEqual(missing.returncode, 1)
         self.assertEqual(json.loads(missing.stdout)["read_tier"], "absent")
 
+
+
+class WorkspaceViewTest(unittest.TestCase):
+    setUp = WorkspaceRecordsTest.setUp
+    tearDown = WorkspaceRecordsTest.tearDown
+    write = WorkspaceRecordsTest.write
+    git = WorkspaceRecordsTest.git
+    record = WorkspaceRecordsTest.record
+    def export(self, output):
+        with contextlib.redirect_stdout(io.StringIO()) as stream:
+            code = main(["--root", str(self.root), "view", "demo", "--output", str(output)])
+        return code, json.loads(stream.getvalue())
+
+    def test_export_uses_real_records_without_writing_sources(self):
+        before = {str(p): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
+        with tempfile.TemporaryDirectory() as output_dir:
+            output = Path(output_dir) / "view.html"
+            code, payload = self.export(output)
+            self.assertEqual(code, 0)
+            html = output.read_text()
+            data = json.loads(re.search(r'<script id="workspace-data" type="application/json">(.*?)</script>', html, re.S)[1])
+            self.assertEqual(data["graph"], run(self.root, "graph", "demo"))
+            self.assertEqual(payload["nodes"], len(data["records"]))
+            self.assertIn("Task body", html)
+            self.assertNotIn('src="https://', html)
+            self.assertIn('id="search"', html)
+        self.assertEqual(before, {str(p): p.read_bytes() for p in self.root.rglob("*") if p.is_file()})
+
+    def test_record_text_cannot_break_out_of_data_script(self):
+        attack = '</script><script>globalThis.sourceExecuted=true</script>'
+        self.write("workspace/demo/records/task-a.md", self.record("task-a", "task", "paused", attack))
+        with tempfile.TemporaryDirectory() as output_dir:
+            output = Path(output_dir) / "view.html"
+            self.assertEqual(self.export(output)[0], 0)
+            html = output.read_text()
+            self.assertNotIn(attack, html)
+            data = json.loads(re.search(r'<script id="workspace-data" type="application/json">(.*?)</script>', html, re.S)[1])
+            self.assertIn(attack, data["records"][0]["body"] if data["records"][0]["id"] == "task-a" else next(x["body"] for x in data["records"] if x["id"] == "task-a"))
+
+    def test_export_refuses_source_tree_and_existing_output(self):
+        original = self.root / "workspace/demo/project.md"
+        before = original.read_bytes()
+        self.assertEqual(self.export(original)[0], 1)
+        self.assertEqual(original.read_bytes(), before)
+        self.assertEqual(self.export(self.root / "new.html")[0], 1)
+        self.assertFalse((self.root / "new.html").exists())
+        with tempfile.TemporaryDirectory() as output_dir:
+            output = Path(output_dir) / "view.html"
+            output.write_text("keep me")
+            self.assertEqual(self.export(output)[0], 1)
+            self.assertEqual(output.read_text(), "keep me")
+
+    def test_empty_and_nonstandard_records_remain_honest(self):
+        for p in (self.root / "workspace/demo/records").glob("*.md"):
+            p.unlink()
+        with tempfile.TemporaryDirectory() as output_dir:
+            output = Path(output_dir) / "empty.html"
+            code, payload = self.export(output)
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["nodes"], 0)
+            self.write("workspace/demo/records/ad-hoc.md", "Readable notes without frontmatter")
+            code, payload = self.export(Path(output_dir) / "nonstandard.html")
+            self.assertEqual(code, 0)
+            self.assertTrue(payload["diagnostics"])
+            self.assertEqual(payload["read_tier"], "non-standard readable records")
 
 if __name__ == "__main__":
     unittest.main()

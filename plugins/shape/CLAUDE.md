@@ -1,94 +1,67 @@
-# shape — plugin-level CLAUDE.md
+# shape — plugin maintainer guide
 
-> Editing this plugin. To run a skill, read its `SKILL.md` (self-contained).
+Shape turns intent into findable decisions, evidence and task-owned work. Nav owns
+implementation, code health and landing. Read an individual SKILL.md to run that verb.
 
-## What it is
+## Eight entrances
 
-**Forward motion: give intent its form, then hand it to the manual build path.** Sibling to `nav` — the two split the lifecycle cleanly: **shape pushes the work forward** (converge → plan), **nav keeps the result healthy** (audit → refactor → sync). Domain = the loop **converge a decision → record it legibly → keep it current → hand off to be built**.
+- idea saves an independent spark without authorizing implementation.
+- elicit clarifies an undecided question; idea capture is not elicitation.
+- mockup converges a choice through an interactive artifact.
+- probe tests an undecided claim with a minimal experiment.
+- dogfood uses built behavior to find reproducible friction.
+- status reconstructs work and, only on explicit request, helps set priorities.
+- wrap saves progress/reasons/next actions in the original tasks.
+- tidy reconciles stale or redundant records while preserving useful reasons/recovery.
 
-> Identity note (ADR-011, revised ADR-110): shape once widened to include `build`, an orchestrator driving the plan's In-progress column to done. It retired 2026-08-12 — zero fires ever, Paul walks the same loop by hand (`/nav:plan` → `/nav:do`/`/nav:refactor` → `/shape:align`). Re-entry condition: he asks for autonomous board-driven execution more than once.
+Align, park and catchup are retired by ADR-146. Their priority, reconstruction and
+reason-preservation capabilities survive in status/wrap; legacy data is not deleted.
+No init, setup, migrate, build or doctor entry is reintroduced. Historical rationale
+remains in ADRs, not live instructions that summon retired verbs.
 
-## Opt-in workspace pilot (ADR-140)
+## Record ownership
 
-`idea`, `status`, and `wrap` trial task-owned working records in an explicitly located
-workspace. The shared convention owner is `plugins/shape/references/workspace-records.md`,
-bundled into each entrance. The read-only workspace reader is owned by
-`plugins/shape/skills/status/scripts/` and bundled verbatim into record consumers
-by the shared-resource builder. Home repos own data, not a second parser. Idea capture is independent of elicitation; status reads
-records plus fresh mapped code evidence; wrap updates original tasks without another
-handoff. Existing align/park/catchup remain for legacy projects until one real project
-can save and resume through a fresh agent. The following board/handoff spine describes
-that legacy path, not an instruction to create duplicate state in the pilot.
+`plugins/shape/references/workspace-records.md` owns typed layout and lifecycle;
+`plugins/shape/references/record-interface.md` owns metadata, dates, Relations and
+progressive disclosure. The shared-resource builder bundles them into consumers.
+Project.md owns context/repository mappings/curated priorities; original tasks own
+progress, verification and next actions. State and graphs derive from records;
+Git owns committed revisions. No duplicate board, index.md, state.md or handoff.
 
-## Spine (through-line)
+Shape status scripts own the reader, explicit graph export, renderer and template.
+Related record consumers carry generated standalone copies. A home repository
+owns private records, not another parser. HTML is an on-demand read-only snapshot,
+not an editor or the authority for decisions. Explicit output is outside the home
+repo and never overwrites an existing file. Read helpers are optional; report fallback.
 
-**Converge by a real, disposable instance — never a description.** The instance's *form* varies: a verbal grounded fork (elicit), or a rendered interactive artifact (mockup). Its standing form is the blueprints board — **one current state, one maintained render**: `plan.md` (agent-facing; deps point downstream only). A human-facing view renders **on demand via `/shape:mockup`** when actually wanted — disposable, never a standing file to drift. Its **terminus is now the manual path** (ADR-110): the disposable instances converge the decision; the user drives it real by hand — `/nav:plan` grounds an item, `/nav:do`/`/nav:refactor` implements it, `/shape:align` moves it to Shipped. `build` orchestrated this loop autonomously and retired unexercised; its ADR-040 dispatch machinery survives in git for the re-entry condition above.
+## Legacy projects and maintenance
 
-**Progressive disclosure runs through every artifact.** Every artifact leads with its interface and drills in only as needed — markdown structure (a `head -12`-able header + TL;DR, sections that lead with their point) for the agent-facing docs, click-to-reveal for any rendered mockup, including an on-demand board snapshot. Same interface-first principle as `nav`'s file headers.
+Status reads existing boards/handoffs tolerantly and reports the evidence tier.
+Its legacy-blueprints/priorities references preserve old conventions; tidy owns the
+manual migration ledger. Workspace mappings take precedence, and no ordinary
+read/save automatically migrates or discards old data. Priority changes require
+user authority; read-only status never silently updates records.
 
-**The verb is the only door for its deliverable (ADR-038).** If you are about to hand-produce something a verb encodes — a comparison mockup (`/shape:mockup`), a clarification conversation (`/shape:elicit`), a decided behaviour-changing change (`/nav:do`) — **fire the verb instead of hand-rolling the artifact**. The artifact is not the deliverable; the *protocol around it* is (scope-aware continuation, check bracket, gated diffs) — hand-rolling produces the artifact and silently drops the protocol. Having done the craft ambiently many times is the *risk signal*, not a waiver: fluency is exactly when the door gets skipped (two sightings: 2026-06-03 execution, 2026-06-11 converge). This does not make verbs auto-fire — it governs the case where you're *already producing* the deliverable.
+Development-artifacts owns retention/recovery policy. Mockup owns comparison;
+tidy owns retirement after settled choice, useful residue and inbound links are
+accounted for. A task closing does not erase an adopted thought or inconclusive probe.
 
-**Decisions are born durable — no freeze tier (ADR-112).** There is no separate canon layer to graduate into and no ledger of pending amendments waiting on a freeze moment: a converged decision lands directly in `thoughts/` with a `Status:` line (`in force` / `superseded by <file>` / `shipped`), and a changed decision is just an edit to that line plus a fresh entry — made by whichever verb touches it (`elicit` for a reconsidered call, `tidy` for a fact reality already settled). Principles route by how they must fire, not by a tier: **always-loaded** (a project's CLAUDE.md, paid every turn), **a gate/validator** (mechanically enforced, can't silently drift), or **a dated case-bearing file** in `thoughts/` (situational, read on demand). `core/`, the ADR-041 freeze protocol, and `docs/core/amendments.md` retired with `/shape:position` — the tier conflated two genres (timeless principle vs. architecture that must track code), and freezing the second manufactured permanent drift debt: across 5 projects the `core/` trees were scaffolded then abandoned, one holding only a `.gitkeep` for 3 weeks while the repo shipped daily.
+## Seams and execution
 
-**Resolve consequential uncertainty (shared with nav rule ⑦).** Read evidence and prior decisions first. Ask when missing intent or authority would change scope, behavior, compatibility, or a material trade-off. Routine implementation choices need no invented confidence percentage; label unsupported claims and continue independent work.
+Shape converges intent; nav-plan grounds implementation; nav-do/refactor implement;
+wrap saves the touched task; status reconstructs the next round. Nav remains
+standalone: cross-skill recommendations are soft, bundled references self-contained.
+No skill calls another skill's runtime. Planning/judgment/acceptance stay on the
+session model; scoped execution follows the marketplace dispatch tier policy.
+No whole-turn mechanical override exists in Shape. Live-provider cost/authorization
+checks in probe/dogfood still apply independently of executor model cost.
 
-## Work-record interface (ADR-142)
+## Artifact interface
 
-`plugins/shape/references/record-interface.md` owns the common frontmatter/date,
-opening conclusion, visible Relations and detail layout. It is bundled into record
-readers/writers; workspace-records owns location and lifecycle. Mockup uses one
-Markdown record per decision, with HTML variants pointing to it. Project state is
-derived from tasks and actual repositories; Git owns committed revision history.
-
-## Artifact retention
-
-`plugins/shape/references/development-artifacts.md` owns retention and Git checks,
-bundled into every Shape skill, nav-plan, and nav-compose. Process artifacts default to local storage;
-explicit project policies govern exceptions. Durable understanding does not imply a
-committed render or a cross-machine backup. ADR-134.
-
-## Members
-
-Grouped by verb (mirrors `nav`'s family shape):
-
-- **converge** — turn an open question into a decision:
-  - `mockup` — render-to-decide: a real interactive HTML (UI mockup, or diagram for backend/agent/data/flow). *(built)*
-  - `elicit` — clarify an undecided conceptual choice or specific cause through grounded conversation. Ask only what affects the decision; agree when supported and challenge concrete problems, without a friction quota. Interpret hesitation in context rather than classify phrases automatically. Explain small gaps inline; use the optional survey leg for a demonstrated broader gap, or a scoped experiment for material unknowns. Sources have no quota; pause for reading only when wanted or genuinely needed. Stop when the uncertainty is resolved. Persistence and continuation follow existing authorization (ADR-129).
-  - `probe` — design and run a **minimal experiment** for the fourth knowledge quadrant: a fork nobody can settle by argument (not the user, not the model, not the world's documented knowledge). Design chain borrowed *by protocol*, in sequence: locate the load-bearing assumption → `frame:first-principles` (strip it to the smallest testable claim) → `frame:orthogonal` (control the variables — its independence check *is*, verbatim, a controlled experiment's definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Pre-registers the verdict rule before the first trial runs; design + verdict-reading stay session-model, execution legs dispatchable to cheap-tier agents (ADR-067); its own live-LLM-cost signal instance for paid-LLM fan-out (ADR-062). Read-only toward product code; artifact retention follows the shared development-artifact policy. Lands `docs/findings/` (if present) or `blueprints/thoughts/…-probe.md`, tolerant-reader compliant (ADR-071); evidence feeds the pending decision back to elicit or the user. Summoned directly. *(built; ADR-075)*
-  - `dogfood` — use a *built* feature that feels unsmooth for real: drive the REAL interface (`agent-browser` / `curl` / CLI) against a list of user intents, report **friction** (works but clunky → a UX idea) + the **coverage gaps** that fall out (an intent with no path → a logic hole). Experience-first; logic-coverage is the byproduct. Output is a friction report (not a mandatory mockup); render is an optional redesign hand-off. A gap's layer (missing intent = direction · dead-end = incomplete) routes it, handed to `elicit`. Borrows `/verify`·`/run`'s drive-the-real-app method (asks "is it smooth + what's missing", not "is it correct"). *(built; ADR-033, supersedes ADR-020)*
-- **project** — keep the record honest, then decide what's next:
-  - `align` — verify carried board items against current code, decide now/next/later with the user, and update the lean `plan.md`. No item disappears silently. Full document cleanup is not a prerequisite; evidence and priority judgment remain on the session model (ADR-086/131).
-  - `tidy` — restore the separate entrance for cleaning stale thoughts, completed plans, and redundant mockups. Verify status from source and later decisions; preserve live reasons and rejected alternatives before consolidation or retirement. Keeps the tracked/untracked and three-condition mockup safeguards. Does not choose priorities or rewrite accepted intent to excuse implementation drift (ADR-037/131).
-- **session** — two explicit entrances, one handoff convention (ADR-127):
-  - `park` — save the stopping point, reasons, rejected approaches, and next action; preview before an authorized overwrite.
-  - `catchup` — recover current work from the note and fresh evidence; report freshness and fallback tier, retaining live work and unique rationale. Not a general repo tour or an implicit build request.
-  - Shared location/format owner: `plugins/shape/references/session-handoff.md`. `scripts/build-manifests.mjs` derives both bundled copies; never hand-edit the copies. Existing `blueprints/baton.md` and root `HANDOFF.md` remain compatible.
-- **`blueprints/` = convention**, not a skill — the artifact container the verbs read/write. `thoughts/` carries decisions permanently (dated, `Status:` line — in force / superseded by \<file\> / shipped); there is no separate `core/` tier to graduate into (ADR-112 retired it along with `/shape:position`). The specification has one owner below and a generated bundle in tidy; edit the owner and run `scripts/build-manifests.mjs`. Layout + `plan.md` shape + the on-demand human-render contract (rendered by `/shape:mockup`, never maintained as a standing file — ADR-063) live in [`skills/align/references/blueprints-spec.md`](plugins/shape/skills/align/references/blueprints-spec.md).
-- **`doctor` = deferred** — an orchestrator (elicit → align) only crystallizes once there's genuinely enough to orchestrate — a sequence whose separate entrances must first show recurring orchestration demand. nav's own `doctor` was **retired** (ADR-021) for being too thin a sequence (`audit → sync`, 2 steps) — a caution that an orchestrator with little to orchestrate is redundant ceremony, not a convenience. Don't build shape's until the sequence earns it.
-
-There is deliberately **no `init` skill** — scaffolding the `blueprints/` tree folds into `align`'s first run (reuse the established location; scaffold idempotently within authorization). A skill for `mkdir -p` would be structure-theatre.
-
-## The seams with `nav` (hard deps one-way; soft recommendations either way)
-
-shape is the forward-motion half; `nav` is the maintenance half. The dependency rule has two tiers:
-- **Hard deps (import / call / breaks-without-it) are one-way: shape → nav.** `nav` must run fully standalone — never *depend* on shape.
-- **Soft recommendations may go nav → shape.** `nav-plan` may use `shape-mockup` for an unresolved visual choice when available. The planning/build scope determines continuation; no numbered-stage menu is required (ADR-126).
-
-Record the seams; don't blur them:
-
-1. **`blueprints/` is the hand-off artifact to `/nav:plan` — both directions.** shape converges intent into blueprints; `nav:plan` grounds a thought/spec into a code-level implementation plan **and writes it back into `blueprints/plans/`** when the tree is present (soft `nav → shape` preference, ADR-017). `align` triages forward; `nav:plan` grounds one item down — adjacent verbs, not overlapping. The grounded plan stays co-located so the whole arc (decision → status → grounded-how) lives in one tree.
-2. **Shared evidence, distinct tasks.** `align` verifies board status and priorities; `tidy` maintains thoughts/plans/mockups; `/nav:sync` keeps source headers and reader documents accurate. Headers locate implementation evidence; inspect code and relevant tests before declaring work shipped. These verbs can reuse fresh findings, but none automatically runs the others.
-3. **The build loop is now manual, not a concentrated seam.** `build` used to *control* the loop (lives in shape, forward-motion) while *calling* nav's code-side protocols per item; it retired unexercised (ADR-110). The user now walks the same sequence by hand: `/nav:plan` (ground) → `/nav:do`/`/nav:refactor` (implement) → `/shape:align` (writes back). Direction stays one-way: shape → nav.
-
-## Conventions for skills inside this plugin
-
-> Repo-wide **authoring + maintenance** rules (naming, skills-root-relative paths, stack-neutral examples, frontmatter `description`, ADR-on-new-skill, the site-map gate, versioning) live in the repo-root [`CLAUDE.md`](CLAUDE.md). Shape-specific:
-
-- **★ Progressive disclosure in every produced artifact** (so an agent scans fast, not just the human): a `thoughts/` doc opens with `# <title> — <one-line role>` + a ≤3-line TL;DR/status blockquote (`head -12` yields the gist without reading the body), sections lead with their point, enumerations go in tables, key terms bolded; a `mockup` HTML opens with purpose · candidates · canonical Markdown record locator; the record owns mutable picks/status/dates. This is `nav`'s interface-first (rule ②) applied to shape's outputs. Every skill that emits a doc/artifact (`elicit`, `mockup`, `align`) enforces it.
-- **Scope-aware writes**: show the proposed changes and honor existing authority. A check-only request stays read-only. `tidy` additionally checks recoverability, preserves unique reasons, and resolves inbound links before destructive cleanup.
-- **Skills don't invoke each other**: they reference sibling protocols by name (e.g. align → "run `/shape:elicit`" for a decision-change it finds mid-pass), never re-implement or call them.
-- **Cost tier (ADR-058/059)**: shape has no whole-turn mechanical override today. `align` and `tidy` require judgment, as do the convergence verbs. Bounded execution can follow the repo's dispatch policy; the browser-verifier remains a mechanical executor when that slot is invoked.
-- **Live-LLM-cost signal (ADR-062)**: a different axis than the cost tier above — it flags the cost of the **feature being dogfooded/verified**, not the skill's own model/tokens, when that feature itself calls a live paid LLM (fan-out/multi-agent especially). Root definition + `nav:do`'s inheritance chain (`plan`, `refactor`) live in nav's [ADR-062](docs/adr/062-live-llm-cost-signal.md). shape's own instance (not inherited — drives the real thing its own way): `dogfood`'s live-LLM-cost caveat.
+Lead with a short conclusion, visible Relations and details only as needed. Mockup
+HTML points at one canonical decision card; variants share it. Read the user's UI
+preferences and project design canon before UI work. Use real data/relations and
+activate artifacts with a URL. No fake graph, completion percentage or selected variant.
 
 ## browser-verify — a shared per-project capability slot
 
@@ -103,7 +76,3 @@ Record the seams; don't blur them:
 - **Delegate the pass to the `browser-verifier` subagent — the cost tier (ADR-058).** The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/shape/agents/browser-verifier.md) (model: sonnet). The caller injects URL · screenshot destination · expectation (mockup path or stated behaviour) · any interaction steps / tool override, and receives back a compact verdict (`PASS | DRIFT | BLOCKED | MISSING-TOOL` + reason + paths) — the drive-and-capture loop and its **image tokens stay in the subagent's context**, never entering the main conversation (where every screenshot is re-paid on every later turn). Delegate whenever the pass is mechanical and actually invoked (mockup's slot is opt-in, ADR-124 — a handfeel/gesture verify or an explicit user request, not a routine render); drive inline only when the user is being walked through the page live. The close-contract binds inside the subagent — its last move is `close`. Ships with the plugin, so it works on any machine that installed shape.
 - **Verify economy — capture at decision points, not per step, and not by default.** A screenshot is *evidence* (a pick's record, friction-evidence), never a progress note: `dogfood` screenshots at friction/gap moments and records video **only on explicit request**; `mockup` doesn't invoke the slot at all for a routine render (ADR-124) — activation + a clickable link *is* the confirmation — and confirms at most once, never per iteration, on the rare occasion it's actually invoked (a board snapshot included). Screenshots live on disk (report/mockups tree) — referenced by path, not pasted into the chat.
 - **Known traps:** the slot's field manual ([`references/browser-verify-gotchas.md`](plugins/shape/references/browser-verify-gotchas.md)) is organized by scope — **universal** (session isolation · assert state-not-text · measure-before-toggle · selector-over-pixel clicks · poll-don't-snapshot · rule-out-mock-data · daemon-reset · teardown/`close` with its knowledge≠trigger cue-ladder + provenance-keyed reaper), **audio** (dual-backend mute · real-input for user-activation), **transform-canvas** (`position:fixed` → portal to body), and **React+Vite** (controlled-input native-setter, HMR console ghosts). Read before trusting a screenshot or console scan, and `close` the browser when the pass ends.
-
-## Status
-
-Eleven skills during the pilot: idea, status, wrap, plus eight legacy-compatible skills (`mockup`, `elicit`, `probe`, `dogfood`, `align`, `tidy`, `park`, `catchup`); `doctor` remains deferred. `migrate` retired by [ADR-136](docs/adr/136-retire-relay-and-shape-migrate.md) — the convention migration ledger survives as align's bundled `skills/align/references/migration-ledger.md`, applied by hand. ADR-141 renames reconcile to tidy without changing its gates. ADR-131 restored reconcile as an independent cleanup entrance while align retains board verification and user-owned priority decisions. `setup` — scaffold-to-verified-baseline — was retired as never invoked, its archetype-scaffolding payload not a door anyone reached for; see [ADR-107](docs/adr/107-retirement-round-four-verbs.md). Historical consolidation per [ADR-112](docs/adr/112-one-board-verb-two-tiers.md): `reconcile` merged into `align` as one verify → compact → triage pass (the record's honesty and the next call were always read off the same evidence, so one door replaces two), and `position` retired along with it — the `core/` canon tier, the ADR-041 freeze protocol, and the amendments ledger all go with it; a converged decision now lands directly in `thoughts/` with a `Status:` line, born durable, with no freeze/graduation step to wait on. Down from ten per [ADR-110](docs/adr/110-shape-slims-to-eight.md) before that: `survey` folded into `elicit` as its survey leg (formerly Phase 1 of the elicit-ecosystem plan — mid-grill terrain-mapping now lives inside elicit's own gatekeeper, offered when a volley stalls on missing terrain), `build` retired (zero fires ever; the manual `/nav:plan` → `/nav:do`/`/nav:refactor` → `/shape:align` path is the terminus now), `migrate` demoted to summon-only. `probe` designs and runs a minimal experiment for a fork nobody can settle by argument — summoned directly (ADR-075/132), Phase 2 of the same plan; kept as a door on user attestation (ADR-110). `elicit`'s behavioral spec comes from `docs/observations/2026-05-29-thought-mode-how-paul-converges.md`; the browser-verify slot lands in ADR-011; blueprints drops the standing `overview.html` for an on-demand `/shape:mockup` render in ADR-063. History: `docs/observations/2026-05-29-shape-plugin.md`.

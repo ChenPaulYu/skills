@@ -16,16 +16,13 @@
     "nav-refactor": "Execute a behavior-preserving structural refactor with risk-proportional verification. Use to extract, split, or reorganize code without changing observable contracts.",
     "nav-ship": "Land finished work: commit, push, merge into main (or open a PR when required), clean merged branches and worktrees, then run the project's documented tail. Making the change belongs to nav-do.",
     "nav-sync": "Check or batch-update README and docs, or refresh code-file headers against current implementation. Verify claims and missing reader workflows. Project-record cleanup belongs to shape-tidy.",
-    "shape-align": "Verify the plan.md board against current evidence and decide priorities with the user. Use for what is next; design-record cleanup belongs to shape-tidy.",
-    "shape-catchup": "Reconstruct where this project's work stopped and what comes next from its handoff and current evidence. Explicitly invoked; not a repo tour or permission to start implementing.",
     "shape-dogfood": "Use a built feature through real browser or CLI workflows; evaluate tool friction and missing intents against the user's goal. Undecided comparative claims belong to shape-probe.",
     "shape-elicit": "Clarify an undecided conceptual choice or specific root cause through grounded conversation. Ask only what changes the decision; explain small gaps inline. Not a visual comparison or permission to implement.",
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
-    "shape-park": "Save the session's goal, progress, reasons, and next action before stepping away. Explicitly invoked; one overwritten handoff, not the durable project board.",
     "shape-probe": "Design a minimal experiment or assess existing measurements for an undecided claim. Judge what data supports; preferences and built-feature friction belong to shape-mockup / shape-dogfood.",
     "shape-idea": "Capture or revisit a project idea, including something to consider later. Saving does not authorize implementation; clarifying a specific choice belongs to shape-elicit.",
-    "shape-status": "Recover current project work and next actions from task records and fresh code evidence. Reading status does not authorize implementation or priority changes.",
+    "shape-status": "Recover current project work and next actions, or set priorities when explicitly requested. Reading status never authorizes implementation; graph views are disposable snapshots.",
     "shape-wrap": "Save this round’s progress and next actions into the original project tasks before stopping. Explicitly invoked; no separate handoff or checkpoint.",
-    "shape-tidy": "Tidy stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; priorities to shape-align."
+    "shape-tidy": "Tidy stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; explicit priorities to shape-status."
   }
 }

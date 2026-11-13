@@ -76,7 +76,7 @@ report the blocked check and ask only for missing installation authority or scop
 ## Continuation
 
 Complete already-authorized follow-up work without a generic approval menu. Unresolved
-choices can use shape-elicit or shape-mockup; shape-align owns priorities, nav-do small
+choices can use shape-elicit or shape-mockup; shape-status owns priorities, nav-do small
 decided fixes, and nav-plan substantial builds. No automatic companion invocation.
 
 Explain the outcome in the user's language, leading with the point and adding technical

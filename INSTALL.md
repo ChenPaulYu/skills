@@ -27,7 +27,7 @@ then `node scripts/validate-codex-skills.mjs`.
 /plugin install frame@skills
 ```
 
-**Verify:** `/plugin` lists the three plugins; skills surface as `/nav:audit`, `/shape:align`, etc.
+**Verify:** `/plugin` lists the three plugins; skills surface as `/nav:audit`, `/shape:status`, etc.
 
 ## Antigravity CLI (`agy`)
 

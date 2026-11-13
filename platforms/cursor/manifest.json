@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "adapter_release": "1.0.4",
+  "adapter_release": "1.0.5",
   "release_policy": {
     "adapter_versioning": "independent-semver",
     "schema_versioning": "increment-on-required-contract-change",

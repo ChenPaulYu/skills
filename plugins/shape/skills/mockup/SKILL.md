@@ -51,7 +51,7 @@ choice or permission is still missing, ask that specific question; otherwise
 suggest a next step only when useful. Do not invent a follow-up task or invoke
 another skill automatically.
 
-For authorized work, shape-align handles durable priorities, nav-do small decided
+For authorized work, shape-status handles durable priorities, nav-do small decided
 changes, and nav-plan substantial builds. Unresolved product choices can use
 shape-elicit or shape-mockup when available.
 
