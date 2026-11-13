@@ -77,6 +77,11 @@ Search body text as well as titles before creating another record.
 | task | planned, active, paused, blocked, done, cancelled | Goal, progress, verification, blockers/reasons, next action |
 | plan | draft, active, completed, superseded | Implementation approach, critical files, checks |
 
+All record types additionally accept `unverified` during legacy import when current
+state has not been established. Preserve the source status claim separately and
+label its provenance; unverified is neither completion nor a new implementation
+commitment. Such an import is not promoted into active work merely by being saved.
+
 These are pilot conventions, not a requirement to normalize existing documents. An
 unknown status is something to report, not permission to discard the record. Keep a
 small piece of work together; split only when a part needs independent reuse, comparison,
