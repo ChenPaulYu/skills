@@ -291,6 +291,16 @@ class WorkspaceViewTest(unittest.TestCase):
             self.assertIn('id="search"', html)
         self.assertEqual(before, {str(p): p.read_bytes() for p in self.root.rglob("*") if p.is_file()})
 
+    def test_project_dates_preserve_precision_without_exporting_other_metadata(self):
+        self.write("workspace/demo/project.md", "---\nid: demo\ntitle: Demo\ncreated: 2026-11-11\nupdated: 2026-11-14T03:00:00Z\nprivate_hint: must-not-export\n---\nProject notes.\n")
+        with tempfile.TemporaryDirectory() as output_dir:
+            output = Path(output_dir) / "dates.html"
+            self.assertEqual(self.export(output)[0], 0)
+            data = json.loads(re.search(r'<script id="workspace-data" type="application/json">(.*?)</script>', output.read_text(), re.S)[1])
+            self.assertEqual(data["project"]["metadata"], {"created": "2026-11-11", "updated": "2026-11-14T03:00:00+00:00"})
+            self.assertEqual(data["projects"][0]["metadata"], data["project"]["metadata"])
+            self.assertNotIn("must-not-export", output.read_text())
+
     def test_record_text_cannot_break_out_of_data_script(self):
         attack = '</script><script>globalThis.sourceExecuted=true</script>'
         self.write("workspace/demo/records/task-a.md", self.record("task-a", "task", "paused", attack))

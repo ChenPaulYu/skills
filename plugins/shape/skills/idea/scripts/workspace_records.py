@@ -361,6 +361,13 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
     raise WorkspaceError(f"unknown command {command!r}")
 
 
+def _view_project(project):
+    """Export navigation and source dates without exposing other project metadata."""
+    return ({key: project[key] for key in ("id", "title", "priorities")}
+            | {"selector": project["_scope"],
+               "metadata": {key: project["metadata"].get(key) for key in ("created", "updated")}})
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", required=True, type=Path, help="Home repository root containing workspace/")
@@ -393,10 +400,10 @@ def main(argv: list[str] | None = None) -> int:
             included = projects if args.all_projects else [project]
             scopes = {p["_scope"] for p in included}
             selected = [_public_record(r) | {"project_selector": r["_project_dir"]} for r in records if r["_project_dir"] in scopes]
-            project_data = [{key: p[key] for key in ("id", "title", "priorities")} | {"selector": p["_scope"]} for p in included]
+            project_data = [_view_project(p) for p in included]
             graphs = {p["_scope"]: run(args.root, "graph", p["_scope"]) for p in included}
             reviews = {p["_scope"]: run(args.root, "review", p["_scope"]) for p in included}
-            payload = export_view(args.root, {key: project[key] for key in ("id", "title", "priorities")} | {"selector": project["_scope"]}, graph, selected, args.output,
+            payload = export_view(args.root, _view_project(project), graph, selected, args.output,
                                   projects=project_data, graphs=graphs, reviews=reviews)
         else:
             payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None))
