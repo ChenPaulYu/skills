@@ -28,6 +28,12 @@ pick/open choice, artifacts and retirement conditions; a task needs progress,
 verification/limits and next action; a plan needs approach and checks. An idea can
 remain just a spark and why it was saved. Do not require six documents for one item.
 
+A Mockup may carry an optional `preview_url` for its directly openable HTTP(S) view.
+The reader exposes that link separately from selecting the record; absent or unsupported
+URLs do not produce an open action. Keep the original artifact locator and preservation
+information in the card. A localhost preview is a disposable session locator, not a
+permanent media backup or a change to the Mockup’s lifecycle status.
+
 ## Honest dates
 
 - New records use `created` and `updated` in `YYYY-MM-DD`, based on the actual
