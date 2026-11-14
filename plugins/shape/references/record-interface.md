@@ -56,6 +56,21 @@ connections; an idea need not have a task, and a mockup need not have both a tho
 and task. No parents yet means `links: []` and a visible "No relations recorded yet."
 Do not create fake parents or infer implementation authority to fill this section.
 
+Before creating a record, search the selected project's existing titles, bodies and
+relations for the same question or work. Reuse the same thread; create a separate
+record only when it has independent value. On a substantive update, inspect the
+record's outgoing links and available backlinks for affected decisions or evidence.
+Add or correct only connections supported by that work; an independent idea may
+remain unlinked. Missing evidence is not a reason to invent a parent or task.
+
+Choose a relation that states what the connection means: a mockup explores an idea,
+a probe tests a claim, a task implements a decision, a plan implements a task, or a
+record is supported by evidence. Read the relation as a sentence from source to
+target and verify its direction. Use a generic reference only when that is the real
+connection, rather than substituting it for a known purpose. Put a short explanation
+in the record when the reason is not apparent from its opening and the linked item.
+Store each fact once; derive the reverse lookup instead of adding a mirror edge.
+
 The visible Relations table is a **derived projection**, marked as such. Resolve
 target titles and relative Markdown paths from their actual records. When writing
 or changing a record, refresh the projection from `links`; edit the canonical edges,
