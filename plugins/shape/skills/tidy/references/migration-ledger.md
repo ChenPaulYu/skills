@@ -23,7 +23,7 @@ convention change it implements, runnable against any tree, any time, once.
 | **v3** (current, ADR-112 · extended ADR-113) | `blueprints/thoughts/*.md` carry a `Status:` line; no `precedents/` folder |
 | v2 (legacy, ADR-105) | `blueprints/precedents/index.md` exists |
 | v1 (legacy, ADR-026) | `blueprints/decisions.md` exists, no `precedents/` |
-| pre-blueprints | neither; possibly no `blueprints/` at all — nothing to migrate, point at `/shape:status` to scaffold |
+| pre-blueprints | neither; possibly no `blueprints/` at all — nothing to migrate; explicitly requested workspace registration belongs to `/shape:setup`, while `/shape:status` stays read-only |
 
 More than one fingerprint present = a half-migrated tree; report it as the finding and offer to
 complete the relevant `M<n>` (M1 for a v1 remnant, M2 for a v2 remnant, M3 for a root `HANDOFF.md`

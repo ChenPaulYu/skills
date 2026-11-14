@@ -3,8 +3,9 @@
 Shape turns intent into findable decisions, evidence and task-owned work. Nav owns
 implementation, code health and landing. Read an individual SKILL.md to run that verb.
 
-## Eight entrances
+## Nine entrances
 
+- setup explicitly connects a code repository to its selected workspace; reuses identity and verifies the read path without environment scaffolding or legacy migration.
 - idea saves an independent spark without authorizing implementation.
 - elicit clarifies an undecided question; idea capture is not elicitation.
 - mockup converges a choice through an interactive artifact.
@@ -16,8 +17,9 @@ implementation, code health and landing. Read an individual SKILL.md to run that
 
 Align, park and catchup are retired by ADR-146. Their priority, reconstruction and
 reason-preservation capabilities survive in status/wrap; legacy data is not deleted.
-No init, setup, migrate, build or doctor entry is reintroduced. Historical rationale
-remains in ADRs, not live instructions that summon retired verbs.
+Setup returns with the workspace-only role in ADR-148; the old environment scaffolder
+remains retired. Init, migrate, build and doctor remain retired entrances. Historical
+rationale stays in ADRs, not live instructions that summon retired verbs.
 
 ## Record ownership
 

@@ -8,7 +8,7 @@ import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, st
 import { dirname, join } from "node:path";
 
 const RECORD_CONSUMERS = [
-  ...["idea", "elicit", "mockup", "probe", "dogfood", "status", "wrap", "tidy"]
+  ...["setup", "idea", "elicit", "mockup", "probe", "dogfood", "status", "wrap", "tidy"]
     .map(skill => `plugins/shape/skills/${skill}`),
   ...["plan", "do", "refactor", "compose", "ship"]
     .map(skill => `plugins/nav/skills/${skill}`),
@@ -35,7 +35,7 @@ export const SHARED_SKILL_REFERENCES = [
 }, {
   source: "plugins/shape/references/development-artifacts.md",
   destinations: [
-    ...["status", "wrap", "dogfood", "elicit", "mockup", "probe", "tidy"]
+    ...["setup", "status", "wrap", "dogfood", "elicit", "mockup", "probe", "tidy"]
       .map(skill => `plugins/shape/skills/${skill}/references/development-artifacts.md`),
     "plugins/nav/skills/plan/references/development-artifacts.md",
     "plugins/nav/skills/compose/references/development-artifacts.md",

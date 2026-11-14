@@ -21,6 +21,14 @@ Without a workspace mapping, read existing blueprints/plan/TODO/handoff document
 Git as fallback; report that fallback. Ask for a destination only when an authorized
 write needs one that cannot be inferred. Reading status does not scaffold a workspace.
 
+## First-time connection
+
+Explicit project-workspace registration belongs to `shape-setup`. It resolves the
+selected home and code repository, reuses existing identity, creates only a needed
+project.md and portable code-side pointer, then verifies with the shared reader.
+Ordinary status reads and record saves do not silently enroll or migrate projects.
+Legacy migration remains a separate, explicitly scoped operation.
+
 ## Small record convention
 
 For the common frontmatter, dates, visible Relations projection, and opening/detail

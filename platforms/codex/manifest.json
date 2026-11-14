@@ -1,6 +1,6 @@
 {
   "schema_version": "2",
-  "adapter_release": "1.0.13",
+  "adapter_release": "1.0.14",
   "release_policy": {
     "adapter_versioning": "independent-semver",
     "schema_versioning": "increment-on-required-contract-change",
@@ -176,7 +176,8 @@
         "> **Explicitly invoked only.**"
       ],
       "contract_consumers": [
-        ".agents/skills/shape-wrap/SKILL.md"
+        ".agents/skills/shape-wrap/SKILL.md",
+        ".agents/skills/shape-setup/SKILL.md"
       ]
     },
     {

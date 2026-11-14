@@ -133,6 +133,19 @@ class WorkspaceRecordsTest(unittest.TestCase):
         report = run(self.root, "check")
         self.assertIn("duplicate-project-id", {d["code"] for d in report["diagnostics"]})
 
+    def test_new_project_reads_without_placeholder_work_records(self):
+        self.write("workspace/new-project/project.md", "---\nid: new-project\ntitle: New project\ncreated: 2026-11-14\nupdated: 2026-11-14\nrepositories:\n  app: repos/app\npriorities: []\n---\nNew connection.\n")
+        before = {str(p): p.read_bytes() for p in (self.root / "workspace/new-project").rglob("*") if p.is_file()}
+        projects = run(self.root, "projects")
+        self.assertEqual(sum(p["id"] == "new-project" for p in projects["projects"]), 1)
+        for _ in range(2):
+            status = run(self.root, "status", "new-project")
+            self.assertEqual(status["tasks"], [])
+            self.assertEqual(status["active_records"], [])
+            self.assertEqual(status["project"]["repositories"], {"app": "repos/app"})
+            self.assertEqual(run(self.root, "check", "new-project")["diagnostics"], [])
+        self.assertEqual(before, {str(p): p.read_bytes() for p in (self.root / "workspace/new-project").rglob("*") if p.is_file()})
+
     def test_graph_tolerates_unhashable_record_id(self) -> None:
         self.write("workspace/demo/records/unhashable-id.md", "---\nid: []\ntype: idea\ntitle: Bad ID\nstatus: saved\n---\nBody\n")
         graph = run(self.root, "graph", "demo")

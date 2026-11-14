@@ -89,7 +89,7 @@
     },
     "shape": {
       "readme": {
-        "summary": "**Give work its form** — capture ideas, converge decisions, test claims, recover progress and save it into original task records. Status/wrap replace the old board/handoff entrances; graph exports derive from the same records (ADR-146).",
+        "summary": "**Give work its form** — connect projects, capture ideas, converge decisions, test claims, recover progress and save it into original tasks. Explicit workspace setup joins status/wrap; graph exports derive from the same records (ADR-148).",
         "skills": {
           "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
           "mockup": "converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record",
@@ -98,14 +98,15 @@
           "tidy": "tidy stale thoughts, completed plans, and redundant mockups; preserve useful reasons, verify completion and inbound links, and honor the requested cleanup scope (ADR-131)",
           "idea": "save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice",
           "status": "recover task-owned progress and fresh code evidence; explicitly requested priorities update the original project entry; export an interactive graph on demand",
-          "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint"
+          "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint",
+          "setup": "connect a code repository to its selected home workspace, reuse existing identity, add the minimal project/pointer and verify reading; environment scaffolding and legacy migration remain separate"
         }
       },
       "site": {
         "layer": "ui",
         "blurb": {
-          "en": "Eight entrances: capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; tolerant legacy reading remains.",
-          "zh": "八個入口：存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊文件仍可讀。"
+          "en": "Nine entrances: connect, capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; legacy migration remains explicit.",
+          "zh": "九個入口：接入專案、存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊資料移植另有明確範圍。"
         },
         "skills": {
           "mockup": [
@@ -141,6 +142,13 @@
             {
               "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-131).",
               "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-131）。"
+            }
+          ],
+          "setup": [
+            "",
+            {
+              "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-148.",
+              "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-148。"
             }
           ]
         },

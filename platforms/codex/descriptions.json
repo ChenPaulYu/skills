@@ -23,6 +23,7 @@
     "shape-idea": "Capture or revisit a project idea, including something to consider later. Saving does not authorize implementation; clarifying a specific choice belongs to shape-elicit.",
     "shape-status": "Recover current project work and next actions, or set priorities when explicitly requested. Reading status never authorizes implementation; graph views are disposable snapshots.",
     "shape-wrap": "Save this round’s progress and next actions into the original project tasks before stopping. Explicitly invoked; no separate handoff or checkpoint.",
-    "shape-tidy": "Tidy stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; explicit priorities to shape-status."
+    "shape-tidy": "Tidy stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; explicit priorities to shape-status.",
+    "shape-setup": "Connect a code repository to its selected home workspace, reuse existing registration and verify the read path. Explicit setup only; environment scaffolding and legacy migration are separate."
   }
 }

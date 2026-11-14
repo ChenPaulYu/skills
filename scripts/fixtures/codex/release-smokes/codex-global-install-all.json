@@ -14,11 +14,12 @@
     "nav-plan",
     "shape-status"
   ],
-  "expect_skill_count": 21,
+  "expect_skill_count": 22,
   "expect_skills": [
     "nav-plan",
     "shape-status",
-    "shape-wrap"
+    "shape-wrap",
+    "shape-setup"
   ],
   "expect_runtime_files": [
     ".codex/agents/executor.toml",

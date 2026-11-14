@@ -1,7 +1,7 @@
 {
   "name": "shape",
-  "version": "0.34.5",
-  "description": "Give intent its form through idea, elicit, mockup, probe, dogfood, status, wrap and tidy. Task-owned progress, portable workspace tools and on-demand relation graphs.",
+  "version": "0.35.0",
+  "description": "Connect projects and give intent its form through setup, idea, elicit, mockup, probe, dogfood, status, wrap and tidy. Task-owned workspace records and portable relation views.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

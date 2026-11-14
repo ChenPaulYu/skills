@@ -1,6 +1,6 @@
 # ADR 107 — Retirement round: `frame:graft`, `shape:setup`, `research:provenance`, `reflect:observe`
 
-**Status**: accepted
+**Status**: partially superseded — [ADR-148](docs/adr/148-workspace-setup.md) restores a workspace-only setup entry; the environment scaffolder and other retirements remain retired.
 **Date**: 2026-08-12
 **Source**: ratified by Paul 2026-08-12, off a transcript audit he commissioned ("my skills feel harder to use — track my conversation history and list the problems").
 **Precedent cited**: [ADR-021](docs/adr/021-retire-nav-doctor.md) (the razor: a verb survives only if it forces a structure the default would skip) · [ADR-079](docs/adr/079-retire-reflect-summarize.md) (its first application to a non-orchestrator).

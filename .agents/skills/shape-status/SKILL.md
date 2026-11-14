@@ -17,6 +17,9 @@ workspace launcher (commands in that reference) for JSON; an explicitly requeste
 private views on localhost and provide a URL; data is a snapshot, not a new state owner.
 Read its diagnostics. Export does not authorize editing the source records.
 
+For an unmapped project, report the missing connection. Explicit first-time registration
+belongs to shape-setup; reading status does not perform it.
+
 ## Reconstruct before deciding
 
 Check existing baton.md/HANDOFF.md as well as readable plan/TODO records when there is
