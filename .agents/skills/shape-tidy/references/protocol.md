@@ -11,6 +11,7 @@ material without inventing a tree. Read the board as context, not as an invitati
 Use `git status --short` and `git ls-files` to distinguish tracked and untracked material.
 
 Read each document for its claim, purpose, status, live rationale, and inbound references.
+Include code-absorbed and obsolete records even if they are not labelled closed.
 Dates and self-declared completion locate candidates; inspect implementation and verification
 evidence before concluding. For a multi-step plan, account for each required outcome and
 its verification, distinguishing shipped code from an unrun experiment. Legacy layouts remain
@@ -24,7 +25,7 @@ readable: report their dialect without migrating them.
 | A later accepted decision explicitly replaces this one | Add reciprocal supersession pointers in place |
 | Duplicate material with no unique live residue | Propose consolidation; name and verify the destination |
 | Code disagrees with intended behavior | Report intent/implementation discrepancy; do not ratify the code |
-| Insufficient or conflicting evidence | Mark uncertain; keep until resolved |
+| Insufficient or conflicting evidence | Use the skill body’s uncertainty gate: ask the user and keep pending the answer |
 
 ## Apply the bounded proposal
 
@@ -77,8 +78,8 @@ round, not three (ADR-039).
 local retention policies mean a folder can sit on disk without ever entering Git (field case: 65 untracked mockup folders in one repo).
 
 **Salvage respects the amend boundary:** it *relocates* a recorded pick/deferral, never authors
-one. If ② fails because the design judgment itself is unclear — stop, recommend
-`shape-elicit`.
+one. If ② fails because the design judgment itself is unclear, use the skill body’s
+uncertainty gate; ask the user directly rather than guessing the pick.
 
 ## Handoffs and legacy views
 

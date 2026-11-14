@@ -5,8 +5,9 @@ description: "Tidy project design records against current reality: identify comp
 
 # Tidy — keep project records useful
 
-Find what is still live, what has shipped, and what can safely be consolidated. The
-deliverable is an evidence-backed cleanup or proposal, without reprioritizing the project.
+Records absorbed by code or made obsolete are tidy candidates regardless of their
+status label. Check what remains live and what can safely be consolidated; preserve
+useful decisions and unfinished branches without reprioritizing the project.
 
 When record cards exist, read `references/record-interface.md` and follow their
 canonical typed relations to decisions/tasks/artifacts before assessing retirement.
@@ -43,6 +44,11 @@ for retention policy, Git checks, and preservation of local evidence.
 
 ## Gates
 
+- **Uncertainty goes to the user.** First inspect code, Git and later decisions. If
+  absorption, obsolescence, intent, unique value or recoverability remains uncertain,
+  ask the user a specific question with the evidence and the unresolved choice.
+  Keep that item while awaiting the answer; continue other decided cleanup. Delegated
+  discretion does not turn missing evidence into permission to guess or delete.
 - **Fact versus decision.** Correct an outdated implementation fact; retain planned behavior
   as planned. If code violates an accepted decision, report the discrepancy instead of
   rewriting the decision to bless the code. A change of intent needs the user's decision.
