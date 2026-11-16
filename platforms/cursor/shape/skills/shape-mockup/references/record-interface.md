@@ -125,6 +125,18 @@ a superseded decision names its successor and why it changed. Preserve unique
 reasons before replacing a record, without manufacturing a daily checkpoint chain.
 Uncommitted/ignored artifacts still need explicit preservation; Git is not their backup.
 
+Keep a thought focused on its current decision/question, operative reasons and alternatives
+that still explain the choice. An artifact-by-artifact retirement catalog is cleanup history,
+not a reason to enlarge a live thought. During consolidation, keep operative principles in
+their decision owner and deferred work in an existing appropriate idea/task; do not turn a
+deferral into a rejection or an implementation commitment. Completed cleanup details may
+leave the active record after exact committed recovery is verified. Put any necessary
+non-Git recovery instructions in the existing preservation owner, not another mandatory
+archive or a duplicated retirement list. Preserve a useful rejected alternative when it
+still informs the current choice, without retaining every retired variant's chronology.
+Document-count preferences guide consolidation, but do not justify mixing unrelated
+decisions, work and cleanup logs into one record.
+
 `project.md` is the sole project entry/index. It owns purpose, constraints, repository
 mappings, navigation to existing work folders, and user-chosen priorities.
 It can use the same compact metadata/summary discipline, without inventing a single

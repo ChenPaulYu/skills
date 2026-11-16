@@ -5,7 +5,8 @@ the inventory and retirement mechanics, extracted from align (ADR-131).
 
 ## Inventory and evidence
 
-Locate the existing blueprints tree (often `docs/blueprints/`) or readable equivalent.
+Locate the connected workspace first; without one, locate the existing blueprints tree
+(often `docs/blueprints/`) or readable equivalent.
 Inventory only the requested design notes, implementation plans, and mockups; report absent
 material without inventing a tree. Read the board as context, not as an invitation to reorder it.
 Use `git status --short` and `git ls-files` to distinguish tracked and untracked material.
@@ -39,6 +40,15 @@ within authority. Do not chain `mv` and `rm`; an unsuccessful move must never pe
 Prefer a status edit when a shipped thought still carries a decision or rejected alternatives.
 Supersession stays in place; there is no graduation tier or mandatory move.
 
+Apply the record-interface's history rule to retirement catalogs inside active records.
+For each entry, distinguish a still-operative decision/rejection reason, deferred work,
+necessary recovery instructions, and a completed cleanup event. Confirm the existing
+owner or verified Git snapshot for the substance before removing the entry within scope.
+Keep a short current reason when it prevents repeating a rejected choice; omit the
+per-artifact cleanup chronology from the live thought. Reuse an existing preservation
+record when recovery details need a maintained home. This does not require another
+ledger, a new record for every old entry, or a wholesale migration during ordinary tidy.
+
 ## The mockups tier — retire on ship, with a forwarding address (ADR-037)
 
 `mockup`'s own rule — detail-level artifacts **retire on ship**, structural locks carry a
@@ -55,9 +65,10 @@ verdict:
 1. **Decision settled/shipped?** Same evidence as thoughts: implementation and relevant tests, located through headers/search. ("No
    one cites it" alone never triggers prune — an uncited mockup for an in-flight decision is
    kept.)
-2. **Residue absorbed?** The pick **and any deferred branch** must be *verifiably* recorded in
-   the owning thought — verified by reading, not assumed (mockup's step 5 should have written it;
-   confirm it did). This is a judgment check, not a grep — present per collect-don't-conclude,
+2. **Residue absorbed?** The pick and its operative reasons must be *verifiably* recorded in
+   the decision owner; any deferred branch must remain findable in its appropriate existing
+   idea/task or retained mockup. Do not copy every deferred item or retirement event into
+   the thought. Verify by reading, not assumption. This is a judgment check, not a grep — present per collect-don't-conclude,
    mark `uncertain` rather than guess.
 3. **Inbound links resolved?** Search the repository for citations into the folder — this one *is*
    mechanical; list the hits as evidence.

@@ -21,7 +21,7 @@ for retention policy, Git checks, and preservation of local evidence.
 
 ## Workflow
 
-1. **Bound the inventory.** Locate the existing blueprints tree or readable equivalent;
+1. **Bound the inventory.** Locate the connected workspace or, without one, the existing blueprints tree or readable equivalent;
    include the requested thoughts, implementation plans, and mockups. Report standard,
    nonstandard, or absent input. No tree or equivalent material means nothing to tidy;
    report that without scaffolding. Read `references/protocol.md` for the inventory and
@@ -56,6 +56,9 @@ for retention policy, Git checks, and preservation of local evidence.
 - **Keep expensive-to-recover knowledge.** Prefer a status correction or consolidation to
   deletion. Before removing a record, preserve its live reasons and rejected alternatives
   in a named durable destination, then verify the transfer; Git history alone is not an index.
+- **Consolidate by purpose.** Apply `references/record-interface.md` to separate live
+  decisions, deferred work and completed cleanup history. Verify each disposition before
+  pruning a retirement list; a file-count target never substitutes for coherent ownership.
 - **Mockup retirement has three ordered conditions:** the decision is settled/shipped, its
   useful residue is verified in the owning document, and inbound links are resolved. A
   parked decision keeps its artifact. Never delete merely because an artifact is old.
