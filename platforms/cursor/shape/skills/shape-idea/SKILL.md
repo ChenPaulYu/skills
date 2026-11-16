@@ -12,8 +12,8 @@ can be worth saving before anyone knows the questions it raises.
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
-`references/record-interface.md` for the shared frontmatter, honest dates, opening
-conclusion and visible Relations. Keep existing records readable; do not invent parents.
+`references/record-interface.md` and apply its pre-write ownership check; it also
+defines frontmatter, dates, opening conclusions and visible Relations. Keep existing records readable; do not invent parents.
 
 Search existing project records for the same topic and reasons. Extend an existing
 idea when it is the same thread; create a new one when it is independently useful.

@@ -19,6 +19,12 @@ removed within authorized tidy after verifying exact committed recovery. Necessa
 non-Git restoration instructions use an existing preservation owner. Neither a new
 mandatory archive nor one replacement record per retired item is required.
 
+The ownership check runs before initial drafting and every substantive update, not
+only during tidy. A reusable settled conclusion is saved in its thought under existing
+authority and linked from the exploration; it is not buried in an idea/mockup log.
+A conclusion creates no automatic task or extra document. Recheck section purpose before
+finishing the write, without treating this check as authority to remove historical bytes.
+
 Tidy's body gates purpose-based consolidation; its protocol verifies each disposition
 and stops requiring all deferred branches to be copied into the owning thought. A
 heading, old date or document-count target does not authorize deletion. Uncertain live

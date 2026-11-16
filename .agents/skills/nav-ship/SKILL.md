@@ -12,8 +12,8 @@ same in every repo; the tail (version bump, rebuild, alias, deploy) belongs to t
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
-`references/record-interface.md` for metadata, dates, opening conclusions and
-Relations. This does not change the format of product docs or force legacy-board migration.
+`references/record-interface.md` and apply its pre-write ownership check; it also
+defines metadata, dates, opening conclusions and Relations. This does not change the format of product docs or force legacy-board migration.
 
 1. **Read the state before touching anything.** `git status`, current branch, `git worktree
    list`, remotes, the main branch name, and `git fetch`. Read the project's ship rules: a

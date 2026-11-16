@@ -10,8 +10,8 @@ smallest discriminating experiment, run within scope, and read the verdict hones
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
-`references/record-interface.md` for the shared frontmatter, honest dates, opening
-conclusion and visible Relations. Keep existing records readable; do not invent parents.
+`references/record-interface.md` and apply its pre-write ownership check; it also
+defines frontmatter, dates, opening conclusions and visible Relations. Keep existing records readable; do not invent parents.
 
 When measurements already exist, assess their method, criteria, and limits first. Reuse
 the evidence that answers the decision; design a follow-up only for what remains unknown,

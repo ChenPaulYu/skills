@@ -6,6 +6,26 @@ This is a writing convention, not permission to retrofit a legacy project.
 When an explicit project workspace is selected, read `references/workspace-records.md`
 for its typed locations and colocated artifacts; otherwise use the existing project convention.
 
+## Before drafting or updating: choose the owner
+
+Apply this check on the first write and every substantive update, not only during tidy.
+Decide what the record must help the next reader understand or do, then reuse the owner
+for that purpose. A reusable settled conclusion belongs in its decision thought; link
+it from the idea/mockup rather than burying it in an accumulated exploration log. Save
+within the user's existing scope; a conclusion creates no automatic task or document.
+
+Keep a thought focused on its current decision/question, operative reasons and alternatives
+that still explain the choice. An artifact-by-artifact retirement catalog is cleanup history,
+not a reason to enlarge a live thought. Keep operative principles in their decision owner
+and deferred work in an appropriate existing idea/task or retained comparison; do not turn
+a deferral into a rejection or an implementation commitment.
+
+Document-count preferences guide consolidation, but do not justify mixing unrelated
+decisions, work and cleanup logs into one record. Before finishing the write, check that
+each section serves this record's purpose; route unrelated substance to its actual owner
+and link it rather than adding another catch-all section. Historical-content removal
+still follows the preservation checks below; this writing check is not deletion authority.
+
 ## One glance, then deeper
 
 1. **Frontmatter:** stable `id`, `type`, `title`, `status`, `created`, `updated`,
@@ -123,17 +143,11 @@ a superseded decision names its successor and why it changed. Preserve unique
 reasons before replacing a record, without manufacturing a daily checkpoint chain.
 Uncommitted/ignored artifacts still need explicit preservation; Git is not their backup.
 
-Keep a thought focused on its current decision/question, operative reasons and alternatives
-that still explain the choice. An artifact-by-artifact retirement catalog is cleanup history,
-not a reason to enlarge a live thought. During consolidation, keep operative principles in
-their decision owner and deferred work in an existing appropriate idea/task; do not turn a
-deferral into a rejection or an implementation commitment. Completed cleanup details may
+Completed cleanup details may
 leave the active record after exact committed recovery is verified. Put any necessary
 non-Git recovery instructions in the existing preservation owner, not another mandatory
 archive or a duplicated retirement list. Preserve a useful rejected alternative when it
 still informs the current choice, without retaining every retired variant's chronology.
-Document-count preferences guide consolidation, but do not justify mixing unrelated
-decisions, work and cleanup logs into one record.
 
 `project.md` is the sole project entry/index. It owns purpose, constraints, repository
 mappings, navigation to existing work folders, and user-chosen priorities.

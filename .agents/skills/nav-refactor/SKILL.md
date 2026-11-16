@@ -13,8 +13,8 @@ The result should hide a real design decision behind a useful interface, not jus
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
-`references/record-interface.md` for metadata, dates, opening conclusions and
-Relations. This does not change the format of product docs or force legacy-board migration.
+`references/record-interface.md` and apply its pre-write ownership check; it also
+defines metadata, dates, opening conclusions and Relations. This does not change the format of product docs or force legacy-board migration.
 
 ## Decide the boundary
 

@@ -11,8 +11,8 @@ Use the user's context and relevant evidence; keep the choice theirs.
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
-`references/record-interface.md` for the shared frontmatter, honest dates, opening
-conclusion and visible Relations. Keep existing records readable; do not invent parents.
+`references/record-interface.md` and apply its pre-write ownership check; it also
+defines frontmatter, dates, opening conclusions and visible Relations. Keep existing records readable; do not invent parents.
 
 Before persisting or retiring process artifacts, read `references/development-artifacts.md`
 for retention policy, Git checks, and preservation of local evidence.
