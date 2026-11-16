@@ -27,7 +27,8 @@ rationale stays in ADRs, not live instructions that summon retired verbs.
 `plugins/shape/references/record-interface.md` owns metadata, dates, Relations and
 progressive disclosure. The shared-resource builder bundles them into consumers.
 Project.md owns context/repository mappings/curated priorities; original tasks own
-progress, verification and next actions. State and graphs derive from records;
+goals, completion criteria, implementation plans, progress, verification and next actions.
+New work does not split task and plan; legacy plans remain readable (ADR-152). State and graphs derive from records;
 Git owns committed revisions. No duplicate board, index.md, state.md or handoff.
 
 Shape status scripts own the reader, explicit graph export, renderer and template.

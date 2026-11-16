@@ -6,7 +6,7 @@ description: "Turn a feature intent into a codebase-grounded implementation plan
 
 # Plan
 
-Turn intent into an executable plan grounded in actual code: what changes, what stays
+Turn intent into an executable plan inside the owning task: what changes, what stays
 compatible, which existing parts to reuse, and how completion will be demonstrated.
 
 Before creating or updating project records or working artifacts, read
@@ -23,13 +23,18 @@ defines metadata, dates, opening conclusions and Relations. This does not change
    when a missing answer would change scope, externally visible behavior, compatibility, or a
    material trade-off. Routine implementation choices are yours to make and explain. Record
    deferred questions with the step they block; continue independent work.
-3. **Produce a reviewable plan.** If the request or repository policy forbids file changes,
-   present it in chat until writing is authorized. Otherwise use `plans/` in an explicitly mapped project workspace (read
-   `references/workspace-records.md`); without one, follow the repository convention:
+3. **Write in the owning task.** If the request or repository policy forbids file changes,
+   present the plan in chat. In a connected workspace, find the existing work item,
+   or create `tasks/<topic>.md` under the task-creation rules in
+   `references/workspace-records.md`. Put the grounded approach in its Implementation
+   plan section alongside completion criteria, progress and next action. Reuse live
+   legacy plans in place; do not silently migrate them or create a parallel task.
+   Without a connected workspace, follow the project's existing planning convention:
    prefer `blueprints/plans/`, an established plans directory, or `docs/plans/`.
    Before writing, read `references/development-artifacts.md` for project retention policy
-   and Git checks. State the selected path; a conventional location needs no separate confirmation. Include
-   Context, Approach, Critical files, and Verification. Read `references/plan-protocol.md` for
+   and Git checks. State the owning path; a conventional location needs no separate confirmation.
+   Include grounded context, approach, critical files and verification in the implementation
+   section, preserving existing progress. Read `references/plan-protocol.md` for
    the grounding checklist and template when drafting.
 4. **Continue according to the user's scope.** A plan-only or do-not-implement request ends with
    the plan and unresolved decisions. When implementation is already authorized, show the plan's
@@ -54,6 +59,6 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 
 ## Completion
 
-Report the plan's location, approach, and decisions still needed. If part of an authorized
+Report the owning work item, its implementation plan, and decisions still needed. If part of an authorized
 build, complete the build and verification before the final handoff. Preserve the user's
 limits on commits, publication, and external actions.

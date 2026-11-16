@@ -1,6 +1,7 @@
 # Work-record interface — metadata, conclusion, relations, detail
 
-Use the same reading interface for idea, thought, mockup, probe, task, and plan.
+Use the same reading interface for idea, thought, mockup, probe and task, plus
+legacy plan records when reading or updating them.
 Keep the record's established location, type/status vocabulary, and language.
 This is a writing convention, not permission to retrofit a legacy project.
 When an explicit project workspace is selected, read `references/workspace-records.md`
@@ -45,7 +46,8 @@ owns comparison-specific candidates, open choices and artifact locators.
 The title may be rendered from frontmatter. A short conclusion is prose owned by
 the record, not a second project-wide progress board. A mockup needs its question,
 pick/open choice, artifacts and retirement conditions; a task needs progress,
-verification/limits and next action; a plan needs approach and checks. An idea can
+verification/limits and next action; its optional implementation plan contains
+approach and checks. Legacy plans keep their established interface. An idea can
 remain just a spark and why it was saved. Do not require six documents for one item.
 
 A Mockup may carry an optional `preview_url` for its directly openable HTTP(S) view.
@@ -84,7 +86,7 @@ Add or correct only connections supported by that work; an independent idea may
 remain unlinked. Missing evidence is not a reason to invent a parent or task.
 
 Choose a relation that states what the connection means: a mockup explores an idea,
-a probe tests a claim, a task implements a decision, a plan implements a task, or a
+a probe tests a claim, a task implements a decision, a legacy plan implements a task, or a
 record is supported by evidence. Read the relation as a sentence from source to
 target and verify its direction. Use a generic reference only when that is the real
 connection, rather than substituting it for a known purpose. Put a short explanation
@@ -101,15 +103,15 @@ use frontmatter as the edge source; a read-only request does not silently repair
 
 ```markdown
 ---
-id: example-plan
-type: plan
+id: example-task
+type: task
 title: Implement the selected approach
-status: active
+status: planned
 created: 2026-11-13
 updated: 2026-11-13
 links:
   - relation: implements
-    target: example-task
+    target: example-thought
 ---
 # Implement the selected approach
 
@@ -120,11 +122,17 @@ links:
 <!-- relations: derived from frontmatter.links -->
 | Relation | Record |
 |---|---|
-| implements | `example-task` — resolve its actual title/path |
+| implements | `example-thought` — resolve its actual title/path |
 <!-- /relations -->
 
-## Approach
-Implementation details and checks follow the opening interface.
+## Goal and completion criteria
+State the intended outcome and how completion will be checked.
+
+## Implementation plan
+Include grounded approach and checks only when planning is needed.
+
+## Progress and next action
+Keep current evidence, limits and the next executable step here.
 ```
 
 Resolve each real target into a clickable relative Markdown link in the projection;

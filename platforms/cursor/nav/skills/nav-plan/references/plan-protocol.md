@@ -18,18 +18,28 @@ Resolve uncertainty from the repository and conversation first. Ask about missin
 trade-off the user must own; do not invent questions to fill a quota. Separate blocked steps
 from independent work. A plan depending on an unanswered material question must say so.
 
-## Plan template
+## Task with an implementation plan
 
-Follow the existing repository language and structure; omit empty optional sections.
+In a connected workspace, extend the existing task instead of replacing its goal,
+progress or verification with a fresh plan. New tasks follow the shared metadata
+and Relations convention. Keep completed evidence separate from proposed checks;
+planning-only work remains `planned`, without implied execution approval. Use this
+body shape when it fits, omitting empty sections. For a live legacy plan or an
+unconnected repository, retain its established record shape and location.
 
 ```markdown
-# <Feature> — plan
+# <Feature>
 
-> Generated: <date> · Source: <request/spec> · Grounding: <fresh/reused>
+> Goal: <outcome> · Scope: <planning-only or already-authorized execution>
+> Next: <concrete next action>
 
 ## Context
 
 <Current behavior, code evidence, desired outcome, compatibility boundaries.>
+
+## Completion criteria
+
+<Observable outcome, including required verification.>
 
 ## Resolved questions
 
@@ -39,7 +49,7 @@ Follow the existing repository language and structure; omit empty optional secti
 
 <Only unresolved choices; state which step each blocks.>
 
-## Approach
+## Implementation plan
 
 <Dependency-ordered, independently verifiable changes. Name existing pieces to reuse,
 new owners and their adopting consumers, and required generated artifacts.>
@@ -50,10 +60,14 @@ new owners and their adopting consumers, and required generated artifacts.>
 |---|---|
 | <path> | <why this file is involved> |
 
-## Verification
+## Verification plan
 
 <Checks for changed behavior and preserved contracts; focused checks during implementation,
 required final gates, and interface flows not covered by tests. Identify missing evidence.>
+
+## Progress and next action
+
+<Actual changes, completed verification, limits/blockers and the next executable step.>
 
 ## Out of scope
 

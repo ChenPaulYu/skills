@@ -7,7 +7,7 @@ the inventory and retirement mechanics, extracted from align (ADR-131).
 
 Locate the connected workspace first; without one, locate the existing blueprints tree
 (often `docs/blueprints/`) or readable equivalent.
-Inventory only the requested design notes, implementation plans, and mockups; report absent
+Inventory only the requested tasks (including implementation sections), legacy plans, design notes, and mockups; report absent
 material without inventing a tree. Read the board as context, not as an invitation to reorder it.
 Use `git status --short` and `git ls-files` to distinguish tracked and untracked material.
 

@@ -3347,11 +3347,11 @@ const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.26.9",
+    "version": "0.26.10",
     "skillCount": 7,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.9; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.9；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.10; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.10；7 個 skills）"
     },
     "files": [
       [
@@ -3382,8 +3382,8 @@ const DOMAINS = {
         "/nav:plan",
         "",
         {
-          "en": "★ Ground a spec against the code, clarify consequential ambiguity, then either write a plan artifact when planning is the requested outcome or carry already-granted implementation authority into the build path. Reuses /nav:audit Mode 2 output if it ran in this session. Writes plan artifacts into blueprints/plans/ when a blueprints/ tree is present (soft nav→shape; else docs/plans/) — ADR-017/126. Plan retention follows the bundled development-artifact policy (ADR-134).",
-          "zh": "★ 以 codebase 為基底處理 spec,釐清會影響結果的不明處;這輪若目標是規劃就寫 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 /nav:audit Mode 2 會 reuse。有 blueprints/ 樹時 plan artifact 寫進 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。 計畫保存方式遵循打包的開發產物政策（ADR-134）。"
+          "en": "Ground a feature against actual code and write the implementation plan inside its owning workspace task. Preserve live legacy plans and unconnected project conventions; planning alone does not authorize execution (ADR-152).",
+          "zh": "對照實際程式，把實作計畫寫進同一份Task；保留舊Plan與未接入專案的既有慣例。只要求規劃不代表授權開工（ADR-152）。"
         }
       ],
       [
@@ -3415,11 +3415,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.35.4",
+    "version": "0.35.5",
     "skillCount": 9,
     "blurb": {
-      "en": "Nine entrances: connect, capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; legacy migration remains explicit. (v0.35.4; 9 skills)",
-      "zh": "九個入口：接入專案、存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊資料移植另有明確範圍。（v0.35.4；9 個 skills）"
+      "en": "Nine entrances: connect, capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; legacy migration remains explicit. (v0.35.5; 9 skills)",
+      "zh": "九個入口：接入專案、存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊資料移植另有明確範圍。（v0.35.5；9 個 skills）"
     },
     "files": [
       [
@@ -3571,8 +3571,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.9; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.9；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.10; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.10；7 個 skills）"
     }
   },
   {
@@ -3588,8 +3588,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.35.4; 9 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.35.4；9 個 skills）"
+      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.35.5; 9 skills)",
+      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.35.5；9 個 skills）"
     }
   },
   {

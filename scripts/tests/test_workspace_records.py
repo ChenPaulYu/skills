@@ -55,6 +55,24 @@ class WorkspaceRecordsTest(unittest.TestCase):
     def git(self, *args: str) -> None:
         subprocess.run(["git", "-C", str(self.repo), *args], check=True, capture_output=True, text=True)
 
+    def test_task_embeds_planning_without_replacing_legacy_plan(self) -> None:
+        body = ("## Goal and completion criteria\nDeliver the chosen behavior.\n"
+                "## Implementation plan\nReuse the existing entry point.\n"
+                "## Verification plan\nExercise the user workflow.\n"
+                "## Progress and next action\nPlanning only; execution not started.\n")
+        task = self.write("workspace/demo/tasks/new-work.md", self.record("new-work", "task", "planned", body))
+        legacy = self.root / "workspace/demo/records/plan.md"
+        before = {path: path.read_bytes() for path in (task, legacy)}
+        result = run(self.root, "status", "demo")
+        records = {identifier: run(self.root, "show", "demo", identifier)["record"]
+                   for identifier in ("new-work", "plan-a")}
+        self.assertIn("## Implementation plan", records["new-work"]["body"])
+        self.assertIn("Planning only; execution not started", records["new-work"]["body"])
+        self.assertEqual(records["new-work"]["status"], "planned")
+        self.assertEqual(records["plan-a"]["type"], "plan")
+        self.assertIn("plan-a", {record["id"] for record in result["active_records"]})
+        self.assertEqual(before, {path: path.read_bytes() for path in (task, legacy)})
+
     def test_projects_status_and_git_are_read_only_and_include_active_bodies(self) -> None:
         before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
         result = run(self.root, "status", "demo")

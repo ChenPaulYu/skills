@@ -23,13 +23,13 @@ for retention policy, Git checks, and preservation of local evidence.
 ## Workflow
 
 1. **Bound the inventory.** Locate the connected workspace or, without one, the existing blueprints tree or readable equivalent;
-   include the requested thoughts, implementation plans, and mockups. Report standard,
+   include the requested tasks, their implementation plans, legacy plans, thoughts, and mockups. Report standard,
    nonstandard, or absent input. No tree or equivalent material means nothing to tidy;
    report that without scaffolding. Read `references/protocol.md` for the inventory and
    cleanup sequence. Preserve the existing record format; status edits need no new template.
 2. **Check reality, not dates alone.** Inspect code, relevant tests, Git, and later decisions.
    Headers and search hits locate evidence but do not establish completion. Reuse fresh
-   same-session evidence only after checking relevant working-tree changes. A plan is
+   same-session evidence only after checking relevant working-tree changes. Work is
    shipped only when its required behavior and verification are accounted for; otherwise
    report partial or uncertain status.
 3. **Classify before editing.** Distinguish current, partially shipped, shipped, superseded,
@@ -57,6 +57,11 @@ for retention policy, Git checks, and preservation of local evidence.
 - **Keep expensive-to-recover knowledge.** Prefer a status correction or consolidation to
   deletion. Before removing a record, preserve its live reasons and rejected alternatives
   in a named durable destination, then verify the transfer; Git history alone is not an index.
+- **Task/plan consolidation is scoped cleanup.** A new default is not evidence that
+  an old plan is stale. When consolidation is requested, reuse the task as the owner
+  (or convert a standalone plan), preserve unique live content and identity, repair
+  inbound references and verify recovery before retiring the old record. Otherwise
+  keep the legacy plan readable in place.
 - **Consolidate by purpose.** Apply `references/record-interface.md` to separate live
   decisions, deferred work and completed cleanup history. Verify each disposition before
   pruning a retirement list; a file-count target never substitutes for coherent ownership.

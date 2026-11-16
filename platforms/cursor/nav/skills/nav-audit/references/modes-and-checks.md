@@ -52,7 +52,7 @@ Triggered when the user gives a path to a spec / plan / feature description and 
 
 The mechanical + heuristic checks below are identical in both modes — only the SCOPE (which files) and the REPORT FRAMING (general health vs gap-vs-target) differ.
 
-> **Want the full workflow?** Mode 2 stops at the gap-analysis report. If the user wants to also clarify the ambiguities the spec leaves open AND produce a durable plan artifact, redirect to `nav-plan` — it inlines Mode 2's Stage 1 and then continues with dialog + plan-file output. (`nav-plan` will reuse Mode 2's output if you just ran it in this session — see ADR-006.)
+> **Want the full workflow?** Mode 2 stops at the gap-analysis report. If the user wants to also clarify the ambiguities the spec leaves open AND produce a durable plan artifact, redirect to `nav-plan` — it inlines Mode 2's Stage 1 and then continues with dialog + an implementation plan in the owning work item. (`nav-plan` will reuse Mode 2's output if you just ran it in this session — see ADR-006.)
 
 ### Mode 3: Deep sweep (depth strategy — fan-out instead of single-pass)
 

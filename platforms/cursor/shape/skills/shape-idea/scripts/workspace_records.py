@@ -2,7 +2,8 @@
 """Read-only JSON CLI for Markdown project workspaces and their linked records.
 
 Reads ``workspace/<project>/project.md`` and typed work folders using YAML
-frontmatter; legacy flat ``records/*.md`` remains readable. Every root is explicit.
+frontmatter; task bodies include implementation planning. Legacy typed plans and
+flat ``records/*.md`` remain readable without normalization. Every root is explicit.
 Source records and Git are read-only; explicit view export writes a new HTML outside the home repository.
 """
 

@@ -8,7 +8,8 @@ priorities; its current state is read from those tasks, not copied into a second
 
 Use an explicit workspace/project path from the user or repository instructions. A
 home repo holds `workspace/<project>/project.md` as the sole entry and work in typed
-folders: `ideas/`, `thoughts/`, `tasks/`, `plans/`, `mockups/`, and `probes/`.
+folders: `ideas/`, `thoughts/`, `tasks/`, `mockups/`, and `probes/`. Existing
+`plans/` and flat plan records remain readable legacy inputs.
 Do not assume the code checkout contains its records. Resolve code repositories from
 the project's explicit mappings; report missing/unavailable mappings, never substitute
 the home repo's HEAD. Machine-local paths are locators, not portable identity.
@@ -36,6 +37,33 @@ Without a workspace mapping, read existing blueprints/plan/TODO/handoff document
 Git as fallback; report that fallback. Ask for a destination only when an authorized
 write needs one that cannot be inferred. Reading status does not scaffold a workspace.
 
+## Task-owned planning
+
+For new workspace work, one task owns the goal, scope, completion criteria,
+implementation plan when needed, progress, verification and next action. Planning
+is an optional section, not a separate record type to create alongside the task.
+Keep short work short; a one-off fix does not require a tracking document merely
+because this layout exists.
+
+Create or reuse a task when the user asks to record committed work, plan it, or
+implement work that needs durable tracking. Search existing tasks and linked
+ideas/thoughts/mockups before creating another owner. Recording a task is not
+permission to start it; a planning-only request authorizes planning, not building.
+Preserve that boundary and use `planned` until the authorized execution begins.
+A saved idea, positive mockup reaction or read-only status request alone creates
+no task. Recording-only requests need the goal, scope, completion criteria and
+next action, not speculative implementation detail.
+
+`nav-plan` grounds and writes the implementation section in that task; execution
+and `shape-wrap` update the same owner. Link the actual decision and evidence,
+without requiring every record type or a second plan file.
+
+Existing plans keep their IDs, paths, types, statuses and links. Read a still-live
+plan as the existing work item rather than creating a duplicate just to match the
+new convention. Task consolidation/conversion is separately scoped work: verify
+unique content, inbound links and recovery before moving or retiring anything.
+Without a connected workspace, follow the project's existing planning convention.
+
 ## First-time connection
 
 Explicit project-workspace registration belongs to `shape-setup`. It resolves the
@@ -58,7 +86,7 @@ progress out of it. Do not add a competing `index.md` or `state.md`; render curr
 state from the original work records and actual Git context when requested.
 
 Each independently reusable item has YAML frontmatter. Store simple records as
-`ideas/<topic>.md`, `thoughts/<topic>.md`, `tasks/<topic>.md`, or `plans/<topic>.md`.
+`ideas/<topic>.md`, `thoughts/<topic>.md`, or `tasks/<topic>.md`.
 A mockup decision lives in `mockups/<topic>/mockup.md` beside its HTML variants;
 a probe lives in `probes/<topic>/probe.md` beside results and supporting evidence.
 Do not mistake a supporting README, results.md, HTML or CSV for another record.
@@ -99,8 +127,8 @@ Search body text as well as titles before creating another record.
 | thought | draft, adopted, shelved, superseded | Decision/question, reasons, alternatives |
 | mockup | draft, selected, shelved, superseded | What was compared, pick/reason, artifact locator |
 | probe | planned, active, concluded | Claim, method, evidence, verdict including inconclusive |
-| task | planned, active, paused, blocked, done, cancelled | Goal, progress, verification, blockers/reasons, next action |
-| plan | draft, active, completed, superseded | Implementation approach, critical files, checks |
+| task | planned, active, paused, blocked, done, cancelled | Goal, scope, completion criteria, optional implementation plan, progress, verification, blockers/reasons, next action |
+| plan (legacy read support) | draft, active, completed, superseded | Existing implementation approach, critical files, checks; preserve until scoped consolidation |
 
 All record types additionally accept `unverified` during legacy import when current
 state has not been established. Preserve the source status claim separately and
@@ -128,7 +156,8 @@ show the intended delta. Existing save/implementation authority covers its recor
 update. Conflicting evidence stays visible until resolved. A task is done only when
 its completion criteria are met; distinguish implementation from verified behavior.
 
-Completing a task may complete its plan, but does not expire an adopted thought.
+A task closes its own planning and execution together; any linked legacy plan
+needs its own completion check. Closing work does not expire an adopted thought.
 A concluded probe may remain inconclusive and authorize no task. A saved idea does
 not imply approved work. Keep deferred and rejected distinct. Superseded decisions
 link their successors; preserve useful rejected alternatives and evidence locators.

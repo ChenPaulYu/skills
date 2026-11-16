@@ -62,6 +62,8 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 ## Process artifact retention
 
+nav-plan writes implementation planning in the owning connected-workspace task (ADR-152);
+legacy plans and unconnected project conventions remain readable in place.
 nav-plan and nav-compose bundle the shared development-artifact policy owned by Shape. A plan location
 is a convention, not an instruction to commit process notes; explicit project retention
 policy governs. See ADR-134.

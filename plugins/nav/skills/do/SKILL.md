@@ -50,7 +50,13 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    **Report evidence and limits accurately.** If no suite exists, seek a reproducible runtime or
    input/output check. If adequate verification is unavailable, name exactly what is unverified;
    do not call it a pass or attribute a skip to the user unless they actually declined it.
-4. **Board sync (blueprints carve-out — the push half of ADR-086)** — if the repo has a `blueprints/plan.md` board and this change closes or materially advances one of its 🚧/▶ items, update that item **in the same change**: move it to ✅ Shipped with a one-line evidence pointer, or annotate the progress. A stale board entry is the same lie as a stale header, one tier up — and the board has no other push-side writer (measured: one project's sweep found 5 of 7 "Next" items already shipped, every one shipped via an execution verb that never touched the board). Scope discipline: touch ONLY the item(s) this change actually moved — re-triaging, reordering, or dropping items is `/shape:status`'s job, with the user. No board, or the change maps to no item → gate passes vacuously.
+4. **Work-item sync** — in a connected workspace, update the original task's
+   progress, verification/limits and next action; its implementation plan stays in
+   that same record. Reuse live legacy work in place. A small one-off fix needs no
+   new task solely for ceremony; follow `references/workspace-records.md` when
+   durable tracking is needed. For an existing legacy board, the push half of
+   ADR-086 still applies:
+   **Board sync** — if the repo has a `blueprints/plan.md` board and this change closes or materially advances one of its 🚧/▶ items, update that item **in the same change**: move it to ✅ Shipped with a one-line evidence pointer, or annotate the progress. A stale board entry is the same lie as a stale header, one tier up — and the board has no other push-side writer (measured: one project's sweep found 5 of 7 "Next" items already shipped, every one shipped via an execution verb that never touched the board). Scope discipline: touch ONLY the item(s) this change actually moved — re-triaging, reordering, or dropping items is `/shape:status`'s job, with the user. No board, or the change maps to no item → gate passes vacuously.
 
 Scope decisions, ownership checks, and examples of risk-proportional verification: `references/do-protocol.md`.
 

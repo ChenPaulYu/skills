@@ -19,7 +19,9 @@ defines frontmatter, dates, opening conclusions and visible Relations. Keep exis
 
 For each touched task, keep the goal and why, actual progress, verification and its limits,
 remaining blockers/reasons, rejected approaches and why they were rejected, and one
-executable next action. Record a fresh code SHA when useful; label missing intent or
+executable next action. Keep any implementation plan in that task and distinguish
+proposed steps from verified results; do not create a separate plan to save progress.
+Record a fresh code SHA when useful; label missing intent or
 Git evidence rather than fabricating it. Preserve unrelated open
 work and unique reasons already there. Store a new decision or deferred idea in its
 appropriate record only when it adds independent value; link it to the task.
@@ -34,7 +36,8 @@ dependencies in the connected home before reporting it saved.
 Show the intended delta and apply the already-authorized save. Re-read before each
 write to preserve concurrent work. Label unrecorded reasons and unverified behavior
 honestly; avoid calling implementation complete when its acceptance check is pending.
-Update a linked plan only when its own criteria are met. An adopted thought remains
+Update an existing linked legacy plan only when its own criteria are met; ordinary
+wrap does not move, convert or delete it. An adopted thought remains
 valid after the task closes. Report changed records and any unsaved or unresolved
 material, then stop without starting another task.
 
