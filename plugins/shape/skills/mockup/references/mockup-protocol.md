@@ -130,8 +130,8 @@ per decision; otherwise use adjacent `mockup.md`. Keep meaningful variants toget
 representativeness alone does not require a move to an artifacts container. Reuse an existing card, keep actual related thought/task IDs or legacy
 paths, and group variants under it. Never create a fake task just to populate Relations.
 
-- **Where:** the existing blueprints tree's `mockups/<date>-<topic>/` or project-selected
-  location. Apply `references/development-artifacts.md` before writing; that reference
+- **Where:** the connected home's `workspace/<project>/mockups/<topic>/`, with
+  `mockup.md` and the HTML together. Without a mapping, use the established legacy location. Apply `references/development-artifacts.md` before writing; that reference
   owns retention, ignore/tracking/staging checks, and recovery limits. Preserve the Pick
   and any deferred branch in the designated owner, so durable docs need not depend on a
   local throwaway link.

@@ -91,7 +91,8 @@ feature — not auto-fired because a feature got mentioned. Three neighbors to s
 
 ## Storage & format
 
-Use the project's `dogfood/<date>-<feature>/` or established location. Read
+Resolve the connected home first. Keep the report and retained evidence with the owning
+workspace work item; without a mapping, use the established project-local dogfood location. Read
 `references/development-artifacts.md` before writing; it owns retention and the separate
 ignore, tracking, and staging checks. Store the report (`report.md`), requested recording,
 friction-point screenshots (`shots/`), and actual responses (`responses/`) together.

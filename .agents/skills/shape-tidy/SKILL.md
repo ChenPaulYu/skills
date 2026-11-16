@@ -10,6 +10,7 @@ Records absorbed by code or made obsolete are tidy candidates regardless of thei
 status label. Check what remains live and what can safely be consolidated; preserve
 useful decisions and unfinished branches without reprioritizing the project.
 
+Read `references/workspace-records.md` to locate the connected home before writing.
 When record cards exist, read `references/record-interface.md` and follow their
 canonical typed relations to decisions/tasks/artifacts before assessing retirement.
 Dates locate candidates; they do not authorize deletion. Preserve readable legacy inputs.

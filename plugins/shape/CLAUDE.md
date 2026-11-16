@@ -47,7 +47,8 @@ manual migration ledger. Workspace mappings take precedence, and no ordinary
 read/save automatically migrates or discards old data. Priority changes require
 user authority; read-only status never silently updates records.
 
-Development-artifacts owns retention/recovery policy. Mockup owns comparison;
+The selected home owns working records and retained artifacts together; product code
+and runtime fixtures stay in their code repositories. Development-artifacts owns retention/recovery policy. Mockup owns comparison;
 tidy owns retirement after settled choice, useful residue and inbound links are
 accounted for. A task closing does not erase an adopted thought or inconclusive probe.
 

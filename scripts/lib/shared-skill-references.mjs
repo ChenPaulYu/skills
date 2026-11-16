@@ -34,12 +34,7 @@ export const SHARED_SKILL_REFERENCES = [
   ],
 }, {
   source: "plugins/shape/references/development-artifacts.md",
-  destinations: [
-    ...["setup", "status", "wrap", "dogfood", "elicit", "mockup", "probe", "tidy"]
-      .map(skill => `plugins/shape/skills/${skill}/references/development-artifacts.md`),
-    "plugins/nav/skills/plan/references/development-artifacts.md",
-    "plugins/nav/skills/compose/references/development-artifacts.md",
-  ],
+  destinations: RECORD_CONSUMERS.map(skill => `${skill}/references/development-artifacts.md`),
 }, {
   source: "plugins/shape/references/artifact-activation.md",
   destinations: [

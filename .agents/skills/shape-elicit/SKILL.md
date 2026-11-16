@@ -9,7 +9,8 @@ description: "Clarify an undecided conceptual choice or specific root cause thro
 Resolve the uncertainty that actually matters, not a quota of questions or objections.
 Use the user's context and relevant evidence; keep the choice theirs.
 
-When creating or updating an individual working record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for the shared frontmatter, honest dates, opening
 conclusion and visible Relations. Keep existing records readable; do not invent parents.
 

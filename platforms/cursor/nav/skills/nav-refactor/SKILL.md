@@ -9,7 +9,8 @@ description: "Restructure code while preserving observable behavior and public c
 Improve the code's boundaries while keeping observable behavior and public contracts intact.
 The result should hide a real design decision behind a useful interface, not just shorten a file.
 
-When producing or updating an individual project work record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for metadata, dates, opening conclusions and
 Relations. This does not change the format of product docs or force legacy-board migration.
 

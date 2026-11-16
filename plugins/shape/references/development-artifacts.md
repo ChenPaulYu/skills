@@ -5,11 +5,24 @@ it into standalone skills; local references carry the same policy, not separate 
 
 ## Select the policy before writing
 
-Read the user's instructions, repository rules, existing artifact location, and ignore
-rules. Explicit user/project retention choices govern. With no stated exception, keep
+Resolve the existing project home with `references/workspace-records.md` before choosing
+a destination. In a connected workspace, save working artifacts beside their owning
+records under that home; do not fall back to code-local blueprints, `.reference/` or
+temporary previews. Read the selected home's storage and ignore rules. Explicit
+user/project retention choices govern. Only without a connected workspace or another
+explicit retention choice, keep
 blueprints (thoughts, plans, board, handoff), mockups, dogfood captures, and one-off
 experiment scripts/results local and Git-ignored. A dated filename or a useful result
 does not make a process artifact a production deliverable.
+
+An instruction to save a mockup or probe includes its actual artifact and the dependencies
+needed to reopen it, not only a summary, path or hash. Prefer a self-contained artifact
+when supported. Verify a reopen or restoration from the saved destination before
+reporting preservation. A temporary server URL is a preview, not the saved copy.
+Respect the home's media policy; when required assets cannot be retained under that
+policy and no explicit user choice resolves it, report the concrete conflict rather
+than silently splitting the artifact into another repository. Do not broaden a scoped
+retention choice into a general media-import policy.
 
 Resolve coverage at the existing process-artifact root before narrowing to the requested
 output: for example, inventory `blueprints/` thoughts, plans, board, handoff, and mockups.

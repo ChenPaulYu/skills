@@ -87,15 +87,15 @@ Recorded-data assessment does not launch paid trials merely to complete a report
 
 ## Read-only toward product code
 
-`probe` never edits source to make an experiment work. Fixtures, harness scripts, and transcripts produced while running an experiment are disposable — they live in a scratch or throwaway location, never committed as if they were the deliverable. Retain the findings according to project policy; apply `references/development-artifacts.md`
+`probe` never edits source to make an experiment work. Temporary execution scratch may be disposable; retain the results and supporting artifacts needed to assess or resume the experiment with its owning workspace record. Do not treat all harnesses or transcripts as automatically disposable. Retain according to project policy; apply `references/development-artifacts.md`
 for storage, Git checks, and recovery. A reusable harness becomes a tracked regression
 test only through an explicitly adopted project deliverable.
 
 ## Output
 
-A findings-style doc: method + data + verdict. Lands under the project's `docs/findings/` if that convention already exists in the repo, else `blueprints/thoughts/<date>-<topic>-probe.md`.
+A findings-style doc: method + data + verdict. In a connected home, use `workspace/<project>/probes/<topic>/probe.md` with its retained results and supporting artifacts. Without a mapping, follow existing `docs/findings/` or legacy blueprints conventions.
 
-**Tolerant reader (ADR-071):** neither `docs/findings/` nor `blueprints/` is a contract. If neither exists yet, scaffold the simpler of the two rather than failing; if either exists in a non-standard shape, tolerate it and write into whatever shape is there; either way, self-report which tier you wrote to so the user can calibrate trust in the result.
+**Tolerant reader (ADR-071):** neither `docs/findings/` nor `blueprints/` is a contract. Only without a connected workspace, if neither exists yet, scaffold the simpler of the two rather than failing; if either exists in a non-standard shape, tolerate it and write into whatever shape is there; either way, self-report which tier you wrote to so the user can calibrate trust in the result.
 
 The doc states explicitly, near the top, that **the evidence feeds the pending decision back** — into `shape-elicit`'s next volley if a fork sent it here, or directly back to the user if they summoned `probe` on their own.
 

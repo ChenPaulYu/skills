@@ -63,8 +63,8 @@ An ordinary hand-owned instruction file can receive a short section such as:
 
 Resolve <selected-home-selector-or-portable-locator>, then read
 `workspace/sample-project/project.md` before reconstructing project work.
-Code and runtime evidence remain in this repository; original task records own
-progress and next actions. Status is read-only; legacy migration is separate work.
+Code and product runtime fixtures remain in this repository; working records and
+retained artifacts belong in that workspace. Original tasks own progress and next actions. Status is read-only; legacy migration is separate work.
 ```
 
 Adapt the pointer to the repo's current convention. Reuse an existing pointer when

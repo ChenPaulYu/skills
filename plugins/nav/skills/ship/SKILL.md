@@ -9,7 +9,8 @@ Take work that is already done and verified, get it into the main branch, and le
 stray branches, worktrees, or half-finished release steps behind. The front half is the
 same in every repo; the tail (version bump, rebuild, alias, deploy) belongs to the project.
 
-When producing or updating an individual project work record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for metadata, dates, opening conclusions and
 Relations. This does not change the format of product docs or force legacy-board migration.
 

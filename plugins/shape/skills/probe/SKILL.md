@@ -8,7 +8,8 @@ description: "Design a minimal experiment or assess existing measurements for an
 Resolve an empirical claim through measurements: assess existing evidence or design the
 smallest discriminating experiment, run within scope, and read the verdict honestly.
 
-When creating or updating an individual working record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for the shared frontmatter, honest dates, opening
 conclusion and visible Relations. Keep existing records readable; do not invent parents.
 

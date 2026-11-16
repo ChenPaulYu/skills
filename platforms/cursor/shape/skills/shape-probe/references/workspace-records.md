@@ -15,6 +15,23 @@ Do not assume the code checkout contains its records. Resolve code repositories 
 the project's explicit mappings; report missing/unavailable mappings, never substitute
 the home repo's HEAD. Machine-local paths are locators, not portable identity.
 
+Resolve the existing home before choosing any project-record or artifact destination:
+use the user's explicit selection, then the project's home pointer, then the configured
+home entry. For My-wiki, consult `MY_WIKI_ROOT` or the default workspace selected by
+`~/.config/my-wiki/config.json`; validate the root and match the project registration
+to the code checkout. Read the home's instructions, storage policy and project entry.
+A configured but unavailable home is a reported blocker for saving there, not permission
+to silently create another store in the code repo or scratch directory. Without an
+existing mapping, report that tier and follow the established legacy convention;
+ordinary saves do not register or migrate a project.
+
+For a connected project, its selected home workspace owns both working records and
+their retained mockups, probe results and supporting artifacts. Keep artifacts beside
+the owning mockup/probe card; code and product runtime fixtures remain in the code
+repository. Apply `references/development-artifacts.md` for retention, dependencies
+and recovery. External reference materials may stay at their source; an external
+locator alone does not preserve an agent-created artifact the user asked to save.
+
 Report the evidence tier: **standard records**, **non-standard readable records**, or
 **absent**. Consume readable prose without silently rewriting it into the pilot schema.
 Without a workspace mapping, read existing blueprints/plan/TODO/handoff documents and

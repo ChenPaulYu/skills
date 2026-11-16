@@ -11,7 +11,8 @@ Run when asked to save progress or finish the round. Read
 `references/workspace-records.md`, then the project's records and current mapped
 repository evidence. Update the original touched tasks, not a new session summary.
 
-When creating or updating an individual working record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for the shared frontmatter, honest dates, opening
 conclusion and visible Relations. Keep existing records readable; do not invent parents.
 
@@ -24,6 +25,10 @@ appropriate record only when it adds independent value; link it to the task.
 When the user explicitly puts unfinished work aside for later, mark it `paused`
 (or `blocked` when a recorded external dependency prevents progress). Ending the
 round does not make a task `done`.
+
+When saving includes a mockup, probe or other working artifact, read
+`references/development-artifacts.md` and preserve the actual artifact and required
+dependencies in the connected home before reporting it saved.
 
 Show the intended delta and apply the already-authorized save. Re-read before each
 write to preserve concurrent work. Label unrecorded reasons and unverified behavior

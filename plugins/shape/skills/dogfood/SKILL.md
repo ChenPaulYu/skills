@@ -9,7 +9,8 @@ Drive the real interface against user intents and return findings tied to actual
 requests, responses, or screenshots. A demonstration output is evidence about the
 tool; improving that output is a separate task unless the user requests it.
 
-When creating or updating an individual working record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for the shared frontmatter, honest dates, opening
 conclusion and visible Relations. Keep existing records readable; do not invent parents.
 

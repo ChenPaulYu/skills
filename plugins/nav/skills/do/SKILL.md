@@ -7,7 +7,8 @@ description: "Make a small, already-decided, behaviour-changing code change dire
 
 Make a small, already-decided, **behaviour-changing** change happen **now** — and place it deep-module-correctly as you go, without the ceremony of a written plan. nav's execution verb: the only nav skill that writes new/changed feature code directly. It is the same inject↔check discipline a sub-agent already carries when `/nav:plan` or `/nav:refactor` dispatches it ([ADR-008](docs/adr/008-inject-check-at-handoff.md)), promoted to a standalone, plan-less verb.
 
-When producing or updating an individual project work record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for metadata, dates, opening conclusions and
 Relations. This does not change the format of product docs or force legacy-board migration.
 

@@ -11,7 +11,8 @@ description: "Write a codebase-grounded implementation plan for a substantial fe
 Turn intent into an executable plan grounded in actual code: what changes, what stays
 compatible, which existing parts to reuse, and how completion will be demonstrated.
 
-When producing or updating an individual project work record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for metadata, dates, opening conclusions and
 Relations. This does not change the format of product docs or force legacy-board migration.
 

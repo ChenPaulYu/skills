@@ -10,7 +10,8 @@ Read `references/workspace-records.md` to locate the project's records and prese
 their ownership and lifecycle. This entrance is distinct from clarification: a spark
 can be worth saving before anyone knows the questions it raises.
 
-When creating or updating an individual working record, read
+Before creating or updating project records or working artifacts, read
+`references/workspace-records.md` to resolve the connected home and storage first. Read
 `references/record-interface.md` for the shared frontmatter, honest dates, opening
 conclusion and visible Relations. Keep existing records readable; do not invent parents.
 
