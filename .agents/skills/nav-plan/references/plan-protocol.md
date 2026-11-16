@@ -26,6 +26,36 @@ Resolve uncertainty from repository evidence and prior decisions first. Ask abou
 or a trade-off the user must own; do not invent questions to fill a quota. Separate blocked items
 from independent work and name the decision that blocks each affected item.
 
+## Turn promised outcomes into coverage
+
+Use the user's requests and accepted reference to follow one representative interaction. At
+relevant transitions, ask what input/material is carried in, what the user receives, what they
+can do next, and what survives leaving/reopening or a failed attempt. Compare affected menus,
+shortcuts and other entry points; include removal of superseded behavior. Reuse the task's
+completion criteria/work items for these observations instead of adding a second inventory.
+
+A reference with authored example text, fixed results or seeded state proves a presentation
+choice. Inspect which of those the implementation must acquire, compute, generate or persist.
+Name that producer and the check for its output before treating the reference as implementable.
+For example, an attachment visible in an editor needs checks at submission, in the sent result,
+and on later inspection; checking only its input chip misses the rest of the promised behavior.
+
+For generated answers, trace evidence acquisition into the real request. Record necessary
+surrounding context, source identity, retrieval/coverage limits and what happens when it is
+unavailable. A narrow selected target can require wider evidence without expanding the output
+scope. Choose bounds for the task rather than always loading a whole corpus or prescribing a
+fixed page count, summary cache or provider architecture.
+
+Use discriminating examples: a pronoun whose antecedent is outside the selected excerpt, or
+the same excerpt in two source contexts that require different interpretations. Define the
+supported answer and disallowed unsupported claims from the source. Deterministic fixtures can
+verify context inclusion, retrieval/failure behavior and correct source delivery. Evaluation
+against those source-dependent expectations is separate from schema/transport/UI checks; a
+canned response cannot establish generated-answer quality. When live evaluation is not
+available or authorized, retain that acceptance item as pending and complete independent
+engineering work within scope. Do not treat the user's core outcome as verified by relabeling it
+an optional quality improvement.
+
 ## One task, expanded only where useful
 
 In a connected workspace, extend the existing task rather than replacing its goal, progress or

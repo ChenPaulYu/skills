@@ -28,7 +28,7 @@ Catalog: 3 plugins · 22 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.26.11 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
+| [`nav`](plugins/nav/) | 0.26.12 | 7 | **Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules. |
 | [`shape`](plugins/shape/) | 0.35.5 | 9 | **Give work its form** — connect projects, capture ideas, converge decisions, test claims, recover progress and save it into original tasks. Explicit workspace setup joins status/wrap; graph exports derive from the same records (ADR-148). |
 | [`frame`](plugins/frame/) | 0.17.1 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
@@ -57,7 +57,7 @@ Catalog skills: 22 active skills.
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a behavior-preserving structural refactor with risk-proportional verification
 - `/nav:sync` — check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)
-- `/nav:plan` — choose direct work, a short task or grounded engineering detail by coordination and design risk; preserve ownership/reuse and plan behavioral, regression and structural checks. Implementation planning stays in its owning task; planning-only stops before execution (ADR-153)
+- `/nav:plan` — map user outcomes through the affected workflow, then choose direct work, a short task or grounded engineering detail by risk; preserve ownership/reuse and distinguish generated-content quality from wiring checks. Implementation planning stays in its owning task; planning-only stops before execution (ADR-153)
 - `/nav:do` — execute decided behavior changes with ownership/reuse discipline; verify the outcome, preserved behavior and structure, record evidence in the original task and continue authorized ready items
 - `/nav:compose` — author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval
 - `/nav:ship` — land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)

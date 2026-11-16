@@ -7,7 +7,7 @@
           "audit": "assess codebase shape (or read-only quick-check against a target spec)",
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
           "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
-          "plan": "choose direct work, a short task or grounded engineering detail by coordination and design risk; preserve ownership/reuse and plan behavioral, regression and structural checks. Implementation planning stays in its owning task; planning-only stops before execution (ADR-153)",
+          "plan": "map user outcomes through the affected workflow, then choose direct work, a short task or grounded engineering detail by risk; preserve ownership/reuse and distinguish generated-content quality from wiring checks. Implementation planning stays in its owning task; planning-only stops before execution (ADR-153)",
           "do": "execute decided behavior changes with ownership/reuse discipline; verify the outcome, preserved behavior and structure, record evidence in the original task and continue authorized ready items",
           "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval",
           "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)"
@@ -44,8 +44,8 @@
           "plan": [
             "",
             {
-              "en": "Choose planning depth from code and risk: direct work, a short task, or engineering detail in the owning task. Preserve module ownership, reused paths and compatible interfaces; define outcome, regression and structural verification. A planning-only request does not authorize execution (ADR-153).",
-              "zh": "讀過 code 後按協作需求與設計風險選深度：直接做、短 Task，或在原 Task 補工程計畫。保留模組責任、既有流程與相容介面，定義功能、回歸與結構驗證；只要求規劃不代表授權開工（ADR-153）。"
+              "en": "Map promised user outcomes through the affected workflow before choosing direct work, a short task or engineering detail. Preserve ownership/reuse and compatible interfaces; distinguish generated-content quality from wiring checks. Planning stays in the owning task; a planning-only request does not authorize execution (ADR-153).",
+              "zh": "先走過需求中的完整使用流程，再按風險選直接做、短 Task 或工程計畫。保留模組責任、既有流程與相容介面，將生成內容品質和資料／介面串接分開驗收。計畫留在原 Task；只要求規劃不代表授權開工（ADR-153）。"
             }
           ],
           "do": [

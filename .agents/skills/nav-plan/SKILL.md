@@ -19,6 +19,12 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 
 ## Choose planning depth
 
+Start from the user/caller outcome before splitting work by modules. Walk a representative
+trigger → result → next action or revisit path from the requests, decisions and accepted
+reference. Turn promised behavior, affected entry points and what must disappear into
+completion checks. Identify content/state supplied by hand in a mockup and how the live
+product will produce it. Cover only affected stages; a bounded fix still needs no extra document.
+
 Read the relevant code and prior decisions before choosing; use decision risk and coordination
 needs, not file count or a fixed document length:
 
@@ -75,11 +81,18 @@ already-granted execution authority. Do not create an extra plan record to chang
 - Keep implementation detail behind its existing owner and a simple interface. For a new owner,
   explain the decision it hides and which consumers adopt it. Trace changes to shared callbacks,
   prompts or configuration across their callers so one new action does not silently alter others.
+- For AI-generated content, separate the selected target from the evidence needed to answer it.
+  Name how sufficient context is acquired, its bounds and missing-context behavior. Include a
+  content-level acceptance case whose answer depends on that evidence, beyond valid formatting
+  or delivery. Context/tool availability alone does not prove it was supplied or used; see
+  `references/plan-protocol.md` for coverage and evaluation examples.
 - Use a visual comparison when an unresolved visual choice needs one and the capability is
   available. A mockup can settle appearance; real-engine behavior still needs runtime evidence.
 - Completion must be checkable. Translate a scored or open-ended target ("90 points", "do all
   of it") into observable criteria, and mark steps that need the user's hands or judgment as
-  user-owned. The build is done when the criteria pass and only user-owned steps remain.
+  user-owned. Keep material product outcomes open when their evidence is missing; report
+  engineering readiness separately from outcome acceptance. The build is done when the criteria
+  pass and only user-owned steps remain.
 - Plan checks for the new behavior, affected existing behavior, and structural readability
   (ownership, reuse, interface size and duplicate logic). Name the observation that would expose
   each material failure and the command or workflow that will collect it. Exercise the affected
