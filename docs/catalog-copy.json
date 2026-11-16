@@ -7,8 +7,8 @@
           "audit": "assess codebase shape (or read-only quick-check against a target spec)",
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
           "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
-          "plan": "ground implementation against the code and write it in the owning workspace task; preserve live legacy plans and existing conventions outside connected workspaces. Planning-only stops before execution (ADR-152)",
-          "do": "execute a small, decided, behaviour-*changing* change directly (deep-module/header discipline inline, no plan artifact; closes the tracking `blueprints/plan.md` item in the same change, ADR-086) — the execution verb, refactor's behaviour-changing twin",
+          "plan": "choose direct work, a short task or grounded engineering detail by coordination and design risk; preserve ownership/reuse and plan behavioral, regression and structural checks. Implementation planning stays in its owning task; planning-only stops before execution (ADR-153)",
+          "do": "execute decided behavior changes with ownership/reuse discipline; verify the outcome, preserved behavior and structure, record evidence in the original task and continue authorized ready items",
           "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval",
           "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)"
         }
@@ -44,15 +44,15 @@
           "plan": [
             "",
             {
-              "en": "Ground a feature against actual code and write the implementation plan inside its owning workspace task. Preserve live legacy plans and unconnected project conventions; planning alone does not authorize execution (ADR-152).",
-              "zh": "對照實際程式，把實作計畫寫進同一份Task；保留舊Plan與未接入專案的既有慣例。只要求規劃不代表授權開工（ADR-152）。"
+              "en": "Choose planning depth from code and risk: direct work, a short task, or engineering detail in the owning task. Preserve module ownership, reused paths and compatible interfaces; define outcome, regression and structural verification. A planning-only request does not authorize execution (ADR-153).",
+              "zh": "讀過 code 後按協作需求與設計風險選深度：直接做、短 Task，或在原 Task 補工程計畫。保留模組責任、既有流程與相容介面，定義功能、回歸與結構驗證；只要求規劃不代表授權開工（ADR-153）。"
             }
           ],
           "do": [
             "",
             {
-              "en": "Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md artifact. Deep-module/header/N+1 awareness throughout + a thin bracket: inject (head -12 + reuse-grep) → execute → check (header · N+1 · unconditional verify gate · board sync: a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The inject↔check sub-agent discipline (ADR-008) as a standalone verb; refactor twin (refactor preserves behaviour, do changes it) — ADR-023.",
-              "zh": "直接執行一個小的、已決定的、會改變行為的變更 —— 不留 plan.md。全程 deep-module/header/N+1 awareness + 一道薄 bracket:inject(head -12 + reuse-grep)→ execute → check(header · N+1 · 無條件 verify gate · board sync:出貨若關掉 blueprints/plan.md 某條目,同 commit 更新它,ADR-086)。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞;refactor 雙生(refactor 保行為,do 改行為)—— ADR-023。"
+              "en": "Execute decided behavior changes through the existing owner. Verify the delivered outcome, preserved behavior and structural readability; distinguish planned checks from observed evidence. Keep progress in the original work item and continue authorized ready items; use planning when material design decisions emerge.",
+              "zh": "沿既有模組執行已決定的行為變更，驗證實際結果、原有行為與程式結構；分清預定檢查與已觀察證據。進度存回原工作紀錄並接續已授權、可開始的項目；發現重要設計取捨時補規劃。"
             }
           ],
           "compose": [

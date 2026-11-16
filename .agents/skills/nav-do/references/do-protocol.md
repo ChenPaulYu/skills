@@ -9,7 +9,9 @@ A decided small change has an observable outcome and a placement that can be gro
 separate implementation plan. File count alone does not decide scope: a mechanical update across
 several files can remain small; a one-file feature with unresolved product choices may need a plan.
 
-Use nav-refactor for behavior-preserving restructuring and nav-plan for substantial changes.
+Several decided items can share one short task for resumption without an engineering plan.
+Use nav-refactor for behavior-preserving restructuring and nav-plan when material design or
+coordination decisions need to be recorded; its depth gate owns the proportional planning choice.
 Resolve routine implementation choices from code. Ask when missing intent would change the
 requested outcome, compatibility, or a material trade-off. Planning within an authorized build
 does not revoke the authority to continue that build.
@@ -25,6 +27,10 @@ A second consumer of a shared implementation should reference its owner. Repeate
 design values, and configuration have the same ownership concern across code and non-code
 layers. Distinct design values need a meaningful distinction, not just a slightly different literal.
 
+Trace a shared callback, prompt or configuration to its other callers; a new action must not
+change the policy of an existing one accidentally. Inspect interface growth: forwarding props or
+introducing flags without owning the hidden decision may add a layer rather than deepen a module.
+
 Keep structural preparation and changed behavior reviewable. Prefer verbatim moves where they
 fit, but preserve behavior rather than requiring identical source text. Unrelated restructuring
 and discovered bugs remain separate findings unless they are already in scope.
@@ -37,6 +43,9 @@ and discovered bugs remain separate findings unless they are already in scope.
 - A UI interaction change: automated interaction coverage or a focused browser pass through
   the affected states; a screenshot alone cannot prove a drag or keyboard action works.
 - A shared API change: integration/consumer checks alongside unit tests.
+- A new action on an existing runner: drive the real action-to-result path with fake external
+  boundaries where needed, and check an existing action that shares its handler or policy.
+  Passing the new component in isolation does not prove the request is delivered or saved.
 - A low-impact wording change: inspect the rendered result or diff; do not invent a test that
   just repeats the string.
 - A newly enabled paid-LLM path: separate deterministic logic checks from live-service evidence,
@@ -45,6 +54,11 @@ and discovered bugs remain separate findings unless they are already in scope.
 Complete repository-required gates. Report missing evidence precisely. Passing tests on an
 unrelated path is not verification of the changed behavior; absence of a suite is a reason to
 find reproducible checks, not automatically to stop.
+
+Record actual commands/workflows, inputs or interface states, observations and unverified limits
+separately from intended checks. A fake service can prove delivery wiring without proving live
+provider output quality. Treat diff-based ownership/reuse/interface inspection as structural
+evidence; passing a typecheck is not a substitute for that inspection.
 
 ## Completion
 

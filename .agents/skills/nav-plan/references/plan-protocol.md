@@ -1,86 +1,104 @@
-# Plan protocol — grounding and artifact
+# Plan protocol — grounded work at the necessary depth
 
-Use while drafting a substantial implementation plan. The skill body owns continuation and
-authority; this reference supplies the evidence checklist and file shape.
+The skill body owns depth selection, continuation and authority. Use this reference when
+writing a short task or engineering detail; it supplies grounding and verification examples,
+not a mandatory set of sections.
 
-## Grounding
+## Grounding and readability
 
 Reuse a same-session audit of the same target when it still matches the working tree. Otherwise
 read affected domains, detect the stack, and trace behavior through entry points, implementation,
 consumers, and verification. Scope the investigation to the proposed change.
 
-Describe each gap as current behavior, requested behavior, and the necessary change. Check for
-existing helpers and architectural seams before proposing new ones. File length is a reason to
-inspect cohesion, not an instruction to split. A public API or persisted format needs an explicit
-compatibility boundary and a check of its consumers.
+Describe the gap as current behavior, requested behavior, and the necessary change. Find the
+existing owner and reusable path before proposing new ones. For engineering decisions, explain:
 
-Resolve uncertainty from the repository and conversation first. Ask about missing intent or a
-trade-off the user must own; do not invent questions to fill a quota. Separate blocked steps
-from independent work. A plan depending on an unanswered material question must say so.
+- Which module owns the behavior and hides its policy, state, format or algorithm.
+- Which existing entry points and implementations are reused, and how consumers adopt any new owner.
+- Which interface must change and which callers/contracts must remain compatible. Avoid props,
+  flags and helper layers that merely relay knowledge another owner should keep private.
 
-## Task with an implementation plan
+File length invites inspection of cohesion, not an automatic split. A public API or persisted
+format needs an explicit compatibility boundary and a check of its consumers. A shared callback,
+prompt or configuration change needs a check of other operations using it, not only the new caller.
 
-In a connected workspace, extend the existing task instead of replacing its goal,
-progress or verification with a fresh plan. New tasks follow the shared metadata
-and Relations convention. Keep completed evidence separate from proposed checks;
-planning-only work remains `planned`, without implied execution approval. Use this
-body shape when it fits, omitting empty sections. For a live legacy plan or an
-unconnected repository, retain its established record shape and location.
+Resolve uncertainty from repository evidence and prior decisions first. Ask about missing intent
+or a trade-off the user must own; do not invent questions to fill a quota. Separate blocked items
+from independent work and name the decision that blocks each affected item.
+
+## One task, expanded only where useful
+
+In a connected workspace, extend the existing task rather than replacing its goal, progress or
+verification. Follow the shared frontmatter, opening summary and visible Relations convention;
+those fields are owned by the record interface, not this template. Planning-only work remains
+`planned`. Keep live legacy plans and unconnected-repository conventions in their existing shape.
+
+A short task can use this body. Omit empty sections; do not manufacture work just to fill it.
 
 ```markdown
-# <Feature>
+# <Outcome>
 
-> Goal: <outcome> · Scope: <planning-only or already-authorized execution>
+> <Current state or open question in up to three lines.>
 > Next: <concrete next action>
 
-## Context
+## Relations
+<Projection of actual frontmatter links, or an explicit absence of relations.>
 
-<Current behavior, code evidence, desired outcome, compatibility boundaries.>
+## Goal and boundaries
+<Desired outcome, authorized scope and existing behavior that must remain intact.>
 
 ## Completion criteria
+<Observable outcomes, including what evidence is needed before closing.>
 
-<Observable outcome, including required verification.>
+## Work items
+- [ ] <Ready outcome and its completion check.>
+- [ ] <Dependent outcome and its completion check; name its dependency when needed.>
 
-## Resolved questions
+## Verification
+<Expected result and command/workflow for each material risk. Planned checks are not passes.>
 
-<Consequential choices already made, including prior conversation authorization.>
-
-## Open questions
-
-<Only unresolved choices; state which step each blocks.>
-
-## Implementation plan
-
-<Dependency-ordered, independently verifiable changes. Name existing pieces to reuse,
-new owners and their adopting consumers, and required generated artifacts.>
-
-## Critical files
-
-| File | Role and planned change |
-|---|---|
-| <path> | <why this file is involved> |
-
-## Verification plan
-
-<Checks for changed behavior and preserved contracts; focused checks during implementation,
-required final gates, and interface flows not covered by tests. Identify missing evidence.>
-
-## Progress and next action
-
-<Actual changes, completed verification, limits/blockers and the next executable step.>
-
-## Out of scope
-
-<Real scope boundaries, not hypothetical future features.>
+## Progress, evidence and next action
+<Actual changes, checks run and observed results; remaining limits/blockers and next ready item.>
 ```
 
-For shared design values, name the single owner and the step adopting it at existing call sites.
-Verify the owner has actual consumers. When a board tracks the work, update only advanced or
-completed items with evidence; reprioritization remains a separate decision.
+For engineering depth, add an **Implementation plan** in the same task: responsibility/ownership,
+reuse, critical interface changes, compatibility and risk handling, followed by dependency-ordered,
+independently verifiable changes. Name critical files where their role matters. Resolved/open
+questions, migration/rollback or a file-role table are useful only when they inform execution.
+Do not prescribe every edit or add a second progress checklist in another document.
+
+A work item is an outcome the executor can verify, not just "edit file A." Keep structural
+preparation reviewable separately from new behavior. After a verified item, advance the next
+ready item within the user's existing authorization; update blockers without losing independent
+work. Do not split one task into several records merely to list implementation steps.
+
+## Verification design and evidence
+
+Choose checks by the failure they could reveal. Cover applicable risks in three dimensions:
+
+| Dimension | Question | Useful evidence |
+|---|---|---|
+| New behavior | Does the actual entry point deliver the requested result? | Focused input/output check or interaction through the result, including delivery/persistence when affected |
+| Preserved behavior | Which existing operation could change unintentionally? | Existing-consumer or regression check, especially for shared handlers, policies and configuration |
+| Readability | Is complexity behind the right owner and a simple interface? | Diff inspection of responsibilities, real reuse, adopting callers, interface growth and duplicate logic |
+
+For each material risk, name the scenario, expected observation and command or workflow. Keep
+verification proportional: a pure helper may need input/output checks; a UI interaction may need
+an interface pass at required sizes; an installed command needs invocation through its entry point.
+Build/typecheck contributes static evidence, not proof that the behavior is connected. A fake
+boundary can verify wiring while leaving native, physical-device or provider quality unverified;
+state the boundary rather than claiming full runtime acceptance.
+
+During execution, retain the actual check, relevant inputs/states, result and remaining limits.
+Keep these observations distinct from checks merely planned. Record a newly discovered regression
+as additional evidence rather than presenting it as a preregistered test. Honor repository-required
+gates and existing authority for paid checks or external effects. No fixed test count or compulsory
+new test file follows from this format.
 
 ## Review before continuing
 
-Can another executor identify the files, intended behavior, preserved contract, and completion
-check without reconstructing this conversation? Are unresolved decisions visible? Does the
-plan respect the authorized scope? If so, show its approach and follow the continuation rule
-in the skill body. Planning alone is not permission to build or publish.
+Can the next executor identify the intended behavior, owner/reused path, preserved contract,
+next ready item and completion check without reconstructing the conversation? At engineering
+depth, are consequential decisions and caller adoption explicit? Keep only details that improve
+those answers, show the chosen approach, then honor the continuation rule in the skill body.
+Planning alone is not permission to build or publish.

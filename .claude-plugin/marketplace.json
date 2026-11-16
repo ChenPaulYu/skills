@@ -9,7 +9,7 @@
       "name": "nav",
       "source": "./plugins/nav",
       "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
-      "version": "0.26.10"
+      "version": "0.26.11"
     },
     {
       "name": "shape",

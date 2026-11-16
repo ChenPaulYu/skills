@@ -16,6 +16,10 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 ## Stance
 
 - **In scope: a small, decided, behaviour-changing change** you can hold in your head without a written plan. **Out of scope**: behaviour-preserving restructuring (→ `nav-refactor`), substantial work (→ `nav-plan`), or an unresolved product decision. Read the code and existing decisions first; ask only if missing intent would change scope, behavior, or a material trade-off.
+- **Known work may span several items.** Use the original task when progress must survive a
+  pause; a short task is enough when the approach is settled. If grounding reveals a material
+  ownership, interface, compatibility or migration decision, use nav-plan to record that decision
+  before editing the affected path. File count alone does not require an engineering plan.
 - **An open-ended target gets a finish line before work starts.** When the request is a loop with no checkable end ("keep optimizing until it's a 90", "finish everything left"), first state a short list of checkable completion criteria and separate the items only the user can do (logins, hardware, accounts, taste calls). Stop when the criteria pass or only user-owned items remain; hand those over as the remaining list instead of iterating on them.
 
 ### The kernel — 乙 always on, 甲 enforced
@@ -36,7 +40,11 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
 #### check (←) — four gates before "done"
 1. **Header hygiene** — a new load-bearing file (≥150 LOC · domain leader · subsystem barrel) carries a header in the project's convention; a file whose role / main imports / load-bearing status changed has its header updated **in the same change** (stale header = lie).
 2. **N+1** — did this add a second consumer of an inline util? Extract the primitive; don't ship the copy. Did it bypass a barrel/facade, or shove a new concern into one? Read the seam rule at *intent*, not as a wall. **N+1 fires on *values* too, in any *layer*** — a 2nd raw copy of a color / constant / config value (code OR CSS / prompt / config) = reference its owner, don't re-express it. And a *new* distinct design value must earn its distinctness vs the nearest existing one: a sub-JND near-duplicate is drift, not a new level/category (the justification is **perceptually vetoable** — a stated reason doesn't survive an imperceptible difference). This is the *cheap per-change half*; it's structurally blind to leakage that only shows in aggregate — the guarantee is `nav-audit`'s value-leakage check ([ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md)).
-3. **Verify the changed behavior.** Choose checks that expose the likely failure: focused tests,
+3. **Verify the outcome, preserved behavior and structure.** Check the new behavior through its
+   affected entry-to-result path, cover nearby behavior a shared-path change could alter, and
+   inspect ownership, reused paths, interface growth and duplicate logic in the diff. Component
+   tests cannot alone prove wiring to persistence or delivery; build/typecheck alone cannot prove
+   behavior. Choose checks that expose the likely failure: focused tests,
    type/lint checks, CLI input/output, integration checks, or a browser flow for interactions
    not covered automatically. Add or adjust tests when they provide meaningful regression
    coverage; reversible low-impact changes do not need tests that merely mirror implementation.
@@ -51,11 +59,16 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    **Report evidence and limits accurately.** If no suite exists, seek a reproducible runtime or
    input/output check. If adequate verification is unavailable, name exactly what is unverified;
    do not call it a pass or attribute a skip to the user unless they actually declined it.
+   Record actual checks, relevant inputs/states, observed results and remaining limits separately
+   from proposed checks. A newly discovered regression is additional evidence; do not claim the
+   original verification plan already covered it.
 4. **Work-item sync** — in a connected workspace, update the original task's
    progress, verification/limits and next action; its implementation plan stays in
    that same record. Reuse live legacy work in place. A small one-off fix needs no
    new task solely for ceremony; follow `references/workspace-records.md` when
-   durable tracking is needed. For an existing legacy board, the push half of
+   durable tracking is needed. Mark only verified work complete, then continue the next authorized
+   ready item. Record blockers and proceed with independent items in scope; stop when the work
+   is complete or no authorized ready item remains. For an existing legacy board, the push half of
    ADR-086 still applies:
    **Board sync** — if the repo has a `blueprints/plan.md` board and this change closes or materially advances one of its 🚧/▶ items, update that item **in the same change**: move it to ✅ Shipped with a one-line evidence pointer, or annotate the progress. A stale board entry is the same lie as a stale header, one tier up — and the board has no other push-side writer (measured: one project's sweep found 5 of 7 "Next" items already shipped, every one shipped via an execution verb that never touched the board). Scope discipline: touch ONLY the item(s) this change actually moved — re-triaging, reordering, or dropping items is `shape-status`'s job, with the user. No board, or the change maps to no item → gate passes vacuously.
 
@@ -63,7 +76,7 @@ Scope decisions, ownership checks, and examples of risk-proportional verificatio
 
 ## Companion skills
 
-- **`nav-plan`** — when a substantial change warrants a grounded plan first; already-authorized execution then follows this skill's discipline.
+- **`nav-plan`** — choose a short task or engineering detail when work needs coordination or material design decisions; already-authorized execution follows this skill's discipline.
 - **`nav-refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`nav-audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
 - **`nav-sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header. Include affected reader documents when the change alters their claims or usage.
