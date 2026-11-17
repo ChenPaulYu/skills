@@ -15,8 +15,10 @@ than creating another checklist or enforcing a fixed set of headings.
 When checking a premise, consider whether an unspoken boundary, compatibility obligation,
 edge condition or trade-off would change the result. These are lenses for finding consequential
 unknowns, not questions to ask by quota. Read facts from the repository/source, recover already
-made choices from the conversation, render visual alternatives when needed, and ask only for a
-remaining user-owned decision. Preserve a resolved choice's rationale when it constrains the
+made choices from the conversation, and ask only for a remaining user-owned decision.
+Engineering owns factual investigation and routine implementation trade-offs. A missing API
+fact is not a question for the author. An unresolved product choice names the affected
+engineering decision and returns to shape; it does not expand plan into product discovery. Preserve a resolved choice's rationale when it constrains the
 implementation; keep unresolved premises and their consequences visible to the next executor.
 A short plan can compress the writing while still accounting for those decisions.
 

@@ -55,7 +55,10 @@ broader decision-space survey is actually needed.
 ## Outcome and continuation
 
 Report the confirmed decision or cause, its relevant reasons, and any remaining
-uncertainty. In diagnosis, distinguish the observed symptom, supported cause, and
+uncertainty. When the decision feeds an authorized build, carry its intended experience,
+operative reasons and a representative right/wrong example into the existing decision/task;
+link evidence rather than writing a second handoff or prescribing module design.
+In diagnosis, distinguish the observed symptom, supported cause, and
 proposed fix; a plausible cause is not a confirmed one.
 
 Persist only when authorized: use the project's existing thoughts convention,

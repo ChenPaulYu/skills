@@ -6,9 +6,9 @@ description: "Plan a code change at the depth its coordination and design risks 
 
 # Plan
 
-Turn intent into executable work inside the owning task. Choose how much planning the
-change needs; preserve code readability through ownership, reuse and explicit interfaces,
-and define how the behavior will be verified.
+Turn the accepted experience into executable engineering work inside the owning task.
+Choose how much planning the change needs; preserve code readability through ownership,
+reuse and explicit interfaces, and define how the behavior will be verified.
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
@@ -20,8 +20,10 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 Planning closes the gap between the intended outcome and evidenced current behavior.
 Account for each requested outcome before decomposing modules: what must become true,
 what the code already supports, and which gaps or assumptions could prevent success.
-Walk the affected use/continuation paths to expose missing requirements; distinguish an
-accepted reference's authored examples from capabilities the product must actually provide.
+Trace the accepted use/continuation paths to expose engineering dependencies; distinguish
+an accepted reference's authored examples from capabilities the product must actually provide.
+Treat settled behavior, reasons and reference examples as implementation constraints. Reusing
+a component is appropriate only when it preserves that experience, not just its stored data.
 Explicitly account for deferred outcomes instead of silently dropping them.
 
 Depth changes how much implementation detail is useful, not whether material requirements
@@ -53,7 +55,10 @@ already-granted execution authority. Do not create an extra plan record to chang
    necessary change; cite files. Include dependencies that the outcome relies on.
 2. **Resolve consequential uncertainty.** Surface assumptions that could change the outcome,
    not just questions obvious in the spec. Resolve factual gaps from evidence and product
-   choices from prior decisions or the user; use a render when the decision requires seeing it.
+   choices from prior decisions. If intent is still missing or contradictory, identify the
+   engineering decision it blocks and ask that focused question (shape-elicit / shape-mockup
+   can help). Existing decisions do not require an author sign-off before implementation;
+   nav-plan does not reopen product or visual convergence.
    Keep consequential resolved choices and their reasons visible. Label unresolved assumptions
    with their consequences and blocked work instead of treating them as settled. Routine
    implementation choices remain yours; continue independent authorized work. Question counts
@@ -92,8 +97,9 @@ already-granted execution authority. Do not create an extra plan record to chang
   content-level acceptance case whose answer depends on that evidence, beyond valid formatting
   or delivery. Context/tool availability alone does not prove it was supplied or used; see
   `references/plan-protocol.md` for coverage and evaluation examples.
-- Use a visual comparison when an unresolved visual choice needs one and the capability is
-  available. A mockup can settle appearance; real-engine behavior still needs runtime evidence.
+- Compare implementation with the accepted reference at the interaction and content level.
+  If an unresolved visual choice blocks engineering, return that choice to shape; a mockup
+  can settle appearance, while real-engine behavior still needs runtime evidence.
 - Completion must be checkable. Translate a scored or open-ended target ("90 points", "do all
   of it") into observable criteria, and mark steps that need the user's hands or judgment as
   user-owned. Keep material product outcomes open when their evidence is missing; report

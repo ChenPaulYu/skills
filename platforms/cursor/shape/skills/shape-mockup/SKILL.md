@@ -31,6 +31,10 @@ defines frontmatter, dates, opening conclusions and visible Relations. Keep exis
   use adjacent `mockup.md` in the established artifact folder. Candidate HTML variants share that record. HTML headers
   point to it instead of separately owning mutable picks/status/dates.
 - **Storage:** resolve the connected home workspace before writing and keep the HTML with its mockup card there. Read `references/development-artifacts.md` for complete-artifact preservation, retention and Git checks; legacy project-local storage is a fallback only without a workspace mapping.
+- **Make a pick usable by implementation.** Preserve the accepted experience and reasons,
+  with the representative artifact/state and any still-open choices, in its existing owner.
+  Distinguish authored sample content from the capability expected to produce it. This is
+  decision evidence for engineering, not a second plan or an automatic author sign-off.
 - **After a pick, honor the requested scope.** A settled pick ends exploration; continue an already-authorized build, or stop after the mockup when that was all the user requested.
 
 Full protocol — the firing boundary detail (incl. the `shape-dogfood` sibling distinction), the default (light) and escalate (heavy) render steps, a worked example, the grounded-replica discipline (handfeel + mocked-text-input caveats), activation mechanics, the browser-verify slot + `browser-verifier` subagent dispatch, scope-aware continuation, and the anti-pattern table: `references/mockup-protocol.md`.
