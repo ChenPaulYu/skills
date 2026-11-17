@@ -16,11 +16,15 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 
 ## Choose planning depth
 
-Start from the user/caller outcome before splitting work by modules. Walk a representative
-trigger → result → next action or revisit path from the requests, decisions and accepted
-reference. Turn promised behavior, affected entry points and what must disappear into
-completion checks. Identify content/state supplied by hand in a mockup and how the live
-product will produce it. Cover only affected stages; a bounded fix still needs no extra document.
+Planning closes the gap between the intended outcome and evidenced current behavior.
+Account for each requested outcome before decomposing modules: what must become true,
+what the code already supports, and which gaps or assumptions could prevent success.
+Walk the affected use/continuation paths to expose missing requirements; distinguish an
+accepted reference's authored examples from capabilities the product must actually provide.
+Explicitly account for deferred outcomes instead of silently dropping them.
+
+Depth changes how much implementation detail is useful, not whether material requirements
+and uncertainty are examined. A bounded fix can keep that reasoning brief and need no document.
 
 Read the relevant code and prior decisions before choosing; use decision risk and coordination
 needs, not file count or a fixed document length:
@@ -44,11 +48,15 @@ already-granted execution authority. Do not create an extra plan record to chang
 
 1. **Ground the affected domains at the chosen depth.** Reuse a recent matching audit from the conversation, then
    inspect anything that changed. Trace entry points, implementations, consumers, and tests.
-   Identify the gap between current behavior and the requested outcome; cite files.
-2. **Resolve consequential uncertainty.** Read code and prior decisions before asking. Ask only
-   when a missing answer would change scope, externally visible behavior, compatibility, or a
-   material trade-off. Routine implementation choices are yours to make and explain. Record
-   deferred questions with the step they block; continue independent work.
+   For each affected responsibility, connect intended behavior to current evidence and the
+   necessary change; cite files. Include dependencies that the outcome relies on.
+2. **Resolve consequential uncertainty.** Surface assumptions that could change the outcome,
+   not just questions obvious in the spec. Resolve factual gaps from evidence and product
+   choices from prior decisions or the user; use a render when the decision requires seeing it.
+   Keep consequential resolved choices and their reasons visible. Label unresolved assumptions
+   with their consequences and blocked work instead of treating them as settled. Routine
+   implementation choices remain yours; continue independent authorized work. Question counts
+   and document length are not measures of adequate clarification.
 3. **Write in the owning task when a record is needed.** If the request or repository policy forbids file changes,
    present the plan in chat. In a connected workspace, find the existing work item,
    or create `tasks/<topic>.md` under the task-creation rules in

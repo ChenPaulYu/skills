@@ -2,7 +2,7 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-11-17 (rev 152)
+  Last audit: 2026-11-17 (rev 153)
 ═══════════════════════════════════════════════════════════════════════════
 
   The marketplace source owns current facts. This scoped revision checks the
@@ -187,7 +187,13 @@
       conversion. agy also reads .agents/skills/ project-level (flat names,
       shared with Codex). Verified live 2026-06-11; current roster is 4 plugins.
 
-  ⚠ FIXED in this revision (rev 152)
+  ⚠ FIXED in this revision (rev 153)
+    • Nav 0.26.13: planning restores outcome-to-evidence gap analysis and visible
+      consequential assumptions. Proportional writing retains requirement coverage;
+      clarification is judged by resolved uncertainty, not a question quota.
+      This scoped update checks planning copy and generated channels only.
+
+  ⚠ FIXED in rev 152 (kept for history)
     • Nav 0.26.12: plan starts from promised user outcomes across the affected
       workflow and distinguishes generated-content quality from wiring checks.
       README/site catalog copy follows those gates; generated channels validate.
@@ -3353,11 +3359,11 @@ const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.26.12",
+    "version": "0.26.13",
     "skillCount": 7,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.12; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.12；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.13; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.13；7 個 skills）"
     },
     "files": [
       [
@@ -3388,8 +3394,8 @@ const DOMAINS = {
         "/nav:plan",
         "",
         {
-          "en": "Map promised user outcomes through the affected workflow before choosing direct work, a short task or engineering detail. Preserve ownership/reuse and compatible interfaces; distinguish generated-content quality from wiring checks. Planning stays in the owning task; a planning-only request does not authorize execution (ADR-153).",
-          "zh": "先走過需求中的完整使用流程，再按風險選直接做、短 Task 或工程計畫。保留模組責任、既有流程與相容介面，將生成內容品質和資料／介面串接分開驗收。計畫留在原 Task；只要求規劃不代表授權開工（ADR-153）。"
+          "en": "Connect requested outcomes to current evidence, necessary changes and consequential unresolved assumptions before decomposing work. Scale implementation detail to risk while preserving requirement coverage, ownership/reuse and outcome acceptance. Planning stays in its task; planning-only does not authorize execution.",
+          "zh": "先把每項需求對回現況證據、必要改變與會影響結果的未決假設，再拆工作。工程細節按風險增減，需求檢查、模組責任與結果驗收仍要完整。計畫留在原 Task；只要求規劃不代表授權開工。"
         }
       ],
       [
@@ -3577,8 +3583,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.12; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.12；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.13; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.13；7 個 skills）"
     }
   },
   {

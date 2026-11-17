@@ -18,7 +18,7 @@
       "name": "nav",
       "source": "nav",
       "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
-      "version": "0.26.12"
+      "version": "0.26.13"
     },
     {
       "name": "shape",

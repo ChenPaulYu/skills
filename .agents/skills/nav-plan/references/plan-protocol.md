@@ -6,6 +6,20 @@ not a mandatory set of sections.
 
 ## Grounding and readability
 
+Use a gap-and-uncertainty loop: intended outcome → current evidence → necessary change
+and unresolved premises → evidence or decision that resolves them → an acceptance observation.
+Apply it at the responsibilities affected by the request, including dependencies; a file inventory
+alone cannot establish requirement coverage. Reuse existing task criteria and decisions rather
+than creating another checklist or enforcing a fixed set of headings.
+
+When checking a premise, consider whether an unspoken boundary, compatibility obligation,
+edge condition or trade-off would change the result. These are lenses for finding consequential
+unknowns, not questions to ask by quota. Read facts from the repository/source, recover already
+made choices from the conversation, render visual alternatives when needed, and ask only for a
+remaining user-owned decision. Preserve a resolved choice's rationale when it constrains the
+implementation; keep unresolved premises and their consequences visible to the next executor.
+A short plan can compress the writing while still accounting for those decisions.
+
 Reuse a same-session audit of the same target when it still matches the working tree. Otherwise
 read affected domains, detect the stack, and trace behavior through entry points, implementation,
 consumers, and verification. Scope the investigation to the proposed change.
