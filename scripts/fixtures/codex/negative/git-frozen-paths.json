@@ -7,14 +7,14 @@
     "plugins"
   ],
   "files": {
-    "plugins/nav/skills/plan/SKILL.md": "# baseline skill\n",
+    "plugins/nav/skills/do/SKILL.md": "# baseline skill\n",
     "plugins/frame/skills/analogize/SKILL.md": "# second baseline skill\n",
     "scripts/build-codex.mjs": "console.log('generated only');\n"
   },
   "operations": [
     {
       "kind": "append",
-      "path": "plugins/nav/skills/plan/SKILL.md",
+      "path": "plugins/nav/skills/do/SKILL.md",
       "content": "tracked unstaged edit\n"
     },
     {
@@ -33,7 +33,7 @@
     }
   ],
   "expect_errors": [
-    "frozen Claude contract has tracked unstaged changes: plugins/nav/skills/plan/SKILL.md",
+    "frozen Claude contract has tracked unstaged changes: plugins/nav/skills/do/SKILL.md",
     "frozen Claude contract has staged changes: plugins/frame/skills/analogize/SKILL.md",
     "frozen Claude contract has untracked files: plugins/new/skills/new/SKILL.md"
   ],

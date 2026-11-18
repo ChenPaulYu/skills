@@ -6,10 +6,10 @@
 ## What nav is
 
 Skills for keeping code navigable as it grows, after Ousterhout's *A Philosophy of Software
-Design*. Seven verbs, one per job ([ADR-004](docs/adr/004-nav-verb-roster.md)): `audit`
+Design*. Six verbs, one per job ([ADR-004](docs/adr/004-nav-verb-roster.md)): `audit`
 (assess) · `refactor` (restructure, behavior preserved) · `sync` (headers and reader documents
-against code, [ADR-005](docs/adr/005-nav-sync-scope.md)) · `plan` (a requested engineering
-approach) · `do` (implement decided behavior and verify it) · `compose` (author or restructure
+against code, [ADR-005](docs/adr/005-nav-sync-scope.md)) · `do` (implement decided behavior and
+verify it, or show the approach first when asked) · `compose` (author or restructure
 prose) · `ship` (land finished work). Language-agnostic: a universal core plus per-stack
 heuristics; degrade to universal checks and say what was skipped.
 
@@ -50,14 +50,14 @@ at a useful boundary. The rules apply to nav's own files too.
   — when you are about to hand-produce a behavior change, a structural move or a comparison
   mockup, fire `/nav:do`, `/nav:refactor` or `/shape:mockup` instead.
 - **Reuse via transcript** — a skill that needs another's output first checks whether it
-  already ran on the same input this session and reuses it (`sync`, `plan` reuse `audit`).
+  already ran on the same input this session and reuses it (`sync` and `do` reuse `audit`).
 - **Inject ↔ check at hand-off** — give a bounded executor scope, seams, contracts and
   completion checks; read the actual diff and reproduce verification before accepting.
 - **Live-LLM cost** ([ADR-008](docs/adr/008-verification-and-spend-gates.md)) — name added paid
   scope before running it; never substitute a mock and call it live verification.
 - **Task ownership** ([ADR-016](docs/adr/016-task-owned-planning-and-direct-execution.md)) —
-  Shape's task owns the delivery record; `do` verifies and writes back to it; `plan` answers in
-  chat unless asked to persist. A plan location is a convention, not permission to commit
+  Shape's task owns the delivery record; `do` verifies and writes back to it, and answers
+  approach-first requests in chat. A plan location is a convention, not permission to commit
   process notes.
 
 ## When editing nav

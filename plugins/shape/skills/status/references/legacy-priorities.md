@@ -113,16 +113,16 @@ align stops at writing `plan.md`; it never generates or maintains an HTML file.
 ## The seam with `nav` — don't blur it
 
 align is **pre-build** (intent side). It ends at "decided + recorded in blueprints".
-`/nav:plan` is **build-side**: it takes a thought/spec and grounds it into a *codebase-level
-implementation plan*. `blueprints/` is the hand-off artifact. They are adjacent verbs, not
-overlapping — align triages forward into a status board; nav:plan grounds one item down into
+`/nav:do` is **build-side**: it takes a thought/spec and, when asked, grounds it into a *codebase-level
+implementation approach*. `blueprints/` is the hand-off artifact. They are adjacent verbs, not
+overlapping — align triages forward into a status board; nav:do grounds one item down into
 code. Never produce a code-implementation plan here.
 
 **Board currency is push-primary, align is the pull safety net (ADR-015).** The board's
 staleness problem is structural: work ships through execution verbs that historically never
 touched `plan.md`, so the board only healed when align was summoned — and it always lagged. The
 fix mirrors the ledger/file-header pattern that demonstrably stays current ("change lands →
-same commit updates the record"): `/nav:do`'s fourth check gate and `/nav:plan`'s board
+same commit updates the record"): `/nav:do`'s fourth check gate and `/nav:do`'s board
 close-out update the touched item at ship time (push); align's every-item verification (Step 2)
 catches whatever bypassed them (pull). Neither side alone suffices — push keeps the board
 honest daily, pull keeps it honest against undisciplined writers.

@@ -7,16 +7,16 @@
   "verify_sync_profile_preservation": true,
   "verify_full_compat_exit": true,
   "seed_legacy_duplicates": [
-    "nav-plan",
+    "nav-do",
     "shape-status"
   ],
   "reject_legacy_duplicates": [
-    "nav-plan",
+    "nav-do",
     "shape-status"
   ],
-  "expect_skill_count": 23,
+  "expect_skill_count": 22,
   "expect_skills": [
-    "nav-plan",
+    "nav-do",
     "shape-status",
     "shape-wrap",
     "shape-task",

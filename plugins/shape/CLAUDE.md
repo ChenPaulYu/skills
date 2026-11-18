@@ -39,8 +39,8 @@ instructions; their history is in the ADRs.
 
 ## Seams
 
-Shape converges intent and defines verifiable tasks; `nav:do` implements, `nav:refactor`
-restructures, `nav:plan` answers requested engineering proposals
+Shape converges intent and defines verifiable tasks; `nav:do` implements and also
+answers approach-first requests, `nav:refactor` restructures
 ([ADR-016](docs/adr/016-task-owned-planning-and-direct-execution.md)). `wrap` saves the touched
 task and `status` resumes the next round. No skill calls another; Shape has no whole-turn
 `model: sonnet` override. Probe and dogfood still name live-provider cost before spending it.

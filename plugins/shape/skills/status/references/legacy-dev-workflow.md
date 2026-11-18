@@ -23,9 +23,9 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 | Reconcile completed/stale design notes, plans, and mockups | `/shape:tidy` |
 | Check/update README, setup, usage, or architecture docs against code | `/nav:sync` |
 | See the board rendered visually | `/shape:mockup` → an on-demand board snapshot |
-| Scope a feature against the actual code | `/nav:plan` → `docs/blueprints/plans/` |
+| Scope a feature against the actual code | `/nav:do` (approach first) |
 | Implement a small decided change | `/nav:do` |
-| Drive the in-progress board to done | manual: `/nav:plan` per item → `/nav:do`/`/nav:refactor` → `/shape:status` |
+| Drive the in-progress board to done | manual: `/nav:do` per item (or `/nav:refactor`) → `/shape:status` |
 | Behaviour-preserving structural move | `/nav:refactor` |
 | Re-sync file-top headers after restructuring | `/nav:sync` |
 | Audit architecture | `/nav:audit` |
@@ -36,4 +36,4 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 <!-- shape:dev-workflow end -->
 ```
 
-**Canonical locations (establish these at birth so a project never half-adopts the workflow):** grounded plans live at `docs/blueprints/plans/` — *not* a separate `docs/plans/`. A project that puts nav:plan output one place and the board another is the "half-adopted" smell (nav side present, shape side absent); one tree avoids it.
+**Canonical locations (establish these at birth so a project never half-adopts the workflow):** grounded plans live at `docs/blueprints/plans/` — *not* a separate `docs/plans/`. A project that puts approach notes one place and the board another is the "half-adopted" smell (nav side present, shape side absent); one tree avoids it.

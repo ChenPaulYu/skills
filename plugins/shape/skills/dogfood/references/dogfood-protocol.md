@@ -122,7 +122,7 @@ A feature lets users **archive** items to declutter. It shipped; it feels off. D
 - **Report:** a session clip up top, two friction-or-gap entries each with its shot + the saved
   500 response, the "find again" gap tagged *direction*, the restore gap tagged *incomplete*.
 - **Route:** "find again has no entry" → `/shape:elicit` ("is archive meant to be one-way? then
-  it's the design, not a hole"); the undo-toast idea → `/nav:plan`; the 500 → `/nav:plan` to
+  it's the design, not a hole"); the undo-toast idea → `/nav:do` (approach first); the 500 → `/nav:do` to
   finish.
 
 The session turns "this feels off" into "watch this — archiving is clunky (here's the fix), and
@@ -138,7 +138,7 @@ two things you can't actually do — one's a direction question, one's just unfi
 | Enumerate every `state × action` cell | Use human intents instead — they have a floor; a full state×action matrix is a QA exercise that explodes. Tell: the session is generating combinations instead of walking realistic user goals. |
 | Make rendering a mockup the mandatory output | Render only when a finding is a genuine redesign worth `/shape:mockup` — the real output is an evidence-rich report + ideas. Tell: about to build a mockup before any friction has actually been found. |
 | Only report friction, ignore the gaps that fall out | Report and tag both — a clunky path AND an intent with no path at all. Tell: a missing user intent observed during the run was omitted from the findings. |
-| Redesign or implement the fix in place | Surface + route — the redesign is `/shape:elicit`/`/shape:mockup`, the finish is `/nav:plan` + `/nav:do`/`/nav:refactor`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
+| Redesign or implement the fix in place | Surface + route — the redesign is `/shape:elicit`/`/shape:mockup`, the finish is `/nav:do`/`/nav:refactor`. Tell: about to change code or a mockup mid-dogfood-session instead of naming the finding. |
 | Confuse it with `/verify` | Keep the question separate — verify checks correctness, dogfood critiques experience + coverage. Tell: the session is checking "does this work" instead of "does this feel right / is anything missing." |
 | Fire on a passing mention of a feature | Wait for a "try it / it feels off / show me where it's clunky" request. Tell: about to start a dogfood session off an incidental mention of a feature, not an actual ask. |
 | Keep going after the feature feels smooth | Exit when the evidence and findings answer the request; routing is optional. Tell: continuing to poke at a flow after nothing new has surfaced for a while. |
@@ -150,7 +150,7 @@ two things you can't actually do — one's a direction question, one's just unfi
   like · an improvement idea, embedding its screenshot / response.
 - **The session captures** — `session.mp4`/`.webm` (where supported), `shots/`, `responses/`.
 - **The coverage gaps that fell out**, each tagged by layer (direction vs incomplete) and
-  routed: direction → `/shape:elicit`/`/shape:mockup`; incomplete → `/nav:plan` + `/nav:do`/`/nav:refactor`.
+  routed: direction → `/shape:elicit`/`/shape:mockup`; incomplete → `/nav:do`/`/nav:refactor`.
 - (Optional) a hand-off to `/shape:mockup` for any finding big enough to be a *redesign* — not
   the default.
 - A useful tracking suggestion when needed, not a required closing menu.

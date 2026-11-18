@@ -11,8 +11,7 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 |---|---|
 | Audit my codebase's architecture / find smells | `/nav:audit` |
 | Queue decided deliverables and define how to accept them | `/shape:task` |
-| Implement a decided fix or feature | `/nav:do` |
-| Review an engineering approach against the actual code | `/nav:plan` |
+| Implement a decided fix or feature, or see its engineering approach first | `/nav:do` |
 | Land finished work: commit, push, merge, clean up branches（收尾）| `/nav:ship` |
 | Mock up / compare a few options visually（想看選項長什麼樣） | `/shape:mockup` |
 | Think a decision through — I haven't decided yet | `/shape:elicit` |
@@ -25,16 +24,16 @@ A quick lookup for the highest-frequency intents — full plugin tables and per-
 ## What's in here
 
 <!-- BEGIN GENERATED catalog-plugins -->
-Catalog: 3 plugins · 23 skills.
+Catalog: 3 plugins · 22 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.27.0 | 7 | **Keep code healthy** — audit, refactor, sync source and docs, implement decided behavior, review requested engineering approaches, ship, and compose clear prose. |
-| [`shape`](plugins/shape/) | 0.35.11 | 10 | **Give work its form** — connect projects, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. |
+| [`nav`](plugins/nav/) | 0.28.0 | 6 | **Keep code healthy** — audit, refactor, sync source and docs, implement decided behavior, ship, and compose clear prose. |
+| [`shape`](plugins/shape/) | 0.35.12 | 10 | **Give work its form** — connect projects, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. |
 | [`frame`](plugins/frame/) | 0.17.3 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
-**Shape** converges decisions and defines verifiable tasks. **Nav** implements and lands decided work (do → ship) and keeps it healthy (audit → refactor → sync). Use nav-plan when you want to review the engineering approach. **frame** (the understanding family: lenses to see a problem, forms to present an answer, and `unfold` to walk through a subject one layer at a time) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
+**Shape** converges decisions and defines verifiable tasks. **Nav** implements and lands decided work (do → ship) and keeps it healthy (audit → refactor → sync). Ask nav-do for the approach first when you want to review it before building. **frame** (the understanding family: lenses to see a problem, forms to present an answer, and `unfold` to walk through a subject one layer at a time) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
 
 More plugins land here over time. Each lives in its own folder under `plugins/`, gets its own `plugin.json`, and registers via the marketplace's `marketplace.json`.
 
@@ -49,7 +48,7 @@ Use `/shape:setup` once to connect a code repository to its selected home worksp
 Ask `/nav:ship` to land finished work ("幫我 commit -> push -> merge，然後把沒在用的 branch 刪一刪"); it merges into main by default, opens a PR only when the project requires one, deletes only merged branches, and runs the tail documented in the project's `## Ship` section (ADR-004). Ask `/frame:unfold` for a layered walkthrough ("用 progressive disclosure 帶我認識 X", "walk me through X") and `/frame:tinker` for an object you can poke; a single explanation or ELI5 stays with `/frame:analogize`. Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-010).
 
 <!-- BEGIN GENERATED catalog-skills -->
-Catalog skills: 23 active skills.
+Catalog skills: 22 active skills.
 
 ### `nav`
 
@@ -58,7 +57,6 @@ Catalog skills: 23 active skills.
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a behavior-preserving structural refactor with risk-proportional verification
 - `/nav:sync` — check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-005)
-- `/nav:plan` — ground a requested engineering proposal in code, including ownership, reuse, compatibility and verification
 - `/nav:do` — find the owning task and Git baseline before editing, implement authorized changes, and record verified progress in the original task
 - `/nav:compose` — author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval
 - `/nav:ship` — land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-004)

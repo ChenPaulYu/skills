@@ -12,7 +12,6 @@
     "nav-audit": "Audit codebase architecture against deep-module principles. Use for health, smells, feature-readiness, or full-domain reviews; read-only.",
     "nav-compose": "Author or restructure prose: lead with the point, group by knowledge, and preserve claims and sources. Checking README/docs against implementation belongs to nav-sync.",
     "nav-do": "Implement and verify authorized, already-decided fixes or multi-item tasks. Ground the approach in code; unresolved product choices and behavior-preserving refactors belong elsewhere.",
-    "nav-plan": "Ground an engineering approach in the code when asked for an implementation plan or to compare technical options. Use shape-task for delivery criteria and nav-do for decided builds.",
     "nav-refactor": "Execute a behavior-preserving structural refactor with risk-proportional verification. Use to extract, split, or reorganize code without changing observable contracts.",
     "nav-ship": "Land finished work: commit, push, merge into main (or open a PR when required), clean merged branches and worktrees, then run the project's documented tail. Making the change belongs to nav-do.",
     "nav-sync": "Check or batch-update README and docs, or refresh code-file headers against current implementation. Verify claims and missing reader workflows. Project-record cleanup belongs to shape-tidy.",

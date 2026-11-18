@@ -9,8 +9,9 @@ check, and the same task carries evidence and the next action. Recording a task
 leaves execution pending. `nav:do` accepts decided multi-item work, finds the owning
 work item before its first edit, grounds ownership, ordering, compatibility and
 verification in code, and records verified progress in that task. A bounded fix with
-no matching task can proceed directly. `nav:plan` answers requests to see or choose
-an engineering approach, in chat by default. Experience decided in elicit or mockup
+no matching task can proceed directly. When the user asks to see or compare the
+engineering approach first, `nav:do` gives it in chat and stops; there is no separate
+planning skill. Experience decided in elicit or mockup
 is carried into the task and traced by the implementer; an unresolved user-owned
 choice returns to shape. Existing engineering sections and legacy plans stay
 readable.
@@ -21,7 +22,9 @@ readable.
   trial, direct implementation passed the shared acceptance checks; the planned path
   flagged two real risks but missed an older persisted representation. One trial
   supports the default for decided work, not that written proposals are worthless.
-- Retiring `nav:plan` immediately was rejected; the explicit engineering-review entry
-  stays until more cases are tested.
+- A separate `nav:plan` entry for reviewing an approach was kept briefly as a trial and
+  removed on 2026-11-18 at the owner's call: `nav:do` already planned within execution,
+  and two entries for one job split the trigger. Its grounding and verification guidance
+  moved to `nav:do`'s `references/planning.md`.
 - A new handoff skill or extra mandatory step between shape and nav was rejected.
 - A new record type or formatter for plans was rejected.

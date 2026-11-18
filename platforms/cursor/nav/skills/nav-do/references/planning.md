@@ -1,7 +1,7 @@
-# Plan protocol — grounded work at the necessary depth
+# Planning — grounded work at the necessary depth
 
 The skill body owns depth selection, continuation and authority. Use this reference when
-working through a requested engineering approach; it supplies grounding and verification examples,
+planning coupled work or answering a request to see the approach first; it supplies grounding and verification examples,
 not a mandatory set of sections.
 
 ## Grounding and readability
@@ -18,7 +18,7 @@ unknowns, not questions to ask by quota. Read facts from the repository/source, 
 made choices from the conversation, and ask only for a remaining user-owned decision.
 Engineering owns factual investigation and routine implementation trade-offs. A missing API
 fact is not a question for the author. An unresolved product choice names the affected
-engineering decision and returns to shape; it does not expand plan into product discovery. Preserve a resolved choice's rationale when it constrains the
+engineering decision and returns to shape; it does not expand planning into product discovery. Preserve a resolved choice's rationale when it constrains the
 implementation; keep unresolved premises and their consequences visible to the next executor.
 A short plan can compress the writing while still accounting for those decisions.
 

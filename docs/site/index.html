@@ -220,14 +220,14 @@
     <section id="nav-anatomy">
       <h2>
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
-        <span data-t="navanat_title">nav anatomy — assess, transform, describe, plan, execute, ship</span>
+        <span data-t="navanat_title">nav anatomy — assess, transform, describe, execute, ship</span>
       </h2>
-      <div class="lede" data-t="navanat_lede">Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).</div>
+      <div class="lede" data-t="navanat_lede">Six skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes, or shows the engineering approach first when asked; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).</div>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
       </div>
-      <div class="callout" data-t="navanat_callout">Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. <code>nav-plan</code> grounds an engineering approach when you ask to review one.</div>
+      <div class="callout" data-t="navanat_callout">Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. Ask <code>nav-do</code> for the engineering approach first when you want to review it before building.</div>
     </section>
 
     <section id="shape-anatomy">
@@ -294,9 +294,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav anatomy — assess, transform, describe, plan, execute, ship',
-    navanat_lede: "Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).",
-    navanat_callout: "Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. <code>nav-plan</code> grounds an engineering approach when you ask to review one.",
+    navanat_title: 'nav anatomy — assess, transform, describe, execute, ship',
+    navanat_lede: "Six skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes, or shows the engineering approach first when asked; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).",
+    navanat_callout: "Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. Ask <code>nav-do</code> for the engineering approach first when you want to review it before building.",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
     // panel labels
@@ -310,7 +310,7 @@ const T = {
     nav_default_h3: 'nav plugin anatomy',
     nav_default_role: "Six skills. Click a node for its responsibility.",
     nav_default_click_label: 'tip',
-    nav_default_click_text: "Sync keeps requested explanations current, from a source header to a full README/docs batch. Audit checks structure; compose organizes prose; plan grounds work; do and refactor implement it.",
+    nav_default_click_text: "Sync keeps requested explanations current, from a source header to a full README/docs batch. Audit checks structure; compose organizes prose; do and refactor implement it, and do shows the approach first when asked.",
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape anatomy — converge · project · handoff',
     shape_anat_lede: "Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-014). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.",
@@ -364,8 +364,8 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃、執行、收尾',
-    navanat_lede: "七個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的變更，<code>plan</code> 在有需要時提供工程方案；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-005）。",
-    navanat_callout: "用 <code>shape-task</code> 定義交付項目和驗收條件。<code>nav-do</code> 實作已決定且已授權的工作，也能接多項目的 Task。要先檢視工程做法時，再用 <code>nav-plan</code>。",
+    navanat_lede: "六個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的變更，需要時可先提供工程做法；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-005）。",
+    navanat_callout: "用 <code>shape-task</code> 定義交付項目和驗收條件。<code>nav-do</code> 實作已決定且已授權的工作，也能接多項目的 Task。要先檢視工程做法時，請 <code>nav-do</code> 先給做法。",
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
     role_label: '角色', wires_label: '指向', used_by_label: '被指向', view_anatomy: '前往解剖',
@@ -377,7 +377,7 @@ const T = {
     nav_default_h3: 'nav plugin 解剖',
     nav_default_role: "六個 skill。點選節點查看分工。",
     nav_default_click_label: '提示',
-    nav_default_click_text: "sync 校準指定範圍的說明，從一份程式檔頭到整批 README／docs 都能處理。audit 檢查結構，compose 整理文稿，plan 接地計畫，do 與 refactor 執行變更。",
+    nav_default_click_text: "sync 校準指定範圍的說明，從一份程式檔頭到整批 README／docs 都能處理。audit 檢查結構，compose 整理文稿，do 與 refactor 執行變更，do 也能先提供工程做法。",
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape 解剖 —— 收斂 · 排序 · 整理 · 交接',
     shape_anat_lede: "舊入口相容圖（八個）；workspace 另外試用 <code>idea</code>、<code>status</code>、<code>wrap</code>（ADR-014）。原本的 <code>blueprints/</code> 慣例：mockup、elicit、probe、dogfood 收斂決策；<code>align</code> 核對工作板，跟使用者決定優先順序；<code>tidy</code> 獨立整理過期設計紀錄並保存理由。park／catchup 共用一份交接檔。",
@@ -396,13 +396,13 @@ const T = {
 const LAYERS = [
   {cls:'ui', name:{en:'Marketplace', zh:'Marketplace'}, tag:{en:'the container — identity from GitHub username', zh:'容器 —— 身份來自 GitHub 帳號'}, doms:['skills']},
   {cls:'state', name:{en:'Plugin', zh:'Plugin'}, tag:{en:'a topical family of skills', zh:'一個主題家族的 skills'}, doms:['nav']},
-  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','plan','do','compose']},
+  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','do','compose']},
 ];
 
 const ARCH_LAYERS = [
   {cls:'ui', label:{en:'MARKETPLACE', zh:'MARKETPLACE'}, desc:{en:'<code>skills/</code> — the personal collection. <code>.claude-plugin/marketplace.json</code> lists which plugins live inside. Identity comes from the GitHub username (<code>ChenPaulYu/skills</code>), not the folder name.', zh:'<code>skills/</code> —— 個人收藏。<code>.claude-plugin/marketplace.json</code> 列出內含的 plugins。身份來自 GitHub 帳號(<code>ChenPaulYu/skills</code>),不是資料夾名。'}},
   {cls:'state', label:{en:'PLUGIN', zh:'PLUGIN'}, desc:{en:'<code>plugins/&lt;family&gt;/</code> — one topical family. <code>.claude-plugin/plugin.json</code> declares the plugin; <code>CLAUDE.md</code> holds its dev conventions; <code>skills/</code> holds the verbs.', zh:'<code>plugins/&lt;family&gt;/</code> —— 一個主題家族。<code>.claude-plugin/plugin.json</code> 宣告 plugin;<code>CLAUDE.md</code> 是開發約定;<code>skills/</code> 放動詞。'}},
-  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','sync','plan','do','compose']},
+  {cls:'foundation', label:{en:'SKILL', zh:'SKILL'}, chips:['audit','refactor','sync','do','compose']},
 ];
 
 const ARCH_CONN = [
@@ -424,17 +424,17 @@ const RULES = [
 // BEGIN GENERATED catalog-data
 const CATALOG_COUNTS = {
   "plugins": 3,
-  "skills": 23
+  "skills": 22
 };
 const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.27.0",
-    "skillCount": 7,
+    "version": "0.28.0",
+    "skillCount": 6,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.27.0; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.27.0；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Execute within existing authority, with the approach first when asked; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.28.0; 6 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。do 承接既有授權，也能先提供工程做法；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.28.0；6 個 skills）"
     },
     "files": [
       [
@@ -459,14 +459,6 @@ const DOMAINS = {
         {
           "en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry for a named file or a complete README/docs batch; no standing codebase HTML (ADR-005).",
           "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。可處理指定單檔或整批 README／docs，每份都有處理結果；不再維護常駐 codebase HTML（ADR-005）。"
-        }
-      ],
-      [
-        "/nav:plan",
-        "",
-        {
-          "en": "Ground a requested engineering approach in existing code. Explain ownership, reuse, compatibility and verification in proportion to risk.",
-          "zh": "在要求檢視工程做法時，從現有程式查清模組責任、可重用的路徑、相容性和驗證方式。"
         }
       ],
       [
@@ -498,11 +490,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.35.11",
+    "version": "0.35.12",
     "skillCount": 10,
     "blurb": {
-      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.11; 10 skills)",
-      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.11；10 個 skills）"
+      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.12; 10 skills)",
+      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.12；10 個 skills）"
     },
     "files": [
       [
@@ -662,8 +654,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.27.0; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.27.0；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Execute within existing authority, with the approach first when asked; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.28.0; 6 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。do 承接既有授權，也能先提供工程做法；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.28.0；6 個 skills）"
     }
   },
   {
@@ -679,8 +671,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014). (v0.35.11; 10 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。（v0.35.11；10 個 skills）"
+      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014). (v0.35.12; 10 skills)",
+      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。（v0.35.12；10 個 skills）"
     }
   },
   {
@@ -704,7 +696,6 @@ const CB_NODES = [
 const CB_EDGES = [['shape','nav']];
 
 const NAV_NODES = [
-  {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'engineering proposal', zh:'工程方案'}, desc:{"en": "Ground a requested engineering proposal in the existing code. Explain ownership, compatibility, rollout and verification where they affect the decision.", "zh": "從現有程式查清工程方案，說明會影響決策的模組責任、相容性、上線順序和驗證方式。"}},
   {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
   {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Behavior-preserving structural change: public contracts and observable behavior stay stable, while necessary internal rewrites are allowed when verified. Syncs each touched file header inline in the same change (ADR-004, like do); repo map regen stays sync job. Verification scales with risk and touched surface.', zh:'保持行為的結構調整:公開契約與可觀察行為維持穩定,必要的內部改寫可做但要驗證。被動到的檔 header 在同一步 inline 同步(ADR-004,同 do);repo map 重生仍交給 sync。驗證強度依風險與觸及面調整。'}},
   {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{"en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry, with only the requested surface in scope; no standing codebase HTML (ADR-005).", "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。只處理指定範圍，不再維護常駐 codebase HTML（ADR-005）。"}},
@@ -713,9 +704,7 @@ const NAV_NODES = [
 ];
 
 const NAV_EDGES = [
-  ['plan', 'audit'],
   ['sync', 'audit'],
-  ['plan', 'do'],
   ['refactor', 'do'],
   ['compose', 'sync'],
 ];
@@ -752,7 +741,7 @@ const CONV = [
   {label:{en:'Skill name = bare verb', zh:'Skill 名 = 裸動詞'}, desc:{en:"Just <code>audit</code>, not <code>nav-audit</code>. Namespace lives in the plugin name; don\'t pay twice. ADR-001.", zh:'就 <code>audit</code>,不是 <code>nav-audit</code>。命名空間在 plugin 名;別付兩次。ADR-001。'}},
   {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill carries the current rules it needs and remains usable without shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 攜帶自己需要的現行規則,不依賴 SKILL.md 之間互相 import。ADR-001 #3。'}},
   {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-001.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-001。'}},
-  {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (sync, refactor, plan) shows the change before applying.', zh:'任何會改檔的 skill(sync、refactor、plan)套用前先示差異。'}},
+  {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (sync, refactor) shows the change before applying.', zh:'任何會改檔的 skill(sync、refactor)套用前先示差異。'}},
   {label:{en:'Stack-neutral examples', zh:'範例 stack-中性'}, desc:{en:'Every SKILL.md example reads standalone — no past-project domain nouns. Use generic placeholders (UserList, useSelection). A skill that needs Project X context is leaky.', zh:'每個 SKILL.md 範例都能單看就懂 —— 不帶過去專案的領域詞。用通用 placeholder(UserList、useSelection)。需要 Project X 背景才看得懂的 skill 就是漏的。'}},
   {label:{en:'Skills-root-relative paths', zh:'以 skills 為根的路徑'}, desc:{en:'All paths (doc links AND example code) written as if <code>skills/</code> is root. No <code>./</code> or <code>../</code> prefixes. Imports use alias (<code>@/core/user</code>) or bare names.', zh:'所有路徑(doc 連結與範例程式碼)都以 <code>skills/</code> 為根。不用 <code>./</code> 或 <code>../</code>。import 用 alias(<code>@/core/user</code>)或裸模組名。'}},
   {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-007.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-007。'}},

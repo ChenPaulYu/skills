@@ -6,15 +6,16 @@ Status: accepted · 2026-11-18
 
 Nav has one verb per job: `audit` (health, feasibility, or deep per-domain fan-out),
 `refactor` (behavior-preserving restructure, syncing affected headers in the same
-change), `sync` (headers and reader documents), `plan` (a requested engineering
-approach), `do` (implement decided behavior and verify it), `compose` (author or
+change), `sync` (headers and reader documents), `do` (implement decided behavior and
+verify it, or show the grounded approach first when asked), `compose` (author or
 restructure prose) and `ship` (commit, push, merge, clean up). Audit's deep mode uses
 read-only sub-agents per domain plus a completeness critic; it is suggested, never
 auto-run.
 
 ## Evidence and alternatives
 
-- A separate `spec` plugin for planning was rejected; planning stays a nav verb.
+- A separate `spec` plugin for planning was rejected, and so was a separate `plan` verb
+  (removed 2026-11-18): planning happens inside `do` (ADR-016).
 - No implementation verb (leaning on global instructions) was rejected: the
   inject-and-check discipline kept being skipped until it had a door.
 - A `doctor` orchestrator and a standalone integration verb were rejected; their

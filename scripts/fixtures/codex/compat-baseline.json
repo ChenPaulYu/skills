@@ -56,10 +56,9 @@
   "ratchet_ledger": [
     {
       "date": "2026-07-13",
-      "reason": "ADR-017 arbitration: ADR-007 dispatch-tiers content legitimately adds worker-dispatch / model-tier / explicit-invocation language to nav-plan, nav-audit, shape-build and AGENTS.md. Conscious bump; to be ratcheted back down when build-codex learns to lower/strip Claude-only dispatch semantics (codex-compatibility Phases 1-5).",
+      "reason": "ADR-017 arbitration: ADR-007 dispatch-tiers content legitimately adds worker-dispatch / model-tier / explicit-invocation language to nav-audit, shape-build and AGENTS.md. Conscious bump; to be ratcheted back down when build-codex learns to lower/strip Claude-only dispatch semantics (codex-compatibility Phases 1-5).",
       "bumps": {
         "subagent_protocol": {
-          ".agents/skills/nav-plan/SKILL.md": "10->11",
           "AGENTS.md": "8->9"
         },
         "disable_model_invocation": {
@@ -67,7 +66,6 @@
         },
         "model_sonnet": {
           ".agents/skills/nav-audit/SKILL.md": "0->1",
-          ".agents/skills/nav-plan/SKILL.md": "0->1",
           ".agents/skills/shape-build/SKILL.md": "1->2",
           "AGENTS.md": "7->8"
         }
@@ -96,7 +94,7 @@
     },
     {
       "date": "2026-07-14",
-      "reason": "ADR-007 extends ADR-007's dispatch-tiers convention with a pre-dispatch proposal gate, borrowing ADR-009's batch-proposal-gate pattern by name — root CLAUDE.md's dispatch-tiers bullet names 'AskUserQuestion-style ask' a second time, alongside the existing nav:plan Stage-4 mention already counted once. No new capability — the same interactive_choice mechanism, referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "reason": "ADR-007 extends ADR-007's dispatch-tiers convention with a pre-dispatch proposal gate, borrowing ADR-009's batch-proposal-gate pattern by name — root CLAUDE.md's dispatch-tiers bullet names 'AskUserQuestion-style ask' a second time, alongside a prior Stage-4 mention already counted once. No new capability — the same interactive_choice mechanism, referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
       "bumps": {
         "ask_user_question": {
           "AGENTS.md": "1->2"
@@ -109,19 +107,16 @@
       "drops": {
         "agent_call": {
           ".agents/skills/nav-audit/SKILL.md": "1->0",
-          ".agents/skills/nav-plan/SKILL.md": "1->0",
           ".agents/skills/nav-refactor/SKILL.md": "1->0"
         },
         "subagent_type": {
           ".agents/skills/nav-audit/SKILL.md": "1->0",
-          ".agents/skills/nav-plan/SKILL.md": "1->0",
           ".agents/skills/nav-refactor/SKILL.md": "1->0"
         },
         "subagent_protocol": {
           ".agents/skills/nav-audit/SKILL.md": "9->0",
           ".agents/skills/nav-compose/references/authoring-failure-modes.md": "1->0",
           ".agents/skills/nav-do/SKILL.md": "2->0",
-          ".agents/skills/nav-plan/SKILL.md": "11->0",
           ".agents/skills/nav-refactor/SKILL.md": "4->0",
           ".agents/skills/shape-build/SKILL.md": "2->0",
           ".agents/skills/shape-elicit/SKILL.md": "4->0",
@@ -137,7 +132,6 @@
         },
         "model_sonnet": {
           ".agents/skills/nav-audit/SKILL.md": "1->0",
-          ".agents/skills/nav-plan/SKILL.md": "1->0",
           ".agents/skills/relay-digest/SKILL.md": "2->0",
           ".agents/skills/relay-format/SKILL.md": "2->0",
           ".agents/skills/shape-align/SKILL.md": "2->0",
@@ -160,7 +154,6 @@
         "ask_user_question": {
           ".agents/skills/frame-dialectic/SKILL.md": "1->0",
           ".agents/skills/frame-first-principles/SKILL.md": "1->0",
-          ".agents/skills/nav-plan/SKILL.md": "4->0",
           ".agents/skills/nav-refactor/SKILL.md": "2->0",
           ".agents/skills/shape-dogfood/SKILL.md": "1->0",
           ".agents/skills/shape-elicit/SKILL.md": "1->0",
