@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: "Restructure code while preserving observable behavior and public contracts. Use for extraction, consolidation, or reorganization; behavior-changing features and fixes belong to /nav:do or a grounded implementation plan."
+description: "Restructure code while preserving observable behavior and public contracts. Use for extraction, consolidation, or reorganization; behavior-changing features and fixes belong to nav-do."
 ---
 
 # Refactor

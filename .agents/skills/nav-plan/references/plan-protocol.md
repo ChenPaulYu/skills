@@ -1,7 +1,7 @@
 # Plan protocol — grounded work at the necessary depth
 
 The skill body owns depth selection, continuation and authority. Use this reference when
-writing a short task or engineering detail; it supplies grounding and verification examples,
+working through a requested engineering approach; it supplies grounding and verification examples,
 not a mandatory set of sections.
 
 ## Grounding and readability
@@ -72,51 +72,13 @@ available or authorized, retain that acceptance item as pending and complete ind
 engineering work within scope. Do not treat the user's core outcome as verified by relabeling it
 an optional quality improvement.
 
-## One task, expanded only where useful
+## Keep the approach proportional
 
-In a connected workspace, extend the existing task rather than replacing its goal, progress or
-verification. Follow the shared frontmatter, opening summary and visible Relations convention;
-those fields are owned by the record interface, not this template. Planning-only work remains
-`planned`. Keep live legacy plans and unconnected-repository conventions in their existing shape.
-
-A short task can use this body. Omit empty sections; do not manufacture work just to fill it.
-
-```markdown
-# <Outcome>
-
-> <Current state or open question in up to three lines.>
-> Next: <concrete next action>
-
-## Relations
-<Projection of actual frontmatter links, or an explicit absence of relations.>
-
-## Goal and boundaries
-<Desired outcome, authorized scope and existing behavior that must remain intact.>
-
-## Completion criteria
-<Observable outcomes, including what evidence is needed before closing.>
-
-## Work items
-- [ ] <Ready outcome and its completion check.>
-- [ ] <Dependent outcome and its completion check; name its dependency when needed.>
-
-## Verification
-<Expected result and command/workflow for each material risk. Planned checks are not passes.>
-
-## Progress, evidence and next action
-<Actual changes, checks run and observed results; remaining limits/blockers and next ready item.>
-```
-
-For engineering depth, add an **Implementation plan** in the same task: responsibility/ownership,
-reuse, critical interface changes, compatibility and risk handling, followed by dependency-ordered,
-independently verifiable changes. Name critical files where their role matters. Resolved/open
-questions, migration/rollback or a file-role table are useful only when they inform execution.
-Do not prescribe every edit or add a second progress checklist in another document.
-
-A work item is an outcome the executor can verify, not just "edit file A." Keep structural
-preparation reviewable separately from new behavior. After a verified item, advance the next
-ready item within the user's existing authorization; update blockers without losing independent
-work. Do not split one task into several records merely to list implementation steps.
+An engineering proposal explains responsibility and ownership, reuse, critical
+interface changes, compatibility and risk handling. Order dependent changes
+where sequencing matters. Name critical files when their role informs a choice.
+Discuss rollback only when the proposed change needs it. Use the existing task's
+deliverables and acceptance checks as inputs and keep their progress in that task.
 
 ## Verification design and evidence
 

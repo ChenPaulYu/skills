@@ -56,9 +56,9 @@ choice or permission is still missing, ask that specific question; otherwise
 suggest a next step only when useful. Do not invent a follow-up task or invoke
 another skill automatically.
 
-For authorized work, shape-status handles durable priorities, nav-do small decided
-changes, and nav-plan substantial builds. Unresolved product choices can use
-shape-elicit or shape-mockup when available.
+For authorized work, use the shape-task convention when deliverables need tracking
+and nav-do discipline for implementation. Shape-status handles durable priorities.
+Unresolved product choices can use shape-elicit or shape-mockup when available.
 
 ## Communication style
 

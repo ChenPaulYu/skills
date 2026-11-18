@@ -14,11 +14,12 @@
     "nav-plan",
     "shape-status"
   ],
-  "expect_skill_count": 22,
+  "expect_skill_count": 23,
   "expect_skills": [
     "nav-plan",
     "shape-status",
     "shape-wrap",
+    "shape-task",
     "shape-setup"
   ],
   "expect_runtime_files": [

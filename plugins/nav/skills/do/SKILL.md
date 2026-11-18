@@ -1,11 +1,12 @@
 ---
 name: do
-description: "Make a small, already-decided, behaviour-changing code change directly — with deep-module discipline, but no plan.md. Fires on \"just add X\" / \"你做一下\" / \"直接開始實作\", or post-converge \"make it functional\". NOT for behaviour-preserving moves (use /nav:refactor) or large/ambiguous specs (use /nav:plan)."
+description: "Implement already-decided behavior changes, including a multi-item task, and verify the result. Use for authorized fixes or features with clear outcomes. Behavior-preserving refactors and unresolved product choices belong to separate workflows."
 ---
 
-# Deep-module do — execute a small change, disciplined
+# Do — implement decided behavior
 
-Make a small, already-decided, **behaviour-changing** change happen **now** — and place it deep-module-correctly as you go, without the ceremony of a written plan. nav's execution verb: the only nav skill that writes new/changed feature code directly. It is the same inject↔check discipline a sub-agent already carries when `/nav:plan` or `/nav:refactor` dispatches it ([ADR-008](docs/adr/008-inject-check-at-handoff.md)), promoted to a standalone, plan-less verb.
+Ground the change in the existing code, then deliver and verify the agreed outcomes.
+Use the owning task when work needs durable tracking.
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
@@ -14,11 +15,16 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 
 ## Stance
 
-- **In scope: a small, decided, behaviour-changing change** you can hold in your head without a written plan. **Out of scope**: behaviour-preserving restructuring (→ `/nav:refactor`), substantial work (→ `/nav:plan`), or an unresolved product decision. Read the code and existing decisions first; ask only if missing intent would change scope, behavior, or a material trade-off.
-- **Known work may span several items.** Use the original task when progress must survive a
-  pause; a short task is enough when the approach is settled. If grounding reveals a material
-  ownership, interface, compatibility or migration decision, use nav-plan to record that decision
-  before editing the affected path. File count alone does not require an engineering plan.
+- **Use the agreed outcomes as the entry gate.** A multi-item task can go directly
+  through do. Read its deliverables, acceptance checks and linked decisions. Reconcile
+  requested behavior, current evidence and any gaps before dividing the work.
+  When a write needs durable tracking, use the original task and the shape-task
+  record convention. A one-off fix can proceed without a new file.
+- **Plan within execution.** For coupled changes, decide dependency order, existing
+  owners, interface and compatibility impacts, and migration or rollback before
+  editing affected paths. Scale the detail to risk. Ask only when a choice needs
+  the user to settle scope, compatibility or a material trade-off. Continue
+  independent authorized work if another item is blocked.
 - **An open-ended target gets a finish line before work starts.** When the request is a loop with no checkable end ("keep optimizing until it's a 90", "finish everything left"), first state a short list of checkable completion criteria and separate the items only the user can do (logins, hardware, accounts, taste calls). Stop when the criteria pass or only user-owned items remain; hand those over as the remaining list instead of iterating on them.
 
 ### The kernel — 乙 always on, 甲 enforced
@@ -62,10 +68,10 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    from proposed checks. A newly discovered regression is additional evidence; do not claim the
    original verification plan already covered it.
 4. **Work-item sync** — in a connected workspace, update the original task's
-   progress, verification/limits and next action; its implementation plan stays in
-   that same record. Reuse live legacy work in place. A small one-off fix needs no
-   new task solely for ceremony; follow `references/workspace-records.md` when
-   durable tracking is needed. Mark only verified work complete, then continue the next authorized
+   deliverable checkboxes, verification/limits and next action. Check a deliverable
+   after its acceptance passes. Reuse live legacy work in place and preserve its
+   existing progress format. A one-off fix can proceed without a new record. For
+   durable tracking, follow `references/workspace-records.md`. Mark only verified work complete, then continue the next authorized
    ready item. Record blockers and proceed with independent items in scope; stop when the work
    is complete or no authorized ready item remains. For an existing legacy board, the push half of
    ADR-086 still applies:
@@ -75,7 +81,8 @@ Scope decisions, ownership checks, and examples of risk-proportional verificatio
 
 ## Companion skills
 
-- **`/nav:plan`** — choose a short task or engineering detail when work needs coordination or material design decisions; already-authorized execution follows this skill's discipline.
+- **`shape-task`** — turn settled intent into deliverables with acceptance checks.
+- **`nav-plan`** — provide a separate engineering proposal when the user asks to review one.
 - **`/nav:refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`/nav:audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
 - **`/nav:sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header. Include affected reader documents when the change alters their claims or usage.

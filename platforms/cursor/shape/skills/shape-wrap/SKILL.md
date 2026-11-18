@@ -18,8 +18,8 @@ defines frontmatter, dates, opening conclusions and visible Relations. Keep exis
 
 For each touched task, keep the goal and why, actual progress, verification and its limits,
 remaining blockers/reasons, rejected approaches and why they were rejected, and one
-executable next action. Keep any implementation plan in that task and distinguish
-proposed steps from verified results; do not create a separate plan to save progress.
+executable next action. Update the existing deliverable checklist from verified
+results and preserve any useful engineering notes already in the record.
 Record a fresh code SHA when useful; label missing intent or
 Git evidence rather than fabricating it. Preserve unrelated open
 work and unique reasons already there. Store a new decision or deferred idea in its

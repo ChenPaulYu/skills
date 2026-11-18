@@ -7,7 +7,7 @@
 
 A focused collection of skills for **keeping code navigable** — auditing, refactoring, documenting, and planning against the code so it stays navigable as it grows. Inspired by Ousterhout's *A Philosophy of Software Design*; calibrated against real refactors (e.g., decomposing a 1718-line component into a 16-file subsystem with a single barrel).
 
-Seven skills today: `audit` (assess) · `refactor` (transform without changing behavior) · `sync` (keep source headers and reader documents accurate against implementation) · `plan` (ground a feature intent) · `do` (execute a small decided behavior change) · `compose` (author or restructure prose) · `ship` (plan → do → ship: land finished work, clean merged branches and worktrees, run the project's documented tail, [ADR-139](docs/adr/139-nav-ship.md)). Sync has one entry and chooses the requested surface; it no longer generates a standing codebase map ([ADR-131](docs/adr/131-reconcile-and-one-sync.md)). History: headers/map first merged in ADR-019, split by cadence in ADR-029, rejoined in ADR-108; reader-document checks joined in ADR-125. Retired verbs: doctor (ADR-021), tour (ADR-111; its successor also retired in ADR-126).
+Seven skills today: `audit` (assess) · `refactor` (transform without changing behavior) · `sync` (keep source headers and reader documents accurate against implementation) · `plan` (ground a requested engineering approach) · `do` (implement decided behavior and verify it) · `compose` (author or restructure prose) · `ship` (do → ship: land finished work, clean merged branches and worktrees, run the project's documented tail, [ADR-139](docs/adr/139-nav-ship.md)). Sync has one entry and chooses the requested surface; it no longer generates a standing codebase map ([ADR-131](docs/adr/131-reconcile-and-one-sync.md)). History: headers/map first merged in ADR-019, split by cadence in ADR-029, rejoined in ADR-108; reader-document checks joined in ADR-125. Retired verbs: doctor (ADR-021), tour (ADR-111; its successor also retired in ADR-126).
 
 **Language-agnostic by design.** The 8 rules transfer to any stack; specific checks have universal-core + per-stack heuristics.
 
@@ -62,9 +62,10 @@ Repo-wide editing rules — new-skill → ADR, the ★ authoring checks, renamin
 
 ## Process artifact retention
 
-nav-plan selects direct work, a short task or engineering detail by risk (ADR-153), and writes
-needed planning in the owning connected-workspace task (ADR-152);
-legacy plans and unconnected project conventions remain readable in place.
+Shape-task owns the delivery record. Nav-do grounds the approach and verifies the
+agreed behavior. Nav-plan presents a requested engineering approach, in chat by
+default. Persist it when requested using the established project convention.
+Existing engineering sections and legacy plans remain readable (ADR-155).
 nav-plan and nav-compose bundle the shared development-artifact policy owned by Shape. A plan location
 is a convention, not an instruction to commit process notes; explicit project retention
 policy governs. See ADR-134.

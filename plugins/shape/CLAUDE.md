@@ -3,7 +3,7 @@
 Shape turns intent into findable decisions, evidence and task-owned work. Nav owns
 implementation, code health and landing. Read an individual SKILL.md to run that verb.
 
-## Nine entrances
+## Ten entrances
 
 - setup explicitly connects a code repository to its selected workspace; reuses identity and verifies the read path without environment scaffolding or legacy migration.
 - idea saves an independent spark without authorizing implementation.
@@ -11,6 +11,7 @@ implementation, code health and landing. Read an individual SKILL.md to run that
 - mockup converges a choice through an interactive artifact.
 - probe tests an undecided claim with a minimal experiment.
 - dogfood uses built behavior to find reproducible friction.
+- task turns decided work into verifiable deliverables and acceptance checks.
 - status reconstructs work and, only on explicit request, helps set priorities.
 - wrap saves progress/reasons/next actions in the original tasks.
 - tidy reconciles stale or redundant records while preserving useful reasons/recovery.
@@ -27,8 +28,9 @@ rationale stays in ADRs, not live instructions that summon retired verbs.
 `plugins/shape/references/record-interface.md` owns metadata, dates, Relations and
 progressive disclosure. The shared-resource builder bundles them into consumers.
 Project.md owns context/repository mappings/curated priorities; original tasks own
-goals, completion criteria, implementation plans, progress, verification and next actions.
-New work does not split task and plan; legacy plans remain readable (ADR-152). State and graphs derive from records;
+goals, deliverables, acceptance checks, progress, verification and next actions.
+Shape-task writes the delivery record (ADR-155); legacy plans and existing engineering
+sections remain readable. State and graphs derive from records;
 Git owns committed revisions. No duplicate board, index.md, state.md or handoff.
 
 Shape status scripts own the reader, explicit graph export, renderer and template.
@@ -55,8 +57,9 @@ accounted for. A task closing does not erase an adopted thought or inconclusive 
 
 ## Seams and execution
 
-Shape converges intent; nav-plan grounds implementation; nav-do/refactor implement;
-wrap saves the touched task; status reconstructs the next round. Nav remains
+Shape converges intent and defines verifiable tasks. Nav-do implements decided work,
+nav-refactor preserves behavior, and nav-plan covers requested engineering proposals.
+Wrap saves the touched task; status reconstructs the next round. Nav remains
 standalone: cross-skill recommendations are soft, bundled references self-contained.
 No skill calls another skill's runtime. Planning/judgment/acceptance stay on the
 session model; scoped execution follows the marketplace dispatch tier policy.

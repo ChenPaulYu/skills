@@ -57,10 +57,11 @@
       "skills": []
     },
     "minimal": {
-      "summary": "Small everyday build loop.",
+      "summary": "Everyday task, execution and progress loop.",
       "skills": [
         "nav-do",
         "nav-plan",
+        "shape-task",
         "shape-status",
         "shape-wrap"
       ]

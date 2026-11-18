@@ -2,13 +2,13 @@
   "plugins": {
     "nav": {
       "readme": {
-        "summary": "**Keep code healthy** — audit structure, refactor with discipline, sync source headers and reader documents against implementation, ground plans, execute small changes, ship finished work, and compose prose as deep modules.",
+        "summary": "**Keep code healthy** — audit, refactor, sync source and docs, implement decided behavior, review requested engineering approaches, ship, and compose clear prose.",
         "skills": {
           "audit": "assess codebase shape (or read-only quick-check against a target spec)",
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
           "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
-          "plan": "ground each requested outcome in current evidence, expose consequential gaps/assumptions, then choose proportional implementation detail; preserve ownership/reuse and distinguish generated-content quality from wiring checks. Planning stays in its owning task; planning-only stops before execution",
-          "do": "execute decided behavior changes with ownership/reuse discipline; verify the outcome, preserved behavior and structure, record evidence in the original task and continue authorized ready items",
+          "plan": "ground a requested engineering proposal in code, including ownership, reuse, compatibility and verification",
+          "do": "implement authorized decided changes, including multi-item tasks; verify each deliverable and record evidence in the original task",
           "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval",
           "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)"
         }
@@ -44,15 +44,15 @@
           "plan": [
             "",
             {
-              "en": "Connect requested outcomes to current evidence, necessary changes and consequential unresolved assumptions before decomposing work. Scale implementation detail to risk while preserving requirement coverage, ownership/reuse and outcome acceptance. Planning stays in its task; planning-only does not authorize execution.",
-              "zh": "先把每項需求對回現況證據、必要改變與會影響結果的未決假設，再拆工作。工程細節按風險增減，需求檢查、模組責任與結果驗收仍要完整。計畫留在原 Task；只要求規劃不代表授權開工。"
+              "en": "Ground a requested engineering approach in existing code. Explain ownership, reuse, compatibility and verification in proportion to risk.",
+              "zh": "在要求檢視工程做法時，從現有程式查清模組責任、可重用的路徑、相容性和驗證方式。"
             }
           ],
           "do": [
             "",
             {
-              "en": "Execute decided behavior changes through the existing owner. Verify the delivered outcome, preserved behavior and structural readability; distinguish planned checks from observed evidence. Keep progress in the original work item and continue authorized ready items; use planning when material design decisions emerge.",
-              "zh": "沿既有模組執行已決定的行為變更，驗證實際結果、原有行為與程式結構；分清預定檢查與已觀察證據。進度存回原工作紀錄並接續已授權、可開始的項目；發現重要設計取捨時補規劃。"
+              "en": "Implement authorized decided behavior, including multi-item tasks. Resolve engineering details in code, verify each deliverable, and record evidence in its original task.",
+              "zh": "實作已決定且已授權的變更，包含多項目的 Task。從現有程式決定做法，逐項驗收並把證據寫回原 Task。"
             }
           ],
           "compose": [
@@ -89,7 +89,7 @@
     },
     "shape": {
       "readme": {
-        "summary": "**Give work its form** — connect projects, capture ideas, converge decisions, test claims, recover progress and save it into original tasks. Explicit workspace setup joins status/wrap; graph exports derive from the same records (ADR-148).",
+        "summary": "**Give work its form** — connect projects, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records.",
         "skills": {
           "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
           "mockup": "converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record",
@@ -99,14 +99,15 @@
           "idea": "save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice",
           "status": "recover task-owned progress and fresh code evidence; explicitly requested priorities update the original project entry; export an interactive graph on demand",
           "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint",
-          "setup": "connect a code repository to its selected home workspace, reuse existing identity, add the minimal project/pointer and verify reading; environment scaffolding and legacy migration remain separate"
+          "setup": "connect a code repository to its selected home workspace, reuse existing identity, add the minimal project/pointer and verify reading; environment scaffolding and legacy migration remain separate",
+          "task": "turn decided work into an original task with deliverables, acceptance checks and next action; recording a task does not authorize implementation"
         }
       },
       "site": {
         "layer": "ui",
         "blurb": {
-          "en": "Nine entrances: connect, capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; legacy migration remains explicit.",
-          "zh": "九個入口：接入專案、存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊資料移植另有明確範圍。"
+          "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records.",
+          "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。"
         },
         "skills": {
           "mockup": [
@@ -149,6 +150,13 @@
             {
               "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-148.",
               "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-148。"
+            }
+          ],
+          "task": [
+            "",
+            {
+              "en": "Record the agreed goal, scope, deliverables and acceptance checks in the owning task. Follow existing workspace metadata and links. An already-authorized build can continue through nav-do.",
+              "zh": "把已決定的目標、範圍、交付項目和驗收條件寫進原 Task，沿用工作區欄位和連結。已獲授權的實作可以接著走 nav-do。"
             }
           ]
         },

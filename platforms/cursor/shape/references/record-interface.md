@@ -46,8 +46,8 @@ owns comparison-specific candidates, open choices and artifact locators.
 The title may be rendered from frontmatter. A short conclusion is prose owned by
 the record, not a second project-wide progress board. A mockup needs its question,
 pick/open choice, artifacts and retirement conditions; a task needs progress,
-verification/limits and next action; its optional implementation plan contains
-approach and checks. Legacy plans keep their established interface. An idea can
+deliverables paired with acceptance checks, verification/limits and next action.
+Legacy plans and existing engineering notes keep their established interface. An idea can
 remain just a spark and why it was saved. Do not require six documents for one item.
 
 A Mockup may carry an optional `preview_url` for its directly openable HTTP(S) view.
@@ -105,18 +105,19 @@ use frontmatter as the edge source; a read-only request does not silently repair
 ---
 id: example-task
 type: task
-title: Implement the selected approach
+title: Copy a saved excerpt
 status: planned
-created: 2026-11-13
-updated: 2026-11-13
+created: 2026-11-18
+updated: 2026-11-18
+repo: app
 links:
   - relation: implements
     target: example-thought
 ---
-# Implement the selected approach
+# Copy a saved excerpt
 
-> Ground the selected approach in the codebase. Verification is still pending.
-> Next: run the scoped acceptance workflow.
+> Let readers reuse a saved excerpt with its source reference.
+> Next: verify the copy action on a saved excerpt.
 
 ## Relations
 <!-- relations: derived from frontmatter.links -->
@@ -125,15 +126,26 @@ links:
 | implements | `example-thought` — resolve its actual title/path |
 <!-- /relations -->
 
-## Goal and completion criteria
-State the intended outcome and how completion will be checked.
+## Goal and scope
+Copy saved excerpts with their source. Preserve the existing editing flow.
 
-## Implementation plan
-Include grounded approach and checks only when planning is needed.
+## Deliverables and acceptance
+- [ ] Copy the exact saved passage and its source reference.
+  - Accept when copying from a saved excerpt preserves its text and opens
+    the correct source from the copied link.
+- [ ] Recover from a clipboard failure.
+  - Accept when the failure is visible, the saved excerpt stays intact,
+    and retry succeeds once the clipboard is available.
 
-## Progress and next action
-Keep current evidence, limits and the next executable step here.
+## Progress and verification
+Record actual checks, results and limits as work proceeds.
+
+## Next action
+Exercise the copy action on a saved excerpt.
 ```
+
+Task status describes the whole record. A checkbox tracks one deliverable and is checked
+after its stated acceptance is verified. Omit empty optional sections.
 
 Resolve each real target into a clickable relative Markdown link in the projection;
 the example above uses an ID placeholder, not a nonexistent file. Filenames are

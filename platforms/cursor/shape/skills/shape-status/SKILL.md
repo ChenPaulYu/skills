@@ -8,8 +8,8 @@ description: "Recover current project work and next actions from original record
 
 Read `references/workspace-records.md`. Locate the project and mapped repositories;
 report standard records, non-standard readable records, or absent evidence. Read its
-priorities, open tasks (including their embedded implementation plans), live legacy
-plans and linked decisions/probes/ideas without promoting saved ideas
+priorities, open tasks with their acceptance and any existing engineering notes,
+live legacy plans and linked decisions/probes/ideas without promoting saved ideas
 or inconclusive probes into approved implementation.
 
 Read `references/record-interface.md` when presenting records. Use the optional bundled

@@ -8,7 +8,7 @@ import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, st
 import { dirname, join } from "node:path";
 
 const RECORD_CONSUMERS = [
-  ...["setup", "idea", "elicit", "mockup", "probe", "dogfood", "status", "wrap", "tidy"]
+  ...["setup", "idea", "elicit", "mockup", "probe", "dogfood", "task", "status", "wrap", "tidy"]
     .map(skill => `plugins/shape/skills/${skill}`),
   ...["plan", "do", "refactor", "compose", "ship"]
     .map(skill => `plugins/nav/skills/${skill}`),

@@ -1,7 +1,7 @@
 {
   "name": "shape",
-  "version": "0.35.6",
-  "description": "Connect projects and give intent its form through setup, idea, elicit, mockup, probe, dogfood, status, wrap and tidy. Task-owned workspace records and portable relation views.",
+  "version": "0.35.8",
+  "description": "Connect project workspaces, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. Task-owned records and portable relation views.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

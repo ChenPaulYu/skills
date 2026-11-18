@@ -2,11 +2,11 @@
 <!--
 ═══════════════════════════════════════════════════════════════════════════
   SKILLS · MARKETPLACE MAP · GROUNDING AUDIT
-  Last audit: 2026-11-17 (rev 153)
+  Last audit: 2026-11-18 (rev 154)
 ═══════════════════════════════════════════════════════════════════════════
 
-  The marketplace source owns current facts. This scoped revision checks the
-  Nav planning copy and generated artifacts; other dated grounding notes and
+  The marketplace source owns current facts. This scoped revision reflects
+  Shape Task and direct Nav execution (ADR-155); other dated grounding notes and
   revision logs remain historical context, not newly repeated workflow checks.
 
   ✓ VERIFIED (mechanically grep'd against the source)
@@ -3151,12 +3151,12 @@
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
         <span data-t="navanat_title">nav anatomy — assess, transform, describe, plan, execute, ship</span>
       </h2>
-      <div class="lede" data-t="navanat_lede">Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements a small decided change; <code>plan</code> grounds larger work; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-131).</div>
+      <div class="lede" data-t="navanat_lede">Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-131).</div>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
       </div>
-      <div class="callout" data-t="navanat_callout">The planning skill (<code>plan</code>) grounds the work before acting: if this turn asked for a plan, it stops at the artifact; if implementation was already authorized, it can carry that authority into the build path. It inlines <code>audit</code>'s protocol but follows the "scan transcript first" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated), <code>/nav:refactor</code>, or <code>/nav:do</code> as the change shape requires.</div>
+      <div class="callout" data-t="navanat_callout">Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. <code>nav-plan</code> grounds an engineering approach when you ask to review one.</div>
     </section>
 
     <section id="shape-anatomy">
@@ -3224,8 +3224,8 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav anatomy — assess, transform, describe, plan, execute, ship',
-    navanat_lede: "Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements a small decided change; <code>plan</code> grounds larger work; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-131).",
-    navanat_callout: "The planning skill (<code>plan</code>) grounds the work before acting: if this turn asked for a plan, it stops at the artifact; if implementation was already authorized, it can carry that authority into the build path. It inlines <code>audit</code>'s protocol but follows the \"scan transcript first\" preamble — if audit ran this session, it reuses that output instead of re-running grep (ADR-006). <code>audit</code> itself is read-only; to act on its findings, run <code>/nav:sync</code> (gated), <code>/nav:refactor</code>, or <code>/nav:do</code> as the change shape requires.",
+    navanat_lede: "Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-131).",
+    navanat_callout: "Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. <code>nav-plan</code> grounds an engineering approach when you ask to review one.",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
     // panel labels
@@ -3293,8 +3293,8 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃、執行、收尾',
-    navanat_lede: "七個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的小變更，<code>plan</code> 為較大的工作接地；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-131）。",
-    navanat_callout: 'plan skill 先把工作接地再動手:這輪若只要 plan,它停在 artifact;若已經授權實作,它可以把這個授權帶進 build path。它內嵌 <code>audit</code> 的 protocol,但遵守「先掃 transcript」的 preamble —— 同 session 跑過 audit 就 reuse,不重新 grep(ADR-006)。<code>audit</code> 本身唯讀;要動手就依變更形狀跑 <code>/nav:sync</code>(gated)、<code>/nav:refactor</code> 或 <code>/nav:do</code>。',
+    navanat_lede: "七個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的變更，<code>plan</code> 在有需要時提供工程方案；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-131）。",
+    navanat_callout: "用 <code>shape-task</code> 定義交付項目和驗收條件。<code>nav-do</code> 實作已決定且已授權的工作，也能接多項目的 Task。要先檢視工程做法時，再用 <code>nav-plan</code>。",
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
     role_label: '角色', wires_label: '指向', used_by_label: '被指向', view_anatomy: '前往解剖',
@@ -3353,17 +3353,17 @@ const RULES = [
 // BEGIN GENERATED catalog-data
 const CATALOG_COUNTS = {
   "plugins": 3,
-  "skills": 22
+  "skills": 23
 };
 const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.26.14",
+    "version": "0.26.15",
     "skillCount": 7,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.14; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.14；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.15; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.15；7 個 skills）"
     },
     "files": [
       [
@@ -3394,16 +3394,16 @@ const DOMAINS = {
         "/nav:plan",
         "",
         {
-          "en": "Connect requested outcomes to current evidence, necessary changes and consequential unresolved assumptions before decomposing work. Scale implementation detail to risk while preserving requirement coverage, ownership/reuse and outcome acceptance. Planning stays in its task; planning-only does not authorize execution.",
-          "zh": "先把每項需求對回現況證據、必要改變與會影響結果的未決假設，再拆工作。工程細節按風險增減，需求檢查、模組責任與結果驗收仍要完整。計畫留在原 Task；只要求規劃不代表授權開工。"
+          "en": "Ground a requested engineering approach in existing code. Explain ownership, reuse, compatibility and verification in proportion to risk.",
+          "zh": "在要求檢視工程做法時，從現有程式查清模組責任、可重用的路徑、相容性和驗證方式。"
         }
       ],
       [
         "/nav:do",
         "",
         {
-          "en": "Execute decided behavior changes through the existing owner. Verify the delivered outcome, preserved behavior and structural readability; distinguish planned checks from observed evidence. Keep progress in the original work item and continue authorized ready items; use planning when material design decisions emerge.",
-          "zh": "沿既有模組執行已決定的行為變更，驗證實際結果、原有行為與程式結構；分清預定檢查與已觀察證據。進度存回原工作紀錄並接續已授權、可開始的項目；發現重要設計取捨時補規劃。"
+          "en": "Implement authorized decided behavior, including multi-item tasks. Resolve engineering details in code, verify each deliverable, and record evidence in its original task.",
+          "zh": "實作已決定且已授權的變更，包含多項目的 Task。從現有程式決定做法，逐項驗收並把證據寫回原 Task。"
         }
       ],
       [
@@ -3427,11 +3427,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.35.6",
-    "skillCount": 9,
+    "version": "0.35.8",
+    "skillCount": 10,
     "blurb": {
-      "en": "Nine entrances: connect, capture, converge, verify, resume, save and tidy. Task-owned workspace records and offline relation graphs; legacy migration remains explicit. (v0.35.6; 9 skills)",
-      "zh": "九個入口：接入專案、存想法、收斂、驗證、接手、存回與整理。進度歸 task，關係圖隨用隨產生；舊資料移植另有明確範圍。（v0.35.6；9 個 skills）"
+      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.8; 10 skills)",
+      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.8；10 個 skills）"
     },
     "files": [
       [
@@ -3504,6 +3504,14 @@ const DOMAINS = {
         {
           "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-148.",
           "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-148。"
+        }
+      ],
+      [
+        "/shape:task",
+        "",
+        {
+          "en": "Record the agreed goal, scope, deliverables and acceptance checks in the owning task. Follow existing workspace metadata and links. An already-authorized build can continue through nav-do.",
+          "zh": "把已決定的目標、範圍、交付項目和驗收條件寫進原 Task，沿用工作區欄位和連結。已獲授權的實作可以接著走 nav-do。"
         }
       ]
     ]
@@ -3583,8 +3591,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.14; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.14；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.15; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.15；7 個 skills）"
     }
   },
   {
@@ -3600,8 +3608,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.35.6; 9 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.35.6；9 個 skills）"
+      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.35.8; 10 skills)",
+      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.35.8；10 個 skills）"
     }
   },
   {
@@ -3625,11 +3633,11 @@ const CB_NODES = [
 const CB_EDGES = [['shape','nav']];
 
 const NAV_NODES = [
-  {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'ground + plan', zh:'底料 + 規劃'}, desc:{en:'Spec-grounded planning and build handoff — inlines audit (Mode 2) on spec-touched domains, clarifies consequential ambiguity, then stops at a plan artifact when planning is the requested outcome or carries already-granted implementation authority into the build path. Reuses prior audit output if it ran this session. Plan artifacts land in blueprints/plans/ when that tree exists (soft nav→shape; else docs/plans/) — ADR-017/126.', zh:'以 spec 為目標的規劃與 build handoff —— 內嵌 audit Mode 2 在受影響 domains,釐清會影響結果的不明處;這輪若目標是規劃就停在 plan artifact,若已授權實作就把授權帶進 build path。同 session 跑過 audit 會 reuse。有 blueprints/ 樹時 plan artifact 落 blueprints/plans/(soft nav→shape;否則 docs/plans/)—— ADR-017/126。'}},
+  {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'engineering proposal', zh:'工程方案'}, desc:{"en": "Ground a requested engineering proposal in the existing code. Explain ownership, compatibility, rollout and verification where they affect the decision.", "zh": "從現有程式查清工程方案，說明會影響決策的模組責任、相容性、上線順序和驗證方式。"}},
   {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
   {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Behavior-preserving structural change: public contracts and observable behavior stay stable, while necessary internal rewrites are allowed when verified. Syncs each touched file header inline in the same change (ADR-025, like do); repo map regen stays sync job. Verification scales with risk and touched surface.', zh:'保持行為的結構調整:公開契約與可觀察行為維持穩定,必要的內部改寫可做但要驗證。被動到的檔 header 在同一步 inline 同步(ADR-025,同 do);repo map 重生仍交給 sync。驗證強度依風險與觸及面調整。'}},
   {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{"en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry, with only the requested surface in scope; no standing codebase HTML (ADR-131).", "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。只處理指定範圍，不再維護常駐 codebase HTML（ADR-131）。"}},
-  {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{en:'Execute a small, already-decided, behaviour-CHANGING change directly — no plan.md. The inject↔check sub-agent discipline (ADR-008) promoted to a standalone verb: continuous deep-module/header/N+1/LOC awareness + a thin bracket (inject: head -12 + grep for a reusable impl → execute → check: header · N+1 · unconditional verify gate · board sync — a change closing a blueprints/plan.md item updates it same-commit, ADR-086). The behaviour-changing twin of refactor (refactor preserves behaviour; do changes it). ADR-023.', zh:'直接執行一個小的、已決定的、會改變行為的變更 —— 不寫 plan.md。把 inject↔check 的 sub-agent 紀律(ADR-008)獨立成動詞:全程 deep-module/header/N+1/LOC awareness + 一道薄 bracket(inject:head -12 + grep 既有可重用實作 → execute → check:header · N+1 · 無條件 verify gate · board sync —— 出貨若關掉 blueprints/plan.md 條目,同 commit 更新它,ADR-086)。refactor 的行為改變雙生(refactor 保行為,do 改行為)。ADR-023。'}},
+  {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{"en": "Implement decided behavior, verify each deliverable through its real entry point, and write evidence and next actions in the owning task.", "zh": "實作已決定的行為，從實際入口逐項驗收，再把證據和下一步寫回原 Task。"}},
   {id:'compose', kind:'describe', x:690, y:130, w:120, role:{en:'author (prose doc)', zh:'撰寫(文件)'}, desc:{"en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Show the draft or diff before applying unless already authorized. nav-compose owns document structure; nav-sync maintains code headers and checks reader documents against implementation.", "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。套用前先展示草稿或差異，已授權的範圍不用再問。nav-compose 負責文件結構；nav-sync 維護程式檔頭，並核對人讀的文件是否符合實作。"}},
 ];
 

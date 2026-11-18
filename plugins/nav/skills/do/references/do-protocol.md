@@ -1,20 +1,24 @@
 # Do protocol — scope and verification examples
 
-The skill body owns the inject → execute → check workflow. Read this reference when deciding
-whether a task is a small behavior change or when selecting useful verification.
+The skill body owns the inject → execute → check workflow. Read this reference
+for grounding multi-step work or selecting verification.
 
 ## Scope
 
-A decided small change has an observable outcome and a placement that can be grounded without a
-separate implementation plan. File count alone does not decide scope: a mechanical update across
-several files can remain small; a one-file feature with unresolved product choices may need a plan.
+A decided outcome can be implemented once its acceptance is observable and the
+request authorizes execution. Trace each promised path against current behavior
+before dividing the work. Surface assumptions that would change an outcome,
+including alternate entry points, older persisted data, and what happens after an
+error or reopening. A mockup may show seeded or authored output; identify where
+the application will get the real result and how to verify it. For generated answers,
+check what source evidence reaches the model and whether the resulting answer
+uses it. Wiring tests and answer-quality checks establish different facts.
 
-Several decided items can share one short task for resumption without an engineering plan.
-Use nav-refactor for behavior-preserving restructuring and nav-plan when material design or
-coordination decisions need to be recorded; its depth gate owns the proportional planning choice.
-Resolve routine implementation choices from code. Ask when missing intent would change the
-requested outcome, compatibility, or a material trade-off. Planning within an authorized build
-does not revoke the authority to continue that build.
+Derive execution order and test mechanisms from the code. When ownership or
+compatibility has a costly consequence, investigate the affected callers and
+persisted state before writing. Keep the implementation reasoning proportional
+to the decision. If a user-owned choice blocks an item, name the consequence
+and continue any independent authorized item.
 
 ## Grounding and ownership
 
