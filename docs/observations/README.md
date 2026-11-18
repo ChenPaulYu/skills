@@ -1,5 +1,10 @@
 # Observations
 
+> **Closed to new entries (2026-11-18, [ADR-156](docs/adr/156-topic-owned-adrs-edited-in-place.md)).**
+> A correction goes straight to the skill or CLAUDE.md it fixes. A pattern with no
+> clear owner is saved as a workspace idea. The files here stay as history; the
+> rules below describe how they were written.
+
 Field notes from working with coding agents. Raw observations land here first; the ones that mature get promoted into skills, plugins, or ADRs.
 
 ## Why this exists

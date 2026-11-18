@@ -1,55 +1,46 @@
 # ADRs — Architecture Decision Records
 
-Decisions that shape this marketplace. Sibling to [`observations/`](docs/observations/) (use-side patterns) and [`findings/`](docs/findings/) (build-side mechanisms).
+An ADR stops a rejected alternative from being re-proposed. Each one states a topic's current decision and why the alternatives lost ([ADR-156](docs/adr/156-topic-owned-adrs-edited-in-place.md)). Siblings: [`findings/`](docs/findings/) (build-side mechanisms) and [`out-of-scope/`](docs/out-of-scope/) (rejected proposals with no standing decision).
 
 ## When to write an ADR
 
 | Trigger | Goes to |
 |---|---|
-| Made a choice between alternatives | **ADR** |
+| Weighed alternatives, and the rejected one is likely to be re-proposed | **ADR** — update the topic's existing ADR, or add one for a new topic |
+| Any other change, including a new skill or a rename | the commit message |
 | Learned how the tooling works | `findings/` |
-| Noticed a usage pattern | `observations/` |
-| Want a "always do this" rule, no alternatives weighed | `CLAUDE.md` addition |
+| Noticed a usage pattern | the skill or `CLAUDE.md` it corrects; a workspace idea when the owner is unclear |
+| Want an "always do this" rule, no alternatives weighed | `CLAUDE.md` addition |
 
-If a finding led to weighing alternatives → promote to ADR (link the finding from the ADR's Context).
+If a finding led to weighing alternatives → record it in the topic's ADR (link the finding).
 
 ## Format
 
 ```markdown
-# ADR <N> — <topic>
+# ADR-<N> — <topic>
 
-**Status**: accepted | superseded by ADR-<M> | partially superseded
-**Date**: YYYY-MM-DD
-**Supersedes**: (optional) prior ADRs replaced
-
-## Context
-2-4 sentences. The situation forcing a decision.
+Status: accepted | trial | retired · YYYY-MM-DD
 
 ## Decision
-What we chose. Table if multiple parts.
+The current decision, stated as it stands today.
 
-## Why
-3-5 bullets. Load-bearing reasons only.
-
-## Consequences
-3-5 bullets. What changes as a result.
+## Evidence and alternatives
+What grounded it, and each rejected alternative with the reason it lost.
 ```
-
-Optional trailing sections: `## Notes` for caveats / "what this doesn't promise" / lessons. Skip if nothing to add.
 
 ## Status lifecycle
 
 | Status | Meaning |
 |---|---|
-| `accepted` | In force |
-| `partially superseded` | One section overridden; rest stands. Link to the superseding ADR. |
-| `superseded by ADR-<M>` | Fully replaced. Keep file as history. |
+| `accepted` | In force. Edit in place when the decision changes and update the date. |
+| `trial` | In force for a stated pilot; name what would confirm or reverse it. |
+| `retired` | No longer in force. Keep one line saying what replaced it. |
 
-Never delete an ADR. Supersede.
+One ADR owns one topic. Revise it in place; Git keeps the history. ADRs 001–155 predate this rule and stay as written, including their older status forms: fold one into its topic's ADR the next time that topic changes. Do not renumber or mass-migrate them.
 
 ## Discipline
 
-- Title = one-line decision (greppable). Future you scans titles, not bodies.
-- "Why" lists reasons, not narrative. If a reason needs a paragraph, it's probably two reasons.
+- Title = the topic (greppable). Future you scans titles, not bodies.
+- An ADR states the current decision and its reasons. What changed and when belongs in the commit message.
+- Reasons, not narrative. If a reason needs a paragraph, it's probably two reasons.
 - Cite findings / commits / files when the ADR is grounded in concrete events.
-- No "lesson recorded" essays. One line if useful, else cut.

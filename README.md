@@ -297,15 +297,15 @@ When in doubt: rule ⑦. Ask.
 
 [`docs/site/index.html`](docs/site/index.html) is a self-contained bilingual interactive map of this marketplace — every plugin, every skill, the 8 rules, conventions, plus the `nav` and `shape` anatomy graphs. Open it directly in a browser.
 
-**Living document — stale = lie.** When you add / rename / remove a skill, plugin, or ADR, update the map + its audit block in the same commit. The audit block at the top of the HTML lists what was last verified; treat drift as a lie until corrected.
+**Living document — stale = lie.** When you add / rename / remove a skill or plugin, update the map + its audit block in the same commit. The audit block at the top of the HTML lists what was last verified; treat drift as a lie until corrected.
 
 ## Docs layout
 
 | Folder | What |
 |---|---|
-| [`docs/adr/`](docs/adr/) | Architecture Decision Records — decisions with alternatives weighed |
+| [`docs/adr/`](docs/adr/) | Architecture Decision Records — one current decision per topic, with the alternatives it rejected |
 | [`docs/findings/`](docs/findings/) | Build-side mechanisms learned while editing this marketplace |
-| [`docs/observations/`](docs/observations/) | Usage techniques observed while working with coding agents (→ future skills) |
+| [`docs/observations/`](docs/observations/) | Historical usage notes (closed to new entries since ADR-156) |
 | [`docs/site/`](docs/site/) | The interactive marketplace map (living document) |
 
 Repo-wide rules for editing this marketplace (the hard gates, authoring conventions, maintenance steps) live once in the repo-root [`CLAUDE.md`](CLAUDE.md); plugin-specific conventions live in each plugin's own `CLAUDE.md` (e.g. [`plugins/nav/CLAUDE.md`](plugins/nav/CLAUDE.md)).
