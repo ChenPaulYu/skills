@@ -86,9 +86,10 @@ skills: [`authoring-failure-modes.md`](plugins/nav/skills/compose/references/aut
   findings and the site. Scopes: `nav`, `shape`, `frame` (or `nav/do` for one skill),
   `scripts`, `adr`; omit the scope when a change spans areas. The body says why and how it was
   verified. Renaming or retiring a skill is breaking: `feat(nav)!:` plus `BREAKING CHANGE:`.
-- **Branches:** small decided changes commit to `main`. An uncertain trial uses
-  `experiment/<topic>`, is pushed from its first commit, and carries a decision date in its
-  workspace task; it is then merged or closed with a reason.
+- **Branches:** fixes, docs and chores commit to `main`. Starting a new feature opens
+  `feat/<topic>`; a trial that may be discarded opens `experiment/<topic>`. Merge as soon as
+  acceptance passes, raise any branch unmerged after 7 days, and delete the branch and its
+  worktree right after merging. Push a branch that outlives the session.
 
 ## Changing skills
 
