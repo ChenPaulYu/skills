@@ -56,7 +56,8 @@ defines metadata, dates, opening conclusions and Relations. This does not change
   the Task's code snapshot. Use the current checkout for bounded work that can
   coexist with local edits. Use a separate worktree when concurrent edits,
   comparison runs, or verification output need isolation. Confirm that the
-  chosen worktree includes any local changes the task depends on. See
+  chosen worktree includes any local changes the task depends on. Decide whether
+  the work needs its own branch from the user's or project's `## Git` rules. See
   **Git baseline and isolation** in `references/do-protocol.md`.
 - `head -12` the file(s) the change lands in — role + `Reads` without reading the body. (No header? that's a rule-① smell; note it.)
 - **grep the target domain for a reusable existing impl** before adding anything new — the single most common miss. A fresh execution re-implements what's already there (the canonical ADR-007 failure: a re-written `fillPath()` that already existed with important bucketing, shipped green-tested). Reuse it; don't add a parallel one.

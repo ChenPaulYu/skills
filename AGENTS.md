@@ -78,6 +78,18 @@ skills: [`authoring-failure-modes.md`](plugins/nav/skills/compose/references/aut
   exact staged snapshot; post-commit/merge/rewrite run `scripts/sync-installed.sh` to refresh
   installed copies. Installation details: [`INSTALL.md`](INSTALL.md).
 
+## Git
+
+- **Commits:** `<type>(<scope>): <summary>` in English. Types: `feat`, `fix`, `refactor`,
+  `docs`, `test`, `chore`, `revert`. A change to a `SKILL.md`, its references or a CLAUDE.md
+  alters agent behavior, so it is `feat` or `fix`, never `docs`; `docs` is for README, ADRs,
+  findings and the site. Scopes: `nav`, `shape`, `frame` (or `nav/do` for one skill),
+  `scripts`, `adr`; omit the scope when a change spans areas. The body says why and how it was
+  verified. Renaming or retiring a skill is breaking: `feat(nav)!:` plus `BREAKING CHANGE:`.
+- **Branches:** small decided changes commit to `main`. An uncertain trial uses
+  `experiment/<topic>`, is pushed from its first commit, and carries a decision date in its
+  workspace task; it is then merged or closed with a reason.
+
 ## Changing skills
 
 - **Before adding or changing one,** check [`docs/out-of-scope/`](docs/out-of-scope/README.md)

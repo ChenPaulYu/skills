@@ -22,8 +22,9 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 2. **Commit only this task's work.** Stage the files this task changed; list anything else
    that is dirty and leave it unstaged. Never stage process artifacts — blueprints, plans,
    experiment outputs, logs, local config — even when no ignore rule covers them. Follow
-   the repo's message convention and run its hooks — never `--no-verify` unless the user
-   says so.
+   the commit and branch conventions in the user's and project's instructions (a `## Git`
+   section; the project's wins); without one, use `<type>(<scope>): <summary>` with a body
+   that says why. Run the repo's hooks — never `--no-verify` unless the user says so.
 3. **Integrate by the project's rule.** Default: bring the branch up to date with the latest
    main, merge into main (fast-forward when possible), push. Open a PR instead when main is
    protected, the remote is a fork of someone else's repo, the project says PR, or the user

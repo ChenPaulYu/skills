@@ -26,11 +26,13 @@ the user does not own, or a push to main is rejected as protected.
 ```bash
 git add <files this task changed>
 git status --short          # anything still listed is not part of this commit — mention it
-git commit -m "<type>: <summary>"
+git commit -m "<type>(<scope>): <summary>" -m "<why, and how it was verified>"
 ```
 
-Follow the repo's existing message style (`git log --oneline -10`). If a hook fails, fix the
-cause or report it; do not bypass the hook.
+Use the stated `## Git` convention from the user's or project's instructions; the project's
+wins. Without one, use Conventional Commits types (`feat`, `fix`, `refactor`, `docs`, `test`,
+`chore`, `revert`) and check `git log --oneline -10` for the repo's scopes. If a hook fails,
+fix the cause or report it; do not bypass the hook.
 
 ## 3. Integrate
 
