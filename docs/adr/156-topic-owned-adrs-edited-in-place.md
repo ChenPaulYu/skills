@@ -18,8 +18,10 @@ ADRs 001–155 predate this rule and stay as written. When a topic next changes,
 fold its live ADRs into one topic ADR and mark the old files `retired` with a
 pointer. There is no mass migration.
 
-`docs/observations/` is closed to new entries. A correction goes to the skill or
-CLAUDE.md it fixes; a pattern with no clear owner becomes a workspace idea.
+`docs/observations/` is removed. A correction goes to the skill or CLAUDE.md it
+fixes; a pattern with no clear owner becomes a workspace idea. The still-relevant
+observations became Skills workspace ideas, one still-cited mechanism note moved
+to `docs/findings/`, and the rest are recoverable from Git (`a59c0ae`).
 `docs/findings/` and `docs/out-of-scope/` are unchanged.
 
 ## Evidence and alternatives

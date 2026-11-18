@@ -27,7 +27,7 @@
 # change) and post-merge / post-rewrite (you pulled someone else's, merged or
 # rebased). Nothing here must be remembered by a human: a step that must be
 # remembered is a step that will be skipped.
-# Full account: docs/observations/2026-08-12-skill-copies-outlive-their-source.md
+# Full account: docs/findings/2026-08-12-skill-copies-outlive-their-source.md
 #
 # Enable the hooks once per clone:
 #     git config core.hooksPath scripts/hooks

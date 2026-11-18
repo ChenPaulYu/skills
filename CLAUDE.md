@@ -120,7 +120,7 @@ symlinks. Hooks invoke it after commit/pull. The Codex receipt owns profile sele
 preserve it, default a receipt-less machine to `minimal`, and change scope deliberately
 with `sh scripts/sync-installed.sh --codex-profile <name>`. Hand-edited
 `~/.codex/agents/*.toml` overrides are preserved. Run the script directly for a full report.
-Why automatic refresh matters: [stale-copy observation](docs/observations/2026-08-12-skill-copies-outlive-their-source.md).
+Why automatic refresh matters: [stale-copy finding](docs/findings/2026-08-12-skill-copies-outlive-their-source.md).
 
 ### 1. Plugin version + manifests are single-owner
 
@@ -192,10 +192,10 @@ mechanical roster/version refreshes do not require another hand-copied inventory
 - **New skill** — scaffold `plugins/<plugin>/skills/<name>/SKILL.md`, write the frontmatter description carefully, test that invocations cover the main trigger phrasings, and state in the commit message why it exists and how its trigger avoids stealing its siblings' fire. Record an ADR only when the ADR threshold below is met. **Then regenerate the public catalog** in the **same commit** as the `SKILL.md` (gate #3). Add editorial copy in `docs/catalog-copy.json` when the source-description fallback is insufficient; review hand-owned explanatory surfaces too.
 - **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and state the rename in the commit message.
 - **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and update the ADR that owns that rule.
-- **ADR threshold (ADR-156)** — write or update an ADR only when alternatives were weighed and a later session would plausibly re-propose the rejected one. Everything else is a commit message. One ADR owns one topic: when its decision changes, edit that ADR in place and let Git keep the history; do not add a new number to revise an old one. Usage patterns go to the skill or CLAUDE.md they correct, or to a workspace idea when the owner is unclear — `docs/observations/` is closed to new entries.
+- **ADR threshold (ADR-156)** — write or update an ADR only when alternatives were weighed and a later session would plausibly re-propose the rejected one. Everything else is a commit message. One ADR owns one topic: when its decision changes, edit that ADR in place and let Git keep the history; do not add a new number to revise an old one. Usage patterns go to the skill or CLAUDE.md they correct, or to a workspace idea when the owner is unclear; the old `docs/observations/` inbox was removed.
 - **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.
 - **Retirement (ADR-109)** — zero fires across three months of transcripts demotes a model-invoked skill to `disable-model-invocation: true`; real demand reverses demotion. Do not claim demotion removes its description from runtime context without measuring. Deletion additionally needs ADR-107's three-causes check: never reachable, mis-triggered, or genuinely unclaimed; zero use alone is insufficient. Watch list (near-zero in the first ledger window, 2026-10/11): `frame:analogize`, `frame:draw`. Retirement history lives in ADR-107/110/111/113/126/127/136/137. Transcripts are retained only ~5 weeks, so the evidence is the monthly ledger: run `node scripts/skill-usage.mjs --write` each month and read the last three `docs/usage/` snapshots (ADR-136).
-- **Every plugin content change needs a version bump** in `plugins/<name>/.claude-plugin/plugin.json`, followed by manifest regeneration. Native plugin caches are version-pinned; unchanged versions can keep serving stale content. Hooks propagate the new version after commit/pull (gate #0). Evidence: [cache-pin observation](docs/observations/2026-07-17-plugin-cache-pins-version-stale-content.md).
+- **Every plugin content change needs a version bump** in `plugins/<name>/.claude-plugin/plugin.json`, followed by manifest regeneration. Native plugin caches are version-pinned; unchanged versions can keep serving stale content. Hooks propagate the new version after commit/pull (gate #0). Evidence: [cache-pin finding](docs/findings/2026-07-17-plugin-cache-pins-version-stale-content.md).
 
 ## Where things live
 

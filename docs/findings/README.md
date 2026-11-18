@@ -4,12 +4,7 @@ Build-side notes from editing this marketplace. The kind of mechanical knowledge
 
 ## Why this exists
 
-Sibling to [`observations/`](docs/observations/), but pointing inward instead of outward:
-
-| Folder | Audience | Promotion target |
-|---|---|---|
-| [`observations/`](docs/observations/) | future users of the skills (including future-you) | `plugins/*/skills/*/SKILL.md` |
-| `findings/` (this folder) | future-you (or anyone) editing this marketplace | marketplace `CLAUDE.md` addition · `docs/adr/` · plugin `CLAUDE.md` · convention note |
+Findings point inward: the audience is future-you (or anyone) editing this marketplace, and a matured finding lands in a marketplace `CLAUDE.md` addition, a topic's ADR, a plugin `CLAUDE.md` or a convention note. Usage patterns that point outward go straight to the skill or `CLAUDE.md` they correct, or to a workspace idea when the owner is unclear; the old `observations/` inbox was removed ([ADR-156](docs/adr/156-topic-owned-adrs-edited-in-place.md)).
 
 ADRs record **decisions** ("we chose X over Y"). Findings record **mechanisms** ("here's how the thing actually behaves"). Different shape, different lifecycle.
 
@@ -21,7 +16,7 @@ Anything you learned the hard way while editing this marketplace. Examples:
 - Naming patterns that look fine in isolation but read badly once invoked
 - File-layout choices that affect distribution vs local-only tooling
 
-**Not for**: usage techniques (those are [`observations/`](docs/observations/)) or formal design decisions (those are [`docs/adr/`](docs/adr/)).
+**Not for**: usage techniques (those go to the skill they correct, or a workspace idea) or formal design decisions (those are [`docs/adr/`](docs/adr/)).
 
 ## File shape
 
@@ -44,7 +39,7 @@ status: raw
   the one-line generalizable principle>
 ```
 
-Lean by design — same as [`observations/`](docs/observations/). Extra frontmatter fields earn their keep only after 5+ findings show they'd be useful.
+Lean by design. Extra frontmatter fields earn their keep only after 5+ findings show they'd be useful.
 
 ## Status lifecycle
 
@@ -55,14 +50,14 @@ Lean by design — same as [`observations/`](docs/observations/). Extra frontmat
 | `promoted` | Folded into `CLAUDE.md`, an ADR, or a convention note | Add a top-line link to where it landed; keep the finding as history |
 | `superseded` | Underlying tooling / convention changed; finding no longer applies | Keep file with a one-line "superseded by X" header (negative results have value) |
 
-(No `repeated` / `maturing` like `observations/` — findings are either confirmed or not; they don't gestate into bigger things, they get folded into the right place.)
+(No `repeated` / `maturing` stages — findings are either confirmed or not; they don't gestate into bigger things, they get folded into the right place.)
 
 ## Promotion targets
 
 When a finding matures:
 
 - **`CLAUDE.md` addition** (marketplace or plugin level) — a one-paragraph "by the way, X works like this" that everyone editing here should know.
-- **ADR** (`docs/adr/<n>-<topic>.md`) — only if the finding led to a **decision** about how this marketplace is shaped. A mere "how the tool works" stays as a finding.
+- **ADR** (the topic's `docs/adr/<n>-<topic>.md`) — only if the finding led to a **decision** about how this marketplace is shaped. A mere "how the tool works" stays as a finding.
 - **Convention note inside a SKILL.md / plugin** — if the finding is internal to one plugin's mechanism.
 - **Stay as a finding forever** — totally fine if it's reference material rather than something to bake into instructions.
 
@@ -72,4 +67,4 @@ When a finding matures:
 - **Future-self framing.** End with "how would I recognize this situation next time?" — that's what makes a finding useful, not the war story.
 - **Don't duplicate ADRs.** If a finding directly led to a decision, the decision belongs in `docs/adr/`. Link from the finding to the ADR; don't restate.
 - **Negative results count.** "Tried X, it doesn't work because Y" is a real finding — mark it `superseded` or keep it `confirmed` with the limitation, don't delete.
-- **One file per finding.** Same reason as observations — granularity helps promotion later.
+- **One file per finding.** Granularity helps promotion later.
