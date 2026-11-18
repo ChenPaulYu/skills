@@ -10,8 +10,10 @@ priorities; its current state is read from those tasks, not copied into a second
 
 Use an explicit workspace/project path from the user or repository instructions. A
 home repo holds `workspace/<project>/project.md` as the sole entry and work in typed
-folders: `ideas/`, `thoughts/`, `tasks/`, `mockups/`, and `probes/`. Existing
-`plans/` and flat plan records remain readable legacy inputs.
+folders: `ideas/`, `thoughts/`, `tasks/`, `mockups/`, and `probes/`. An idea asks
+whether to do something; a thought holds how to see something (a position that may
+still be a draft, and acts as a decision once adopted). The `plans/` type is retired:
+read a leftover plan as legacy evidence and fold its live content into the owning task.
 Do not assume the code checkout contains its records. Resolve code repositories from
 the project's explicit mappings; report missing/unavailable mappings, never substitute
 the home repo's HEAD. Machine-local paths are locators, not portable identity.
@@ -53,10 +55,9 @@ before creating another owner. Use `planned` until authorized execution begins.
 A saved idea, positive mockup reaction or read-only status request alone creates
 no task. A one-off fix can proceed without a new tracking document.
 
-Existing plans keep their IDs, paths, types, statuses and links. Read a still-live
-plan as the existing work item rather than creating a duplicate just to match the
-new convention. Task consolidation/conversion is separately scoped work: verify
-unique content, inbound links and recovery before moving or retiring anything.
+A leftover plan keeps its ID, path, status and links until it is folded into its
+task. Folding is separately scoped work: verify unique content, inbound links and
+recovery before moving or retiring anything.
 Without a connected workspace, follow the project's existing planning convention.
 
 ## First-time connection
@@ -81,7 +82,9 @@ progress out of it. Do not add a competing `index.md` or `state.md`; render curr
 state from the original work records and actual Git context when requested.
 
 Each independently reusable item has YAML frontmatter. Store simple records as
-`ideas/<topic>.md`, `thoughts/<topic>.md`, or `tasks/<topic>.md`.
+`ideas/<topic>.md`, `thoughts/<topic>.md`, or `tasks/<topic>.md`. A task that keeps
+evidence or artifacts puts them in a sibling folder `tasks/<topic>/` and links them
+from the task.
 A mockup decision lives in `mockups/<topic>/mockup.md` beside its HTML variants;
 a probe lives in `probes/<topic>/probe.md` beside results and supporting evidence.
 Do not mistake a supporting README, results.md, HTML or CSV for another record.
@@ -118,12 +121,12 @@ Search body text as well as titles before creating another record.
 
 | Type | Pilot statuses | Body carries |
 |---|---|---|
-| idea | saved, exploring, closed | Original spark, why saved, conditions for revisiting |
-| thought | draft, adopted, shelved, superseded | Decision/question, reasons, alternatives |
+| idea | saved, exploring, closed | Whether to do something: original spark, why saved, conditions for revisiting |
+| thought | draft, adopted, shelved, superseded | How to see something: position or question, reasons, alternatives |
 | mockup | draft, selected, shelved, superseded | What was compared, pick/reason, artifact locator |
 | probe | planned, active, concluded | Claim, method, evidence, verdict including inconclusive |
 | task | planned, active, paused, blocked, done, cancelled | Goal, scope, deliverables paired with acceptance checks, progress, verification, blockers/reasons, next action |
-| plan (legacy read support) | draft, active, completed, superseded | Existing implementation approach, critical files, checks; preserve until scoped consolidation |
+| plan (retired, read only) | draft, active, completed, superseded | Leftover implementation approach; fold live content into its task, then remove |
 
 All record types additionally accept `unverified` during legacy import when current
 state has not been established. Preserve the source status claim separately and
@@ -151,8 +154,7 @@ show the intended delta. Existing save/implementation authority covers its recor
 update. Conflicting evidence stays visible until resolved. A task is done only when
 its completion criteria are met; distinguish implementation from verified behavior.
 
-A task closes when its required outcomes are verified; any linked legacy plan
-needs its own completion check. Closing work does not expire an adopted thought.
+A task closes when its required outcomes are verified. Closing work does not expire an adopted thought.
 A concluded probe may remain inconclusive and authorize no task. A saved idea does
 not imply approved work. Keep deferred and rejected distinct. Superseded decisions
 link their successors; preserve useful rejected alternatives and evidence locators.

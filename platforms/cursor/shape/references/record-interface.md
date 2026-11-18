@@ -1,7 +1,7 @@
 # Work-record interface — metadata, conclusion, relations, detail
 
-Use the same reading interface for idea, thought, mockup, probe and task, plus
-legacy plan records when reading or updating them.
+Use the same reading interface for idea, thought, mockup, probe and task; read a
+leftover retired plan the same way.
 Keep the record's established location, type/status vocabulary, and language.
 This is a writing convention, not permission to retrofit a legacy project.
 When an explicit project workspace is selected, read `references/workspace-records.md`
@@ -47,7 +47,7 @@ The title may be rendered from frontmatter. A short conclusion is prose owned by
 the record, not a second project-wide progress board. A mockup needs its question,
 pick/open choice, artifacts and retirement conditions; a task needs progress,
 deliverables paired with acceptance checks, verification/limits and next action.
-Legacy plans and existing engineering notes keep their established interface. An idea can
+Existing engineering notes keep their established interface. An idea can
 remain just a spark and why it was saved. Do not require six documents for one item.
 
 A Mockup may carry an optional `preview_url` for its directly openable HTTP(S) view.
@@ -86,7 +86,7 @@ Add or correct only connections supported by that work; an independent idea may
 remain unlinked. Missing evidence is not a reason to invent a parent or task.
 
 Choose a relation that states what the connection means: a mockup explores an idea,
-a probe tests a claim, a task implements a decision, a legacy plan implements a task, or a
+a probe tests a claim, a task implements a decision, or a
 record is supported by evidence. Read the relation as a sentence from source to
 target and verify its direction. Use a generic reference only when that is the real
 connection, rather than substituting it for a known purpose. Put a short explanation
