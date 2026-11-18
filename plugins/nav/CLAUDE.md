@@ -25,7 +25,9 @@ it needs.
    The rule recurses: modules compose behind a package façade into the next-scale module, so
    a folder earns existence only by hiding members or being a declared contract.
 2. **Interface-first at every scale** — one door per module, subsystem (barrel/façade) and
-   codebase (index/map); drill into bodies only as needed.
+   codebase (index/map); drill into bodies only as needed. An interface is everything a caller
+   must know to use the module correctly: the signature plus invariants, ordering constraints,
+   error modes, required configuration and performance characteristics.
 3. **Explicit dependencies** — deterministic functions; dependencies in the signature.
 4. **Right grain** — neither giant nor needlessly fragmented.
 5. **Fit the framework** — idiomatic patterns; don't fight the ecosystem.

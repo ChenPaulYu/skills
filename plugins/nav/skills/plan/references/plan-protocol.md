@@ -80,6 +80,19 @@ where sequencing matters. Name critical files when their role informs a choice.
 Discuss rollback only when the proposed change needs it. Use the existing task's
 deliverables and acceptance checks as inputs and keep their progress in that task.
 
+## Comparing interface designs
+
+Use this only when the user asks to compare or choose an interface. In one pass,
+sketch three deliberately different designs: (a) the fewest entry points, (b) the
+most flexibility for future callers, (c) the simplest call for the most common
+caller. For each, give the signature, a caller example, what it hides and its
+trade-offs. Compare them on depth (behavior per unit of interface), where future
+change lands, and seam placement, then recommend one or a hybrid. Keep any behavior
+change it implies (failure handling, naming, ordering) visible as a decision for the
+user rather than folding it into the design. In two probe rounds this single-pass
+form won 2 of 3 blind comparisons, each narrowly; it is not worth separate design
+sub-agents by default.
+
 ## Verification design and evidence
 
 Choose checks by the failure they could reveal. Cover applicable risks in three dimensions:

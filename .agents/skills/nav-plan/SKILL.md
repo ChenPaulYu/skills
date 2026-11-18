@@ -51,7 +51,10 @@ directly through nav-do, including engineering reasoning within execution.
 - Preserve named public contracts and map each new shared owner to the callers that will adopt
   it; naming a helper without rewiring its consumers leaves dead architecture.
 - Keep implementation detail behind its existing owner and a simple interface. For a new owner,
-  explain the decision it hides and which consumers adopt it. Trace changes to shared callbacks,
+  explain the decision it hides and which consumers adopt it. When the user asks to compare
+  interface designs, draft three different ones first (fewest entry points, most flexible,
+  best for the common caller), compare depth, where change concentrates and seam placement,
+  then recommend one; see `references/plan-protocol.md`. Trace changes to shared callbacks,
   prompts or configuration across their callers so one new action does not silently alter others.
 - For AI-generated content, separate the selected target from the evidence needed to answer it.
   Name how sufficient context is acquired, its bounds and missing-context behavior. Include a
