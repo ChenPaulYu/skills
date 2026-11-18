@@ -1,6 +1,6 @@
 {
   "name": "shape",
-  "version": "0.35.13",
+  "version": "0.35.14",
   "description": "Connect project workspaces, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. Task-owned records and portable relation views.",
   "author": {
     "name": "Paul",

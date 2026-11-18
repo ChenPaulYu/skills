@@ -145,6 +145,13 @@ one cause. Split a task only when ownership, next action or completion needs to 
 independent; a deferred possibility can remain an idea. No additional record kind or
 mandatory observation schema is required.
 
+## Records in a retired shape
+
+When the reader's `check` lists `migrations`, or a rule change leaves existing records
+in an old shape, list the affected records and what migrating each would do, then ask
+the user whether to migrate now. Migrate only on a yes, in the same round, and re-run
+`check`; otherwise report what remains. Never migrate as a side effect of a read or save.
+
 ## Updating and closing
 
 Re-read the original before editing, preserve unrelated tasks and live reasons, and

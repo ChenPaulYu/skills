@@ -30,6 +30,7 @@ STATUSES = {
     "plan": {"draft", "active", "completed", "superseded"},
 }
 ACTIVE = {"task": {"active", "paused", "blocked"}, "plan": {"active"}}
+RETIRED_TYPES = {"plan": "plan records are retired; ask the user before folding live content into its task"}
 
 
 class WorkspaceError(Exception):
@@ -323,7 +324,12 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
         else:
             selected_diagnostics = scoped_diagnostics()
             tier = _read_tier(projects, records, diagnostics)
-        return {"status": "ok" if not selected_diagnostics else "error", "diagnostics": selected_diagnostics, "read_tier": tier}
+        result = {"status": "ok" if not selected_diagnostics else "error", "diagnostics": selected_diagnostics, "read_tier": tier}
+        in_scope = [r for r in records if not project_id or r["_project_dir"] in {p["_scope"] for p in projects if p["id"] == project_id or p["_scope"] == project_id}]
+        migrations = [{"path": r["path"], "message": RETIRED_TYPES[r["type"]]} for r in in_scope if r.get("type") in RETIRED_TYPES]
+        if migrations:
+            result["migrations"] = migrations
+        return result
     assert project_id is not None
     project = _project(projects, project_id)
     scope = project["_scope"]

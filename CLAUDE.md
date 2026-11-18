@@ -85,6 +85,10 @@ skills: [`authoring-failure-modes.md`](plugins/nav/skills/compose/references/aut
   regenerate the catalog in the same commit, and explain in the commit message why it exists
   and how it avoids stealing siblings' triggers.
 - **Shared rule change:** update every skill that restates it in the same commit.
+- **Record-convention change:** when a change to `record-interface.md` or `workspace-records.md`
+  leaves existing workspace records in an old shape, list them and ask the user whether to
+  migrate them in the same round; teach the reader's `check` to report the old shape as
+  `migrations`.
 - **Stale is worse than missing:** fix a `SKILL.md` in the commit that made it stale.
 - **ADRs (ADR-019):** write or update one only when alternatives were weighed and the rejected
   one is likely to be re-proposed. One topic per ADR, edited in place. Usage patterns go to the

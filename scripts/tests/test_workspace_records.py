@@ -274,6 +274,12 @@ class WorkspaceRecordsTest(unittest.TestCase):
         self.assertEqual(run(self.root, "show", "demo", "misplaced")["record"]["body"], "Still readable\n")
         self.assertEqual(report["read_tier"], "non-standard readable records")
 
+    def test_check_lists_retired_plans_as_migrations_without_failing(self) -> None:
+        self.write("workspace/demo/plans/old.md", self.record("old-plan", "plan", "active", "Old approach"))
+        result = run(self.root, "check", "demo")
+        self.assertEqual(result["status"], "ok")
+        self.assertIn("workspace/demo/plans/old.md", [m["path"] for m in result["migrations"]])
+
     def test_unverified_import_is_readable_without_becoming_active_or_done(self) -> None:
         self.write("workspace/demo/plans/imported.md", self.record("imported", "plan", "unverified", "Legacy claimed complete; not reverified"))
         self.assertEqual(run(self.root, "check", "demo")["status"], "ok")
