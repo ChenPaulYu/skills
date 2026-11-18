@@ -66,6 +66,6 @@ evidence; passing a typecheck is not a substitute for that inspection.
 
 ## Completion
 
-Report changed behavior, relevant files, checks and results, and material limitations. Update
-changed file roles and any board item actually advanced by this work. Do not retriage the board
-or publish merely because the implementation is complete.
+Report changed behavior, relevant files, checks and results, and material limitations.
+Apply the work-item sync gate in the skill and keep any unrelated priority changes out of
+the completion update. Publication requires its own authority.

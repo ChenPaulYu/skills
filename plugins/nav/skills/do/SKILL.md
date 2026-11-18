@@ -72,10 +72,10 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    after its acceptance passes. Reuse live legacy work in place and preserve its
    existing progress format. A one-off fix can proceed without a new record. For
    durable tracking, follow `references/workspace-records.md`. Mark only verified work complete, then continue the next authorized
-   ready item. Record blockers and proceed with independent items in scope; stop when the work
-   is complete or no authorized ready item remains. For an existing legacy board, the push half of
-   ADR-086 still applies:
-   **Board sync** — if the repo has a `blueprints/plan.md` board and this change closes or materially advances one of its 🚧/▶ items, update that item **in the same change**: move it to ✅ Shipped with a one-line evidence pointer, or annotate the progress. A stale board entry is the same lie as a stale header, one tier up — and the board has no other push-side writer (measured: one project's sweep found 5 of 7 "Next" items already shipped, every one shipped via an execution verb that never touched the board). Scope discipline: touch ONLY the item(s) this change actually moved — re-triaging, reordering, or dropping items is `/shape:status`'s job, with the user. No board, or the change maps to no item → gate passes vacuously.
+   ready item. Record blockers and proceed with independent items in scope. Keep
+   progress in its owning record, including when a compatibility board is present.
+   When a legacy board still owns the work, update only the matching item in the
+   same change with verified progress or completion and an evidence pointer.
 
 Scope decisions, ownership checks, and examples of risk-proportional verification: `references/do-protocol.md`.
 

@@ -3,6 +3,10 @@
 **Status**: accepted
 **Date**: 2026-11-16
 
+[ADR-155](docs/adr/155-shape-task-and-direct-execution.md) revises where new
+engineering proposals go by default. Nav-plan presents them in chat and saves
+them in the owning task when requested. The single-owner rule still applies.
+
 ## Context
 
 The connected-workspace pilot separated task progress from implementation plans.

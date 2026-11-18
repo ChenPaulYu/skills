@@ -3,6 +3,11 @@
 **Status**: accepted
 **Date**: 2026-11-16
 
+[ADR-155](docs/adr/155-shape-task-and-direct-execution.md) revises the default
+routing. Decided work goes through Shape task and Nav-do when tracking is needed.
+Nav-plan remains available for an explicitly requested engineering proposal.
+Risk-proportional reasoning and the verification requirements still apply.
+
 ## Context
 
 ADR-152 made implementation planning an optional section of its owning task. The planning
