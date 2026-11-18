@@ -1,223 +1,95 @@
 # CLAUDE.md — `skills` marketplace (repo root)
 
-> Repo-wide rules for editing **this marketplace** — loaded for work anywhere in the repo, so a rule here is seen no matter which plugin you touch.
-> Each `plugins/<name>/CLAUDE.md` holds only what is **specific to that plugin** (its identity, roster, the design patterns / framework it owns). Read the affected family's guide before editing it; leave unrelated families unloaded. Shared authoring and maintenance rules live **here, once**.
+> Repo-wide rules for editing this marketplace, stated once. Each `plugins/<name>/CLAUDE.md`
+> holds only that family's identity, roster and patterns; read it before editing that family.
+> Reasons and rejected alternatives live in [`docs/adr/`](docs/adr/README.md).
 
-## This repository's workspace pilot
+## Workspace pilot (this branch)
 
-On `experiment/workspace-graph`, this project's working-record locator is
-`workspace/skills/project.md` inside the owner's configured home repo. Resolve that
-home through the available My-wiki entry/configuration, never a committed machine
-path. Read the project before reconstructing this pilot from old blueprints. If
-the home repo is unavailable, report that and use readable local evidence. ADR-014
-owns the experiment's scope; this locator does not migrate other projects.
+On `experiment/workspace-graph`, this project's working records live at
+`workspace/skills/project.md` in the owner's configured home repo. Resolve that home through
+the My-wiki entry/configuration, never a committed machine path, and read the project before
+reconstructing work from old blueprints. If the home is unavailable, say so and use readable
+local evidence. Scope: ADR-014.
 
-## ⚖ The three-layer law — every skill is a deep module (ADR-002)
+## Core principles
 
-The first thing to know before touching any skill. A skill has three layers, and **each fact lives in the lowest layer that still fires it**:
+1. **Three-layer law (ADR-002).** Each skill fact lives in the lowest layer that still fires it:
+   `description` (every turn: when to summon + one NOT-boundary, ≤3 sentences) → `SKILL.md`
+   body (on fire: stance and behavior-changing gates only) → `references/` (on demand:
+   protocol detail, moved verbatim). Depth = behavior delta ÷ always-resident tokens;
+   delete-test each paragraph and compress narration, never gates. A skill is
+   self-contained in its directory and depends on no CLAUDE.md.
+2. **One owner per fact.** Every fact has one owner; everything else is derived or points to
+   it. Generated files are never hand-edited (see Gates).
+3. **Skills read standalone.** Stack-neutral examples with generic placeholders, no origin
+   project's nouns. Paths are repo-root-relative with no `./` or `../`. Skills are bare verbs
+   under the `<plugin>:` namespace; cross-references use the typed form (`/nav:audit`).
+4. **Honor authorized scope (ADR-006).** Analysis is read-only. Carry out authorized changes;
+   ask only for a consequential unresolved choice, new authority, material cost, or external
+   or destructive effects. Publishing and speaking for the user always need explicit consent.
+5. **Dispatch tiers (ADR-007).** Planning, judgment, review and acceptance stay with the
+   session model; bounded execution defaults to `model: sonnet`, and mechanical skills declare
+   it in frontmatter. Workers return evidence, not verdicts. Stuck judgment goes to the user.
+   Report `⚙ 派工:執行=<tier> ×N|判斷+驗收=session model`.
+6. **Conventions are read tolerantly (ADR-019).** Only manifests and generated artifacts are
+   contracts. A verb reading blueprints, boards, handoffs or headers handles standard,
+   ad-hoc and absent shapes, and reports which it read.
+7. **This repo is public.** Anonymize at write time: no third-party names (roles instead;
+   crediting public work is fine), no private repo names or internals (the owner's product
+   codenames may appear, their ports, endpoints, code names and roadmap may not), no machine
+   paths, no confidential material. If evidence loses its lesson once anonymized, it belongs
+   in private notes.
 
-| Layer | Loaded | Carries |
-|---|---|---|
-| `description` (frontmatter) | **every turn**, every session | when-to-summon (the user's measured vernacular) + one NOT-boundary. ≤3 sentences. |
-| `SKILL.md` body | on fire | **stance + behavior-changing gates** — only what alters the model's behavior while running |
-| `references/` | on demand | protocol detail, tables, procedures, machinery — moved **verbatim** (rule ⑥) |
+Prose that reads well but stops working has named failure modes; use them when reviewing
+skills: [`authoring-failure-modes.md`](plugins/nav/skills/compose/references/authoring-failure-modes.md).
 
-**Skill depth = behavior delta ÷ always-resident tokens.** Delete-test each body paragraph:
-if removing it changes no behavior, sink or cut it. At authoring time, compare the prompt
-with and without the skill; negligible difference is evidence against building it.
-**Keep behavior-changing gates in bodies; compress narration, not gates.**
-The skill layer is judged by use; doctrine (ADRs, observations, findings) by transferable
-understanding, not usage counts. Rationale: ADR-009/002.
+## Gates
 
-## Deep-module discipline applies to this repo's own files
-
-The 8 deep-module rules nav audits for govern **these meta-files too** — the CLAUDE.md docs, the `scripts/`, the manifests, the site map — not just the product code the skills describe. Apply them as you edit here:
-
-- **Rule ① — one owner, no leakage.** Every fact has a single owner; everything else is derived or points to it. A version lives in one manifest (gate #1); a repo-wide rule is stated **once** in this file, never re-copied per plugin.
-- **Rule ② — interface-first / progressive disclosure.** Every doc leads with its point and drills in only as needed (`head`-able); the validator + gates are the one door to "did I keep the repo consistent?".
-- **Rule ④ — right grain.** A `SKILL.md` or CLAUDE.md past ~500 lines, or enumerating many distinct responsibilities, gets split — the same bar nav applies to product code.
-
-## Anonymization — this repo is PUBLIC; write like it
-
-Everything committed here (ADRs, observations, findings, plans, design docs, fixtures)
-is world-readable. When writing evidence or narrative into any of them, **anonymize at
-write time**:
-
-- **No real third-party names or handles.** Collaborators appear as roles: "the
-  counterpart", "a team member". The repo owner naming *himself* is normal authorship
-  and fine; naming anyone else is not — they didn't consent to appearing in a public
-  tools repo. **Carve-out**: crediting the authors of *public* work (Ousterhout,
-  `mattpocock/skills`, a published paper's ideas) is attribution, not a leak — the
-  law protects non-consenting private collaborators, not public authorship.
-- **No private repo names, org paths, or internal project details.** Use placeholders
-  (`<relay-repo>`, "a private R&D project"). Unreleased-product feature/debt items are
-  described by shape ("a timing-grounding item"), never by internal name.
-  **Calibration (ruled 2026-07-17)**: the owner's own product *codenames* (Crate,
-  TrackMate, Tactus, …) may appear as passing references — he uses them publicly.
-  What must stay out is the sharp internals attached to them: dev ports, API
-  endpoints, component/function/token names, internal roadmap or debt items, cost
-  figures, private-repo paths and commit hashes. Name the product, describe the
-  detail by shape.
-- **No machine-specific paths.** `$HOME`, `<dev-root>`, `<session scratchpad>` — a
-  literal `/home/<user>/...` leaks the account name and 404s for everyone else.
-- **No confidential third-party material.** Papers under review, private conversations,
-  anything received under an expectation of confidence — keep the transferable lesson,
-  strip every identifying fingerprint.
-
-The test: **the evidence must keep its lesson after anonymization.** If it can't — if
-the doc is only meaningful with the real names and internals — it belongs in private
-notes, not in this repo.
-
-## Concurrent editors — check before you write, not at push time
-
-This repo has more than one active editor (the owner + agent sessions) pushing to `main`
-directly — no PR review gate catches a stale base before it lands. **Before your first
-edit in a session, not before your first push:**
-
-```bash
-git fetch origin && git log --oneline HEAD..origin/main
-```
-
-If upstream moved, pull/rebase on a clean worktree or re-read affected files and preserve
-local work before editing. Resolve conflicts, regenerate derived files, and validate.
-
-## Hard gates — run before every commit
-
-**One owner per fact; one green validator per commit.** Before committing changes under
-`plugins/`, `.claude-plugin/`, or `docs/`, run:
-
-```bash
-node scripts/validate-codex-skills.mjs
-```
-
-It must print `... ok`; it regenerates artifacts in a temporary tree and compares them.
-Enable hooks once per clone with `git config core.hooksPath scripts/hooks`. The pre-commit
-hook runs these checks plus the blueprint check against the exact staged snapshot, through
-`node scripts/validate-staged.mjs`; unstaged repairs cannot hide a broken commit. Use the normal
-validator while editing, then stage complete changes before the commit gate. The hook leaves
-unstaged and untracked work untouched; post-commit, post-merge, and post-rewrite refresh installed copies.
-A deliberate bypass is `git commit --no-verify`.
-
-### 0. Installed copies follow the repo automatically — `git pull` is the ritual
-
-On a machine you rarely open, `sh scripts/install-auto-pull.sh` schedules a safe fast-forward-only pull (see INSTALL.md → Keep this machine current); the post-merge hook then does the rest.
-
-The repo is the source of truth; every tool that runs these skills reads a **copy**, and each copy rots in its own way:
-
-| Runtime | Reads | Rots because |
-|---|---|---|
-| Claude Code | `~/.claude/plugins/cache/skills/<plugin>/<version>/` | the snapshot is **version-pinned** — new content never arrives, and a *retired* plugin stays loadable from its old pin |
-| Codex · opencode | `~/.codex/skills/<plugin>-<skill>/` — the dual-global root | a plain copy, only as fresh as the last generator run |
-| Cursor | `~/.cursor/plugins/local/<plugin>` → `platforms/cursor/<plugin>` | symlinks, so content is always live; only the *set* of links goes stale when a plugin joins or retires |
-
-Cursor consumes native plugins, not the Codex mirror (ADR-017). Keep this marketplace
-out of `~/.agents/skills`; disable Cursor's “Include third-party Plugins, Skills, and
-other configs” so it does not discover Codex's flattened copies either.
-
-[`scripts/sync-installed.sh`](scripts/sync-installed.sh) owns installation: refresh native
-plugin caches, remove retired/superseded pins, install the Codex mirror, and aim Cursor
-symlinks. Hooks invoke it after commit/pull. The Codex receipt owns profile selection;
-preserve it, default a receipt-less machine to `minimal`, and change scope deliberately
-with `sh scripts/sync-installed.sh --codex-profile <name>`. Hand-edited
-`~/.codex/agents/*.toml` overrides are preserved. Run the script directly for a full report.
-Why automatic refresh matters: [stale-copy finding](docs/findings/2026-08-12-skill-copies-outlive-their-source.md).
-
-### 1. Plugin version + manifests are single-owner
-
-- **Owner**: `plugins/<name>/.claude-plugin/plugin.json` owns that plugin's `name` · `version` · `description` · `author`.
-- **Derived — never hand-edit**:
-  - `plugins/<name>/.cursor-plugin/plugin.json` — a projection of the owner.
-  - the `version` field of each entry in `.claude-plugin/marketplace.json`. (The marketplace `description` there is a separate, hand-owned blurb — only `version` is derived.)
-- **After any version / description / author change**, regenerate then validate:
+- **Before your first edit:** `git fetch origin && git log --oneline HEAD..origin/main`.
+  Several editors push directly; re-read and preserve upstream work before editing.
+- **Any plugin content change:** bump `plugins/<name>/.claude-plugin/plugin.json`
+  (native caches pin by version), then run in order:
   ```bash
-  node scripts/build-manifests.mjs         # re-derive cursor projections + marketplace versions
-  node scripts/validate-codex-skills.mjs   # fails the build on any manifest drift
+  node scripts/build-manifests.mjs   # manifests, shared references, README/site catalog
+  node scripts/build-codex.mjs       # .agents/skills/ + AGENTS.md
+  node scripts/build-cursor.mjs      # platforms/cursor/ + .cursor-plugin/
+  node scripts/validate-codex-skills.mjs   # must print "... ok"
   ```
+- **Never hand-edit generated files:** `.agents/`, `AGENTS.md`, `platforms/cursor/` (except
+  `manifest.json`), `.cursor-plugin/`, marketplace `version` fields, and the marked catalog
+  blocks in `README.md` and `docs/site/index.html`. `docs/catalog-copy.json` owns catalog prose
+  only, never membership.
+- **Hooks:** `git config core.hooksPath scripts/hooks` once per clone. Pre-commit validates the
+  exact staged snapshot; post-commit/merge/rewrite run `scripts/sync-installed.sh` to refresh
+  installed copies. Installation details: [`INSTALL.md`](INSTALL.md).
 
-### 2. Codex / Cursor / opencode skill mirrors are generated
+## Changing skills
 
-- `.agents/skills/` + the repo-root `AGENTS.md` are generated from `plugins/` by `node scripts/build-codex.mjs`. Never hand-edit them — edit the plugin `SKILL.md` / `CLAUDE.md`, regenerate, then validate (same validator as above).
-- `platforms/cursor/<plugin>/` + repo-root `.cursor-plugin/marketplace.json` are generated from `plugins/` by `node scripts/build-cursor.mjs`. Never hand-edit them (except `platforms/cursor/manifest.json`, the Cursor adapter's release owner). Cursor is a native-plugin channel, not a Codex-mirror consumer (ADR-017).
-
-Shared skill references are generated too: `scripts/lib/shared-skill-references.mjs` maps each editable owner to its bundled, self-contained consumers. Run `node scripts/build-manifests.mjs` before the platform generators after changing an owner. The same validator catches bundled-reference drift.
-
-### 3. Human-facing catalog blocks are generated — site map AND README
-
-Plugin versions come from their owner manifests; the active skill roster and invocation
-category come from skill directories and frontmatter. `docs/catalog-copy.json` owns only
-editorial descriptions, bilingual labels, and layout hints — it cannot register a skill.
-Missing copy falls back to source descriptions; stale copy cannot keep a retired skill alive.
-
-`node scripts/build-manifests.mjs` renders the marked catalog blocks in `README.md` and
-`docs/site/index.html` through `scripts/lib/catalog.mjs`. Never hand-edit those blocks.
-The validator regenerates both surfaces in a temporary tree and compares them exactly;
-missing or malformed markers fail rather than silently skipping a surface. Run this
-builder **before** the Codex and Cursor builders, then run the validator (ADR-018).
-
-Human judgment still owns the prose: update `docs/catalog-copy.json` when behavior changes.
-The README quick lookup, site anatomy diagrams, plugin CLAUDE.md conventions, and ADRs
-remain hand-maintained; generated registration is not proof that those explanations are
-true. For an intentional site design or explanatory change, bump its audit revision and
-record what changed. Historical audit notes are dated snapshots, not live inventory;
-mechanical roster/version refreshes do not require another hand-copied inventory there.
-
-## Authoring conventions (every plugin, every skill)
-
-- **★ Contracts vs conventions** — the manifest/generated-artifact set is mechanically enforced in this marketplace. The relay plugin and its old thought-frontmatter linter are retired (ADR-009); no relay invariants remain to enforce. Blueprints, boards, handoffs, headers, and document layout are conventions: tolerate non-standard or absent forms instead of treating them as malformed contracts. Decisions live in `thoughts/` with a `Status:` line; the former core freeze protocol is retired (ADR-019/013).
-- **★ Tolerant reader — three states, self-reported** — every verb that reads a convention-owned structure (above) handles three states: **standard shape** → consume directly; **non-standard/ad-hoc shape** → tolerate, consume what's readable; **absent** → degrade gracefully and **self-report which tier it read from**, so the user can judge how much to trust the result. Canonical instance: `plugins/shape/skills/status/SKILL.md`'s reconstruction steps. [ADR-019](docs/adr/019-doctrine-docs-and-conventions.md).
-- **★ Invocation category is visible, not just in frontmatter** — a skill's invocation axis (model-invoked by default, or summoned-only via `disable-model-invocation: true`) already has one owner, the frontmatter field; `README.md`'s Invocation section should additionally bucket entries by category (User-invoked / Model-invoked) so the fact is scannable by a human, not just greppable in frontmatter. Inventory + what's still an open question: [ADR-002](docs/adr/002-skill-three-layer-law.md).
-- **Naming** — skills use **bare verbs** (`audit`, `mockup`, `dissect`); the `<plugin>:` namespace supplies the topic, so no `<plugin>-` prefix on the skill name. A family may diverge when its idiom demands it (e.g. `frame`'s reasoning lenses use canonical names — `first-principles` — for discoverability, while its `analogize` member uses a bare verb); document the divergence in that plugin's CLAUDE.md.
-- **★ Self-contained skill, three layers** — governed by **⚖ The three-layer law at the top of this file** (ADR-002; single owner, stated once). The one nuance owned here: *self-contained* means within the skill's **directory**, not within the body — a skill depends on no CLAUDE.md being loaded, and its `references/` ship with it.
-- **★ Stack-neutral, standalone-legible examples** — every example must be understandable from the skill *alone*; never leak an origin project's domain nouns (component names, filenames, app concepts). Use generic placeholders (`UserList`, `core/user`, `Editor.tsx`). A skill that only makes sense if you know Project X is a leaky skill.
-- **★ Skills-root-relative paths** — all paths (doc links **and** example code) are written as if `skills/` (the repo root) is root. **No `./` or `../` prefixes.** Doc links: `docs/adr/007-dispatch-tiers.md`. Example imports: alias form (`@/core/user`) or bare module names.
-- **Frontmatter `description`** — lead with the user's trigger, stay within three sentences, avoid synonym lists, and retain a meaningful boundary. Summon-only skills (`disable-model-invocation: true`) omit auto-trigger phrase lists. Description length is measurable context cost; invocation flags alone do not prove runtime savings (ADR-002).
-- **Honor the user's authorized scope (ADR-006).** Analysis/review requests are read-only. For requested changes, show the intended approach or diff and carry out already-authorized work; a separate confirmation is needed only for a consequential unresolved choice or new authority, material scope/cost, external effects, or destructive action beyond that authorization. Existing consent remains valid for the same scope. Publishing and speaking for the user keep their explicit authorization boundaries.
-- **Cost tier — mechanical verbs declare `model: sonnet`** ([ADR-007](docs/adr/007-dispatch-tiers.md)) — a skill whose work is a mechanical sweep / format / scan / render-from-structured-source (rather than open-ended judgment) declares `model: sonnet` in its SKILL.md frontmatter: a **turn-level** override, the session model resumes on the user's next prompt, and every gate (diff, write-gate, confidence-gate) is unchanged. Judgment-heavy verbs stay on the session model. This bullet owns the *criterion*; **which of its verbs are tiered is listed in each plugin's CLAUDE.md** (the instance, one owner each).
-- **★ Dispatch tiers** — planning, judgment, review, and acceptance stay with the session model; bounded reconnaissance/execution defaults to `model: sonnet`. Workers return file/source evidence, never a substitute verdict for the session. Load work-packet and return instructions only when dispatching. Announce scope, execution tier, and what stays with the session; honor existing task authorization and ask only for missing authority or additional material cost/effects. A stuck user-intent decision goes directly to the user, not a reviewer agent (ADR-007/006). The user's tier choice overrides the default. The dispatcher must report `⚙ 派工:執行=<tier> ×N|判斷+驗收=session model`; any resulting commit carries "Executed by a `<tier>` hand, judgment-seat reviewed (ADR-007)". Task-selection evidence and execution safeguards: [ADR-007](docs/adr/007-dispatch-tiers.md).
-- **★ Prose failure vocabulary** — the named ways skill/doc prose reads but stops working (adopted from mattpocock/skills' `writing-great-skills`, [ADR-002](docs/adr/002-skill-three-layer-law.md)); rule ① keeps each term defined once, here — plugins reference it, never restate it:
-  - **Premature Completion** — ending a step early because a later step already entered view.
-  - **Negation** — a prohibition that makes the forbidden behavior easier to think about, not harder.
-  - **No-Op** — an instruction that changes nothing relative to default behavior.
-  - **Sediment** — stale lines kept out of reluctance to delete, not out of need.
-  - **Sprawl** — length itself is the failure, even when every individual line is necessary.
-  - **Leading Word** — a compact, already-understood term reused instead of re-describing the same idea in prose each time.
-  - **Completion Criterion** — a precise, checkable "done" that Premature Completion can't slip past.
-
-  Full definitions + this repo's instances + the tell + remedies: [`plugins/nav/skills/compose/references/authoring-failure-modes.md`](plugins/nav/skills/compose/references/authoring-failure-modes.md).
-- **Cross-references between skills** are spelled `/nav:audit`, `/shape:mockup` — the form the user actually types, not bare names.
-
-## When editing — maintenance rules
-
-- **Before adding or changing any skill**, check the ★ authoring principles above (the two most common leaks: an origin-project domain noun, and a `./`/`../` path). Also check [`docs/out-of-scope/`](docs/out-of-scope/README.md) first — don't re-propose an already-rejected idea without engaging with why it was rejected.
-- **New skill** — scaffold `plugins/<plugin>/skills/<name>/SKILL.md`, write the frontmatter description carefully, test that invocations cover the main trigger phrasings, and state in the commit message why it exists and how its trigger avoids stealing its siblings' fire. Record an ADR only when the ADR threshold below is met. **Then regenerate the public catalog** in the **same commit** as the `SKILL.md` (gate #3). Add editorial copy in `docs/catalog-copy.json` when the source-description fallback is insufficient; review hand-owned explanatory surfaces too.
-- **Renaming a skill** — bump `version` in `.claude-plugin/plugin.json` (gate #1), run `node scripts/build-manifests.mjs`, and state the rename in the commit message.
-- **Changing a shared rule** that every skill restates (e.g. nav's 8 rules) — update every affected `SKILL.md` in the **same commit**, and update the ADR that owns that rule.
-- **ADR threshold (ADR-019)** — write or update an ADR only when alternatives were weighed and a later session would plausibly re-propose the rejected one. Everything else is a commit message. One ADR owns one topic: when its decision changes, edit that ADR in place and let Git keep the history; do not add a new number to revise an old one. Usage patterns go to the skill or CLAUDE.md they correct, or to a workspace idea when the owner is unclear; the old `docs/observations/` inbox was removed.
-- **Stale `SKILL.md` is worse than a missing one** — same law as "stale header = lie." Fix it in the commit that made it stale.
-- **Retirement (ADR-009)** — zero fires across three months of transcripts demotes a model-invoked skill to `disable-model-invocation: true`; real demand reverses demotion. Do not claim demotion removes its description from runtime context without measuring. Deletion additionally needs ADR-009's three-causes check: never reachable, mis-triggered, or genuinely unclaimed; zero use alone is insufficient. Watch list (near-zero in the first ledger window, 2026-10/11): `frame:analogize`, `frame:draw`. Retirement history lives in ADR-009/015/006. Transcripts are retained only ~5 weeks, so the evidence is the monthly ledger: run `node scripts/skill-usage.mjs --write` each month and read the last three `docs/usage/` snapshots (ADR-009).
-- **Every plugin content change needs a version bump** in `plugins/<name>/.claude-plugin/plugin.json`, followed by manifest regeneration. Native plugin caches are version-pinned; unchanged versions can keep serving stale content. Hooks propagate the new version after commit/pull (gate #0). Evidence: [cache-pin finding](docs/findings/2026-07-17-plugin-cache-pins-version-stale-content.md).
+- **Before adding or changing one,** check [`docs/out-of-scope/`](docs/out-of-scope/README.md)
+  and the relevant topic ADR so a rejected idea is not re-proposed unexamined.
+- **New skill or rename:** write the description carefully, test the main trigger phrasings,
+  regenerate the catalog in the same commit, and explain in the commit message why it exists
+  and how it avoids stealing siblings' triggers.
+- **Shared rule change:** update every skill that restates it in the same commit.
+- **Stale is worse than missing:** fix a `SKILL.md` in the commit that made it stale.
+- **ADRs (ADR-019):** write or update one only when alternatives were weighed and the rejected
+  one is likely to be re-proposed. One topic per ADR, edited in place. Usage patterns go to the
+  skill they correct, or to a workspace idea when the owner is unclear.
+- **Retirement (ADR-009):** three months of zero fires in the monthly ledger
+  (`node scripts/skill-usage.mjs --write`, read the last three `docs/usage/` snapshots) demotes
+  a model-invoked skill to summon-only; deletion also needs the three-causes check. Watch list:
+  `frame:analogize`, `frame:draw`.
 
 ## Where things live
 
 ```
-.claude-plugin/marketplace.json   → registers every plugin (name · source · description · version)
-plugins/<name>/.claude-plugin/    → per-plugin manifest (the version + metadata OWNER)
-plugins/<name>/.cursor-plugin/    → generated four-field projection (do not hand-edit; not the installable Cursor plugin)
-plugins/<name>/CLAUDE.md          → plugin-specific identity + roster + design patterns
-plugins/<name>/skills/<s>/SKILL.md → individual skills, each self-contained
-scripts/build-manifests.mjs       → regenerates projections, shared references, and public catalog blocks
-scripts/lib/catalog.mjs           → derives public catalog from manifest + skill sources
-docs/catalog-copy.json           → hand-owned README/site prose and layout (not roster)
-scripts/build-codex.mjs           → regenerates .agents/skills/ + AGENTS.md
-scripts/build-cursor.mjs          → regenerates platforms/cursor/<plugin>/ + .cursor-plugin/marketplace.json
-scripts/validate-codex-skills.mjs → gates ALL of the above (run before commit)
-platforms/cursor/                 → generated Cursor Plugins (do not hand-edit except manifest.json)
-platforms/cursor/manifest.json    → Cursor adapter release (hand-owned)
-.cursor-plugin/marketplace.json   → generated Cursor marketplace (do not hand-edit)
-scripts/skill-usage.mjs           → monthly skill-usage snapshot → docs/usage/ (retirement evidence)
-scripts/sync-installed.sh         → single owner of "make THIS machine's installed copies match the repo"
-scripts/hooks/                    → pre-commit (validate) · post-commit / post-merge / post-rewrite (sync)
-docs/adr/                         → ADRs (marketplace-level, shared across plugins)
-docs/site/index.html             → the bilingual marketplace map (gating, see gate #3)
-README.md                         → human-facing marketplace overview
+plugins/<name>/.claude-plugin/plugin.json → plugin version + metadata (owner)
+plugins/<name>/CLAUDE.md                  → family guide
+plugins/<name>/skills/<s>/                → self-contained skills
+scripts/                                  → builders, validator, hooks, sync-installed.sh
+docs/adr/                                 → topic ADRs (reasons, rejected alternatives)
+docs/findings/ · docs/out-of-scope/       → build-side mechanisms · rejected proposals
+docs/usage/                               → monthly skill-usage ledger
+README.md · docs/site/index.html          → human-facing overview and map
 ```

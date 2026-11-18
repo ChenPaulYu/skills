@@ -549,7 +549,7 @@ function validateAdrNumbers() {
       errors.push(
         `docs/adr/: number ${n} is claimed by ${files.length} files (${files.join(", ")}) — ` +
           `ADR numbers must be unique; the later author renumbers to the next free number and ` +
-          `updates every reference (site map audit block, plugin CLAUDE.md, skill bodies)`,
+          `updates every reference (site map, plugin CLAUDE.md, skill bodies)`,
       );
     }
   }

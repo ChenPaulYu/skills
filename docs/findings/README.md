@@ -1,70 +1,32 @@
 # Findings
 
-Build-side notes from editing this marketplace. The kind of mechanical knowledge — "Claude Code's plugin discovery actually works like this", "this naming pattern bites if you're not careful" — that future-you will want to look up before stepping on the same nail twice.
+How the tooling actually behaves, learned while editing this marketplace — so the next editor
+does not step on the same nail. Decisions go to [`docs/adr/`](docs/adr/README.md); usage
+patterns go to the skill they correct, or to a workspace idea when the owner is unclear.
 
-## Why this exists
+## When to write one
 
-Findings point inward: the audience is future-you (or anyone) editing this marketplace, and a matured finding lands in a marketplace `CLAUDE.md` addition, a topic's ADR, a plugin `CLAUDE.md` or a convention note. Usage patterns that point outward go straight to the skill or `CLAUDE.md` they correct, or to a workspace idea when the owner is unclear; the old `observations/` inbox was removed ([ADR-019](docs/adr/019-doctrine-docs-and-conventions.md)).
+Something about Claude Code, Codex, Cursor, the manifests or the build behaved differently than
+expected, and you found the mechanism. A "how the tool works" note stays a finding; if it led
+to weighing alternatives, record the decision in the topic's ADR and link the finding.
 
-ADRs record **decisions** ("we chose X over Y"). Findings record **mechanisms** ("here's how the thing actually behaves"). Different shape, different lifecycle.
+## Shape
 
-## Scope
-
-Anything you learned the hard way while editing this marketplace. Examples:
-- How Claude Code's plugin discovery / registration / reload actually works
-- How `marketplace.json` vs `plugin.json` slot together
-- Naming patterns that look fine in isolation but read badly once invoked
-- File-layout choices that affect distribution vs local-only tooling
-
-**Not for**: usage techniques (those go to the skill they correct, or a workspace idea) or formal design decisions (those are [`docs/adr/`](docs/adr/)).
-
-## File shape
-
-One file per finding. Name: `YYYY-MM-DD-<short-kebab-slug>.md`.
+One file per finding, `YYYY-MM-DD-<short-kebab-slug>.md`:
 
 ```markdown
 ---
 date: 2026-05-28
-status: raw
+status: raw | confirmed | promoted | superseded
 ---
 
 # <One-line takeaway in plain language>
 
-<Free-form body. Useful prompts to answer if relevant:
-- What I tried (concrete steps + commands)
-- What happened (what didn't work, the symptom)
-- Root cause (the underlying mechanism)
-- How I fixed it (concrete steps + commands)
-- Future-self note: how to recognize this situation next time, or
-  the one-line generalizable principle>
+What I tried, what happened, the root cause, the fix, and how to recognize it next time.
 ```
 
-Lean by design. Extra frontmatter fields earn their keep only after 5+ findings show they'd be useful.
+- `confirmed`: reproducible, root cause understood.
+- `promoted`: folded into a guide, ADR or skill — link where it landed at the top.
+- `superseded`: the tooling changed; keep a one-line "superseded by X" header.
 
-## Status lifecycle
-
-| Status | Meaning | Action |
-|---|---|---|
-| `raw` | First time encountered | Write it down before the details fade |
-| `confirmed` | Reproducible; root cause understood | Update the body with the verified mechanism |
-| `promoted` | Folded into `CLAUDE.md`, an ADR, or a convention note | Add a top-line link to where it landed; keep the finding as history |
-| `superseded` | Underlying tooling / convention changed; finding no longer applies | Keep file with a one-line "superseded by X" header (negative results have value) |
-
-(No `repeated` / `maturing` stages — findings are either confirmed or not; they don't gestate into bigger things, they get folded into the right place.)
-
-## Promotion targets
-
-When a finding matures:
-
-- **`CLAUDE.md` addition** (marketplace or plugin level) — a one-paragraph "by the way, X works like this" that everyone editing here should know.
-- **ADR** (the topic's `docs/adr/<n>-<topic>.md`) — only if the finding led to a **decision** about how this marketplace is shaped. A mere "how the tool works" stays as a finding.
-- **Convention note inside a SKILL.md / plugin** — if the finding is internal to one plugin's mechanism.
-- **Stay as a finding forever** — totally fine if it's reference material rather than something to bake into instructions.
-
-## Discipline (for the finder)
-
-- **Concrete > abstract.** Cite the actual command, the actual error, the actual file path. Generalities are hard to apply later.
-- **Future-self framing.** End with "how would I recognize this situation next time?" — that's what makes a finding useful, not the war story.
-- **Don't duplicate ADRs.** If a finding directly led to a decision, the decision belongs in `docs/adr/`. Link from the finding to the ADR; don't restate.
-- **Negative results count.** "Tried X, it doesn't work because Y" is a real finding — mark it `superseded` or keep it `confirmed` with the limitation, don't delete.
-- **One file per finding.** Granularity helps promotion later.
+Be concrete (actual commands, errors, paths). Negative results count; don't delete them.

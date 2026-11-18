@@ -12,19 +12,19 @@
       "name": "frame",
       "source": "frame",
       "description": "Apply an explicit, named frame that adds substantive reasoning checks without a fixed output worksheet — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.17.2"
+      "version": "0.17.3"
     },
     {
       "name": "nav",
       "source": "nav",
       "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
-      "version": "0.26.19"
+      "version": "0.26.20"
     },
     {
       "name": "shape",
       "source": "shape",
       "description": "Capture ideas, converge decisions, verify evidence, resume and save task-owned work, and tidy project records.",
-      "version": "0.35.10"
+      "version": "0.35.11"
     }
   ]
 }
