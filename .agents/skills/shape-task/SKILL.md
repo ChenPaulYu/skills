@@ -48,5 +48,5 @@ the whole task's status independently of the checklist. When updating, retain
 verified progress and keep the next ready action and any material blockers visible.
 
 Report the task and its next action. Recording work leaves it planned until
-execution is authorized. When the request already includes implementation,
-continue the ready items with nav-do discipline under that same authority.
+execution is authorized. For a combined request to record and implement, finish
+the task record, then hand execution to nav-do under the existing authorization.

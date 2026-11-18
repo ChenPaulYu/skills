@@ -7,7 +7,22 @@ description: "Implement and verify authorized, already-decided fixes or multi-it
 # Do — implement decided behavior
 
 Ground the change in the existing code, then deliver and verify the agreed outcomes.
-Use the owning task when work needs durable tracking.
+
+## Before the first edit: find the work item
+
+For every execution request, check the project instructions for its workspace
+mapping. For a connected project, open its `project.md` and search existing tasks
+and live legacy work for the requested outcome, even for a small fix. Use the
+user's explicit task or project pointer, or the **Locate before reading or
+writing** section of `references/workspace-records.md` if the mapping is unclear.
+The bundled `scripts/workspace --root <home> status <project>` can help.
+
+Report the matched work item, a completed lookup with no match, a legacy fallback,
+or an unavailable workspace. If two matches would change the work, resolve which
+owns it before editing that part. If the configured workspace is unavailable,
+report what could not be read and pause work that depends on its requirements.
+For an unmapped project, check its established local tracking. After a lookup
+with no match, a one-off fix may proceed under the existing authorization.
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
@@ -19,8 +34,8 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 - **Use the agreed outcomes as the entry gate.** A multi-item task can go directly
   through do. Read its deliverables, acceptance checks and linked decisions. Reconcile
   requested behavior, current evidence and any gaps before dividing the work.
-  When a write needs durable tracking, use the original task and the shape-task
-  record convention. A one-off fix can proceed without a new file.
+  Reuse the matched work item. If no item exists and the work has multiple
+  deliverables or needs resuming later, record it using the shared task convention.
 - **Plan within execution.** For coupled changes, decide dependency order, existing
   owners, interface and compatibility impacts, and migration or rollback before
   editing affected paths. Scale the detail to risk. Ask only when a choice needs

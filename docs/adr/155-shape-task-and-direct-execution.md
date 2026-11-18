@@ -4,8 +4,8 @@ Status: Accepted as a trial · 2026-11-18
 
 ## Decision
 
-Add shape-task for requests to record decided work or start an authorized change
-that needs durable tracking. Reuse the original task. Each deliverable carries
+Add shape-task for requests to record or revise decided work. Reuse the original
+task. Each deliverable carries
 its observable acceptance check, and the same record carries evidence and next
 action. Keep the existing frontmatter, relationships and status vocabulary.
 Idea capture, unresolved product choices and saving session progress stay with
@@ -17,6 +17,12 @@ It verifies and advances authorized ready items and records evidence in the
 owning task. Nav-plan remains available for requests to see or choose an
 engineering approach. Its output defaults to chat. A request to record a task
 or review an engineering approach alone leaves execution pending.
+
+Route requests by the deliverable. “Write a task for this” selects shape-task.
+“Implement this” selects nav-do, which looks for the owning work item before
+editing. When the user asks for both, Shape records the agreed outcome first
+and Nav executes under the existing authorization. A matched task owns the
+writeback; a bounded fix without a match can proceed directly.
 
 This revises ADR-152's default treatment of engineering notes and ADR-153's
 routing by planning depth. It keeps their single task owner, proportional
