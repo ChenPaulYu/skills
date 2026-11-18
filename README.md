@@ -95,27 +95,7 @@ Catalog skills: 23 active skills.
 
 ## Install
 
-One source tree, three channels, five agents. `plugins/` is the single source of truth everywhere:
-
-| Agent | Reads | Skill names |
-|---|---|---|
-| **Claude Code** | `plugins/` natively | `/nav:audit` |
-| **Antigravity (`agy`)** | `plugins/` via `agy plugin install` (preferred); or project `.agents/skills/` | `/nav:audit` · or flat `nav-audit` |
-| **Codex** · **opencode** | generated `.agents/skills/` | `nav-audit` |
-| **Cursor** | generated `platforms/cursor/<plugin>/` (ADR-017 — **not** the Codex mirror) | `nav-audit` inside each plugin |
-
-After any skill edit, regenerate **all** derived surfaces, then validate:
-
-```bash
-node scripts/build-manifests.mjs && node scripts/build-codex.mjs && node scripts/build-cursor.mjs
-node scripts/validate-codex-skills.mjs
-```
-
-Shortcut for any harness — tell your agent:
-
-> Fetch and follow instructions from `https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md`
-
-Or by hand. In Claude Code:
+In Claude Code:
 
 ```bash
 /plugin marketplace add ChenPaulYu/skills
@@ -124,172 +104,44 @@ Or by hand. In Claude Code:
 /plugin install frame@skills
 ```
 
-That's it — the `/nav:*`, `/shape:*`, and `/frame:*` skills become available. (Install only `nav` if you just want the maintenance half; `shape` depends on `nav`, so install both to use the forward-motion half. `frame` is independent — install alone or with the others.)
+`shape` depends on `nav`; `frame` is independent. Other agents read the same `plugins/` source
+through generated copies:
 
-### Antigravity CLI (`agy`)
+| Agent | Reads | Skill names |
+|---|---|---|
+| **Claude Code** | `plugins/` natively | `/nav:audit` |
+| **Antigravity (`agy`)** | `agy plugin install plugins/<name>` | `/nav:audit` |
+| **Codex** · **opencode** | generated `.agents/skills/` | `nav-audit` |
+| **Cursor** | generated `platforms/cursor/<plugin>/` | `nav-audit` |
+| **skills.sh** | `npx skills add ChenPaulYu/skills` (add `-g` for global) | per agent |
 
-Antigravity CLI natively imports Claude Code plugins — same `SKILL.md` format, same `/<plugin>:<skill>` namespace, **no conversion needed**. Two ways to wire this repo up:
+Per-agent steps, keeping a machine current, and avoiding duplicate global copies:
+[`INSTALL.md`](INSTALL.md). Or tell your agent: *Fetch and follow instructions from
+`https://raw.githubusercontent.com/ChenPaulYu/skills/main/INSTALL.md`.* Translation contracts:
+[Codex](docs/codex-compatibility.md) · [Cursor](docs/cursor-compatibility.md).
 
-**Global install (recommended).** Clone the repo, then import each plugin directory:
+## Development
 
-```bash
-git clone https://github.com/ChenPaulYu/skills.git && cd skills
-agy plugin install plugins/nav
-agy plugin install plugins/shape
-agy plugin install plugins/frame
-```
-
-Verify with `agy plugin list` — each plugin shows up with source `claude-code`, and its skills are available in every project under the usual namespaced names (`/nav:audit`, `/shape:mockup`, `/frame:analogize`, …).
-
-AGY-only automation (hooks, MCP) stays in `~/.gemini/config/` on the machine — never commit it here, so Claude / Codex / Cursor stay untouched.
-
-**Project-level auto-detection.** `agy` also reads `.agents/skills/` in the project you open it from — the same flat, generated mirror Codex uses (see [Codex compatibility](#codex-compatibility) below). Inside this repo that mirror is already committed, so opening `agy` here loads all skills under their flat names (`nav-audit`, `shape-mockup`, …) with no install step. To reuse them in another project, copy the skill dirs you want into that project's `.agents/skills/`.
-
-Prefer the global install: it keeps the namespace, tracks the plugin source, and doesn't depend on the generated mirror.
-
-### Codex · opencode (flat mirror)
-
-Both auto-discover `.agents/skills/` — so **inside a clone of this repo there is nothing to install**; the committed mirror loads automatically. For **global use alongside Cursor**, install Codex into its own root so flat names do not collide:
+Editing rules, generated files and commit gates live in [`CLAUDE.md`](CLAUDE.md). The short
+version: edit `plugins/`, bump the plugin version, regenerate, validate.
 
 ```bash
-git clone https://github.com/ChenPaulYu/skills.git && cd skills
-node scripts/build-codex.mjs --sync-global --profile build --global-root codex
-```
-
-That installs the `build` profile's compiled flat skills into `~/.codex/skills/`, runtime artifacts into `~/.codex/`, and prunes this marketplace from `~/.agents/skills/`. Default `--global-root agents` still targets `~/.agents/skills/` when Cursor is not in play. Use another named profile when needed; reserve `all` for a machine that truly needs every skill globally. Skills surface under flat names (`nav-audit`, `shape-mockup`, …). Verify: Codex — `/skills`; opencode — `opencode debug skill`.
-
-### Cursor (native plugins)
-
-Cursor is not a Codex consumer. A generated Cursor Plugin tree lives under `platforms/cursor/<plugin>/` (flattened skill names — `nav-audit` — because Cursor does not namespace plugin skills). Install:
-
-```bash
-git clone https://github.com/ChenPaulYu/skills.git && cd skills
-node scripts/build-cursor.mjs --sync-local
-```
-
-That symlinks the generated plugins into `~/.cursor/plugins/local/`. Reload Cursor (**Developer: Reload Window**), then type `/` in Agent chat and search `nav-audit`. Do **not** symlink `plugins/nav` — that directory is the Claude source (bare names collide; Claude-host tool names leak). Full translation contract: [Cursor compatibility](docs/cursor-compatibility.md).
-
-**Dual-global:** Codex `--global-root codex` + Cursor `--sync-local`, then turn **OFF** Cursor’s “Include third-party Plugins, Skills, and other configs” so Cursor does not also scan `~/.codex/skills`. See [Cursor compatibility](docs/cursor-compatibility.md).
-
-Cursor's public `/add-plugin` marketplace is a separate, review-gated publishing channel — not this repo's release path. The generated `.cursor-plugin/marketplace.json` is for a Team Marketplace import of this GitHub repo.
-
-### npx (skills.sh CLI)
-
-The [skills.sh](https://skills.sh/) CLI wraps the same clone-and-copy in an npm-like UX, and tracks installs in a `skills-lock.json` so `npx skills update` can refresh them later:
-
-```bash
-# Interactive — pick skills and target agents from a list:
-npx skills add ChenPaulYu/skills
-
-# Non-interactive — values are space-separated; '*' selects all:
-npx skills add ChenPaulYu/skills -s nav-audit shape-elicit -a cursor opencode -y
-```
-
-Add `-g` for a global (user-level) install; omit it to install into the current project. The picker shows each skill twice (flat mirror `nav-audit` + plugin source `audit`): **pick the prefixed set**; the unprefixed names (`plan`, `align`, `do`, …) are generic and collision-prone.
-
-### Local development (Paul only)
-
-For iterating on this marketplace itself, use a local path instead of the GitHub handle:
-
-```bash
-/plugin marketplace add <absolute-path-to-this-repo>
-/plugin install nav@skills
-/plugin install shape@skills
-```
-
-After editing any `SKILL.md`, run `/reload-plugins` — Claude Code re-reads the local path in place (no reinstall).
-
-## Codex compatibility
-
-Codex (OpenAI) uses the same Agent Skills format (`SKILL.md` = `name` + `description` frontmatter + body + optional `references/`), so the plugins above double as Codex skills. The Claude plugins under `plugins/` stay the **single source of truth**; a Codex-discoverable mirror is **generated** into `.agents/skills/` — one flat, unnamespaced skill per plugin skill (`nav:audit` → `nav-audit`, since Codex has no plugin namespace), with cross-references and bundled paths rewritten. Codex gets a separate, short, trigger-first metadata projection from `platforms/codex/descriptions.json`; Claude descriptions remain unchanged. The generated repo-root [`AGENTS.md`](AGENTS.md) carries shared editing rules and links to family maintainer guides, loaded only when that family is edited. The adapter now has its own release line in `platforms/codex/manifest.json` (`adapter_release` + `schema_version`, independent from Claude plugin versions). The full translation/install contract is in [`docs/codex-compatibility.md`](docs/codex-compatibility.md).
-
-```bash
-node scripts/build-manifests.mjs   # manifests, shared references, README/site catalog
-node scripts/build-codex.mjs       # re-run after editing any SKILL.md
-node scripts/build-cursor.mjs      # re-run after editing any SKILL.md (Cursor plugins)
-node scripts/validate-codex-skills.mjs --release-smoke
+git config core.hooksPath scripts/hooks   # once per clone; validates the staged snapshot
+node scripts/build-manifests.mjs && node scripts/build-codex.mjs && node scripts/build-cursor.mjs
 node scripts/validate-codex-skills.mjs
-node scripts/validate-codex-skills.mjs --metadata-audit
+node --test scripts/lib/*.test.mjs        # offline regression tests
 ```
 
-The validator checks both sides of the contract: Claude Code source skills under `plugins/` must have valid YAML frontmatter, and the Codex mirror under `.agents/skills/` must be regenerated and YAML-safe. It also gates Codex sidecar coverage, the per-skill/total metadata budget, install-profile references, **manifest drift**, and **public catalog drift**. See the repo-root [`CLAUDE.md`](CLAUDE.md) for the full single-owner rule.
-
-The marked README and site catalog blocks are generated, including versions, counts, skill membership, and invocation categories. Edit [`docs/catalog-copy.json`](docs/catalog-copy.json) for editorial prose and layout hints; absent copy falls back to source descriptions. Keep quick lookups and anatomy explanations current by hand. See [ADR-018](docs/adr/018-manifest-catalog-and-commit-gates.md).
-
-Enable the pre-commit hook once per clone. It validates the complete staged snapshot,
-including its validator scripts, while leaving unstaged and untracked work untouched:
-
-```bash
-git config core.hooksPath scripts/hooks
-```
-
-Codex discovers `.agents/skills/` automatically when you open this repo (or copy a skill dir into your own project's `.agents/skills/`, or `~/.agents/skills/` for all projects). Invoke with `/skills` or a `$skill-name` mention; Codex also picks one implicitly when a task matches its `description`. The same mirror serves **opencode**, which scans the identical project + global directories. **Cursor is a separate channel** — native Cursor Plugins generated by `scripts/build-cursor.mjs`, not this Codex lowering (see [Cursor compatibility](#cursor-compatibility)). Antigravity CLI (`agy`) reads `.agents/skills/` in project-level mode — though for `agy` the [global plugin install](#antigravity-cli-agy) above is preferred, since it keeps the plugin namespace. **Don't hand-edit `.agents/skills/` or `AGENTS.md`** — edit the plugin skill, regenerate, and validate.
-
-Keep only one active copy of each Codex skill. For dual-global with Cursor, use `--global-root codex`; otherwise `--global-root agents` (default). The install always prunes this marketplace from the other global root:
-
-```bash
-node scripts/build-codex.mjs --sync-global --profile build --global-root codex
-```
-
-Hook-driven updates preserve the profile recorded by the last install instead of widening it back to
-`all`. On a fresh machine they start at `minimal`; switch the persistent selection with
-`sh scripts/sync-installed.sh --codex-profile <name>`.
-
-## Validation
-
-Run offline regression tests with:
-
-```bash
-node --test scripts/lib/*.test.mjs
-node scripts/validate-staged.mjs   # check the staged commit candidate without committing
-```
-
-Real skill-task checks are opt-in. The helper prepares a small isolated Git project and
-checks observable results; it never starts a model or paid job:
-
-```bash
-node scripts/skill-behavior.mjs list
-trial_root="$(mktemp -d)"
-node scripts/skill-behavior.mjs prepare docs-batch "$trial_root/docs-batch"
-# Give a fresh executor only the returned workspace, skill, and prompt.
-# After it finishes:
-node scripts/skill-behavior.mjs check "$trial_root/docs-batch"
-```
-
-Use a fresh workspace for each case. Keep the adjacent baseline receipt intact and outside
-the executor's task scope. A mechanical pass still requires the returned `reviewRequired`
-checks: inspect the artifacts, final response, and actual tool actions. Unchanged final
-hashes cannot establish that no transient write occurred. Do not supply expected answers
-from the case catalog to the executor. See [the first four runs and their limits](docs/findings/2026-09-30-behavior-cases.md).
-
-Four further cases cover local artifact retention, ignored-but-tracked cleanup, probe
-evidence limits, and assisted tool evaluation. Their offline positive/negative checker
-tests and unrun model trials are documented in
-[the evidence checks](docs/findings/2026-09-30-development-artifacts-and-evidence-checks.md).
-
-Four natural-prompt variants extend that catalog. Eight fresh gpt-6-luna executions
-(one rejected setup) exposed routing, retention, and reporting defects; the resulting
-instruction repairs passed offline checks but have not been rerun through the model.
-See [the observed outcomes and limits](docs/findings/2026-09-30-low-cue-skill-trials.md).
-
-One two-turn dogfood case brings the opt-in catalog to 13 cases. The bounded post-repair
-follow-up separates a passing existing-measurement sample from failed tree retention,
-partial goal continuity, and a corrected capture allowlist. See
-[the follow-up evidence and remaining limits](docs/findings/2026-09-30-probe-and-roster-followup.md).
-
-## Cursor compatibility
-
-Cursor loads **Cursor Plugins**, not the Codex `.agents/skills/` lowering. `plugins/` stays the source of truth; `scripts/build-cursor.mjs` emits installable plugins under `platforms/cursor/<plugin>/` with flattened skill names (`nav-audit`) and Cursor-native tool names (`AskQuestion`, `Task`). The adapter has its own release line in `platforms/cursor/manifest.json`. Full translation/install contract: [`docs/cursor-compatibility.md`](docs/cursor-compatibility.md).
-
-```bash
-node scripts/build-cursor.mjs --sync-local
-```
+For a local checkout in Claude Code, add the marketplace by absolute path and run
+`/reload-plugins` after edits. Opt-in skill-behavior trials (`node scripts/skill-behavior.mjs`)
+prepare isolated projects and check observable results without starting a model; their cases
+and limits are in [`docs/findings/2026-09-30-behavior-cases.md`](docs/findings/2026-09-30-behavior-cases.md).
 
 ## Philosophy (the through-line)
 
 Deep modules — narrow interfaces over hidden complexity. Code you can navigate top-down, without reading every body to understand the surface. Refactors that move things around but never lie about what changed. Documentation grounded in code, never invented.
 
-And the forward-motion counterpart (`shape`): **converge by a real, disposable instance — never a description.** Push a decision into a form you can point at (a grounded fork, a rendered artifact, a blueprints board), record it so it is born durable, and keep it honest against the code — then hand the build to `nav`.
+And the forward-motion counterpart (`shape`): **converge by a real, disposable instance — never a description.** Push a decision into a form you can point at (a grounded fork, a rendered artifact, a task with acceptance checks), record it so it is born durable, and keep it honest against the code — then hand the build to `nav`.
 
 When in doubt: rule ⑦. Ask.
 
@@ -297,7 +149,7 @@ When in doubt: rule ⑦. Ask.
 
 [`docs/site/index.html`](docs/site/index.html) is a self-contained bilingual interactive map of this marketplace — every plugin, every skill, the 8 rules, conventions, plus the `nav` and `shape` anatomy graphs. Open it directly in a browser.
 
-**Living document — stale = lie.** When you add / rename / remove a skill or plugin, update the map + its audit block in the same commit. The audit block at the top of the HTML lists what was last verified; treat drift as a lie until corrected.
+Its catalog blocks are generated; its explanations are hand-maintained, so update them in the same commit as the behavior they describe.
 
 ## Docs layout
 
