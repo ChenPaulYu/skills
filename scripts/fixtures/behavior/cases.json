@@ -38,7 +38,7 @@
     "artifact-options": {
       "files": {
         ".gitignore": "/node_modules/\n",
-        "docs/adr/001-retention.md": "# Retained decision\n\nProject policy: maintain adopted ADRs in Git. Development-process artifacts stay local.\n",
+        "docs/adr/001-marketplace-structure-and-naming.md": "# Retained decision\n\nProject policy: maintain adopted ADRs in Git. Development-process artifacts stay local.\n",
         "tests/sample.json": "{\"required_fixture\": true}\n"
       },
       "untracked": {
@@ -271,7 +271,7 @@
           "blueprints/thoughts/local-decision.md"
         ],
         "tracked": [
-          "docs/adr/001-retention.md",
+          "docs/adr/001-marketplace-structure-and-naming.md",
           "tests/sample.json"
         ],
         "notStaged": [
@@ -444,7 +444,7 @@
           "blueprints/thoughts/local-decision.md"
         ],
         "tracked": [
-          "docs/adr/001-retention.md",
+          "docs/adr/001-marketplace-structure-and-naming.md",
           "tests/sample.json"
         ],
         "notStaged": [

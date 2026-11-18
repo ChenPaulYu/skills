@@ -1,6 +1,6 @@
 # nav:tour routing probe
 
-Role: post-hoc verification that adding `nav:tour` (ADR-082) and narrowing `nav:map`'s
+Role: post-hoc verification that adding `nav:tour` (ADR-009) and narrowing `nav:map`'s
 onboarding trigger routes correctly — positives select `tour`, boundary negatives stay
 with their owner (especially `nav:map`, whose description used to claim onboarding
 language directly).
@@ -50,7 +50,7 @@ because behavioral live-repo verification and a second judge wouldn't add real e
   gap — phrase #6 (an explicit map-refresh ask) still lands on `map`, not `tour`.
 - `nav:tour` does not steal `reflect:catchup` (#7), `shape:survey` (#8), `shape:elicit` (#9),
   `frame:analogize` (#10), or `nav:audit` (#11) — the six boundary-negative neighbors named
-  in ADR-082 all held.
+  in ADR-009 all held.
 - The sparse-repo phrasing (#14) still routes to `tour` rather than falling through to
   "none" — consistent with the skill's own tolerant-fallback design (Step 2 of its process).
 
@@ -67,7 +67,7 @@ than assume this probe covered what the plan asked for.
 
 Role: the routing probe above never exercised `tour`'s actual load-bearing feature — the
 mandatory correction loop (Steps 4–5). This is a fourth-quadrant ("nobody knows") question
-per ADR-075's map: no amount of re-reading the SKILL.md answers whether a fresh agent
+per ADR-012's map: no amount of re-reading the SKILL.md answers whether a fresh agent
 actually reaches Step 4 instead of stopping after Step 3 (Premature Completion) — it has to
 be run.
 
@@ -92,14 +92,14 @@ stopped after Step 3.
 **Result — PASS.** Single trial: full protocol executed. Self-reported evidence tier =
 standard navigation layer (root/plugin `CLAUDE.md`, `README.md`, `docs/site/index.html`,
 `plugin.json`) supplemented by `git log`; no source-and-git fallback needed. Rationale claims
-correctly separated into Recorded (citing ADR-019/029/021/082 by name) vs Inferred (the "8
+correctly separated into Recorded (citing ADR-005/009 by name) vs Inferred (the "8
 rules restated per-SKILL.md" pattern, explicitly flagged as inference, not fact). Response
 ended with a 6-item falsifiable shared-model block covering capability (#2), a recorded
 decision (#3), the tour's own differentiator (#4), a repo-wide constraint (#5), and an
 explicit audience assumption open to correction (#6) — plus the exact correction question.
 
 **Experimental contamination, disclosed**: the trial agent was told not to read `tour`'s own
-SKILL.md or ADR-082 directly, but it picked up ADR-082's rationale secondhand from
+SKILL.md or ADR-009 directly, but it picked up ADR-009's rationale secondhand from
 `docs/site/index.html`'s audit block (also authored in this session) and cited it as Recorded.
 This is a minor design leak — the site map should have been excluded too — not evidence the
 protocol failed; the agent didn't fabricate the citation, it found a real one through an

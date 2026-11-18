@@ -67,7 +67,7 @@ export function validateCodexCompatPhase0(root, options = {}) {
   // worktreeFreeze is the codex-workstream discipline (adapter work must not
   // write Claude sources); it is NOT a repo-wide freeze. Default validator runs
   // pass worktreeFreeze: false so normal marketplace evolution stays possible
-  // (arbitrated 2026-07-13, ADR-068). The --compat-audit door keeps it on.
+  // (arbitrated 2026-07-13, ADR-017). The --compat-audit door keeps it on.
   const { worktreeFreeze = true } = options;
   const errors = [];
   const audit = runCodexCompatAudit(root);

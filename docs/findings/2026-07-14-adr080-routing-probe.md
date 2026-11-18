@@ -1,6 +1,6 @@
-# ADR-080 routing probe — non-paper argument-document triggers
+# ADR-009 routing probe — non-paper argument-document triggers
 
-Role: post-hoc verification that ADR-080's object generalization ("papers" → "argument
+Role: post-hoc verification that ADR-009's object generalization ("papers" → "argument
 documents") routes correctly for non-academic inputs (RFCs, design proposals, ADRs,
 whitepapers) without `research:*` stealing fire from `nav:compose`, `frame:dialectic`,
 or `deep-research`.
@@ -69,7 +69,7 @@ None. No failures, no splits — both judges converged on the pre-registered key
 
 ## Verdict
 
-**12/12 PASS.** The ADR-080 generalization (papers → argument documents) routes
+**12/12 PASS.** The ADR-009 generalization (papers → argument documents) routes
 correctly:
 
 - The four non-paper object types (RFC, design proposals, ADR, whitepaper) route to the

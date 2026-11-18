@@ -1,6 +1,6 @@
 # Deep process (Mode 3 only)
 
-Replaces the single-pass Steps 3-5 with a fan-out. Steps 1-2 (detect stack + domain inventory) run **first, in the main context** — you need the domain list before you can fan out. This is the [inject↔check](docs/adr/008-inject-check-at-handoff.md) bracket applied to a fleet of read-only domain auditors.
+Replaces the single-pass Steps 3-5 with a fan-out. Steps 1-2 (detect stack + domain inventory) run **first, in the main context** — you need the domain list before you can fan out. This is the [inject↔check](docs/adr/007-dispatch-tiers.md) bracket applied to a fleet of read-only domain auditors.
 
 ### D1 — Ground the fan-out (main context)
 

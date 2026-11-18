@@ -1,6 +1,6 @@
 # Skill usage ledger
 
-Monthly snapshots (`YYYY-MM.json`) of how often each skill in this marketplace fired, counted from local Claude Code and Codex transcripts. Transcripts are only retained about five weeks, so these files are the durable evidence behind ADR-109's retirement rule.
+Monthly snapshots (`YYYY-MM.json`) of how often each skill in this marketplace fired, counted from local Claude Code and Codex transcripts. Transcripts are only retained about five weeks, so these files are the durable evidence behind ADR-009's retirement rule.
 
 Regenerate a month (overwrites the same file, stable key order, clean diffs):
 
@@ -14,4 +14,4 @@ Each file has `coverage` (sessions seen and the earliest event, so you can tell 
 
 Files carry skill names and counts only: no project names, paths, session ids, or prompt text.
 
-ADR-109's "zero fires across three months" check reads the last three files here.
+ADR-009's "zero fires across three months" check reads the last three files here.

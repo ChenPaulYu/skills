@@ -28,7 +28,7 @@ Restructure 成 Matt Pocock 真正的形狀:
 | Skill | `nav-audit` | `audit`(bare verb) |
 | 觸發 | `/skills:nav-audit` | `/nav:audit` |
 
-`/nav:doctor` 也對齊 `brew doctor` / `flutter doctor` / `npm doctor` 的肌肉記憶。決定記在 ADR-005。
+`/nav:doctor` 也對齊 `brew doctor` / `flutter doctor` / `npm doctor` 的肌肉記憶。決定記在 ADR-001。
 
 ## Future-self note
 

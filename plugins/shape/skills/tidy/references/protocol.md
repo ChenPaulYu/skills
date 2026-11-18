@@ -1,7 +1,7 @@
 # Tidy — evidence and cleanup protocol
 
 The skill body owns authority, preservation, and completion gates. This reference supplies
-the inventory and retirement mechanics, extracted from align (ADR-131).
+the inventory and retirement mechanics, extracted from align (ADR-005).
 
 ## Inventory and evidence
 
@@ -49,7 +49,7 @@ per-artifact cleanup chronology from the live thought. Reuse an existing preserv
 record when recovery details need a maintained home. This does not require another
 ledger, a new record for every old entry, or a wholesale migration during ordinary tidy.
 
-## The mockups tier — retire on ship, with a forwarding address (ADR-037)
+## The mockups tier — retire on ship, with a forwarding address (ADR-013)
 
 `mockup`'s own rule — detail-level artifacts **retire on ship**, structural locks carry a
 freshness stamp — has its enforcement point *here*: at mockup time nothing is shipped yet, and
@@ -58,7 +58,7 @@ no other verb returns to `mockups/` post-ship. Without this sweep, `mockups/` gr
 growth this pass's `thoughts/` pruning guards against, one tier down.
 
 **A mockup exists to represent what the running system cannot yet represent; once code absorbs
-it, representation transfers and it exits** (ADR-039). One question per folder: *"does this
+it, representation transfers and it exits** (ADR-013). One question per folder: *"does this
 still represent something the code doesn't have?"* Three ordered pre-conditions, then the
 verdict:
 
@@ -75,7 +75,7 @@ verdict:
 
 **Default direction:** a folder failing all keep-clauses gets prune as the *default proposal*
 (the concrete destructive-scope gate stands — propose, don't presume). The razor exists so a sweep is one gated
-round, not three (ADR-039).
+round, not three (ADR-013).
 
 | situation | action |
 |---|---|

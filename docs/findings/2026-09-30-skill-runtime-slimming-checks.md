@@ -1,6 +1,6 @@
 # Skill runtime slimming — verification
 
-> 2026-09-30 · ADR-132 · Local changes and installations verified; no commit or push.
+> 2026-09-30 · ADR-002 · Local changes and installations verified; no commit or push.
 
 The marketplace still exposes 24 skills. Shared editing rules load at the root; family
 maintainer guides and detailed protocols load when needed. The preceding reconcile/sync
@@ -9,7 +9,7 @@ distribution; it does not claim measured model-quality improvement.
 
 ## Size comparison
 
-Baseline is the local state after ADR-131, immediately before this pass. Counts are Unicode
+Baseline is the local state after ADR-005, immediately before this pass. Counts are Unicode
 characters including frontmatter and whitespace, not tokens. They describe file size, not
 the exact context used by any particular runtime or session.
 

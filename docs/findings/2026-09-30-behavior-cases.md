@@ -1,6 +1,6 @@
 # Skill task cases and staged validation — findings
 
-> 2026-09-30 · ADR-133 · Four isolated task runs; no remote operations.
+> 2026-09-30 · ADR-018 · Four isolated task runs; no remote operations.
 
 All four runs met their core task criteria. Two final-response defects remain recorded
 below; this is not a claim that every answer was flawless or that skill slimming improved

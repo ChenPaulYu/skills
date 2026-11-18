@@ -1,6 +1,6 @@
 # Reconcile and sync — packaging and scenario checks
 
-> 2026-09-30 · Scope: ADR-131 implementation · Status: local verification
+> 2026-09-30 · Scope: ADR-005 implementation · Status: local verification
 
 The implementation has one explanation-sync entry and a separate project-record cleanup
 entry. These checks establish source consistency, packaging, and browser behavior. They do
@@ -38,7 +38,7 @@ This is an instruction review, not an independent agent experiment or a blind A/
 - Compatibility diagnostics passed 11 canaries, 15 negative fixtures, 2 preservation
   smokes, 2 release smokes, and 24/24 coverage. The optional `--compat-audit` command
   also enforces an adapter-only source freeze, which reports the intentionally changed
-  native skills in this marketplace task (ADR-068); the normal marketplace validator is
+  native skills in this marketplace task (ADR-017); the normal marketplace validator is
   the applicable gate.
 - Local install verification compared 87 source/installed file pairs for nav and shape,
   checked Cursor symlink targets, and confirmed removal of retired map references.

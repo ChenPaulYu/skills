@@ -1,6 +1,6 @@
 # Low-cue skill trials — observed outcomes
 
-> 2026-09-30 · ADR-134 follow-up · Eight fresh gpt-6-luna executions; one rejected setup.
+> 2026-09-30 · ADR-019 follow-up · Eight fresh gpt-6-luna executions; one rejected setup.
 
 These trials found concrete retention and routing defects. They do not show that the
 whole skill pack improves model quality. The final instruction repairs passed offline

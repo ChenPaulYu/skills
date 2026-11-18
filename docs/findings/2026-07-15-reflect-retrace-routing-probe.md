@@ -4,7 +4,7 @@
 
 ## What this check tests
 
-`reflect:retrace` risks collapsing into four neighbors: current-state catchup, current-codebase tour, ordinary chronological recap, or the planned evaluative retro. This check reads the new source frontmatter, its Boundaries/Completion criterion, sibling contracts, and ADR-079/082/084, then asks whether a prompt has one honest owner.
+`reflect:retrace` risks collapsing into four neighbors: current-state catchup, current-codebase tour, ordinary chronological recap, or the planned evaluative retro. This check reads the new source frontmatter, its Boundaries/Completion criterion, sibling contracts, and ADR-009, then asks whether a prompt has one honest owner.
 
 PASS means the written routing contract is unambiguous. It does not claim that every model will select the skill without a future live judge.
 
@@ -19,7 +19,7 @@ PASS means the written routing contract is unambiguous. It does not claim that e
 | 5 | “Why did fixing the first renderer expose the next data-model problem?” | `reflect:retrace` | PASS | Pressure-bearing bridge between stages |
 | 6 | “Where are we right now, what is open, and what should I do next?” | `reflect:catchup` | PASS | Present cursor only |
 | 7 | “I am back after a week; resume from HANDOFF.md and git.” | `reflect:catchup` | PASS | Durable present-state reconstruction |
-| 8 | “Summarize everything we did today in order.” | Plain request | PASS | Chronological recap has no skill owner (ADR-079) |
+| 8 | “Summarize everything we did today in order.” | Plain request | PASS | Chronological recap has no skill owner (ADR-009) |
 | 9 | “Walk me through what this codebase does and how the modules cooperate.” | `nav:tour` | PASS | Present system model, not development path |
 | 10 | “Explain why the current repository has these boundaries, then let me correct your model.” | `nav:tour` | PASS | Current codebase + shared-model correction |
 | 11 | “Render or refresh the bilingual module map.” | `nav:map` | PASS | Durable repo-structure projection |

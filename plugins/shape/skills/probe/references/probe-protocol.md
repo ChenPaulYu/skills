@@ -18,13 +18,13 @@ design only the smallest follow-up that could resolve it; mark an unrun design a
 
 ## Why this skill exists
 
-The four-quadrant knowledge map behind this family ([ADR-075](docs/adr/075-shape-probe-ask-reality.md)) names four states: you know you know it (`/shape:elicit` draws it out), you know you don't know it and the world does (elicit's survey leg maps it), you don't even know you're missing it (elicit detects the blind spot mid-grill and runs the leg in place), and — the fourth — **nobody knows**. No amount of grilling the user, mapping the repo, or reading documentation answers a fourth-quadrant question, because the fact simply hasn't been measured yet. Grinding on it with more argument produces confident-sounding noise, not an answer. `probe` is the verb that stops arguing and starts measuring: design a minimal experiment, run it, let the result — not the strongest rhetoric — decide.
+The four-quadrant knowledge map behind this family ([ADR-012](docs/adr/012-probe-and-dogfood.md)) names four states: you know you know it (`/shape:elicit` draws it out), you know you don't know it and the world does (elicit's survey leg maps it), you don't even know you're missing it (elicit detects the blind spot mid-grill and runs the leg in place), and — the fourth — **nobody knows**. No amount of grilling the user, mapping the repo, or reading documentation answers a fourth-quadrant question, because the fact simply hasn't been measured yet. Grinding on it with more argument produces confident-sounding noise, not an answer. `probe` is the verb that stops arguing and starts measuring: design a minimal experiment, run it, let the result — not the strongest rhetoric — decide.
 
-The gap was real, not hypothetical: this repo has hand-rolled the deliverable `probe` now encodes at least three separate times, each time re-inventing the discipline from scratch — see ADR-075 for the citations. A verb that gets hand-produced three times without anyone naming it is exactly ADR-038's trigger condition ("if you're about to hand-roll a verb's deliverable, fire the verb instead").
+The gap was real, not hypothetical: this repo has hand-rolled the deliverable `probe` now encodes at least three separate times, each time re-inventing the discipline from scratch — see ADR-012 for the citations. A verb that gets hand-produced three times without anyone naming it is exactly ADR-006's trigger condition ("if you're about to hand-roll a verb's deliverable, fire the verb instead").
 
 ## Design chain — borrowed by protocol (never by call)
 
-`probe` doesn't invoke `frame:first-principles` or `frame:orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern the now-retired `position` skill established for elicit/mockup/first-principles (ADR-008):
+`probe` doesn't invoke `frame:first-principles` or `frame:orthogonal` — skills in this marketplace never call each other. It restates their disciplines in sequence, crediting each, the same borrow-by-protocol pattern the now-retired `position` skill established for elicit/mockup/first-principles (ADR-007):
 
 1. **Locate the load-bearing assumption.** A fork usually has several plausible-sounding cruxes; only one is actually load-bearing (the assumption that, if it flips, flips the decision). Don't design an experiment around a surface disagreement — find the one thing the fork actually rests on. If an earlier analysis in the conversation already named the assumption, reuse it rather than re-derive it.
 2. **Strip it to the smallest testable claim** — `frame:first-principles`' move. Convention vs necessity: restate the load-bearing assumption as the smallest falsifiable statement, stripped of the surface phrasing that made it sound bigger or vaguer than it is. Test the necessity, never the wording ("does a graph database read faster" is testable; "is a graph database the right model" is not — reduce to the first before designing anything).
@@ -75,9 +75,9 @@ proof of perceptual quality or workflow fit. Follow the session's artifact-servi
 
 ## Dispatch — design and verdict stay with the session model
 
-Per the dispatch-tiers convention (ADR-067): designing the experiment (steps 1-3 above) and reading the verdict against the pre-registered rule is the judgment-dense part — it stays with the session model. The **execution legs** — running each variant, collecting the raw outputs, tallying results — can go to cheap-tier delegated agents, reporting back grounded in fact (the actual output, the actual number), never an impression of how it went.
+Per the dispatch-tiers convention (ADR-007): designing the experiment (steps 1-3 above) and reading the verdict against the pre-registered rule is the judgment-dense part — it stays with the session model. The **execution legs** — running each variant, collecting the raw outputs, tallying results — can go to cheap-tier delegated agents, reporting back grounded in fact (the actual output, the actual number), never an impression of how it went.
 
-## Live-LLM-cost signal — probe's own instance (ADR-062)
+## Live-LLM-cost signal — probe's own instance (ADR-008)
 
 For paid-LLM fanout, state the selected model, call/trial scale, and intended budget.
 Honor approval already given for the same scope, including the user's tier choice.
@@ -95,7 +95,7 @@ test only through an explicitly adopted project deliverable.
 
 A findings-style doc: method + data + verdict. In a connected home, use `workspace/<project>/probes/<topic>/probe.md` with its retained results and supporting artifacts. Without a mapping, follow existing `docs/findings/` or legacy blueprints conventions.
 
-**Tolerant reader (ADR-071):** neither `docs/findings/` nor `blueprints/` is a contract. Only without a connected workspace, if neither exists yet, scaffold the simpler of the two rather than failing; if either exists in a non-standard shape, tolerate it and write into whatever shape is there; either way, self-report which tier you wrote to so the user can calibrate trust in the result.
+**Tolerant reader (ADR-019):** neither `docs/findings/` nor `blueprints/` is a contract. Only without a connected workspace, if neither exists yet, scaffold the simpler of the two rather than failing; if either exists in a non-standard shape, tolerate it and write into whatever shape is there; either way, self-report which tier you wrote to so the user can calibrate trust in the result.
 
 The doc states explicitly, near the top, that **the evidence feeds the pending decision back** — into `/shape:elicit`'s next volley if a fork sent it here, or directly back to the user if they summoned `probe` on their own.
 

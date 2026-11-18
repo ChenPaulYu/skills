@@ -9,19 +9,19 @@
       "name": "nav",
       "source": "./plugins/nav",
       "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
-      "version": "0.26.18"
+      "version": "0.26.19"
     },
     {
       "name": "shape",
       "source": "./plugins/shape",
       "description": "Capture ideas, converge decisions, verify evidence, resume and save task-owned work, and tidy project records.",
-      "version": "0.35.9"
+      "version": "0.35.10"
     },
     {
       "name": "frame",
       "source": "./plugins/frame",
       "description": "Apply an explicit, named frame that adds substantive reasoning checks without a fixed output worksheet — to a problem (three reasoning lenses: first-principles, orthogonal, dialectic) or to an answer you already have (analogize — a stress-tested analogy; draw — render it, with the form chosen by the kind of knowledge). Lenses feed shape one-way; analogize does not. Standalone. Renamed from think.",
-      "version": "0.17.1"
+      "version": "0.17.2"
     }
   ]
 }

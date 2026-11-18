@@ -1,14 +1,14 @@
 # Compose protocol — the full machinery behind structure-as-deep-module
 
 > On-demand rationale, rule examples, and failure checks for `/nav:compose`.
-> The body owns its operative gates; ADR-132 aligns this reference with authorized continuation
+> The body owns its operative gates; ADR-002 aligns this reference with authorized continuation
 > and preservation of meaning during restructuring.
 
 ## Why this skill exists
 
 Deep-module discipline applies to **any accreting artifact, not just code** — the docs an agent writes (ADRs, design notes, reports, observations, READMEs, specs) go un-navigable the same way a codebase does: the point buried mid-paragraph, the same decision re-explained in three files, a doc that grew to cover five concerns. `sync` maintains file-top headers and factual alignment of reader documents; `compose` applies the **same eight rules to the structure of a prose document**.
 
-It is the prose-document sibling of `sync` (ADR-049): `sync` maintains code headers and checks reader documents against implementation; `compose` authors or restructures prose documents. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
+It is the prose-document sibling of `sync` (ADR-004): `sync` maintains code headers and checks reader documents against implementation; `compose` authors or restructures prose documents. Both are interface-first (rule ②) applied to writing. Deep-prose discipline has many consumers across this marketplace (shape's `core`/`plan`, reflect's observations, research's notes, the ADRs themselves), so it is extracted here as the single owner rather than restated per plugin (the N+1 trigger).
 
 ## Scope
 

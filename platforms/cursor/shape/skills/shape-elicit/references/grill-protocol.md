@@ -1,7 +1,7 @@
 # Elicit protocol — choose the next useful move
 
 > Operational examples and diagnostic detail. The SKILL.md body owns the behavior
-> and authorization gates. ADR-129 replaces the former compulsory-friction loop;
+> and authorization gates. ADR-011 replaces the former compulsory-friction loop;
 > the filename remains stable for existing references.
 
 ## Ground the actual uncertainty

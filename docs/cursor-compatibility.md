@@ -2,7 +2,7 @@
 
 > Claude Code plugin files are the frozen source contract. Cursor compatibility is a generated Cursor Plugin tree owned by `platforms/cursor/` and `scripts/build-cursor.mjs`.
 
-The Cursor adapter releases independently from the Claude marketplace. Its release metadata lives in `platforms/cursor/manifest.json`; the ratified contract is [ADR-118](docs/adr/118-cursor-native-plugin-adapter.md).
+The Cursor adapter releases independently from the Claude marketplace. Its release metadata lives in `platforms/cursor/manifest.json`; the ratified contract is [ADR-017](docs/adr/017-platform-mirrors.md).
 
 ## The rule
 

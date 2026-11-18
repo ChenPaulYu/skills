@@ -33,7 +33,7 @@ blueprints/
 - **`plans/`** — the grounding layer (owned by `nav:plan`). Each file = one item grounded into a code-level implementation plan, dated `YYYY-MM-DD-<slug>.md`. It's the build-side render of a thought; lives here so the whole arc (decision → status → grounded-how) stays in one tree. `shape:tidy` keeps these current alongside `thoughts/` (completion changes status; governing reasons remain useful after the implementation ships).
 - **`mockups/`** — disposable visual-decision artifacts (owned by `shape:mockup`). Preserve the Pick and useful samples in the decision's designated owner before retirement; sharing or retaining the render follows the project's artifact policy.
 - **`plan.md`** — what to do, grouped by status. The agent's index — and, since it's plain markdown, directly human-readable too. Lean: only "what + which thought", no prose essays.
-- **`baton.md`** — the **ephemeral** tier, below `plan.md`. One overwritten file: the session cursor — a five-section goal · done · now · open · next note, written on the way out and read on the way in, written by shape-wrap and read by shape-status. Not a decision and not a status entry — it never enters `thoughts/` or `plan.md`, and it is retained while work is live or its reasons are not recorded durably; shape-status clears only verified consumed state. **No tree → root `HANDOFF.md`** is the fallback location; never scaffold a tree just to pass a baton, and the skill self-reports which location it used (tolerant reader, ADR-071).
+- **`baton.md`** — the **ephemeral** tier, below `plan.md`. One overwritten file: the session cursor — a five-section goal · done · now · open · next note, written on the way out and read on the way in, written by shape-wrap and read by shape-status. Not a decision and not a status entry — it never enters `thoughts/` or `plan.md`, and it is retained while work is live or its reasons are not recorded durably; shape-status clears only verified consumed state. **No tree → root `HANDOFF.md`** is the fallback location; never scaffold a tree just to pass a baton, and the skill self-reports which location it used (tolerant reader, ADR-019).
 
 Where `blueprints/` itself lives is per-project (commonly `docs/blueprints/`). Reuse the established location; ask only if a consequential location choice is still unresolved.
 
@@ -132,7 +132,7 @@ follow it. Continuing an existing corpus, match its established language — an 
 `thoughts/` tier and a Chinese-primary `plan.md` are both valid, in the same project. Code, commits,
 and outward-facing docs stay English.
 
-## Convention versions (ADR-105 → ADR-112)
+## Convention versions (ADR-013 → ADR-013)
 
 The tree layout above is **v3** (current, 2026-08-13). The convention is a versioned interface
 with living instances; version is detected **by structure, never a marker file**:
@@ -155,5 +155,5 @@ commit.
 
 blueprints is pre-build (intent side); `nav` is build / post-build (code side). They meet at two points — record both, don't blur them:
 
-1. **`blueprints/` is the hand-off artifact to `nav:plan` — both directions.** *In:* `nav:plan` consumes a thought/spec and grounds it. *Out:* when a `blueprints/` tree is present, `nav:plan` writes its grounded plan **back into `blueprints/plans/`** (soft `nav → shape` preference, ADR-017), so the whole arc stays co-located. shape ends at "decided + recorded"; nav begins at "now build it against the code" — and the grounded plan lands back in the same tree.
+1. **`blueprints/` is the hand-off artifact to `nav:plan` — both directions.** *In:* `nav:plan` consumes a thought/spec and grounds it. *Out:* when a `blueprints/` tree is present, `nav:plan` writes its grounded plan **back into `blueprints/plans/`** (soft `nav → shape` preference, ADR-013), so the whole arc stays co-located. shape ends at "decided + recorded"; nav begins at "now build it against the code" — and the grounded plan lands back in the same tree.
 2. **`shape:tidy` checks design-record currency; `shape:status` verifies board status.** File headers from `nav:sync` locate implementation evidence; inspect code and tests before declaring a plan shipped. Reconcile maintains thoughts/plans/mockups, while align decides priorities. README and usage-document accuracy belongs to `nav:sync`.

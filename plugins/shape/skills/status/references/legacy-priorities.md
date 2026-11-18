@@ -4,7 +4,7 @@
 
 # Align — full protocol
 
-Machinery sunk from the SKILL.md body per ADR-109 (three-layer re-homing). The workflow
+Machinery sunk from the SKILL.md body per ADR-002 (three-layer re-homing). The workflow
 in SKILL.md carries the behavior-changing gates (verify-before-triage, no-item-vanishes, authorized writes);
 this file carries the full step sequence, the scaffolding mechanics, and the boundary rationale.
 
@@ -87,7 +87,7 @@ side in code, Git, and the conversation:
   and relevant tests before assigning status.
 
 (The evidence and verification gates for this step are stated in full, verbatim,
-in the SKILL.md body — ADR-086.)
+in the SKILL.md body — ADR-015.)
 
 ### Step 3 — Triage *with the user* into now / next / later
 
@@ -98,7 +98,7 @@ decision: already-stated priorities count and do not need to be asked again. If 
 Keep board-item verification here; a full document cleanup is not required before triage.
 
 (The no-item-vanishes gate for this step is stated in full, verbatim, in the SKILL.md body's
-workflow — ADR-086.)
+workflow — ADR-015.)
 
 ### Step 4 — Write `plan.md` (the agent index — and the only maintained artifact)
 
@@ -118,7 +118,7 @@ implementation plan*. `blueprints/` is the hand-off artifact. They are adjacent 
 overlapping — align triages forward into a status board; nav:plan grounds one item down into
 code. Never produce a code-implementation plan here.
 
-**Board currency is push-primary, align is the pull safety net (ADR-086).** The board's
+**Board currency is push-primary, align is the pull safety net (ADR-015).** The board's
 staleness problem is structural: work ships through execution verbs that historically never
 touched `plan.md`, so the board only healed when align was summoned — and it always lagged. The
 fix mirrors the ledger/file-header pattern that demonstrably stays current ("change lands →

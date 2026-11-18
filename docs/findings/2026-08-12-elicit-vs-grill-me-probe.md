@@ -1,7 +1,7 @@
 # Finding — elicit vs grill-me, blind judgment probe (2 trials)
 
 **Method**: `/shape:probe` shape #2 (blind judgment test) · **Trial 1** 2026-08-12 (opening turn, executor tier, no repo access) · **Trial 2** 2026-08-13 (two full turns, session tier, repo access)
-**Context**: ADR-109 designated the compressed `elicit` as the probe validating the deep-module rewrite, with the standing question: does elicit's machinery beyond mattpocock's 14-line grill-me earn its lines?
+**Context**: ADR-002 designated the compressed `elicit` as the probe validating the deep-module rewrite, with the standing question: does elicit's machinery beyond mattpocock's 14-line grill-me earn its lines?
 
 **Outcome: trial 1 lost, produced a fix, trial 2 won.** The amendment forced by trial 1 is what trial 2's winning arm visibly executed — the probe worked as a repair loop, not just a scoreboard.
 
@@ -52,8 +52,8 @@ Verdict rule fixed in advance and stated to Paul: **elicit wins → kept; tie or
 **elicit won** (「我選乙」). Paul gave no reason this round; the observable differences, in the order they likely mattered:
 
 1. **Meta-feedback: absorbed vs deferred.** Paul's mid-probe aside — 「可讀性可以提高」 — was identical input to both arms. elicit changed its register on the spot (「這輪起我把字壓短、少丟 repo 黑話」). grill-me classified it as out of scope for the decision (「是修法、不是判準」) and parked it. A user telling you how to talk to them is not a backlog item.
-2. **Friction aimed at the user's reasoning, not just the facts.** elicit's turn 2 pre-empted Paul's likely bias — 「別讓 5 > 0 救 first-principles;ADR-107 說 raw zero 不能當刪除理由,反過來 raw non-zero 一樣不能當保留理由」 — which is exactly the amended stance (friction at their last move) doing work. grill-me's friction stayed on facts.
-3. **Drilled under the framing instead of along it.** grill-me continued down the fire-count branch. elicit swapped the instrument: fire counts prove whether anyone opened the door, not whether anything is behind it — so use ADR-109's depth test. That is "the real question beneath 'which option'".
+2. **Friction aimed at the user's reasoning, not just the facts.** elicit's turn 2 pre-empted Paul's likely bias — 「別讓 5 > 0 救 first-principles;ADR-009 說 raw zero 不能當刪除理由,反過來 raw non-zero 一樣不能當保留理由」 — which is exactly the amended stance (friction at their last move) doing work. grill-me's friction stayed on facts.
+3. **Drilled under the framing instead of along it.** grill-me continued down the fire-count branch. elicit swapped the instrument: fire counts prove whether anyone opened the door, not whether anything is behind it — so use ADR-002's depth test. That is "the real question beneath 'which option'".
 
 ## What this does and doesn't settle
 

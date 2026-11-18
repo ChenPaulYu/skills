@@ -1,10 +1,10 @@
-# ADR-054 — relay decision-ledger: implementation plan
+# ADR-009 — relay decision-ledger: implementation plan
 
-> Generated: 2026-06-25 · Spec source: [docs/adr/054-relay-decision-ledger.md](docs/adr/054-relay-decision-ledger.md) · Stage 1: fresh (this session)
+> Generated: 2026-06-25 · Spec source: [docs/adr/009-retirement-policy.md](docs/adr/009-retirement-policy.md) · Stage 1: fresh (this session)
 
 ## Context
 
-ADR-054 (accepted, design) reshapes how relay stores decisions. Today (post-ADR-053) `settle` **rewrites** the per-project `index.md` (`## Where things stand` + `## Decisions (pinned)`) and moves settled thoughts to `archive/`. The decisions — relay's highest-value output — live as bullets in a disposable, regenerated projection, which can silently drop a prior decision on rewrite. ADR-054 fixes this by splitting four roles, each with one owner:
+ADR-009 (accepted, design) reshapes how relay stores decisions. Today (post-ADR-009) `settle` **rewrites** the per-project `index.md` (`## Where things stand` + `## Decisions (pinned)`) and moves settled thoughts to `archive/`. The decisions — relay's highest-value output — live as bullets in a disposable, regenerated projection, which can silently drop a prior decision on rewrite. ADR-009 fixes this by splitting four roles, each with one owner:
 
 - **`thoughts/`** — disposable drafts; **hard-deleted** once settled (git is the deep archive; no `archive/`).
 - **`decisions/log.md`** — append-only History; each entry a **self-contained distilled ruling** (+ one-line why + provenance), readable without the deleted thought.
@@ -45,7 +45,7 @@ Step 3 scaffolds `thoughts/` + `core/` + `decisions/{log.md, active.md}` (seeded
 **Phase 4 — Version + mirrors + manifests.**
 Bump `0.2.1 → 0.3.0` in `plugins/relay/.claude-plugin/plugin.json` **and** `.cursor-plugin/plugin.json`; update both `description`s (settle no longer "snapshot + pinned" → "append-only decision ledger + prune"). Run `node scripts/build-manifests.mjs` + `node scripts/build-codex.mjs`; `node scripts/validate-codex-skills.mjs` green.
 
-**Phase 5 — ADR-054 status — `docs/adr/054-relay-decision-ledger.md`.**
+**Phase 5 — ADR-009 status — `docs/adr/009-retirement-policy.md`.**
 Flip the "Pending → Implementation" note to done; keep Status accepted.
 
 **Phase 6 — `accord` data migration (separate commit, the content repo).**
@@ -60,7 +60,7 @@ Run the new `settle` on `projects/<project>/`: distil the already-agreed threads
 | `plugins/relay/skills/digest/SKILL.md` | Drop `index.md` coupling; owns progress (per-person) | 2 |
 | `plugins/relay/skills/launch/SKILL.md` | Scaffold shape; stray `reply` fix | 3 |
 | `plugins/relay/.claude-plugin/plugin.json` · `.cursor-plugin/plugin.json` | Version + description (two mirrors) | 4 |
-| `docs/adr/054-relay-decision-ledger.md` | Mark implemented | 5 |
+| `docs/adr/009-retirement-policy.md` | Mark implemented | 5 |
 | `<relay-repo>/projects/<project>/**` | Live data migration to the new shape | 6 |
 
 ## Single-source-of-truth owners
@@ -70,7 +70,7 @@ Run the new `settle` on `projects/<project>/`: distil the already-agreed threads
 | relay file-format shapes (`thoughts/`, `decisions/log.md`, `decisions/active.md`) | `plugins/relay/CLAUDE.md` → Format contract — settle/digest/launch **restate, same commit** |
 | decision lifecycle semantics (agree → settle appends → supersede → active) | `plugins/relay/CLAUDE.md` → Resolution & decisions |
 
-No new code-level owner is introduced (relay bundles no scripts for this; ADR-051). The discipline here is *doc* single-sourcing: change a shape in CLAUDE.md → update every restating SKILL.md in the same commit.
+No new code-level owner is introduced (relay bundles no scripts for this; ADR-009). The discipline here is *doc* single-sourcing: change a shape in CLAUDE.md → update every restating SKILL.md in the same commit.
 
 ## Verification
 
@@ -83,7 +83,7 @@ No new code-level owner is introduced (relay bundles no scripts for this; ADR-05
 
 ## Out of scope (deferred)
 
-- **Multi-party consensus** — still out (ADR-053 §Out of scope); this doesn't reintroduce an `@`-set gate.
+- **Multi-party consensus** — still out (ADR-009 §Out of scope); this doesn't reintroduce an `@`-set gate.
 - **`register` skill** — unaffected (it manages people, not project structure).
 - **`core/` canon docs** — a separate concern (shape:position territory); untouched by the migration.
 - **The counterpart's dashboard implementation** — their side; we only guarantee the new files are plain-markdown readable. Whether their dashboard honors the ask-vs-FYI termination convention is a separate cross-agent check.

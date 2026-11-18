@@ -2,7 +2,7 @@
 
 **Date**: 2026-08-12
 **Evidence**: audit of 944 session logs (156 top-level Claude Code sessions, 628 sub-agent sessions, 160 Codex rollouts; 2.8 GB; window 2025-09-19 → 2026-08-12) plus a byte-comparison of every `SKILL.md` on disk.
-**Fed into**: [ADR-107](docs/adr/107-retirement-round-four-verbs.md).
+**Fed into**: [ADR-009](docs/adr/009-retirement-policy.md).
 
 ## The observation
 
@@ -21,7 +21,7 @@ Two independent failures compound here, and they are worth separating.
 
 **Failure 1 — the copies drift silently.** Every home outside the repo was frozen at 2026-07-13. Every improvement landed after that date reached zero sessions. Installed plugins are *version-pinned cache snapshots*, so without a version bump plus an explicit update, `claude plugin update` no-ops and each machine keeps serving the old snapshot. All six plugins were behind; one by two major versions.
 
-**Failure 2 — deletion doesn't propagate, so retired skills stay loadable.** `reflect:summarize` (retired 2026-07-14, ADR-079) and `relay:register` were still present in the installed cache a month later — not as dead files, but as **installable, loadable skills**. The repo had no such verb; sessions did.
+**Failure 2 — deletion doesn't propagate, so retired skills stay loadable.** `reflect:summarize` (retired 2026-07-14, ADR-009) and `relay:register` were still present in the installed cache a month later — not as dead files, but as **installable, loadable skills**. The repo had no such verb; sessions did.
 
 The second failure is the sharper one. Drift makes a skill *old*. Un-propagated deletion makes a skill *nonexistent-but-live* — behaviour with no source to read, no owner to fix, and no way to reason about it from the repo.
 

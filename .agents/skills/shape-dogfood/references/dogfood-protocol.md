@@ -1,6 +1,6 @@
 # Dogfood — full protocol
 
-Machinery sunk from the SKILL.md body per ADR-109 (three-layer re-homing). The Stance section
+Machinery sunk from the SKILL.md body per ADR-002 (three-layer re-homing). The Stance section
 in SKILL.md carries the behavior-changing rules (the harness-artifact caveat, the live-LLM-cost
 caveat, the render-demoted-to-optional rule, the scope-aware continuation); this file carries the full
 session steps, the report shape, the three boundaries, storage format, a worked example, and
@@ -33,7 +33,7 @@ build** and records it.
    project's browser-verify slot (`agent-browser`; a desktop app → `agent-desktop`): actually click the flow; **screenshot at
    each friction point and dead-end** — the moments that become findings — not every routine
    step, and **record video only when the user explicitly asks for it** (verify economy,
-   ADR-058: a capture is evidence, not a progress note; captures go to disk and are referenced
+   ADR-007: a capture is evidence, not a progress note; captures go to disk and are referenced
    by path, never pasted into the chat). Backend / CLI → `curl` the endpoint or run the command
    and **save the actual request/response**. **Don't reason from the doc or from memory** — a
    belief about how your own feature behaves is often false; confirm it by doing it.

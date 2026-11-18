@@ -23,7 +23,7 @@ defines frontmatter, dates, opening conclusions and visible Relations. Keep exis
 - **A handfeel/gesture decision needs the real behaviour to actually run, verified with faithful input** — build only the decision-critical interaction, make its effect observable, and keep chrome (full styling, i18n, extra candidates) out — length is the smell on this kind of decision, not the effort.
 - **Past a disposable replica, hand off.** When the judgment needs the feature inside the real app — real components, real surrounding pages ("hifi", "差真實太多", "做一個 working prototype 讓我試") — that exceeds this skill's standalone-file stance: build an in-app prototype instead (e.g. the UI branch of an installed `prototype` skill such as `mattpocock-skills:prototype`), isolated behind a variant/fixture param, read-only, and cleaned out of the main branch once decided.
 - **A written file isn't a decidable artifact until activated** — open it (or serve it on a remote/headless box; decide which by checking `SSH_CONNECTION` / `DISPLAY`, never by assuming) and hand over a clickable URL; never hand off just a screenshot.
-- **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `/shape:tidy`'s `mockups/` sweep (ADR-037) executes it, since nothing is shipped yet at mockup time.
+- **A visual-lock (rare) retires on ship at detail level, or carries a freshness/supersession stamp at structural level** — this skill states the rule; `/shape:tidy`'s `mockups/` sweep (ADR-013) executes it, since nothing is shipped yet at mockup time.
 - **One decision, one record.** Reuse/create a Markdown mockup record with dates, actual
   thought/task relations, a short conclusion, artifact locators and retirement conditions.
   In a mapped workspace, use `mockups/<topic>/mockup.md` beside the HTML; otherwise
@@ -38,7 +38,7 @@ defines frontmatter, dates, opening conclusions and visible Relations. Keep exis
 
 Full protocol — the firing boundary detail (incl. the `/shape:dogfood` sibling distinction), the default (light) and escalate (heavy) render steps, a worked example, the grounded-replica discipline (handfeel + mocked-text-input caveats), activation mechanics, the browser-verify slot + `browser-verifier` subagent dispatch, scope-aware continuation, and the anti-pattern table: `references/mockup-protocol.md`.
 
-## The browser-verify slot is opt-in, not automatic (ADR-124)
+## The browser-verify slot is opt-in, not automatic (ADR-008)
 
 Default hand-off: write the file, **activate it** (open locally, or serve a URL on a remote/headless box — see the reference doc), and hand the user a clickable link. The user opening it *is* the confirmation — don't spend a dispatch confirming an ordinary mockup renders (2026-08-24: cut for token cost). Reach for the slot (defined once in `plugins/shape/CLAUDE.md`, available for requested browser verification) only when there's a concrete reason to distrust the render sight-unseen — chiefly the handfeel/gesture case (a synthetic interaction needs verifying with faithful input, see the reference doc) — or the user asks for a confirm pass: dispatch the plugin's `browser-verifier` agent (model: sonnet) with the file/URL + what to confirm, and take back verdict + screenshot path; the image tokens stay out of the main context.
 

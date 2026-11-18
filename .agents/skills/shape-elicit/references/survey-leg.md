@@ -1,7 +1,7 @@
 # Survey leg — fill a demonstrated gap in the decision space
 
-> The focused mapping capability retained from the former shape-survey (ADR-110).
-> ADR-129 removes automatic stall classification and mandatory reading detours.
+> The focused mapping capability retained from the former shape-survey (ADR-015).
+> ADR-011 removes automatic stall classification and mandatory reading detours.
 > This is an optional part of elicit, not a separate skill call.
 
 ## When this helps

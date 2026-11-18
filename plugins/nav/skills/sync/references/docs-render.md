@@ -1,7 +1,7 @@
 # Document sync — claim, implementation, reader path
 
 The skill body owns scope and write authority. This protocol supplies the checks, adapted
-from nav-sync's docs leg (ADR-125), expanded for complete batches in ADR-131.
+from nav-sync's docs leg (ADR-005), expanded for complete batches in ADR-005.
 
 ## Ground the requested pass
 

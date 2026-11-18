@@ -29,9 +29,9 @@ Catalog: 3 plugins · 23 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.26.18 | 7 | **Keep code healthy** — audit, refactor, sync source and docs, implement decided behavior, review requested engineering approaches, ship, and compose clear prose. |
-| [`shape`](plugins/shape/) | 0.35.9 | 10 | **Give work its form** — connect projects, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. |
-| [`frame`](plugins/frame/) | 0.17.1 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
+| [`nav`](plugins/nav/) | 0.26.19 | 7 | **Keep code healthy** — audit, refactor, sync source and docs, implement decided behavior, review requested engineering approaches, ship, and compose clear prose. |
+| [`shape`](plugins/shape/) | 0.35.10 | 10 | **Give work its form** — connect projects, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. |
+| [`frame`](plugins/frame/) | 0.17.2 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 <!-- END GENERATED catalog-plugins -->
 
 **Shape** converges decisions and defines verifiable tasks. **Nav** implements and lands decided work (do → ship) and keeps it healthy (audit → refactor → sync). Use nav-plan when you want to review the engineering approach. **frame** (the understanding family: lenses to see a problem, forms to present an answer, and `unfold` to walk through a subject one layer at a time) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.
@@ -42,11 +42,11 @@ More plugins land here over time. Each lives in its own folder under `plugins/`,
 
 Once installed (see below), each plugin's skills appear as `/<plugin>:<skill>`.
 
-Skills come in two invocation categories ([ADR-072](docs/adr/072-invocation-direction-law-inventory.md)): **model-invoked** — the agent fires them off your phrasing — and **user-invoked** — summoned only by typing the command, never auto-fired. Each plugin's list below buckets them.
+Skills come in two invocation categories ([ADR-002](docs/adr/002-skill-three-layer-law.md)): **model-invoked** — the agent fires them off your phrasing — and **user-invoked** — summoned only by typing the command, never auto-fired. Each plugin's list below buckets them.
 
-Use `/shape:setup` once to connect a code repository to its selected home workspace: reuse an existing registration, add only the needed project entry and portable instruction pointer, then verify the real read path. It does not scaffold an environment or migrate legacy records (ADR-148). Ordinary status reads and record saves do not enroll projects automatically.
+Use `/shape:setup` once to connect a code repository to its selected home workspace: reuse an existing registration, add only the needed project entry and portable instruction pointer, then verify the real read path. It does not scaffold an environment or migrate legacy records (ADR-015). Ordinary status reads and record saves do not enroll projects automatically.
 
-Ask `/nav:ship` to land finished work ("幫我 commit -> push -> merge，然後把沒在用的 branch 刪一刪"); it merges into main by default, opens a PR only when the project requires one, deletes only merged branches, and runs the tail documented in the project's `## Ship` section (ADR-139). Ask `/frame:unfold` for a layered walkthrough ("用 progressive disclosure 帶我認識 X", "walk me through X") and `/frame:tinker` for an object you can poke; a single explanation or ELI5 stays with `/frame:analogize`. Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-128).
+Ask `/nav:ship` to land finished work ("幫我 commit -> push -> merge，然後把沒在用的 branch 刪一刪"); it merges into main by default, opens a PR only when the project requires one, deletes only merged branches, and runs the tail documented in the project's `## Ship` section (ADR-004). Ask `/frame:unfold` for a layered walkthrough ("用 progressive disclosure 帶我認識 X", "walk me through X") and `/frame:tinker` for an object you can poke; a single explanation or ELI5 stays with `/frame:analogize`. Frame and shape no longer end by forcing a next-action menu. If your request already authorizes the next scoped step, the agent continues in the ordinary workflow; if you asked only for analysis or a mockup, that does not grant build authority. When a consequential choice or missing run authority remains, the agent asks a concise question instead of presenting a generic menu (ADR-010).
 
 <!-- BEGIN GENERATED catalog-skills -->
 Catalog skills: 23 active skills.
@@ -57,11 +57,11 @@ Catalog skills: 23 active skills.
 
 - `/nav:audit` — assess codebase shape (or read-only quick-check against a target spec)
 - `/nav:refactor` — execute a behavior-preserving structural refactor with risk-proportional verification
-- `/nav:sync` — check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)
+- `/nav:sync` — check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-005)
 - `/nav:plan` — ground a requested engineering proposal in code, including ownership, reuse, compatibility and verification
 - `/nav:do` — find the owning task and Git baseline before editing, implement authorized changes, and record verified progress in the original task
 - `/nav:compose` — author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval
-- `/nav:ship` — land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)
+- `/nav:ship` — land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-004)
 
 ### `shape`
 
@@ -71,7 +71,7 @@ Catalog skills: 23 active skills.
 - `/shape:mockup` — converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record
 - `/shape:probe` — design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials
 - `/shape:dogfood` — drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries
-- `/shape:tidy` — tidy completed tasks, legacy plans, stale thoughts and redundant mockups; preserve useful reasons and live work, and consolidate task/plan files only within requested cleanup scope (ADR-152)
+- `/shape:tidy` — tidy completed tasks, legacy plans, stale thoughts and redundant mockups; preserve useful reasons and live work, and consolidate task/plan files only within requested cleanup scope (ADR-016)
 - `/shape:idea` — save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice
 - `/shape:status` — recover task-owned progress and fresh code evidence; explicitly requested priorities update the original project entry; export an interactive graph on demand
 - `/shape:task` — turn decided work into an original task with deliverables, acceptance checks and next action; recording a task does not authorize implementation
@@ -102,7 +102,7 @@ One source tree, three channels, five agents. `plugins/` is the single source of
 | **Claude Code** | `plugins/` natively | `/nav:audit` |
 | **Antigravity (`agy`)** | `plugins/` via `agy plugin install` (preferred); or project `.agents/skills/` | `/nav:audit` · or flat `nav-audit` |
 | **Codex** · **opencode** | generated `.agents/skills/` | `nav-audit` |
-| **Cursor** | generated `platforms/cursor/<plugin>/` (ADR-118 — **not** the Codex mirror) | `nav-audit` inside each plugin |
+| **Cursor** | generated `platforms/cursor/<plugin>/` (ADR-017 — **not** the Codex mirror) | `nav-audit` inside each plugin |
 
 After any skill edit, regenerate **all** derived surfaces, then validate:
 
@@ -214,7 +214,7 @@ node scripts/validate-codex-skills.mjs --metadata-audit
 
 The validator checks both sides of the contract: Claude Code source skills under `plugins/` must have valid YAML frontmatter, and the Codex mirror under `.agents/skills/` must be regenerated and YAML-safe. It also gates Codex sidecar coverage, the per-skill/total metadata budget, install-profile references, **manifest drift**, and **public catalog drift**. See the repo-root [`CLAUDE.md`](CLAUDE.md) for the full single-owner rule.
 
-The marked README and site catalog blocks are generated, including versions, counts, skill membership, and invocation categories. Edit [`docs/catalog-copy.json`](docs/catalog-copy.json) for editorial prose and layout hints; absent copy falls back to source descriptions. Keep quick lookups and anatomy explanations current by hand. See [ADR-130](docs/adr/130-source-derived-public-catalog.md).
+The marked README and site catalog blocks are generated, including versions, counts, skill membership, and invocation categories. Edit [`docs/catalog-copy.json`](docs/catalog-copy.json) for editorial prose and layout hints; absent copy falls back to source descriptions. Keep quick lookups and anatomy explanations current by hand. See [ADR-018](docs/adr/018-manifest-catalog-and-commit-gates.md).
 
 Enable the pre-commit hook once per clone. It validates the complete staged snapshot,
 including its validator scripts, while leaving unstaged and untracked work untouched:
@@ -305,7 +305,6 @@ When in doubt: rule ⑦. Ask.
 |---|---|
 | [`docs/adr/`](docs/adr/) | Architecture Decision Records — one current decision per topic, with the alternatives it rejected |
 | [`docs/findings/`](docs/findings/) | Build-side mechanisms learned while editing this marketplace |
-| [`docs/observations/`](docs/observations/) | Historical usage notes (closed to new entries since ADR-156) |
 | [`docs/site/`](docs/site/) | The interactive marketplace map (living document) |
 
 Repo-wide rules for editing this marketplace (the hard gates, authoring conventions, maintenance steps) live once in the repo-root [`CLAUDE.md`](CLAUDE.md); plugin-specific conventions live in each plugin's own `CLAUDE.md` (e.g. [`plugins/nav/CLAUDE.md`](plugins/nav/CLAUDE.md)).

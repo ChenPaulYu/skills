@@ -191,7 +191,7 @@ Decisive quotes, one per trial:
 
 **Recorded as a known limitation, per the pre-decided rule.** No further prose iteration. The two wiring fixes remain in the SKILL.md — each closed a real observed escape mode (round 2's self-investigation/gut-check/deferral escapes; round 3's momentum-read is at least partially reachable, per trial 3) — but **reliable cold-start gatekeeper firing on the cheap tier is unproven.**
 
-**Scope note (applies regardless of verdict).** These probes test a cold-started cheap-tier model reading the SKILL.md alone, with one scripted turn of context. In real use, elicit is a judgment-heavy verb that runs on the session model per this repo's dispatch-tiers convention (repo CLAUDE.md; ADR-067) — a stronger model, carrying the full live conversation. Cold cheap-model reliability is therefore the FLOOR for this behavior, not the expected ceiling; this finding establishes that the floor is not held, not that the gatekeeper fails in real sessions.
+**Scope note (applies regardless of verdict).** These probes test a cold-started cheap-tier model reading the SKILL.md alone, with one scripted turn of context. In real use, elicit is a judgment-heavy verb that runs on the session model per this repo's dispatch-tiers convention (repo CLAUDE.md; ADR-007) — a stronger model, carrying the full live conversation. Cold cheap-model reliability is therefore the FLOOR for this behavior, not the expected ceiling; this finding establishes that the floor is not held, not that the gatekeeper fails in real sessions.
 
 ## What this file does not claim
 

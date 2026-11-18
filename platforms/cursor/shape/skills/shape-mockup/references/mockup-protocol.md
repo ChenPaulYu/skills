@@ -1,6 +1,6 @@
 # Mockup — full protocol
 
-Machinery sunk from the SKILL.md body per ADR-109 (three-layer re-homing). The Stance section
+Machinery sunk from the SKILL.md body per ADR-002 (three-layer re-homing). The Stance section
 in SKILL.md carries the core non-negotiable and the behavior-changing defaults condensed; this
 file carries the full firing boundary, the default/escalate protocols, a worked example, the
 visual-lock policy detail, storage & format, the grounded-replica discipline (including the
@@ -28,7 +28,7 @@ override; otherwise it triggers on the request.
 blueprints board rather than decide something. Render per the board-snapshot contract in
 [`../status/references/legacy-blueprints.md`](../shape-status/references/legacy-blueprints.md): copy
 `overview-template.html`, fill it from the current `plan.md` + `thoughts/` (filtered to
-`Status: in force` — ADR-112), activate it per the usual protocol below. **Always disposable** — never write it back as a standing `overview.html`; `align` does
+`Status: in force` — ADR-013), activate it per the usual protocol below. **Always disposable** — never write it back as a standing `overview.html`; `align` does
 not maintain one. This is the family's answer to "I want to *see* the plan": render it fresh,
 don't keep a second file in sync.
 
@@ -113,7 +113,7 @@ A lock (a chosen artifact frozen as a reference) is **rare** and **decays** — 
   it's a lie.
 - **It can't auto-regenerate from source** → discipline is
   **retire + stamp, never silent refresh.** Most discard; a permanent lock is a rare exception.
-- **Enforcement point: `shape-tidy` (ADR-037/131).** At mockup time nothing is shipped yet, so
+- **Enforcement point: `shape-tidy` (ADR-013/005).** At mockup time nothing is shipped yet, so
   retirement/stamping can't execute here — tidy's `mockups/` sweep does it post-ship:
   pre-conditions (decision settled · pick + deferred branches verifiably recorded in the owning
   doc · inbound links resolved) → prune only after verifying recovery and preservation; parked decisions keep
@@ -148,7 +148,7 @@ paths, and group variants under it. Never create a fake task just to populate Re
   eligible; a promoted visual-lock is rare and stamped. A retained record is not an
   instruction to commit every HTML render or screenshot.
 - **Lifecycle end:** disposable folders don't accumulate forever — `shape-tidy` sweeps
-  `mockups/` as part of its compaction pass (ADR-037), retiring a folder once its decision ships and the pick
+  `mockups/` as part of its compaction pass (ADR-013), retiring a folder once its decision ships and the pick
   (+ any deferred branch) is verified recorded in the owning doc. Recovery depends on verified committed content or another preserved destination; record
   the pick in the doc at step 5 so the sweep finds it absorbed, not orphaned.
 
@@ -202,7 +202,7 @@ paths, and group variants under it. Never create a fake task just to populate Re
 
 Moved to the shared owner: read `references/artifact-activation.md`.
 
-## The browser-verify slot is opt-in, not automatic (ADR-124)
+## The browser-verify slot is opt-in, not automatic (ADR-008)
 
 `mockup` uses the shared **browser-verify capability slot** (defined once in
 `the plugin conventions`): a named default (`agent-browser`) + detect + fail-helpfully if
@@ -215,7 +215,7 @@ link (see `references/artifact-activation.md`) — the user looking at the live 
 **Reach for the slot only when there's a concrete reason to distrust the render sight-unseen:**
 the handfeel/gesture case (a synthetic interaction needs verifying with faithful input — see the
 grounded-replica discipline above), or the user explicitly asks for a confirm pass. When it is
-invoked, capture runs in the `browser-verifier` subagent (cost tier, ADR-058) — dispatch the
+invoked, capture runs in the `browser-verifier` subagent (cost tier, ADR-007) — dispatch the
 plugin's `browser-verifier` agent (mechanical-tier executor) with the file/URL + what to confirm, and take
 back verdict + screenshot path; the image tokens stay out of the main context. Confirm **once**,
 not per iteration, on the rare occasion the slot is used at all.

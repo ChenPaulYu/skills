@@ -1,6 +1,6 @@
 # frame description-diet pilot — baseline, rewrite, cue-preservation check
 
-> **Owner of the pilot's rationale**: [ADR-065](docs/adr/065-description-lean-but-honest-pilot-frame.md) (two-load model, lean-but-honest convention, pilot scope + measurement method). This file is the pilot's data: baseline matrix, character counts, cue-preservation results.
+> **Owner of the pilot's rationale**: [ADR-002](docs/adr/002-skill-three-layer-law.md) (two-load model, lean-but-honest convention, pilot scope + measurement method). This file is the pilot's data: baseline matrix, character counts, cue-preservation results.
 > **Status**: cue-preservation check complete (this file). **Live trigger-accuracy QA is NOT done here** — that's a separate acceptance pass by Fable/Paul (see "What this file does not claim" below).
 
 ## Method
@@ -79,8 +79,8 @@ Method: the session model read all five rewritten descriptions **in the context 
 - **"把一個主張送上審判台"** (dialectic, ZH semantic): "Put a forming claim on trial" is the direct conceptual translation (審判台 = on trial); bilingual routing holds. **PASS.**
 - **"把一個成熟模型嫁接到新系統"** (graft, ZH semantic): 嫁接 = graft, carried by both the skill name and "grafting a mature model onto a new problem" + ZH "借用...的架構". **PASS.**
 
-**Verdict: 15/15 — pilot ACCEPTED.** The lean-but-honest rewrite loses no routing accuracy in judgment-level QA; the -41% context-load saving stands. Rollout to the remaining 29 skills is a separate session's decision (per ADR-065), now unblocked.
+**Verdict: 15/15 — pilot ACCEPTED.** The lean-but-honest rewrite loses no routing accuracy in judgment-level QA; the -41% context-load saving stands. Rollout to the remaining 29 skills is a separate session's decision (per ADR-002), now unblocked.
 
 ## What this file does not claim
 
-This pilot verifies that a **static routing cue** for each baseline sentence survives the rewrite. It does **not** run the new descriptions against a live model to confirm real trigger accuracy is unchanged or improved — per the execution contract, that final trigger QA is **Fable/Paul's acceptance step**, not this pass's. Whether to roll the lean-but-honest convention out to the remaining 29 skills is a separate, later decision gated on that acceptance (see ADR-065's Consequences).
+This pilot verifies that a **static routing cue** for each baseline sentence survives the rewrite. It does **not** run the new descriptions against a live model to confirm real trigger accuracy is unchanged or improved — per the execution contract, that final trigger QA is **Fable/Paul's acceptance step**, not this pass's. Whether to roll the lean-but-honest convention out to the remaining 29 skills is a separate, later decision gated on that acceptance (see ADR-002's Consequences).

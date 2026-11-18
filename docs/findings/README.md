@@ -4,7 +4,7 @@ Build-side notes from editing this marketplace. The kind of mechanical knowledge
 
 ## Why this exists
 
-Findings point inward: the audience is future-you (or anyone) editing this marketplace, and a matured finding lands in a marketplace `CLAUDE.md` addition, a topic's ADR, a plugin `CLAUDE.md` or a convention note. Usage patterns that point outward go straight to the skill or `CLAUDE.md` they correct, or to a workspace idea when the owner is unclear; the old `observations/` inbox was removed ([ADR-156](docs/adr/156-topic-owned-adrs-edited-in-place.md)).
+Findings point inward: the audience is future-you (or anyone) editing this marketplace, and a matured finding lands in a marketplace `CLAUDE.md` addition, a topic's ADR, a plugin `CLAUDE.md` or a convention note. Usage patterns that point outward go straight to the skill or `CLAUDE.md` they correct, or to a workspace idea when the owner is unclear; the old `observations/` inbox was removed ([ADR-019](docs/adr/019-doctrine-docs-and-conventions.md)).
 
 ADRs record **decisions** ("we chose X over Y"). Findings record **mechanisms** ("here's how the thing actually behaves"). Different shape, different lifecycle.
 

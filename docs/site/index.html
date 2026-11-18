@@ -6,55 +6,55 @@
 ═══════════════════════════════════════════════════════════════════════════
 
   The marketplace source owns current facts. This scoped revision reflects
-  Shape Task and direct Nav execution (ADR-155); other dated grounding notes and
+  Shape Task and direct Nav execution (ADR-016); other dated grounding notes and
   revision logs remain historical context, not newly repeated workflow checks.
 
   ✓ VERIFIED (mechanically grep'd against the source)
     • Marketplace name = "skills" (see .claude-plugin/marketplace.json)
     • Current versions, skill counts, and rosters are generated in catalog-data
-      from plugin manifests and skill frontmatter (ADR-130), not copied here.
+      from plugin manifests and skill frontmatter (ADR-018), not copied here.
   HISTORICAL GROUNDING NOTES (inherited context, not the current inventory)
     • shape skills: mockup (render-to-decide), elicit (grounded grill → a
       thought; gatekeeper offers three branches when a volley stalls,
-      ADR-076 — fuzzy-but-known: keep grilling; missing terrain: run the
+      ADR-011 — fuzzy-but-known: keep grilling; missing terrain: run the
       survey leg in place, two layers — domain-prior axes borrowing
       frame:orthogonal's independence check by protocol + a reality-diff
       layer grounded at file:line — then report the DIFF vs the user's
       stated understanding, folded from the retired standalone
       /shape:survey whose designed primary entrance was always this offer,
-      ADR-110; unmeasured fact: offer /shape:probe), probe (design + run a
+      ADR-015; unmeasured fact: offer /shape:probe), probe (design + run a
       minimal experiment — A/B, blind judgment test, or behavior probe —
       for a fork nobody can settle by argument; three-lens design chain
       borrowed by protocol from frame:dialectic → frame:first-principles →
       frame:orthogonal; pre-registered verdict rule; findings land
-      docs/findings/ or a blueprints/thoughts/ doc; ADR-075), position
+      docs/findings/ or a blueprints/thoughts/ doc; ADR-012), position
       (canon-authoring campaign → core principle-wise docs: ingest-assess
       w/ guarding + altitude instrument w/ churn alarm + two-tier landing +
       graduation-grown core + periodic re-audit; mirror of reconcile —
-      births vs keeps-true; meta-skill; ADR-035; single-writer freeze-gated
-      write protocol + amendments ledger, ADR-041), dogfood (use a built
+      births vs keeps-true; meta-skill; ADR-013; single-writer freeze-gated
+      write protocol + amendments ledger, ADR-013), dogfood (use a built
       feature for real → friction + coverage gaps; evidence-rich report,
-      borrows /verify·/run, ADR-033), align (decide next + render the
+      borrows /verify·/run, ADR-012), align (decide next + render the
       plan), reconcile (amend stale facts / prune stale notes / retire shipped
-      decisions' mockups, salvage-then-prune w/ git as deep archive, ADR-037;
+      decisions' mockups, salvage-then-prune w/ git as deep archive, ADR-013;
       decision-change → /shape:elicit; sweeps the core amendments ledger +
-      canon-grade → /shape:position, ADR-041); position births the
+      canon-grade → /shape:position, ADR-013); position births the
       founding set directly at a project's founding — graduation is the growth channel,
-      not the only door (ADR-104); the durable-why tier is precedents/ — one dated file per binding
+      not the only door (ADR-013); the durable-why tier is precedents/ — one dated file per binding
       call, index + overruled — with the convention itself versioned and migrate
       (now summon-only, disable-model-invocation: true — an episodic,
-      author-driven event with zero model-routing value, ADR-110) as its
-      upgrade verb (ADR-105). build retired (ADR-110) — zero fires ever;
+      author-driven event with zero model-routing value, ADR-015) as its
+      upgrade verb (ADR-013). build retired (ADR-015) — zero fires ever;
       the manual loop /nav:plan → /nav:do·/nav:refactor → /shape:align
-      replaces it, its ADR-040 dispatch machinery preserved in git for a
+      replaces it, its ADR-009 dispatch machinery preserved in git for a
       re-entry condition. shape v0.16.1;
-      cost tiers (ADR-058): browser-verify passes delegate to the plugin-bundled
+      cost tiers (ADR-007): browser-verify passes delegate to the plugin-bundled
       browser-verifier subagent (model: sonnet; image tokens stay out of the main
       context) + verify economy (capture at decision points only; dogfood video
       opt-in) + reconcile runs model: sonnet via SKILL.md frontmatter.
       doctor (orchestrator) deferred. blueprints/ = artifact convention (not a
       skill); identity = forward motion: intent → form, handed off to the
-      manual build path (shape/CLAUDE.md + ADR-010/011/110). nav stays
+      manual build path (shape/CLAUDE.md + ADR-013/008/015). nav stays
       shape-independent.
     • frame skills (plugin renamed from think): first-principles (decompose DOWN —
       strip to irreducible axioms, rebuild, surface divergence) + orthogonal
@@ -62,22 +62,22 @@
       independence, name what was conflated) + dialectic (put a claim ON TRIAL —
       steelman both sides, surface the load-bearing assumption, name the deciding
       experiment; verdict three-way, not pass/fail; closing offer now includes a
-      guarded /shape:probe — run the Killer Experiment it names, ADR-012 pattern,
-      ADR-075). Two decompose, one trials — all
-      three feed shape one-way, in-chat (ADR-034/045/046/047). All three now close on a
+      guarded /shape:probe — run the Killer Experiment it names, ADR-006 pattern,
+      ADR-012). Two decompose, one trials — all
+      three feed shape one-way, in-chat (ADR-010/009). All three now close on a
       mandatory PLAIN-LANGUAGE LANDING step — one zero-jargon conclusion sentence +
       one deliberately-chosen analogy (analogize's discipline, borrowed by protocol,
       never a call), each banning its own terms of art in that closing line
       (first-principles: axiom/公理/first principles; orthogonal: orthogonal/正交/
-      axis/軸; dialectic: steelman/dialectic) — ADR-077.
+      axis/軸; dialectic: steelman/dialectic) — ADR-010.
       A fourth faces the other
       direction: analogize (DELIVER — build a deliberately stress-tested analogy for
       a concept already understood: generate multiple candidates, check the mapping,
       name where it breaks; delivers to the user rather than deriving for the agent,
       so it does NOT feed shape; untouched by the landing-step addition). frame
       v0.8.0; the speculative invert/second-order
-      seed was dropped for no usage evidence (ADR-046). Standalone.
-    • shape gains baton (ADR-113): take or pass the ephemeral session cursor — one
+      seed was dropped for no usage evidence (ADR-010). Standalone.
+    • shape gains baton (ADR-009): take or pass the ephemeral session cursor — one
       overwritten goal · done · now · open · next, at blueprints/baton.md (no-tree
       fallback: root HANDOFF.md). Merges reflect's former catchup (take) + park
       (pass) into one door over one artifact; retrace retires (its provenance-
@@ -85,7 +85,7 @@
       had no other members, so it dissolves: marketplace 6 plugins → 5, 27 → 25
       skills. Summon-only (disable-model-invocation: true).
     • relay skills: four daily verbs, following the ACCORD MEMORY MODEL
-      (ADR-100/101/120/121, relay v2.5.2) — four objects with clean boundaries
+      (ADR-009, relay v2.5.2) — four objects with clean boundaries
       (Discussion/Issue/PR/Commit), two memories (GitHub = collaboration
       memory; decisions/, briefs/, core/ = formal memory). There is NO
       Announcement object any more: a tell needing a receipt is an Issue
@@ -118,7 +118,7 @@
       label + reassign to recorder — through to a recorded, linked-back
       Decision/Brief/Core change under exact-settlement fuses, then commit,
       push, and read back the remote commit; unsettled wording may use a PR).
-      ADR-115 retires launch, brief,
+      ADR-009 retires launch, brief,
       and migrate as verbs (relay: 7 → 4 skills, marketplace 28 → 25):
       launch's audit half is superseded by the workspace's own conformance
       CI, its setup half was a completed once-per-workspace act; brief
@@ -133,45 +133,45 @@
       trust only status: active. The LEGACY [ACK]-titled-Discussion
       compatibility path (original pre-097 single-recipient 👀 semantics)
       retired 2026-07-22 with zero live legacy objects remaining — an
-      [ACK]-titled Discussion is now just a Discussion. ADR-097's
-      receipt-default retires in full; ADR-096's Announcement-closure branch
+      [ACK]-titled Discussion is now just a Discussion. ADR-009's
+      receipt-default retires in full; ADR-009's Announcement-closure branch
       retires (its general every-Discussion-closed-by-its-initiator rule
-      survives, folded into settle); ADR-093's obligations/notices split and
+      survives, folded into settle); ADR-009's obligations/notices split and
       the open-non-draft-PR-never-obligation-free invariant remain in force
-      unchanged; ADR-098 (upstream nursery) and ADR-099 (decision-reversal
-      consent) remain fully in force, absorbed into the router; ADR-095
+      unchanged; ADR-009 (upstream nursery) and ADR-009 (decision-reversal
+      consent) remain fully in force, absorbed into the router; ADR-009
       (author sign-off) is unchanged. GitHub owns objects and state; Relay
       owns routing, obligation semantics, authority checks, synthesis
       policy, and read-back verification.
-      relay v2.5.2; standalone (ADR-090/091/092/093/094/095/096/097/098/099/100/101/102/115/120/121;
+      relay v2.5.2; standalone (ADR-009;
       design record: blueprints/plans/2026-08-19-relay-conversation-lifecycle.md).
     • Slash-command form /nav:<skill> confirmed by Claude Code's
       <plugin>:<skill> namespace convention
     • At revision 134: 130 ADRs in docs/adr/ — 001..130, no duplicates (the 114 collision between
       two concurrent sessions was resolved 2026-08-13: first-to-land kept 114, the
       fathom split renumbered to 116) with cross-supersede / refine links
-    • Cost tier (ADR-058/059): mechanical verbs declare model: sonnet in SKILL.md
+    • Cost tier (ADR-007): mechanical verbs declare model: sonnet in SKILL.md
       frontmatter (turn-level; criterion owned by repo-root CLAUDE.md, instances
       per plugin CLAUDE.md) — shape reconcile + align, relay digest;
       nav has no frontmatter-tiered verb today (map's derived-work rendering
-      folded into sync as its map leg, ADR-108 — that leg's dispatch guidance
+      folded into sync as its map leg, ADR-005 — that leg's dispatch guidance
       now lives inside sync's body, not a separate skill's frontmatter tier);
       nav sync itself deliberately NOT tiered (it authors the
       headers everything else reads; rule ⑧ — describing IS diagnosing).
     • Findings (2 seed entries) + observations (scaffold) under docs/
     • Codex mirror: .agents/skills/ (22 flat skills: nav-* / relay-* /
       shape-* / frame-*) + root AGENTS.md, generated from plugins/ by
-      scripts/build-codex.mjs (ADR-022) — committed, do-not-hand-edit.
+      scripts/build-codex.mjs (ADR-017) — committed, do-not-hand-edit.
       Codex metadata is normalised during generation so descriptions are
       YAML-safe and within Codex's length limit; `node scripts/build-codex.mjs
       --sync-global --profile <name> --dedupe-global-roots` is the supported
       global install path (compiled skills + only the needed runtime artifacts
       into `~/.codex/`); scripts/validate-codex-skills.mjs gates Claude Code
       source frontmatter, Codex mirror drift, Cursor plugin drift, manifest
-      drift, and fresh-install release smokes (ADR-083, ADR-118).
+      drift, and fresh-install release smokes (ADR-017).
     • Cursor native plugins: platforms/cursor/<plugin>/ (flattened skill
       folders nav-audit, …) + .cursor-plugin/marketplace.json, generated by
-      scripts/build-cursor.mjs (ADR-118). Install: node scripts/build-cursor.mjs
+      scripts/build-cursor.mjs (ADR-017). Install: node scripts/build-cursor.mjs
       --sync-local → ~/.cursor/plugins/local/. Cursor is not a Codex-mirror
       consumer.
     • Manifest single-owner: each plugin's .claude-plugin/plugin.json owns its
@@ -200,40 +200,40 @@
       Planning depth and authority boundaries remain unchanged.
 
   ⚠ FIXED in rev 151 (kept for history)
-    • ADR-148: workspace-only shape-setup is the ninth Shape entrance. Registration
+    • ADR-015: workspace-only shape-setup is the ninth Shape entrance. Registration
       reuses project identity and verifies the shared reader; environment scaffolding
       stays retired. Ordinary status/saves do not silently enroll projects.
 
   ⚠ FIXED in rev 150 (kept for history)
-    • ADR-146: Shape has eight entrances. Status/wrap absorb align/park/catchup;
+    • ADR-015: Shape has eight entrances. Status/wrap absorb align/park/catchup;
       legacy reads preserve live context. Skill-owned graph export derives real records.
       Current roster/versions remain generated; inherited anatomy is historical.
 
   ⚠ FIXED in rev 149 (kept for history)
-    • ADR-143: project.md is the sole project index. Typed work folders replace
+    • ADR-014: project.md is the sole project index. Typed work folders replace
       the flat pilot container; mockup/probe cards stay with their artifacts. Legacy
       records stay readable; no artifacts-promotion tier or extra state/history file.
       This revision refreshes generated versions; the legacy anatomy remains labelled.
 
   ⚠ FIXED in rev 148 (kept for history)
-    • ADR-142: common work-record interface adds honest dates, frontmatter, visible
+    • ADR-014: common work-record interface adds honest dates, frontmatter, visible
       Relations and progressive disclosure. Mockup creates/reuses one Markdown card
       per decision, with HTML variants pointing to it. Git carries committed history;
       no extra history board or stored project-state copy. Mockup catalog copy updated.
 
   ⚠ FIXED in rev 147 (kept for history)
-    • ADR-141: shape:reconcile is renamed shape:tidy. Active anatomy nodes,
+    • ADR-015: shape:reconcile is renamed shape:tidy. Active anatomy nodes,
       commands and catalog text use tidy; cleanup behavior and retention gates
       are unchanged. Historical revision notes preserve the old name.
 
   ⚠ FIXED in rev 146 (kept for history)
-    • ADR-140: opt-in workspace pilot adds idea/status/wrap, with task-owned progress
+    • ADR-014: opt-in workspace pilot adds idea/status/wrap, with task-owned progress
       and derived views. Legacy eight-verb anatomy below remains a compatibility map,
       not the full eleven-skill pilot roster. Catalog and descriptions identify the
       temporary overlap; no global migration or retirement is implied.
 
   ⚠ FIXED in rev 145 (kept for history)
-    • ADR-139: new nav:ship verb (plan -> do -> ship). Lands finished work: commit only
+    • ADR-004: new nav:ship verb (plan -> do -> ship). Lands finished work: commit only
       this task's changes, push, merge into main (PR when required), remove merged
       branches and clean worktrees, run the project's documented `## Ship` tail. nav
       0.21.0 -> 0.22.0, seven skills. Hand-owned catalog copy (nav summary, blurb,
@@ -241,7 +241,7 @@
       in both languages; catalog blocks regenerate.
 
   ⚠ FIXED in rev 144 (kept for history)
-    • ADR-138: frame becomes the understanding family. New members unfold (layered
+    • ADR-010: frame becomes the understanding family. New members unfold (layered
       walkthrough entry; bundles generated copies of the analogize, draw, and tinker
       disciplines, never calls them) and tinker (an interactive object to poke).
       Mockup's activation text moved verbatim to the shared owner
@@ -251,8 +251,8 @@
       catalog blocks regenerate. Revision logs below are history.
 
   ⚠ FIXED in rev 143 (kept for history)
-    • ADR-137: frame:dialectic retired on the owner's attestation that it is unclaimed
-      (ADR-107 third cause; zero Claude Code uses and two Codex sessions in the 5-week
+    • ADR-009: frame:dialectic retired on the owner's attestation that it is unclaimed
+      (ADR-009 third cause; zero Claude Code uses and two Codex sessions in the 5-week
       window). Frame is two reasoning lenses (first-principles, orthogonal) plus analogize
       and draw. shape:probe's design chain keeps its first step without naming a live
       skill. The catalog blocks regenerate; the hand-owned site prose carried no
@@ -260,8 +260,8 @@
       dialectic as it was.
 
   ⚠ FIXED in rev 142 (kept for history)
-    • ADR-136: relay plugin (digest/reply/report/settle) and shape:migrate retired on the
-      owner's attestation that both are unclaimed (ADR-107 third cause). Marketplace is three
+    • ADR-009: relay plugin (digest/reply/report/settle) and shape:migrate retired on the
+      owner's attestation that both are unclaimed (ADR-009 third cause). Marketplace is three
       plugins; shape is eight skills. The migration ledger lives on as
       plugins/shape/skills/align/references/migration-ledger.md. Site changes: removed the migrate node and
       its edge from the shape anatomy graph, dropped relay from install snippets and the
@@ -269,7 +269,7 @@
       above and below are history and still mention relay/migrate as they were.
 
   ⚠ FIXED in rev 141 (kept for history)
-    • ADR-135: probe's detailed protocol distinguishes existing measurements from new
+    • ADR-012: probe's detailed protocol distinguishes existing measurements from new
       trials and carries matching paid-scope approval forward. Catalog and both platform
       generators share source-file skill discovery, ignoring retired directory residue.
 
@@ -279,26 +279,26 @@
       are clarified. Eight gpt-6-luna runs include one rejected setup; findings retain limits.
 
   ⚠ FIXED in rev 139 (kept for history)
-    • ADR-134: shared local-first process-artifact retention, separate ignore/tracking/staging
+    • ADR-019: shared local-first process-artifact retention, separate ignore/tracking/staging
       checks, representative and fair probe evidence, and goal-anchored dogfood attribution.
     • Four new opt-in behavior cases cover artifact defaults, tracked cleanup, probe limits,
       and assisted tool evaluation. Offline checker tests are not fresh model-run evidence.
 
   ⚠ FIXED in rev 138 (kept for history)
-    • ADR-133: pre-commit validates staged bytes; four opt-in isolated skill task cases
+    • ADR-018: pre-commit validates staged bytes; four opt-in isolated skill task cases
       complement offline checks. Core behavior passed with two reporting defects recorded.
     • Retired Relay contract wording corrected; shape uses available browser equivalents
       and asks only for missing authority or consequential scope choices.
     • 133 ADRs; 24 skill entrances retained; generated catalog follows shape 0.24.3.
 
   ⚠ FIXED in rev 137 (kept for history)
-    • ADR-132: shared root guidance with on-demand family guides; reconcile drops render bundles.
+    • ADR-002: shared root guidance with on-demand family guides; reconcile drops render bundles.
     • Compose honors authorized edits; frame keeps its reasoning checks in compact bodies;
       digest loads full classifier semantics only for fallback/diagnosis.
     • 132 ADRs; no skill entrance retired in this pass.
 
   ⚠ FIXED in rev 136 (kept for history)
-    • ADR-131 restores shape-reconcile; align owns verified board priorities.
+    • ADR-005 restores shape-reconcile; align owns verified board priorities.
     • nav-sync unifies headers and reader documents, including complete README/docs batches;
       its unused standing codebase-map generation workflow is removed.
     • 131 ADRs; source-owned catalog and current anatomy copy updated together.
@@ -309,15 +309,15 @@
       Historical audit notes below remain dated evidence.
 
   ⚠ FIXED in rev 134 (kept for history)
-    • ADR-130 generates README and bilingual site catalog blocks from source;
+    • ADR-018 generates README and bilingual site catalog blocks from source;
       editorial prose remains hand-owned. Exact drift checks replace token scans.
       Skill totals exclude supporting documents.
 
   ⚠ FIXED in rev 133 (kept for history)
-    • ADR-129 changes elicit from compulsory friction to grounded clarification:
+    • ADR-011 changes elicit from compulsory friction to grounded clarification:
       hesitation is contextual; small gaps are explained inline; surveys and
       reading pauses are optional; source verification and user authority remain.
-    1. ADR-128 removes forced next-action menus from frame and shape.
+    1. ADR-010 removes forced next-action menus from frame and shape.
        Substantive reasoning checks stay, but visible worksheets, tables, and
        headings are proportional to the question. Plain language remains the
        style, not a zero-jargon ban: technical words are allowed when useful and
@@ -330,7 +330,7 @@
        plugins / 23 skills.
 
   ⚠ FIXED in rev 131 (kept for history)
-    1. ADR-127 splits the former shape handoff door into two explicit
+    1. ADR-009 splits the former shape handoff door into two explicit
        entrances over one shared file: /shape:catchup reads/reconstructs
        current session state, and /shape:park writes the handoff. Both use
        the same five fields in blueprints/baton.md (root HANDOFF.md fallback).
@@ -341,7 +341,7 @@
        roster is now 8 shape skills / 23 skills total.
 
   ⚠ FIXED in rev 130 (kept for history)
-    1. Skill renovation (ADR-126): Fathom retires from the current roster
+    1. Skill renovation (ADR-006): Fathom retires from the current roster
        (5 skills removed), nav moves to 0.19.0, and the public surfaces now
        show 4 plugins / 22 skills. Nav planning/refactoring now carries
        existing implementation authority, avoids forced next-step menus, and
@@ -349,7 +349,7 @@
        reviewer judgment role is retired.
 
   ⚠ FIXED in rev 129 (kept for history)
-    1. nav 0.18.0: /nav:sync gains a third, on-demand leg — docs (ADR-125).
+    1. nav 0.18.0: /nav:sync gains a third, on-demand leg — docs (ADR-005).
        Checks a hand-maintained human-facing doc (README, install steps)
        against real ground truth (manifest, directory, code); tolerant-reader
        for a repo-declared consistency gate (like this marketplace's own
@@ -359,7 +359,7 @@
 
   ⚠ FIXED in rev 128 (kept for history)
     1. Shape 0.20.1: mockup's browser-verify slot is opt-in, not automatic
-       (ADR-124) — a routine mockup no longer dispatches the browser-verifier
+       (ADR-008) — a routine mockup no longer dispatches the browser-verifier
        subagent to confirm every render; the user opening the activated link
        is the confirmation. Reserved for the handfeel/gesture case or an
        explicit request.
@@ -376,7 +376,7 @@
        not every new obligation or lifecycle finding.
 
   ⚠ FIXED in rev 125 (kept for history)
-    1. Relay 2.5.0 (ADR-120) adds the missing conversation transition:
+    1. Relay 2.5.0 (ADR-009) adds the missing conversation transition:
        independent follow-ups fork into linked child Issues; ordinary baton
        handoff changes the assignee without moving settlement authority;
        protected acceptance/recording stages stay protected. digest schema 5
@@ -389,7 +389,7 @@
   ⚠ FIXED in rev 124 (kept for history)
     1. Install surfaces name the five-agent harness map correctly:
        Claude + agy read plugins/ (namespaced); Codex/opencode read
-       .agents/skills/; Cursor reads platforms/cursor/ (ADR-118), not
+       .agents/skills/; Cursor reads platforms/cursor/ (ADR-017), not
        the Codex mirror. README + INSTALL golden loop now runs
        build-manifests + build-codex + build-cursor before validate.
        agy install examples include fathom + relay. Site map ADR count
@@ -400,11 +400,11 @@
        marketplace 26 -> 27): compile a study into a guided multi-scale
        code map. The door owns a moment no sibling carries (post-dive
        enrich, stale-study return, another session's one-line request).
-       ADR-119. ADR count 118 -> 119.
+       ADR-009. ADR count 118 -> 119.
 
   ⚠ FIXED in rev 122 (kept for history)
     1. Cursor is a native-plugin channel, not a Codex-mirror consumer
-       (ADR-118): generated plugins live under platforms/cursor/<plugin>/
+       (ADR-017): generated plugins live under platforms/cursor/<plugin>/
        with flattened skill names; install is
        `node scripts/build-cursor.mjs --sync-local` into
        ~/.cursor/plugins/local/. README, INSTALL.md, and this map's install
@@ -534,7 +534,7 @@
        earning a different interaction; a Map must land in ~30s with no
        clicks and be broad-but-shallow, not narrow) is now written into
        fathom's forms.md and the pointer is honest. (b) The
-       canonical-run playback grammar was lost in the ADR-117 move —
+       canonical-run playback grammar was lost in the ADR-010 move —
        fixed spine · one lit outcome · a dedicated return rail · a
        terminal state that replaces it · rearrange-don't-shrink — now in
        frame draw's forms.md under Playback, where every lifecycle
@@ -566,7 +566,7 @@
   ⚠ FIXED in rev 114 (kept for history)
     1. /frame:draw's form table is re-cut on first principles, after a
        survey of how three traditions classify pictures (frame 0.10.0 ->
-       0.11.0; no ADR — this refines ADR-117's skill, it does not move a
+       0.11.0; no ADR — this refines ADR-010's skill, it does not move a
        boundary). The old table listed 9 audience questions in no
        particular order; it now groups them by the RELATIONSHIP a drawing
        asserts — order · order-across-actors · condition · lifetime ·
@@ -594,7 +594,7 @@
        everything matters equally). ADR count unchanged at 117.
 
   ⚠ FIXED in rev 113 (kept for history)
-    1. ADR-117 extracts the form grammar into a new verb,
+    1. ADR-010 extracts the form grammar into a new verb,
        /frame:draw (frame 0.9.0 -> 0.10.0, fathom 0.7.0 -> 0.8.0,
        25 -> 26 skills). The knowledge-kind -> form table (ownership ->
        spatial map · process -> playback · state over time -> stepper ·
@@ -619,7 +619,7 @@
        audience asks. ADR count 116 -> 117.
 
   ⚠ FIXED in rev 112 (kept for history)
-    1. ADR-115 condenses relay 7 -> 4 skills (marketplace 28 -> 25):
+    1. ADR-009 condenses relay 7 -> 4 skills (marketplace 28 -> 25):
        launch, brief, and migrate retire as verbs. launch's audit half is
        superseded by the workspace's own conformance CI (relay-conformance.mjs,
        Checks A-G on schedule and on push); its setup half was a completed
@@ -653,14 +653,14 @@
        instead of forcing the learner between doors.
 
   ⚠ FIXED in rev 110 (kept for history)
-    1. ADR-114 splits fathom 1 -> 4 verbs (0.3.0 -> 0.4.0; marketplace
+    1. ADR-008 splits fathom 1 -> 4 verbs (0.3.0 -> 0.4.0; marketplace
        25 -> 28 skills). Two live studies showed the flow is not fixed —
        sessions ran scan → teach → follow-up → teach → check in whatever
        order curiosity took — and that distinct moments were trapped
        inside one door: wanting an index and a trustworthiness read with
        NO teaching; wanting to be quizzed days later; wanting to keep
        digging at one topic without advancing. The one-door precedent
-       (ADR-108's nav:map) did not transfer: map died because sync's
+       (ADR-005's nav:map) did not transfer: map died because sync's
        trigger subsumed it, not because splitting is wrong. New verbs:
        `sound` (grounding: anchor + release distance, collapse judgment,
        the growing index.md file:line index, a measured trust
@@ -680,7 +680,7 @@
        /fathom:repo to /fathom:guide. ADR count 113 -> 114.
 
   ⚠ FIXED in rev 109 (kept for history)
-    1. ADR-114 cost-scales two gates that used to fire unconditionally. VERIFY:
+    1. ADR-008 cost-scales two gates that used to fire unconditionally. VERIFY:
        the verification stays mandatory, but only its auto-execution is gated —
        tests/typecheck/lint/backend runs and a browser pass statable up front as
        <=5 interactions run without asking; live-LLM spend, broader computer-use
@@ -691,7 +691,7 @@
        and self-reports; expensive (any agent that writes files, >=3 agents,
        computer-use driving, live-LLM fan-out) gets one AskUserQuestion per
        batch with the cheap hand pre-selected. Resolves the "mysterious trigger"
-       as what it was: ADR-081's downgrade valve pulled globally on 2026-07-16
+       as what it was: ADR-007's downgrade valve pulled globally on 2026-07-16
        and never written down. Spend is now measured from local session logs,
        not estimated. nav v0.16.0, shape v0.19.0.
 
@@ -723,11 +723,11 @@
        unchanged.
 
   ⚠ FIXED in rev 107 (kept for history)
-    1. ADR-113: the baton joins blueprints, reflect dissolves. `reflect:catchup`
+    1. ADR-009: the baton joins blueprints, reflect dissolves. `reflect:catchup`
        (take) + `reflect:park` (pass) merge into one door over one artifact,
        `/shape:baton` — a session's ephemeral cursor moves from a root
        `HANDOFF.md` into the tree's ephemeral tier, `blueprints/baton.md` (no-tree
-       fallback unchanged: root `HANDOFF.md`, tolerant-reader, ADR-071). Named
+       fallback unchanged: root `HANDOFF.md`, tolerant-reader, ADR-019). Named
        `baton` because both directions read naturally (take it / pass it).
        `reflect:retrace` retires outright — its near neighbours were fathom's
        (teach a model → gate on correction → emit an artifact), not catchup's;
@@ -744,8 +744,8 @@
        languages). ADR count 113.
 
   ⚠ FIXED in rev 106 (kept for history)
-    1. ADR-112 collapses shape's record layer: `/shape:position` retired with the
-       `core/` canon tier, the ADR-041 freeze protocol and the amendments ledger
+    1. ADR-013 collapses shape's record layer: `/shape:position` retired with the
+       `core/` canon tier, the ADR-013 freeze protocol and the amendments ledger
        (core conflated timeless principles with architecture docs that must track
        code — freezing the second manufactured permanent drift debt; measured:
        core trees scaffolded then abandoned across 5 projects). `/shape:reconcile`
@@ -783,7 +783,7 @@
        fathom CLAUDE.md one-way method-evolution flow).
 
   ⚠ FIXED in rev 104 (kept for history)
-    1. ADR-111 retires `nav:tour` (owner's direct verdict ends its ADR-109
+    1. ADR-009 retires `nav:tour` (owner's direct verdict ends its ADR-009
        watch early; three-causes check ruled mis-fit — single-altitude
        delivery, no layered ladder) and adds the `fathom` plugin (0.1.0),
        one skill `repo`: a five-level comprehension ladder over an
@@ -804,9 +804,9 @@
        fathom-repo in).
 
   ⚠ FIXED in rev 103 (kept for history)
-    1. ADR-110 slims shape 10 → 8: retires `build` (zero fires ever; the
+    1. ADR-015 slims shape 10 → 8: retires `build` (zero fires ever; the
        manual loop /nav:plan → /nav:do·/nav:refactor → /shape:align replaces
-       it, its ADR-040 dispatch machinery preserved in git for a re-entry
+       it, its ADR-009 dispatch machinery preserved in git for a re-entry
        condition), folds `survey` into `elicit` as its internal survey leg
        (1 direct fire in 11 months — its designed primary entrance was
        always elicit's gatekeeper offer; the full protocol moved verbatim to
@@ -827,12 +827,12 @@
        ADR count 108 → 110. Codex mirror 31 → 29 flat skills.
 
   ⚠ FIXED in rev 102 (kept for history)
-    1. ADR-109 deep-module-izes the whole non-relay roster: every SKILL.md
+    1. ADR-002 deep-module-izes the whole non-relay roster: every SKILL.md
        re-homed to three layers (description = signature ≤3 sentences · body =
        stance + gates, delete-tested · references/ = machinery, moved
        verbatim). Bodies 3043 → 1035 lines across 21 skills (post gate-restoration); gates kept
-       verbatim (position's freeze protocol, build's ADR-040 proposal gate,
-       refactor's test-gate ladder, frame's ADR-077 landing step, retrace's
+       verbatim (position's freeze protocol, build's ADR-009 proposal gate,
+       refactor's test-gate ladder, frame's ADR-010 landing step, retrace's
        correction gate); catchup needed nothing and was left untouched.
        elicit is the probe (137 → 30; adds per-question recommended answers
        from the grill-me pattern + a mid-grill render escape hatch) and
@@ -842,11 +842,11 @@
        rhythm codified (3-month zero-fire → summon-only; repo CLAUDE.md).
 
   ⚠ FIXED in rev 101 (kept for history)
-    1. ADR-108 retires the entire research plugin (critique · dissect · untangle
+    1. ADR-005 retires the entire research plugin (critique · dissect · untangle
        — 11-month record: critique 0 fires, untangle 0 fires, dissect 3; real
-       demand, no behavior delta, the summarize failure ADR-079 named at plugin
+       demand, no behavior delta, the summarize failure ADR-009 named at plugin
        scale) and folds nav:map back into nav:sync as its map leg (same door,
-       two cadences — ADR-019 merged them, ADR-029 re-split them by cadence,
+       two cadences — ADR-005 merged them, ADR-005 re-split them by cadence,
        this ADR folds them back after the split door drew 0 direct fires in 11
        months). This map drops: the research DOMAINS card + CB_NODES node +
        RES_NODES/RES_EDGES (dissect/untangle/critique nodes + both edges) + the
@@ -860,12 +860,12 @@
        v0.13.0). Marketplace total 35 → 31 skills, six plugins → five. ADR
        count 107 → 108. Cost-tier line: nav map dropped from the frontmatter-
        tiered list (map's sonnet-tier dispatch guidance now lives inside sync's
-       body per ADR-108, not a separate skill's frontmatter). Codex mirror
+       body per ADR-005, not a separate skill's frontmatter). Codex mirror
        38 → 31 flat skills (research-* prefix retired; verified against the
        committed .agents/skills/ listing, 31 entries).
 
   ⚠ FIXED in rev 100 (kept for history)
-    1. ADR-107 retires four skills for zero-usage-evidence / superseded-by-
+    1. ADR-009 retires four skills for zero-usage-evidence / superseded-by-
        adjacent-verb reasons: frame:graft (mature-donor transplant lens),
        shape:setup (project scaffolding), research:provenance (own-citation
        self-audit), and reflect:observe (candidate-learning distiller). Their
@@ -881,7 +881,7 @@
        v0.14.0), frame 5 → 4 skills (v0.6.1 → v0.8.0), reflect 4 → 3 skills
        (v0.8.0 → v0.8.0), research 4 → 3 skills (v0.8.0 → v0.8.0). Marketplace
        total 39 → 35 skills. ADR count 103 → 107 (the stale 103 already lagged
-       ADR-104/105/106 cited elsewhere in this same audit block before this
+       ADR-013 cited elsewhere in this same audit block before this
        revision).
 
   ⚠ FIXED in rev 99 (kept for history)
@@ -892,7 +892,7 @@
        report resolves the workspace before routing content, then accepts only
        an explicit verified GitHub account or one unambiguous roster match;
        missing/ambiguous identity stops before author sign-off, and neither cwd
-       nor a similar-looking username is ever guessed. ADR-101, the shared
+       nor a similar-looking username is ever guessed. ADR-009, the shared
        Relay contract, launch/report, README, generated Codex projections, and
        the originating observation now carry the same rule. ADR count stays 103.
 
@@ -902,12 +902,12 @@
        disable-model-invocation blocked the model before refactor's own
        verbatim-move, diff, test, confidence, and real-app gates could load.
        The frontmatter flag is removed; those skill-owned safety gates stay
-       unchanged. This resolves ADR-072's open invocation-direction question
+       unchanged. This resolves ADR-002's open invocation-direction question
        narrowly for refactor — other explicit-only skills keep their policy.
        Updated: plugins/nav/skills/refactor/SKILL.md, nav version + generated
        manifests, README invocation bucket, Codex capability inventory +
        mirror (adapter 1.0.3), and this map's two nav version blurbs. NEW
-       docs/adr/103-nav-refactor-allows-model-invocation.md. ADR count 102 →
+       docs/adr/002-skill-three-layer-law.md. ADR count 102 →
        103.
 
   ⚠ FIXED in rev 97 (kept for history)
@@ -918,7 +918,7 @@
        temporary uv tool install) rather than only the repo-local runner.
   ⚠ FIXED in rev 96 (kept for history)
     1. Relay 2.1.0 retires the LEGACY [ACK]-titled-Discussion compatibility
-       path ADR-100 introduced: migration completed and the live repo
+       path ADR-009 introduced: migration completed and the live repo
        carried zero open [ACK]/ack-required Discussions, ratifying the
        ADR's own "retires after migration" clause. compute-state.mjs:
        isLegacyAckDiscussion, legacyAckRecipient, and the single-recipient
@@ -938,13 +938,13 @@
        [ACK]/👀 mention removed), docs/design/relay.md (LEGACY section
        removed, changelog line appended), this site map (DOMAINS.relay
        blurb + relay graph-node blurb + relay skill rows, both langs,
-       v2.1.0). docs/adr/100-relay-adopts-the-accord-memory-model.md gains
+       v2.1.0). docs/adr/009-retirement-policy.md gains
        a dated retirement note in its Legacy-compatibility section (ADR not
        superseded — the retirement was foreseen by its own text). No new
        ADR: ADR count stays 101. relay 2.0.1 → 2.1.0 (behavior removal,
        minor per semver-ish plugin convention — a compatibility path
        leaving is not a breaking change for any live object).
-    2. Relay 2.1.0 (ADR-102) generalizes /relay:migrate from a v0→v1
+    2. Relay 2.1.0 (ADR-009) generalizes /relay:migrate from a v0→v1
        compatibility bridge (its only named target already migrated) into
        a general pre-model-coordination-state → memory-model migrator:
        file-based ledgers/thought streams, overloaded ACK-style
@@ -960,7 +960,7 @@
        fuses, announcement-shaped objects converting to tell/needs-input
        Issues ONLY when action or receipt is still owed → verify with
        read-backs + a conformance sweep where the target repo has one →
-       the effective point). Author sign-off (ADR-095), ADR-099 consent
+       the effective point). Author sign-off (ADR-009), ADR-009 consent
        routing for decision reversals, and the cite-never-restate law all
        carry over unchanged. disable-model-invocation stays true;
        explicit-only, destructive-adjacent character unchanged. Rejected:
@@ -969,20 +969,20 @@
        wording as-is (a stale, false-present-tense surface). Updated:
        plugins/relay/skills/migrate/SKILL.md (full rewrite), plugins/
        relay/CLAUDE.md (six-daily-verbs footnote + Cost-and-invocation
-       line generalized, ADR-102 added to the header ADR list), README.md
+       line generalized, ADR-009 added to the header ADR list), README.md
        (migrate line), this site map (migrate skill-row blurb, both
        langs; this "✓ VERIFIED" bullet's migrate parenthetical). NEW
-       docs/adr/102-relay-migrate-generalizes.md. No reducer/schema
+       docs/adr/009-retirement-policy.md. No reducer/schema
        change: compute-state.test.mjs stays 75/75. relay stays 2.1.0
        (skill-scope rewrite, no verb-contract behavior change). ADR count
        101 → 102.
 
   ⚠ FIXED in rev 95 (kept for history)
-    1. Relay 2.0.1 (ADR-101) restores relay.yml as attested reference data —
+    1. Relay 2.0.1 (ADR-009) restores relay.yml as attested reference data —
        blueprint section 3, "Attested reference data — the roster." The
        roster (legacy handle · GitHub account · name · role) had been
        dropped as parallel state during the GitHub-native migration
-       (ADR-090), but a load-bearing gap surfaced: several backfilled
+       (ADR-009), but a load-bearing gap surfaced: several backfilled
        Decision files attribute conclusions to legacy handles with no
        recorded mapping. relay.yml is restored as a fourth formal-memory
        category, distinct from Decision/Brief/Core: every change goes
@@ -998,13 +998,13 @@
        convention-tier audit item — parseable YAML + handles resolve via
        read-only gh api users/<handle>; absent = missing (optional), never
        a blocker; Discipline bullet no longer names "roster" as forbidden
-       outright). NEW docs/adr/101-relay-attested-reference-roster.md. No
+       outright). NEW docs/adr/009-retirement-policy.md. No
        reducer/schema change: compute-state.test.mjs stays 82/82. relay
        2.0.0 → 2.0.1 (documentation/audit-surface addition, no verb
        behavior change — patch, not minor). ADR count 100 → 101.
 
   ⚠ FIXED in rev 94 (kept for history)
-    1. Relay 2.0.0 (ADR-100) adopts the ACCORD MEMORY MODEL — a semantic
+    1. Relay 2.0.0 (ADR-009) adopts the ACCORD MEMORY MODEL — a semantic
        break, design record: blueprints/plans/2026-07-22-accord-memory-model.md.
        Four objects with clean boundaries (Discussion = think together, Issue
        = get one thing finished, PR = review a diff, Commit = keep what's
@@ -1028,15 +1028,15 @@
        traffic should never create one. Trigger: a full convergence session
        named that Relay's obligation model had grown, ADR by ADR, around
        one Announcement/receipt shape with no single owning design for what
-       a Decision is or where it lives once made. Supersedes: ADR-097 in
-       full; ADR-096's Announcement-closure branch (its general
+       a Decision is or where it lives once made. Supersedes: ADR-009 in
+       full; ADR-009's Announcement-closure branch (its general
        every-Discussion-closed-by-its-initiator rule survives, folded into
-       settle); the awareness leg of ADR-091/092 outside the LEGACY path;
-       ADR-093's Announcement-specific hard rule (its obligations/notices
+       settle); the awareness leg of ADR-009 outside the LEGACY path;
+       ADR-009's Announcement-specific hard rule (its obligations/notices
        split and open-non-draft-PR-never-obligation-free invariant remain
-       in force). Remains fully in force, absorbed unchanged: ADR-090,
-       ADR-098 (upstream nursery), ADR-099 (decision-reversal consent),
-       ADR-095 (author sign-off). Updated: plugins/relay/skills/{report,
+       in force). Remains fully in force, absorbed unchanged: ADR-009,
+       ADR-009 (upstream nursery), ADR-009 (decision-reversal consent),
+       ADR-009 (author sign-off). Updated: plugins/relay/skills/{report,
        reply,settle,brief,launch}/SKILL.md (full rewrite to the new
        contracts), plugins/relay/skills/digest/scripts/compute-state.mjs
        (SCHEMA_VERSION 3 → 4; isAnnouncementDiscussion/announcementRecipients/
@@ -1051,11 +1051,11 @@
        rewrite, historical changelog appended not replaced), README.md
        (relay section rewritten), this site map (DOMAINS.relay blurb +
        relay graph-node blurb + relay skill rows, both langs, v2.0.0).
-       NEW docs/adr/100-relay-adopts-the-accord-memory-model.md. relay
+       NEW docs/adr/009-retirement-policy.md. relay
        1.4.0 → 2.0.0. ADR count 99 → 100.
 
   ⚠ FIXED in rev 93 (kept for history)
-    1. Relay 1.4.0 (ADR-096) ratifies closure semantics: EVERY Discussion is
+    1. Relay 1.4.0 (ADR-009) ratifies closure semantics: EVERY Discussion is
        closed by its initiator — one closure-owner class, no split by
        category or recipient count. An FYI recipient's seen-signal is 👀,
        the same reaction primitive [ACK] already uses (a comment is welcome
@@ -1077,7 +1077,7 @@
        judgment-seat review before landing — atemporal engagement
        suppression, this revision's own first draft: it silenced a
        mentioned-in-prose notice on ANY prior viewer engagement, with no
-       notion of when, which re-opens ADR-093's founding scenario (a later
+       notion of when, which re-opens ADR-009's founding scenario (a later
        "@person please respond" would go silent forever in any thread the
        person had ever once touched). The shipped reducer change is
        TEMPORAL for a comment-borne mention and atemporal only for a
@@ -1099,7 +1099,7 @@
        split (later comment-mention still fires after an earlier viewer
        comment; a viewer's later comment suppresses an earlier stranger
        mention; 👀 never covers a comment mention) and one pre-existing test
-       RESTORED to its original pre-ADR-096 expectation, with an updated
+       RESTORED to its original pre-ADR-009 expectation, with an updated
        comment explaining why the atemporal interim answer was wrong — all
        66 green. Updated: report/SKILL.md (FYI closure at the
        recipient-tagging bullet), settle/SKILL.md (initiator as closure
@@ -1117,7 +1117,7 @@
        the temporal rule and the third rejected variant — nothing here was
        ever committed, so no separate superseding entry). relay 1.3.0 →
        1.4.0. ADR count 95 → 96.
-    2. Relay 1.4.0 (ADR-097) flips the awareness tier from optional to
+    2. Relay 1.4.0 (ADR-009) flips the awareness tier from optional to
        RECEIPT-DEFAULT: any open, non-fyi, non-Q&A Discussion naming one or
        more @recipients in its title/body is now Announcements-tier by
        construction, and EVERY named account owes its own receipt (👀) —
@@ -1146,7 +1146,7 @@
        reaction list. Accepted limit, stated plainly rather than hidden:
        forcing 👀 by default can debase it toward reflex over time; ACK
        still only ever attests awareness, never comprehension or
-       acceptance (ADR-091 unchanged). Reducer: designatedAckRecipient
+       acceptance (ADR-009 unchanged). Reducer: designatedAckRecipient
        (first-mention-wins) removed; isAnnouncementDiscussion +
        announcementRecipients added; hasFormalSignal and the obligation
        loop both updated; a comment-borne mention still never triggers a
@@ -1174,7 +1174,7 @@
        collected, no resolution comment needed), plugins/relay/CLAUDE.md
        (lifecycle matrix's old FYI/Awareness-ACK rows replaced by a
        receipt-default Announcement row and a narrower FYI opt-out row,
-       Owner column kept single-meaning per ADR-096's fable-flagged fix),
+       Owner column kept single-meaning per ADR-009's fable-flagged fix),
        plugins/relay/skills/launch/references/templates/
        DISCUSSION_TEMPLATE/announcements.yml (recipients field states the
        receipt-default rule + fyi opt-out), docs/adr/096 (amended, not
@@ -1182,10 +1182,10 @@
        fyi-labeled case; its "no ACK lifecycle change" consequence marked
        superseded), docs/design/relay.md (closure-semantics paragraph,
        lifecycle matrix, and changelog all updated). NEW
-       docs/adr/097-relay-receipt-default.md. relay stays 1.4.0 — this
-       ships in the same shipping unit as ADR-096, no separate version
+       docs/adr/009-retirement-policy.md. relay stays 1.4.0 — this
+       ships in the same shipping unit as ADR-009, no separate version
        bump. ADR count 96 → 97.
-    3. Relay 1.4.0 (ADR-098) names Discussions as Relay's UPSTREAM NURSERY
+    3. Relay 1.4.0 (ADR-009) names Discussions as Relay's UPSTREAM NURSERY
        after the user observed a routing inversion: convergence-talk had
        been pulled almost entirely into Issues, because Relay's obligation
        model needs a stated assignee and completion rule to produce any
@@ -1210,21 +1210,21 @@
        plugins/relay/CLAUDE.md (same paragraph stated once as plugin law;
        the "Discussion needing a conclusion" lifecycle-matrix row gains the
        graduation clause), docs/design/relay.md (one clause in Object
-       routing). NEW docs/adr/098-relay-upstream-nursery-routing.md. ADR
+       routing). NEW docs/adr/009-retirement-policy.md. ADR
        count 97 → 98.
-    4. Relay 1.4.0 (ADR-099) closes a live consent gap: a decision
+    4. Relay 1.4.0 (ADR-009) closes a live consent gap: a decision
        originally agreed by both collaborators was reversed unilaterally
        in practice, and the reversal was announced through an [ACK]
-       Discussion — but 👀 attests awareness only, never consent (ADR-091),
+       Discussion — but 👀 attests awareness only, never consent (ADR-009),
        so the reversal shipped with no consent record at all, an
        overloaded-ACK failure in a new guise. Ratified rule: reversing or
        materially amending a previously agreed decision routes as a
        Decision Issue assigned to the counterpart; their authored Outcome:
        resolution is the consent record — the same native completion
-       signal ADR-092 already defined for MAKING a decision, now stated
+       signal ADR-009 already defined for MAKING a decision, now stated
        explicitly to also govern CHANGING one. An accompanying Announcement
        may inform but never substitutes. Rejected: reading tacit consent
-       from 👀 plus silence — exactly the overloaded-ACK fallacy ADR-091
+       from 👀 plus silence — exactly the overloaded-ACK fallacy ADR-009
        already named; treating non-objection as agreement also inverts the
        burden, making silence the cheapest way to be recorded as having
        agreed. Routing/authority-guidance only — no reducer/schema change,
@@ -1236,8 +1236,8 @@
        to reversal/amendment), plugins/relay/CLAUDE.md (new paragraph next
        to "accepted decision is not automatically effective"),
        docs/design/relay.md (one clause in Object routing). NEW
-       docs/adr/099-relay-decision-reversal-consent.md. ADR count 98 → 99.
-    5. Fable full-unit review of the whole 1.4.0 shipping unit (ADR-096–099)
+       docs/adr/009-retirement-policy.md. ADR count 98 → 99.
+    5. Fable full-unit review of the whole 1.4.0 shipping unit (ADR-009–099)
        found two reducer defects in what item 2 shipped, fixed in code (not
        weakened in docs) — the ratified instruction: B1 (BLOCKING) —
        announcementRecipients over-collected two kinds of non-recipients.
@@ -1266,7 +1266,7 @@
        included (unchanged, verified by interaction test: no duplicate
        nag while work is already owed). compute-state.test.mjs: 69 → 76
        (four new tests for B1, three for I2), all green. O3 (optional,
-       done): ADR-097's accepted-limits section gained one sentence naming
+       done): ADR-009's accepted-limits section gained one sentence naming
        third-party obligation-spam — any title/body mention on a wild
        non-fyi Discussion mints a real per-person receipt, so authors must
        mention deliberately. Updated: compute-state.mjs (findAllMentions
@@ -1279,12 +1279,12 @@
        title/body-only scope of formal-signal suppression — this is the
        exact sentence fable cited as contradicting the "never silenced"
        claim), docs/design/relay.md (Two-tier digest paragraph corrected
-       + changelog line), docs/adr/097-relay-receipt-default.md (accepted-
+       + changelog line), docs/adr/009-retirement-policy.md (accepted-
        limits addition). No new ADR; no schema change; relay stays 1.4.0.
        ADR count unchanged at 99.
 
   ⚠ FIXED in rev 92 (kept for history)
-    1. Relay 1.3.0 (ADR-095) adds an author sign-off gate for outbound
+    1. Relay 1.3.0 (ADR-009) adds an author sign-off gate for outbound
        GitHub prose: any text a writing verb posts into a GitHub object in
        the user's voice — report's title/body, reply's answer/comment/
        verdict text, settle's closing resolution, brief's synthesis — must
@@ -1319,7 +1319,7 @@
        main. ADR count unchanged (94).
 
   ⚠ FIXED in rev 90 (kept for history)
-    1. Relay 1.2.0 (ADR-094) extends recipient-tagging to organic GitHub
+    1. Relay 1.2.0 (ADR-009) extends recipient-tagging to organic GitHub
        traffic that never passes through report's router: a human opening an
        Issue or Discussion directly, without going through /relay:report, had
        no nudge toward naming a recipient or the right shape — GitHub's own
@@ -1335,7 +1335,7 @@
        Recipients @handle field) and q-a.yml (an optional
        best-placed-to-answer field, explicitly documented as producing a
        notice, not an obligation), and .github/pull_request_template.md (a
-       request-a-reviewer checklist item matching ADR-093's request-reviewer
+       request-a-reviewer checklist item matching ADR-009's request-reviewer
        invariant). A fable review of the first cut caught that Discussion
        category form filenames must equal the repository's live category
        slug or GitHub silently never serves the form — the first cut shipped
@@ -1349,14 +1349,14 @@
        assets live at plugins/relay/skills/launch/references/templates/,
        copied verbatim into a target repo through launch's existing audit →
        gated mutation → read-back-verify flow — nothing new is written
-       without approval. Ratified as a convention, not a contract (ADR-071's
+       without approval. Ratified as a convention, not a contract (ADR-019's
        distinction): digest's reducer (compute-state.mjs) never reads a
        template's field values, no new machine gate lints them, and a
        repository without these templates keeps working with Relay exactly
        as before — launch self-reports the absence as a `missing` finding,
        never a blocker. Two alternatives were considered and rejected in the
        ADR: dual-writing template-submitted fields into a parallel
-       Relay-owned store (the same parallel-database shape ADR-090 already
+       Relay-owned store (the same parallel-database shape ADR-009 already
        rejected wholesale, for the same rule-① drift reason), and
        reducer-side parsing of template body text (would promote a
        convention to a contract with no machine gate protecting it).
@@ -1366,7 +1366,7 @@
        SCHEMA_VERSION does not move. ADR count 93 → 94.
 
   ⚠ FIXED in rev 89 (kept for history)
-    1. Relay 1.1.0 (ADR-093) adds a two-tier digest: obligations keep the existing
+    1. Relay 1.1.0 (ADR-009) adds a two-tier digest: obligations keep the existing
        real-obligations-only contract, and a new separate, explicitly non-binding
        `notices` array surfaces awareness a prior parity audit found the obligation
        tier missed — a prose `@mention` on any open Discussion/Issue/PR
@@ -1484,7 +1484,7 @@
        named merger; abandoned PRs close with a reason. A migration completes
        only after its reviewed cleanup merges and every destination reads back.
        Digest schema v2 exposes those obligations and reports unverifiable Core enforcement as a blocker.
-       ADR-091/092; skill roster unchanged; ADR count 90 → 92.
+       ADR-009; skill roster unchanged; ADR count 90 → 92.
 
   ⚠ FIXED in rev 85 (kept for history)
     1. Relay 1.0.2 completes the Codex upgrade path: the one-way cleanup now
@@ -1500,7 +1500,7 @@
        gate the hotfix; no skill or protocol boundary changed.
 
   ⚠ FIXED in rev 83 (kept for history)
-    1. `relay` becomes GitHub-native (ADR-090; relay 0.8.1 → 1.0.0). GitHub
+    1. `relay` becomes GitHub-native (ADR-009; relay 0.8.1 → 1.0.0). GitHub
        Discussions, Issues, pull requests, reviews, reactions, assignments, and
        protected merges now own collaboration state; Relay retains routing,
        obligation semantics, authority checks, cited synthesis, settlement, and
@@ -1508,12 +1508,12 @@
        (launch · report · digest · reply · brief · settle) plus explicit-only
        migrate for legacy provenance. Marketplace total 37 → 38 skills. Updated:
        Relay source skills and contract, plugin/marketplace/Codex descriptions,
-       README, this bilingual map, and ADR-090. The Codex mirror was regenerated
+       README, this bilingual map, and ADR-009. The Codex mirror was regenerated
        and the old Relay SessionStart hook retired in the same release. ADR count
        86 → 90.
 
   ⚠ FIXED in rev 82 (kept for history)
-    1. Board currency becomes PUSH-PRIMARY (ADR-086; nav 0.9.0 → 0.10.0, shape
+    1. Board currency becomes PUSH-PRIMARY (ADR-015; nav 0.9.0 → 0.10.0, shape
        0.9.4 → 0.10.0, no new skill/slug): execution verbs now update the
        blueprints/plan.md board at ship time instead of leaving it to the next
        align summons. `nav:do`'s check bracket grows a fourth gate (board sync —
@@ -1534,11 +1534,11 @@
        overview.html. Updated: plugins/nav/skills/do/SKILL.md,
        plugins/nav/skills/plan/SKILL.md, plugins/shape/skills/align/SKILL.md,
        both plugin.json versions, README.md (nav:do + shape:align lines),
-       docs/adr/086-board-sync-push-primary-pull-safety-net.md (new), manifests +
+       docs/adr/015-shape-entrance-roster.md (new), manifests +
        generated Codex mirror, and this bilingual map. ADR count 85 → 86.
 
   ⚠ FIXED in rev 81 (kept for history)
-    1. `reflect:catchup` now clears the consumed cursor (ADR-085; reflect
+    1. `reflect:catchup` now clears the consumed cursor (ADR-009; reflect
        0.6.0 → 0.7.0, no new skill/slug): a read cursor is a used cursor —
        after delivering its report, catchup deletes HANDOFF.md directly (no
        confirmation) when the work it describes verifiably shipped, or when
@@ -1562,7 +1562,7 @@
        bilingual map. Skill count unchanged (37). ADR count 84 → 85.
 
   ⚠ FIXED in rev 80 (kept for history)
-    1. New skill `reflect:retrace` (ADR-084; reflect 0.5.0 → 0.6.0): causal
+    1. New skill `reflect:retrace` (ADR-009; reflect 0.5.0 → 0.6.0): causal
        re-entry for a long development arc. It earns a door the retired
        `reflect:summarize` did not by forcing six-field stages (prior state →
        pressure → evidence → decision → status → next pressure), provenance-
@@ -1580,14 +1580,14 @@
        platforms/codex/descriptions.json, manifests + generated Codex mirror,
        blueprints/thoughts/2026-07-15-reflect-retrace.md, docs/observations/
        2026-07-15-chronology-does-not-restore-alignment-without-causal-bridges.md,
-       docs/adr/084-reflect-retrace-causal-development-alignment.md, and this
+       docs/adr/009-retirement-policy.md, and this
        bilingual map. Browser verification also fixed an existing unescaped
        apostrophe in the frame graph blurb that prevented the site's inline
        JavaScript from parsing. Marketplace-wide skill count 36 → 37. ADR
        count 83 → 84.
 
   ⚠ FIXED in rev 79 (kept for history)
-    1. Codex adapter Phase 6 completed and released independently (ADR-083) —
+    1. Codex adapter Phase 6 completed and released independently (ADR-017) —
        the Codex layer is now documented and smoke-gated as its own release
        line instead of a Phase-5 artifact. `platforms/codex/manifest.json`
        moves from the phase-labeled prerelease string to independent adapter
@@ -1607,7 +1607,7 @@
        required runtime artifacts with no duplicate legacy copies or unresolved
        Claude-only constructs, and that a fresh Claude-side manifests/metadata
        pass preserves the frozen source contract unchanged. Updated:
-       docs/adr/083-codex-adapter-independent-release.md (new),
+       docs/adr/017-platform-mirrors.md (new),
        docs/codex-compatibility.md, README.md, platforms/codex/manifest.json,
        scripts/build-codex.mjs, scripts/validate-codex-skills.mjs,
        scripts/lib/codex-compat-audit.mjs, scripts/fixtures/codex/release-
@@ -1616,7 +1616,7 @@
        ADR count: 82 → 83.
 
   ⚠ FIXED in rev 78 (kept for history)
-    1. New skill `nav:tour` (ADR-082; nav 0.8.4 → 0.9.0): a conversational
+    1. New skill `nav:tour` (ADR-009; nav 0.8.4 → 0.9.0): a conversational
        walkthrough that grounds a repo's capabilities/flow/rationale/
        constraints (three-tier tolerant evidence read, why-claims labeled
        Recorded/Inferred/Unknown) and is complete only after a mandatory
@@ -1630,7 +1630,7 @@
        `nav:map`'s frontmatter narrowed to drop conversational-onboarding as
        a trigger (kept: create/refresh/open the durable HTML render); `tour`
        consumes map by protocol when present, never invokes or writes it —
-       the same cadence-axis split as ADR-029's sync/map re-split. Updated:
+       the same cadence-axis split as ADR-005's sync/map re-split. Updated:
        plugins/nav/skills/tour/SKILL.md (new), plugins/nav/skills/map/
        SKILL.md (frontmatter + one companion-skill line),
        plugins/nav/.claude-plugin/plugin.json (version),
@@ -1643,14 +1643,14 @@
 
   ⚠ FIXED in rev 77 (kept for history)
     1. Anti-pattern-table SWEEP: the "Instead — and the tell" merged column
-       (ADR-069) landed on all 25 existing anti-pattern tables that didn't
+       (ADR-002) landed on all 25 existing anti-pattern tables that didn't
        already carry it — frame (analogize, dialectic, first-principles,
        graft, orthogonal), nav (compose, do, map, plan, refactor, sync),
        relay (digest, format, launch, report, review, settle), shape (build,
-       dogfood, elicit, mockup, position, probe, setup, survey). ADR-069
+       dogfood, elicit, mockup, position, probe, setup, survey). ADR-002
        named this sweep optional follow-up (not mandated at adoption time);
        Paul ordered it run now. `reflect:park`'s table already carried the
-       merged column (the canonical instance ADR-069 cites) and needed no
+       merged column (the canonical instance ADR-002 cites) and needed no
        change. Every row's existing two columns (Temptation · the prior
        "Why to refuse" text) stayed load-bearing — merged verbatim into the
        renamed "Instead — and the tell" column with a positive replacement
@@ -1671,23 +1671,23 @@
        block. README.md unchanged — it carries no per-skill anti-pattern
        content, only the roster + install commands. Marketplace-wide skill
        count unchanged (35); no skill added/removed/renamed. ADR count
-       unchanged (81) — ADR-069 already covers this sweep as its named
+       unchanged (81) — ADR-002 already covers this sweep as its named
        follow-up, no new ADR needed.
 
   ⚠ FIXED in rev 76 (kept for history)
-    1. Dispatch tiers convention (ADR-067) gains a PROPOSAL GATE + RETURN
-       SELF-REPORT + USER OVERRIDE PRECEDENCE (ADR-081; root CLAUDE.md only —
+    1. Dispatch tiers convention (ADR-007) gains a PROPOSAL GATE + RETURN
+       SELF-REPORT + USER OVERRIDE PRECEDENCE (ADR-007; root CLAUDE.md only —
        no plugin version bump, no skill file touched). Paul's complaint:
        dispatch to a cheap-tier sub-agent was invisible — no signal before
        ("did I agree to this tier?") or after ("did a weaker model actually do
        this?") — so trust had nowhere to anchor. Rejected fix: name skills per
-       tier (e.g. a `nav:do-sonnet` variant) — fails ADR-067's own role-not-
+       tier (e.g. a `nav:do-sonnet` variant) — fails ADR-007's own role-not-
        model naming law and the N+1 problem (every dispatch-shaped skill would
        need a tier-suffixed twin). Adopted fix borrows two patterns already
-       proven in this repo rather than inventing a third: ADR-040's batch
+       proven in this repo rather than inventing a third: ADR-009's batch
        proposal gate (propose once, the user's nod starts the batch — never
        per-agent, with a downgrade valve: "don't ask again for this line of
-       work" → drops to self-report-only) before dispatch, and ADR-071's
+       work" → drops to self-report-only) before dispatch, and ADR-019's
        tolerant-reader self-report (mirrored to the write side: a fixed
        report line `⚙ 派工:執行=<tier> ×N|判斷+驗收=session model`, no
        dispatch = no line, plus a standard commit-message clause) after. User
@@ -1697,16 +1697,16 @@
        dispatcher's own walked reporting step, not a footer or reference
        note — citing docs/observations/2026-07-14-knowledge-is-not-cue-walked
        -steps-fire.md's same-day finding that footer-only rules don't fire.
-       `shape:build`'s existing Scheduling batch gate (ADR-040) already
+       `shape:build`'s existing Scheduling batch gate (ADR-009) already
        complies and is cited as prior art, not a change target. Updated: root
        CLAUDE.md (★ Dispatch tiers bullet amended in place, one compact
        sub-passage — rule ① single owner, no second dispatch bullet),
-       docs/adr/081-dispatch-proposal-gate-and-self-report.md (new). No
+       docs/adr/007-dispatch-tiers.md (new). No
        skill/plugin version changed; no SKILL.md touched (follow-up, not
        blocking). ADR count 80 → 81.
 
   ⚠ FIXED in rev 75 (kept for history)
-    1. `research` GENERALIZED from "paper" to "argument document" (ADR-080; research
+    1. `research` GENERALIZED from "paper" to "argument document" (ADR-009; research
        v0.8.0 → 0.6.0). research was the marketplace's only family organized around
        an academic object — its own CLAUDE.md and all four SKILL.md descriptions
        centered "paper" as the unit, though the underlying Gap/Claim/Mechanism/
@@ -1731,7 +1731,7 @@
        (Paul-ratified 2026-07-14): both places offering deep-research (shape:survey's
        big-gap fill, provenance's new true-orphan remediation) now name the cost —
        a multi-agent harness fanning out dozens of searches/verification rounds, an
-       order of magnitude above sibling options — an ADR-062 instance (shape
+       order of magnitude above sibling options — an ADR-008 instance (shape
        v0.9.2 → 0.9.3). Engines/protocols untouched — narrative convergence only.
        Updated: plugins/research/CLAUDE.md (identity + seams paragraph),
        plugins/research/skills/{dissect,critique,provenance,untangle}/SKILL.md
@@ -1751,7 +1751,7 @@
        renamed. ADR count 79 → 80.
 
   ⚠ FIXED in rev 74 (kept for history)
-    1. `reflect:summarize` RETIRED (ADR-079; reflect v0.8.0 → 0.5.0). It failed the
+    1. `reflect:summarize` RETIRED (ADR-009; reflect v0.8.0 → 0.5.0). It failed the
        No-Op test: a plain "summarize this session" request already produces the
        complete, neutral, chronological recap summarize's own forced structure
        (Complete + Objective + Grounded) restated — no scaffolding forced anything
@@ -1761,7 +1761,7 @@
        overwrite-with-SHA-check protocol, observe's candidate-first classify-and-
        route protocol (own-learning vs skill-feedback, two different selectors).
        summarize had none of that — the shallowest moat in the family. Precedent:
-       ADR-021 (nav:doctor retirement) — the same razor applied one layer further
+       ADR-009 (nav:doctor retirement) — the same razor applied one layer further
        in: not an orchestrator over too little, but a verb that restates default
        behavior. What's lost, honestly: summarize's ONE real guarantee — a fixed
        named shape (Goal/Done/Decisions/Changed/Open) plus an explicit no-
@@ -1789,21 +1789,21 @@
 
   ⚠ FIXED in rev 73 (kept for history)
     1. `relay:register` merged into `relay:launch` as an explicit second branch;
-       `register` retired as a standalone skill (ADR-078). Both verbs were
+       `register` retired as a standalone skill (ADR-009). Both verbs were
        structural bookkeeping (open a small YAML file, add/edit an entry, diff-
        gate, commit) with no judgment work comparable to report/review/settle,
        and `launch` already half-absorbed `register`'s job on first run (its
        Step 1 bootstraps relay.yml for the running user). At relay's stated
        1-2-person, progress-centric tuning, `register`'s residue below that
        was too thin to earn a second maintained frontmatter, registration
-       footprint, and trigger surface — the same razor ADR-021 applied to
+       footprint, and trigger surface — the same razor ADR-009 applied to
        nav:doctor's retirement. A second option (demote both to a documented
        CLAUDE.md protocol, no skill door) was priced out: relay.yml/
        project.yml shapes are part of one of only three real *contracts* in
-       this repo (ADR-071), so demoting the write discipline to prose risks
+       this repo (ADR-019), so demoting the write discipline to prose risks
        either a format-linter extension or the knowledge≠cue failure mode
        this repo's own findings caught four times on 2026-07-14 alone
-       (docs/findings/2026-07-14-elicit-ecosystem-probes.md; ADR-076; ADR-077).
+       (docs/findings/2026-07-14-elicit-ecosystem-probes.md; ADR-011; ADR-010).
        `launch`'s Process now splits after the shared repo-location step into
        Branch A (create a project) and Branch B (add a person / assign a
        role) — register's protocol content (identity vs role layers, the
@@ -1823,7 +1823,7 @@
 
   ⚠ FIXED in rev 72 (kept for history)
     1. `frame`'s four reasoning lenses gain a mandatory PLAIN-LANGUAGE LANDING
-       step (ADR-077; frame v0.5.2 → 0.6.0) — first-principles, orthogonal,
+       step (ADR-010; frame v0.5.2 → 0.6.0) — first-principles, orthogonal,
        dialectic, and graft each produce a forced structure optimized for
        reasoning-verifiability, but the final conclusion was written in the
        lens's own terms of art ("the axiom is X", "verdict: unsettled — owned
@@ -1855,7 +1855,7 @@
        no frontmatter `description` changed, so no routing behavior moved.
        Updated: DOMAINS.frame + frame graph-node blurbs (both langs, v0.8.0
        + landing mention), CONV.frame per-skill entries for all four lenses
-       (both langs, ADR-077 + banned-term lists), plugins/frame/CLAUDE.md
+       (both langs, ADR-010 + banned-term lists), plugins/frame/CLAUDE.md
        (new convention bullet). ADR count 76 → 77.
 
   ⚠ FIXED in rev 71 (kept for history)
@@ -1884,7 +1884,7 @@
        version token (both langs, v0.9.2). Skill/ADR counts unchanged.
 
   ⚠ FIXED in rev 70 (kept for history)
-    1. `shape:elicit` gains a GATEKEEPER upgrade (ADR-076; shape v0.10.0 → 0.9.1)
+    1. `shape:elicit` gains a GATEKEEPER upgrade (ADR-011; shape v0.10.0 → 0.9.1)
        — Phase 3 of the elicit-ecosystem plan (blueprints/plans/2026-07-14-
        elicit-ecosystem.md). The 6 moves, the Core (weight-adaptive exit), the
        stance, and diagnostic mode are byte-identical — untouched. New: a
@@ -1900,7 +1900,7 @@
        one-shot, degrades gracefully if survey/probe aren't installed. This
        is not a new skill — no new engine, no N+1 copy; gatekeeping is a
        narrow duty added at the stall point only. Completes the four-quadrant
-       ecosystem's routing (ADR-074, ADR-075). shape skill count unchanged
+       ecosystem's routing (ADR-011, ADR-012). shape skill count unchanged
        (10); Codex mirror unchanged (37 flat skills, shape-elicit description
        updated in place, same 192-char length so the total budget is
        unaffected).
@@ -1911,7 +1911,7 @@
        Members line gains the gatekeeper clause). ADR count 75 → 76.
 
   ⚠ FIXED in rev 69 (kept for history)
-    1. shape gains NEW SKILL `probe` (ADR-075; shape v0.8.0 → 0.9.0) — Phase 2
+    1. shape gains NEW SKILL `probe` (ADR-012; shape v0.8.0 → 0.9.0) — Phase 2
        of the elicit-ecosystem plan (blueprints/plans/2026-07-14-elicit-
        ecosystem.md). Designs and runs a minimal experiment (A/B comparison,
        blind judgment test, or behavior probe) when a fork can't be settled
@@ -1922,17 +1922,17 @@
        smallest testable claim) → frame:orthogonal (control the variables —
        its independence check literally defines a controlled experiment).
        Verdict rule pre-registered before the first trial; execution legs
-       dispatchable to cheap-tier delegated agents (ADR-067), design +
+       dispatchable to cheap-tier delegated agents (ADR-007), design +
        verdict-reading stay with the session model. New live-LLM-cost signal
-       instance (ADR-062) for paid-LLM fan-out inside an experiment. Lands
+       instance (ADR-008) for paid-LLM fan-out inside an experiment. Lands
        docs/findings/ (if present) or blueprints/thoughts/<date>-<topic>-
-       probe.md, tolerant-reader compliant (ADR-071). shape 9 → 10 skills;
+       probe.md, tolerant-reader compliant (ADR-019). shape 9 → 10 skills;
        Codex mirror 36 → 37 flat skills (shape-probe added,
        platforms/codex/descriptions.json updated + trimmed several entries
        to stay under the 7000-char total budget).
     2. `frame:dialectic`'s closing offer gains a guarded `/shape:probe`
        option — run the Killer Experiment the trial names, worded like
-       `nav:plan`'s guarded `/shape:mockup` offer (ADR-012 pattern),
+       `nav:plan`'s guarded `/shape:mockup` offer (ADR-006 pattern),
        degrades gracefully if shape isn't installed. frame v0.8.0 → 0.5.2
        (behavior addition to an existing skill, not a new one).
        Updated: DOMAINS.shape + DOMAINS.frame blurbs (both langs), shape +
@@ -1942,7 +1942,7 @@
        CLAUDE.md (dialectic's probe offer line). ADR count 74 → 75.
 
   ⚠ FIXED in rev 68 (kept for history)
-    1. shape gains NEW SKILL `survey` (ADR-074; shape v0.7.5 → 0.8.0) — Phase 1
+    1. shape gains NEW SKILL `survey` (ADR-011; shape v0.7.5 → 0.8.0) — Phase 1
        of the elicit-ecosystem plan (blueprints/plans/2026-07-14-elicit-
        ecosystem.md). Maps a decision space in two layers (domain-prior axes
        borrowing frame:orthogonal's independence check by protocol + a
@@ -1953,7 +1953,7 @@
        spot (elicit's own gatekeeper detection logic is Phase 3, not built
        here). Small gaps explained in place; big gaps OFFER /frame:analogize
        or deep-research (never called directly). Lands blueprints/thoughts/
-       <date>-<topic>-survey.md, tolerant-reader compliant (ADR-071), input
+       <date>-<topic>-survey.md, tolerant-reader compliant (ADR-019), input
        to /shape:elicit. shape 8 → 9 skills; Codex mirror 35 → 36 flat skills
        (shape-survey added, platforms/codex/descriptions.json updated).
        Updated: DOMAINS.shape blurb + shape graph-node blurb (both langs,
@@ -1963,7 +1963,7 @@
        73 → 74.
 
   ⚠ FIXED in rev 67 (kept for history)
-    1. description lean-but-honest convention (ADR-065) rolled out marketplace-
+    1. description lean-but-honest convention (ADR-002) rolled out marketplace-
        wide: the remaining 30 skills across nav/reflect/relay/research/shape
        (frame's 5 were the pilot) had their frontmatter `description` field
        rewritten by 5 Sonnet sub-agents, one per plugin — model-invoked skills
@@ -1973,10 +1973,10 @@
        Also carried the fixed-structure-learning-curve thought's 藥方三
        (表述翻轉 / intent-first framing) along, per that thought's own note.
        Marketplace-wide description total: 22,484 → 14,347 chars (63.8%).
-       ADR-073; full table in docs/findings/2026-07-13-description-diet-rollout.md.
+       ADR-002; full table in docs/findings/2026-07-13-description-diet-rollout.md.
 
   ⚠ FIXED in rev 66 (kept for history)
-    1. Two fixed-structure-learning-curve remedies landed (ADR-071):
+    1. Two fixed-structure-learning-curve remedies landed (ADR-019):
        contracts-vs-conventions named once in root CLAUDE.md (only 3 real
        contracts: relay frontmatter, the manifest/generated-artifact set,
        docs/core/ freeze) + the tolerant-reader three-state convention
@@ -1987,10 +1987,10 @@
        the absent-tree/absent-plan.md degrade path. README gained a
        "Which verb do I want?" quick-lookup table (12 rows, top of file).
     2. invocation-direction-law (W5) inventoried against existing rules
-       (ADR-072): proposal 1 (invocation category visible, not just in
+       (ADR-002): proposal 1 (invocation category visible, not just in
        frontmatter) landed as a new root CLAUDE.md bullet; proposal 3
        (summoned-only description trigger-list drop) found fully absorbed
-       by ADR-065 + the plan.md Next queue, no new owner needed; proposal 2
+       by ADR-002 + the plan.md Next queue, no new owner needed; proposal 2
        (the directional cross-reference rule + its dozen contested loci)
        left explicitly open — the thought's own author deferred it to Paul,
        not re-litigated here. Versions: shape 0.7.4 → 0.7.5 (manifests +
@@ -1998,7 +1998,7 @@
 
   ⚠ FIXED in rev 65 (kept for history)
     1. Sonnet exec batch, P1 + P5 of blueprints/plans/2026-07-13-sonnet-exec
-       -batch.md (P2/P3/P4 landed rev 64; ADR-068 arbitrated the Codex
+       -batch.md (P2/P3/P4 landed rev 64; ADR-017 arbitrated the Codex
        phase-0 freeze scope in between — worktree-freeze check moved off the
        default validator path, ratchet ledger kept on it with a
        conscious-bump protocol): (a) NEW prose-failure vocabulary — owner
@@ -2008,7 +2008,7 @@
        "tell"), root CLAUDE.md gains a one-line-per-term index, `nav:compose`
        loads it on demand; anti-pattern tables' third column convention
        merged into "Instead — and the tell" (new/touched tables only, no
-       full sweep) — ADR-069. (b) NEW SKILL `reflect:park` — writes the
+       full sweep) — ADR-002. (b) NEW SKILL `reflect:park` — writes the
        session's cursor (catchup's five-shape mirror + git SHA) into the
        project's root `HANDOFF.md`, overwriting in place; `catchup` gains a
        consumption-priority step (HANDOFF.md + SHA check → plan artifacts →
@@ -2017,7 +2017,7 @@
        A/B test (`docs/findings/2026-07-13-park-ab-experiment.md`: bare git
        11/20 + both session hallucinations, unstructured notes 19/20, the
        structured handoff 19/20 with zero hallucinations and a clean
-       dead-end catch) — ADR-070. Versions: nav 0.8.2 → 0.8.3, shape 0.7.3 →
+       dead-end catch) — ADR-009. Versions: nav 0.8.2 → 0.8.3, shape 0.7.3 →
        0.7.4, reflect 0.3.0 → 0.4.0 (manifests + Codex projection
        regenerated; ratchet ledger gained a second conscious-bump entry for
        the new park/HANDOFF vocabulary).
@@ -2031,11 +2031,11 @@
        trigger-cue preservation checked (15/15 pass, 2 flagged semantic-only
        for substituted Chinese baselines) — findings + method in
        `docs/findings/2026-07-13-description-diet-pilot.md`; convention +
-       rationale in ADR-065; final live trigger-accuracy QA left to Fable/Paul.
-       (b) NEW `docs/out-of-scope/` rejection ledger (ADR-066) — deferral ≠
+       rationale in ADR-002; final live trigger-accuracy QA left to Fable/Paul.
+       (b) NEW `docs/out-of-scope/` rejection ledger (ADR-019) — deferral ≠
        rejection; seeded with 2 verified entries (skills-don't-invoke-each
        -other, Changesets release automation). (c) NEW "★ Dispatch tiers"
-       convention in root CLAUDE.md (ADR-067) — judgment seat vs cheap-hand
+       convention in root CLAUDE.md (ADR-007) — judgment seat vs cheap-hand
        dispatch, consultant-seat resolution order (advisor tool → strong
        sub-agent → ask the user); instance pointers added to `nav:plan`
        Stage 4, `shape:build` Scheduling, `nav:audit` Mode-3 fan-out; folds in
@@ -2072,7 +2072,7 @@
     2. Operational note (not this repo's problem to fix, but real): a
        marketplace rename is NOT an install migration. Anyone with `think`
        installed must `claude plugin uninstall think@skills && claude plugin
-       install frame@skills` (per the manage→reflect precedent, ADR-056) — the
+       install frame@skills` (per the manage→reflect precedent, ADR-009) — the
        catalog rename alone leaves a dangling pinned install.
 
   ⚠ FIXED in rev 62 (kept for history)
@@ -2087,9 +2087,9 @@
        added one); DOMAINS.shape/reflect/relay blurbs (shape v0.8.0 → 0.7.0;
        reflect v0.2.0 → 0.3.0 — the rev-61 fix only reached the VERIFIED
        line, not this card; relay v0.1.0 → 0.5.0, "reply" → "review" per
-       ADR-053, +format verb); graph-node blurbs for nav (6 → 7 skills),
+       ADR-009, +format verb); graph-node blurbs for nav (6 → 7 skills),
        shape (v0.3.0 → 0.7.0, 6 → 8 skills, position no longer "planned" —
-       it shipped in ADR-035/041), research (v0.8.0 → 0.5.0, 3 → 4 skills,
+       it shipped in ADR-013), research (v0.8.0 → 0.5.0, 3 → 4 skills,
        +provenance), reflect (v0.2.0 → 0.3.0), relay (v0.1.0 → 0.5.0, same
        reply → review + format fix). Also fixed: README.md's plugin table
        row for relay still said `report`/`reply` while relay's own
@@ -2110,11 +2110,11 @@
        CLAUDE.md's gate #3 section (single owner for the check's scope).
 
   ⚠ FIXED in rev 61 (kept for history)
-    1. Cost tier goes MARKETPLACE-WIDE (ADR-059, extends ADR-058; nav v0.8.0 →
+    1. Cost tier goes MARKETPLACE-WIDE (ADR-007, extends ADR-007; nav v0.8.0 →
        0.8.0, relay v0.8.0 → 0.5.0, reflect v0.2.0 → 0.3.0; shape's additions fold
        into its uncommitted 0.7.0): mechanical verbs declare model: sonnet in
        SKILL.md frontmatter (turn-level override; all gates unchanged). Criterion
-       moved to repo-root CLAUDE.md (single owner; shape's ADR-058 bullet trimmed
+       moved to repo-root CLAUDE.md (single owner; shape's ADR-007 bullet trimmed
        to point there — leakage removed); each plugin CLAUDE.md lists its own
        instances. Tiered: nav map · shape reconcile+align · relay format+digest ·
        reflect summarize. The instructive borderline: nav sync stays on the
@@ -2126,7 +2126,7 @@
        and its skill detail omitted graft entirely; reflect version read v0.2.0.
 
   ⚠ FIXED in rev 60 (kept for history)
-    1. shape gains COST TIERS (ADR-058; shape v0.8.0 → 0.7.0, no new skill/slug):
+    1. shape gains COST TIERS (ADR-007; shape v0.8.0 → 0.7.0, no new skill/slug):
        (a) new plugin-bundled subagent agents/browser-verifier.md (model: sonnet;
        Bash/Read/Glob) is now the browser-verify slot's default EXECUTOR — the
        drive → capture → compare → close loop runs inside the subagent, so
@@ -2141,24 +2141,24 @@
        with no screenshot. (c) mechanical verbs declare model: sonnet in
        SKILL.md frontmatter (turn-level override) — applied to reconcile;
        criterion (mechanical sweep vs judgment) recorded in shape/CLAUDE.md.
-       ADR-040's muscle/brain split applied to model choice. ADR count 57 → 58.
+       ADR-009's muscle/brain split applied to model choice. ADR count 57 → 58.
     2. Drift fixes in the VERIFIED list: shape version read v0.8.0 (two bumps
        stale) and the Codex mirror count read 32 flat skills (33 since
        relay:format landed).
 
   ⚠ FIXED in rev 59 (kept for history)
-    1. think:first-principles gains a FOURTH routing option `/nav:do` (ADR-057) — its
+    1. think:first-principles gains a FOURTH routing option `/nav:do` (ADR-009) — its
        "offer to route" step previously listed only /shape:elicit · /shape:mockup ·
        /nav:plan, so a rebuilt conclusion that was a small, decided, one-sentence code
        fix (the common shape, e.g. "swap a type-erasing `as` assertion for an exhaustive
        lookup") had no one-click destination and degraded to unstructured chat text —
-       the exact friction ADR-007's offer-next-action pattern exists to remove. Now
+       the exact friction ADR-006's offer-next-action pattern exists to remove. Now
        routes small/decided fixes to /nav:do (reusing do's own "one sentence, held in
        your head" scoping test) and keeps /nav:plan for bigger/ambiguous work. No new
-       skill, no version bump (behavioral addition, ADR-015 precedent). ADR count 56 → 57.
+       skill, no version bump (behavioral addition, ADR-006 precedent). ADR count 56 → 57.
 
   ⚠ FIXED in rev 58 (kept for history)
-    1. RENAMED plugin `manage` → `reflect` (ADR-056) — the old name read as *maintenance*
+    1. RENAMED plugin `manage` → `reflect` (ADR-009) — the old name read as *maintenance*
        (which is nav's job); the family's object is your own working SESSION, and its 3
        members (catchup · summarize · observe) are all REFLEXIVE acts — manage fit 0 of 3,
        reflect fits 3/3. `reflect` filters by reflexivity, not tense (a mirror shows you
@@ -2171,7 +2171,7 @@
        history (manage was accurate when written). ADR count 55 → 56.
 
   ⚠ FIXED in rev 57 (kept for history)
-    1. relay gains its first BUNDLED HELPER SCRIPT (ADR-051, marketplace-first) — skills/reply/
+    1. relay gains its first BUNDLED HELPER SCRIPT (ADR-009, marketplace-first) — skills/reply/
        scripts/check-acceptance.mjs computes a decision's @-set vs its accepts so graduation is
        an EXACT set-comparison, never an LLM judgement that could ratify a non-consensus.
        Establishes the code-vs-judgment split (code = deterministic / correctness-critical; LLM
@@ -2179,7 +2179,7 @@
        bundling constraint. relay v0.1.0 → 0.1.1; no new skill/slug. ADR count 50 → 51.
 
   ⚠ FIXED in rev 56 (kept for history)
-    1. NEW PLUGIN `relay` (ADR-050) — coordinate asynchronously with a counterpart through your
+    1. NEW PLUGIN `relay` (ADR-009) — coordinate asynchronously with a counterpart through your
        agents over a shared git repo: structured updates (not chat), decisions to explicit
        consensus (the @-set unanimously; graduation is event-driven at the completing accept),
        threaded across cycles. 6 verbs, structure vs content: launch · register · report ·
@@ -2191,7 +2191,7 @@
        → 32; relay v0.1.0; CB_NODES + relay node + DOMAINS entry. ADR count 49 → 50.
 
   ⚠ FIXED in rev 55 (kept for history)
-    1. nav gains a SEVENTH skill `compose` (ADR-049) — author or restructure a PROSE
+    1. nav gains a SEVENTH skill `compose` (ADR-004) — author or restructure a PROSE
        document as a deep module (lead with the point, one fact one owner / link don't
        restate, group by knowledge not chronology, right grain; diff-gated). The
        prose-document sibling of `sync`: sync = the header line atop a CODE file, compose
@@ -2201,12 +2201,12 @@
        writing-clearly-and-concisely skill. nav v0.8.0 → 0.7.0; 6 → 7 skills; NAV_NODES
        + compose node (describe kind) + compose→sync edge. Codex mirror regenerates to 26.
     2. CORRECTED counts found stale on the lines this pass touched (set to ground truth,
-       not blind increments): think 3 → 4 skills (graft landed via ADR-048 without a
+       not blind increments): think 3 → 4 skills (graft landed via ADR-009 without a
        count bump here), total 19 → 26 skills / 38 → 52 picker entries (README), Codex
-       23 → 26 flat skills, ADRs 46 → 49 (001..049).
+       23 → 26 flat skills, ADR-010 → 49 (001..049).
 
   ⚠ FIXED in rev 54 (kept for history)
-    1. REGISTERED think's THIRD lens `dialectic` (ADR-047) — the skill file + ADR +
+    1. REGISTERED think's THIRD lens `dialectic` (ADR-009) — the skill file + ADR +
        Codex mirror shipped in commit ee350ba but the REGISTRATION was missing: plugin
        stayed at v0.2.0, and CLAUDE.md / README / this map / marketplace never mentioned
        it (the validator only checks generated artifacts, so a half-registered skill
@@ -2223,21 +2223,21 @@
        routing.
 
   ⚠ FIXED in rev 53 (kept for history)
-    1. think gains a SECOND lens `orthogonal` (ADR-046) — decompose SIDEWAYS: factor
+    1. think gains a SECOND lens `orthogonal` (ADR-010) — decompose SIDEWAYS: factor
        a tangled phenomenon into mutually-independent axes, verify the independence
        (move one, the others must not move), name what was conflated / falsely-coupled.
        Pairs with first-principles (decompose DOWN): the two ways to take a problem
-       apart. In-chat (ADR-045). think v0.1.0 → 0.2.0; 1 → 2 skills; Codex 22 → 23.
+       apart. In-chat (ADR-010). think v0.1.0 → 0.2.0; 1 → 2 skills; Codex 22 → 23.
     2. DROPPED the speculative `invert` / `second-order` seed family — an evidence
        audit (docs/observations/) found ZERO usage of them as lenses (every "invert"
        hit is the everyday verb; "second-order" appears nowhere), while orthogonal is
-       the user's frequently-used lens. Per ADR-018 (promote by evidence) they had no
+       the user's frequently-used lens. Per ADR-010 (promote by evidence) they had no
        more standing than parked candidates, so they were removed from all live
        surfaces (plugin.json · CLAUDE.md · README · this map · first-principles refs);
-       ADR-034 left as history. ADR count 45 → 46.
+       ADR-010 left as history. ADR count 45 → 46.
 
   ⚠ FIXED in rev 52 (kept for history)
-    1. think is now LIGHTWEIGHT (ADR-045) — reasons in-chat, writes NO file (was a
+    1. think is now LIGHTWEIGHT (ADR-010) — reasons in-chat, writes NO file (was a
        thinking/<date>-<topic>.md artifact). Persistence is by routing to shape
        (/shape:elicit → thoughts/, /shape:mockup, /nav:plan), which think already
        offers; a think-owned file was a redundant second home. Sharpens the family
@@ -2250,7 +2250,7 @@
        together on any plugin/skill roster change (the drift that caused this).
 
   ⚠ FIXED in rev 51 (kept for history)
-    1. NEW PLUGIN `manage` (ADR-044) — the meta-lane: reflect on your own working
+    1. NEW PLUGIN `manage` (ADR-009) — the meta-lane: reflect on your own working
        session (the work process itself, the cross-cutting object no other plugin
        owns). 3 seed skills, triad orient → recap → distill: catchup (where the
        work stands now, rebuilt from git/diff/plan not chat memory), summarize (a
@@ -2266,7 +2266,7 @@
        writing (a fresh plugin has no projection dir yet).
 
   ⚠ FIXED in rev 50 (kept for history)
-    1. audit gains Mode 3 (deep sweep, ADR-043) — a depth strategy that fans out
+    1. audit gains Mode 3 (deep sweep, ADR-004) — a depth strategy that fans out
        one read-only sub-agent per domain instead of a single satisficing pass,
        then merges + root-cause clusters + runs a completeness-critic loop-until-dry.
        For large/legacy codebases (no headers/barrels, many domains) a single
@@ -2319,7 +2319,7 @@
        with Codex's metadata constraints.
 
   ⚠ FIXED in rev 45 (kept for history)
-    1. research: new fourth skill `provenance` (ADR-042) — the SELF-AUDIT verb:
+    1. research: new fourth skill `provenance` (ADR-009) — the SELF-AUDIT verb:
        trace every load-bearing citation in the USER'S OWN documents back to a
        verified source; scan → trace → classify (first-hand verified /
        second-hand / orphan) → quarantine list (read-or-demote). Critique's
@@ -2336,14 +2336,14 @@
        verdicts (verified / needs qualification / unsupported) + corrected
        citable sentence-form. New "Citation verification" output section +
        two discipline bullets (never-trust-the-filename; headline numbers
-       carry conditions). research 3 → 4 skills; v0.8.0 → 0.5.0; ADR 41 → 42.
+       carry conditions). research 3 → 4 skills; v0.8.0 → 0.5.0; ADR-013 → 42.
        Updated: provenance SKILL.md (new) + dissect SKILL.md + research
        CLAUDE.md (spine: provenance = the reflexive corner) + plugin.json +
        .cursor-plugin + marketplace.json + README (table, command list,
        picker 36→38) + this site (header + audit block + RES_NODES/RES_EDGES
        + command card) + codex mirror regenerated (18 → 19 skills).
     3. drift caught while editing: /research:critique had NO command card in
-       this site's research files list (missed when ADR-030 landed) — added
+       this site's research files list (missed when ADR-009 landed) — added
        alongside the provenance card.
 
   ⚠ FIXED in rev 44 (kept for history)
@@ -2369,7 +2369,7 @@
   ⚠ FIXED in rev 43 (kept for history)
     1. Marketplace repositioned as TRI-PLATFORM — one source tree under
        plugins/, installable in Claude Code (marketplace-native), Codex
-       (generated flat mirror, ADR-022), and Antigravity CLI (native plugin
+       (generated flat mirror, ADR-017), and Antigravity CLI (native plugin
        import). Sidebar sub + tour_lede updated ("Claude marketplace" →
        "agent-skills marketplace" + platform list, en+zh); #install section
        rewritten from "two commands" (stale: said 6 skills / nav only) to
@@ -2379,7 +2379,7 @@
        intro + agy section). No skill/plugin/ADR changes.
 
   ⚠ FIXED in rev 42 (kept for history)
-    1. Canon is SINGLE-WRITER and FREEZE-GATED (ADR-041) — marketplace-level
+    1. Canon is SINGLE-WRITER and FREEZE-GATED (ADR-013) — marketplace-level
        convention in both plugin CLAUDE.mds. Door (who): only a summoned
        /shape:position writes docs/core/*-class docs — every other verb,
        ambient chat, and sub-agents: never. Timing (when): even position
@@ -2390,16 +2390,16 @@
        docs/core/amendments.md (co-located so the staleness debt is seen
        where canon is read); position adjudicates the ledger as each
        summon's first feeding; reconcile sweeps its leftovers (the exit —
-       ADR-026/017/037 grow-only lineage) and gains a canon-grade verdict
+       ADR-013 grow-only lineage) and gains a canon-grade verdict
        (settled axiom/principle thought → recommend position, never write).
        Freshness carve-out: stale header = same-commit fix; stale canon =
        ledger entry. nav:do gate 1 + build land step carry it inline.
        Field-evidenced (trackmate 2026-06-11: a legal nav:do core write +
        a plan.md double-clobber). Full protocol: position references/
-       write-protocol.md; origin observation 2026-06-11. ADR 40 → 41.
+       write-protocol.md; origin observation 2026-06-11. ADR-009 → 41.
 
   ⚠ FIXED in rev 41 (kept for history)
-    1. shape:build gains a parallel SCHEDULING POLICY (ADR-040) — never an
+    1. shape:build gains a parallel SCHEDULING POLICY (ADR-009) — never an
        execution mode: ground ALL items upfront (read-only fan-out; each
        /nav:plan artifact's Critical files + Verification are the scheduling
        inputs, no new schema) → three criteria (disjoint footprint incl.
@@ -2413,14 +2413,14 @@
        parallelizes, adjudication never does. Entrance ruling bounds it:
        the board stays build's ONLY queue (other sources enter via
        /shape:align). Full protocol in build references/parallel-
-       scheduling.md; origin observation 2026-06-11. ADR 39 → 40.
+       scheduling.md; origin observation 2026-06-11. ADR-013 → 40.
 
   ⚠ FIXED in rev 40 (kept for history)
-    1. shape:reconcile sweep widened to a THIRD tier — mockups/ (ADR-037).
+    1. shape:reconcile sweep widened to a THIRD tier — mockups/ (ADR-013).
        A mockup's currency is inherited from the decision it served; nothing
        in the family ever returned to mockups/ post-ship, so the committed-
        by-default flip (4481b82) made the layer grow monotonically — the
-       ADR-026 bug one tier down. Three ordered pre-conditions (decision
+       ADR-013 bug one tier down. Three ordered pre-conditions (decision
        settled · residue [pick + deferred branches] verifiably absorbed in
        the owning doc · inbound links resolved) → prune, with git as the
        deep archive (git log --follow recovers); residue only in the mockup
@@ -2428,10 +2428,10 @@
        → keep + parked stamp; load-bearing citation (ratified visual spec)
        → keep + freshness stamp; untracked = hard gate (git ls-files, never
        ls — the depth-unanchored gitignore trap). mockup's retire-on-ship
-       rule now names reconcile as its enforcement point. ADR 36 → 37.
+       rule now names reconcile as its enforcement point. ADR-009 → 37.
 
   ⚠ FIXED in rev 39 (kept for history)
-    1. shape: NEW SKILL `setup` (ADR-036) — scaffold a new project to a
+    1. shape: NEW SKILL `setup` (ADR-009) — scaffold a new project to a
        VERIFIED running baseline on a three-layer knowledge base: neutral
        engine (archetype → principles → reference → preflight → scaffold →
        verification chain → staged commits → write-back) · references/
@@ -2444,7 +2444,7 @@
        setup log → graduates on user sign-off (晉升 loop, 4th appearance).
        Reconciled with the "no init" razor (rejects mkdir-theatre; setup's
        payload is what default scaffolding skips). shape 7 → 8 skills;
-       v0.8.0 → 0.5.0; ADR 35 → 36; codex mirror 17 → 18.
+       v0.8.0 → 0.5.0; ADR-013 → 36; codex mirror 17 → 18.
 
   ⚠ FIXED in rev 38 (kept for history)
     1. shape: mockups storage default FLIPPED git-ignored → COMMITTED (Paul's
@@ -2458,7 +2458,7 @@
        en+zh), codex mirror regenerated.
 
   ⚠ FIXED in rev 37 (kept for history)
-    1. shape: `position` crystallized planned → built (ADR-035) — the canon-
+    1. shape: `position` crystallized planned → built (ADR-013) — the canon-
        authoring verb: a gated multi-feeding campaign that lands core
        (principle-wise) docs. User reframe at crystallization: DOC-CLASS framed
        (any core doc — the invariant is user-ratified · principle-altitude ·
@@ -2470,7 +2470,7 @@
        think:first-principles self-audit). Mirror of reconcile: births canon
        (pre-code, authority-driven) vs keeps-true (post-code, reality-driven).
        Same-day field validation: two canon docs from one engine, first live
-       graduation. shape 6 → 7 skills; v0.3.0 → 0.4.0; ADR 34 → 35. Updated:
+       graduation. shape 6 → 7 skills; v0.3.0 → 0.4.0; ADR-010 → 35. Updated:
        SKILL.md (new), shape CLAUDE.md (converge group; candidate note
        superseded), plugin.json + marketplace.json, founding observation
        stamped crystallized, this site (header + anatomy + SHAPE_NODES/EDGES +
@@ -2485,11 +2485,11 @@
        (axiom / principle / approach / bet; catches conversation-sediment lists),
        two-tier landing (core/ confirmed canon + thoughts/ dated hypotheses). NOT
        built — full design in docs/observations/2026-06-10-position-verb-canon-
-       campaign.md; crystallize per ADR-018's evidence gate (one campaign so far).
+       campaign.md; crystallize per ADR-010's evidence gate (one campaign so far).
        shape/CLAUDE.md candidate note + this site (header + shape node).
 
   ⚠ FIXED in rev 35 (kept for history)
-    1. NEW PLUGIN `think` (ADR-034) — reason about a problem through a named
+    1. NEW PLUGIN `think` (ADR-010) — reason about a problem through a named
        reasoning lens that forces a structure the default "think harder" skips.
        First skill `first-principles`: name the conventional answer + inherited
        assumptions → strip to irreducible axioms → rebuild from them alone →
@@ -2502,20 +2502,20 @@
        procedure + output): first-principles decomposes down, invert negates,
        second-order projects forward. Value-guardrail: a lens ships only if it
        forces a structure the default omits (else it's the ceremony that retired
-       nav's doctor, ADR-021). invert + second-order are seed (planned); promote
-       per ADR-018. Standalone, feeds shape one-way. plugins/think/ (plugin.json
+       nav's doctor, ADR-009). invert + second-order are seed (planned); promote
+       per ADR-010. Standalone, feeds shape one-way. plugins/think/ (plugin.json
        + CLAUDE.md + skills/first-principles/SKILL.md); marketplace + README +
        this site (DOMAINS think + CB_NODES think node + header + command card,
        en+zh); codex auto-discovered (16 skills, validator green). A THINK
        anatomy graph is deferred until ≥2 lenses (one node has no edges to draw).
-       ADR 33 → 34.
+       ADR-012 → 34.
     2. docs sync: research was under-reported as 1-2 skills in marketplace.json
        (v0.2.0, stale "map") + README + this site's CB_NODES/blurb — corrected to
        its real 3 (dissect / untangle / critique, v0.8.0).
 
   ⚠ FIXED in rev 34 (kept for history)
-    1. shape: `rehearse` reoriented + renamed → `dogfood` (ADR-033, supersedes
-       ADR-020). Engine inverted — from a top-down logic-walk that always rendered
+    1. shape: `rehearse` reoriented + renamed → `dogfood` (ADR-012, supersedes
+       ADR-009). Engine inverted — from a top-down logic-walk that always rendered
        a mockup, to an experience-first DOGFOOD of the real build: drive the real
        interface (agent-browser / curl / CLI) against user intents, capture the run
        (session recording + screenshots + responses), report friction (works but
@@ -2523,15 +2523,15 @@
        a logic hole). Output is an evidence-rich report, not a mockup (render
        demoted to an optional redesign hand-off); borrows /verify·/run's drive-the-
        real-app method (new boundary vs /verify: "smooth + missing", not "correct").
-       Survives ADR-020: human-purpose floor + layer-is-the-diagnosis routing.
+       Survives ADR-009: human-purpose floor + layer-is-the-diagnosis routing.
        Renamed for trigger-fit (rehearse = pre-release scent, no UX cue). git mv
        rehearse/ → dogfood/; SKILL.md rewritten; shape + nav CLAUDE.md; elicit /
        mockup cross-refs; plugin.json / marketplace.json / README; SHAPE_NODES
        rehearse → dogfood (+ edges), anatomy ledes + command card (en+zh). Codex
-       mirror regenerated (shape-rehearse → shape-dogfood; still 15). ADR 32 → 33.
+       mirror regenerated (shape-rehearse → shape-dogfood; still 15). ADR-003 → 33.
 
   ⚠ FIXED in rev 33 (kept for history)
-    1. research: `map` renamed → `untangle` and reframed (ADR-031). Core is no
+    1. research: `map` renamed → `untangle` and reframed (ADR-009). Core is no
        longer "a claim-framed related-work landscape" but the RELATIONAL STRUCTURE
        across N sources — the edges: lineage / clusters / contradictions /
        contested ground. The claim is now OPTIONAL (an overlaid positioning lens),
@@ -2541,7 +2541,7 @@
        + research/CLAUDE.md + RES_NODES (map→untangle node, relational desc) +
        RES_EDGES + anatomy lede/title (en+zh) + /research:untangle command card.
        nav:map disambiguation note removed (collision gone). Codex mirror
-       regenerated (research-map → research-untangle; still 15 skills). ADR 30 → 31.
+       regenerated (research-map → research-untangle; still 15 skills). ADR-009 → 31.
        From observations 2026-06-06-grounding-is-intent-relative (intent sets the
        grain) + the map-feels-vague session.
 
@@ -2550,7 +2550,7 @@
        paper (claim↔evidence audit + self-attack every finding before it ships →
        cut-log; two coupled cores: ground attack surfaces to recompute-depth, then
        refute). Consumes `dissect`; the rating stays the reviewer's (verdict
-       checkpoint). ADR-030, from observations 2026-06-06-adversarial-paper-
+       checkpoint). ADR-009, from observations 2026-06-06-adversarial-paper-
        critique-self-attack + 2026-06-06-grounding-is-intent-relative. research
        2 → 3 skills; v0.2.0 → 0.3.0. RES_NODES gains critique (assess kind);
        RES_EDGES gains critique→dissect. research anatomy lede/title (en+zh) +
@@ -2559,13 +2559,13 @@
 
   ⚠ FIXED in revision (rev 31)
     1. nav: the single `sync` door re-split into `sync` (file headers) + a new
-       `map` skill, by CADENCE (ADR-029, superseding the ADR-019 merge). sync is
+       `map` skill, by CADENCE (ADR-005, superseding the ADR-005 merge). sync is
        now headers-ONLY — per-file navigability, continuous/per-change cadence,
        keeps references/header-render.md; the new `map` owns the per-repo
        codebase map (periodic/batched cadence) + references/map-render.md +
        visual-spec.md (moved into skills/map/references/). sync offers /nav:map
        at the end; map reads the headers sync maintains. Reasoning: headers and
-       the map have different cadences, and ADR-019's claimed shared-grounding-
+       the map have different cadences, and ADR-005's claimed shared-grounding-
        pass synergy didn't fire in practice — the literal reverse of rev 21.
        nav 5 → 6 skills; v0.8.0 → 0.5.0. NAV_NODES sync reshaped (headers-only)
        + new map node (describe kind, sync's color family); NAV_EDGES gains
@@ -2579,14 +2579,14 @@
        claim, and discipline rules into the sub-agent prompt (inject →), receives
        the returned markdown note, and checks it before saving (← check: all 5
        layers present, Evidence has plain-language descriptions, Conclusion quotes
-       paper's own words, uncertainty flagged). Follows nav's ADR-008 inject↔check
+       paper's own words, uncertainty flagged). Follows nav's ADR-007 inject↔check
        discipline. Edits: research/skills/dissect/SKILL.md Step 1 (remove
        read-self), Step 3 (sub-agent dispatch protocol), Step 4 (implications via
        inject, not post-hoc); index.html dissect descriptions + node + blurb.
 
   ⚠ FIXED in rev 29 (kept for history)
     1. shape's converge verbs now offer the EXECUTION route after a pick, not
-       only /shape:align (ADR-028). mockup (+ elicit, lighter) offer build-it-now
+       only /shape:align (ADR-006). mockup (+ elicit, lighter) offer build-it-now
        routed by scope — /nav:do (small) · /nav:plan (bigger) · /shape:build
        (multi-item) — beside the existing track-it (/shape:align) branch; and
        /nav:do's trigger description now catches the post-converge "make it
@@ -2595,12 +2595,12 @@
        check bracket (inject↔execute↔verify) instead of flowing past it on the
        always-on CLAUDE.md discipline (awareness without the enforced check).
        Origin: observation 2026-06-03-ambient-discipline-suppresses-firing-the-
-       verb (crystallized on first sighting at user request). Edits: ADR-028;
+       verb (crystallized on first sighting at user request). Edits: ADR-006;
        mockup + elicit SKILL.md offer steps; nav:do description; nav/CLAUDE.md
-       offer-next-action registry. ADR count 27 → 28. Extends ADR-007/015.
+       offer-next-action registry. ADR count 27 → 28. Extends ADR-006.
 
   ⚠ FIXED in rev 28 (kept for history)
-    1. New plugin: research (ADR-027) — argument anatomy for reading external
+    1. New plugin: research (ADR-009) — argument anatomy for reading external
        sources. Two skills: dissect (single or batch Gap/Claim/Mechanism/Evidence
        dissection; one note per document) + map (claim-framed landscape synthesis
        across N sources — already done / gap / priority order). Standalone — no
@@ -2610,7 +2610,7 @@
        ADR count 26 → 27; audit block date 2026-06-02 → 2026-06-03.
 
   ⚠ FIXED in rev 27 (kept for history)
-    1. refactor now syncs per-file headers INLINE, in the same change (ADR-025) —
+    1. refactor now syncs per-file headers INLINE, in the same change (ADR-004) —
        previously it deferred ALL header work to a later /nav:sync (a window of
        lying headers between the refactor landing and a sync the user might never
        run). Now aligned with do's inline header-hygiene gate: per-file headers
@@ -2619,16 +2619,16 @@
        renamed "Sync headers, then report" + a Discipline bullet; /nav:sync
        companion reframed (map + holistic sweep, not primary header update).
        refactor node desc updated (also dropped a stale "Doctor recommends"
-       mention — doctor retired in ADR-021). ADR count 24 → 25. No structural
+       mention — doctor retired in ADR-009). ADR count 24 → 25. No structural
        NAV_NODES/EDGES change — behaviour inside an existing skill.
 
   ⚠ FIXED in rev 26 (kept for history)
-    1. nav: new skill `do` (ADR-023) — nav's execution verb, the only nav
+    1. nav: new skill `do` (ADR-004) — nav's execution verb, the only nav
        skill that writes a behaviour-CHANGING change directly. The inject↔check
-       sub-agent discipline (ADR-008) promoted to a standalone, plan-less door:
+       sub-agent discipline (ADR-007) promoted to a standalone, plan-less door:
        continuous deep-module/header/N+1/LOC awareness (乙) + a thin enforced
        bracket (甲 — inject head -12 + reuse-grep → execute → check header · N+1 ·
-       unconditional verify gate · board sync, the push half of ADR-086: a change
+       unconditional verify gate · board sync, the push half of ADR-015: a change
        that closes a blueprints/plan.md item updates that item same-commit).
        refactor's behaviour-changing twin (refactor
        preserves behaviour; do changes it). It is an N+1 extraction of the
@@ -2638,7 +2638,7 @@
        plan→do / refactor→do edges; nav anatomy lede/title/counts four → five.
        (The install/blurb/master-node "5 skills" strings, stale-low since the
        rev-24 doctor retirement left them at 5 when nav was 4, are now correct.)
-    2. Rule ① deepened to "Deep modules through information hiding" (ADR-024) —
+    2. Rule ① deepened to "Deep modules through information hiding" (ADR-003) —
        names the technique (information hiding, Parnas: encapsulate each design
        decision so it never surfaces in the interface) + the red flags
        (information leakage; temporal decomposition). Folded into ①, NOT a 9th
@@ -2650,7 +2650,7 @@
     3. ADR count 22 → 24; nav 4 → 5 skills in VERIFIED.
 
   ⚠ FIXED in rev 25 (kept for history)
-    1. Codex compatibility (ADR-022) — Codex uses the same Agent Skills
+    1. Codex compatibility (ADR-017) — Codex uses the same Agent Skills
        format, so plugins/ stays the single source of truth and
        scripts/build-codex.mjs emits a flat, unnamespaced mirror into
        .agents/skills/ (nav:audit → nav-audit; no plugin namespace in Codex)
@@ -2664,18 +2664,18 @@
        section.
 
   ⚠ FIXED in rev 24 (kept for history)
-    1. Retired nav:doctor (ADR-021) — after the headers+map→sync merge it
+    1. Retired nav:doctor (ADR-009) — after the headers+map→sync merge it
        orchestrated only audit → sync (2 steps, sync self-gates), too thin to
        earn a skill (shape defers its own doctor until ≥3 steps; nav was under
        its own bar). nav 5 → 4 skills (audit · refactor · sync · plan); 0.2.0 →
        0.3.0. Full-pass trigger phrasings ("do the works", "tune up", "checkup")
        folded into audit's description. NAV_NODES drops the doctor node + its two
-       edges; nav anatomy lede/callout/heading + counts updated; ADR-003 amended
+       edges; nav anatomy lede/callout/heading + counts updated; ADR-004 amended
        again. Also: anatomy ledes reflowed into a scannable grouped list (layout)
        + stale nav "6 skills" counts fixed.
 
   ⚠ FIXED in rev 23 (kept for history)
-    1. Strengthened cross-skill hand-off offers (offer-next-action, ADR-007/015,
+    1. Strengthened cross-skill hand-off offers (offer-next-action, ADR-006,
        all guarded + one-shot + opt-out): rehearse now actively OFFERS to route
        its holes by layer (direction → /shape:elicit or /shape:mockup ·
        incomplete → /nav:plan); elicit now offers /shape:mockup when the decision
@@ -2687,7 +2687,7 @@
        NOT added — user-scoped out.)
 
   ⚠ FIXED in rev 22 (kept for history)
-    1. shape: new skill `rehearse` (ADR-020) — walk a feature's usage
+    1. shape: new skill `rehearse` (ADR-009) — walk a feature's usage
        (user intent → usage scenario → check against what's really built) and
        render the holes as a mockup (reuses /shape:mockup's render path). The
        hole's layer = direction-wrong (missing intent) vs incomplete (dead-end
@@ -2695,79 +2695,79 @@
        named canonical fork for it). mockup's logic-twin: mockup decides
        look/structure, rehearse walks logic-coverage. shape 0.2.0 → 0.3.0; 5 → 6
        skills. SHAPE_NODES + edge added; converge group now mockup/elicit/
-       rehearse. Crystallized from one dense session per ADR-018's evidence gate.
+       rehearse. Crystallized from one dense session per ADR-010's evidence gate.
 
   ⚠ FIXED in rev 21 (kept for history)
     1. nav: `headers` + `map` skills collapsed into a single `sync` door
-       (ADR-019). One grounding pass → Phase A header-render (gated) → Phase B
+       (ADR-005). One grounding pass → Phase A header-render (gated) → Phase B
        map-render. Engine kept as two reference protocols under
        skills/sync/references/ (header-render.md · map-render.md · visual-spec.md)
        so doctor still gates between them and shape:reconcile still reads the
        header artifact. nav 0.1.0 → 0.2.0; 6 → 5 skills. NAV_NODES headers+map →
        sync, edges rewired; doctor + all shape /nav:headers·/nav:map refs
-       repointed to /nav:sync. ADR-003 amended.
+       repointed to /nav:sync. ADR-004 amended.
 
   ⚠ FIXED in rev 20 (kept for history)
-    1. Promotion gate clarified (ADR-018): the capture-before-crystallize
+    1. Promotion gate clarified (ADR-010): the capture-before-crystallize
        ladder's "≥2 contexts / don't pre-skill" is a PROXY for evidence
        sufficiency, not a literal session count. A single dense session may
        crystallize a skill/ADR when it carries the substitutes for recurrence
        — grounded ∧ friction-tested ∧ principle-level (all three). Names the
        marketplace's self-exemption + gives it a test so "fast" stays
-       disciplined. observations/README ladder updated. ADR 17 → 18.
+       disciplined. observations/README ladder updated. ADR-013 → 18.
 
   ⚠ FIXED in rev 19 (kept for history)
     1. nav:plan now writes its grounded plan into blueprints/plans/ when a
        blueprints/ tree is present (soft nav→shape; else docs/plans/), so the
        whole arc (decision → status → grounded-how) co-locates in one tree
-       (ADR-017). blueprints-spec gained the plans/ layer (plural plans/ =
+       (ADR-013). blueprints-spec gained the plans/ layer (plural plans/ =
        nav:plan's grounded plans; singular plan.md = align's status index).
     2. shape:reconcile scope widened to maintain plans/ alongside thoughts/ —
        a plan whose steps all shipped is stale like an implemented thought
        (amend/prune/consolidate; plans check sharper via their steps +
-       Verification table). ADR 16 → 17.
+       Verification table). ADR-015 → 17.
 
   ⚠ FIXED in rev 18 (kept for history)
     1. shape:align clarified as a status SYNC, not a read-only re-render
-       (ADR-016): it verifies done-ness against the code (grep + head -12 +
+       (ADR-015): it verifies done-ness against the code (grep + head -12 +
        git log), and moves 待驗/TBD items that shipped into ✅ Shipped — a board
        still saying "TBD: is X done?" after an align run is an align failure.
-       Draws the align↔reconcile boundary (pairs with ADR-014): item-STATUS
+       Draws the align↔reconcile boundary (pairs with ADR-013): item-STATUS
        sync = align; doc-CURRENCY (amend/prune/consolidate) = reconcile. Each
-       writes only its own layer. ADR 15 → 16.
+       writes only its own layer. ADR-006 → 16.
 
   ⚠ FIXED in rev 17 (kept for history)
     1. shape:elicit + shape:mockup now OFFER /shape:align after landing a
-       thought (ADR-015, extends ADR-007 offer-next-action to shape's converge
+       thought (ADR-006, extends ADR-006 offer-next-action to shape's converge
        verbs): an AskUserQuestion with a save-only opt-out — auto-OFFER, never
        auto-CALL (skills don't invoke each other; align decides WITH the user).
        Guarded + one-shot (board must exist; no nagging on rapid-fire); the
        recommended option runs align in-session (needs this conversation's
        context), not a clean sub-agent. NOT /nav:plan — wrong direction (align
-       is its upstream; post-build align is build's tail). ADR 14 → 15.
+       is its upstream; post-build align is build's tail). ADR-013 → 15.
 
   ⚠ FIXED in rev 16 (kept for history)
-    1. shape:reconcile gained a 4th action, amend (ADR-014): correct a doc's
+    1. shape:reconcile gained a 4th action, amend (ADR-013): correct a doc's
        stale FACT in place (verbatim except the confirmed line; serves a new
        "current · N stale fact(s)" verdict) instead of pruning a 90%-live doc
        for one overtaken line. Hard boundary: amend syncs what built code shows,
        never re-decides — a decision-change is out of scope, so reconcile
        actively recommends /shape:elicit and says so (active form of "no new
-       decisions during render"). No new skill (folded, N+1). ADR 13 → 14.
+       decisions during render"). No new skill (folded, N+1). ADR-011 → 14.
 
   ⚠ FIXED in rev 15 (kept for history)
-    1. Widened shape:elicit to cover diagnosis (ADR-013): one engine, two
+    1. Widened shape:elicit to cover diagnosis (ADR-011): one engine, two
        objects — a forward decision ("what should X be") OR a backward
        root-cause ("why is X wrong / where's the logic hole"). Added a
        diagnostic-mode section (ground symptom vs real impl → forks = candidate
        causes traced against code → drill local-bug into structural-cause →
        hand fix to mockup/build; read-only). NO separate diagnose skill — it'd
        be a parallel copy of elicit's convergence engine (N+1). Grounding:
-       docs/observations/2026-05-29-how-diagnosis-converges.md. ADR 12 → 13.
+       docs/observations/2026-05-29-how-diagnosis-converges.md. ADR-006 → 13.
 
   ⚠ FIXED in rev 14 (kept for history)
     1. nav:plan Stage 4 now offers a guarded "visual summary (→ /shape:mockup)"
-       option (ADR-012) — an ask, never auto; shown only when the plan is
+       option (ADR-006) — an ask, never auto; shown only when the plan is
        visual/structural AND shape:mockup is available.
     2. Refined the cross-plugin rule: HARD deps one-way (shape → nav, the master
        edge); SOFT recommendations may go nav → shape (guarded offers that
@@ -2776,7 +2776,7 @@
        callout. ADR count 11 → 12.
 
   ⚠ FIXED in rev 13 (kept for history)
-    1. Built shape:build (ADR-011) — a meta-skill that drives the plan's
+    1. Built shape:build (ADR-008) — a meta-skill that drives the plan's
        In-progress column to done: per item ground via /nav:plan → summarize the
        plan as an interactive diagram (mockup protocol) → implement (/nav:refactor
        discipline + inject↔check, sequential) → verify (browser screenshot vs the
@@ -2793,7 +2793,7 @@
        (+ build node, new build kind color).
 
   ⚠ FIXED in rev 12 (kept for history)
-    1. Built shape:elicit (the converge-verbal sibling of mockup; ADR-010's
+    1. Built shape:elicit (the converge-verbal sibling of mockup; ADR-013's
        pending member). Behavioral spec from the thought-mode observation:
        react-not-author (proposer vs refiner, a volley), the 6 moves (mirror →
        drill-to-principle → named fork → friction → versions-to-one-line →
@@ -2804,11 +2804,11 @@
     2. shape 3 → 4 built skills; elicit pending → built across all surfaces
        (SHAPE_NODES, Module map, master node, plugin.json + marketplace.json).
        No new ADR — elicit's existence + boundary were already decided in
-       ADR-010; this is execution, and the behavioral spec lives in the
+       ADR-013; this is execution, and the behavioral spec lives in the
        observation, not an architectural decision.
 
   ⚠ FIXED in rev 11 (kept for history)
-    1. shape grew its blueprints workflow (ADR-010): two new skills —
+    1. shape grew its blueprints workflow (ADR-013): two new skills —
        align (project: decide now/next/later WITH user → plan.md + regenerate
        overview.html; pre-build mirror of /nav:map) and reconcile (judge stale
        thoughts via code/headers + self-declaration + date → prune/consolidate,
@@ -2823,7 +2823,7 @@
        scannable head + TL;DR), and mockup/align now activate the artifact +
        hand over a clickable URL in chat (Superpowers-style).
     5. shape v0.0.1 → 0.1.0 (plugin.json + marketplace.json). The "no shape
-       ADR" debt is cleared (ADR-010). ADR count 9 → 10.
+       ADR" debt is cleared (ADR-013). ADR count 9 → 10.
     6. Synced site surfaces: shape anatomy (SHAPE_NODES 1 → 5 with a blueprints
        hub + align/reconcile/elicit nodes; new project/reconcile/artifact kind
        colors), Module map shape skills, master-graph shape node, callouts.
@@ -2832,7 +2832,7 @@
     1. Added plugins/shape/CLAUDE.md — formalized shape's identity: through-line
        = "converge by a real disposable instance, not a description"; members =
        skills {thought-ground (unbuilt), mockup (built)}, spec = convention,
-       plan = reuse. (Superseded by rev 11 / ADR-010, which replaced the
+       plan = reuse. (Superseded by rev 11 / ADR-013, which replaced the
        thought→spec→plan framing with the verb-grouped family + blueprints.)
 
   ⚠ FIXED in rev 9 (kept for history)
@@ -2860,13 +2860,13 @@
        boundary vs nav) + shape/CLAUDE.md.
 
   ⚠ FIXED in rev 7 (kept for history)
-    1. Consolidated the deep-module rules 11 → 8 (ADR-009): made "deep
+    1. Consolidated the deep-module rules 11 → 8 (ADR-003): made "deep
        modules" the explicit root, merged the interface-first trio (old
        ②+⑩) and the grain balance (old ⑤+⑥), folded old ④ (future-ready)
        into ①, grouped Shape ①–⑤ / Discipline ⑥–⑦ / Test ⑧. Rewrote the
        RULES cards array + remapped every by-number reference across the
        live surfaces (6 SKILL.md, CLAUDE.md, README, this map, visual-spec).
-       ADRs + the observation keep the 11-scheme as dated history; ADR-009
+       ADRs + the observation keep the 11-scheme as dated history; ADR-003
        carries the old→new remap key. ADR count 8→9.
 
   ⚠ FIXED in rev 6 (kept for history)
@@ -2882,7 +2882,7 @@
        Added both as CONV rows here. No NAV_NODES / NAV_EDGES change.
 
   ⚠ FIXED in rev 5 (kept for history)
-    1. Bracketed the sub-agent hand-off with inject↔check (ADR-008):
+    1. Bracketed the sub-agent hand-off with inject↔check (ADR-007):
        /nav:plan Stage 4, /nav:refactor Step 8, /nav:doctor Step 7 now
        inject the skill's in-session grounding (+ N+1 trigger) into the
        sub-agent prompt and run a deep-module integration pass on the
@@ -2891,7 +2891,7 @@
        here. No new NAV_NODES / NAV_EDGES — behaviour inside existing skills.
 
   ⚠ FIXED in rev 4 (kept for history)
-    1. Added "offer-next-action" pattern to the 3 meta-skills (ADR-007):
+    1. Added "offer-next-action" pattern to the 3 meta-skills (ADR-006):
        /nav:plan gets a new Stage 4, /nav:refactor a new Step 8,
        /nav:doctor a new Step 7. Each ends with AskUserQuestion offering
        sub-agent / in-session / save-only options. Sub-agent option
@@ -2912,7 +2912,7 @@
        install_lede, install_note. Added `pre.cmd` CSS for code block.
 
   ⚠ FIXED in rev 2 (kept for history)
-    1. Added /nav:plan as nav's 6th skill (ADR-006). Updated NAV_NODES
+    1. Added /nav:plan as nav's 6th skill (ADR-004). Updated NAV_NODES
        (added 'plan' node + plan→audit edge), DOMAINS.nav.files
        (added /nav:plan row), ARCH_LAYERS skill chips (added 'plan'),
        and nav-anatomy lede + callout to mention plan.
@@ -3127,7 +3127,7 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 940 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame is standalone. See ADR-012/128.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame is standalone. See ADR-006/010.</span></div>
     </section>
 
     <section id="rules">
@@ -3151,7 +3151,7 @@
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
         <span data-t="navanat_title">nav anatomy — assess, transform, describe, plan, execute, ship</span>
       </h2>
-      <div class="lede" data-t="navanat_lede">Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-131).</div>
+      <div class="lede" data-t="navanat_lede">Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).</div>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
@@ -3164,7 +3164,7 @@
         <span class="layer-chip ui" data-t="layer_plugin">plugin</span>
       <span data-t="shape_anat_title">shape anatomy — converge · project · handoff</span>
       </h2>
-      <div class="lede" data-t="shape_anat_lede">Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-140). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.</div>
+      <div class="lede" data-t="shape_anat_lede">Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-014). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.</div>
       <div class="graphwrap">
         <svg class="graph" id="shapeGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="shapePanel"></div>
@@ -3212,7 +3212,7 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame is standalone. See ADR-012/128.",
+    pluginsmap_howread: "click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame is standalone. See ADR-006/010.",
     rules_title: 'Design rules — the bar every skill clears',
     rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. This is the current live summary; historical audit entries below may quote older versions.',
     map_title: 'Skill list — search & expand',
@@ -3224,7 +3224,7 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav anatomy — assess, transform, describe, plan, execute, ship',
-    navanat_lede: "Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-131).",
+    navanat_lede: "Seven skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes; <code>plan</code> grounds requested engineering proposals; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).",
     navanat_callout: "Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. <code>nav-plan</code> grounds an engineering approach when you ask to review one.",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
@@ -3242,10 +3242,10 @@ const T = {
     nav_default_click_text: "Sync keeps requested explanations current, from a source header to a full README/docs batch. Audit checks structure; compose organizes prose; plan grounds work; do and refactor implement it.",
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape anatomy — converge · project · handoff',
-    shape_anat_lede: "Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-140). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.",
+    shape_anat_lede: "Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-014). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.",
     shape_anat_callout: "Align owns priorities; tidy owns design-record lifecycle; nav-sync owns source headers and reader-document accuracy. Shared evidence does not require running all three. The board is plan.md; visual views are created on demand.",
     shape_default_h3: 'shape plugin anatomy',
-    shape_default_role: "Legacy map: converge decisions, align priorities, tidy records, and hand off sessions. Workspace pilot: idea → status → wrap (ADR-140). Click a node for its role.",
+    shape_default_role: "Legacy map: converge decisions, align priorities, tidy records, and hand off sessions. Workspace pilot: idea → status → wrap (ADR-014). Click a node for its role.",
     shape_default_click_label: 'tip',
     shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. The shared handoff file is blueprints/baton.md, with root HANDOFF.md as the no-tree fallback.',
     leg_decide: 'converge', leg_project: 'project', leg_tidy: 'tidy', leg_artifact: 'blueprints (convention)',
@@ -3281,7 +3281,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述。三個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)、nav(可導覽性,維護那半)、frame(套用具名的思考框架)。shape 硬依賴 nav(shape → nav —— 連線標出來了);當決策需要成形時 nav 可建議回 shape,但已授權的工作不再強迫跳出固定下一步選單。frame 獨立。見 ADR-012/128。',
+    pluginsmap_howread: '點 node 看描述。三個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)、nav(可導覽性,維護那半)、frame(套用具名的思考框架)。shape 硬依賴 nav(shape → nav —— 連線標出來了);當決策需要成形時 nav 可建議回 shape,但已授權的工作不再強迫跳出固定下一步選單。frame 獨立。見 ADR-006/010。',
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -3293,7 +3293,7 @@ const T = {
     layer_plugin: 'plugin',
     layer_skill: 'skill',
     navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃、執行、收尾',
-    navanat_lede: "七個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的變更，<code>plan</code> 在有需要時提供工程方案；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-131）。",
+    navanat_lede: "七個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的變更，<code>plan</code> 在有需要時提供工程方案；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-005）。",
     navanat_callout: "用 <code>shape-task</code> 定義交付項目和驗收條件。<code>nav-do</code> 實作已決定且已授權的工作，也能接多項目的 Task。要先檢視工程做法時，再用 <code>nav-plan</code>。",
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
@@ -3309,10 +3309,10 @@ const T = {
     nav_default_click_text: "sync 校準指定範圍的說明，從一份程式檔頭到整批 README／docs 都能處理。audit 檢查結構，compose 整理文稿，plan 接地計畫，do 與 refactor 執行變更。",
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
     shape_anat_title: 'shape 解剖 —— 收斂 · 排序 · 整理 · 交接',
-    shape_anat_lede: "舊入口相容圖（八個）；workspace 另外試用 <code>idea</code>、<code>status</code>、<code>wrap</code>（ADR-140）。原本的 <code>blueprints/</code> 慣例：mockup、elicit、probe、dogfood 收斂決策；<code>align</code> 核對工作板，跟使用者決定優先順序；<code>tidy</code> 獨立整理過期設計紀錄並保存理由。park／catchup 共用一份交接檔。",
+    shape_anat_lede: "舊入口相容圖（八個）；workspace 另外試用 <code>idea</code>、<code>status</code>、<code>wrap</code>（ADR-014）。原本的 <code>blueprints/</code> 慣例：mockup、elicit、probe、dogfood 收斂決策；<code>align</code> 核對工作板，跟使用者決定優先順序；<code>tidy</code> 獨立整理過期設計紀錄並保存理由。park／catchup 共用一份交接檔。",
     shape_anat_callout: "align 管優先順序，tidy 管設計紀錄的去留，nav-sync 管檔頭與人讀文件的正確性。證據可以共用，三者不必綁著跑。工作板是 plan.md，需要視覺說明時才產圖。",
     shape_default_h3: 'shape plugin 解剖',
-    shape_default_role: "舊入口相容圖：收斂決策、安排工作、整理紀錄、交接 session。Workspace 另試用 idea、status、wrap（ADR-140）。點選節點查看分工。",
+    shape_default_role: "舊入口相容圖：收斂決策、安排工作、整理紀錄、交接 session。Workspace 另試用 idea、status、wrap（ADR-014）。點選節點查看分工。",
     shape_default_click_label: '提示',
     shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。共享 handoff 檔是 blueprints/baton.md;沒有 blueprints 樹時 fallback 到根目錄 HANDOFF.md。',
     leg_decide: '收斂', leg_project: '投影', leg_tidy: '整理', leg_artifact: 'blueprints(約定)',
@@ -3359,11 +3359,11 @@ const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.26.18",
+    "version": "0.26.19",
     "skillCount": 7,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.18; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.18；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.26.19; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.26.19；7 個 skills）"
     },
     "files": [
       [
@@ -3386,8 +3386,8 @@ const DOMAINS = {
         "/nav:sync",
         "",
         {
-          "en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry for a named file or a complete README/docs batch; no standing codebase HTML (ADR-131).",
-          "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。可處理指定單檔或整批 README／docs，每份都有處理結果；不再維護常駐 codebase HTML（ADR-131）。"
+          "en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry for a named file or a complete README/docs batch; no standing codebase HTML (ADR-005).",
+          "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。可處理指定單檔或整批 README／docs，每份都有處理結果；不再維護常駐 codebase HTML（ADR-005）。"
         }
       ],
       [
@@ -3418,8 +3418,8 @@ const DOMAINS = {
         "/nav:ship",
         "",
         {
-          "en": "Land finished work and leave the repo clean: read state first, commit only this task's changes, push, merge into the main branch (or open a PR when main is protected, the remote is someone else's, or the user asks), delete only merged or gone branches and clean worktrees, then run the project's documented `## Ship` tail. Publishing or deploying needs explicit authority; the report ends with a verification line. NOT making the change itself: that is /nav:do. ADR-139.",
-          "zh": "把做完的工作收尾並讓 repo 保持乾淨：先讀狀態，只 commit 這次任務的改動，push，merge 進主分支（主分支受保護、remote 是別人的 repo、或你要求時改開 PR），只刪已 merge 或 gone 的 branch 與乾淨的 worktree，再照專案文件的 `## Ship` 段跑尾巴（版本號、rebuild、alias、部署）。發佈或部署需要明確授權；回報結尾附一行驗證結果。NOT 寫變更本身——那是 /nav:do。ADR-139。"
+          "en": "Land finished work and leave the repo clean: read state first, commit only this task's changes, push, merge into the main branch (or open a PR when main is protected, the remote is someone else's, or the user asks), delete only merged or gone branches and clean worktrees, then run the project's documented `## Ship` tail. Publishing or deploying needs explicit authority; the report ends with a verification line. NOT making the change itself: that is /nav:do. ADR-004.",
+          "zh": "把做完的工作收尾並讓 repo 保持乾淨：先讀狀態，只 commit 這次任務的改動，push，merge 進主分支（主分支受保護、remote 是別人的 repo、或你要求時改開 PR），只刪已 merge 或 gone 的 branch 與乾淨的 worktree，再照專案文件的 `## Ship` 段跑尾巴（版本號、rebuild、alias、部署）。發佈或部署需要明確授權；回報結尾附一行驗證結果。NOT 寫變更本身——那是 /nav:do。ADR-004。"
         }
       ]
     ]
@@ -3427,51 +3427,51 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.35.9",
+    "version": "0.35.10",
     "skillCount": 10,
     "blurb": {
-      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.9; 10 skills)",
-      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.9；10 個 skills）"
+      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.10; 10 skills)",
+      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.10；10 個 skills）"
     },
     "files": [
       [
         "/shape:elicit",
         "",
         {
-          "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-129.",
-          "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-129。"
+          "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-011.",
+          "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-011。"
         }
       ],
       [
         "/shape:mockup",
         "",
         {
-          "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-142).",
-          "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-142）。"
+          "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-014).",
+          "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-014）。"
         }
       ],
       [
         "/shape:probe",
         "",
         {
-          "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-134).",
-          "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-134）。"
+          "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-019).",
+          "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-019）。"
         }
       ],
       [
         "/shape:dogfood",
         "",
         {
-          "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-134).",
-          "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-134）。"
+          "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-019).",
+          "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-019）。"
         }
       ],
       [
         "/shape:tidy",
         "",
         {
-          "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-131).",
-          "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-131）。"
+          "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-005).",
+          "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-005）。"
         }
       ],
       [
@@ -3502,8 +3502,8 @@ const DOMAINS = {
         "/shape:setup",
         "",
         {
-          "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-148.",
-          "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-148。"
+          "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-015.",
+          "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-015。"
         }
       ],
       [
@@ -3519,35 +3519,35 @@ const DOMAINS = {
   "frame": {
     "layer": "foundation",
     "path": "plugins/frame/",
-    "version": "0.17.1",
+    "version": "0.17.2",
     "skillCount": 6,
     "blurb": {
-      "en": "The understanding family: lenses to see a problem (first-principles strips assumptions and rebuilds; orthogonal factors independent axes), forms to present an answer already in hand (analogize builds a checked analogy and is the ELI5 door; draw chooses the picture and medium; tinker builds a small object to poke), and one entry (unfold walks a repository, paper, book, or concept one layer per turn, skeleton first, choosing a form per layer). unfold applies the forms by bundled protocol, never by calling a skill (ADR-138). ADR-128 still governs output: structure scales to the question. Analysis-only requests do not grant build authority. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128/138 + the rename ADR. (v0.17.1; 6 skills)",
-      "zh": "理解家族：lens 用來看清問題（first-principles 拆假設並重建；orthogonal 拆獨立軸）、form 用來呈現手上已有的答案（analogize 做檢查過的類比，也是 ELI5 的入口；draw 選圖形與媒介；tinker 做一個可以動手玩的小物件）、一個入口（unfold 用 progressive disclosure 帶你認識 repo、論文、書或概念：先骨架、一回合一層、每層選一種形式）。unfold 以內附協議套用各 form，不呼叫其他 skill（ADR-138）。輸出仍依 ADR-128 隨問題大小調整；只要求分析不授權 build。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128/138 + 改名 ADR。（v0.17.1；6 個 skills）"
+      "en": "The understanding family: lenses to see a problem (first-principles strips assumptions and rebuilds; orthogonal factors independent axes), forms to present an answer already in hand (analogize builds a checked analogy and is the ELI5 door; draw chooses the picture and medium; tinker builds a small object to poke), and one entry (unfold walks a repository, paper, book, or concept one layer per turn, skeleton first, choosing a form per layer). unfold applies the forms by bundled protocol, never by calling a skill (ADR-010). ADR-010 still governs output: structure scales to the question. Analysis-only requests do not grant build authority. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-010/009/012/006 + the rename ADR. (v0.17.2; 6 skills)",
+      "zh": "理解家族：lens 用來看清問題（first-principles 拆假設並重建；orthogonal 拆獨立軸）、form 用來呈現手上已有的答案（analogize 做檢查過的類比，也是 ELI5 的入口；draw 選圖形與媒介；tinker 做一個可以動手玩的小物件）、一個入口（unfold 用 progressive disclosure 帶你認識 repo、論文、書或概念：先骨架、一回合一層、每層選一種形式）。unfold 以內附協議套用各 form，不呼叫其他 skill（ADR-010）。輸出仍依 ADR-010 隨問題大小調整；只要求分析不授權 build。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-010/009/012/006 + 改名 ADR。（v0.17.2；6 個 skills）"
     },
     "files": [
       [
         "/frame:first-principles",
         "",
         {
-          "en": "Reason a question from first principles — name the conventional answer + inherited assumptions, strip to irreducible base facts, rebuild from those alone, and surface the divergence from convention. The reasoning check remains; the visible worksheet/headings scale to the question. Plain language is the style, not a zero-jargon ban: use technical terms when useful and gloss them when needed. Analysis-only stays in chat unless continuation was already authorized. ADR-034/057/077/128.",
-          "zh": "從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的基礎事實,只用這些重建答案,再標出它跟慣例的分歧。reasoning check 保留;可見 worksheet/headings 按問題大小調整。白話是風格,不是零術語禁令:技術詞有用就用,需要時補 gloss。只要求分析就留在對話內,除非已授權接續。ADR-034/057/077/128。"
+          "en": "Reason a question from first principles — name the conventional answer + inherited assumptions, strip to irreducible base facts, rebuild from those alone, and surface the divergence from convention. The reasoning check remains; the visible worksheet/headings scale to the question. Plain language is the style, not a zero-jargon ban: use technical terms when useful and gloss them when needed. Analysis-only stays in chat unless continuation was already authorized. ADR-010/009.",
+          "zh": "從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的基礎事實,只用這些重建答案,再標出它跟慣例的分歧。reasoning check 保留;可見 worksheet/headings 按問題大小調整。白話是風格,不是零術語禁令:技術詞有用就用,需要時補 gloss。只要求分析就留在對話內,除非已授權接續。ADR-010/009。"
         }
       ],
       [
         "/frame:orthogonal",
         "",
         {
-          "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-046/077/128.",
-          "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-046/077/128。"
+          "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-010.",
+          "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-010。"
         }
       ],
       [
         "/frame:analogize",
         "",
         {
-          "en": "Explain an understood concept with a structurally checked analogy. Compare alternatives privately, deliver only the useful mapping and relevant limitations. Presentation scales to the question; no fixed four-part output. The analogy is requested, not an automatic addition to other skills. ADR-128.",
-          "zh": "用檢查過結構對應的比喻解釋已理解的概念。先比較候選，再交付有用的對應與必要限制；依問題大小決定長度，不強制四段格式。比喻是這個 skill 的明確任務，不是其他 skill 每次都要加上的結尾。ADR-128。"
+          "en": "Explain an understood concept with a structurally checked analogy. Compare alternatives privately, deliver only the useful mapping and relevant limitations. Presentation scales to the question; no fixed four-part output. The analogy is requested, not an automatic addition to other skills. ADR-010.",
+          "zh": "用檢查過結構對應的比喻解釋已理解的概念。先比較候選，再交付有用的對應與必要限制；依問題大小決定長度，不強制四段格式。比喻是這個 skill 的明確任務，不是其他 skill 每次都要加上的結尾。ADR-010。"
         }
       ],
       [
@@ -3562,16 +3562,16 @@ const DOMAINS = {
         "/frame:unfold",
         "",
         {
-          "en": "Walk someone through an unfamiliar repository, library, paper, book, or concept one layer at a time. Skeleton first; one layer per turn; each new term glossed at first use; key claims anchored and marked recorded, inferred, or unknown; the learner's questions set route and depth; each turn ends at a checkpoint naming what is open. Per layer it picks a form (plain text, analogy, picture, object to poke), names it in a short phrase, and honors overrides. No fixed level count, gates, or learner-state file. NOT a single explanation or ELI5: that is /frame:analogize. ADR-138.",
-          "zh": "一層一層帶人認識不熟的 repo、library、論文、書或概念。先給骨架；一回合只講一層；每個新詞第一次出現就補一句 gloss；重要主張標出處並區分「來源記載／我的推論／未知」；學習者的問題決定路線與深度；每回合停在說明還有什麼沒解的 checkpoint。每一層自己選形式（純文字、類比、圖、可操作的物件）、用一個短語說出來、並接受隨時覆寫。沒有固定層數、關卡或學習者狀態檔。NOT 單次解釋或 ELI5——那是 /frame:analogize。ADR-138。"
+          "en": "Walk someone through an unfamiliar repository, library, paper, book, or concept one layer at a time. Skeleton first; one layer per turn; each new term glossed at first use; key claims anchored and marked recorded, inferred, or unknown; the learner's questions set route and depth; each turn ends at a checkpoint naming what is open. Per layer it picks a form (plain text, analogy, picture, object to poke), names it in a short phrase, and honors overrides. No fixed level count, gates, or learner-state file. NOT a single explanation or ELI5: that is /frame:analogize. ADR-010.",
+          "zh": "一層一層帶人認識不熟的 repo、library、論文、書或概念。先給骨架；一回合只講一層；每個新詞第一次出現就補一句 gloss；重要主張標出處並區分「來源記載／我的推論／未知」；學習者的問題決定路線與深度；每回合停在說明還有什麼沒解的 checkpoint。每一層自己選形式（純文字、類比、圖、可操作的物件）、用一個短語說出來、並接受隨時覆寫。沒有固定層數、關卡或學習者狀態檔。NOT 單次解釋或 ELI5——那是 /frame:analogize。ADR-010。"
         }
       ],
       [
         "/frame:tinker",
         "",
         {
-          "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /shape:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-138.",
-          "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /shape:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-138。"
+          "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /shape:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-010.",
+          "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /shape:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-010。"
         }
       ]
     ]
@@ -3591,8 +3591,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131). (v0.26.18; 7 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。（v0.26.18；7 個 skills）"
+      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.26.19; 7 skills)",
+      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.26.19；7 個 skills）"
     }
   },
   {
@@ -3608,8 +3608,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140). (v0.35.9; 10 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。（v0.35.9；10 個 skills）"
+      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014). (v0.35.10; 10 skills)",
+      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。（v0.35.10；10 個 skills）"
     }
   },
   {
@@ -3624,8 +3624,8 @@ const CB_NODES = [
       "zh": "理解它"
     },
     "desc": {
-      "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-128, ADR-138. (v0.17.1; 6 skills)",
-      "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-128、ADR-138。（v0.17.1；6 個 skills）"
+      "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-010. (v0.17.2; 6 skills)",
+      "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-010、ADR-010。（v0.17.2；6 個 skills）"
     }
   }
 ];
@@ -3635,8 +3635,8 @@ const CB_EDGES = [['shape','nav']];
 const NAV_NODES = [
   {id:'plan', kind:'orchestrator', x:520, y:30, w:120, role:{en:'engineering proposal', zh:'工程方案'}, desc:{"en": "Ground a requested engineering proposal in the existing code. Explain ownership, compatibility, rollout and verification where they affect the decision.", "zh": "從現有程式查清工程方案，說明會影響決策的模組責任、相容性、上線順序和驗證方式。"}},
   {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
-  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Behavior-preserving structural change: public contracts and observable behavior stay stable, while necessary internal rewrites are allowed when verified. Syncs each touched file header inline in the same change (ADR-025, like do); repo map regen stays sync job. Verification scales with risk and touched surface.', zh:'保持行為的結構調整:公開契約與可觀察行為維持穩定,必要的內部改寫可做但要驗證。被動到的檔 header 在同一步 inline 同步(ADR-025,同 do);repo map 重生仍交給 sync。驗證強度依風險與觸及面調整。'}},
-  {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{"en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry, with only the requested surface in scope; no standing codebase HTML (ADR-131).", "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。只處理指定範圍，不再維護常駐 codebase HTML（ADR-131）。"}},
+  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Behavior-preserving structural change: public contracts and observable behavior stay stable, while necessary internal rewrites are allowed when verified. Syncs each touched file header inline in the same change (ADR-004, like do); repo map regen stays sync job. Verification scales with risk and touched surface.', zh:'保持行為的結構調整:公開契約與可觀察行為維持穩定,必要的內部改寫可做但要驗證。被動到的檔 header 在同一步 inline 同步(ADR-004,同 do);repo map 重生仍交給 sync。驗證強度依風險與觸及面調整。'}},
+  {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{"en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry, with only the requested surface in scope; no standing codebase HTML (ADR-005).", "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。只處理指定範圍，不再維護常駐 codebase HTML（ADR-005）。"}},
   {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{"en": "Implement decided behavior, verify each deliverable through its real entry point, and write evidence and next actions in the owning task.", "zh": "實作已決定的行為，從實際入口逐項驗收，再把證據和下一步寫回原 Task。"}},
   {id:'compose', kind:'describe', x:690, y:130, w:120, role:{en:'author (prose doc)', zh:'撰寫(文件)'}, desc:{"en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Show the draft or diff before applying unless already authorized. nav-compose owns document structure; nav-sync maintains code headers and checks reader documents against implementation.", "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。套用前先展示草稿或差異，已授權的範圍不用再問。nav-compose 負責文件結構；nav-sync 維護程式檔頭，並核對人讀的文件是否符合實作。"}},
 ];
@@ -3650,14 +3650,14 @@ const NAV_EDGES = [
 ];
 
 const SHAPE_NODES = [
-  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{"en":"Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. v0.23.0; ADR-129.","zh":"用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。v0.23.0；ADR-129。"}},
-  {id:'probe', kind:'decide', x:200, y:0, w:120, role:{en:'converge (experiment)', zh:'收斂(實驗)'}, desc:{en:"Design and run a minimal experiment when a fork can\'t be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment\'s definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-067); own live-LLM-cost signal instance (ADR-062). Read-only toward product code. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-071). Evidence feeds back to elicit\'s next volley, or the user directly. ADR-075.", zh:"當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-067);有自己的 live-LLM-cost 訊號實例(ADR-062)。對產品 code 唯讀。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-071)。證據回流到 elicit 的下一輪,或直接回給使用者。ADR-075。"}},
-  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{"en":"Converge a visual or structural decision through a real, disposable interactive HTML artifact, served at a clickable URL. Stop exploring once the user picks. Continue a build only when the broader request already authorizes it; no compulsory track/build chooser. ADR-128.","zh":"用真實、可丟棄的互動 HTML 收斂視覺或結構決定，提供可點開的網址。使用者選定就停止探索；只有原本請求已授權實作時才接續，不再強制選擇追蹤或建置。ADR-128。"}},
-  {id:'dogfood', kind:'decide', x:200, y:130, w:130, role:{en:'critique (experience)', zh:'批評(體驗)'}, desc:{en:"Dogfood a built feature that feels unsmooth: use the REAL interface (agent-browser / curl / CLI) against a list of user intents, capturing the run. Reports friction (works but clunky → a UX idea) + the coverage gaps that fall out (an intent with no path → a logic hole) — experience-first, coverage as a byproduct. Evidence is the captured session (friction-point screenshots + responses; recording on explicit request — ADR-058), not a synthesized mockup. A gap\'s layer IS the diagnosis — missing intent = direction (redesign), dead-end = incomplete (finish) — handed to /shape:elicit\'s diagnostic fork. Borrows /verify·/run\'s drive-the-real-app method (asks 'is it smooth + what\'s missing', not 'is it correct'). ADR-033 (supersedes ADR-020).", zh:"Dogfood 一個用起來不順的 built feature:用真的介面(agent-browser / curl / CLI)、帶 user intent 清單操作並記錄。回報 friction(能用但卡 → UX idea)+ 掉出來的 coverage gap(想做卻沒路 → 邏輯洞)—— 體驗優先,coverage 是副產品。證據是記錄下來的 session(friction 點截圖 + response;錄影需明說才錄 — ADR-058),不是合成 mockup。gap 落在哪層就是診斷 —— 缺 intent = 方向(重想)、dead-end = 沒做完(補完)—— 交給 /shape:elicit 的 diagnostic fork。借 /verify·/run 的開真 app 方法(問「順不順 + 缺什麼」、不是「對不對」)。ADR-033(supersede ADR-020)。"}},
-  {id:'catchup', kind:'project', x:390, y:130, w:120, role:{en:'read handoff', zh:'讀交接'}, desc:{en:'Explicit-only handoff reader: reconstructs goal · done · now · open · next from blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports trust. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. ADR-127.', zh:'明確召喚的交接讀取器:從 blueprints/baton.md 重建 goal · done · now · open · next;沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任度。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。ADR-127。'}},
-  {id:'park', kind:'project', x:530, y:130, w:120, role:{en:'write handoff', zh:'寫交接'}, desc:{en:'Explicit-only handoff writer: before stepping away, previews and overwrites the shared handoff file with the same five fields at decision level. It honors existing authorization instead of forcing a next-action menu when the next step is already settled. ADR-127.', zh:'明確召喚的交接寫入器:離開前以同一組五欄、decision-level 精簡地預覽並覆寫共享 handoff 檔。下一步已拍板時尊重既有授權,不強迫再開 next-action 選單。ADR-127。'}},
-  {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{"en": "Verify carried board items against source and tests, decide priorities with the user, and update plan.md. No silent drops and no mandatory document-cleanup pass. Tidy owns design-record lifecycle; nav-sync owns reader-document accuracy (ADR-131).", "zh": "以程式與測試核對板上進度，跟使用者決定優先順序，再更新 plan.md。條目不能無聲消失，也不用先整理整棵文件樹。設計紀錄由 tidy 整理；人讀的說明由 nav-sync 校準（ADR-131）。"}},
-  {"id": "tidy", "kind": "tidy", "x": 560, "y": 55, "w": 140, "role": {"en": "tidy records", "zh": "整理紀錄"}, "desc": {"en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-131).", "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-131）。"}},
+  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{"en":"Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. v0.23.0; ADR-011.","zh":"用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。v0.23.0；ADR-011。"}},
+  {id:'probe', kind:'decide', x:200, y:0, w:120, role:{en:'converge (experiment)', zh:'收斂(實驗)'}, desc:{en:"Design and run a minimal experiment when a fork can\'t be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment\'s definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-007); own live-LLM-cost signal instance (ADR-008). Read-only toward product code. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-019). Evidence feeds back to elicit\'s next volley, or the user directly. ADR-012.", zh:"當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-007);有自己的 live-LLM-cost 訊號實例(ADR-008)。對產品 code 唯讀。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-019)。證據回流到 elicit 的下一輪,或直接回給使用者。ADR-012。"}},
+  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{"en":"Converge a visual or structural decision through a real, disposable interactive HTML artifact, served at a clickable URL. Stop exploring once the user picks. Continue a build only when the broader request already authorizes it; no compulsory track/build chooser. ADR-010.","zh":"用真實、可丟棄的互動 HTML 收斂視覺或結構決定，提供可點開的網址。使用者選定就停止探索；只有原本請求已授權實作時才接續，不再強制選擇追蹤或建置。ADR-010。"}},
+  {id:'dogfood', kind:'decide', x:200, y:130, w:130, role:{en:'critique (experience)', zh:'批評(體驗)'}, desc:{en:"Dogfood a built feature that feels unsmooth: use the REAL interface (agent-browser / curl / CLI) against a list of user intents, capturing the run. Reports friction (works but clunky → a UX idea) + the coverage gaps that fall out (an intent with no path → a logic hole) — experience-first, coverage as a byproduct. Evidence is the captured session (friction-point screenshots + responses; recording on explicit request — ADR-007), not a synthesized mockup. A gap\'s layer IS the diagnosis — missing intent = direction (redesign), dead-end = incomplete (finish) — handed to /shape:elicit\'s diagnostic fork. Borrows /verify·/run\'s drive-the-real-app method (asks 'is it smooth + what\'s missing', not 'is it correct'). ADR-012 (supersedes ADR-009).", zh:"Dogfood 一個用起來不順的 built feature:用真的介面(agent-browser / curl / CLI)、帶 user intent 清單操作並記錄。回報 friction(能用但卡 → UX idea)+ 掉出來的 coverage gap(想做卻沒路 → 邏輯洞)—— 體驗優先,coverage 是副產品。證據是記錄下來的 session(friction 點截圖 + response;錄影需明說才錄 — ADR-007),不是合成 mockup。gap 落在哪層就是診斷 —— 缺 intent = 方向(重想)、dead-end = 沒做完(補完)—— 交給 /shape:elicit 的 diagnostic fork。借 /verify·/run 的開真 app 方法(問「順不順 + 缺什麼」、不是「對不對」)。ADR-012(supersede ADR-009)。"}},
+  {id:'catchup', kind:'project', x:390, y:130, w:120, role:{en:'read handoff', zh:'讀交接'}, desc:{en:'Explicit-only handoff reader: reconstructs goal · done · now · open · next from blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports trust. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. ADR-009.', zh:'明確召喚的交接讀取器:從 blueprints/baton.md 重建 goal · done · now · open · next;沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任度。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。ADR-009。'}},
+  {id:'park', kind:'project', x:530, y:130, w:120, role:{en:'write handoff', zh:'寫交接'}, desc:{en:'Explicit-only handoff writer: before stepping away, previews and overwrites the shared handoff file with the same five fields at decision level. It honors existing authorization instead of forcing a next-action menu when the next step is already settled. ADR-009.', zh:'明確召喚的交接寫入器:離開前以同一組五欄、decision-level 精簡地預覽並覆寫共享 handoff 檔。下一步已拍板時尊重既有授權,不強迫再開 next-action 選單。ADR-009。'}},
+  {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{"en": "Verify carried board items against source and tests, decide priorities with the user, and update plan.md. No silent drops and no mandatory document-cleanup pass. Tidy owns design-record lifecycle; nav-sync owns reader-document accuracy (ADR-005).", "zh": "以程式與測試核對板上進度，跟使用者決定優先順序，再更新 plan.md。條目不能無聲消失，也不用先整理整棵文件樹。設計紀錄由 tidy 整理；人讀的說明由 nav-sync 校準（ADR-005）。"}},
+  {"id": "tidy", "kind": "tidy", "x": 560, "y": 55, "w": 140, "role": {"en": "tidy records", "zh": "整理紀錄"}, "desc": {"en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-005).", "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-005）。"}},
   {id:'blueprints', kind:'artifact', x:290, y:185, w:180, role:{en:'artifact convention', zh:'artifact 約定'}, desc:{"en": "Document convention, not a skill: thoughts hold durable decisions, plans hold implementation steps, plan.md is the current board, mockups hold decision artifacts, and baton.md is the session handoff. Visual views are disposable and created on demand.", "zh": "文件慣例，不是 skill：thoughts 保存決策、plans 保存實作步驟、plan.md 是目前工作板、mockups 保存決策樣本、baton.md 保存交接。視覺說明按需要製作，用完可丟。"}},
 ];
 const SHAPE_EDGES = [
@@ -3677,14 +3677,14 @@ const SHAPE_EDGES = [
 
 const CONV = [
   {label:{en:'Marketplace = personal container', zh:'Marketplace = 個人容器'}, desc:{en:'Name <code>skills</code>; identity from <code>ChenPaulYu/skills</code>. ADR-001 #1.', zh:'名為 <code>skills</code>;身份來自 <code>ChenPaulYu/skills</code>。ADR-001 #1。'}},
-  {label:{en:'Plugin name = topic', zh:'Plugin 名 = 主題'}, desc:{en:'<code>nav</code>, <code>spec</code>, <code>craft</code> — never generic. ADR-005.', zh:'<code>nav</code>、<code>spec</code>、<code>craft</code> —— 絕不取通用名。ADR-005。'}},
-  {label:{en:'Skill name = bare verb', zh:'Skill 名 = 裸動詞'}, desc:{en:"Just <code>audit</code>, not <code>nav-audit</code>. Namespace lives in the plugin name; don\'t pay twice. ADR-005.", zh:'就 <code>audit</code>,不是 <code>nav-audit</code>。命名空間在 plugin 名;別付兩次。ADR-005。'}},
+  {label:{en:'Plugin name = topic', zh:'Plugin 名 = 主題'}, desc:{en:'<code>nav</code>, <code>spec</code>, <code>craft</code> — never generic. ADR-001.', zh:'<code>nav</code>、<code>spec</code>、<code>craft</code> —— 絕不取通用名。ADR-001。'}},
+  {label:{en:'Skill name = bare verb', zh:'Skill 名 = 裸動詞'}, desc:{en:"Just <code>audit</code>, not <code>nav-audit</code>. Namespace lives in the plugin name; don\'t pay twice. ADR-001.", zh:'就 <code>audit</code>,不是 <code>nav-audit</code>。命名空間在 plugin 名;別付兩次。ADR-001。'}},
   {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill carries the current rules it needs and remains usable without shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 攜帶自己需要的現行規則,不依賴 SKILL.md 之間互相 import。ADR-001 #3。'}},
-  {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-004.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-004。'}},
+  {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-001.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-001。'}},
   {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (sync, refactor, plan) shows the change before applying.', zh:'任何會改檔的 skill(sync、refactor、plan)套用前先示差異。'}},
   {label:{en:'Stack-neutral examples', zh:'範例 stack-中性'}, desc:{en:'Every SKILL.md example reads standalone — no past-project domain nouns. Use generic placeholders (UserList, useSelection). A skill that needs Project X context is leaky.', zh:'每個 SKILL.md 範例都能單看就懂 —— 不帶過去專案的領域詞。用通用 placeholder(UserList、useSelection)。需要 Project X 背景才看得懂的 skill 就是漏的。'}},
   {label:{en:'Skills-root-relative paths', zh:'以 skills 為根的路徑'}, desc:{en:'All paths (doc links AND example code) written as if <code>skills/</code> is root. No <code>./</code> or <code>../</code> prefixes. Imports use alias (<code>@/core/user</code>) or bare names.', zh:'所有路徑(doc 連結與範例程式碼)都以 <code>skills/</code> 為根。不用 <code>./</code> 或 <code>../</code>。import 用 alias(<code>@/core/user</code>)或裸模組名。'}},
-  {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-008.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-008。'}},
+  {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-007.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-007。'}},
   {label:{en:'N+1 trigger', zh:'N+1 觸發'}, desc:{en:'First consumer of an inline util = inline OK; second consumer = extract a primitive (don\'t copy). Corollary of rules ④ + ②.', zh:'inline util 的第一個 consumer = inline OK;第二個 consumer = 抽 primitive(別複製)。規則 ④ + ② 的推論。'}},
   {label:{en:'Stale = lie', zh:'過時 = 謊言'}, desc:{en:'When you add/rename/remove a skill, plugin, or ADR, update this map + its audit block in the same commit.', zh:'新增/改名/移除 skill、plugin、ADR 時,同 commit 更新此圖與 audit block。'}},
 ];

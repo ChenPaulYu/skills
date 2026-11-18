@@ -1,6 +1,6 @@
 # Development-artifact retention and decision evidence — checks
 
-> 2026-09-30 · ADR-134 · Node v24.18.0 · Offline checks and local installation only.
+> 2026-09-30 · ADR-019 · Node v24.18.0 · Offline checks and local installation only.
 
 This report records the initial local verification before follow-up trials and publication.
 Later outcomes and final versions are recorded in

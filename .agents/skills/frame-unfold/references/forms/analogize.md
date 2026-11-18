@@ -2,7 +2,7 @@
 
 # analogize — full discipline, worked examples, anti-patterns
 
-> Examples retained from the pre-ADR-109 body; presentation revised in ADR-128. The SKILL.md Stance carries the operative
+> Examples retained from the pre-ADR-002 body; presentation revised in ADR-010. The SKILL.md Stance carries the operative
 > discipline + proportional presentation; this is the elaborated numbered walk-through, the two worked
 > examples, and the full refuse-these table, loaded on demand.
 

@@ -1,6 +1,6 @@
 # Out-of-scope — rejection ledger
 
-> **Why this exists**: a mechanism for institutional memory of what was proposed and **rejected**, so a future session (agent or human) doesn't re-litigate a closed question from scratch. Adopted from the `mattpocock/skills` precedent of a `.out-of-scope/` directory. Rationale: [ADR-066](docs/adr/066-out-of-scope-rejection-ledger.md).
+> **Why this exists**: a mechanism for institutional memory of what was proposed and **rejected**, so a future session (agent or human) doesn't re-litigate a closed question from scratch. Adopted from the `mattpocock/skills` precedent of a `.out-of-scope/` directory. Rationale: [ADR-019](docs/adr/019-doctrine-docs-and-conventions.md).
 
 ## The hard rule: deferral ≠ rejection
 

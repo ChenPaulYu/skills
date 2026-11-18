@@ -1,6 +1,6 @@
 # orthogonal — anti-patterns
 
-> Moved verbatim from the pre-ADR-109 SKILL.md body. The SKILL.md Stance carries the operative
+> Moved verbatim from the pre-ADR-002 SKILL.md body. The SKILL.md Stance carries the operative
 > discipline; this table is the full refuse-these reference, loaded on demand.
 
 ## Anti-patterns (refuse these)

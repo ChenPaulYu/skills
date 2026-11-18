@@ -12,7 +12,7 @@
 #   Codex        → ~/.codex/skills/<plugin>-<skill>/, the Codex lowering.
 #   opencode     → the same tree; it reads the .agents/skills convention too.
 #   Cursor       → ~/.cursor/plugins/local/<plugin> → platforms/cursor/<plugin>.
-#                  A NATIVE plugin channel, not the Codex mirror (ADR-118).
+#                  A NATIVE plugin channel, not the Codex mirror (ADR-017).
 #                  Cursor does discover ~/.agents/skills, and that is the trap,
 #                  not the shortcut: the tree there is Codex-lowered, so the
 #                  skills would load and be quietly wrong. Hence the dual-global
@@ -119,7 +119,7 @@ if command -v node >/dev/null 2>&1; then
   # --sync-global installs the COMPILED mirror and prunes skills that left the
   # repo (a retirement that reaches the source but not the runtime has not
   # happened). --global-root codex keeps this marketplace out of
-  # ~/.agents/skills, which Cursor scans — see ADR-118 in the header.
+  # ~/.agents/skills, which Cursor scans — see ADR-017 in the header.
   if out=$(node scripts/build-codex.mjs --sync-global --profile "$CODEX_PROFILE" --global-root codex 2>&1); then
     say "$out"
     if [ "$QUIET" -eq 1 ]; then
@@ -135,7 +135,7 @@ if command -v node >/dev/null 2>&1; then
     echo "✗ Codex mirror sync failed — run \`sh scripts/sync-installed.sh --codex-profile $CODEX_PROFILE\` by hand" >&2
   fi
 
-  # ── Cursor — native plugins, symlinked (ADR-118) ────────────────────────────
+  # ── Cursor — native plugins, symlinked (ADR-017) ────────────────────────────
   CURSOR_ROOT="$HOME/.cursor/plugins/local"
   before=$(fingerprint "$CURSOR_ROOT")
   if out=$(node scripts/build-cursor.mjs --sync-local 2>&1); then

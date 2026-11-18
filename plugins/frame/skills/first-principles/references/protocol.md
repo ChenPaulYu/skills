@@ -1,6 +1,6 @@
 # first-principles — walk-through, worked example, anti-patterns
 
-> Moved verbatim from the pre-ADR-109 SKILL.md body. The SKILL.md Stance carries the operative
+> Moved verbatim from the pre-ADR-002 SKILL.md body. The SKILL.md Stance carries the operative
 > discipline (strip assumptions, rebuild from grounded base truths, compare the divergence); everything here
 > is the elaborated procedure, loaded on demand.
 

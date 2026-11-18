@@ -1,8 +1,8 @@
 # Authoring failure-mode vocabulary — prose that reads but doesn't work
 
-> **Source**: mattpocock/skills' `writing-great-skills` skill + its `GLOSSARY.md` (fetched via WebFetch, definitions here are paraphrased, not verbatim quotes) — same lineage as [ADR-001](docs/adr/001-plugin-shape-and-naming.md) ("Following Matt Pocock's `mattpocock/skills`"), borrowed a second time: first for plugin-naming convention, now for the vocabulary of how skill/doc **prose itself** fails. Adopted by [ADR-069](docs/adr/069-adopt-prose-failure-vocabulary-plus-the-tell-column.md).
+> **Source**: mattpocock/skills' `writing-great-skills` skill + its `GLOSSARY.md` (fetched via WebFetch, definitions here are paraphrased, not verbatim quotes) — same lineage as [ADR-001](docs/adr/001-marketplace-structure-and-naming.md) ("Following Matt Pocock's `mattpocock/skills`"), borrowed a second time: first for plugin-naming convention, now for the vocabulary of how skill/doc **prose itself** fails. Adopted by [ADR-002](docs/adr/002-skill-three-layer-law.md).
 > **Loaded by**: `/nav:compose` when authoring or restructuring skill prose (on demand, not every invocation — this file is a reference, not the SKILL.md body).
-> **Historical examples**: quoted instructions and line numbers below describe the ADR-069-era sources. ADR-126 removed nav's fixed menus and location-confirmation ritual; those quotations are evidence of past prose, not current workflow requirements.
+> **Historical examples**: quoted instructions and line numbers below describe the ADR-002-era sources. ADR-006 removed nav's fixed menus and location-confirmation ritual; those quotations are evidence of past prose, not current workflow requirements.
 
 Five failure modes name how an instruction reads fine but stops working. Two more entries name devices that prevent the most common one. Every entry below is one repo-instance case, not an exhaustive audit — several are explicitly flagged as assumptions or single-grep observations, not proof.
 
@@ -40,11 +40,11 @@ Five failure modes name how an instruction reads fine but stops working. Two mor
 
 **Definition**: lines that accumulate over successive edits because no one wants to be the one who deletes them — stale, no-longer-relevant text kept out of reluctance rather than need.
 
-**Repo instance (already solved, canonical case)**: [ADR-009](docs/adr/009-consolidate-11-rules-to-8.md) opens with *"The eleven rules grew by accretion and, on review, mixed three different kinds of statement under one flat list"* — a textbook Sediment case this repo already walked all the way through the fix for (spotted three different kinds of statement tangled together, merged the isomorphic rules, cut 11 rules to 8). This ADR can be cited directly as the canonical Sediment example.
+**Repo instance (already solved, canonical case)**: [ADR-003](docs/adr/003-nav-eight-rules.md) opens with *"The eleven rules grew by accretion and, on review, mixed three different kinds of statement under one flat list"* — a textbook Sediment case this repo already walked all the way through the fix for (spotted three different kinds of statement tangled together, merged the isomorphic rules, cut 11 rules to 8). This ADR can be cited directly as the canonical Sediment example.
 
 **The tell (derived)**: nobody in the room can say what would break if the line were deleted — that's the signal it's sediment, not load.
 
-**Remedy**: periodic review with permission to delete; ADR-009 is the worked example of the full fix.
+**Remedy**: periodic review with permission to delete; ADR-003 is the worked example of the full fix.
 
 ## Sprawl
 
@@ -60,7 +60,7 @@ Five failure modes name how an instruction reads fine but stops working. Two mor
 
 **Definition**: a compact term the model already understands from pretraining ("tight loop", "red-green", "tracer bullet") used in place of repeated prose — cheaper on tokens and anchors behavior more consistently than re-describing the same idea each time.
 
-**Repo instance (already in use, just not named as one technique until now)**: this repo already reuses several such terms verbatim rather than re-describing them in prose each time — *"summoned, not automatic"* (the former park entrance (now wrap; ADR-146), `shape:elicit`, and others, reused verbatim), *"one fact one owner"* (the retired relay plugin's CLAUDE.md cited `/nav:compose`'s discipline by this phrase rather than re-defining it), *"right grain"* (the standing name for rule ④'s whole paragraph), *"stop on the snap"* (elicit's convergence-exit criterion), *"inject → check"* (the sub-agent hand-off protocol, one term standing in for the whole bracket). This document only makes explicit that these are all instances of the same rhetorical device, worth reusing deliberately rather than re-prosing each time.
+**Repo instance (already in use, just not named as one technique until now)**: this repo already reuses several such terms verbatim rather than re-describing them in prose each time — *"summoned, not automatic"* (the former park entrance (now wrap; ADR-015), `shape:elicit`, and others, reused verbatim), *"one fact one owner"* (the retired relay plugin's CLAUDE.md cited `/nav:compose`'s discipline by this phrase rather than re-defining it), *"right grain"* (the standing name for rule ④'s whole paragraph), *"stop on the snap"* (elicit's convergence-exit criterion), *"inject → check"* (the sub-agent hand-off protocol, one term standing in for the whole bracket). This document only makes explicit that these are all instances of the same rhetorical device, worth reusing deliberately rather than re-prosing each time.
 
 **The tell (derived)**: the same concept gets a fresh paragraph of prose every time it's mentioned somewhere new, instead of the same short handle.
 

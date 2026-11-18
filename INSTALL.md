@@ -12,7 +12,7 @@ There are three channels (five agents):
 |---|---|---|
 | Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/shape:mockup` |
 | Flat mirror `.agents/skills/` | Codex · opencode · (agy project-level fallback) | flat — `nav-audit`, `shape-mockup` |
-| Native Cursor Plugins (`platforms/cursor/`) | Cursor — **not** the Codex mirror (ADR-118) | flat inside plugins — `nav-audit`, `shape-mockup` |
+| Native Cursor Plugins (`platforms/cursor/`) | Cursor — **not** the Codex mirror (ADR-017) | flat inside plugins — `nav-audit`, `shape-mockup` |
 
 Edit only `plugins/`. After a skill change, regenerate with
 `node scripts/build-manifests.mjs && node scripts/build-codex.mjs && node scripts/build-cursor.mjs`,

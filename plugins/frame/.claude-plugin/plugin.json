@@ -1,6 +1,6 @@
 {
   "name": "frame",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "The understanding family: skills that help someone understand something. Two lenses see a problem — first-principles (decompose DOWN to irreducible axioms, rebuild, surface divergence from convention) and orthogonal (decompose SIDEWAYS into mutually-independent axes, verify independence). Three forms present an answer already in hand — analogize (a stress-tested analogy built from the reader's own models; also the ELI5 door), draw (choose the picture and its medium), and tinker (a small interactive object to poke: one control, a visible before/after). One entry holds the rhythm — unfold walks a repository, paper, book, or concept through one layer per turn, skeleton first, choosing a form per layer. Lenses and forms stay standalone entrances; unfold applies the forms by bundled protocol, never by calling a skill. In-chat except tinker's disposable HTML artifact. Standalone — no nav/shape dependency. Renamed from think.",
   "author": {
     "name": "Paul",

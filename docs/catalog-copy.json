@@ -6,18 +6,18 @@
         "skills": {
           "audit": "assess codebase shape (or read-only quick-check against a target spec)",
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
-          "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
+          "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-005)",
           "plan": "ground a requested engineering proposal in code, including ownership, reuse, compatibility and verification",
           "do": "find the owning task and Git baseline before editing, implement authorized changes, and record verified progress in the original task",
           "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval",
-          "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)"
+          "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-004)"
         }
       },
       "site": {
         "layer": "state",
         "blurb": {
-          "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131).",
-          "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。"
+          "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005).",
+          "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。"
         },
         "skills": {
           "audit": [
@@ -37,8 +37,8 @@
           "sync": [
             "",
             {
-              "en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry for a named file or a complete README/docs batch; no standing codebase HTML (ADR-131).",
-              "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。可處理指定單檔或整批 README／docs，每份都有處理結果；不再維護常駐 codebase HTML（ADR-131）。"
+              "en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry for a named file or a complete README/docs batch; no standing codebase HTML (ADR-005).",
+              "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。可處理指定單檔或整批 README／docs，每份都有處理結果；不再維護常駐 codebase HTML（ADR-005）。"
             }
           ],
           "plan": [
@@ -65,8 +65,8 @@
           "ship": [
             "",
             {
-              "en": "Land finished work and leave the repo clean: read state first, commit only this task's changes, push, merge into the main branch (or open a PR when main is protected, the remote is someone else's, or the user asks), delete only merged or gone branches and clean worktrees, then run the project's documented `## Ship` tail. Publishing or deploying needs explicit authority; the report ends with a verification line. NOT making the change itself: that is /nav:do. ADR-139.",
-              "zh": "把做完的工作收尾並讓 repo 保持乾淨：先讀狀態，只 commit 這次任務的改動，push，merge 進主分支（主分支受保護、remote 是別人的 repo、或你要求時改開 PR），只刪已 merge 或 gone 的 branch 與乾淨的 worktree，再照專案文件的 `## Ship` 段跑尾巴（版本號、rebuild、alias、部署）。發佈或部署需要明確授權；回報結尾附一行驗證結果。NOT 寫變更本身——那是 /nav:do。ADR-139。"
+              "en": "Land finished work and leave the repo clean: read state first, commit only this task's changes, push, merge into the main branch (or open a PR when main is protected, the remote is someone else's, or the user asks), delete only merged or gone branches and clean worktrees, then run the project's documented `## Ship` tail. Publishing or deploying needs explicit authority; the report ends with a verification line. NOT making the change itself: that is /nav:do. ADR-004.",
+              "zh": "把做完的工作收尾並讓 repo 保持乾淨：先讀狀態，只 commit 這次任務的改動，push，merge 進主分支（主分支受保護、remote 是別人的 repo、或你要求時改開 PR），只刪已 merge 或 gone 的 branch 與乾淨的 worktree，再照專案文件的 `## Ship` 段跑尾巴（版本號、rebuild、alias、部署）。發佈或部署需要明確授權；回報結尾附一行驗證結果。NOT 寫變更本身——那是 /nav:do。ADR-004。"
             }
           ]
         },
@@ -81,8 +81,8 @@
             "zh": "可導覽性"
           },
           "desc": {
-            "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-131).",
-            "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-131）。"
+            "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Plan and execute within existing authority; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005).",
+            "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。plan 和 do 承接既有授權；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。"
           }
         }
       }
@@ -95,7 +95,7 @@
           "mockup": "converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record",
           "probe": "design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials",
           "dogfood": "drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries",
-          "tidy": "tidy completed tasks, legacy plans, stale thoughts and redundant mockups; preserve useful reasons and live work, and consolidate task/plan files only within requested cleanup scope (ADR-152)",
+          "tidy": "tidy completed tasks, legacy plans, stale thoughts and redundant mockups; preserve useful reasons and live work, and consolidate task/plan files only within requested cleanup scope (ADR-016)",
           "idea": "save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice",
           "status": "recover task-owned progress and fresh code evidence; explicitly requested priorities update the original project entry; export an interactive graph on demand",
           "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint",
@@ -113,43 +113,43 @@
           "mockup": [
             "",
             {
-              "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-142).",
-              "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-142）。"
+              "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-014).",
+              "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-014）。"
             }
           ],
           "dogfood": [
             "",
             {
-              "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-134).",
-              "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-134）。"
+              "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-019).",
+              "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-019）。"
             }
           ],
           "elicit": [
             "",
             {
-              "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-129.",
-              "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-129。"
+              "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-011.",
+              "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-011。"
             }
           ],
           "probe": [
             "",
             {
-              "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-134).",
-              "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-134）。"
+              "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-019).",
+              "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-019）。"
             }
           ],
           "tidy": [
             "",
             {
-              "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-131).",
-              "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-131）。"
+              "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-005).",
+              "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-005）。"
             }
           ],
           "setup": [
             "",
             {
-              "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-148.",
-              "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-148。"
+              "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-015.",
+              "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-015。"
             }
           ],
           "task": [
@@ -171,8 +171,8 @@
             "zh": "意圖 → 做出來"
           },
           "desc": {
-            "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-140).",
-            "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-140）。"
+            "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014).",
+            "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。"
           }
         }
       }
@@ -192,29 +192,29 @@
       "site": {
         "layer": "foundation",
         "blurb": {
-          "en": "The understanding family: lenses to see a problem (first-principles strips assumptions and rebuilds; orthogonal factors independent axes), forms to present an answer already in hand (analogize builds a checked analogy and is the ELI5 door; draw chooses the picture and medium; tinker builds a small object to poke), and one entry (unfold walks a repository, paper, book, or concept one layer per turn, skeleton first, choosing a form per layer). unfold applies the forms by bundled protocol, never by calling a skill (ADR-138). ADR-128 still governs output: structure scales to the question. Analysis-only requests do not grant build authority. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128/138 + the rename ADR.",
-          "zh": "理解家族：lens 用來看清問題（first-principles 拆假設並重建；orthogonal 拆獨立軸）、form 用來呈現手上已有的答案（analogize 做檢查過的類比，也是 ELI5 的入口；draw 選圖形與媒介；tinker 做一個可以動手玩的小物件）、一個入口（unfold 用 progressive disclosure 帶你認識 repo、論文、書或概念：先骨架、一回合一層、每層選一種形式）。unfold 以內附協議套用各 form，不呼叫其他 skill（ADR-138）。輸出仍依 ADR-128 隨問題大小調整；只要求分析不授權 build。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-034/045/046/047/075/077/126/128/138 + 改名 ADR。"
+          "en": "The understanding family: lenses to see a problem (first-principles strips assumptions and rebuilds; orthogonal factors independent axes), forms to present an answer already in hand (analogize builds a checked analogy and is the ELI5 door; draw chooses the picture and medium; tinker builds a small object to poke), and one entry (unfold walks a repository, paper, book, or concept one layer per turn, skeleton first, choosing a form per layer). unfold applies the forms by bundled protocol, never by calling a skill (ADR-010). ADR-010 still governs output: structure scales to the question. Analysis-only requests do not grant build authority. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-010/009/012/006 + the rename ADR.",
+          "zh": "理解家族：lens 用來看清問題（first-principles 拆假設並重建；orthogonal 拆獨立軸）、form 用來呈現手上已有的答案（analogize 做檢查過的類比，也是 ELI5 的入口；draw 選圖形與媒介；tinker 做一個可以動手玩的小物件）、一個入口（unfold 用 progressive disclosure 帶你認識 repo、論文、書或概念：先骨架、一回合一層、每層選一種形式）。unfold 以內附協議套用各 form，不呼叫其他 skill（ADR-010）。輸出仍依 ADR-010 隨問題大小調整；只要求分析不授權 build。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-010/009/012/006 + 改名 ADR。"
         },
         "skills": {
           "first-principles": [
             "",
             {
-              "en": "Reason a question from first principles — name the conventional answer + inherited assumptions, strip to irreducible base facts, rebuild from those alone, and surface the divergence from convention. The reasoning check remains; the visible worksheet/headings scale to the question. Plain language is the style, not a zero-jargon ban: use technical terms when useful and gloss them when needed. Analysis-only stays in chat unless continuation was already authorized. ADR-034/057/077/128.",
-              "zh": "從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的基礎事實,只用這些重建答案,再標出它跟慣例的分歧。reasoning check 保留;可見 worksheet/headings 按問題大小調整。白話是風格,不是零術語禁令:技術詞有用就用,需要時補 gloss。只要求分析就留在對話內,除非已授權接續。ADR-034/057/077/128。"
+              "en": "Reason a question from first principles — name the conventional answer + inherited assumptions, strip to irreducible base facts, rebuild from those alone, and surface the divergence from convention. The reasoning check remains; the visible worksheet/headings scale to the question. Plain language is the style, not a zero-jargon ban: use technical terms when useful and gloss them when needed. Analysis-only stays in chat unless continuation was already authorized. ADR-010/009.",
+              "zh": "從第一性原理推一個問題 —— 講出慣例答案 + 它繼承的假設,剝到不可再分的基礎事實,只用這些重建答案,再標出它跟慣例的分歧。reasoning check 保留;可見 worksheet/headings 按問題大小調整。白話是風格,不是零術語禁令:技術詞有用就用,需要時補 gloss。只要求分析就留在對話內,除非已授權接續。ADR-010/009。"
             }
           ],
           "orthogonal": [
             "",
             {
-              "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-046/077/128.",
-              "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-046/077/128。"
+              "en": "Factor a tangled phenomenon into mutually independent axes, verify the independence (move one; the others should not move), and name what was conflated or falsely decoupled. The independence check remains; tables or diagrams appear only when they help. Technical words such as orthogonal/axis are allowed with a useful gloss. In-chat unless continuation was already authorized. ADR-010.",
+              "zh": "把一個糾結的現象拆成互相獨立的軸,驗證獨立性(動一個,其他不該跟著動),並點出被混為一談或假性分開的東西。獨立性檢查保留;table 或 diagram 只有有幫助才出現。orthogonal/axis 這類技術詞可用,需要時補 gloss。除非已授權接續,否則留在對話內。ADR-010。"
             }
           ],
           "analogize": [
             "",
             {
-              "en": "Explain an understood concept with a structurally checked analogy. Compare alternatives privately, deliver only the useful mapping and relevant limitations. Presentation scales to the question; no fixed four-part output. The analogy is requested, not an automatic addition to other skills. ADR-128.",
-              "zh": "用檢查過結構對應的比喻解釋已理解的概念。先比較候選，再交付有用的對應與必要限制；依問題大小決定長度，不強制四段格式。比喻是這個 skill 的明確任務，不是其他 skill 每次都要加上的結尾。ADR-128。"
+              "en": "Explain an understood concept with a structurally checked analogy. Compare alternatives privately, deliver only the useful mapping and relevant limitations. Presentation scales to the question; no fixed four-part output. The analogy is requested, not an automatic addition to other skills. ADR-010.",
+              "zh": "用檢查過結構對應的比喻解釋已理解的概念。先比較候選，再交付有用的對應與必要限制；依問題大小決定長度，不強制四段格式。比喻是這個 skill 的明確任務，不是其他 skill 每次都要加上的結尾。ADR-010。"
             }
           ],
           "draw": [
@@ -227,15 +227,15 @@
           "unfold": [
             "",
             {
-              "en": "Walk someone through an unfamiliar repository, library, paper, book, or concept one layer at a time. Skeleton first; one layer per turn; each new term glossed at first use; key claims anchored and marked recorded, inferred, or unknown; the learner's questions set route and depth; each turn ends at a checkpoint naming what is open. Per layer it picks a form (plain text, analogy, picture, object to poke), names it in a short phrase, and honors overrides. No fixed level count, gates, or learner-state file. NOT a single explanation or ELI5: that is /frame:analogize. ADR-138.",
-              "zh": "一層一層帶人認識不熟的 repo、library、論文、書或概念。先給骨架；一回合只講一層；每個新詞第一次出現就補一句 gloss；重要主張標出處並區分「來源記載／我的推論／未知」；學習者的問題決定路線與深度；每回合停在說明還有什麼沒解的 checkpoint。每一層自己選形式（純文字、類比、圖、可操作的物件）、用一個短語說出來、並接受隨時覆寫。沒有固定層數、關卡或學習者狀態檔。NOT 單次解釋或 ELI5——那是 /frame:analogize。ADR-138。"
+              "en": "Walk someone through an unfamiliar repository, library, paper, book, or concept one layer at a time. Skeleton first; one layer per turn; each new term glossed at first use; key claims anchored and marked recorded, inferred, or unknown; the learner's questions set route and depth; each turn ends at a checkpoint naming what is open. Per layer it picks a form (plain text, analogy, picture, object to poke), names it in a short phrase, and honors overrides. No fixed level count, gates, or learner-state file. NOT a single explanation or ELI5: that is /frame:analogize. ADR-010.",
+              "zh": "一層一層帶人認識不熟的 repo、library、論文、書或概念。先給骨架；一回合只講一層；每個新詞第一次出現就補一句 gloss；重要主張標出處並區分「來源記載／我的推論／未知」；學習者的問題決定路線與深度；每回合停在說明還有什麼沒解的 checkpoint。每一層自己選形式（純文字、類比、圖、可操作的物件）、用一個短語說出來、並接受隨時覆寫。沒有固定層數、關卡或學習者狀態檔。NOT 單次解釋或 ELI5——那是 /frame:analogize。ADR-010。"
             }
           ],
           "tinker": [
             "",
             {
-              "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /shape:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-138.",
-              "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /shape:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-138。"
+              "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /shape:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-010.",
+              "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /shape:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-010。"
             }
           ]
         },
@@ -249,8 +249,8 @@
             "zh": "理解它"
           },
           "desc": {
-            "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-128, ADR-138.",
-            "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-128、ADR-138。"
+            "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-010.",
+            "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-010、ADR-010。"
           }
         }
       }

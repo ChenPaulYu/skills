@@ -1,6 +1,6 @@
 # Probe and source-roster follow-up — observed outcomes
 
-> 2026-09-30 · ADR-135 · Three fresh gpt-6-luna contexts, four execution turns.
+> 2026-09-30 · ADR-012 · Three fresh gpt-6-luna contexts, four execution turns.
 
 The generator discrepancy is covered by real-builder regression tests. Existing-evidence
 probe selection and assessment worked in this sample. Whole-tree artifact retention still
@@ -90,7 +90,7 @@ running the existing sync ritual resolved them; no manual cache surgery was used
 
 The owner subsequently authorized committing and pushing these verified changes and
 refreshing this machine's installed skills. That publication/update step adds no model
-trials. Publication of the preceding ADR-134 change was completed separately.
+trials. Publication of the preceding ADR-019 change was completed separately.
 
 ## Usage and limits
 

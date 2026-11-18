@@ -2,11 +2,11 @@
 
 > Claude Code plugin files are the frozen source contract. Codex compatibility is a generated projection owned by `platforms/codex/` and `scripts/build-codex.mjs`.
 
-The Codex adapter now releases independently from the Claude marketplace. Its release/schema metadata and fresh-install smoke ownership live in `platforms/codex/manifest.json`; the ratified release contract is [ADR-083](docs/adr/083-codex-adapter-independent-release.md).
+The Codex adapter now releases independently from the Claude marketplace. Its release/schema metadata and fresh-install smoke ownership live in `platforms/codex/manifest.json`; the ratified release contract is [ADR-017](docs/adr/017-platform-mirrors.md).
 
 ## The rule
 
-Never solve Codex compatibility by weakening or forking the Claude skill. Keep `plugins/**`, `CLAUDE.md`, `.claude-plugin/**`, and `plugins/*/.cursor-plugin/**` unchanged. Translate host-specific syntax and runtime assumptions while preserving the skill's behavioral gates. **Cursor is not this adapter** — it has its own generated plugin tree ([ADR-118](docs/adr/118-cursor-native-plugin-adapter.md), [`docs/cursor-compatibility.md`](docs/cursor-compatibility.md)).
+Never solve Codex compatibility by weakening or forking the Claude skill. Keep `plugins/**`, `CLAUDE.md`, `.claude-plugin/**`, and `plugins/*/.cursor-plugin/**` unchanged. Translate host-specific syntax and runtime assumptions while preserving the skill's behavioral gates. **Cursor is not this adapter** — it has its own generated plugin tree ([ADR-017](docs/adr/017-platform-mirrors.md), [`docs/cursor-compatibility.md`](docs/cursor-compatibility.md)).
 
 ```text
 Claude owner                          Codex projection
@@ -24,7 +24,7 @@ Codex always sees every installed skill's `name` and `description`; it loads the
 The repo-root `AGENTS.md` embeds shared marketplace editing rules and links to native family
 maintainer guides. Read only the affected family's guide before editing its source. Those
 links remain source paths; runtime skill guidance still undergoes normal host translation
-(ADR-132).
+(ADR-002).
 
 1. **One active copy per skill.** Never install the same generated name in both `~/.agents/skills` and `~/.codex/skills`. Prefer `--global-root codex` when Cursor plugins are also global (Cursor scans `~/.agents/skills` by default). Project and global copies also overlap while that project is open, so prefer a small global profile when not using the Cursor-safe root.
 2. **Codex descriptions are sidecars.** `platforms/codex/descriptions.json` owns short, trigger-first descriptions. Claude descriptions remain complete and unchanged. Whenever a Claude skill's routing semantics or frontmatter description changes, review its Codex sidecar in the same change; leaving the sidecar text unchanged is a deliberate review result, never an omission.

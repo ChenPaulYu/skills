@@ -2,7 +2,7 @@
 /**
  * skill-usage.mjs — monthly skill-usage ledger from local Claude Code + Codex transcripts.
  *
- * Why this exists: ADR-109 retires a model-invoked skill after "zero fires across
+ * Why this exists: ADR-009 retires a model-invoked skill after "zero fires across
  * three months of transcripts", but local transcripts are kept only ~5 weeks, so
  * the rule cannot be checked after the fact. A monthly snapshot committed under
  * docs/usage/ accumulates the evidence. Snapshots hold skill names and counts only.

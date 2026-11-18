@@ -26,7 +26,7 @@ const INTERACTIVE_CHOICE_CONSUMERS = {
 };
 
 const BROWSER_VERIFY_ANCHORS = {
-  "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-124)",
+  "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-008)",
   "shape-dogfood": "## Workflow",
 };
 

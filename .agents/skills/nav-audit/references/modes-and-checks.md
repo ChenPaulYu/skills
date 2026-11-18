@@ -21,7 +21,7 @@ Full detail behind `audit`'s Stance summary — the check tables, the three-mode
 - Function: > 100 LOC = suspect
 - Imports per file: > 20 = wide caller surface
 
-> **A threshold is a signal to look, never a verdict to cut (ADR-122).** Every number above says
+> **A threshold is a signal to look, never a verdict to cut (ADR-003).** Every number above says
 > *examine this*, not *fix this* — report them as evidence, never as a to-do list. The question
 > that overrides any of them: **does this section have a name that lets its caller stop knowing
 > what is inside?** If the length comes from **surface width** (a wide CLI/flag/prop contract) or
@@ -32,7 +32,7 @@ Full detail behind `audit`'s Stance summary — the check tables, the three-mode
 
 ## Three modes — read first
 
-Modes 1 and 2 differ by **scope + framing**; Mode 3 differs by **depth** (single-pass vs fan-out) and defaults to Mode 1's scope. See [ADR-043](docs/adr/043-audit-deep-mode-domain-fanout.md).
+Modes 1 and 2 differ by **scope + framing**; Mode 3 differs by **depth** (single-pass vs fan-out) and defaults to Mode 1's scope. See [ADR-004](docs/adr/004-nav-verb-roster.md).
 
 ### Mode 1: Unconditional health audit (no input beyond cwd)
 
@@ -40,7 +40,7 @@ Triggered when the user asks "is this code healthy?", "audit my codebase", "any 
 
 → Run all checks across all domains. Report by rule.
 
-→ **Auto-suggest the deep upgrade.** After Step 1's stack + scope detection, if the codebase looks **large/legacy** — many domains, many source files, **no file-top headers, no barrels** (the organic shape of code not grown with nav) — a single pass will *satisfice* (sample a few domains and stop; see [ADR-043](docs/adr/043-audit-deep-mode-domain-fanout.md)). Finish the normal Mode 1 pass, then **offer Mode 3** at the end: "this looks large/legacy — a single pass likely missed domains; want a deep sweep (one worker per domain)?" **Never auto-run it** — the fan-out costs N× a normal audit, so the spend is the user's call.
+→ **Auto-suggest the deep upgrade.** After Step 1's stack + scope detection, if the codebase looks **large/legacy** — many domains, many source files, **no file-top headers, no barrels** (the organic shape of code not grown with nav) — a single pass will *satisfice* (sample a few domains and stop; see [ADR-004](docs/adr/004-nav-verb-roster.md)). Finish the normal Mode 1 pass, then **offer Mode 3** at the end: "this looks large/legacy — a single pass likely missed domains; want a deep sweep (one worker per domain)?" **Never auto-run it** — the fan-out costs N× a normal audit, so the spend is the user's call.
 
 ### Mode 2: Feasibility audit (input: a spec / plan / feature description) — read-only quick check
 
@@ -52,13 +52,13 @@ Triggered when the user gives a path to a spec / plan / feature description and 
 
 The mechanical + heuristic checks below are identical in both modes — only the SCOPE (which files) and the REPORT FRAMING (general health vs gap-vs-target) differ.
 
-> **Want the full workflow?** Mode 2 stops at the gap-analysis report. If the user wants to also clarify the ambiguities the spec leaves open AND produce a durable plan artifact, redirect to `nav-plan` — it inlines Mode 2's Stage 1 and then continues with dialog + an implementation plan in the owning work item. (`nav-plan` will reuse Mode 2's output if you just ran it in this session — see ADR-006.)
+> **Want the full workflow?** Mode 2 stops at the gap-analysis report. If the user wants to also clarify the ambiguities the spec leaves open AND produce a durable plan artifact, redirect to `nav-plan` — it inlines Mode 2's Stage 1 and then continues with dialog + an implementation plan in the owning work item. (`nav-plan` will reuse Mode 2's output if you just ran it in this session — see ADR-004.)
 
 ### Mode 3: Deep sweep (depth strategy — fan-out instead of single-pass)
 
 Triggered explicitly ("deep audit", "徹底掃描", "full sweep", "find all the issues at once", "legacy sweep", "audit thoroughly"), or accepted from Mode 1's auto-suggest above. Defaults to Mode 1's whole-repo health scope.
 
-**Why it exists.** Modes 1/2 run in **one context, one pass**. On a large/legacy codebase that context can't hold the whole repo, so the agent **satisfices** — scans a few domains, self-evals a few leaders, and stops. Coverage is silently partial and the output is a flat list, not the few root causes. Mode 3 fixes both: **fan out one read-only worker per domain** (parallel — total time bounded by the largest domain, not by one context), then **synthesize + root-cause cluster + critic-loop until coverage is dry**. See [ADR-043](docs/adr/043-audit-deep-mode-domain-fanout.md).
+**Why it exists.** Modes 1/2 run in **one context, one pass**. On a large/legacy codebase that context can't hold the whole repo, so the agent **satisfices** — scans a few domains, self-evals a few leaders, and stops. Coverage is silently partial and the output is a flat list, not the few root causes. Mode 3 fixes both: **fan out one read-only worker per domain** (parallel — total time bounded by the largest domain, not by one context), then **synthesize + root-cause cluster + critic-loop until coverage is dry**. See [ADR-004](docs/adr/004-nav-verb-roster.md).
 
 → Run the **deep process** (`references/deep-sweep.md`) instead of the single-pass Step 3-5. The checks themselves are identical — only the *execution* (fan-out vs single context) and the *synthesis* (prioritized root causes, not a flat per-rule list) differ.
 
@@ -127,7 +127,7 @@ For each domain leader and every file > 100 LOC:
 | Temporal decomposition | Modules/classes split by execution order (e.g. `read`/`modify`/`write` over a shared format) rather than by knowledge — a common cause of the leakage above | ① |
 | Value-leakage (canary + proximity) | An **owned** value (a token / named const) with raw copies elsewhere → consolidate to the owner; a **cluster of near-identical values** (sub-JND, or no documented level-or-category reason) → collapse. Scan code AND non-code layers (CSS arbitrary values / `@theme` tokens, prompt strings, config). | ① |
 
-> **Value-leakage — run it anchored, not naive.** Don't scan every literal (that flags `2` / `'px'` → noise that gets ignored). Two *anchored* screens: **canary** — inventory the *owners* (CSS-var / `@theme` tokens, exported color/const consts, config keys), then `grep` each owner's value for raw copies outside its definition → each copy is a leak (anchoring on what's already owned is the human-proof that this category *is* a decision). **proximity** — cluster near-identical values (e.g. ΔE for colors); a cluster with no single owner, or members within just-noticeable distance, is drift. **The machine screens physical duplication/proximity; *you* judge semantic legitimacy** — a value escapes consolidation only if it is *perceptibly* distinct AND maps to a real, documented level/category (a sub-JND "category" is drift, whatever the stated reason). This is the **aggregate backstop** for what `nav-do` (per-change) and `nav-plan` (foresight) structurally can't catch — see [ADR-032](docs/adr/032-value-leakage-layer-agnostic-three-tier.md).
+> **Value-leakage — run it anchored, not naive.** Don't scan every literal (that flags `2` / `'px'` → noise that gets ignored). Two *anchored* screens: **canary** — inventory the *owners* (CSS-var / `@theme` tokens, exported color/const consts, config keys), then `grep` each owner's value for raw copies outside its definition → each copy is a leak (anchoring on what's already owned is the human-proof that this category *is* a decision). **proximity** — cluster near-identical values (e.g. ΔE for colors); a cluster with no single owner, or members within just-noticeable distance, is drift. **The machine screens physical duplication/proximity; *you* judge semantic legitimacy** — a value escapes consolidation only if it is *perceptibly* distinct AND maps to a real, documented level/category (a sub-JND "category" is drift, whatever the stated reason). This is the **aggregate backstop** for what `nav-do` (per-change) and `nav-plan` (foresight) structurally can't catch — see [ADR-003](docs/adr/003-nav-eight-rules.md).
 
 **TS/React specific (only if React detected):**
 
@@ -184,4 +184,4 @@ Group findings by rule number. Within each rule, sort by severity: error > warn 
   commands, which cut cleanly to 11 lines. The tell that it is NOT: the only names available for
   the parts are execution phases (`preflight`/`resolve`/`land`/`execute`) — that is temporal
   decomposition (rule ①), and the extracted helpers will each have exactly one caller and a wide
-  parameter list, i.e. shallow modules that hide nothing. Full case: ADR-122.
+  parameter list, i.e. shallow modules that hide nothing. Full case: ADR-003.

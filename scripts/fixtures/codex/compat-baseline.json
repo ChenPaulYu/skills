@@ -56,7 +56,7 @@
   "ratchet_ledger": [
     {
       "date": "2026-07-13",
-      "reason": "ADR-068 arbitration: ADR-067 dispatch-tiers content legitimately adds worker-dispatch / model-tier / explicit-invocation language to nav-plan, nav-audit, shape-build and AGENTS.md. Conscious bump; to be ratcheted back down when build-codex learns to lower/strip Claude-only dispatch semantics (codex-compatibility Phases 1-5).",
+      "reason": "ADR-017 arbitration: ADR-007 dispatch-tiers content legitimately adds worker-dispatch / model-tier / explicit-invocation language to nav-plan, nav-audit, shape-build and AGENTS.md. Conscious bump; to be ratcheted back down when build-codex learns to lower/strip Claude-only dispatch semantics (codex-compatibility Phases 1-5).",
       "bumps": {
         "subagent_protocol": {
           ".agents/skills/nav-plan/SKILL.md": "10->11",
@@ -75,7 +75,7 @@
     },
     {
       "date": "2026-07-13",
-      "reason": "Sonnet exec batch P1+P5 (blueprints/plans/2026-07-13-sonnet-exec-batch.md): ADR-069 lands nav:compose's new authoring-failure-modes.md reference doc, which cites the existing 'inject -> check' sub-agent hand-off term once as a Leading-Word example (worker_dispatch capability, not a new dispatch protocol). ADR-070 lands the new reflect:park skill with disable-model-invocation: true (explicit_invocation_only capability), consistent with every other summoned-only reflect member. Both are new generated files (baseline 0 -> 1), not growth in an existing file. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "reason": "Sonnet exec batch P1+P5 (blueprints/plans/2026-07-13-sonnet-exec-batch.md): ADR-002 lands nav:compose's new authoring-failure-modes.md reference doc, which cites the existing 'inject -> check' sub-agent hand-off term once as a Leading-Word example (worker_dispatch capability, not a new dispatch protocol). ADR-009 lands the new reflect:park skill with disable-model-invocation: true (explicit_invocation_only capability), consistent with every other summoned-only reflect member. Both are new generated files (baseline 0 -> 1), not growth in an existing file. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
       "bumps": {
         "subagent_protocol": {
           ".agents/skills/nav-compose/references/authoring-failure-modes.md": "0->1"
@@ -87,7 +87,7 @@
     },
     {
       "date": "2026-07-13",
-      "reason": "invocation-direction-law (W5) inventory (ADR-072): root CLAUDE.md gains a new Authoring-conventions bullet ('Invocation category is visible, not just in frontmatter') that names the existing disable-model-invocation frontmatter flag a second time in prose, alongside ADR-065's existing mention in the same file. No new capability — the same flag already counted once, now referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "reason": "invocation-direction-law (W5) inventory (ADR-002): root CLAUDE.md gains a new Authoring-conventions bullet ('Invocation category is visible, not just in frontmatter') that names the existing disable-model-invocation frontmatter flag a second time in prose, alongside ADR-002's existing mention in the same file. No new capability — the same flag already counted once, now referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
       "bumps": {
         "disable_model_invocation": {
           "AGENTS.md": "1->2"
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-07-14",
-      "reason": "ADR-081 extends ADR-067's dispatch-tiers convention with a pre-dispatch proposal gate, borrowing ADR-040's batch-proposal-gate pattern by name — root CLAUDE.md's dispatch-tiers bullet names 'AskUserQuestion-style ask' a second time, alongside the existing nav:plan Stage-4 mention already counted once. No new capability — the same interactive_choice mechanism, referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
+      "reason": "ADR-007 extends ADR-007's dispatch-tiers convention with a pre-dispatch proposal gate, borrowing ADR-009's batch-proposal-gate pattern by name — root CLAUDE.md's dispatch-tiers bullet names 'AskUserQuestion-style ask' a second time, alongside the existing nav:plan Stage-4 mention already counted once. No new capability — the same interactive_choice mechanism, referenced twice in explanatory text. Conscious bump; ratchets back down once build-codex learns to lower/strip these Claude-only capabilities (codex-compatibility Phases 1-5).",
       "bumps": {
         "ask_user_question": {
           "AGENTS.md": "1->2"
@@ -151,7 +151,7 @@
           ".agents/skills/shape-align/references/dev-workflow-stub.md": "1->0"
         }
       },
-      "note": "reflect-summarize's prior disable_model_invocation/model_sonnet baseline entries (ADR-079 retired that skill before this ratchet) were removed as stale rather than dropped-to-zero."
+      "note": "reflect-summarize's prior disable_model_invocation/model_sonnet baseline entries (ADR-009 retired that skill before this ratchet) were removed as stale rather than dropped-to-zero."
     },
     {
       "date": "2026-07-14",
@@ -191,7 +191,7 @@
     },
     {
       "date": "2026-08-13",
-      "reason": "ADR-113: reflect dissolves (catchup + park merge into shape-baton, retrace retires). .agents/skills/reflect-catchup, reflect-park, reflect-retrace are deleted outright, so their prior zeroed counts simply stop existing rather than dropping further. Shape-baton later split back into explicit shape-park and shape-catchup entrances while preserving the same baton/HANDOFF disk paths; both carry disable-model-invocation: true in source frontmatter, same as every other explicit_invocation_only member. lowerFrontmatter strips it and injects the equivalent body-level policy paragraph exactly as it already does for shape-migrate, so the generated files' disable_model_invocation counts stay 0. No per_file_max_counts change needed.",
+      "reason": "ADR-009: reflect dissolves (catchup + park merge into shape-baton, retrace retires). .agents/skills/reflect-catchup, reflect-park, reflect-retrace are deleted outright, so their prior zeroed counts simply stop existing rather than dropping further. Shape-baton later split back into explicit shape-park and shape-catchup entrances while preserving the same baton/HANDOFF disk paths; both carry disable-model-invocation: true in source frontmatter, same as every other explicit_invocation_only member. lowerFrontmatter strips it and injects the equivalent body-level policy paragraph exactly as it already does for shape-migrate, so the generated files' disable_model_invocation counts stay 0. No per_file_max_counts change needed.",
       "bumps": {}
     }
   ]

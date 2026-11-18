@@ -13,14 +13,14 @@
 ### Task 1: Specify the active digest contract
 
 **Files:**
-- Create: `docs/adr/121-relay-active-digest-inbox-and-triage.md`
+- Create: `docs/adr/009-retirement-policy.md`
 - Modify: `plugins/relay/skills/digest/SKILL.md`
 - Modify: `plugins/relay/skills/digest/references/presentation-and-schema.md`
 - Modify: `plugins/relay/CLAUDE.md`
 
 **Steps:**
 
-1. Write ADR-121: session-start preflight, source obligations versus generated triage wrappers, escalation ownership, and the read-only boundary.
+1. Write ADR-009: session-start preflight, source obligations versus generated triage wrappers, escalation ownership, and the read-only boundary.
 2. Update the digest skill to require an inbox-first presentation: open obligation count, overdue count, oldest overdue item, and first native action. State that “seen” is not completion.
 3. Document `schemaVersion: 6`, `inbox`, and `triage` fields, including the fact that triage wrappers are not included in `obligations`.
 4. Update Relay’s lifecycle/reminder contract to point to the new reducer output and preserve the workspace delivery boundary.
@@ -63,7 +63,7 @@
 
 1. Bump Relay from `2.5.1` to `2.5.2` because the skill contract and reducer schema changed.
 2. Run `node scripts/build-manifests.mjs` and `node scripts/build-codex.mjs`.
-3. Update the README and bilingual site map with schema 6, inbox-first digest behavior, ADR-121, and the new version; regenerate Cursor projections with `node scripts/build-cursor.mjs` if required by the validator.
+3. Update the README and bilingual site map with schema 6, inbox-first digest behavior, ADR-009, and the new version; regenerate Cursor projections with `node scripts/build-cursor.mjs` if required by the validator.
 4. Run `node plugins/relay/skills/digest/scripts/compute-state.test.mjs` and `node scripts/validate-codex-skills.mjs`.
 5. Run `git diff --check`, inspect the complete diff, and verify no unrelated files changed.
 6. Commit all source, generated, documentation, and release-surface changes together.
