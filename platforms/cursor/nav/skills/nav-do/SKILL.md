@@ -50,6 +50,14 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 **甲 — the enforced thin bracket.** Three beats, no artifact:
 
 #### inject (→) — ground before you touch (cheap)
+- **Check the Git baseline.** Identify the target branch and HEAD, inspect staged
+  and unstaged changes and untracked files, and check whether commits cited by
+  the Task belong to the target history. Resolve discrepancies before relying on
+  the Task's code snapshot. Use the current checkout for bounded work that can
+  coexist with local edits. Use a separate worktree when concurrent edits,
+  comparison runs, or verification output need isolation. Confirm that the
+  chosen worktree includes any local changes the task depends on. See
+  **Git baseline and isolation** in `references/do-protocol.md`.
 - `head -12` the file(s) the change lands in — role + `Reads` without reading the body. (No header? that's a rule-① smell; note it.)
 - **grep the target domain for a reusable existing impl** before adding anything new — the single most common miss. A fresh execution re-implements what's already there (the canonical ADR-008 failure: a re-written `fillPath()` that already existed with important bucketing, shipped green-tested). Reuse it; don't add a parallel one.
 - **CLI packaging/docs work:** check the package's command-entry contract before editing docs or wrappers (Python: `[project.scripts]`; Node: `bin`; Rust: installed binary name). Daily-use docs should lead with install-once → bare command; project runners (`uv run`, `npm run`, etc.) belong in the local-development path unless the tool is intentionally repo-only.
@@ -83,6 +91,9 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    Record actual checks, relevant inputs/states, observed results and remaining limits separately
    from proposed checks. A newly discovered regression is additional evidence; do not claim the
    original verification plan already covered it.
+   Tie results to the tested commit or to HEAD plus the scoped uncommitted diff.
+   When an existing PR or CI run is relevant, check its tested revision and
+   actual status before citing it. Leave publication and integration to nav-ship.
 4. **Work-item sync** — in a connected workspace, update the original task's
    deliverable checkboxes, verification/limits and next action. Check a deliverable
    after its acceptance passes. Reuse live legacy work in place and preserve its

@@ -39,6 +39,24 @@ Keep structural preparation and changed behavior reviewable. Prefer verbatim mov
 fit, but preserve behavior rather than requiring identical source text. Unrelated restructuring
 and discovered bugs remain separate findings unless they are already in scope.
 
+## Git baseline and isolation
+
+Run `git status --short --branch` and `git rev-parse --short HEAD` in the code
+checkout. Use `git diff` and `git diff --cached` for affected paths. Use
+`git merge-base --is-ancestor <task-commit> HEAD` when a task cites a material
+revision. If that check fails, inspect the relevant diff or history before
+concluding the change is missing. A squash or cherry-pick can carry equivalent work.
+
+For isolated work, inspect `git worktree list` and start from the verified revision.
+A new worktree starts from committed content. If the task depends on local edits,
+identify the required changes and verify their presence in the isolated checkout
+before running acceptance. Preserve unrelated work in the original checkout.
+
+For an existing GitHub PR, compare its head and the CI run's tested SHA with the
+revision under review. Record relevant check and merge status as separate facts.
+Put evidence links in the owning task and keep private workspace references out
+of public GitHub content.
+
 ## Verification examples
 
 - A pure helper change: targeted tests for the changed cases and existing callers.

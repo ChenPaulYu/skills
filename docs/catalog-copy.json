@@ -8,7 +8,7 @@
           "refactor": "execute a behavior-preserving structural refactor with risk-proportional verification",
           "sync": "check or update source headers, README, setup, usage, API, and architecture documents against current code; catch stale claims and missing reader workflows. Supports complete README/docs batches, with every file accounted for; no standing HTML map (ADR-131)",
           "plan": "ground a requested engineering proposal in code, including ownership, reuse, compatibility and verification",
-          "do": "find the owning task before editing, implement authorized changes, and record verified progress in the original task",
+          "do": "find the owning task and Git baseline before editing, implement authorized changes, and record verified progress in the original task",
           "compose": "author or restructure a document: lead with the point, group by concern, and preserve claims and sources; preview the structure or diff and complete authorized edits without another generic approval",
           "ship": "land finished work: commit only this task's changes, push, merge into the main branch (or open a PR when the project requires one), remove merged branches and clean worktrees, then run the project's documented `## Ship` tail; the verb after `/nav:do` (ADR-139)"
         }
@@ -51,8 +51,8 @@
           "do": [
             "",
             {
-              "en": "Look up the work item before editing. Implement authorized work, verify each deliverable, and record evidence in its original task.",
-              "zh": "動手前先查既有工作紀錄。實作已授權的變更，逐項驗收並把證據寫回原 Task。"
+              "en": "Look up the work item and Git baseline before editing. Isolate work when needed, verify the tested revision, and record evidence in the original task.",
+              "zh": "動手前先查既有工作紀錄與 Git 基準。需要隔離時使用 worktree，確認實際驗過的版本並把證據寫回原 Task。"
             }
           ],
           "compose": [
