@@ -28,6 +28,8 @@ appropriate record only when it adds independent value; link it to the task.
 When the user explicitly puts unfinished work aside for later, mark it `paused`
 (or `blocked` when a recorded external dependency prevents progress). Ending the
 round does not make a task `done`.
+Use **Carry a decision into the next step** in `references/record-interface.md`
+to leave the next session the result and the evidence it needs to act.
 
 When saving includes a mockup, probe or other working artifact, read
 `references/development-artifacts.md` and preserve the actual artifact and required

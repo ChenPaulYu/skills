@@ -26,3 +26,5 @@ authorization. A discussion alone need not create a file. Leave a captured idea
 `saved` unless evidence supports another state; do not create a task, plan, deadline,
 priority, or approval merely because the idea is now durable. Report its location
 and one useful way to find it again (topic or related record).
+On revisiting it, use **Carry a decision into the next step** in
+`references/record-interface.md` when there is a concrete question or decision to carry forward.

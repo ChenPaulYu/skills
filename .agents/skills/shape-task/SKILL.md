@@ -50,3 +50,5 @@ verified progress and keep the next ready action and any material blockers visib
 Report the task and its next action. Recording work leaves it planned until
 execution is authorized. For a combined request to record and implement, finish
 the task record, then hand execution to nav-do under the existing authorization.
+Use **Carry a decision into the next step** in `references/record-interface.md`
+to link the upstream evidence that defines acceptance.

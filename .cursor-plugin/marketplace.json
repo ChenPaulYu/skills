@@ -18,13 +18,13 @@
       "name": "nav",
       "source": "nav",
       "description": "Keep code healthy: audit, refactor, sync headers and reader documents, plan, do, and compose.",
-      "version": "0.28.4"
+      "version": "0.28.5"
     },
     {
       "name": "shape",
       "source": "shape",
       "description": "Capture ideas, converge decisions, verify evidence, resume and save task-owned work, and tidy project records.",
-      "version": "0.35.16"
+      "version": "0.35.17"
     }
   ]
 }

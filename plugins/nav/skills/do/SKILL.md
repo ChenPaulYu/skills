@@ -109,6 +109,8 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    progress in its owning record, including when a compatibility board is present.
    When a legacy board still owns the work, update only the matching item in the
    same change with verified progress or completion and an evidence pointer.
+   Use **Carry a decision into the next step** in `references/record-interface.md`
+   to keep material evidence and the next action with the work item.
 
 Scope decisions, ownership checks, and examples of risk-proportional verification: `references/do-protocol.md`.
 

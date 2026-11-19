@@ -71,18 +71,29 @@ permanent media backup or a change to the Mockup’s lifecycle status.
 
 ## Carry a decision into the next step
 
-When discussion, a mockup, or evidence settles a question, name the next useful
-step if one is clear. A durable product decision or rationale belongs in a
-Thought. A decided change with observable completion belongs in a Task. Reuse the
-card that already owns the work. Keep the reason in that card if it serves only
-that task. An open question or inconclusive result stays with its evidence until
-there is a decision to act on.
+Choose the next step from what the current result establishes:
 
-If recording or execution is already authorized, carry the confirmed outcome,
-reasons and evidence into that work and continue. Otherwise make one concrete
-suggestion in the reply, naming the record or action and what it would capture.
-A small answer can stay in chat. A stage transition needs neither a menu nor a
-new card by default.
+- **Open.** Name the missing judgment or observation. Use Elicit for a choice
+  the user can settle, Mockup for a choice that needs to be seen or tried, Probe
+  for an empirical question, or Dogfood to inspect friction in a built feature.
+  Keep inconclusive results with their evidence and continue only if another
+  useful check is warranted. A saved idea can wait for its revisit condition.
+- **Decided.** Put a durable decision or rationale in its Thought, or a decided
+  change with observable completion in its Task. Reuse the existing owner; keep
+  rationale that serves only one task in that task. Send authorized execution to
+  Nav with the agreed outcome and acceptance checks.
+- **Implemented or checked.** Write observed results, verification limits, and
+  the next executable action into the original Task. Wrap leaves it ready for
+  Status to resume. When required checks pass, close the Task and review linked
+  cards against their own exit conditions. Tidy handles retirement and Ship handles
+  landing or publishing within their authorized scope.
+
+Carry the result, the evidence that affects the next check, and the next action
+in the existing record or the reply. Link evidence that governs downstream work
+in the owning card's Relations, such as the selected mockup that defines acceptance.
+Continue already-authorized work. Otherwise suggest one concrete next action when
+it adds value. A small answer can stay in chat. Reuse the current scope and record
+without requiring a fixed sequence, a chooser, or a separate handoff document.
 
 ## Honest dates
 
