@@ -159,8 +159,11 @@ show the intended delta. Existing save/implementation authority covers its recor
 update. Conflicting evidence stays visible until resolved. A task is done only when
 its completion criteria are met; distinguish implementation from verified behavior.
 
-A task closes when its required outcomes are verified. Record the user's firsthand
-acceptance for the exact experience it covers. Track engineering checks separately.
+A task closes when its required outcomes are verified. For an experience or design
+outcome, use the relevant human's firsthand judgment of whether it solves the
+problem, and record the exact scope accepted. Automated checks establish whether
+the agreed observable behavior was delivered and continues to work. Track those
+checks separately from the human verdict.
 When a check fails or has not run, name the concrete product problem it shows or the
 agreed acceptance or release gate it affects. If the connection is unclear, record
 the engineering uncertainty without reopening the accepted issue or making the user

@@ -30,6 +30,9 @@ its acceptance check in the same list: entry or starting state, action, and
 observable result. Preserve affected existing behavior. Include older saved data,
 failure/retry, and continuation paths when the outcome depends on them. For a
 generated answer, specify what the answer must demonstrate from the source.
+For a change to the user's experience, name the outcome for human judgment and
+the observable behavior engineering will verify. Use **Updating and closing** in
+`references/workspace-records.md` to carry both into acceptance.
 A small task may need one checkbox. Split records only when work must be owned,
 scheduled, or closed independently.
 
