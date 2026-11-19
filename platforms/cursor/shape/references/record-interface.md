@@ -47,8 +47,21 @@ The title may be rendered from frontmatter. A short conclusion is prose owned by
 the record, not a second project-wide progress board. A mockup needs its question,
 pick/open choice, artifacts and retirement conditions; a task needs progress,
 deliverables paired with acceptance checks, verification/limits and next action.
-Existing engineering notes keep their established interface. An idea can
-remain just a spark and why it was saved. Do not require six documents for one item.
+Existing engineering notes keep their established interface. An idea can be a short
+description of the spark and why it was saved. Do not require six documents for one item.
+
+When creating a work card, write one checkable condition for when it can leave
+active use and what happens then (close, consolidate, supersede, or retire the
+comparison). Use an existing acceptance, decision, revisit, or retirement sentence
+when it already answers both questions. For a task, verified required outcomes close
+the task. For an idea, name the observation or decision that resolves whether to
+pursue it. A mockup can retire when its choice and rationale have a durable owner
+and any required implementation has been verified. A probe can conclude when the
+agreed check yields a recorded verdict, including an inconclusive one. An adopted
+thought stays live until a later decision or verified change displaces its rationale.
+Use prose in the existing format. Keep older cards readable when this condition is
+absent; during cleanup, establish their disposition from evidence and preserve
+reasons, links, and recovery.
 
 A Mockup may carry an optional `preview_url` for its directly openable HTTP(S) view.
 The reader exposes that link separately from selecting the record; absent or unsupported

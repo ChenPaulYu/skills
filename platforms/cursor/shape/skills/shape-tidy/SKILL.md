@@ -27,7 +27,8 @@ for retention policy, Git checks, and preservation of local evidence.
    nonstandard, or absent input. No tree or equivalent material means nothing to tidy;
    report that without scaffolding. Read `references/protocol.md` for the inventory and
    cleanup sequence. Preserve the existing record format; status edits need no new template.
-2. **Check reality, not dates alone.** Inspect code, relevant tests, Git, and later decisions.
+2. **Check the card's exit condition against reality.** Start from the condition in the
+   card when present. Inspect code, relevant tests, Git, and later decisions.
    Headers and search hits locate evidence but do not establish completion. Reuse fresh
    same-session evidence only after checking relevant working-tree changes. Work is
    shipped only when its required behavior and verification are accounted for; otherwise
