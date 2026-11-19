@@ -1,6 +1,6 @@
 {
   "name": "nav",
-  "version": "0.28.3",
+  "version": "0.28.4",
   "description": "Keep code navigable: audit structure, refactor without changing behavior, sync source headers and reader documents against implementation, implement decided work, ground requested engineering approaches, ship finished work, and compose clear documents.",
   "author": {
     "name": "Paul",

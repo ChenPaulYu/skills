@@ -67,5 +67,7 @@ silently overwrite a conflicting decision. A small answer may remain in chat.
 
 A diagnosis-only request does not authorize code changes. If the larger request
 already includes implementation and the decision is settled, return to that
-workflow with its normal checks. Otherwise stop with the result; ask only for a
-missing consequential choice or authority. No mandatory next-action menu.
+workflow with its normal checks. When a settled result merits recording or
+execution, apply **Carry a decision into the next step** in
+`references/record-interface.md`. Ask only for a missing consequential choice or
+authority. No mandatory next-action menu.

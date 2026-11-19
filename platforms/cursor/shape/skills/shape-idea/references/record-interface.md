@@ -71,6 +71,21 @@ URLs do not produce an open action. Keep the original artifact locator and prese
 information in the card. A localhost preview is a disposable session locator, not a
 permanent media backup or a change to the Mockup’s lifecycle status.
 
+## Carry a decision into the next step
+
+When discussion, a mockup, or evidence settles a question, name the next useful
+step if one is clear. A durable product decision or rationale belongs in a
+Thought. A decided change with observable completion belongs in a Task. Reuse the
+card that already owns the work. Keep the reason in that card if it serves only
+that task. An open question or inconclusive result stays with its evidence until
+there is a decision to act on.
+
+If recording or execution is already authorized, carry the confirmed outcome,
+reasons and evidence into that work and continue. Otherwise make one concrete
+suggestion in the reply, naming the record or action and what it would capture.
+A small answer can stay in chat. A stage transition needs neither a menu nor a
+new card by default.
+
 ## Honest dates
 
 - New records use `created` and `updated` in `YYYY-MM-DD`, based on the actual

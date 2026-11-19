@@ -34,6 +34,9 @@ Read `references/probe-protocol.md` when assessing measurements, designing a new
 or deciding an unclear boundary. It carries the branch-specific procedure, experiment
 shapes, output convention, and detailed scope checks.
 
+If the verdict settles a decision, apply **Carry a decision into the next step**
+in `references/record-interface.md`. Keep inconclusive evidence in the probe.
+
 ## Companion skills
 
 - **`/shape:elicit`** — the fork that sends work here (a stuck volley) and the consumer of the evidence probe brings back.

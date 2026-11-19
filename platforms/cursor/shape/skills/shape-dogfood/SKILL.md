@@ -79,6 +79,8 @@ report the blocked check and ask only for missing installation authority or scop
 Complete already-authorized follow-up work without a generic approval menu. Unresolved
 choices can use shape-elicit or shape-mockup. Shape-status owns priorities, shape-task
 defines decided work that needs tracking, and nav-do implements authorized changes.
+When a finding points to a settled change, apply **Carry a decision into the next
+step** in `references/record-interface.md`.
 
 Explain the outcome in the user's language, leading with the point and adding technical
 detail only where it helps judge the evidence.

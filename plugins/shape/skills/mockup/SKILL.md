@@ -52,9 +52,8 @@ A completed result needs no next-action menu. If the broader request already
 includes implementation or tracking and the relevant decision is settled, return
 to that authorized workflow with its normal checks, without asking again.
 A pick or diagnosis alone does not authorize a build. When a consequential
-choice or permission is still missing, ask that specific question; otherwise
-suggest a next step only when useful. Do not invent a follow-up task or invoke
-another skill automatically.
+choice or permission is still missing, ask that specific question. For a settled
+pick, apply **Carry a decision into the next step** in `references/record-interface.md`.
 
 For authorized work, use the shape-task convention when deliverables need tracking
 and nav-do discipline for implementation. Shape-status handles durable priorities.
