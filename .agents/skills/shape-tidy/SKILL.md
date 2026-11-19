@@ -29,6 +29,8 @@ for retention policy, Git checks, and preservation of local evidence.
    cleanup sequence. Preserve the existing record format; status edits need no new template.
 2. **Check the card's exit condition against reality.** Start from the condition in the
    card when present. Inspect code, relevant tests, Git, and later decisions.
+   Apply **Updating and closing** in `references/workspace-records.md` to distinguish
+   user acceptance from engineering checks and release gates.
    Headers and search hits locate evidence but do not establish completion. Reuse fresh
    same-session evidence only after checking relevant working-tree changes. Work is
    shipped only when its required behavior and verification are accounted for; otherwise

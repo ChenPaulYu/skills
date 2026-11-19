@@ -161,7 +161,12 @@ show the intended delta. Existing save/implementation authority covers its recor
 update. Conflicting evidence stays visible until resolved. A task is done only when
 its completion criteria are met; distinguish implementation from verified behavior.
 
-A task closes when its required outcomes are verified. Closing work does not expire an adopted thought.
+A task closes when its required outcomes are verified. Record the user's firsthand
+acceptance for the exact experience it covers. Track engineering checks separately.
+When a check fails or has not run, name the concrete product problem it shows or the
+agreed acceptance or release gate it affects. If the connection is unclear, record
+the engineering uncertainty without reopening the accepted issue or making the user
+repeat acceptance. Closing work does not expire an adopted thought.
 A concluded probe may remain inconclusive and authorize no task. A saved idea does
 not imply approved work. Keep deferred and rejected distinct. Superseded decisions
 link their successors; preserve useful rejected alternatives and evidence locators.
