@@ -6,6 +6,8 @@ status: raw
 plugin: nav
 plugin_version: "0.28.7"
 skill_repository_commit: "dd1de7b0579a561f3cd5ebf1c5268b5703290d91"
+pilot_version: "0.29.0"
+pilot_commit: "07e4936"
 skills: ["nav:do", "nav:audit", "nav:sync", "nav:refactor", "nav:compose", "nav:ship"]
 model: "gpt-6.2-sol"
 tags: [skill-evaluation, ablation, routing, documentation]
@@ -147,7 +149,7 @@ The variant with explicit isolation and rechecking had SHA-256
 The last pair did not establish a worker outcome advantage from the added
 instructions. Two direct replays established why the safeguards matter:
 
-- The existing [Ship command recipe](../../plugins/nav/skills/ship/references/protocol.md)
+- The Ship command recipe in the Nav 0.28.7 baseline
   staged only the two approved paths, but the following plain commit also
   included the already-staged notes. Running the docs generator in the dirty
   source tree recorded 99. Each operation succeeded while using the wrong scope.
@@ -177,3 +179,20 @@ in Chromium. The release test selected Ship and landed the CSV change
 with docs generated against the upstream default of 40. In the original
 worktree, the unrelated staged note and working drafts were preserved.
 The landed commit and its reachable remote history had no draft markers.
+In a separate cleanup-only check, a fourth worker selected Ship, removed
+the clean merged branch and worktree, and kept the dirty merged worktree
+and the unmerged branch. Local main and the remote refs stayed unchanged.
+
+### Documentation requests in the pilot
+
+Use natural-language requests. Do checks or updates the named docs against
+the requested implementation. Ship checks reader guidance affected by the
+release by default. A user request or repo rule can expand that scope to the
+full README and docs tree. Both use the same
+[on-demand procedure](../../plugins/nav/references/docs-render.md).
+
+Write authority and document scope are separate decisions. Asking for a
+full check authorizes reading the whole named scope. Asking to bring the
+docs up to date authorizes corrections within that scope. Keep explicit
+`mode` or `scope` fields deferred until a recurring automation needs a
+stable interface. Parameterized invocation was outside these experiments.
