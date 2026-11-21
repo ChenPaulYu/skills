@@ -43,7 +43,9 @@
   nav.side .subhead{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--caramel);font-weight:700;margin:18px 10px 4px;padding-top:14px;border-top:1px dashed var(--line)}
   nav.side a.indent{padding-left:22px}
   /* main */
-  main{padding:36px 44px 120px;min-width:0}
+  main{padding:36px 44px 120px;min-width:0;overflow-wrap:anywhere}
+  .file > *{min-width:0}
+  pre{max-width:100%;overflow:auto}
   section{margin-bottom:60px;scroll-margin-top:24px}
   h1{font-size:30px;margin:0 0 6px;letter-spacing:-.01em}
   h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--caramel);font-weight:700;margin:0 0 18px;display:flex;align-items:center;gap:8px}
@@ -160,7 +162,7 @@
     <a href="#conv" data-t="nav_conv">Conventions</a>
     <div class="meta">
       <div data-t="meta_about">Hand-curated · stale = lie. Re-audit when content drifts.</div>
-      <div class="updated">Updated 2026-09-30</div>
+      <div class="updated">Updated 2026-11-21</div>
     </div>
   </nav>
 
@@ -198,7 +200,7 @@
         <svg class="graph" id="cbGraph" viewBox="0 0 940 320"></svg>
         <div class="panel" id="cbPanel"></div>
       </div>
-      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame is standalone. See ADR-006/010.</span></div>
+      <div class="callout"><b data-t="pluginsmap_howread_label">How to read:</b> <span data-t="pluginsmap_howread">Four plugins: Seek finds answers, Shape keeps work resumable, Nav implements and ships, and Frame explains. Edges indicate useful handoffs, not automatic skill calls.</span></div>
     </section>
 
     <section id="rules">
@@ -220,27 +222,27 @@
     <section id="nav-anatomy">
       <h2>
         <span class="layer-chip state" data-t="layer_plugin">plugin</span>
-        <span data-t="navanat_title">nav anatomy — assess, transform, describe, execute, ship</span>
+        <span data-t="navanat_title">nav — audit, implement, ship</span>
       </h2>
-      <div class="lede" data-t="navanat_lede">Six skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes, or shows the engineering approach first when asked; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).</div>
+      <div class="lede" data-t="navanat_lede">Audit assesses architecture. Do implements, refactors and checks explanations. Ship verifies and lands the selected release.</div>
       <div class="graphwrap">
         <svg class="graph" id="navGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="navPanel"></div>
       </div>
-      <div class="callout" data-t="navanat_callout">Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. Ask <code>nav-do</code> for the engineering approach first when you want to review it before building.</div>
+      <div class="callout" data-t="navanat_callout">Use <code>shape-add</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. Ask <code>nav-do</code> for the engineering approach first when you want to review it before building.</div>
     </section>
 
     <section id="shape-anatomy">
       <h2>
         <span class="layer-chip ui" data-t="layer_plugin">plugin</span>
-      <span data-t="shape_anat_title">shape anatomy — converge · project · handoff</span>
+      <span data-t="shape_anat_title">shape — add, view, next, tend</span>
       </h2>
-      <div class="lede" data-t="shape_anat_lede">Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-014). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.</div>
+      <div class="lede" data-t="shape_anat_lede">Add captures ideas and work. View reads progress. Next advances authorized work. Tend maintains project records.</div>
       <div class="graphwrap">
         <svg class="graph" id="shapeGraph" viewBox="0 0 760 320"></svg>
         <div class="panel" id="shapePanel"></div>
       </div>
-      <div class="callout" data-t="shape_anat_callout">Align owns priorities; tidy owns design-record lifecycle; nav-sync owns source headers and reader-document accuracy. Shared evidence does not require running all three. The board is plan.md; visual views are created on demand.</div>
+      <div class="callout" data-t="shape_anat_callout">Keep progress in the original task. Save independent records only when they have a purpose. Seek owns clarification, comparisons, experiments and real-use reviews.</div>
     </section>
 
 
@@ -283,7 +285,7 @@ const T = {
     pluginsmap_title: 'Plugins map — every plugin at a glance',
     pluginsmap_lede: "One node per plugin currently living under <code>plugins/</code>. Future families (<code>spec</code>, <code>craft</code>, ...) appear here as they ship.",
     pluginsmap_howread_label: 'How to read:',
-    pluginsmap_howread: "click a node for its description. Three plugins — shape (forward motion: intent → built+verified code), nav (navigability, the maintenance half), frame (apply a named reasoning frame). shape hard-depends on nav (shape → nav — the edge shows it); nav may recommend shape back when a decision needs form, but already-authorized work continues without a forced menu. frame is standalone. See ADR-006/010.",
+    pluginsmap_howread: "Four plugins: Seek finds answers, Shape keeps work resumable, Nav implements and ships, and Frame explains. Edges indicate useful handoffs, not automatic skill calls.",
     rules_title: 'Design rules — the bar every skill clears',
     rules_lede: 'Ousterhout-derived deep-module principles + extensions for grounding and agent-navigability. This is the current live summary; historical audit entries below may quote older versions.',
     map_title: 'Skill list — search & expand',
@@ -294,9 +296,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav anatomy — assess, transform, describe, execute, ship',
-    navanat_lede: "Six skills: <code>audit</code> checks structure; <code>refactor</code> preserves behavior; <code>do</code> implements decided changes, or shows the engineering approach first when asked; <code>ship</code> lands finished work and cleans up merged branches. <code>sync</code> checks or updates source headers and reader documents against code, including complete README/docs batches. <code>compose</code> owns document structure. The standing codebase-map workflow is retired (ADR-005).",
-    navanat_callout: "Use <code>shape-task</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. Ask <code>nav-do</code> for the engineering approach first when you want to review it before building.",
+    navanat_title: "nav — audit, implement, ship",
+    navanat_lede: "Audit assesses architecture. Do implements, refactors and checks explanations. Ship verifies and lands the selected release.",
+    navanat_callout: "Use <code>shape-add</code> to define the deliverables and acceptance checks. <code>nav-do</code> implements authorized decided work, including multi-item tasks. Ask <code>nav-do</code> for the engineering approach first when you want to review it before building.",
     conv_title: 'Conventions — load-bearing rules for this marketplace',
     conv_lede: 'Decisions captured as ADRs; what they imply for daily editing.',
     // panel labels
@@ -308,17 +310,17 @@ const T = {
     cb_default_click_label: 'tip',
     cb_default_click_text: 'Future families (spec, craft, ...) will appear here as new nodes.',
     nav_default_h3: 'nav plugin anatomy',
-    nav_default_role: "Six skills. Click a node for its responsibility.",
+    nav_default_role: "Verbs derived from the live catalog. Click for responsibility.",
     nav_default_click_label: 'tip',
-    nav_default_click_text: "Sync keeps requested explanations current, from a source header to a full README/docs batch. Audit checks structure; compose organizes prose; do and refactor implement it, and do shows the approach first when asked.",
+    nav_default_click_text: "Choose the verb by the requested outcome.",
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    shape_anat_title: 'shape anatomy — converge · project · handoff',
-    shape_anat_lede: "Legacy compatibility map (eight entrances); the workspace pilot additionally trials <code>idea</code>, <code>status</code>, and <code>wrap</code> (ADR-014). Around the <code>blueprints/</code> convention: mockup, elicit, probe, and dogfood converge decisions. <code>align</code> verifies the board and chooses priorities with the user; <code>tidy</code> independently cleans stale design records while retaining reasons. Park/catchup share one session handoff.",
-    shape_anat_callout: "Align owns priorities; tidy owns design-record lifecycle; nav-sync owns source headers and reader-document accuracy. Shared evidence does not require running all three. The board is plan.md; visual views are created on demand.",
+    shape_anat_title: "shape — add, view, next, tend",
+    shape_anat_lede: "Add captures ideas and work. View reads progress. Next advances authorized work. Tend maintains project records.",
+    shape_anat_callout: "Keep progress in the original task. Save independent records only when they have a purpose. Seek owns clarification, comparisons, experiments and real-use reviews.",
     shape_default_h3: 'shape plugin anatomy',
-    shape_default_role: "Legacy map: converge decisions, align priorities, tidy records, and hand off sessions. Workspace pilot: idea → status → wrap (ADR-014). Click a node for its role.",
+    shape_default_role: "Verbs derived from the live catalog.",
     shape_default_click_label: 'tip',
-    shape_default_click_text: 'blueprints/ is the artifact convention (not a skill) the verbs read/write. The shared handoff file is blueprints/baton.md, with root HANDOFF.md as the no-tree fallback.',
+    shape_default_click_text: "A queued task is not execution authority. Keep human acceptance visible.",
     leg_decide: 'converge', leg_project: 'project', leg_tidy: 'tidy', leg_artifact: 'blueprints (convention)',
     // legend
     leg_orch: 'orchestrator', leg_assess: 'assess', leg_transform: 'transform', leg_describe: 'describe', leg_execute: 'execute',
@@ -352,7 +354,7 @@ const T = {
     pluginsmap_title: 'Plugins 圖 —— 一眼看完所有 plugin',
     pluginsmap_lede: '目前 <code>plugins/</code> 下每個 plugin 一個 node。未來家族(<code>spec</code>、<code>craft</code>...)上線後會在此出現。',
     pluginsmap_howread_label: '如何閱讀:',
-    pluginsmap_howread: '點 node 看描述。三個 plugin —— shape(往前推:意圖 → 做出來且驗過的 code)、nav(可導覽性,維護那半)、frame(套用具名的思考框架)。shape 硬依賴 nav(shape → nav —— 連線標出來了);當決策需要成形時 nav 可建議回 shape,但已授權的工作不再強迫跳出固定下一步選單。frame 獨立。見 ADR-006/010。',
+    pluginsmap_howread: "四個套件：Seek 找答案、Shape 接續工作、Nav 實作與交付、Frame 協助理解。連線表示可交接的結果，並非自動呼叫。",
     rules_title: '設計規則 —— 每個 skill 都得過的標準',
     rules_lede: '源自 Ousterhout 的 deep-module 原則 + grounding 與 agent-navigability 的擴展。每個 <code>SKILL.md</code> 內嵌這份規則;此為正典。',
     map_title: 'Skill 清單 —— 搜尋與展開',
@@ -363,9 +365,9 @@ const T = {
     layer_marketplace: 'marketplace',
     layer_plugin: 'plugin',
     layer_skill: 'skill',
-    navanat_title: 'nav 解剖 —— 評估、轉換、描述、規劃、執行、收尾',
-    navanat_lede: "六個 skill：<code>audit</code> 檢查結構，<code>refactor</code> 保持行為不變，<code>do</code> 執行已決定的變更，需要時可先提供工程做法；<code>ship</code> 把做完的工作收進主分支並清掉用完的 branch。<code>sync</code> 對照程式校準檔頭與人讀的文件，也能一次更新整批 README／docs；<code>compose</code> 負責文件結構。常駐 codebase map 流程已退役（ADR-005）。",
-    navanat_callout: "用 <code>shape-task</code> 定義交付項目和驗收條件。<code>nav-do</code> 實作已決定且已授權的工作，也能接多項目的 Task。要先檢視工程做法時，請 <code>nav-do</code> 先給做法。",
+    navanat_title: "nav — 檢查、實作、交付",
+    navanat_lede: "Audit 檢查架構，Do 實作、重構並校對說明，Ship 驗證與交付選定的改動。",
+    navanat_callout: "用 <code>shape-add</code> 定義交付項目和驗收條件。<code>nav-do</code> 實作已決定且已授權的工作，也能接多項目的 Task。要先檢視工程做法時，請 <code>nav-do</code> 先給做法。",
     conv_title: '慣例 —— 這個 marketplace 的承重規則',
     conv_lede: '決定記錄於 ADR;此處列出對日常編輯的意涵。',
     role_label: '角色', wires_label: '指向', used_by_label: '被指向', view_anatomy: '前往解剖',
@@ -375,17 +377,17 @@ const T = {
     cb_default_click_label: '提示',
     cb_default_click_text: '未來家族(spec、craft...)會以新 node 出現於此。',
     nav_default_h3: 'nav plugin 解剖',
-    nav_default_role: "六個 skill。點選節點查看分工。",
+    nav_default_role: "三個入口直接來自目前目錄，點選查看責任。",
     nav_default_click_label: '提示',
-    nav_default_click_text: "sync 校準指定範圍的說明，從一份程式檔頭到整批 README／docs 都能處理。audit 檢查結構，compose 整理文稿，do 與 refactor 執行變更，do 也能先提供工程做法。",
+    nav_default_click_text: "依需要的結果選擇入口。",
     nav_shapeanat: 'shape <span class="muted">· plugin</span>',
-    shape_anat_title: 'shape 解剖 —— 收斂 · 排序 · 整理 · 交接',
-    shape_anat_lede: "舊入口相容圖（八個）；workspace 另外試用 <code>idea</code>、<code>status</code>、<code>wrap</code>（ADR-014）。原本的 <code>blueprints/</code> 慣例：mockup、elicit、probe、dogfood 收斂決策；<code>align</code> 核對工作板，跟使用者決定優先順序；<code>tidy</code> 獨立整理過期設計紀錄並保存理由。park／catchup 共用一份交接檔。",
-    shape_anat_callout: "align 管優先順序，tidy 管設計紀錄的去留，nav-sync 管檔頭與人讀文件的正確性。證據可以共用，三者不必綁著跑。工作板是 plan.md，需要視覺說明時才產圖。",
+    shape_anat_title: "shape — 記下、查看、接著做、整理",
+    shape_anat_lede: "Add 記下想法與工作，View 唯讀查看進度，Next 推進已授權工作，Tend 接線與整理紀錄。",
+    shape_anat_callout: "進度寫回原任務，需要獨立保留才另存。Seek 提供釐清、互動比較、實驗和實際試用方法。",
     shape_default_h3: 'shape plugin 解剖',
-    shape_default_role: "舊入口相容圖：收斂決策、安排工作、整理紀錄、交接 session。Workspace 另試用 idea、status、wrap（ADR-014）。點選節點查看分工。",
+    shape_default_role: "入口直接來自目前目錄。",
     shape_default_click_label: '提示',
-    shape_default_click_text: 'blueprints/ 是 artifact 約定(非 skill),被各動詞讀寫。共享 handoff 檔是 blueprints/baton.md;沒有 blueprints 樹時 fallback 到根目錄 HANDOFF.md。',
+    shape_default_click_text: "任務排進去不代表授權實作，仍待人工驗收的項目要保持可見。",
     leg_decide: '收斂', leg_project: '投影', leg_tidy: '整理', leg_artifact: 'blueprints(約定)',
     leg_orch: '統籌', leg_assess: '評估', leg_transform: '轉換', leg_describe: '描述', leg_execute: '執行',
     leg_plugin: 'plugin',
@@ -396,7 +398,7 @@ const T = {
 const LAYERS = [
   {cls:'ui', name:{en:'Marketplace', zh:'Marketplace'}, tag:{en:'the container — identity from GitHub username', zh:'容器 —— 身份來自 GitHub 帳號'}, doms:['skills']},
   {cls:'state', name:{en:'Plugin', zh:'Plugin'}, tag:{en:'a topical family of skills', zh:'一個主題家族的 skills'}, doms:['nav']},
-  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','refactor','sync','do','compose']},
+  {cls:'foundation', name:{en:'Skill', zh:'Skill'}, tag:{en:'bare-verb units; the things you invoke', zh:'裸動詞單位;真正被呼叫的東西'}, doms:['audit','do','ship']},
 ];
 
 const ARCH_LAYERS = [
@@ -423,18 +425,18 @@ const RULES = [
 
 // BEGIN GENERATED catalog-data
 const CATALOG_COUNTS = {
-  "plugins": 3,
-  "skills": 19
+  "plugins": 4,
+  "skills": 17
 };
 const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.29.0",
+    "version": "0.29.2",
     "skillCount": 3,
     "blurb": {
-      "en": "Audit architecture, use Do for verified implementation, refactors and factual docs updates, then use Ship to check release docs and land the verified snapshot. (v0.29.0; 3 skills)",
-      "zh": "audit 唯讀檢查架構，do 實作、重整並校對文件，ship 校對發布文件、驗證並送出這次的改動。（v0.29.0；3 個 skills）"
+      "en": "Audit architecture, use Do for verified implementation, refactors and factual docs updates, then use Ship to check release docs and land the verified snapshot. (v0.29.2; 3 skills)",
+      "zh": "audit 唯讀檢查架構，do 實作、重整並校對文件，ship 校對發布文件、驗證並送出這次的改動。（v0.29.2；3 個 skills）"
     },
     "files": [
       [
@@ -464,93 +466,53 @@ const DOMAINS = {
     ]
   },
   "shape": {
-    "layer": "ui",
+    "layer": "state",
     "path": "plugins/shape/",
-    "version": "0.35.20",
-    "skillCount": 10,
+    "version": "0.37.1",
+    "skillCount": 4,
     "blurb": {
-      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.20; 10 skills)",
-      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.20；10 個 skills）"
+      "en": "Keep scope, verification and the next action together. Maintain the project connection and advance ready work. (v0.37.1; 4 skills)",
+      "zh": "把範圍、驗證和下一步留在原任務，維護專案接線並推進可做的工作。（v0.37.1；4 個 skills）"
     },
     "files": [
       [
-        "/shape:elicit",
+        "/shape:add",
         "",
         {
-          "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-011.",
-          "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-011。"
+          "en": "Capture an idea, define pending work, or update the original record with progress. Use for add this, save this or wrap this round; viewing progress belongs to shape-view and execution to nav-do.",
+          "zh": "記下想法、建立待做工作，或把進度存回原紀錄。查看進度用 shape-view，實作交給 nav-do。"
         }
       ],
       [
-        "/shape:mockup",
+        "/shape:view",
         "",
         {
-          "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-014).",
-          "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-014）。"
+          "en": "Read current project work, priorities, blockers and next actions without changing records. Use for status or catch me up; continuing implementation belongs to shape-next.",
+          "zh": "唯讀查看目前工作、優先順序、卡點與下一步。要接著實作用 shape-next。"
         }
       ],
       [
-        "/shape:probe",
+        "/shape:next",
         "",
         {
-          "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-019).",
-          "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-019）。"
+          "en": "Choose and advance the next ready, already-authorized task or exploration. Use when asked to continue or work while the user is away; a status-only request belongs to shape-view.",
+          "zh": "選出並推進已授權、現在能做的任務或探索。單純查進度用 shape-view。"
         }
       ],
       [
-        "/shape:dogfood",
+        "/shape:tend",
         "",
         {
-          "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-019).",
-          "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-019）。"
+          "en": "Connect a repository to its selected workspace, or tidy project records against code and decisions. Use for project setup and record cleanup; record additions belong to shape-add.",
+          "zh": "把專案接到選定的 workspace，或整理專案紀錄。新增與補充紀錄用 shape-add。"
         }
       ],
       [
-        "/shape:tidy",
-        "",
+        "Guide",
+        "plugins/shape/CLAUDE.md",
         {
-          "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-005).",
-          "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-005）。"
-        }
-      ],
-      [
-        "/shape:idea",
-        "plugins/shape/skills/idea/SKILL.md",
-        {
-          "en": "Capture or revisit a project idea, including something to consider later. Saving an idea does not authorize implementation; resolving a specific undecided choice belongs to shape-elicit.",
-          "zh": "Capture or revisit a project idea, including something to consider later. Saving an idea does not authorize implementation; resolving a specific undecided choice belongs to shape-elicit."
-        }
-      ],
-      [
-        "/shape:status",
-        "plugins/shape/skills/status/SKILL.md",
-        {
-          "en": "Recover current project work and next actions from original records and fresh code evidence. Set priorities only when explicitly requested; reading status never authorizes implementation.",
-          "zh": "Recover current project work and next actions from original records and fresh code evidence. Set priorities only when explicitly requested; reading status never authorizes implementation."
-        }
-      ],
-      [
-        "/shape:wrap",
-        "plugins/shape/skills/wrap/SKILL.md",
-        {
-          "en": "Save this round&#39;s progress and concrete next actions into the original project tasks before stopping. No separate session handoff or checkpoint file.",
-          "zh": "Save this round&#39;s progress and concrete next actions into the original project tasks before stopping. No separate session handoff or checkpoint file."
-        }
-      ],
-      [
-        "/shape:setup",
-        "",
-        {
-          "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-015.",
-          "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-015。"
-        }
-      ],
-      [
-        "/shape:task",
-        "",
-        {
-          "en": "Record or revise the agreed goal, scope, deliverables and acceptance checks in the owning task. Route execution through nav-do.",
-          "zh": "在原 Task 記錄或更新已決定的目標、範圍、交付項目和驗收條件。實作由 nav-do 接手。"
+          "en": "Work continuity",
+          "zh": "工作接續"
         }
       ]
     ]
@@ -558,11 +520,11 @@ const DOMAINS = {
   "frame": {
     "layer": "foundation",
     "path": "plugins/frame/",
-    "version": "0.17.3",
+    "version": "0.17.4",
     "skillCount": 6,
     "blurb": {
-      "en": "The understanding family: lenses to see a problem (first-principles strips assumptions and rebuilds; orthogonal factors independent axes), forms to present an answer already in hand (analogize builds a checked analogy and is the ELI5 door; draw chooses the picture and medium; tinker builds a small object to poke), and one entry (unfold walks a repository, paper, book, or concept one layer per turn, skeleton first, choosing a form per layer). unfold applies the forms by bundled protocol, never by calling a skill (ADR-010). ADR-010 still governs output: structure scales to the question. Analysis-only requests do not grant build authority. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-010/009/012/006 + the rename ADR. (v0.17.3; 6 skills)",
-      "zh": "理解家族：lens 用來看清問題（first-principles 拆假設並重建；orthogonal 拆獨立軸）、form 用來呈現手上已有的答案（analogize 做檢查過的類比，也是 ELI5 的入口；draw 選圖形與媒介；tinker 做一個可以動手玩的小物件）、一個入口（unfold 用 progressive disclosure 帶你認識 repo、論文、書或概念：先骨架、一回合一層、每層選一種形式）。unfold 以內附協議套用各 form，不呼叫其他 skill（ADR-010）。輸出仍依 ADR-010 隨問題大小調整；只要求分析不授權 build。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-010/009/012/006 + 改名 ADR。（v0.17.3；6 個 skills）"
+      "en": "The understanding family: lenses to see a problem (first-principles strips assumptions and rebuilds; orthogonal factors independent axes), forms to present an answer already in hand (analogize builds a checked analogy and is the ELI5 door; draw chooses the picture and medium; tinker builds a small object to poke), and one entry (unfold walks a repository, paper, book, or concept one layer per turn, skeleton first, choosing a form per layer). unfold applies the forms by bundled protocol, never by calling a skill (ADR-010). ADR-010 still governs output: structure scales to the question. Analysis-only requests do not grant build authority. Standalone. Renamed from think; see frame/CLAUDE.md + ADR-010/009/012/006 + the rename ADR. (v0.17.4; 6 skills)",
+      "zh": "理解家族：lens 用來看清問題（first-principles 拆假設並重建；orthogonal 拆獨立軸）、form 用來呈現手上已有的答案（analogize 做檢查過的類比，也是 ELI5 的入口；draw 選圖形與媒介；tinker 做一個可以動手玩的小物件）、一個入口（unfold 用 progressive disclosure 帶你認識 repo、論文、書或概念：先骨架、一回合一層、每層選一種形式）。unfold 以內附協議套用各 form，不呼叫其他 skill（ADR-010）。輸出仍依 ADR-010 隨問題大小調整；只要求分析不授權 build。獨立。由 think 改名；見 frame/CLAUDE.md + ADR-010/009/012/006 + 改名 ADR。（v0.17.4；6 個 skills）"
     },
     "files": [
       [
@@ -593,8 +555,8 @@ const DOMAINS = {
         "/frame:draw",
         "",
         {
-          "en": "Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — 'it would look nicer' is not a threshold. Sibling of analogize: same outward direction, picture instead of comparison. NOT /shape:mockup, which renders candidates so a decision can be picked.",
-          "zh": "把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /shape:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。"
+          "en": "Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — 'it would look nicer' is not a threshold. Sibling of analogize: same outward direction, picture instead of comparison. NOT /seek:mockup, which renders candidates so a decision can be picked.",
+          "zh": "把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /seek:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。"
         }
       ],
       [
@@ -609,8 +571,60 @@ const DOMAINS = {
         "/frame:tinker",
         "",
         {
-          "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /shape:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-010.",
-          "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /shape:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-010。"
+          "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /seek:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-010.",
+          "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /seek:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-010。"
+        }
+      ]
+    ]
+  },
+  "seek": {
+    "layer": "decide",
+    "path": "plugins/seek/",
+    "version": "0.1.1",
+    "skillCount": 4,
+    "blurb": {
+      "en": "Choose a method for the question. Keep results in chat or scratch until retention has a purpose. (v0.1.1; 4 skills)",
+      "zh": "依問題選方法，結果先留在對話或暫存，需要保留時才存。（v0.1.1；4 個 skills）"
+    },
+    "files": [
+      [
+        "/seek:elicit",
+        "",
+        {
+          "en": "Clarify an unsettled choice or specific cause through grounded conversation. Use for help me think this through; measurable claims belong to seek-probe and interactive comparisons to seek-mockup.",
+          "zh": "用接地的對話釐清尚未決定的選擇或具體原因。可測量的主張交給 seek-probe，需要操作比較則用 seek-mockup。"
+        }
+      ],
+      [
+        "/seek:mockup",
+        "",
+        {
+          "en": "Build an interactive comparison when the user wants to see or try alternatives before choosing. Use for mockups and behavior comparisons; implementation and persistent records require their own scope.",
+          "zh": "把選項做成可操作的比較，讓使用者看過、試過再決定。是否實作或保存，依照各自的授權範圍。"
+        }
+      ],
+      [
+        "/seek:probe",
+        "",
+        {
+          "en": "Test a measurable claim or assess existing measurements. Use for experiments and ablations; preferences belong to seek-mockup and built-feature usage to seek-dogfood.",
+          "zh": "以實驗檢驗可測量的主張，或判讀既有測量。偏好比較用 seek-mockup，實際使用已完成的功能用 seek-dogfood。"
+        }
+      ],
+      [
+        "/seek:dogfood",
+        "",
+        {
+          "en": "Use a built feature through its real interface to find reproducible friction and missing user paths. Use for try it or dogfood; testing an undecided claim belongs to seek-probe.",
+          "zh": "透過真實介面使用已完成的功能，找出可重現的阻礙與缺少的操作路徑。未定主張的實驗交給 seek-probe。"
+        }
+      ],
+      [
+        "Guide",
+        "plugins/seek/CLAUDE.md",
+        {
+          "en": "Finding answers",
+          "zh": "找答案"
         }
       ]
     ]
@@ -630,25 +644,25 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Audit architecture, use Do for verified implementation, refactors and factual docs updates, then use Ship to check release docs and land the verified snapshot. (v0.29.0; 3 skills)",
-      "zh": "audit 唯讀檢查架構，do 實作、重整並校對文件，ship 校對發布文件、驗證並送出這次的改動。（v0.29.0；3 個 skills）"
+      "en": "Audit architecture, use Do for verified implementation, refactors and factual docs updates, then use Ship to check release docs and land the verified snapshot. (v0.29.2; 3 skills)",
+      "zh": "audit 唯讀檢查架構，do 實作、重整並校對文件，ship 校對發布文件、驗證並送出這次的改動。（v0.29.2；3 個 skills）"
     }
   },
   {
     "id": "shape",
     "label": "shape",
     "kind": "plugin",
-    "x": 225,
-    "y": 150,
+    "x": 390,
+    "y": 180,
     "w": 120,
     "link": "shape-anatomy",
     "role": {
-      "en": "intent → built",
-      "zh": "意圖 → 做出來"
+      "en": "continue work",
+      "zh": "接續工作"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014). (v0.35.20; 10 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。（v0.35.20；10 個 skills）"
+      "en": "Add, View, Next and Tend keep ideas and authorized work resumable. (v0.37.1; 4 skills)",
+      "zh": "Add 記下、View 查看、Next 推進、Tend 整理。（v0.37.1；4 個 skills）"
     }
   },
   {
@@ -663,52 +677,43 @@ const CB_NODES = [
       "zh": "理解它"
     },
     "desc": {
-      "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-010. (v0.17.3; 6 skills)",
-      "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-010、ADR-010。（v0.17.3；6 個 skills）"
+      "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-010. (v0.17.4; 6 skills)",
+      "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-010、ADR-010。（v0.17.4；6 個 skills）"
+    }
+  },
+  {
+    "id": "seek",
+    "label": "seek",
+    "kind": "plugin",
+    "x": 120,
+    "y": 180,
+    "w": 120,
+    "role": {
+      "en": "find answers",
+      "zh": "找答案"
+    },
+    "desc": {
+      "en": "Elicit, Mockup, Probe and Dogfood are independent, lightweight methods. (v0.1.1; 4 skills)",
+      "zh": "Elicit、Mockup、Probe、Dogfood 是可獨立使用的精簡方法。（v0.1.1；4 個 skills）"
     }
   }
 ];
 // END GENERATED catalog-data
-const CB_EDGES = [['shape','nav']];
+const CB_EDGES = [['seek','shape'], ['shape','nav']];
 
-const NAV_NODES = [
-  {id:'audit', kind:'assess', x:320, y:130, w:120, role:{en:'assess', zh:'評估'}, desc:{en:'Read-only audit against 8 deep-module rules. Three modes: unconditional health, read-only quick-check against a spec, or a deep sweep that fans out one sub-agent per domain for large/legacy codebases.', zh:'唯讀審計,對照 8 條 deep-module 規則。三模式:無條件健康、對應 spec 的唯讀快檢、或對大型/舊專案每個 domain 派一個 sub-agent 平行掃的深度模式。'}},
-  {id:'refactor', kind:'transform', x:80, y:240, w:130, role:{en:'transform', zh:'轉換'}, desc:{en:'Behavior-preserving structural change: public contracts and observable behavior stay stable, while necessary internal rewrites are allowed when verified. Syncs each touched file header inline in the same change (ADR-004, like do); repo map regen stays sync job. Verification scales with risk and touched surface.', zh:'保持行為的結構調整:公開契約與可觀察行為維持穩定,必要的內部改寫可做但要驗證。被動到的檔 header 在同一步 inline 同步(ADR-004,同 do);repo map 重生仍交給 sync。驗證強度依風險與觸及面調整。'}},
-  {id:'sync', kind:'describe', x:430, y:235, w:135, role:{en:'describe (file + docs)', zh:'描述(檔案 + 文件)'}, desc:{"en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry, with only the requested surface in scope; no standing codebase HTML (ADR-005).", "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。只處理指定範圍，不再維護常駐 codebase HTML（ADR-005）。"}},
-  {id:'do', kind:'execute', x:235, y:250, w:105, role:{en:'execute', zh:'執行'}, desc:{"en": "Implement decided behavior, verify each deliverable through its real entry point, and write evidence and next actions in the owning task.", "zh": "實作已決定的行為，從實際入口逐項驗收，再把證據和下一步寫回原 Task。"}},
-  {id:'compose', kind:'describe', x:690, y:130, w:120, role:{en:'author (prose doc)', zh:'撰寫(文件)'}, desc:{"en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Show the draft or diff before applying unless already authorized. nav-compose owns document structure; nav-sync maintains code headers and checks reader documents against implementation.", "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。套用前先展示草稿或差異，已授權的範圍不用再問。nav-compose 負責文件結構；nav-sync 維護程式檔頭，並核對人讀的文件是否符合實作。"}},
-];
-
-const NAV_EDGES = [
-  ['sync', 'audit'],
-  ['refactor', 'do'],
-  ['compose', 'sync'],
-];
-
-const SHAPE_NODES = [
-  {id:'elicit', kind:'decide', x:30, y:55, w:120, role:{en:'converge (verbal)', zh:'收斂(口頭)'}, desc:{"en":"Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. v0.23.0; ADR-011.","zh":"用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。v0.23.0；ADR-011。"}},
-  {id:'probe', kind:'decide', x:200, y:0, w:120, role:{en:'converge (experiment)', zh:'收斂(實驗)'}, desc:{en:"Design and run a minimal experiment when a fork can\'t be settled by argument — the fourth knowledge quadrant, \"nobody knows.\" Design chain borrowed by protocol, in sequence: frame:dialectic (locate the load-bearing assumption) → frame:first-principles (strip to the smallest testable claim) → frame:orthogonal (control the variables — its independence check IS a controlled experiment\'s definition). Three canonical shapes: A/B comparison, blind judgment test, behavior probe. Verdict rule pre-registered before the first trial; design + verdict-reading stay session-model, execution legs dispatchable (ADR-007); own live-LLM-cost signal instance (ADR-008). Read-only toward product code. Lands docs/findings/ or blueprints/thoughts/, tolerant-reader (ADR-019). Evidence feeds back to elicit\'s next volley, or the user directly. ADR-012.", zh:"當一個分岔吵不出結果時,設計並跑一個最小實驗 —— 第四個知識象限,『誰都不知道』。設計鏈依協定借用,依序:frame:dialectic(找出承重假設)→ frame:first-principles(剝到可測的最小公理)→ frame:orthogonal(控制變因 —— 它的獨立性驗收就是控制實驗的定義本身)。三個典型形狀:A/B 比較、盲測判斷、行為探針。判決規則在第一次試驗前就先寫死;設計與判讀留 session model,執行腿可派工(ADR-007);有自己的 live-LLM-cost 訊號實例(ADR-008)。對產品 code 唯讀。落在 docs/findings/ 或 blueprints/thoughts/,tolerant reader(ADR-019)。證據回流到 elicit 的下一輪,或直接回給使用者。ADR-012。"}},
-  {id:'mockup', kind:'decide', x:200, y:55, w:120, role:{en:'converge (render)', zh:'收斂(render)'}, desc:{"en":"Converge a visual or structural decision through a real, disposable interactive HTML artifact, served at a clickable URL. Stop exploring once the user picks. Continue a build only when the broader request already authorizes it; no compulsory track/build chooser. ADR-010.","zh":"用真實、可丟棄的互動 HTML 收斂視覺或結構決定，提供可點開的網址。使用者選定就停止探索；只有原本請求已授權實作時才接續，不再強制選擇追蹤或建置。ADR-010。"}},
-  {id:'dogfood', kind:'decide', x:200, y:130, w:130, role:{en:'critique (experience)', zh:'批評(體驗)'}, desc:{en:"Dogfood a built feature that feels unsmooth: use the REAL interface (agent-browser / curl / CLI) against a list of user intents, capturing the run. Reports friction (works but clunky → a UX idea) + the coverage gaps that fall out (an intent with no path → a logic hole) — experience-first, coverage as a byproduct. Evidence is the captured session (friction-point screenshots + responses; recording on explicit request — ADR-007), not a synthesized mockup. A gap\'s layer IS the diagnosis — missing intent = direction (redesign), dead-end = incomplete (finish) — handed to /shape:elicit\'s diagnostic fork. Borrows /verify·/run\'s drive-the-real-app method (asks 'is it smooth + what\'s missing', not 'is it correct'). ADR-012 (supersedes ADR-009).", zh:"Dogfood 一個用起來不順的 built feature:用真的介面(agent-browser / curl / CLI)、帶 user intent 清單操作並記錄。回報 friction(能用但卡 → UX idea)+ 掉出來的 coverage gap(想做卻沒路 → 邏輯洞)—— 體驗優先,coverage 是副產品。證據是記錄下來的 session(friction 點截圖 + response;錄影需明說才錄 — ADR-007),不是合成 mockup。gap 落在哪層就是診斷 —— 缺 intent = 方向(重想)、dead-end = 沒做完(補完)—— 交給 /shape:elicit 的 diagnostic fork。借 /verify·/run 的開真 app 方法(問「順不順 + 缺什麼」、不是「對不對」)。ADR-012(supersede ADR-009)。"}},
-  {id:'catchup', kind:'project', x:390, y:130, w:120, role:{en:'read handoff', zh:'讀交接'}, desc:{en:'Explicit-only handoff reader: reconstructs goal · done · now · open · next from blueprints/baton.md, or root HANDOFF.md when no tree exists. Tolerates absent, mismatched, or ad-hoc inputs and self-reports trust. Cleanup is conservative: delete only verified consumed state, with the rationale retained durably. ADR-009.', zh:'明確召喚的交接讀取器:從 blueprints/baton.md 重建 goal · done · now · open · next;沒有樹時 fallback 到根目錄 HANDOFF.md。容忍缺席、不相符或 ad-hoc input,並自報信任度。清理很保守:只刪已驗證消費的狀態,理由要耐久保留。ADR-009。'}},
-  {id:'park', kind:'project', x:530, y:130, w:120, role:{en:'write handoff', zh:'寫交接'}, desc:{en:'Explicit-only handoff writer: before stepping away, previews and overwrites the shared handoff file with the same five fields at decision level. It honors existing authorization instead of forcing a next-action menu when the next step is already settled. ADR-009.', zh:'明確召喚的交接寫入器:離開前以同一組五欄、decision-level 精簡地預覽並覆寫共享 handoff 檔。下一步已拍板時尊重既有授權,不強迫再開 next-action 選單。ADR-009。'}},
-  {id:'align', kind:'project', x:400, y:55, w:120, role:{en:'project', zh:'投影'}, desc:{"en": "Verify carried board items against source and tests, decide priorities with the user, and update plan.md. No silent drops and no mandatory document-cleanup pass. Tidy owns design-record lifecycle; nav-sync owns reader-document accuracy (ADR-005).", "zh": "以程式與測試核對板上進度，跟使用者決定優先順序，再更新 plan.md。條目不能無聲消失，也不用先整理整棵文件樹。設計紀錄由 tidy 整理；人讀的說明由 nav-sync 校準（ADR-005）。"}},
-  {"id": "tidy", "kind": "tidy", "x": 560, "y": 55, "w": 140, "role": {"en": "tidy records", "zh": "整理紀錄"}, "desc": {"en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-005).", "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-005）。"}},
-  {id:'blueprints', kind:'artifact', x:290, y:185, w:180, role:{en:'artifact convention', zh:'artifact 約定'}, desc:{"en": "Document convention, not a skill: thoughts hold durable decisions, plans hold implementation steps, plan.md is the current board, mockups hold decision artifacts, and baton.md is the session handoff. Visual views are disposable and created on demand.", "zh": "文件慣例，不是 skill：thoughts 保存決策、plans 保存實作步驟、plan.md 是目前工作板、mockups 保存決策樣本、baton.md 保存交接。視覺說明按需要製作，用完可丟。"}},
-];
-const SHAPE_EDGES = [
-  ['catchup', 'blueprints'],
-  ['park', 'blueprints'],
-  ['probe', 'blueprints'],
-  ['probe', 'elicit'],
-  ['elicit', 'blueprints'],
-  ['mockup', 'blueprints'],
-  ['dogfood', 'mockup'],
-  ['align', 'blueprints'],
-  ['tidy', 'blueprints'],
-  ['elicit', 'mockup'],
-  ['dogfood', 'elicit'],
-];
+function anatomyNodes(plugin) {
+  return DOMAINS[plugin].files
+    .filter(([label]) => label.startsWith('/' + plugin + ':'))
+    .map(([label, path, desc], index) => ({
+      id: label.split(':')[1], kind: 'execute',
+      x: 35 + index * (690 / DOMAINS[plugin].skillCount), y: 130, w: Math.min(170, 690 / DOMAINS[plugin].skillCount - 12),
+      role: {en: plugin, zh: plugin}, desc
+    }));
+}
+const NAV_NODES = anatomyNodes('nav');
+const NAV_EDGES = [];
+const SHAPE_NODES = anatomyNodes('shape');
+const SHAPE_EDGES = [];
 
 
 const CONV = [
@@ -717,7 +722,7 @@ const CONV = [
   {label:{en:'Skill name = bare verb', zh:'Skill 名 = 裸動詞'}, desc:{en:"Just <code>audit</code>, not <code>nav-audit</code>. Namespace lives in the plugin name; don\'t pay twice. ADR-001.", zh:'就 <code>audit</code>,不是 <code>nav-audit</code>。命名空間在 plugin 名;別付兩次。ADR-001。'}},
   {label:{en:'Self-contained SKILL.md', zh:'自含 SKILL.md'}, desc:{en:'Every skill carries the current rules it needs and remains usable without shared imports between SKILL.md files. ADR-001 #3.', zh:'每個 skill 攜帶自己需要的現行規則,不依賴 SKILL.md 之間互相 import。ADR-001 #3。'}},
   {label:{en:'Language-agnostic', zh:'跨語言'}, desc:{en:'Universal core + per-stack heuristics. Never bail on unknown stack. ADR-001.', zh:'通用核心 + per-stack 啟發。未知 stack 也不退場。ADR-001。'}},
-  {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Any file-modifying skill (sync, refactor) shows the change before applying.', zh:'任何會改檔的 skill(sync、refactor)套用前先示差異。'}},
+  {label:{en:'Read-only or show-diff-first', zh:'唯讀 或 先示差異'}, desc:{en:'Authorization governs changes; read-only requests stay read-only.', zh:'依照授權範圍改動；唯讀請求只分析與回報。'}},
   {label:{en:'Stack-neutral examples', zh:'範例 stack-中性'}, desc:{en:'Every SKILL.md example reads standalone — no past-project domain nouns. Use generic placeholders (UserList, useSelection). A skill that needs Project X context is leaky.', zh:'每個 SKILL.md 範例都能單看就懂 —— 不帶過去專案的領域詞。用通用 placeholder(UserList、useSelection)。需要 Project X 背景才看得懂的 skill 就是漏的。'}},
   {label:{en:'Skills-root-relative paths', zh:'以 skills 為根的路徑'}, desc:{en:'All paths (doc links AND example code) written as if <code>skills/</code> is root. No <code>./</code> or <code>../</code> prefixes. Imports use alias (<code>@/core/user</code>) or bare names.', zh:'所有路徑(doc 連結與範例程式碼)都以 <code>skills/</code> 為根。不用 <code>./</code> 或 <code>../</code>。import 用 alias(<code>@/core/user</code>)或裸模組名。'}},
   {label:{en:'Inject↔check at hand-off', zh:'交接時 注入↔檢查'}, desc:{en:'When a meta-skill spawns a sub-agent, inject its in-session grounding (+ N+1 trigger) and run a deep-module pass on the returned diff before accepting "done". ADR-007.', zh:'meta-skill 派 sub-agent 時,注入 in-session grounding(+ N+1 trigger),收回 diff 跑一次 deep-module 整合檢查再接受「done」。ADR-007。'}},
@@ -897,9 +902,9 @@ function render(){
   renderAnatomy('#cbGraph', '#cbPanel', CB_NODES, CB_EDGES, 'cb_default',
     [['#7a9e6e','leg_plugin']]);
   renderAnatomy('#navGraph', '#navPanel', NAV_NODES, NAV_EDGES, 'nav_default',
-    [['#2a211c','leg_orch'],['#7a9e6e','leg_assess'],['#6c8fb5','leg_transform'],['#b5894e','leg_describe'],['#cf7d2e','leg_execute']]);
+    []);
   renderAnatomy('#shapeGraph', '#shapePanel', SHAPE_NODES, SHAPE_EDGES, 'shape_default',
-    [['#a86b9e','leg_decide'],['#3f8fa3','leg_project'],['#b5654e','leg_tidy'],['#8a7d6e','leg_artifact']]);
+    []);
   }
 
 function setLang(L){

@@ -7,20 +7,27 @@
 import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const RECORD_CONSUMERS = [
-  ...["setup", "idea", "elicit", "mockup", "probe", "dogfood", "task", "status", "wrap", "tidy"]
-    .map(skill => `plugins/shape/skills/${skill}`),
-  ...["do", "ship"]
-    .map(skill => `plugins/nav/skills/${skill}`),
+const WORK_CONSUMERS = [
+  ...["add", "view", "next", "tend"].map(skill => `plugins/shape/skills/${skill}`),
+  ...["do", "ship"].map(skill => `plugins/nav/skills/${skill}`),
 ];
+const SEEK_CONSUMERS = ["elicit", "mockup", "probe", "dogfood"]
+  .map(skill => `plugins/seek/skills/${skill}`);
+const RECORD_CONSUMERS = [...WORK_CONSUMERS, ...SEEK_CONSUMERS];
 
 export const SHARED_SKILL_REFERENCES = [{
+  source: "plugins/shape/references/saving.md",
+  destinations: RECORD_CONSUMERS.map(skill => `${skill}/references/saving.md`),
+}, {
+  source: "plugins/seek/references/browser-check.md",
+  destinations: ["mockup", "dogfood"].map(skill => `plugins/seek/skills/${skill}/references/browser-check.md`),
+}, {
   source: "plugins/nav/references/docs-render.md",
   destinations: ["do", "ship"].map(skill => `plugins/nav/skills/${skill}/references/docs-render.md`),
 },
   ...["workspace", "workspace_records.py", "workspace_view.py", "workspace_graph.html"].map(file => ({
     source: `plugins/shape/skills/status/scripts/${file}`,
-    destinations: RECORD_CONSUMERS.filter(skill => skill !== "plugins/shape/skills/status")
+    destinations: WORK_CONSUMERS
       .map(skill => `${skill}/scripts/${file}`),
     verbatim: true,
   })), {
@@ -32,8 +39,9 @@ export const SHARED_SKILL_REFERENCES = [{
 }, {
   source: "plugins/shape/references/session-handoff.md",
   destinations: [
-    "plugins/shape/skills/status/references/session-handoff.md",
-    "plugins/shape/skills/wrap/references/session-handoff.md",
+    "plugins/shape/skills/add/references/session-handoff.md",
+    "plugins/shape/skills/view/references/session-handoff.md",
+    "plugins/shape/skills/tend/references/session-handoff.md",
   ],
 }, {
   source: "plugins/shape/references/development-artifacts.md",
@@ -41,7 +49,7 @@ export const SHARED_SKILL_REFERENCES = [{
 }, {
   source: "plugins/shape/references/artifact-activation.md",
   destinations: [
-    "plugins/shape/skills/mockup/references/artifact-activation.md",
+    "plugins/seek/skills/mockup/references/artifact-activation.md",
     "plugins/frame/skills/tinker/references/artifact-activation.md",
     "plugins/frame/skills/unfold/references/artifact-activation.md",
   ],

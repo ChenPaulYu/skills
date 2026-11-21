@@ -1,0 +1,34 @@
+---
+name: next
+description: "Choose and advance the next ready, already-authorized task or exploration. Use when asked to continue or work while the user is away; a status-only request belongs to shape-view."
+---
+
+
+# Next — advance work that is ready
+
+Ground the queue in the selected project's original records and mapped code using
+`references/workspace-records.md`. Inspect priorities, scope, permissions, dependencies,
+acceptance, fresh Git changes and the last verification. A queued task, saved idea or
+priority alone grants no implementation authority.
+
+Choose one ready item within the user's current continuation request. Respect their
+priority order; skip a higher item only when blocked, awaiting the owner or already
+verified, and say why. A permitted exploration can proceed without approval to build
+its eventual result. Keep unresolved product choices with the user.
+
+Use nav-do's implementation and verification discipline for authorized engineering.
+Seek's methods can help a scoped investigation. Reuse their protocols and available
+session evidence; do not invent skill-tool calls or require a chain of skills.
+Account for paid providers, external effects and destructive actions within the
+existing scope before taking them.
+
+Work to the item's checkable finish line. Save only material progress, evidence limits,
+blockers and the next action in that original task using
+`references/record-interface.md`. Keep human acceptance open and preserve the current
+working tree and other tasks. A session ending does not pause the task.
+
+Continue to another independent item only when the user's request covers the queue
+or further continuation. Stop when the authorized work is exhausted, all remaining
+items require the user, the requested bound is reached, or a new cost/effect needs
+authority. Repeating the same failed check without a new diagnostic step is not
+progress. Report work advanced, exact verification and the remaining user decisions.

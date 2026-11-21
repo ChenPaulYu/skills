@@ -4,9 +4,9 @@
 > holds only that family's identity, roster and patterns; read it before editing that family.
 > Reasons and rejected alternatives live in [`docs/adr/`](docs/adr/README.md).
 
-## Workspace pilot (this branch)
+## Project workspace
 
-On `experiment/workspace-graph`, this project's working records live at
+This project's working records live at
 `workspace/skills/project.md` in the owner's configured home repo. Resolve that home through
 the My-wiki entry/configuration, never a committed machine path, and read the project before
 reconstructing work from old blueprints. If the home is unavailable, say so and use readable

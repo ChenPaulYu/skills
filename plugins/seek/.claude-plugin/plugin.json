@@ -1,0 +1,17 @@
+{
+  "name": "seek",
+  "version": "0.1.1",
+  "description": "Clarify choices, compare interactions, test claims and use real workflows with lightweight, optional retention.",
+  "author": {
+    "name": "Paul",
+    "url": "https://github.com/ChenPaulYu"
+  },
+  "repository": "https://github.com/ChenPaulYu/skills",
+  "license": "MIT",
+  "keywords": [
+    "clarification",
+    "mockup",
+    "experiment",
+    "dogfood"
+  ]
+}

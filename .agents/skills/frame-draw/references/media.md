@@ -110,7 +110,7 @@ actually see.
 watching a path re-light, selecting a node and seeing its neighbourhood dim — or the audience
 explicitly asks for one.
 
-Borrow `shape-mockup`'s build protocol for this medium: a real, self-contained HTML page, no
+Borrow `seek-mockup`'s build protocol for this medium: a real, self-contained HTML page, no
 external requests, verified in a browser before delivery.
 
 Two lessons already paid for, verbatim:

@@ -5,12 +5,19 @@
 This is the editable owner of process-artifact storage. The manifest builder bundles
 it into standalone skills; local references carry the same policy, not separate rules.
 
+## Decide whether to retain
+
+Temporary comparisons and one-off checks stay in session scratch by default. Keep
+only the result and reason in the existing task when that is enough for continuation.
+Retain full inputs/results/captures only on request or when a concrete future comparison
+or reproduction requires them. This does not authorize deleting existing material.
+
 ## Select the policy before writing
 
 Resolve the existing project home with `references/workspace-records.md` before choosing
-a destination. In a connected workspace, save working artifacts beside their owning
-records under that home; do not fall back to code-local blueprints, `.reference/` or
-temporary previews. Read the selected home's storage and ignore rules. Explicit
+a destination. In a connected workspace, save explicitly retained working artifacts beside their
+owning records under that home. A disposable session preview may stay in scratch;
+retention and cross-machine availability require the actual artifact in the chosen home. Read the selected home's storage and ignore rules. Explicit
 user/project retention choices govern. Only without a connected workspace or another
 explicit retention choice, keep
 blueprints (thoughts, plans, board, handoff), mockups, dogfood captures, and one-off

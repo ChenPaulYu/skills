@@ -1,6 +1,6 @@
 # Artifact activation
 
-This is the editable owner of artifact activation (open or serve, then hand over a URL). The manifest builder bundles it into `shape-mockup` and `frame-tinker`; the text below is moved verbatim from mockup's protocol.
+This is the editable owner of artifact activation (open or serve, then hand over a URL). The manifest builder bundles it into `seek-mockup` and `frame-tinker`; the text below is moved verbatim from mockup's protocol.
 
 ## Activate it — open + hand over a URL (don't just write the file)
 

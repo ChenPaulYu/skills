@@ -1,7 +1,7 @@
 {
   "name": "shape",
-  "version": "0.35.20",
-  "description": "Connect project workspaces, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records. Task-owned records and portable relation views.",
+  "version": "0.37.1",
+  "description": "Add ideas and tasks, view progress, advance authorized work, and tend project records.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

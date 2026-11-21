@@ -188,7 +188,7 @@ export const CODEX_INTERACTIVE_CHOICE_CONTRACT = `> **Interactive choice contrac
  * so the compiler adds behavior without copying any choice content. Missing or duplicate anchors
  * are hard generation failures: source drift must never silently remove a supervision gate. */
 const INTERACTIVE_CHOICE_CONSUMERS = {
-  "shape-dogfood": "## Workflow",
+  "seek-dogfood": "## Workflow",
 };
 
 export function injectInteractiveChoiceContract(text, flat) {
@@ -219,7 +219,7 @@ const BROWSER_VERIFY_PROSE_RULES = [
     replace: "Delegate the pass to the `browser-verifier` custom agent",
   },
   {
-    find: "The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/shape/agents/browser-verifier.md) (mechanical-tier executor).",
+    find: "The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/seek/agents/browser-verifier.md) (mechanical-tier executor).",
     replace:
       "The slot's default *executor* is the generated project custom agent [`.codex/agents/browser-verifier.toml`](.codex/agents/browser-verifier.toml) (mechanical-tier executor).",
   },
@@ -268,8 +268,8 @@ export const CODEX_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Codex
 > Missing custom-agent runtime or artifact is an inline fallback, **not** \`MISSING-TOOL\`. Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
 
 const BROWSER_VERIFY_ANCHORS = {
-  "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-008)",
-  "shape-dogfood": "## Workflow",
+  "seek-mockup": "## Browser verification",
+  "seek-dogfood": "## Workflow",
 };
 
 function countExact(text, needle) {
@@ -341,7 +341,7 @@ function lowerInitAssumption(text) {
 export function createProjectGuidanceLowerer({ plugins, skills }) {
   const pluginPattern = plugins.map(escapeRegExp).join("|");
   const skillPattern = skills.map(escapeRegExp).join("|");
-  // `/nav:audit`, `nav:audit`, `/shape:mockup` → `nav-audit` / `shape-mockup`. Requires a real
+  // `/nav:audit`, `nav:audit`, `/seek:mockup` → `nav-audit` / `seek-mockup`. Requires a real
   // verb after the colon, so bare-namespace prose ("the `nav:` namespace") is left untouched.
   const NS = new RegExp(`/?\\b(${pluginPattern}):(${skillPattern})\\b`, "g");
   // Full skills-root reference paths → the owning generated skill's bundled references directory.

@@ -1,6 +1,6 @@
 ---
 name: draw
-description: "Decide how to picture something you already understand so it lands for someone else: which FORM the question asks for (in what order? who talks to whom? where does it live? which should I pick?) and which MEDIUM carries it (terminal ASCII · a markdown table · mermaid in a doc · an interactive artifact). Fires on 'draw this out', '這個畫出來比較好懂', 'visualise this architecture', 'help me explain this to the team'. It owns the strategy, not one output format — /shape:mockup is the interactive-HTML executor it reaches for when that medium wins."
+description: "Decide how to picture something you already understand so it lands for someone else: which FORM the question asks for (in what order? who talks to whom? where does it live? which should I pick?) and which MEDIUM carries it (terminal ASCII · a markdown table · mermaid in a doc · an interactive artifact). Fires on 'draw this out', '這個畫出來比較好懂', 'visualise this architecture', 'help me explain this to the team'. It owns the strategy, not one output format — /seek:mockup is the interactive-HTML executor it reaches for when that medium wins."
 ---
 
 # draw — choose the picture, then choose what carries it
@@ -45,7 +45,7 @@ Cheapest medium that carries the form wins. Selection rules and per-medium gramm
 | **D2** | same text-to-diagram idea, far better looking, and **you control the rendering** — ~30 lines replace hundreds of hand-written ones. Never for a map (it re-lays out every render), and its ASCII export breaks on CJK. |
 | **diagram-design plugin** | the diagram is a **keeper with an audience** (doc hero, README, study tour page, slide) and editorial quality matters. 27 typed layouts, brand-skinnable tokens, self-contained static HTML; its hard complexity budget (≤9 nodes) and delete-first taste gate double as content discipline. Static only — state changes still belong to the interactive artifact. (Adopted 2026-08-14 after a live trial.) |
 | **Annotated real output** | the thing already exists and is legible (a log, a response, a tree) — point at it rather than redrawing it. |
-| **Interactive artifact** | **interaction changes visible state** (stepping time, switching a variant, re-lighting a path), or the audience asks. Borrow `/shape:mockup`'s build protocol for this one. |
+| **Interactive artifact** | **interaction changes visible state** (stepping time, switching a variant, re-lighting a path), or the audience asks. Borrow `/seek:mockup`'s build protocol for this one. |
 
 **"It would look nicer" is not a reason to escalate.** Every step up this list costs the audience
 a context switch and costs you verification.
@@ -70,7 +70,7 @@ a context switch and costs you verification.
 
 | If… | Then |
 | --- | --- |
-| something is still **being chosen** | `/shape:mockup` on its own — it renders disposable candidates to decide between. Mockup draws what *might be*; this draws what *is*. When `draw` picks the interactive medium it borrows mockup's protocol, so the two compose rather than compete. |
+| something is still **being chosen** | `/seek:mockup` on its own — it renders disposable candidates to decide between. Mockup draws what *might be*; this draws what *is*. When `draw` picks the interactive medium it borrows mockup's protocol, so the two compose rather than compete. |
 | the difficulty is **conceptual, not structural** | `/frame:analogize` — a stress-tested comparison lands better than a box diagram. |
 | you are **exploring an unfamiliar repository** | Follow the user's current question against source evidence; use this skill when a specific relationship needs a picture. No curriculum or study prerequisite is required. |
 

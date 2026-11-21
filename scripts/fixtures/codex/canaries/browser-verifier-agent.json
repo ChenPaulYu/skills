@@ -4,7 +4,7 @@
   "file": ".codex/agents/browser-verifier.toml",
   "expect_text": [
     "name = \"browser-verifier\"",
-    "description = \"Delegated executor of shape's browser-verify slot:",
+    "description = \"Delegated executor of seek's browser-verify slot:",
     "developer_instructions = '''",
     "verdict: PASS | DRIFT | BLOCKED | MISSING-TOOL",
     "Missing → return verdict `MISSING-TOOL` immediately; do not install anything.",

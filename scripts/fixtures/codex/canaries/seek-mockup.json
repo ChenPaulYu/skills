@@ -1,0 +1,25 @@
+{
+  "id": "seek-mockup",
+  "mode": "generated",
+  "file": ".agents/skills/seek-mockup/SKILL.md",
+  "reject": [
+    {
+      "category": "ask_user_question"
+    },
+    {
+      "category": "legacy_browser_subagent"
+    }
+  ],
+  "reject_text": [
+    "**Interactive choice contract (Codex).**",
+    "Execute nothing downstream until the user makes an explicit choice.",
+    "just record the pick, I'll continue later"
+  ],
+  "expect_text": [
+    "**Browser-verify contract (Codex).**",
+    "When custom-agent runtime is available **and** `.codex/agents/browser-verifier.toml` exists, dispatch the pass to that custom agent.",
+    "Missing custom-agent runtime or artifact is an inline fallback, **not** `MISSING-TOOL`.",
+    "decision-critical success, failure and cancel behavior",
+    "## Browser verification"
+  ]
+}

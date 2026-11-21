@@ -10,9 +10,9 @@ There are three channels (five agents):
 
 | Channel | Harnesses | Skill names |
 |---|---|---|
-| Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/shape:mockup` |
-| Flat mirror `.agents/skills/` | Codex · opencode · (agy project-level fallback) | flat — `nav-audit`, `shape-mockup` |
-| Native Cursor Plugins (`platforms/cursor/`) | Cursor — **not** the Codex mirror (ADR-017) | flat inside plugins — `nav-audit`, `shape-mockup` |
+| Native plugin import | Claude Code · Antigravity CLI (`agy`) | namespaced — `/nav:audit`, `/seek:mockup` |
+| Flat mirror `.agents/skills/` | Codex · opencode · (agy project-level fallback) | flat — `nav-audit`, `seek-mockup` |
+| Native Cursor Plugins (`platforms/cursor/`) | Cursor — **not** the Codex mirror (ADR-017) | flat inside plugins — `nav-audit`, `seek-mockup` |
 
 Edit only `plugins/`. After a skill change, regenerate with
 `node scripts/build-manifests.mjs && node scripts/build-codex.mjs && node scripts/build-cursor.mjs`,
@@ -27,7 +27,7 @@ then `node scripts/validate-codex-skills.mjs`.
 /plugin install frame@skills
 ```
 
-**Verify:** `/plugin` lists the three plugins; skills surface as `/nav:audit`, `/shape:status`, etc.
+**Verify:** `/plugin` lists the four plugins; skills surface as `/nav:audit`, `/shape:add`, etc.
 
 ## Antigravity CLI (`agy`)
 
@@ -68,7 +68,7 @@ Both auto-discover `.agents/skills/` (project) and Codex also reads `~/.codex/sk
 
 **Verify:**
 
-- Codex — `/skills` lists `nav-audit`, `shape-elicit`, `frame-analogize`, …
+- Codex — `/skills` lists `nav-audit`, `seek-elicit`, `frame-analogize`, …
 - opencode — `opencode debug skill` lists them (project `.agents/skills/` and/or global agents root).
 
 ## Cursor

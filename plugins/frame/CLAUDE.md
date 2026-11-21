@@ -32,7 +32,7 @@ through generated copies of their disciplines, never by calling a sibling skill.
 
 ## Boundaries
 
-- **vs `/shape:elicit`:** elicit draws out an answer the user holds; lenses derive one from
+- **vs `/seek:elicit`:** elicit draws out an answer the user holds; lenses derive one from
   the problem's structure; forms deliver an answer the agent already holds.
 - **vs reviewing a document:** frame has no referee skill; `unfold` guides a learner through a
   source without judging it.

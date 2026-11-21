@@ -7,7 +7,7 @@
 A picture shows a relationship; an object lets the learner cause it. Use it when the
 learner's question is "what if?" or "why does it behave like that?", and the answer is a
 dependence between a few quantities. A static relationship with nothing to vary belongs
-to a picture (`/frame:draw`); choosing between candidate designs belongs to `/shape:mockup`.
+to a picture (`/frame:draw`); choosing between candidate designs belongs to `/seek:mockup`.
 
 ## Choosing the one control
 

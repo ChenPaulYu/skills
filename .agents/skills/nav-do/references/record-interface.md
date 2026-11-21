@@ -2,6 +2,12 @@
 
 # Work-record interface — metadata, conclusion, relations, detail
 
+## Retention before format
+
+Apply `references/saving.md` before creating a record. The detailed convention below
+applies only after there is a reason to save. Keep existing records readable in place.
+
+
 Use the same reading interface for idea, thought, mockup, probe and task; read a
 leftover retired plan the same way.
 Keep the record's established location, type/status vocabulary, and language.

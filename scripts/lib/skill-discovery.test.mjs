@@ -34,8 +34,8 @@ test("Codex and Cursor conversion/emission are invariant to retired directory re
     }
     mkdirSync(join(root, "platforms/cursor"), { recursive: true });
     cpSync(join(SOURCE, "platforms/cursor/manifest.json"), join(root, "platforms/cursor/manifest.json"));
-    const reference = join(root, "plugins/shape/skills/probe/references/retirement-fixture.md");
-    writeFileSync(reference, "Historical /shape:retired-only; actual /shape:probe.\n");
+    const reference = join(root, "plugins/seek/skills/probe/references/retirement-fixture.md");
+    writeFileSync(reference, "Historical /shape:retired-only; actual /seek:probe.\n");
     const run = () => {
       for (const script of ["build-codex.mjs", "build-cursor.mjs"]) {
         execFileSync(process.execPath, [join(root, "scripts", script)], { cwd: root, stdio: "pipe" });
@@ -50,9 +50,9 @@ test("Codex and Cursor conversion/emission are invariant to retired directory re
     mkdirSync(join(skills, "malformed/SKILL.md"), { recursive: true });
     run();
     assert.deepEqual(outputFiles(root), before);
-    for (const path of [".agents/skills/shape-probe", "platforms/cursor/shape/skills/shape-probe"]) {
+    for (const path of [".agents/skills/seek-probe", "platforms/cursor/seek/skills/seek-probe"]) {
       assert.equal(readFileSync(join(root, path, "references/retirement-fixture.md"), "utf8"),
-        "Historical /shape:retired-only; actual shape-probe.\n");
+        "Historical /shape:retired-only; actual seek-probe.\n");
     }
     mkdirSync(join(skills, "added"));
     writeFileSync(join(skills, "added/SKILL.md"), '---\nname: added\ndescription: "Fixture skill."\n---\n\n# Added\n');

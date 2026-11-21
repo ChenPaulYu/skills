@@ -2,6 +2,12 @@
 
 # Workspace records — opt-in pilot
 
+## Retention before format
+
+Apply `references/saving.md` before creating a record. The detailed convention below
+applies only after there is a reason to save. Keep existing records readable in place.
+
+
 Use linked Markdown records as a project's working memory. A task owns its progress,
 verification, blockers, reasons, and next action. A project supplies context and curated
 priorities; its current state is read from those tasks, not copied into a second board.
@@ -44,9 +50,9 @@ write needs one that cannot be inferred. Reading status does not scaffold a work
 ## Task-owned delivery
 
 For new workspace work, one task owns the goal, scope, deliverables with acceptance
-checks, progress, verification, blockers and next action. Shape-task authors that
+checks, progress, verification, blockers and next action. Shape-add authors that
 record. Nav-do grounds implementation in code and updates the same record as it
-verifies deliverables. Shape-wrap saves progress to the same owner. Established
+verifies deliverables. Shape-add saves progress to the same owner. Established
 engineering notes and embedded plans remain readable evidence.
 
 Create or reuse a task when asked to record decided work or implement work that
@@ -62,7 +68,7 @@ Without a connected workspace, follow the project's existing planning convention
 
 ## First-time connection
 
-Explicit project-workspace registration belongs to `shape-setup`. It resolves the
+Explicit project-workspace registration belongs to `shape-tend`. It resolves the
 selected home and code repository, reuses existing identity, creates only a needed
 project.md and portable code-side pointer, then verifies with the shared reader.
 Ordinary status reads and record saves do not silently enroll or migrate projects.

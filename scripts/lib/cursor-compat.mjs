@@ -22,12 +22,12 @@ export const CURSOR_BROWSER_VERIFY_CONTRACT = `> **Browser-verify contract (Curs
 > Missing selected helper/override → return \`MISSING-TOOL\` immediately and never install anything from inside this pass. Preserve the verifier verdict schema exactly: \`PASS | DRIFT | BLOCKED | MISSING-TOOL\`, plus \`reason\`, \`screenshots\`, \`console\`, and \`notes\`. Screenshot evidence is reported by filesystem path only — never inline base64 or image bytes. If the helper was opened, close it on every exit path before returning.`;
 
 const INTERACTIVE_CHOICE_CONSUMERS = {
-  "shape-dogfood": "## Workflow",
+  "seek-dogfood": "## Workflow",
 };
 
 const BROWSER_VERIFY_ANCHORS = {
-  "shape-mockup": "## The browser-verify slot is opt-in, not automatic (ADR-008)",
-  "shape-dogfood": "## Workflow",
+  "seek-mockup": "## Browser verification",
+  "seek-dogfood": "## Workflow",
 };
 
 const WORKER_DISPATCH_RULES = [
@@ -69,7 +69,7 @@ const BROWSER_VERIFY_PROSE_RULES = [
     replace: 'dispatch this plugin\'s `browser-verifier` agent via `Task` with `subagent_type: "browser-verifier"`',
   },
   {
-    find: "The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/shape/agents/browser-verifier.md) (mechanical-tier executor).",
+    find: "The slot's default *executor* is the plugin's [`agents/browser-verifier.md`](plugins/seek/agents/browser-verifier.md) (mechanical-tier executor).",
     replace:
       "The slot's default *executor* is this plugin's [`agents/browser-verifier.md`](../../agents/browser-verifier.md). Dispatch it via `Task` with `subagent_type: \"browser-verifier\"`.",
   },

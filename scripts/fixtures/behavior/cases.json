@@ -154,7 +154,7 @@
     {
       "id": "reconcile",
       "project": "records",
-      "skill": "shape-tidy",
+      "skill": "shape-tend",
       "prompt": "請整理 blueprints：對照 code 和測試修正已完成計畫的狀態，保留仍有效的決策、理由與未完成工作。不用重排優先順序，也不用 commit。",
       "allowChanges": [
         "blueprints/plans/retry.md",
@@ -243,7 +243,7 @@
     {
       "id": "artifact-default",
       "project": "artifact-options",
-      "skill": "shape-mockup",
+      "skill": "seek-mockup",
       "prompt": "請做一個可點選兩種排序方式的單檔 HTML mockup，放在 blueprints/mockups/options/index.html，不用瀏覽器截圖也不用 commit。請沿用 repo 的文件政策並交代產物的 Git 狀態。",
       "allowChanges": [
         ".gitignore",
@@ -288,7 +288,7 @@
     {
       "id": "artifact-tracked-cleanup",
       "project": "workflow",
-      "skill": "shape-dogfood",
+      "skill": "seek-dogfood",
       "prompt": "請從真實 CLI dogfood archive、find-archived、restore 這三個使用目的，目標是改進工具設計，不是修 demo.txt。報告放在 dogfood/current/report.md，截取真實回應即可，不用修改 product code 或 commit。另外已授權你將 dogfood/legacy/report.md 取消 Git 追蹤，保留本機檔案；開發產物不得提交。",
       "allowChanges": [
         "dogfood/current/report.md"
@@ -332,7 +332,7 @@
     {
       "id": "probe-decision-evidence",
       "project": "probe-evidence",
-      "skill": "shape-probe",
+      "skill": "seek-probe",
       "prompt": "請依 evidence.json 判斷是否足以採用 candidate 來改善完成率及耗時，並設計仍需要的最小實驗。這份是已存在的測量紀錄，這輪只判讀與設計，不要跑新試驗、付費模型或改程式。把判讀、限制、下一次試驗前的判準寫在 blueprints/thoughts/probe.md，不用 commit。",
       "allowChanges": [
         "blueprints/thoughts/probe.md"
@@ -373,7 +373,7 @@
     {
       "id": "dogfood-tool-goal",
       "project": "workflow",
-      "skill": "shape-dogfood",
+      "skill": "seek-dogfood",
       "prompt": "請用實際 CLI 檢查 archive、find-archived、restore 三個目的能不能完成，這輪要改進工具設計，不是 demo 的文案。這是正常協助使用者，不是盲測；已知沒有 find-archived，請直接提示。報告放在 dogfood/current/report.md，不要改其他檔案、Git index 或 commit；遇到現有 tracked 產物只回報。",
       "allowChanges": [
         "dogfood/current/report.md"
@@ -416,7 +416,7 @@
     {
       "id": "artifact-natural",
       "project": "artifact-options",
-      "skill": "shape-mockup",
+      "skill": "seek-mockup",
       "prompt": "請做一個可點選兩種排序方式的單檔 HTML mockup，放在 blueprints/mockups/options/index.html。不用瀏覽器截圖，也不用 commit。",
       "allowChanges": [
         ".gitignore",
@@ -461,7 +461,7 @@
     {
       "id": "dogfood-natural",
       "project": "workflow",
-      "skill": "shape-dogfood",
+      "skill": "seek-dogfood",
       "prompt": "用這個 CLI dogfood 一下，看看封存、找回封存項目、還原這幾件事用起來順不順。這次先體驗和回報，報告放 dogfood/current/report.md，不用修改程式或 commit。",
       "allowChanges": [
         "dogfood/current/report.md"
@@ -504,7 +504,7 @@
     {
       "id": "probe-natural",
       "project": "probe-evidence",
-      "skill": "shape-probe",
+      "skill": "seek-probe",
       "prompt": "看看 evidence.json，candidate 值得採用嗎？我們希望提升任務完成率、縮短耗時。把判讀和建議寫在 blueprints/thoughts/probe.md；這輪只評估現有資料，不執行新實驗，也不用 commit。",
       "allowChanges": [
         "blueprints/thoughts/probe.md"
@@ -545,7 +545,7 @@
     {
       "id": "records-check-only-natural",
       "project": "records",
-      "skill": "shape-tidy",
+      "skill": "shape-tend",
       "prompt": "幫我看看專案的開發紀錄有哪些已經過期了，對照目前實作，告訴我哪些要整理。這輪先只檢查，不改檔案，也不用重排優先順序。",
       "allowChanges": [],
       "mustChange": [],
@@ -554,7 +554,7 @@
         "unchangedIndex": true
       },
       "review": [
-        "Actual reads select shape-tidy without the user naming it.",
+        "Actual reads select shape-tend without the user naming it.",
         "The response grounds completed retry status in implementation and verification, preserves its governing reason and pending offline work.",
         "No writes or priority changes occur; inspect tool actions separately from final hashes."
       ]
@@ -562,7 +562,7 @@
     {
       "id": "dogfood-continuation",
       "project": "workflow",
-      "skill": "shape-dogfood",
+      "skill": "seek-dogfood",
       "prompt": "用這個 CLI dogfood 一下，看看封存、找回封存項目、還原這幾件事用起來順不順。這次先體驗和回報，報告放 dogfood/current/report.md，不用修改程式或 commit。",
       "allowChanges": [
         "dogfood/current/report.md",

@@ -122,9 +122,9 @@ Scope decisions, ownership checks, and examples of risk-proportional verificatio
 
 ## Companion skills
 
-- **`shape-task`** — turn settled intent into deliverables with acceptance checks.
+- **`shape-add`** — turn settled intent into deliverables with acceptance checks.
 - **`/nav:audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
-- **`/shape:elicit` · `/shape:mockup`** — when the change isn't actually decided yet; converge first, then `do`.
+- **`/seek:elicit` · `/seek:mockup`** — when the change isn't actually decided yet; converge first, then `do`.
 
 ## Communication style
 

@@ -57,91 +57,73 @@
     },
     "shape": {
       "readme": {
-        "summary": "**Give work its form** — connect projects, capture ideas, converge decisions, test claims, define tasks with acceptance checks, recover progress and tidy records.",
+        "summary": "**Keep work resumable** — add ideas and tasks, view progress, advance work, and tend records.",
         "skills": {
-          "elicit": "clarify a conceptual decision or specific root cause with grounded questions and explanations; no forced disagreement, phrase-based stall diagnosis, or reading quota; a wider survey is optional, and implementation needs existing authority",
-          "mockup": "converge a visual / structural decision with interactive HTML and one linked Markdown record: honest dates, visible Relations, pick/open choices and retirement conditions; variants share the record",
-          "probe": "design a minimal experiment or assess existing measurements for a pending decision; separate correctness, output quality, and workflow value, and preregister the verdict before new trials",
-          "dogfood": "drive the real built interface against a stated tool-evaluation goal; attribute friction and missing intents, disclose known problems during assisted use, and preserve independent-trial boundaries",
-          "tidy": "tidy completed tasks, legacy plans, stale thoughts and redundant mockups; preserve useful reasons and live work, and consolidate task/plan files only within requested cleanup scope (ADR-016)",
-          "idea": "save a findable spark without creating an implementation commitment; distinct from clarifying a specific choice",
-          "status": "recover task-owned progress and fresh code evidence; explicitly requested priorities update the original project entry; export an interactive graph on demand",
-          "wrap": "save this round into the original tasks, preserving other open work; no separate handoff or checkpoint",
-          "setup": "connect a code repository to its selected home workspace, reuse existing identity, add the minimal project/pointer and verify reading; environment scaffolding and legacy migration remain separate",
-          "task": "turn decided work into an original task with deliverables, acceptance checks and next action; recording a task does not authorize implementation"
+          "add": "capture an idea, define planned work, or save progress into its original owner",
+          "view": "read current work, blockers and next actions without changing records",
+          "next": "advance ready, already-authorized work without reopening settled choices",
+          "tend": "connect repositories and tidy records while preserving live reasons"
         }
       },
       "site": {
-        "layer": "ui",
+        "layer": "state",
         "blurb": {
-          "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records.",
-          "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。"
+          "en": "Keep scope, verification and the next action together. Maintain the project connection and advance ready work.",
+          "zh": "把範圍、驗證和下一步留在原任務，維護專案接線並推進可做的工作。"
         },
         "skills": {
-          "mockup": [
+          "tend": [
             "",
             {
-              "en": "Converge choices through interactive HTML with one canonical Markdown record per decision. Use common frontmatter, honest dates, visible typed Relations and a short conclusion before detail. HTML points to the record; variants share it. Retention and retirement still require project policy, preserved reasons and verified recovery (ADR-014).",
-              "zh": "用可操作的 HTML 收斂選擇，每個決策共用一份 Markdown 紀錄。開頭放 frontmatter、可信日期、明顯的 Relations 與短結論，細節再往下讀。HTML 指向這份紀錄，多個候選稿共用；保存與退役仍依專案政策、理由保存與可驗證的復原途徑處理（ADR-014）。"
+              "en": "Connect a repository to its selected workspace, or tidy project records against code and decisions. Use for project setup and record cleanup; record additions belong to shape-add.",
+              "zh": "把專案接到選定的 workspace，或整理專案紀錄。新增與補充紀錄用 shape-add。"
             }
           ],
-          "dogfood": [
+          "next": [
             "",
             {
-              "en": "Use the real browser/CLI against user intents and a stated tool-evaluation goal. Attribute findings to tool design, agent misuse, demo quality, or harness artifacts; disclose known issues during assistance and log interventions in agreed independent trials. Process artifacts follow the shared retention and Git checks (ADR-019).",
-              "zh": "以使用目的與明確的工具驗證目標，實際操作 browser／CLI。區分工具設計、agent 誤用、示範品質與測試環境造成的問題；正常協助時直接提示已知問題，約定的獨立試驗則記錄介入。產物遵循共用保存政策與 Git 檢查（ADR-019）。"
+              "en": "Choose and advance the next ready, already-authorized task or exploration. Use when asked to continue or work while the user is away; a status-only request belongs to shape-view.",
+              "zh": "選出並推進已授權、現在能做的任務或探索。單純查進度用 shape-view。"
             }
           ],
-          "elicit": [
+          "add": [
             "",
             {
-              "en": "Clarify an undecided conceptual choice or specific root cause using relevant evidence. Ask only what changes the decision; agree when supported and challenge concrete problems. Hesitation is contextual, not a phrase-triggered diagnosis. Explain small gaps inline; a broader survey or firsthand reading is optional when needed. No friction quota, reading quota, or automatic implementation. ADR-011.",
-              "zh": "用相關證據釐清尚未決定的概念選擇或具體原因。只問會影響決定的問題；有根據就認同，有具體問題才挑戰。猶豫要看上下文，不靠一句話判定你缺知識。小缺口直接解釋，需要時才擴大調查或安排閱讀。不強制製造摩擦、不規定閱讀篇數，也不擅自實作。；ADR-011。"
+              "en": "Capture an idea, define pending work, or update the original record with progress. Use for add this, save this or wrap this round; viewing progress belongs to shape-view and execution to nav-do.",
+              "zh": "記下想法、建立待做工作，或把進度存回原紀錄。查看進度用 shape-view，實作交給 nav-do。"
             }
           ],
-          "probe": [
+          "view": [
             "",
             {
-              "en": "Design a minimal experiment or assess existing measurements for a pending decision. Separate correctness, output quality, and workflow benefit; use representative inputs and fair timing conditions, qualify interference, and preregister only new trials. Existing evidence can be assessed without a rerun. Artifacts follow project retention policy (ADR-019).",
-              "zh": "為待決問題設計最小實驗，或判讀既有測量。分開判斷功能正確、輸出品質與流程價值；選代表性素材，保持計時條件可比，交代干擾限制，只有新試驗才預先訂判準。既有資料可以直接判讀，不必先重跑；產物依專案保存政策處理（ADR-019）。"
-            }
-          ],
-          "tidy": [
-            "",
-            {
-              "en": "Tidy stale thoughts, completed plans, and redundant mockups with code and later decisions. Preserve live reasons, rejected alternatives, and links before cleanup. Distinguish shipped from superseded; do not reprioritize or rewrite accepted intent to match a bug (ADR-005).",
-              "zh": "對照程式與後續決策，整理過期想法、已完成計畫及多餘 mockup。先保存仍有效的理由、未採方案並處理引用，再清理；區分已完成與已被取代，不擅自重排優先順序，也不替偏離設計的 code 改寫理由（ADR-005）。"
-            }
-          ],
-          "setup": [
-            "",
-            {
-              "en": "Explicitly connect a code repository to its selected home workspace. Reuse registrations, add only a needed project entry and portable instruction pointer, then verify the real read path. No environment scaffolding or automatic legacy migration. ADR-015.",
-              "zh": "明確把 code repo 接上選定的 home workspace。重用既有登記，只建立需要的專案入口與可攜指標，並驗證實際讀取；開發環境建置與舊資料移植不混入。ADR-015。"
-            }
-          ],
-          "task": [
-            "",
-            {
-              "en": "Record or revise the agreed goal, scope, deliverables and acceptance checks in the owning task. Route execution through nav-do.",
-              "zh": "在原 Task 記錄或更新已決定的目標、範圍、交付項目和驗收條件。實作由 nav-do 接手。"
+              "en": "Read current project work, priorities, blockers and next actions without changing records. Use for status or catch me up; continuing implementation belongs to shape-next.",
+              "zh": "唯讀查看目前工作、優先順序、卡點與下一步。要接著實作用 shape-next。"
             }
           ]
         },
-        "files": [],
+        "files": [
+          [
+            "Guide",
+            "plugins/shape/CLAUDE.md",
+            {
+              "en": "Work continuity",
+              "zh": "工作接續"
+            }
+          ]
+        ],
         "graph": {
-          "x": 225,
-          "y": 150,
+          "x": 390,
+          "y": 180,
           "w": 120,
-          "link": "shape-anatomy",
           "role": {
-            "en": "intent → built",
-            "zh": "意圖 → 做出來"
+            "en": "continue work",
+            "zh": "接續工作"
           },
           "desc": {
-            "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014).",
-            "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。"
-          }
+            "en": "Add, View, Next and Tend keep ideas and authorized work resumable.",
+            "zh": "Add 記下、View 查看、Next 推進、Tend 整理。"
+          },
+          "link": "shape-anatomy"
         }
       }
     },
@@ -152,9 +134,9 @@
           "first-principles": "strip a question to its irreducible axioms, rebuild from them, and surface where that diverges from convention; analysis stays in-chat unless continuation was already authorized",
           "orthogonal": "factor a tangled phenomenon into mutually-independent (orthogonal) axes; verify the independence (move one, the others stay put) and name what was conflated; in-chat",
           "analogize": "on explicit request, build a checked analogy for a concept you already understand: compare candidates, verify the mapping against the real structure, pick on fit, and name where the winner breaks; in-chat",
-          "draw": "render something you already understand so it lands for someone else, with the form chosen by the kind of knowledge; terminal-first, escalating to an interactive artifact only when interaction changes visible state or the user asks. Distinct from `/shape:mockup`, which renders candidates so a decision can be picked — here the artifact is the explanation",
+          "draw": "render something you already understand so it lands for someone else, with the form chosen by the kind of knowledge; terminal-first, escalating to an interactive artifact only when interaction changes visible state or the user asks. Distinct from `/seek:mockup`, which renders candidates so a decision can be picked — here the artifact is the explanation",
           "unfold": "walk someone through an unfamiliar repository, library, paper, book, or concept by progressive disclosure: skeleton first, one layer per turn, each term glossed at first use, claims marked recorded/inferred/unknown, the learner's questions setting depth, a named checkpoint, and a form chosen per layer. Distinct from `/frame:analogize`, which gives a single explanation",
-          "tinker": "build a small interactive object to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, persistent across turns, with an honest note where it simplifies. Output is an interactive HTML page handed over as a URL. Distinct from `/shape:mockup` (render to decide) and `/frame:draw` (choose a picture)"
+          "tinker": "build a small interactive object to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, persistent across turns, with an honest note where it simplifies. Output is an interactive HTML page handed over as a URL. Distinct from `/seek:mockup` (render to decide) and `/frame:draw` (choose a picture)"
         }
       },
       "site": {
@@ -188,8 +170,8 @@
           "draw": [
             "",
             {
-              "en": "Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — 'it would look nicer' is not a threshold. Sibling of analogize: same outward direction, picture instead of comparison. NOT /shape:mockup, which renders candidates so a decision can be picked.",
-              "zh": "把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /shape:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。"
+              "en": "Render something already understood so it lands for someone else — the form chosen by the KIND of knowledge, never by habit: ownership → spatial map (positions permanent) · temporal process → run playback · state over time → time stepper (a table can state a lifetime; only a stepper shows one expiring) · delta from what they know → claim expansion (their own sentences, verdict as the door, mechanism/trade-off/cost behind it) · taxonomy → grouped map · structure → weighted node-edge graph with next-step hints · lifecycle → canonical-run diagram. Terminal-first; escalate to an interactive artifact only when interaction changes visible state or the audience asks — 'it would look nicer' is not a threshold. Sibling of analogize: same outward direction, picture instead of comparison. NOT /seek:mockup, which renders candidates so a decision can be picked.",
+              "zh": "把一個你已經懂的東西畫出來,讓別人也懂——形式由「知識的種類」決定,不由習慣決定:擁有權 → 空間圖(位置固定不動)· 時間流程 → 執行播放 · 狀態隨時間變化 → 時間步進器(表格講得出壽命,只有步進器看得到東西消失)· 與對方已知的差 → 主張展開(用他自己的句子,判定當入口,機制/取捨/代價在後面)· 分類 → 分組圖 · 結構 → 帶路標的加權 graph · 生命週期 → canonical-run 圖。預設終端機圖;只有「互動會改變可見狀態」或對方明說要,才升級成互動 artifact——「這樣比較好看」不算門檻。analogize 的手足:同樣朝外交付,只是換成圖而非類比。NOT /seek:mockup——那是 render 候選讓你「挑」,這裡 artifact 本身就是解釋。"
             }
           ],
           "unfold": [
@@ -202,8 +184,8 @@
           "tinker": [
             "",
             {
-              "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /shape:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-010.",
-              "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /shape:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-010。"
+              "en": "Build a small interactive object the learner can poke to understand why something behaves as it does: one primary control, a visible before/after, details revealed as asked, the same object extended across turns, and a visible note where it simplifies the source. Output is one interactive HTML page, activated and handed over as a URL. NOT /seek:mockup (render candidates to decide) or /frame:draw (choose a picture). ADR-010.",
+              "zh": "做一個可以動手玩的小物件，讓人理解某件事為什麼會這樣運作：一個主要控制項、看得見的前後差異、細節等被問到才展開、後續問題在同一個物件上延伸，並明講它在哪裡簡化了來源。輸出是一個互動 HTML 頁面，啟動後給可點的 URL。NOT /seek:mockup（render 候選來做決定）或 /frame:draw（選一張圖）。ADR-010。"
             }
           ]
         },
@@ -219,6 +201,77 @@
           "desc": {
             "en": "Understanding family: first-principles and orthogonal see a problem; analogize, draw, and tinker present an answer; unfold walks a subject one layer per turn and applies the forms by bundled protocol. Reasoning checks remain, but output scales to the question. Analysis alone grants no build authority; ADR-010.",
             "zh": "理解家族：first-principles 與 orthogonal 看清問題；analogize、draw、tinker 呈現答案；unfold 一回合一層地帶人走過一個主題，並以內附協議套用各 form。保留實質檢查，呈現隨問題大小調整。單純分析不授權實作；ADR-010、ADR-010。"
+          }
+        }
+      }
+    },
+    "seek": {
+      "readme": {
+        "summary": "**Find an answer** — clarify, compare, measure and try real workflows with lightweight methods.",
+        "skills": {
+          "elicit": "clarify the consequential choice or cause",
+          "mockup": "build an operable comparison and verify its interaction",
+          "probe": "test a claim or interpret existing measurements",
+          "dogfood": "use a real feature and report reproducible friction"
+        }
+      },
+      "site": {
+        "layer": "decide",
+        "blurb": {
+          "en": "Choose a method for the question. Keep results in chat or scratch until retention has a purpose.",
+          "zh": "依問題選方法，結果先留在對話或暫存，需要保留時才存。"
+        },
+        "skills": {
+          "elicit": [
+            "",
+            {
+              "en": "Clarify an unsettled choice or specific cause through grounded conversation. Use for help me think this through; measurable claims belong to seek-probe and interactive comparisons to seek-mockup.",
+              "zh": "用接地的對話釐清尚未決定的選擇或具體原因。可測量的主張交給 seek-probe，需要操作比較則用 seek-mockup。"
+            }
+          ],
+          "mockup": [
+            "",
+            {
+              "en": "Build an interactive comparison when the user wants to see or try alternatives before choosing. Use for mockups and behavior comparisons; implementation and persistent records require their own scope.",
+              "zh": "把選項做成可操作的比較，讓使用者看過、試過再決定。是否實作或保存，依照各自的授權範圍。"
+            }
+          ],
+          "probe": [
+            "",
+            {
+              "en": "Test a measurable claim or assess existing measurements. Use for experiments and ablations; preferences belong to seek-mockup and built-feature usage to seek-dogfood.",
+              "zh": "以實驗檢驗可測量的主張，或判讀既有測量。偏好比較用 seek-mockup，實際使用已完成的功能用 seek-dogfood。"
+            }
+          ],
+          "dogfood": [
+            "",
+            {
+              "en": "Use a built feature through its real interface to find reproducible friction and missing user paths. Use for try it or dogfood; testing an undecided claim belongs to seek-probe.",
+              "zh": "透過真實介面使用已完成的功能，找出可重現的阻礙與缺少的操作路徑。未定主張的實驗交給 seek-probe。"
+            }
+          ]
+        },
+        "files": [
+          [
+            "Guide",
+            "plugins/seek/CLAUDE.md",
+            {
+              "en": "Finding answers",
+              "zh": "找答案"
+            }
+          ]
+        ],
+        "graph": {
+          "x": 120,
+          "y": 180,
+          "w": 120,
+          "role": {
+            "en": "find answers",
+            "zh": "找答案"
+          },
+          "desc": {
+            "en": "Elicit, Mockup, Probe and Dogfood are independent, lightweight methods.",
+            "zh": "Elicit、Mockup、Probe、Dogfood 是可獨立使用的精簡方法。"
           }
         }
       }

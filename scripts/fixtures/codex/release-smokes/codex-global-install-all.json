@@ -8,21 +8,25 @@
   "verify_full_compat_exit": true,
   "seed_legacy_duplicates": [
     "nav-do",
-    "shape-status"
+    "shape-add"
   ],
   "reject_legacy_duplicates": [
     "nav-do",
-    "shape-status"
+    "shape-add"
   ],
-  "expect_skill_count": 19,
+  "expect_skill_count": 17,
   "expect_skills": [
     "nav-audit",
     "nav-do",
     "nav-ship",
-    "shape-status",
-    "shape-wrap",
-    "shape-task",
-    "shape-setup"
+    "shape-add",
+    "shape-tend",
+    "shape-next",
+    "seek-elicit",
+    "seek-mockup",
+    "seek-probe",
+    "seek-dogfood",
+    "shape-view"
   ],
   "expect_runtime_files": [
     ".codex/agents/executor.toml",

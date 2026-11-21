@@ -47,7 +47,7 @@ at a useful boundary. The rules apply to nav's own files too.
   leakage that no single change can see is `audit`'s job.
 - **The verb is the only door for its deliverable** ([ADR-006](docs/adr/006-handoffs-and-authorized-scope.md))
   — when you are about to hand-produce a behavior change, a structural move or a comparison
-  mockup, use `/nav:do` for code and `/shape:mockup` for comparison mockups.
+  mockup, use `/nav:do` for code and `/seek:mockup` for comparison mockups.
 - **Reuse via transcript** — a skill that needs another's output first checks whether it
   already ran on the same input this session and reuses it (`do` may reuse relevant `audit` evidence).
 - **Inject ↔ check at hand-off** — give a bounded executor scope, seams, contracts and
