@@ -15,7 +15,7 @@ The invocation axis has one owner, the `disable-model-invocation` frontmatter fi
 and README buckets it for humans. Instructions load only when needed: the repo-root
 guide indexes source guides, and dispatch machinery lives in references. The prose
 failure vocabulary is owned once by
-`plugins/nav/skills/compose/references/authoring-failure-modes.md`.
+`docs/authoring-failure-modes.md`.
 
 ## Evidence and alternatives
 

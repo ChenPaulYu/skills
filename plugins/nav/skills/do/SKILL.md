@@ -1,15 +1,21 @@
 ---
 name: do
-description: "Implement already-decided behavior changes, including a multi-item task, and verify the result; or show the grounded engineering approach first when asked. Use for authorized fixes or features with clear outcomes, or for 'how would you build this' before building. Behavior-preserving refactors and unresolved product choices belong to separate workflows."
+description: "Implement decided fixes, features, or behavior-preserving refactors and verify them. Also check or update README, docs, and source headers against code. Use for an engineering approach before edits when asked."
 ---
 
-# Do — implement decided behavior
+# Do — implement, refactor, or reconcile explanations
 
-Ground the change in the existing code, then deliver and verify the agreed outcomes.
+Ground the request in the existing code and match verification to the agreed scope.
+
+## Choose the workflow from the request
+
+- **Behavior change or approach first:** Use the implementation workflow below. An approach-only request stays read-only until the user authorizes implementation.
+- **Behavior-preserving refactor:** Read `references/refactor-protocol.md`. Explain the boundary and observable contract, establish a pre-edit baseline, and repeat the same checks on the final change. Keep existing public entry points and data compatibility. If actually dispatching a bounded worker, read `references/worker-dispatch.md` at dispatch time.
+- **Docs or source headers against code:** Use `references/docs-render.md` and/or `references/header-render.md` for the requested surface. A check-only request writes nothing, including temporary generator output in the checkout. For an authorized update, account for the full requested batch, preserve dated history and plans, and verify generated content through its owner. Keep product code outside a docs-only change.
 
 ## Before the first edit: find the work item
 
-For every execution request, check the project instructions for its workspace
+Before an implementation or authorized update, check the project instructions for its workspace
 mapping. For a connected project, open its `project.md` and search existing tasks
 and live legacy work for the requested outcome, even for a small fix. Use the
 user's explicit task or project pointer, or the **Locate before reading or
@@ -117,9 +123,7 @@ Scope decisions, ownership checks, and examples of risk-proportional verificatio
 ## Companion skills
 
 - **`shape-task`** — turn settled intent into deliverables with acceptance checks.
-- **`/nav:refactor`** — the behaviour-preserving twin; when the change is a move, not an addition.
 - **`/nav:audit`** — when you're not sure the placement is sound; a read-only shape check before you `do`.
-- **`/nav:sync`** — after a `do` that changed a file's role or added a load-bearing file, refresh its header. Include affected reader documents when the change alters their claims or usage.
 - **`/shape:elicit` · `/shape:mockup`** — when the change isn't actually decided yet; converge first, then `do`.
 
 ## Communication style

@@ -1,6 +1,6 @@
 ---
 name: ship
-description: "Land finished work: commit, push, merge into the main branch (or open a PR when the project requires one), clean up merged branches and worktrees, then run the project's own release tail. Use for 幫我 commit -> push -> merge, 收尾, 把沒在用的 branch 刪一刪, or ship it. Making the change itself belongs to /nav:do."
+description: "Land verified work with release-doc checks, or clean up merged branches and worktrees. Use for ship it, commit/push/merge, or safe branch cleanup. Implementation belongs to /nav:do."
 ---
 
 # Ship — land it, then leave the repo clean
@@ -8,6 +8,7 @@ description: "Land finished work: commit, push, merge into the main branch (or o
 Take work that is already done and verified, get it into the main branch, and leave no
 stray branches, worktrees, or half-finished release steps behind. The front half is the
 same in every repo; the tail (version bump, rebuild, alias, deploy) belongs to the project.
+For a cleanup-only request, read the Git state and follow safe cleanup within that scope.
 
 Before creating or updating project records or working artifacts, read
 `references/workspace-records.md` to resolve the connected home and storage first. Read
@@ -17,31 +18,35 @@ defines metadata, dates, opening conclusions and Relations. This does not change
 1. **Read the state before touching anything.** `git status`, current branch, `git worktree
    list`, remotes, the main branch name, and `git fetch`. Read the project's ship rules: a
    `## Ship` or release section in CLAUDE.md / AGENTS.md / CONTRIBUTING. If the work is not
-   verified yet, say so and stop at that gap rather than shipping it.
-2. **Commit only this task's work.** Stage the files this task changed; list anything else
-   that is dirty and leave it unstaged. Never stage process artifacts — blueprints, plans,
-   experiment outputs, logs, local config — even when no ignore rule covers them. Follow
-   the commit and branch conventions in the user's and project's instructions (a `## Git`
-   section; the project's wins); without one, use `<type>(<scope>): <summary>` with a body
-   that says why. Run the repo's hooks — never `--no-verify` unless the user says so.
-3. **Integrate by the project's rule.** Default: bring the branch up to date with the latest
-   main, merge into main (fast-forward when possible), push. Open a PR instead when main is
-   protected, the remote is a fork of someone else's repo, the project says PR, or the user
-   asks. A repo with no remote stops at the local commit or merge, and the report says
-   nothing was pushed. Never force-push main. A conflict you cannot resolve without guessing intent:
-   stop, show it, ask.
-4. **Clean up only what is safe.** Delete branches already merged into main or marked
+   verified yet, stop before release preparation and report the missing evidence.
+2. **Select an isolated release snapshot.** Compare the index and working tree with the fetched
+   integration target. If unrelated staged, unstaged, or mixed-file edits are present, prepare the
+   release in a clean checkout or worktree and transfer only the authorized changes. Preserve the
+   operator's index and working changes. When ownership of a necessary hunk is unclear, resolve it
+   before copying or staging it.
+3. **Reconcile release docs before committing.** Inspect reader explanations affected by the release.
+   When the user or repo requests a full refresh, cover the complete named README and docs scope.
+   Use `references/docs-render.md` for the scoped pass, safe examples and generation. In the actual
+   release snapshot, update stale claims and run generators through their owners. Preserve historical
+   and planned guidance. Review the staged changes and commit only the release, using the repo's
+   hooks and commit conventions.
+4. **Integrate by the project's rule.** Bring the release up to date with the integration target,
+   usually merging to main or opening a PR per the repo. Recheck affected docs, generated output,
+   and relevant tests whenever integration changes the verified snapshot. Inspect and verify the
+   exact candidate before pushing or opening the PR. Honor the authorized remote and release
+   effects. Never force-push main. See `references/protocol.md` for the Git workflow.
+5. **Clean up only what is safe.** Delete branches already merged into main or marked
    `[gone]` with `git branch -d`. Remove a worktree only with plain `git worktree remove`
    — **never `--force`**, including the worktree you are standing in. If it refuses because
    of modified or untracked files, keep the worktree and its branch and list those files:
    untracked files are the user's work, however disposable they look. Keep and list any
    unmerged branch too; deleting either needs the user's word.
-5. **Run the project's tail.** Do exactly the steps the project documents or the user named
+6. **Run the project's tail.** Do exactly the steps the project documents or the user named
    (bump version, rebuild, refresh an alias, deploy), in order. Publishing, deploying, or a
    PR on someone else's repository needs explicit authority. When the user keeps asking for
    the same undocumented tail, offer once to record it as a `## Ship` section in the
    project's CLAUDE.md / AGENTS.md.
-6. **Report what landed.** Commit hash(es) and where they went, the merge or PR link,
+7. **Report what landed.** Commit hash(es) and where they went, the merge or PR link,
    branches and worktrees removed or kept (and why), tail results — and one verification
    line: what you checked and its result, or what remains unverified.
 

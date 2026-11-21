@@ -19,7 +19,7 @@ Honestly assess any codebase against 8 deep-module principles — not bug correc
 - **Honesty over flattery.** Name a real finding; mark claims without sufficient evidence `(uncertain)` rather than asserting it — the user wants signal, not reassurance.
 - **Cite evidence.** Every finding gets a file path (and line range where applicable) — no abstract claims.
 - **Distinguish fact from judgment.** ✓ / ⚠ / ❌ for graded findings; a separate self-eval bucket for rule ⑧'s subjective struggle.
-- **Read-only.** Never write or modify files — point the user at `nav-sync` (fix headers) or `nav-refactor` (execute moves) for action.
+- **Read-only.** Never write or modify files — Point the user to `nav-do` for an authorized refactor or an explanation update.
 - **No silent caps (Mode 3).** If you stop at a round cap, sample rather than fully scan a giant domain, or skip a domain, say so in the report — silent truncation reads as full coverage when it isn't.
 
 Full check tables (universal + per-stack thresholds), the complete three-mode walkthrough, the 8-rule restatement, the Step 1-5 audit process, and calibration notes on frequently-misjudged findings: `references/modes-and-checks.md`. The Mode 3 fan-out mechanics (ground → dispatch → merge → root-cause cluster → completeness critic): `references/deep-sweep.md`, read when Mode 3 fires. The full report template: `references/output-format.md`.

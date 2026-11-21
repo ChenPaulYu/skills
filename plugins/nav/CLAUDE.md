@@ -6,11 +6,10 @@
 ## What nav is
 
 Skills for keeping code navigable as it grows, after Ousterhout's *A Philosophy of Software
-Design*. Six verbs, one per job ([ADR-004](docs/adr/004-nav-verb-roster.md)): `audit`
-(assess) · `refactor` (restructure, behavior preserved) · `sync` (headers and reader documents
-against code, [ADR-005](docs/adr/005-nav-sync-scope.md)) · `do` (implement decided behavior and
-verify it, or show the approach first when asked) · `compose` (author or restructure
-prose) · `ship` (land finished work). Language-agnostic: a universal core plus per-stack
+Design*. Three verbs ([ADR-004](docs/adr/004-nav-verb-roster.md)): `audit` assesses architecture read-only,
+`do` implements decided changes, preserves behavior during refactors and reconciles explanations,
+and `ship` verifies release docs and lands finished work. Do and Ship use the same docs procedure
+([ADR-005](docs/adr/005-nav-sync-scope.md)). Language-agnostic: a universal core plus per-stack
 heuristics; degrade to universal checks and say what was skipped.
 
 ## The 8 rules
@@ -48,9 +47,9 @@ at a useful boundary. The rules apply to nav's own files too.
   leakage that no single change can see is `audit`'s job.
 - **The verb is the only door for its deliverable** ([ADR-006](docs/adr/006-handoffs-and-authorized-scope.md))
   — when you are about to hand-produce a behavior change, a structural move or a comparison
-  mockup, fire `/nav:do`, `/nav:refactor` or `/shape:mockup` instead.
+  mockup, use `/nav:do` for code and `/shape:mockup` for comparison mockups.
 - **Reuse via transcript** — a skill that needs another's output first checks whether it
-  already ran on the same input this session and reuses it (`sync` and `do` reuse `audit`).
+  already ran on the same input this session and reuses it (`do` may reuse relevant `audit` evidence).
 - **Inject ↔ check at hand-off** — give a bounded executor scope, seams, contracts and
   completion checks; read the actual diff and reproduce verification before accepting.
 - **Live-LLM cost** ([ADR-008](docs/adr/008-verification-and-spend-gates.md)) — name added paid
@@ -64,4 +63,4 @@ at a useful boundary. The rules apply to nav's own files too.
 
 - Changing the 8 rules: update every skill and bundled restatement in the same change, and the
   owning ADR.
-- No nav verb is frontmatter-tiered to `model: sonnet`; `sync` judges meaning against code.
+- No Nav verb is frontmatter-tiered to `model: sonnet`. Documentation checks are grounded in code.

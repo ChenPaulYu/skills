@@ -107,7 +107,7 @@ Re-read changed records, inspect the diff, resolve inbound links, and account fo
 record. Update directly affected board facts if that update is authorized; preserve priorities.
 Report retained material, unknowns, and coverage limits. There is no automatic align finale.
 
-Code headers from /nav:sync are useful locators, not proof or a prerequisite. Read code directly
-when headers are absent. /nav:sync checks reader documents such as README; /shape:status
+Code headers from /nav:do are useful locators, not proof or a prerequisite. Read code directly
+when headers are absent. /nav:do checks reader documents such as README; /shape:status
 decides priorities; the convention structure is upgraded by hand following the migration ledger in references/migration-ledger.md. Reuse fresh evidence
 between these tasks without requiring or invoking another skill.

@@ -10,11 +10,14 @@ import { dirname, join } from "node:path";
 const RECORD_CONSUMERS = [
   ...["setup", "idea", "elicit", "mockup", "probe", "dogfood", "task", "status", "wrap", "tidy"]
     .map(skill => `plugins/shape/skills/${skill}`),
-  ...["do", "refactor", "compose", "ship"]
+  ...["do", "ship"]
     .map(skill => `plugins/nav/skills/${skill}`),
 ];
 
-export const SHARED_SKILL_REFERENCES = [
+export const SHARED_SKILL_REFERENCES = [{
+  source: "plugins/nav/references/docs-render.md",
+  destinations: ["do", "ship"].map(skill => `plugins/nav/skills/${skill}/references/docs-render.md`),
+},
   ...["workspace", "workspace_records.py", "workspace_view.py", "workspace_graph.html"].map(file => ({
     source: `plugins/shape/skills/status/scripts/${file}`,
     destinations: RECORD_CONSUMERS.filter(skill => skill !== "plugins/shape/skills/status")

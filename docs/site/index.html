@@ -424,17 +424,17 @@ const RULES = [
 // BEGIN GENERATED catalog-data
 const CATALOG_COUNTS = {
   "plugins": 3,
-  "skills": 22
+  "skills": 19
 };
 const DOMAINS = {
   "nav": {
     "layer": "state",
     "path": "plugins/nav/",
-    "version": "0.28.7",
-    "skillCount": 6,
+    "version": "0.29.0",
+    "skillCount": 3,
     "blurb": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Execute within existing authority, with the approach first when asked; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.28.7; 6 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。do 承接既有授權，也能先提供工程做法；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.28.7；6 個 skills）"
+      "en": "Audit architecture, use Do for verified implementation, refactors and factual docs updates, then use Ship to check release docs and land the verified snapshot. (v0.29.0; 3 skills)",
+      "zh": "audit 唯讀檢查架構，do 實作、重整並校對文件，ship 校對發布文件、驗證並送出這次的改動。（v0.29.0；3 個 skills）"
     },
     "files": [
       [
@@ -446,43 +446,19 @@ const DOMAINS = {
         }
       ],
       [
-        "/nav:refactor",
-        "",
-        {
-          "en": "★ Structural refactor that preserves observable behavior and public contracts while allowing necessary verified internal rewrites. Verification scales with risk and touched surface.",
-          "zh": "★ 結構重構:保留可觀察行為與公開契約,但允許必要且已驗證的內部改寫。驗證強度依風險與觸及面調整。"
-        }
-      ],
-      [
-        "/nav:sync",
-        "",
-        {
-          "en": "Check or update source headers and reader documents against current implementation. Verify claims and missing reader workflows; respect check-only versus update scope, generated owners, and historical intent. One entry for a named file or a complete README/docs batch; no standing codebase HTML (ADR-005).",
-          "zh": "對照目前實作，檢查或更新程式檔頭、README、安裝／使用／API／架構文件。既找說錯的內容，也找漏寫的使用流程；區分只檢查與已授權更新，尊重生成來源及歷史決策。可處理指定單檔或整批 README／docs，每份都有處理結果；不再維護常駐 codebase HTML（ADR-005）。"
-        }
-      ],
-      [
         "/nav:do",
         "",
         {
-          "en": "Look up the work item and Git baseline before editing. Isolate work when needed, verify the tested revision, and record evidence in the original task.",
-          "zh": "動手前先查既有工作紀錄與 Git 基準。需要隔離時使用 worktree，確認實際驗過的版本並把證據寫回原 Task。"
-        }
-      ],
-      [
-        "/nav:compose",
-        "",
-        {
-          "en": "Author or restructure prose: lead with the point, group related knowledge, and keep each fact owned once. Preserve claims, qualifications, and sources; preview the structure or diff and complete authorized edits. nav-sync owns factual checks against implementation.",
-          "zh": "撰寫或重整文件：先講重點、把相關內容放在一起，同一件事只維護一份。保留主張、限制與來源；展示結構或差異後完成已授權的修改，不重複詢問。nav-sync 負責對照實作核對內容。"
+          "en": "Implement a decided change, preserve behavior in a refactor, or check and update reader docs and source headers. Use the relevant procedure on demand.",
+          "zh": "實作已定案的改動、維持行為的重整，或校對文件與檔頭。依任務讀取對應指引。"
         }
       ],
       [
         "/nav:ship",
         "",
         {
-          "en": "Land finished work and leave the repo clean: read state first, commit only this task's changes, push, merge into the main branch (or open a PR when main is protected, the remote is someone else's, or the user asks), delete only merged or gone branches and clean worktrees, then run the project's documented `## Ship` tail. Publishing or deploying needs explicit authority; the report ends with a verification line. NOT making the change itself: that is /nav:do. ADR-004.",
-          "zh": "把做完的工作收尾並讓 repo 保持乾淨：先讀狀態，只 commit 這次任務的改動，push，merge 進主分支（主分支受保護、remote 是別人的 repo、或你要求時改開 PR），只刪已 merge 或 gone 的 branch 與乾淨的 worktree，再照專案文件的 `## Ship` 段跑尾巴（版本號、rebuild、alias、部署）。發佈或部署需要明確授權；回報結尾附一行驗證結果。NOT 寫變更本身——那是 /nav:do。ADR-004。"
+          "en": "Verify release docs and code from the same snapshot, preserve unrelated staged and working changes, then land and safely clean up. Review all docs when the user or project asks.",
+          "zh": "用同一份發布程式校對文件及驗證行為，保留其他暫存與本機改動，再送出並安全清理。你或專案要求時，校對完整文件範圍。"
         }
       ]
     ]
@@ -490,11 +466,11 @@ const DOMAINS = {
   "shape": {
     "layer": "ui",
     "path": "plugins/shape/",
-    "version": "0.35.19",
+    "version": "0.35.20",
     "skillCount": 10,
     "blurb": {
-      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.19; 10 skills)",
-      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.19；10 個 skills）"
+      "en": "Connect projects, capture ideas, converge decisions, test claims, define verifiable tasks, recover progress and tidy records. Relation graphs derive from the workspace records. (v0.35.20; 10 skills)",
+      "zh": "接入專案、存想法、收斂決策、試驗、定義可驗收的 Task、接續進度與整理紀錄。關係圖由工作區紀錄產生。（v0.35.20；10 個 skills）"
     },
     "files": [
       [
@@ -654,8 +630,8 @@ const CB_NODES = [
       "zh": "可導覽性"
     },
     "desc": {
-      "en": "Keep code navigable as it grows: audit structure, refactor with proportional verification, and keep headers and reader documents accurate through one sync. Execute within existing authority, with the approach first when asked; ship lands finished work and leaves the repo clean; compose handles document structure. The unused standing codebase-map workflow is retired (ADR-005). (v0.28.7; 6 skills)",
-      "zh": "讓程式長大後仍容易理解：audit 檢查結構、refactor 按風險驗證，sync 用同一個入口校準檔頭與人讀的文件。do 承接既有授權，也能先提供工程做法；ship 把做完的工作收進主分支並清掉用完的 branch／worktree；compose 負責文件結構。無人閱讀的常駐 codebase map 流程已退役（ADR-005）。（v0.28.7；6 個 skills）"
+      "en": "Audit architecture, use Do for verified implementation, refactors and factual docs updates, then use Ship to check release docs and land the verified snapshot. (v0.29.0; 3 skills)",
+      "zh": "audit 唯讀檢查架構，do 實作、重整並校對文件，ship 校對發布文件、驗證並送出這次的改動。（v0.29.0；3 個 skills）"
     }
   },
   {
@@ -671,8 +647,8 @@ const CB_NODES = [
       "zh": "意圖 → 做出來"
     },
     "desc": {
-      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014). (v0.35.19; 10 skills)",
-      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。（v0.35.19；10 個 skills）"
+      "en": "Opt-in workspace pilot: idea captures, status reconstructs, wrap updates the original tasks. Existing convergence and legacy board/handoff entrances remain available while one project tests the loop (ADR-014). (v0.35.20; 10 skills)",
+      "zh": "Workspace 試用：idea 存想法，status 讀回進度，wrap 更新原本的 task。先以一個專案驗證；既有收斂、工作板與交接入口暫時保留（ADR-014）。（v0.35.20；10 個 skills）"
     }
   },
   {

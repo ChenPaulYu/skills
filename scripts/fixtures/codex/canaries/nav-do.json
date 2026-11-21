@@ -1,0 +1,19 @@
+{
+  "id": "nav-do",
+  "mode": "generated",
+  "file": ".agents/skills/nav-do/SKILL.md",
+  "reject": [
+    { "category": "ask_user_question" },
+    { "category": "agent_call" },
+    { "category": "subagent_type" },
+    { "category": "subagent_protocol" },
+    { "category": "model_sonnet" }
+  ],
+  "reject_text": [
+    "> **Explicitly invoked only.** Run this skill"
+  ],
+  "expect_text": [
+    "> **Worker dispatch reference (Codex).**",
+    "Tasks that do not dispatch workers do not load that reference."
+  ]
+}

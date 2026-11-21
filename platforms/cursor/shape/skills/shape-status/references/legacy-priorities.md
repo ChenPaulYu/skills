@@ -16,7 +16,7 @@ point at**: `plan.md`, grouped by status, that the agent executes against direct
 exactly one maintained copy of the truth — no second, HTML-rendered story that can quietly
 drift out of sync with it.
 
-Align records the planned work and its verified status; nav-sync keeps explanations
+Align records the planned work and its verified status; nav-do keeps explanations
 of existing implementation current.
 
 Planning and acceptance stay on the session model. Evidence gathering may be delegated

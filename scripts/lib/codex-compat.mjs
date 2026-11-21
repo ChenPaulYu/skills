@@ -436,12 +436,11 @@ export const CODEX_WORKER_DISPATCH_REFERENCE_FILE = "references/codex-worker-dis
 const CODEX_WORKER_DISPATCH_POINTER =
   `> **Worker dispatch reference (Codex).** Only when dispatching explorer or executor workers, read \`${CODEX_WORKER_DISPATCH_REFERENCE_FILE}\` before preparing briefs or accepting returns. Tasks that do not dispatch workers do not load that reference.`;
 
-const WORKER_DISPATCH_POINTER_CONSUMERS = new Set(["nav-audit", "nav-refactor"]);
+const WORKER_DISPATCH_POINTER_CONSUMERS = new Set(["nav-audit", "nav-do"]);
 
 /**
  * Inserts the conditional worker-dispatch pointer for the given flat skill name immediately after
- * the first H1. No-op for any flat name not configured above. This deliberately does not depend on
- * nav-refactor's old next-action menu text, which is source-owned and can change shape.
+ * the first H1. No-op for any flat name not configured above. The pointer is independent of the skill's source-owned workflow text.
  */
 export function injectWorkerDispatchPointer(text, flat) {
   if (!WORKER_DISPATCH_POINTER_CONSUMERS.has(flat)) return text;

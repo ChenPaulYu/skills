@@ -56,7 +56,7 @@ local evidence. Scope: ADR-014.
    in private notes.
 
 Prose that reads well but stops working has named failure modes; use them when reviewing
-skills: [`authoring-failure-modes.md`](plugins/nav/skills/compose/references/authoring-failure-modes.md).
+skills: [`authoring-failure-modes.md`](docs/authoring-failure-modes.md).
 
 ## Gates
 

@@ -1,7 +1,7 @@
 {
   "name": "nav",
-  "version": "0.28.7",
-  "description": "Keep code navigable: audit structure, refactor without changing behavior, sync source headers and reader documents against implementation, implement decided work, ground requested engineering approaches, ship finished work, and compose clear documents.",
+  "version": "0.29.0",
+  "description": "Keep code navigable: audit structure, implement and refactor with verification, reconcile explanations, and safely land verified work.",
   "author": {
     "name": "Paul",
     "url": "https://github.com/ChenPaulYu"

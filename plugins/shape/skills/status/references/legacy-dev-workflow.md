@@ -21,13 +21,13 @@ This project is driven by the **shape / nav** skill workflow. The planning board
 |---|---|
 | Decide what to work on next / refresh the board | `/shape:status` → `docs/blueprints/plan.md` |
 | Reconcile completed/stale design notes, plans, and mockups | `/shape:tidy` |
-| Check/update README, setup, usage, or architecture docs against code | `/nav:sync` |
+| Check/update README, setup, usage, or architecture docs against code | `/nav:do` |
 | See the board rendered visually | `/shape:mockup` → an on-demand board snapshot |
 | Scope a feature against the actual code | `/nav:do` (approach first) |
 | Implement a small decided change | `/nav:do` |
-| Drive the in-progress board to done | manual: `/nav:do` per item (or `/nav:refactor`) → `/shape:status` |
-| Behaviour-preserving structural move | `/nav:refactor` |
-| Re-sync file-top headers after restructuring | `/nav:sync` |
+| Drive the in-progress board to done | manual: `/nav:do` per item → `/shape:status` |
+| Behaviour-preserving structural move | `/nav:do` |
+| Re-sync file-top headers after restructuring | `/nav:do` |
 | Audit architecture | `/nav:audit` |
 
 **Standing pointers:** plan board = `docs/blueprints/plan.md` (agent AND human — a visual view renders on demand via `/shape:mockup`) · grounded plans = `docs/blueprints/plans/`.

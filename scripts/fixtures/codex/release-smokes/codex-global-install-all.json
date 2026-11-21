@@ -14,9 +14,11 @@
     "nav-do",
     "shape-status"
   ],
-  "expect_skill_count": 22,
+  "expect_skill_count": 19,
   "expect_skills": [
+    "nav-audit",
     "nav-do",
+    "nav-ship",
     "shape-status",
     "shape-wrap",
     "shape-task",

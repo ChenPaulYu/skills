@@ -10,11 +10,8 @@
     "frame-tinker": "Build a small interactive object to poke: one control, a visible before/after, details revealed on request. Rendering candidates to decide belongs to shape-mockup; choosing a picture belongs to frame-draw.",
     "frame-unfold": "Walk someone through a repository, paper, book, or concept one layer at a time, skeleton first, choosing a form per layer. Use for progressive-disclosure walkthroughs; a single explanation or ELI5 belongs to frame-analogize.",
     "nav-audit": "Audit codebase architecture against deep-module principles. Use for health, smells, feature-readiness, or full-domain reviews; read-only.",
-    "nav-compose": "Author or restructure prose: lead with the point, group by knowledge, and preserve claims and sources. Checking README/docs against implementation belongs to nav-sync.",
-    "nav-do": "Implement and verify authorized, already-decided fixes or multi-item tasks. Ground the approach in code; unresolved product choices and behavior-preserving refactors belong elsewhere.",
-    "nav-refactor": "Execute a behavior-preserving structural refactor with risk-proportional verification. Use to extract, split, or reorganize code without changing observable contracts.",
-    "nav-ship": "Land finished work: commit, push, merge into main (or open a PR when required), clean merged branches and worktrees, then run the project's documented tail. Making the change belongs to nav-do.",
-    "nav-sync": "Check or batch-update README and docs, or refresh code-file headers against current implementation. Verify claims and missing reader workflows. Project-record cleanup belongs to shape-tidy.",
+    "nav-do": "Implement decided fixes/features or behavior-preserving refactors and verify them. Check or update README, docs, and source headers against code. Use for an engineering approach before edits when asked.",
+    "nav-ship": "Land verified work with release-doc checks, or clean up merged branches and worktrees. Use for ship it, commit/push/merge, or safe branch cleanup. Implementation belongs to nav-do.",
     "shape-dogfood": "Use a built feature through real browser or CLI workflows; evaluate tool friction and missing intents against the user's goal. Undecided comparative claims belong to shape-probe.",
     "shape-elicit": "Clarify an undecided conceptual choice or specific root cause through grounded conversation. Ask only what changes the decision; explain small gaps inline. Not a visual comparison or permission to implement.",
     "shape-mockup": "Converge a visual, structural, flow, or option decision through an interactive HTML artifact. Use to mock, compare, diagram, or try variants.",
@@ -23,7 +20,7 @@
     "shape-task": "Record decided work with deliverables and acceptance checks. Use to queue work or start a feature that needs tracking. Idea capture belongs to shape-idea; a task-only request does not start implementation.",
     "shape-status": "Recover current project work and next actions, or set priorities when explicitly requested. Reading status never authorizes implementation; graph views are disposable snapshots.",
     "shape-wrap": "Save this round’s progress and next actions into the original project tasks before stopping. Explicitly invoked; no separate handoff or checkpoint.",
-    "shape-tidy": "Tidy stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-sync; explicit priorities to shape-status.",
+    "shape-tidy": "Tidy stale project thoughts, completed plans, and redundant mockups with current reality while preserving useful decisions and reasons. README/code consistency belongs to nav-do; explicit priorities to shape-status.",
     "shape-setup": "Connect a code repository to its selected home workspace, reuse existing registration and verify the read path. Explicit setup only; environment scaffolding and legacy migration are separate."
   }
 }

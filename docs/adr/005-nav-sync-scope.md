@@ -1,14 +1,15 @@
 # ADR-005 — Nav sync scope
 
-Status: accepted · 2026-11-18
+Status: accepted for pilot · 2026-11-21
 
 ## Decision
 
-`nav:sync` is the single door for keeping file headers and reader documents (README,
-setup, usage, API, architecture) accurate against code. Cadence lives inside the
-skill: headers continuously, documents on request, complete batches with every file
-accounted for. There is no standing HTML map. Record lifecycle belongs to
-`shape:tidy`; authoring belongs to `nav:compose`.
+Do owns standalone checks and updates of source headers and reader docs against code.
+For changed file roles, update the headers with the implementation or refactor. Ship checks
+affected reader guidance in the actual release snapshot before committing. A full README/docs
+batch requires the user or repo to request that scope and accounts for every file. Both skills
+use the same [docs procedure](../../plugins/nav/references/docs-render.md). Record lifecycle
+belongs to Shape Tidy. Ordinary prose authoring proceeds directly.
 
 ## Evidence and alternatives
 

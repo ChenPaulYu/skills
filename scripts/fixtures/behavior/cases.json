@@ -87,7 +87,7 @@
     {
       "id": "docs-batch",
       "project": "docs",
-      "skill": "nav-sync",
+      "skill": "nav-do",
       "prompt": "請把 README.md 和 docs 裡的說明文件全部對照目前 code 更新到最新，包含巢狀目錄，並交代每份文件的處理結果。不用 commit。",
       "allowChanges": [
         "README.md",
@@ -184,7 +184,7 @@
     {
       "id": "docs-check-only",
       "project": "docs",
-      "skill": "nav-sync",
+      "skill": "nav-do",
       "prompt": "先檢查 README.md 和 docs 哪些內容跟目前 code 不一致，告訴我具體差異。這輪先不要改任何檔案，也不要 commit。",
       "allowChanges": [],
       "mustChange": [],

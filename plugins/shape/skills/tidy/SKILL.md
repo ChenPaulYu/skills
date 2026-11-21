@@ -1,6 +1,6 @@
 ---
 name: tidy
-description: "Tidy project design records against current reality: identify completed tasks, legacy plans, superseded thoughts, and redundant mockups while preserving useful decisions and reasons. Use for tidy, 整理 blueprints, or cleaning stale project notes; README and usage-document accuracy belongs to /nav:sync, priorities to /shape:status."
+description: "Tidy project design records against current reality: identify completed tasks, legacy plans, superseded thoughts, and redundant mockups while preserving useful decisions and reasons. Use for tidy, 整理 blueprints, or cleaning stale project notes; README and usage-document accuracy belongs to /nav:do, priorities to /shape:status."
 ---
 
 # Tidy — keep project records useful
@@ -76,7 +76,7 @@ for retention policy, Git checks, and preservation of local evidence.
 - **Handoffs remain while work or reasons are live.** A different SHA alone does not justify
   deleting `baton.md` or `HANDOFF.md`; verify consumption and durable preservation first.
 - **No automatic migration or implementation.** Report a legacy layout; structural conversion is a manual
-  upgrade following the migration ledger in references/migration-ledger.md. /nav:sync owns source headers and reader-facing documents. Analysis, curation, and acceptance stay on the session model.
+  upgrade following the migration ledger in references/migration-ledger.md. /nav:do owns source headers and reader-facing documents. Analysis, curation, and acceptance stay on the session model.
 
 ## Completion
 

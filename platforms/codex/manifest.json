@@ -119,7 +119,7 @@
     {
       "id": "worker_dispatch",
       "status": "lowered",
-      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 keeps ordinary skill bodies light: scripts/lib/codex-compat.mjs#injectWorkerDispatchPointer inserts a short conditional pointer into the two dispatch-heavy skills (nav-audit, nav-refactor), while scripts/build-codex.mjs bundles references/codex-worker-dispatch.md with the canonical work-packet and worker-return contracts.",
+      "summary": "scripts/lib/codex-compat.mjs#lowerWorkerProse replaces the exact Agent-call / subagent_type=Explore / subagent_type=general-purpose / hyphenated sub-agent(s) constructs with Codex worker vocabulary (read-only explorer worker, scoped executor worker). Ratcheted to zero across all generated output (codex-compatibility Phase 1). Phase 2 keeps ordinary skill bodies light: scripts/lib/codex-compat.mjs#injectWorkerDispatchPointer inserts a short conditional pointer into the two dispatch-heavy skills (nav-audit, nav-do), while scripts/build-codex.mjs bundles references/codex-worker-dispatch.md with the canonical work-packet and worker-return contracts.",
       "source_signals": [
         {
           "id": "agent_call",
@@ -151,7 +151,7 @@
       ],
       "contract_consumers": [
         ".agents/skills/nav-audit/SKILL.md",
-        ".agents/skills/nav-refactor/SKILL.md"
+        ".agents/skills/nav-do/SKILL.md"
       ],
       "agents": [
         "platforms/codex/agents/executor.toml",

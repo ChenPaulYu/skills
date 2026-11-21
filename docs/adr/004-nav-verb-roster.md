@@ -1,16 +1,17 @@
 # ADR-004 — Nav verb roster and boundaries
 
-Status: accepted · 2026-11-18
+Status: accepted for pilot · 2026-11-21
 
 ## Decision
 
-Nav has one verb per job: `audit` (health, feasibility, or deep per-domain fan-out),
-`refactor` (behavior-preserving restructure, syncing affected headers in the same
-change), `sync` (headers and reader documents), `do` (implement decided behavior and
-verify it, or show the grounded approach first when asked), `compose` (author or
-restructure prose) and `ship` (commit, push, merge, clean up). Audit's deep mode uses
-read-only sub-agents per domain plus a completeness critic; it is suggested, never
-auto-run.
+Nav exposes three verbs. `audit` assesses architecture and feature readiness read-only.
+`do` implements decided behavior, handles behavior-preserving refactors, and checks or
+updates explanations against code. `ship` verifies the release snapshot and lands authorized
+changes. Do loads refactor and explanation procedures only when the request needs them.
+Ordinary prose restructuring proceeds directly. Skill authoring guidance stays available in
+[the authoring reference](../authoring-failure-modes.md).
+
+Audit's deep mode uses read-only sub-agents per domain. It is suggested and waits for authorization.
 
 ## Evidence and alternatives
 
@@ -21,4 +22,8 @@ auto-run.
 - A `doctor` orchestrator and a standalone integration verb were rejected; their
   checks live in audit modes.
 - The Workflow tool for audit fan-out was rejected in favor of plain sub-agents.
-- Leaving header updates to a later command was rejected; refactor syncs them inline.
+- Leaving header updates to a later command was rejected; update them with the change.
+
+- The [roster experiments](../findings/2026-11-21-nav-roster-ablation.md) support trialing the
+  reduced roster. They also showed that the detailed docs procedure protects the check-only
+  boundary, and that review of release docs needs an isolated, current release snapshot.

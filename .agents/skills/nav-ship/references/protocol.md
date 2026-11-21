@@ -21,18 +21,33 @@ CONTRIBUTING, then what the user said in this conversation. Signals that the pro
 PR instead of a direct merge: the rules say so, `origin` is a fork with an `upstream` remote
 the user does not own, or a push to main is rejected as protected.
 
-## 2. Commit only this task's work
+## 2. Prepare and verify the release snapshot
+
+Inspect `git diff --cached`, `git diff`, and untracked paths. A plain commit uses the entire
+index, including unrelated entries staged before this task. For mixed work, start a clean
+temporary worktree at the fetched integration target. Carry only authorized commits or
+reviewed hunks into it. An entire file diff is safe to transfer only when all its changes
+belong to the release. Keep the original worktree and its index intact. Use a release branch
+for the isolated result and leave any still-dirty worktree in place.
+
+Check affected docs in that same snapshot. A named full batch includes nested reader docs,
+with each document accounted for. Generate outputs in the release checkout and exercise
+the commands readers will use. Use the shared `references/docs-render.md` procedure.
 
 ```bash
-git add <files this task changed>
-git status --short          # anything still listed is not part of this commit — mention it
+git add -- <authorized release files>
+git diff --cached --name-status
+git diff --cached --check
+git diff --cached
 git commit -m "<type>(<scope>): <summary>" -m "<why, and how it was verified>"
+git show --stat HEAD
 ```
 
-Use the stated `## Git` convention from the user's or project's instructions; the project's
-wins. Without one, use Conventional Commits types (`feat`, `fix`, `refactor`, `docs`, `test`,
-`chore`, `revert`) and check `git log --oneline -10` for the repo's scopes. If a hook fails,
-fix the cause or report it; do not bypass the hook.
+Use the repo's hooks and commit conventions. Resolve staged scope or verification failures
+before integrating. Recheck procedural scope, examples, and generated files after any
+integration that changes the verified candidate; compare the final candidate to the actual
+integration base before pushing. Verification on the operator's dirty checkout cannot
+establish release contents.
 
 ## 3. Integrate
 
@@ -46,9 +61,11 @@ quick checks after a non-trivial update.
 # main is checked out in another worktree:
 git -C <main-worktree> pull --ff-only
 git -C <main-worktree> merge --ff-only <branch>    # falls back to: merge --no-ff <branch>
+# Verify the integrated snapshot (including affected docs), then push it.
 git -C <main-worktree> push origin <main>
 
 # main is not checked out anywhere (fast-forward only):
+# Verify <branch> against the fetched integration base before updating refs.
 git fetch . <branch>:<main> && git push origin <main>
 ```
 
@@ -126,7 +143,7 @@ Verified: test suite passed on main after the merge (42/42); app launches from t
 | Situation | Do |
 |---|---|
 | Work not verified yet | Say what is unverified; ship only on the user's word |
-| Unrelated dirty files | Leave them unstaged; list them |
+| Unrelated work in the index or worktree | Isolate the release and verify the original staged and working changes are intact |
 | Hook fails | Fix the cause or report; no `--no-verify` |
 | Conflict needing a product decision | Stop, show the hunks, ask |
 | Push to main rejected as protected | Switch to the PR path and say so |
