@@ -1,6 +1,6 @@
 # ADR-015 — Shape and Seek entrances
 
-Status: accepted · updated 2026-11-21
+Status: accepted · updated 2026-11-22
 
 ## Decision
 
@@ -8,8 +8,12 @@ Shape has four verbs in this trial. Add captures an idea, defines planned work o
 updates its original record, including a session save. View reads current progress,
 priorities, blockers and next actions without changing state. Next independently
 loads the necessary state and advances already-authorized ready work; it does not
-require View first. Tend connects the selected repo/home and performs scoped
-maintenance. An idea or priority never grants implementation authority.
+require View first. Tend configures the selected home, registers the repo, explicitly
+migrates legacy work and performs scoped maintenance. Setup and migration share the
+same destination/identity checks; their detailed protocols load only when needed.
+A separate migration skill was rejected because this is occasional project upkeep,
+not another daily entrance. Setup alone does not move records or change an existing
+global default. An idea or priority never grants implementation authority.
 
 Seek holds four small independent methods: elicit, mockup, probe and dogfood.
 They can finish in chat or scratch. Their placement does not require a workflow
@@ -76,3 +80,21 @@ files with their baselines, checked new record types/authorization and reran the
 test. Compatibility reported 17 skills; 49 Node tests and 31 reader tests passed.
 These checks cover bounded behavior, not the owner's long-term ease of choosing
 among the four entrances. The four-entrance arrangement remains a usability trial.
+
+## Home setup and legacy adoption — Shape 0.38.0
+
+Two fresh mechanical-tier executor sessions exercised isolated repositories. Home
+setup preserved unrelated configuration and machine identity, registered the app,
+and left an unavailable-home case unchanged. Migration reused the correct checkout
+among same-title registrations, retained pending human acceptance and unverified
+progress, preserved a private draft and product source, and copied HTML plus its
+script dependency byte-for-byte. Generated instructions were updated through their owner.
+
+Session review found that both initial pointers depended on a vague selected home or
+default. The connection protocol now requires a named alias/configuration owner or
+portable locator; bounded follow-ups corrected the pointers. The session independently
+inspected diffs, checked coverage, links and protected bytes, reran the reader, and
+confirmed 25 files' hashes/mtimes stayed unchanged during read-only repetition.
+Compatibility covered 17 skills; 49 Node tests, 31 reader tests and skill frontmatter
+validation passed. These are operational smokes with isolated fixtures, not an ablation
+or a claim that arbitrary legacy projects can be migrated without inspection.

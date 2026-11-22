@@ -1,22 +1,27 @@
 ---
 name: tend
-description: "Connect a repository to its selected workspace, or tidy project records against code and decisions. Use for project setup and record cleanup; record additions belong to shape-add."
+description: "Set a working-record home, register a repository, migrate legacy work, or tidy project records. Use for home/workspace setup, explicit migration and cleanup; ordinary record additions belong to shape-add."
 ---
 
 
 # Tend — keep project records usable
 
-Read the selected home policy and `references/workspace-records.md`. Bound the request
-to connection, inspection, or authorized cleanup. Routine reads and saves do not enroll
+Read `references/workspace-records.md` and the selected home's policy when available.
+Distinguish home configuration, project connection, migration and cleanup from the request;
+one does not authorize all four. Routine reads and saves do not enroll
 unmapped projects, normalize old formats, or reorganize files.
 
-## Connect
+## Set the home and connect
+
+For home setup or a new/stale connection, read `references/connection.md`. Reuse a valid
+home selection; persist a requested local selection without overwriting other workspaces
+or silently changing an existing default. An unavailable configured home is an error,
+not permission to choose another store. Ask for the missing home only when necessary.
 
 Resolve both the actual code checkout and the selected home. Match existing registrations
-by resolved repository identity, not title. Reuse the unique match. Read
-`references/connection.md` for new or generated instruction pointers.
-Add a portable home/project locator through the code-side instruction owner and its
-generator. With no existing registration, create only the project entry needed by the
+by resolved repository identity, not title. Reuse the unique match. Add the portable
+home/project locator through the code-side instruction owner, using its generator when
+the instructions are generated. With no existing registration, create only the entry needed by the
 request. Preserve priorities, dates, old records and unrelated working changes.
 
 Follow the pointer from the code repo back to the same project and verify the actual
@@ -24,6 +29,14 @@ mapped Git root. Run the bundled reader's `projects`, `status <project>` and
 `check <project>`, or equivalent checks if the helper is unavailable. An unchanged
 repeat must preserve content and dates. If a collision or partial write blocks the
 connection, report exactly what is unresolved.
+
+## Migrate on request
+
+Read `references/migration.md` for an explicitly requested move to the selected home.
+Account for live work, operative reasons, retained artifacts, references and recovery
+before transforming them. Make the destination the single progress owner only after
+verification; preserve uncertain status and user-owned acceptance. Setup alone leaves
+legacy records in place. Historical blueprints recipes are not the current target.
 
 ## Tidy
 
@@ -40,6 +53,5 @@ Without that authority, leave the content in place and report why.
 
 Use `references/record-interface.md` for writes and
 `references/development-artifacts.md` for retained artifacts. Existing boards and
-handoffs remain readable. An explicit legacy migration uses
-`references/migration-ledger.md`; normal cleanup does not trigger it.
+handoffs remain readable; normal cleanup does not trigger migration.
 Re-read changes, resolve affected links, and report preserved material and uncertainty.

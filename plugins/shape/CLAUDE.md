@@ -3,7 +3,7 @@
 Shape keeps authorized work resumable through four verbs:
 - add captures ideas, defines planned work, and saves into the original owner.
 - view reads actual progress, blockers and next actions without changes.
-- tend explicitly connects a repo to its home and tidies records.
+- tend configures a working-record home, registers repos, explicitly migrates legacy work and tidies records.
 - next advances the next ready authorized item, respecting priorities and user gates.
 
 Seek owns clarification, interactive comparisons, experiments and real-use reviews.
@@ -15,8 +15,9 @@ existing evidence within the user's scope; no literal automatic skill invocation
 references/workspace-records.md owns location/lifecycle and record-interface.md owns
 record metadata. Retention is selective: prefer updating the task, keep independent
 ideas/thoughts only with authority and value, and leave disposable artifacts in scratch.
-saving.md owns the concise retention rule bundled into Seek. There is no migration
-of existing workspaces in this change.
+saving.md owns the concise retention rule bundled into Seek. Tend's connection reference
+owns local home setup; its migration reference owns explicit legacy adoption. Setup,
+reads and ordinary cleanup do not automatically migrate other projects.
 
 The canonical reader remains in skills/status/scripts for existing source-path clients.
 That directory has no SKILL.md and is not a skill. The builder packages the same

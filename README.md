@@ -29,7 +29,7 @@ Catalog: 4 plugins · 17 skills.
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
 | [`nav`](plugins/nav/) | 0.29.2 | 3 | **Keep code navigable** — audit architecture, do verified changes and explanation updates, and safely ship. |
-| [`shape`](plugins/shape/) | 0.37.1 | 4 | **Keep work resumable** — add ideas and tasks, view progress, advance work, and tend records. |
+| [`shape`](plugins/shape/) | 0.38.0 | 4 | **Keep work resumable** — add ideas and tasks, view progress, advance work, and tend records. |
 | [`frame`](plugins/frame/) | 0.17.4 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
 | [`seek`](plugins/seek/) | 0.1.1 | 4 | **Find an answer** — clarify, compare, measure and try real workflows with lightweight methods. |
 <!-- END GENERATED catalog-plugins -->
@@ -66,7 +66,7 @@ Catalog skills: 17 active skills.
 - `/shape:add` — capture an idea, define planned work, or save progress into its original owner
 - `/shape:view` — read current work, blockers and next actions without changing records
 - `/shape:next` — advance ready, already-authorized work without reopening settled choices
-- `/shape:tend` — connect repositories and tidy records while preserving live reasons
+- `/shape:tend` — configure the record home, register repos, explicitly migrate legacy work, and tidy records
 
 ### `frame`
 

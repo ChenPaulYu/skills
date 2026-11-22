@@ -21,8 +21,9 @@ plugin, read its source maintainer guide linked below. Other families need not b
 ## Project workspace
 
 This project's working records live at
-`workspace/skills/project.md` in the owner's configured home repo. Resolve that home through
-the My-wiki entry/configuration, never a committed machine path, and read the project before
+`workspace/skills/project.md` in the owner's My-wiki workspace alias `personal`.
+Resolve that alias through the local My-wiki configuration, never a committed machine path,
+and read the project before
 reconstructing work from old blueprints. If the home is unavailable, say so and use readable
 local evidence. Scope: ADR-014.
 

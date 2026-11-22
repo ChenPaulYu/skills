@@ -1,7 +1,7 @@
-# First-time connection — locators, identity and instruction ownership
+# Home configuration and project connection
 
-Use this protocol only for explicitly requested workspace setup. The skill body owns
-scope and uncertainty gates; this reference describes the connection mechanics.
+Use for requested home setup or project connection. Configuring a home does not register
+every project, and registering one does not migrate its old records.
 
 ## Resolve the home without silently choosing another one
 
@@ -14,9 +14,31 @@ memory-policy.md and workspace/README.md when present. An invalid configured roo
 an error, not permission to fall back elsewhere. A home using another explicit
 convention does not need My-wiki files manufactured inside it.
 
-The code-side pointer must resolve this same selection later. Prefer an existing
-configured home identity; use a repository-relative locator when the layout is known
-and portable. If explicit input differs from the configured default, bind the pointer
+## Persist a requested home selection
+
+Inspect the existing local configuration before writing. For My-wiki, preserve all
+unrelated fields, workspace aliases and the machine identity in
+`~/.config/my-wiki/config.json`. A named alias lives at `workspaces.<alias>.path`;
+`default_workspace` selects the default. Store machine paths only in local configuration.
+Validate an existing repository and its storage policy before binding an alias; do not
+initialize a repo or invent a replacement policy as a side effect.
+
+With no configured home, a request to set one authorizes saving the supplied or confirmed
+selection as the initial default. If no reliable path is available, ask for it. With an
+existing default, a project-specific home belongs under its selected alias/locator;
+change the default only when the user requests it. An environment override still takes
+precedence: report a conflicting `MY_WIKI_ROOT` rather than claiming the new default
+will be used. Invalid or unavailable existing selections require resolution, not silent
+fallback. Never guess a machine identity or replace the entire configuration.
+
+Re-read the file and resolve the same selector independently. An unchanged selection is
+a no-op, including timestamps. This local setup alone creates no project records.
+
+The code-side pointer must resolve this same selection without the current conversation.
+Name the actual configured workspace alias (and its configuration owner), or use a
+repository-relative locator when the layout is known and portable. A vague "selected
+home" or an unbound default does not identify the chosen store. If explicit input
+differs from the configured default, bind the pointer
 to the selected alias/locator instead of quietly using the default or modifying global
 configuration. Ask when there is no reliable portable locator.
 
@@ -61,10 +83,11 @@ An ordinary hand-owned instruction file can receive a short section such as:
 ```markdown
 ## Project workspace
 
-Resolve <selected-home-selector-or-portable-locator>, then read
+Resolve <named-workspace-alias-and-config-owner-or-portable-locator>, then read
 `workspace/sample-project/project.md` before reconstructing project work.
 Code and product runtime fixtures remain in this repository; working records and
-retained artifacts belong in that workspace. Original tasks own progress and next actions. Status is read-only; legacy migration is separate work.
+retained artifacts belong in that workspace. Original tasks own progress and next actions.
+Read progress without edits; migrate legacy records only when explicitly requested.
 ```
 
 Adapt the pointer to the repo's current convention. Reuse an existing pointer when

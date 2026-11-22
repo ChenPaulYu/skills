@@ -1,4 +1,9 @@
-# Migrate — full protocol, the migration ledger, boundaries, and anti-patterns
+# Historical blueprints migration ledger
+
+These recipes describe historical blueprints dialects, not the current home/workspace
+convention. For a requested move into the selected home, use `references/migration.md`.
+Do not run M1–M4 merely because old files exist; the requested destination determines
+which protocol applies. The historical references to retired verbs below are not entrances.
 
 Machinery sunk from the SKILL.md body per ADR-002 (three-layer re-homing). The Stance section
 in SKILL.md carries the two safety rules (verbatim reorganizer; no convention change without a

@@ -62,7 +62,7 @@
           "add": "capture an idea, define planned work, or save progress into its original owner",
           "view": "read current work, blockers and next actions without changing records",
           "next": "advance ready, already-authorized work without reopening settled choices",
-          "tend": "connect repositories and tidy records while preserving live reasons"
+          "tend": "configure the record home, register repos, explicitly migrate legacy work, and tidy records"
         }
       },
       "site": {
@@ -75,8 +75,8 @@
           "tend": [
             "",
             {
-              "en": "Connect a repository to its selected workspace, or tidy project records against code and decisions. Use for project setup and record cleanup; record additions belong to shape-add.",
-              "zh": "把專案接到選定的 workspace，或整理專案紀錄。新增與補充紀錄用 shape-add。"
+              "en": "Set the working-record home, register a repository, explicitly migrate legacy records, or tidy existing work. Setup does not automatically move old data.",
+              "zh": "設定工作紀錄的 home、登記專案、明確要求時遷移舊資料，或整理既有紀錄；接線不會自動搬資料。"
             }
           ],
           "next": [
