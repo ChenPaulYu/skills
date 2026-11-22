@@ -236,4 +236,12 @@ sh "$ROOT/scripts/check-global-instructions.sh" | while IFS= read -r line; do
   echo "⚠ ${line#WARN }" >&2
 done
 
-exit 0
+
+
+# ── Antigravity (AGY) — link installed skills into ~/.gemini/config/skills ────
+if [ -f "$ROOT/scripts/sync-agy.mjs" ]; then
+  if [ "$QUIET" -eq 0 ]; then
+    echo "→ Syncing Antigravity skills..."
+  fi
+  node "$ROOT/scripts/sync-agy.mjs" >/dev/null 2>&1 || true
+fi
