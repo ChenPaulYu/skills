@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * sync-agy.mjs — Link installed skills and my-wiki methods into Antigravity (AGY).
+ * sync-agy.mjs — Link installed skills and sync plugins into Antigravity (AGY).
  *
- * Antigravity (Orca chat / ~/.gemini/config/skills) discovers skills by inspecting
- * directories containing SKILL.md. This script links:
+ * Links:
  *   1. Namespaced marketplace skills from ~/.codex/skills (nav-*, shape-*, frame-*, seek-*)
- *   2. Active My-wiki skills from my-wiki repository
+ *   2. Registers my-wiki as an independent native AGY plugin via its catalog adapter
  */
 
-import { existsSync, readdirSync, lstatSync, symlinkSync, unlinkSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, lstatSync, symlinkSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const HOME = process.env.HOME;
 if (!HOME) {
@@ -41,26 +41,25 @@ if (existsSync(CODEX_SKILLS_DIR)) {
   }
 }
 
-// 2. Link active My-wiki methods
-const activeJsonPath = join(MY_WIKI_ROOT, '.my-wiki', 'active.json');
-if (existsSync(activeJsonPath)) {
-  const active = JSON.parse(readFileSync(activeJsonPath, 'utf8'));
-  const enabled = active.enabled_skills || {};
+// 2. Clean up any legacy loose my-wiki symlinks from ~/.gemini/config/skills
+for (const entry of readdirSync(AGY_SKILLS_DIR)) {
+  if (entry === 'my-wiki' || entry.startsWith('my-wiki-')) {
+    const linkPath = join(AGY_SKILLS_DIR, entry);
+    try {
+      unlinkSync(linkPath);
+      console.log(`  ✓ Cleaned legacy symlink: ${entry}`);
+    } catch {}
+  }
+}
 
-  for (const skillId of Object.keys(enabled)) {
-    if (skillId === 'my-wiki') continue; // already linked as root entry
-
-    // Look in core or extensions
-    let skillPath = join(MY_WIKI_ROOT, 'skills', 'core', skillId);
-    if (!existsSync(skillPath)) {
-      skillPath = join(MY_WIKI_ROOT, 'skills', 'extensions', skillId);
-    }
-
-    if (existsSync(skillPath)) {
-      const linkName = `my-wiki-${skillId}`;
-      const linkPath = join(AGY_SKILLS_DIR, linkName);
-      linkIfNeeded(linkPath, skillPath, linkName);
-    }
+// 3. Register/sync My-wiki as an independent AGY plugin
+const catalogScript = join(MY_WIKI_ROOT, 'skills', 'core', 'my-wiki', 'scripts', 'catalog');
+if (existsSync(catalogScript)) {
+  try {
+    execFileSync(catalogScript, ['sync-agy'], { stdio: 'pipe' });
+    console.log('  ✓ Synced My-wiki as independent AGY plugin');
+  } catch (err) {
+    console.error('  ✗ Failed to sync My-wiki plugin:', err.message);
   }
 }
 
