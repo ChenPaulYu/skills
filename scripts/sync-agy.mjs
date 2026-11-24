@@ -19,7 +19,6 @@ if (!HOME) {
 
 const AGY_SKILLS_DIR = join(HOME, '.gemini', 'config', 'skills');
 const CODEX_SKILLS_DIR = join(HOME, '.codex', 'skills');
-const MY_WIKI_ROOT = join(HOME, 'Desktop', 'Github', '01-project', 'personal', 'my-wiki');
 
 if (!existsSync(AGY_SKILLS_DIR)) {
   console.error(`AGY skills directory not found: ${AGY_SKILLS_DIR}`);
@@ -53,7 +52,8 @@ for (const entry of readdirSync(AGY_SKILLS_DIR)) {
 }
 
 // 3. Register/sync My-wiki as an independent AGY plugin
-const catalogScript = join(MY_WIKI_ROOT, 'skills', 'core', 'my-wiki', 'scripts', 'catalog');
+// The installed entry resolves this machine's configured workspace itself.
+const catalogScript = join(HOME, '.local', 'bin', 'my-wiki');
 if (existsSync(catalogScript)) {
   try {
     execFileSync(catalogScript, ['sync-agy'], { stdio: 'pipe' });
