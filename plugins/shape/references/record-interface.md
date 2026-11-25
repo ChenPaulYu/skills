@@ -61,9 +61,13 @@ active use and what happens then (close, consolidate, supersede, or retire the
 comparison). Use an existing acceptance, decision, revisit, or retirement sentence
 when it already answers both questions. For a task, verified required outcomes close
 the task. For an idea, name the observation or decision that resolves whether to
-pursue it. A mockup can retire when its choice and rationale have a durable owner
-and any required implementation has been verified. A probe can conclude when the
-agreed check yields a recorded verdict, including an inconclusive one. An adopted
+pursue it. A mockup can retire when its choice and rationale have a durable owner.
+Retain its original artifact through implementation only when the exact appearance,
+behavior or material is still needed for comparison or acceptance, applying
+`references/development-artifacts.md` and the user's retention choices. Selecting a
+capability for a planned task alone does not require keeping its selection artifact
+until implementation. A probe can conclude when the agreed check yields a recorded
+verdict, including an inconclusive one. An adopted
 thought stays live until a later decision or verified change displaces its rationale.
 Use prose in the existing format. Keep older cards readable when this condition is
 absent; during cleanup, establish their disposition from evidence and preserve

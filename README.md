@@ -28,10 +28,10 @@ Catalog: 4 plugins · 17 skills.
 
 | Plugin | Version | Skills | What it covers |
 |---|---:|---:|---|
-| [`nav`](plugins/nav/) | 0.29.3 | 3 | **Keep code navigable** — audit architecture, do verified changes and explanation updates, and safely ship. |
-| [`shape`](plugins/shape/) | 0.38.1 | 4 | **Keep work resumable** — add ideas and tasks, view progress, advance work, and tend records. |
+| [`nav`](plugins/nav/) | 0.29.4 | 3 | **Keep code navigable** — audit architecture, do verified changes and explanation updates, and safely ship. |
+| [`shape`](plugins/shape/) | 0.38.2 | 4 | **Keep work resumable** — add ideas and tasks, view progress, advance work, and tend records. |
 | [`frame`](plugins/frame/) | 0.17.4 | 6 | **The understanding family** — help someone understand something. Two lenses to see a problem: `first-principles` (decompose down — strip to axioms, rebuild, surface divergence) and `orthogonal` (decompose sideways — factor a tangle into mutually-independent axes). Three forms to present an answer you already have: `analogize` (a checked analogy; also the ELI5 door), `draw` (the picture and its medium), `tinker` (an object to poke). One entry, `unfold`, walks a repository, paper, book, or concept through one layer per turn, choosing a form per layer. Lenses feed `shape` only when continuation is already authorized or the user asks; forms and entry don't. Renamed from `think`. |
-| [`seek`](plugins/seek/) | 0.1.2 | 4 | **Find an answer** — clarify, compare, measure and try real workflows with lightweight methods. |
+| [`seek`](plugins/seek/) | 0.1.3 | 4 | **Find an answer** — clarify, compare, measure and try real workflows with lightweight methods. |
 <!-- END GENERATED catalog-plugins -->
 
 **Shape** converges decisions and defines verifiable tasks. **Nav** implements and lands decided work (do → ship) and assesses architecture through read-only audit. Do also handles refactors and standalone documentation checks. Ask nav-do for the approach first when you want to review it before building. **frame** (the understanding family: lenses to see a problem, forms to present an answer, and `unfold` to walk through a subject one layer at a time) is an independent toolkit that feeds the work without depending on it. shape depends on nav one-way (`shape → nav`); each plugin installs and runs alone.

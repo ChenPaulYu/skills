@@ -55,6 +55,20 @@ maintain two writable boards or delete the only untracked copy. Keep historical 
 readable and distinguish them from current instructions in a stale-path search.
 
 Re-running against the unchanged connected project must preserve bytes, record IDs,
-dates and configuration. Report actual destinations, evidence, preserved exceptions
-and unresolved choices; setup success or a clean reader check alone does not prove
-lossless migration. Keep a durable account in the original task only when needed.
+dates and configuration. Keep a durable account in the original task only when needed.
+
+## State what is complete
+
+Report three outcomes separately: whether current work and operative reasons have named owners;
+which historical material is recoverable from verified committed content or a chosen backup;
+and whether the old source is ready for deletion. State explicit exclusions, unavailable assets and
+remaining blockers. Product code/docs staying in their repository is a deliberate
+boundary, not a claim that every source file was copied into the home.
+
+Source deletion readiness requires complete source-section accounting, independent
+preservation of selected artifacts, repaired references and resolved retention choices.
+Distinguish readiness from an authorized deletion actually performed. For Git-backed
+entrance retirement, name whether changes are local, committed/pushed on a branch or
+integrated into the default branch; an open PR is not integrated retirement.
+Checksums prove recovered bytes, not that live work and reasons have current owners;
+setup success or a clean reader check alone does not prove a completed migration.
