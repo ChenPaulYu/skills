@@ -18,5 +18,5 @@ satisfy an explicit save request.
 Resolve the configured home using references/workspace-records.md and obey its policy.
 Reuse existing owners and formats; no automatic directory migration or cleanup.
 Use references/record-interface.md only when writing a retained record, and
-references/development-artifacts.md when retaining an artifact. Never create a duplicate
+references/development-artifacts.md before selecting or saving an artifact. Never create a duplicate
 progress board or handoff to satisfy a procedure.

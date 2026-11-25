@@ -17,6 +17,10 @@ the home mapping before every write; keep retained artifacts with their records.
 Thoughts hold the current choice and its reasons, not cleanup history. Legacy imports
 are `unverified` until checked.
 
+The shared `development-artifacts.md` owns how to select a minimal useful artifact set
+and verify preservation. The selected home's policy owns allowed formats, storage and
+local exceptions; consumers follow both without duplicating the selection procedure.
+
 `shape:status` owns a read-only reader bundled into consumers; its HTML view and
 offline graph export consume the same result and never edit records.
 
@@ -30,6 +34,8 @@ offline graph export consume the same result and never edit records.
 - Silently substituting another store when the home is unavailable was rejected; it
   is a reported blocker.
 - A second parser or cleanup policy in the view was rejected.
+- Repeating artifact-selection procedures in each home's storage policy was rejected:
+  shared methods own the judgment steps, while home policies constrain where and how to save.
 - Treating imported legacy records as completed work was rejected.
 - Pilot limits: cross-machine daily handoff and Claude Code execution are not yet
   verified.

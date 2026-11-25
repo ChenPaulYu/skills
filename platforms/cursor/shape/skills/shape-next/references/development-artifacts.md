@@ -9,8 +9,22 @@ it into standalone skills; local references carry the same policy, not separate 
 
 Temporary comparisons and one-off checks stay in session scratch by default. Keep
 only the result and reason in the existing task when that is enough for continuation.
-Retain full inputs/results/captures only on request or when a concrete future comparison
-or reproduction requires them. This does not authorize deleting existing material.
+Honor explicit user retention choices. When selecting artifacts yourself, state their
+concrete future decision or use in the owning record: "Keep this so that we can ...".
+Permanently retain supporting artifacts only for:
+
+- An unresolved comparison: its reference, leading candidate and only the genuinely
+  undecided alternatives needed for the next judgment.
+- An important failure: the smallest case and evidence needed to reproduce or understand it.
+- An adopted deliverable that will be used again, with its necessary dependencies.
+
+Choose the smallest complete set serving that purpose. Time or money already spent
+generating a file is not a retention reason. Intermediate renders, redundant copies and
+cheaply reproducible outputs without a concrete future use remain temporary. After a
+decision, review the set again: usually the accepted result and a necessary reference
+are enough. Propose the remainder for authorized deletion; this rule alone does not
+authorize removing existing material. Keep original masters under their existing
+asset-retention rules.
 
 ## Select the policy before writing
 
@@ -26,7 +40,8 @@ does not make a process artifact a production deliverable.
 
 An instruction to save a mockup or probe includes its actual artifact and the dependencies
 needed to reopen it, not only a summary, path or hash. Prefer a self-contained artifact
-when supported. Verify a reopen or restoration from the saved destination before
+when supported. A data-only summary does not preserve a playable or interactive comparison.
+Verify a reopen or restoration from the saved destination before
 reporting preservation. A temporary server URL is a preview, not the saved copy.
 Respect the home's media policy; when required assets cannot be retained under that
 policy and no explicit user choice resolves it, report the concrete conflict rather

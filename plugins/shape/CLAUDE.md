@@ -15,7 +15,9 @@ existing evidence within the user's scope; no literal automatic skill invocation
 references/workspace-records.md owns location/lifecycle and record-interface.md owns
 record metadata. Retention is selective: prefer updating the task, keep independent
 ideas/thoughts only with authority and value, and leave disposable artifacts in scratch.
-saving.md owns the concise retention rule bundled into Seek. Tend's connection reference
+saving.md owns concise record retention; development-artifacts.md owns artifact selection
+and preservation, bundled into consumers. The selected home owns allowed formats and
+storage constraints rather than a duplicate selection procedure. Tend's connection reference
 owns local home setup; its migration reference owns explicit legacy adoption. Setup,
 reads and ordinary cleanup do not automatically migrate other projects.
 
