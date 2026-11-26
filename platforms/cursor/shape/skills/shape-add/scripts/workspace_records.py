@@ -4,7 +4,9 @@
 Reads ``workspace/<project>/project.md``, typed work folders and retained docs using YAML
 frontmatter; task bodies include implementation planning. Legacy typed plans and
 flat ``records/*.md`` remain readable without normalization. Every root is explicit.
-Record queries keep source records and Git read-only; explicit view export writes
+Check reports advisory card-format findings; --records requires selected written
+cards to pass without normalizing legacy content. Record queries keep source records
+and Git read-only; explicit view export writes
 a new HTML outside Home. The connection subcommand delegates setup/local bindings
 and explicitly requested Git startup synchronization to the sibling connection owner.
 """
@@ -323,7 +325,7 @@ def _review(project: dict[str, Any], records: list[dict[str, Any]]) -> dict[str,
             "advisory": "These are review signals, not completion, deletion or automatic parent-creation verdicts."}
 
 
-def run(root: Path, command: str, project_id: str | None = None, record_id: str | None = None, query: str | None = None) -> dict[str, Any]:
+def run(root: Path, command: str, project_id: str | None = None, record_id: str | None = None, query: str | None = None, *, record_paths: list[str] | None = None) -> dict[str, Any]:
     projects, records, diagnostics = _load(root)
     def scoped_diagnostics(scope: str | None = None) -> list[dict[str, str]]:
         return _public_diagnostics([d for d in diagnostics if scope is None or d.get("_scope") == scope])
@@ -347,8 +349,15 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
         else:
             selected_diagnostics = scoped_diagnostics()
             tier = _read_tier(projects, records, diagnostics)
-        result = {"status": "ok" if not selected_diagnostics else "error", "diagnostics": selected_diagnostics, "read_tier": tier}
         in_scope = [r for r in records if not project_id or r["_project_dir"] in {p["_scope"] for p in projects if p["id"] == project_id or p["_scope"] == project_id}]
+        from record_format import inspect_cards
+        formatting = inspect_cards(Path(root), in_scope, record_paths)
+        if formatting["mode"] == "required" and formatting["findings"]:
+            selected_diagnostics.extend(formatting["findings"])
+            if tier != "absent":
+                tier = "non-standard readable records"
+        result = {"status": "ok" if not selected_diagnostics else "error", "diagnostics": selected_diagnostics,
+                  "read_tier": tier, "format": formatting}
         migrations = [{"path": r["path"], "message": RETIRED_TYPES[r["type"]]} for r in in_scope if r.get("type") in RETIRED_TYPES]
         migrations.extend({"path": r["path"], "id": r["id"], "message": "legacy thought: review retained knowledge for docs before applying working-draft cleanup; preserve existing content until migration is authorized"}
                           for r in in_scope if r["type"] == "thought" and "retention" not in r["metadata"])
@@ -420,6 +429,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("projects")
     check = sub.add_parser("check")
     check.add_argument("project", nargs="?")
+    check.add_argument("--records", nargs="+", metavar="PATH",
+                       help="Require these Home-relative work cards to pass metadata/Relations checks; other format findings stay advisory")
     for name in ("status", "graph", "review"):
         cmd = sub.add_parser(name)
         cmd.add_argument("project")
@@ -454,7 +465,8 @@ def main(argv: list[str] | None = None) -> int:
             payload = export_view(args.root, _view_project(project), graph, selected, args.output,
                                   projects=project_data, graphs=graphs, reviews=reviews)
         else:
-            payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None), getattr(args, "query", None))
+            payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None), getattr(args, "query", None),
+                          record_paths=getattr(args, "records", None))
     except (WorkspaceError, OSError, ValueError) as exc:
         print(json.dumps({"error": str(exc), "read_tier": getattr(exc, "read_tier", "absent")}, ensure_ascii=False))
         return 1

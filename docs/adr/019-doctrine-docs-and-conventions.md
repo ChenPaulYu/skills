@@ -17,6 +17,10 @@ or Git-ignored unless their role justifies tracking them.
 Only manifests and generated artifacts are enforced contracts. Blueprints, boards,
 handoffs, headers and document layout are conventions: a verb that reads one handles
 the standard shape, an ad-hoc shape and absence, and reports which it read.
+An explicitly selected retained write may require the supported card interface:
+`check --records` verifies those cards' metadata and visible relation projection.
+Default scans report layout findings advisory; they neither reject legacy reading
+nor authorize bulk normalization. Format success is not source-coverage acceptance.
 
 ## Evidence and alternatives
 
@@ -31,3 +35,6 @@ the standard shape, an ad-hoc shape and absence, and reports which it read.
   unprocessed. Six live patterns became workspace ideas.
 - Bulk untracking of artifacts was rejected; retention is decided per role.
 - Linting conventions as contracts was rejected; it broke on legitimate variants.
+  Scoped write verification was added after missing Relations sections passed a
+  metadata-only check. The explicit path selection enforces the writer's output,
+  keeping the rejected global lint/migration behavior out of ordinary reads.

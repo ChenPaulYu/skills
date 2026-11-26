@@ -56,4 +56,6 @@ thoughts remain in place until their migration is explicitly selected.
 Read `references/session-handoff.md` and `references/legacy-blueprints.md` only when
 an existing legacy record owns the work. Save in place; do not migrate it as a side
 effect. Report what was saved and what remains pending. A save-only request ends
-there; implementation requires existing execution scope.
+there; implementation requires existing execution scope. Before reporting saved,
+apply **Verify a retained write** in `references/record-interface.md` to every card
+created or changed, and report the check's scope and remaining uncertainty.

@@ -55,6 +55,136 @@ class WorkspaceRecordsTest(unittest.TestCase):
     def git(self, *args: str) -> None:
         subprocess.run(["git", "-C", str(self.repo), *args], check=True, capture_output=True, text=True)
 
+    def formatted_card(self, path: str, identifier: str, body: str, links: str = "links: []\n") -> Path:
+        text = self.record(identifier, "doc", "current", body,
+                           "created: 2026-11-26\nupdated: 2026-11-26\n" + links)
+        return self.write(path, text)
+
+    def test_missing_relations_is_advisory_until_written_card_is_selected(self):
+        path = self.formatted_card("workspace/demo/docs/missing.md", "missing-doc", "Retained knowledge.")
+        before = path.read_bytes()
+        advisory = run(self.root, "check", "demo")
+        self.assertEqual(advisory["status"], "ok")
+        self.assertEqual(advisory["format"]["mode"], "advisory")
+        self.assertIn("missing-relations", {d["code"] for d in advisory["format"]["findings"]})
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = main(["--root", str(self.root), "check", "demo", "--records", "workspace/demo/docs/missing.md"])
+        result = json.loads(output.getvalue())
+        self.assertEqual(code, 1)
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(result["format"]["checked_records"], ["workspace/demo/docs/missing.md"])
+        self.assertIn("missing-relations", {d["code"] for d in result["diagnostics"]})
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_selected_valid_card_passes_without_normalizing_legacy_records(self):
+        path = self.formatted_card("workspace/demo/docs/valid.md", "valid-doc",
+                                   "Retained knowledge.\n\n## Relations\n<!-- projection -->\nNo relations recorded yet.\n")
+        legacy = self.root / "workspace/demo/records/thought.md"
+        before = legacy.read_bytes()
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = main(["--root", str(self.root), "check", "demo", "--records", str(path.relative_to(self.root))])
+        result = json.loads(output.getvalue())
+        self.assertEqual(code, 0)
+        self.assertEqual(result["format"]["findings"], [])
+        self.assertIn("not verified", result["format"]["limits"])
+        self.assertEqual(legacy.read_bytes(), before)
+        self.assertEqual(run(self.root, "show", "demo", "thought-a")["record"]["status"], "adopted")
+
+    def test_relation_projection_matches_identity_not_label_or_row_order(self):
+        self.formatted_card("workspace/demo/docs/target space.md", "doc-target", "## Relations\nNo relations recorded yet.")
+        path = "workspace/demo/docs/linked.md"
+        self.formatted_card(path, "doc-linked", """## Relations
+<!-- relations: derived from frontmatter.links -->
+| Relation | Record |
+|---|---|
+| references | [Friendly label](<target%20space.md#section>) |
+| supported_by | [Evidence](../records/task-a.md) |
+<!-- /relations -->
+## Detail
+| unrelated | not a projection row |
+""", "links:\n- relation: supported_by\n  target: task-a\n- relation: references\n  target: doc-target\n")
+        result = run(self.root, "check", "demo", record_paths=[path])
+        self.assertEqual(result["status"], "ok", result)
+
+    def test_wrong_existing_record_or_relation_is_not_a_valid_projection(self):
+        path = "workspace/demo/docs/linked.md"
+        links = "links:\n- relation: supported_by\n  target: task-a\n"
+        for row in ("| references | [Task](../records/task-a.md) |",
+                    "| supported_by | [Task](../records/task-b.md) |",
+                    "| supported_by | [Task](../records/task-a.md) |\n| supported_by | [Duplicate](../records/task-a.md) |"):
+            with self.subTest(row=row):
+                self.formatted_card(path, "linked", "## Relations\n| Relation | Record |\n|---|---|\n" + row, links)
+                result = run(self.root, "check", "demo", record_paths=[path])
+                self.assertEqual(result["status"], "error")
+                self.assertIn("relations-projection-mismatch", {d["code"] for d in result["diagnostics"]})
+
+    def test_relation_link_must_target_project_record_not_just_existing_file(self):
+        self.write("workspace/demo/docs/support.txt", "Not a work card")
+        path = "workspace/demo/docs/linked.md"
+        for target in ("missing.md", "support.txt", "https://example.invalid/record.md", "https://[invalid"):
+            with self.subTest(target=target):
+                self.formatted_card(path, "linked", f"## Relations\n| supported_by | [Target]({target}) |",
+                                    "links:\n- relation: supported_by\n  target: task-a\n")
+                result = run(self.root, "check", "demo", record_paths=[path])
+                self.assertIn("invalid-relations-target", {d["code"] for d in result["diagnostics"]})
+
+    def test_fenced_or_commented_relations_do_not_satisfy_visible_interface(self):
+        path = "workspace/demo/docs/hidden.md"
+        for body in ("```md\n## Relations\nNo relations recorded yet.\n```",
+                     "<!--\n## Relations\nNo relations recorded yet.\n-->"):
+            with self.subTest(body=body):
+                self.formatted_card(path, "hidden", body)
+                result = run(self.root, "check", "demo", record_paths=[path])
+                self.assertIn("missing-relations", {d["code"] for d in result["diagnostics"]})
+
+    def test_empty_links_require_explicit_absence_and_reject_stale_rows(self):
+        path = "workspace/demo/docs/empty.md"
+        for body, code in (("## Relations\n", "missing-empty-relations"),
+                           ("## Relations\nNo relations recorded yet.\n| references | [Task](../records/task-a.md) |",
+                            "relations-projection-mismatch")):
+            self.formatted_card(path, "empty", body)
+            result = run(self.root, "check", "demo", record_paths=[path])
+            self.assertIn(code, {d["code"] for d in result["diagnostics"]})
+
+    def test_new_card_requires_metadata_even_when_relations_exist(self):
+        path = "workspace/demo/docs/metadata.md"
+        self.write(path, self.record("metadata", "doc", "current", "## Relations\nNo relations recorded yet."))
+        result = run(self.root, "check", "demo", record_paths=[path])
+        missing = [d["message"] for d in result["diagnostics"] if d["code"] == "record-missing-field"]
+        self.assertEqual(len(missing), 3)
+
+    def test_relation_projection_ignores_fenced_examples_and_allows_wrapped_empty_statement(self):
+        path = "workspace/demo/docs/examples.md"
+        self.formatted_card(path, "examples", """## Relations
+No relations
+recorded yet.
+```md
+| references | [This is only an example](../records/task-a.md) |
+## Relations
+```
+""")
+        self.assertEqual(run(self.root, "check", "demo", record_paths=[path])["status"], "ok")
+
+    def test_projection_does_not_resolve_through_other_project(self):
+        self.write("workspace/other/project.md", "---\nid: other\ntitle: Other\n---\n")
+        self.formatted_card("workspace/other/docs/task.md", "task-a", "## Relations\nNo relations recorded yet.")
+        path = "workspace/demo/docs/cross-project.md"
+        self.formatted_card(path, "cross-project", "## Relations\n| references | [Task](../../other/docs/task.md) |",
+                            "links:\n- relation: references\n  target: task-a\n")
+        result = run(self.root, "check", "demo", record_paths=[path])
+        self.assertIn("invalid-relations-target", {d["code"] for d in result["diagnostics"]})
+        wrong_scope = run(self.root, "check", "demo", record_paths=["workspace/other/docs/task.md"])
+        self.assertIn("invalid-record-selection", {d["code"] for d in wrong_scope["diagnostics"]})
+
+    def test_required_selection_cannot_silently_skip_wrong_or_empty_paths(self):
+        for paths in ([], ["workspace/demo/project.md"], ["workspace/demo/docs/nope.md"], ["../outside.md"]):
+            with self.subTest(paths=paths):
+                result = run(self.root, "check", "demo", record_paths=paths)
+                self.assertEqual(result["status"], "error")
+                self.assertIn("invalid-record-selection", {d["code"] for d in result["diagnostics"]})
+
     def test_task_embeds_planning_without_replacing_legacy_plan(self) -> None:
         body = ("## Goal and completion criteria\nDeliver the chosen behavior.\n"
                 "## Implementation plan\nReuse the existing entry point.\n"

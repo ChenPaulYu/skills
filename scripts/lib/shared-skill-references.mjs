@@ -25,7 +25,7 @@ export const SHARED_SKILL_REFERENCES = [{
   source: "plugins/nav/references/docs-render.md",
   destinations: ["do", "ship"].map(skill => `plugins/nav/skills/${skill}/references/docs-render.md`),
 },
-  ...["workspace", "workspace_records.py", "home_connections.py", "workspace_view.py", "workspace_graph.html"].map(file => ({
+  ...["workspace", "workspace_records.py", "record_format.py", "home_connections.py", "workspace_view.py", "workspace_graph.html"].map(file => ({
     source: `plugins/shape/skills/status/scripts/${file}`,
     destinations: WORK_CONSUMERS
       .map(skill => `${skill}/scripts/${file}`),

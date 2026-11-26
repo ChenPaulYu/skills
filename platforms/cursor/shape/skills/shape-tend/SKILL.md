@@ -62,4 +62,5 @@ Without that authority, leave the content in place and report why.
 Use `references/record-interface.md` for writes and
 `references/development-artifacts.md` for retained artifacts. Existing boards and
 handoffs remain readable; normal cleanup does not trigger migration.
-Re-read changes, resolve affected links, and report preserved material and uncertainty.
+Apply **Verify a retained write** in `references/record-interface.md` to every card
+created or changed; resolve affected links and report preserved material and uncertainty.

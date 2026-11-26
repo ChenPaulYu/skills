@@ -181,9 +181,32 @@ The visible Relations table is a **derived projection**, marked as such. Resolve
 target titles and relative Markdown paths from their actual records. When writing
 or changing a record, refresh the projection from `links`; edit the canonical edges,
 not the table independently. Use an available renderer when provided, otherwise
-derive it with ordinary file tools. This protocol does not install a formatter or
-claim automatic drift detection. If the two disagree, report the discrepancy and
+derive it with ordinary file tools. The reader checks the supported table projection
+without formatting or rewriting files. If the two disagree, report the discrepancy and
 use frontmatter as the edge source; a read-only request does not silently repair it.
+
+### Verify a retained write
+
+Before reporting a save, migration or consolidation complete, re-read every card
+created or changed and run the bundled reader against those exact Home-relative paths:
+
+```sh
+scripts/workspace --root <home> check <project> --records workspace/<project>/docs/<topic>.md
+```
+
+Pass every changed card after `--records` (multiple paths are supported). This mode
+requires metadata and a visible Relations section whose relation/target rows match
+`links`; descriptive link labels are allowed. For empty links, write `No relations
+recorded yet.` Explicit selection fails on missing/unrecognized paths rather than
+silently checking nothing. Fix findings within the authorized write scope and rerun.
+Frozen sources and supporting Markdown are artifacts, not work cards; do not reformat
+them or select them as cards. Project entries keep their separate index interface.
+
+Without `--records`, format findings appear under `format.findings` as advisory;
+old and ad-hoc records remain readable and unchanged. A clean `diagnostics` list alone
+does not establish card-format compliance. Report format verification, source/content
+coverage and unverified behavior separately. Re-read classification, decisions and
+evidence boundaries yourself: the checker cannot prove factual accuracy or completeness.
 
 ```markdown
 ---
