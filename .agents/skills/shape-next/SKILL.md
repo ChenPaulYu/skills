@@ -7,8 +7,10 @@ description: "Choose and advance the next ready, already-authorized task or expl
 
 # Next — advance work that is ready
 
-Ground the queue in the selected project's original records and mapped code using
-`references/workspace-records.md`. Inspect priorities, scope, permissions, dependencies,
+Before advancing implementation, apply **Development startup** in
+`references/workspace-records.md`; status-only reads stay read-only.
+Ground the queue in the selected project's original records and mapped code.
+Inspect priorities, scope, permissions, dependencies,
 acceptance, fresh Git changes and the last verification. A queued task, saved idea or
 priority alone grants no implementation authority.
 

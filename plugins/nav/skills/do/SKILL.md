@@ -15,8 +15,10 @@ Ground the request in the existing code and match verification to the agreed sco
 
 ## Before the first edit: find the work item
 
-Before an implementation or authorized update, check the project instructions for its workspace
-mapping. For a connected project, open its `project.md` and search existing tasks
+Before an implementation or authorized update, apply **Development startup** in
+`references/workspace-records.md`: resolve the local Home registry, sync its work
+records, and check the code remote plus relevant GitHub PR/CI revisions.
+For a connected project, open its `project.md` and search existing tasks
 and live legacy work for the requested outcome, even for a small fix. Use the
 user's explicit task or project pointer, or the **Locate before reading or
 writing** section of `references/workspace-records.md` if the mapping is unclear.

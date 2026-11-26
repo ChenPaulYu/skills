@@ -18,15 +18,6 @@ plugin, read its source maintainer guide linked below. Other families need not b
 > holds only that family's identity, roster and patterns; read it before editing that family.
 > Reasons and rejected alternatives live in [`docs/adr/`](docs/adr/README.md).
 
-## Project workspace
-
-This project's working records live at
-`workspace/skills/project.md` in the owner's My-wiki workspace alias `personal`.
-Resolve that alias through the local My-wiki configuration, never a committed machine path,
-and read the project before
-reconstructing work from old blueprints. If the home is unavailable, say so and use readable
-local evidence. Scope: ADR-014.
-
 ## Core principles
 
 1. **Three-layer law (ADR-002).** Each skill fact lives in the lowest layer that still fires it:

@@ -15,6 +15,7 @@ import os
 import re
 import subprocess
 import sys
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -135,6 +136,13 @@ def _load(root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[
         scope = project_path.parent.name
         if error:
             diagnostics.append(_diag("project-frontmatter", rel, error, scope))
+        if "uuid" in metadata:
+            try:
+                identifier = str(uuid.UUID(metadata["uuid"]))
+                if any(str(p["metadata"].get("uuid", "")).lower() == identifier for p in projects):
+                    diagnostics.append(_diag("duplicate-project-uuid", rel, "project UUID must be unique in Home", scope))
+            except (ValueError, TypeError, AttributeError):
+                diagnostics.append(_diag("invalid-project-uuid", rel, "project uuid must be a UUID string", scope))
         project_id = metadata.get("id")
         if not isinstance(project_id, str) or not project_id.strip():
             diagnostics.append(_diag("missing-project-id", rel, "project id must be a nonempty string", scope))
@@ -144,8 +152,8 @@ def _load(root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[
         repositories = metadata.get("repositories", {})
         if repositories is None:
             repositories = {}
-        if not isinstance(repositories, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in repositories.items()):
-            diagnostics.append(_diag("invalid-repositories", rel, "repositories must map aliases to paths", scope))
+        if not isinstance(repositories, dict) or any(not isinstance(k, str) or not (isinstance(v, str) or (isinstance(v, dict) and set(v) == {"remote"} and isinstance(v["remote"], str))) for k, v in repositories.items()):
+            diagnostics.append(_diag("invalid-repositories", rel, "repositories must map aliases to legacy paths or remote objects", scope))
             repositories = {}
         priorities = metadata.get("priorities", [])
         if priorities is None:
@@ -243,8 +251,12 @@ def _project(projects: list[dict[str, Any]], project_id: str) -> dict[str, Any]:
 def _git_context(root: Path, project: dict[str, Any]) -> list[dict[str, Any]]:
     result = []
     for alias, value in sorted(project["repositories"].items()):
-        path = Path(value)
-        path = (path if path.is_absolute() else root / path).resolve()
+        from home_connections import repository_path
+        try:
+            path = repository_path(root, project["metadata"], alias, value)
+        except (OSError, ValueError, KeyError, TypeError, subprocess.TimeoutExpired) as exc:
+            result.append({"alias": alias, "error": str(exc)})
+            continue
         if not path.is_dir():
             result.append({"alias": alias, "path": str(path), "error": f"mapped repository does not exist: {path}"})
             continue
@@ -376,9 +388,14 @@ def _view_project(project):
 
 
 def main(argv: list[str] | None = None) -> int:
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    if arguments and arguments[0] == "connection":
+        from home_connections import main as connection_main
+        return connection_main(arguments[1:])
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", required=True, type=Path, help="Home repository root containing workspace/")
     sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("connection", help="Home setup, local binding, diagnosis and development startup; use connection --help")
     sub.add_parser("projects")
     check = sub.add_parser("check")
     check.add_argument("project", nargs="?")
@@ -392,7 +409,7 @@ def main(argv: list[str] | None = None) -> int:
     cmd = sub.add_parser("show")
     cmd.add_argument("project")
     cmd.add_argument("id")
-    args = parser.parse_args(argv)
+    args = parser.parse_args(arguments)
     try:
         if args.command == "view":
             import importlib.util

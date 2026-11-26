@@ -19,12 +19,13 @@ or silently changing an existing default. An unavailable configured home is an e
 not permission to choose another store. Ask for the missing home only when necessary.
 
 Resolve both the actual code checkout and the selected home. Match existing registrations
-by resolved repository identity, not title. Reuse the unique match. Add the portable
-home/project locator through the code-side instruction owner, using its generator when
-the instructions are generated. With no existing registration, create only the entry needed by the
+by resolved repository identity, not title. Reuse the unique match. Store stable UUIDs
+and repository identity in Home, and checkout paths in per-machine configuration.
+Keep personal Home/project pointers out of committed product instructions.
+With no existing registration, create only the entry needed by the
 request. Preserve priorities, dates, old records and unrelated working changes.
 
-Follow the pointer from the code repo back to the same project and verify the actual
+Resolve the local registry from the code repo back to the same project and verify the actual
 mapped Git root. Run the bundled reader's `projects`, `status <project>` and
 `check <project>`, or equivalent checks if the helper is unavailable. An unchanged
 repeat must preserve content and dates. If a collision or partial write blocks the

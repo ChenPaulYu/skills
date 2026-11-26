@@ -23,10 +23,14 @@ the project's explicit mappings; report missing/unavailable mappings, never subs
 the home repo's HEAD. Machine-local paths are locators, not portable identity.
 
 Resolve the existing home before choosing any project-record or artifact destination:
-use the user's explicit selection, then the project's home pointer, then the configured
-home entry. For My-wiki, consult `MY_WIKI_ROOT` or the default workspace selected by
-`~/.config/my-wiki/config.json`; validate the root and match the project registration
-to the code checkout. Read the home's instructions, storage policy and project entry.
+use the user's explicit selection, then the local connection registry. Its config is
+`WORKSPACE_CONFIG` or `~/.config/agent-workspace/config.json`; `default_home` selects
+an alias in `homes`. The bundled `scripts/workspace connection resolve <checkout>`
+returns the matching Home/project and repository alias. Exact local bindings and Git
+worktree identity select a project; a remote or basename alone does not select a clone.
+Use a selected Home's existing adapter or legacy pointer only when no generic registry
+is configured. An invalid configured selection never falls back. Read the home's
+instructions, storage policy and project entry.
 A configured but unavailable home is a reported blocker for saving there, not permission
 to silently create another store in the code repo or scratch directory. Without an
 existing mapping, report that tier and follow the established legacy convention;
@@ -68,7 +72,7 @@ Without a connected workspace, follow the project's existing planning convention
 
 Explicit project-workspace registration belongs to `shape-tend`. It resolves the
 selected home and code repository, reuses existing identity, creates only a needed
-project.md and portable code-side pointer, then verifies with the shared reader.
+project.md and machine-local binding, then verifies with the shared reader.
 Ordinary status reads and record saves do not silently enroll or migrate projects.
 Legacy migration remains a separate, explicitly scoped operation.
 
@@ -79,11 +83,38 @@ layout, read `references/record-interface.md` when creating, updating or present
 work records. This file owns workspace location, type/status and lifecycle; that
 reference owns the shared document interface. Existing readable records remain valid.
 
-`project.md` has YAML frontmatter `id`, `title`, optional `repositories` (alias → path),
+`project.md` has YAML frontmatter `id`, `title`, optional stable `uuid`,
+optional `repositories` (alias → `{remote: credential-free-hosted-remote}` for new
+connections, or a legacy path relative to Home),
 and optional `priorities` (record IDs in user-chosen order). Its prose owns project
 purpose, constraints, context, and navigation to existing work folders. Keep per-task
 progress out of it. Do not add a competing `index.md` or `state.md`; render current
 state from the original work records and actual Git context when requested.
+
+## Development startup
+
+Before editing code or resuming implementation, sync the selected Home and check the
+actual code checkout against its remote, relevant GitHub PRs and CI. Use the bundled
+`scripts/workspace connection start <checkout>` for registered workspace-v1 projects.
+It fetches the Home's configured upstream, fast-forwards it only when safe, then reads
+the current project/tasks. It fetches code without moving its branch, reports upstream
+ahead/behind, and queries GitHub for open PRs and CI at both the current revision and
+the default branch revision. Output is evidence, not permission to ship or proof CI passed.
+
+Inspect the reported SHAs, dirty changes, related PR and run conclusions before choosing
+the work. A behind code branch needs an explicit safe update or a grounded reason to
+work from that revision. Preserve local edits; never automatically stash, reset, merge
+divergent histories, rebase or force-push. Missing upstream, unavailable GitHub access,
+divergence and unpublished Home commits are reported blockers for relying on freshness.
+Resolve the affected requirement before dependent edits. CI failure/pending/absence
+must be stated distinctly, including when no run exists at the current SHA. The query
+returns at most 100 open PRs and 20 runs per SHA; narrow it separately if truncated.
+
+For existing registrations without UUIDs, another Home layout, or an unconnected repo,
+perform the same checks directly: sync the selected Home by fast-forward only, fetch the
+correct code remote, inspect the current branch/upstream and check relevant GitHub PR/CI
+revisions. Read updated work records afterward. Read-only status requests do not fetch,
+pull or create configuration. Registration, migration and publication remain separate.
 
 Each independently reusable item has YAML frontmatter. Store simple records as
 `ideas/<topic>.md`, `thoughts/<topic>.md`, or `tasks/<topic>.md`. A task that keeps

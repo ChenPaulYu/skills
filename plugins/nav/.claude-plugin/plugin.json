@@ -1,6 +1,6 @@
 {
   "name": "nav",
-  "version": "0.29.5",
+  "version": "0.30.0",
   "description": "Keep code navigable: audit structure, implement and refactor with verification, reconcile explanations, and safely land verified work.",
   "author": {
     "name": "Paul",

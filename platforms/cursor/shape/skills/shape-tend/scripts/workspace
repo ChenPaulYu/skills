@@ -2,4 +2,4 @@
 set -eu
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-exec uv run --python 3.12 --with pyyaml python "$SCRIPT_DIR/workspace_records.py" "$@"
+exec uv run --no-project --python 3.12 --with pyyaml python "$SCRIPT_DIR/workspace_records.py" "$@"
