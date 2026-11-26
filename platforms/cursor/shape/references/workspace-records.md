@@ -28,6 +28,8 @@ use the user's explicit selection, then the local connection registry. Its confi
 an alias in `homes`. The bundled `scripts/workspace connection resolve <checkout>`
 returns the matching Home/project and repository alias. Exact local bindings and Git
 worktree identity select a project; a remote or basename alone does not select a clone.
+For shared checkouts, supply `--project PROJECT` and, when needed, `--repo ALIAS`
+from the user's topic or existing task. An ambiguous checkout has no implicit project.
 Use a selected Home's existing adapter or legacy pointer only when no generic registry
 is configured. An invalid configured selection never falls back. Read the home's
 instructions, storage policy and project entry.
@@ -85,7 +87,8 @@ reference owns the shared document interface. Existing readable records remain v
 
 `project.md` has YAML frontmatter `id`, `title`, optional stable `uuid`,
 optional `repositories` (alias → `{remote: credential-free-hosted-remote}` for new
-connections, or a legacy path relative to Home),
+hosted connections, `{local_uuid: UUID, anchor: EXISTING_COMMIT}` for an explicitly
+local-only Git repository, or a legacy path relative to Home),
 and optional `priorities` (record IDs in user-chosen order). Its prose owns project
 purpose, constraints, context, and navigation to existing work folders. Keep per-task
 progress out of it. Do not add a competing `index.md` or `state.md`; render current
@@ -109,6 +112,8 @@ divergence and unpublished Home commits are reported blockers for relying on fre
 Resolve the affected requirement before dependent edits. CI failure/pending/absence
 must be stated distinctly, including when no run exists at the current SHA. The query
 returns at most 100 open PRs and 20 runs per SHA; narrow it separately if truncated.
+An explicitly registered local-only repository has no remote/CI freshness claim;
+startup still synchronizes Home and reads its mapped local Git state.
 
 For existing registrations without UUIDs, another Home layout, or an unconnected repo,
 perform the same checks directly: sync the selected Home by fast-forward only, fetch the

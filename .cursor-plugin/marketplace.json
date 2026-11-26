@@ -18,19 +18,19 @@
       "name": "nav",
       "source": "nav",
       "description": "Audit architecture, do verified changes and explanation updates, and safely ship.",
-      "version": "0.30.0"
+      "version": "0.30.1"
     },
     {
       "name": "seek",
       "source": "seek",
       "description": "Clarify choices, try alternatives, measure claims and use real features.",
-      "version": "0.1.5"
+      "version": "0.1.6"
     },
     {
       "name": "shape",
       "source": "shape",
       "description": "Define and resume tasks, tend records, and advance authorized work.",
-      "version": "0.39.0"
+      "version": "0.39.1"
     }
   ]
 }

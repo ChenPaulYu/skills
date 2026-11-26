@@ -30,6 +30,9 @@ scripts/workspace connection doctor /path/to/app
 
 `init` uses an existing Git checkout containing `workspace/`. It saves a stable Home
 UUID in `.workspace-home.json`, and the local alias/path in the per-machine config.
+It also creates a per-machine `machine_uuid` once in that config, retaining it on
+repeat runs. This is distinct from the committed Home and project UUIDs and any
+Home-specific collector machine ID; those identities are not replaced.
 The first alias becomes the default. Later aliases preserve the default unless
 `init ... --default` is explicitly requested. Reusing an alias with another Home UUID
 fails; relocating the same Home preserves its UUID.
@@ -46,13 +49,24 @@ reuse a matching registration. The same remote or location already registered un
 another project prevents accidental duplicate creation. Use `--remote NAME` when the
 repository's own fetch remote is not `origin`; a private checkout's public upstream
 is not its own identity. Hosted SSH and HTTPS forms compare as the same repository.
-No-remote repositories retain their existing explicit legacy locator until a portable
-identity is chosen; do not invent a remote or publish code as a setup side effect.
+For an existing no-remote repository, use `connect ... --local`. It saves a
+`local_uuid` plus an existing commit `anchor` in the repository mapping. A later
+explicit `bind` verifies that commit exists in the selected checkout. This gives
+independent local history a portable identity without inventing a hosted remote.
+Startup reports remote progress and CI as not configured; it still syncs Home.
 
 A second `connect sample-project another-repo /path/to/another-repo` registers another
 implementation repository under the same project UUID. Tasks select their `repo`
 alias. Keep public/private channel rules and product development guidance intact;
 a shared project never authorizes merging its repositories together.
+
+Existing projects may share a repository (for example, a knowledge Home serving
+both its development project and a research project). Connect each existing entry
+under its original UUID and alias. When implicit lookup is ambiguous, use
+`resolve /path/to/checkout --project PROJECT` or the same selector with `doctor`
+and `start`. `--repo ALIAS` disambiguates multiple aliases of the same Git worktree
+family. Setup commands already have explicit project/repo operands. Keep ambiguity
+visible rather than invent a default project or collapse the existing records.
 
 ## Another machine or moved checkout
 

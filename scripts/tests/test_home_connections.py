@@ -194,6 +194,76 @@ class HomeConnectionTest(unittest.TestCase):
         self.assertEqual(data["default_home"], "personal")
         self.assertEqual(data["owner_setting"], {"keep": True})
 
+    def test_shared_checkout_requires_explicit_project_and_keeps_both_bindings(self):
+        first = self.connect()
+        file = self.home / "workspace/research/project.md"
+        file.parent.mkdir()
+        file.write_text('---\nid: research\ntitle: Research\nrepositories:\n  app: ../app\npriorities: []\n---\nResearch notes.\n')
+        second = self.command("connect", "research", "app", str(self.app))
+        self.assertNotEqual(first["project_uuid"], second["project_uuid"])
+        self.command("resolve", str(self.app), ok=False)
+        for project, expected in [("demo", first), ("research", second)]:
+            found = self.command("resolve", str(self.app), "--project", project)
+            self.assertEqual(found["project_uuid"], expected["project_uuid"])
+            self.command("doctor", str(self.app), "--project", project)
+        config = self.config.read_bytes()
+        self.command("bind", "research", "app", str(self.app))
+        self.assertEqual(config, self.config.read_bytes())
+
+    def test_local_repository_reuses_identity_and_checks_anchor_on_another_machine(self):
+        local = self.repo("local-only")
+        found = self.command("connect", "local-demo", "app", str(local), "--title", "Local", "--local")
+        file = self.home / "workspace/local-demo/project.md"
+        before = file.read_bytes()
+        self.command("connect", "local-demo", "app", str(local), "--local")
+        self.assertEqual(before, file.read_bytes())
+        self.command("doctor", str(local))
+        clone = self.base / "local-copy"
+        subprocess.run(["git", "clone", str(local), str(clone)], check=True, capture_output=True)
+        other_config = self.base / "another-machine.json"
+        with patch.dict(os.environ, {"WORKSPACE_CONFIG": str(other_config)}):
+            self.command("init", "personal", str(self.home))
+            bound = self.command("bind", "local-demo", "app", str(clone))
+            self.assertEqual(found["project_uuid"], bound["project_uuid"])
+            self.command("doctor", str(clone))
+        wrong = self.repo("wrong-history")
+        self.git(wrong, "commit", "--allow-empty", "-qm", "unrelated anchor")
+        metadata = connections.projects(self.home)
+        registration = next(d for p,d in metadata if p.parent.name == "local-demo")
+        registration["repositories"]["app"]["anchor"] = self.git(wrong, "rev-parse", "HEAD")
+        config = connections.read_config()
+        with self.assertRaises(connections.ConnectionError):
+            connections.repository_path(self.home, registration, "app", registration["repositories"]["app"], config)
+
+    def test_machine_uuid_is_stable_and_distinct_from_another_machine(self):
+        first = connections.read_config()["machine_uuid"]
+        self.command("init", "personal", str(self.home))
+        self.assertEqual(connections.read_config()["machine_uuid"], first)
+        with patch.dict(os.environ, {"WORKSPACE_CONFIG": str(self.base / "second-machine.json")}):
+            self.command("init", "personal", str(self.home))
+            self.assertNotEqual(connections.read_config()["machine_uuid"], first)
+
+    def test_local_start_syncs_home_without_fetching_or_claiming_github_ci(self):
+        local = self.repo("local-start")
+        self.command("connect", "local-start", "app", str(local), "--title", "Local", "--local")
+        with patch.object(connections, "git_snapshot", return_value={"state": "checked"}) as snapshot, patch.object(connections, "github_snapshot") as github:
+            result = self.command("start", str(local))
+            snapshot.assert_called_once_with(self.home, pull=True)
+            github.assert_not_called()
+        self.assertEqual(result["code_git"]["state"], "local-only")
+        self.assertEqual(result["github"]["state"], "not-configured")
+
+    def test_exact_worktree_alias_wins_and_unbound_worktree_requires_repo_selector(self):
+        self.connect()
+        fleet = self.base / "fleet"
+        self.git(self.app, "worktree", "add", "-qb", "feat/fleet", str(fleet))
+        self.command("connect", "demo", "fleet", str(fleet))
+        self.assertEqual(self.command("resolve", str(fleet))["repo"], "fleet")
+        other = self.base / "fresh-worktree"
+        self.git(self.app, "worktree", "add", "-qb", "feat/fresh", str(other))
+        self.command("resolve", str(other), "--project", "demo", ok=False)
+        self.assertEqual(self.command("resolve", str(other), "--project", "demo", "--repo", "app")["repo"], "app")
+
     def test_start_syncs_before_read_and_blocked_home_stops_code_checks(self):
         self.connect()
         with patch.object(connections, "git_snapshot", return_value={"state": "diverged"}) as snapshot:

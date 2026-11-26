@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Read-only JSON CLI for Markdown project workspaces and their linked records.
+"""Markdown project record reader and portable connection CLI.
 
 Reads ``workspace/<project>/project.md`` and typed work folders using YAML
 frontmatter; task bodies include implementation planning. Legacy typed plans and
 flat ``records/*.md`` remain readable without normalization. Every root is explicit.
-Source records and Git are read-only; explicit view export writes a new HTML outside the home repository.
+Record queries keep source records and Git read-only; explicit view export writes
+a new HTML outside Home. The connection subcommand delegates setup/local bindings
+and explicitly requested Git startup synchronization to the sibling connection owner.
 """
 
 from __future__ import annotations
@@ -152,8 +154,9 @@ def _load(root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[
         repositories = metadata.get("repositories", {})
         if repositories is None:
             repositories = {}
-        if not isinstance(repositories, dict) or any(not isinstance(k, str) or not (isinstance(v, str) or (isinstance(v, dict) and set(v) == {"remote"} and isinstance(v["remote"], str))) for k, v in repositories.items()):
-            diagnostics.append(_diag("invalid-repositories", rel, "repositories must map aliases to legacy paths or remote objects", scope))
+        from home_connections import valid_repository
+        if not isinstance(repositories, dict) or any(not isinstance(k, str) or not valid_repository(v) for k, v in repositories.items()):
+            diagnostics.append(_diag("invalid-repositories", rel, "repositories must map aliases to legacy paths, remote objects or local UUID/anchor objects", scope))
             repositories = {}
         priorities = metadata.get("priorities", [])
         if priorities is None:
