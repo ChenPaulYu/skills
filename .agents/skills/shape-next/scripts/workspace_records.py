@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Markdown project record reader and portable connection CLI.
 
-Reads ``workspace/<project>/project.md`` and typed work folders using YAML
+Reads ``workspace/<project>/project.md``, typed work folders and retained docs using YAML
 frontmatter; task bodies include implementation planning. Legacy typed plans and
 flat ``records/*.md`` remain readable without normalization. Every root is explicit.
 Record queries keep source records and Git read-only; explicit view export writes
@@ -26,7 +26,8 @@ import yaml
 
 STATUSES = {
     "idea": {"saved", "exploring", "closed"},
-    "thought": {"draft", "adopted", "shelved", "superseded"},
+    "thought": {"draft", "closed", "adopted", "shelved", "superseded"},
+    "doc": {"draft", "current", "superseded"},
     "mockup": {"draft", "selected", "shelved", "superseded"},
     "probe": {"planned", "active", "concluded"},
     "task": {"planned", "active", "paused", "blocked", "done", "cancelled"},
@@ -203,6 +204,8 @@ def _load(root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[
                     continue
                 normalized_links.append({"relation": link["relation"], "target": link["target"]})
             repo = item.get("repo")
+            if kind == "thought" and "retention" in item and item["retention"] != "working":
+                diagnostics.append(_diag("invalid-thought-retention", rrel, "new thoughts use retention: working; retained knowledge belongs in docs", scope))
             if repo is not None and (not isinstance(repo, str) or repo not in repositories):
                 diagnostics.append(_diag("unknown-repo", rrel, f"repo alias {repo!r} is not mapped by this project", scope))
             records.append({"id": _safe_value(identifier), "type": _safe_value(kind), "title": _safe_value(record_title), "status": _safe_value(status),
@@ -293,10 +296,15 @@ def _review(project: dict[str, Any], records: list[dict[str, Any]]) -> dict[str,
     """Advisory work-quality facts shared by agents and the human view, never deletion verdicts."""
     connected = {link["target"] for r in records for link in r["links"]}
     connected.update(r["id"] for r in records if r["links"] and isinstance(r["id"], str))
-    counts = {"unverified": 0, "unlinked_work": 0, "superseded": 0}
+    counts = {"unverified": 0, "unlinked_work": 0, "superseded": 0, "working_draft": 0}
     candidates, observations = [], []
     for record in records:
+        # Retention is independent of status: docs never enter ordinary cleanup.
+        if record["type"] == "doc" or Path(record["path"]).parent.name == "docs":
+            continue
         flags = []
+        if record["type"] == "thought" and record["metadata"].get("retention") == "working" and record["status"] == "closed":
+            flags.append("working_draft")
         if record["status"] == "unverified":
             flags.append("unverified")
         if record["type"] in ("task", "plan", "mockup", "probe") and (not isinstance(record["id"], str) or record["id"] not in connected):
@@ -315,7 +323,7 @@ def _review(project: dict[str, Any], records: list[dict[str, Any]]) -> dict[str,
             "advisory": "These are review signals, not completion, deletion or automatic parent-creation verdicts."}
 
 
-def run(root: Path, command: str, project_id: str | None = None, record_id: str | None = None) -> dict[str, Any]:
+def run(root: Path, command: str, project_id: str | None = None, record_id: str | None = None, query: str | None = None) -> dict[str, Any]:
     projects, records, diagnostics = _load(root)
     def scoped_diagnostics(scope: str | None = None) -> list[dict[str, str]]:
         return _public_diagnostics([d for d in diagnostics if scope is None or d.get("_scope") == scope])
@@ -342,6 +350,8 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
         result = {"status": "ok" if not selected_diagnostics else "error", "diagnostics": selected_diagnostics, "read_tier": tier}
         in_scope = [r for r in records if not project_id or r["_project_dir"] in {p["_scope"] for p in projects if p["id"] == project_id or p["_scope"] == project_id}]
         migrations = [{"path": r["path"], "message": RETIRED_TYPES[r["type"]]} for r in in_scope if r.get("type") in RETIRED_TYPES]
+        migrations.extend({"path": r["path"], "id": r["id"], "message": "legacy thought: review retained knowledge for docs before applying working-draft cleanup; preserve existing content until migration is authorized"}
+                          for r in in_scope if r["type"] == "thought" and "retention" not in r["metadata"])
         if migrations:
             result["migrations"] = migrations
         return result
@@ -350,6 +360,13 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
     scope = project["_scope"]
     mine = [r for r in records if r["_project_dir"] == scope]
     tier = _read_tier(projects, records, diagnostics, scope)
+    if command == "search":
+        if not query or not query.strip():
+            raise WorkspaceError("search query must be nonempty", tier)
+        needle = query.casefold()
+        matches = [r for r in mine if needle in "\n".join(str(r[key]) for key in ("id", "title", "path", "body")).casefold()]
+        return {"project": project["id"], "query": query, "matches": [_public_record(r) for r in matches],
+                "diagnostics": scoped_diagnostics(scope), "read_tier": tier}
     if command == "review":
         return _review(project, mine) | {"diagnostics": scoped_diagnostics(scope), "read_tier": tier}
     if command == "show":
@@ -378,6 +395,7 @@ def run(root: Path, command: str, project_id: str | None = None, record_id: str 
                 git_diagnostics.append(_diag("git-unavailable", Path(project["path"]), f"{item['alias']}: {item['error']}", scope))
         return {"project": {key: project[key] for key in ("id", "title", "path", "repositories", "priorities", "body")},
                 "tasks": [{key: r[key] for key in ("id", "title", "status", "path")} for r in mine if r["type"] == "task"],
+                "docs": [_public_record(r) for r in mine if r["type"] == "doc"],
                 "active_records": [_public_record(r) for r in active], "priorities": [_public_record(r) for r in priorities],
                 "git": git_context, "diagnostics": scoped_diagnostics(scope) + _public_diagnostics(git_diagnostics), "read_tier": tier}
     raise WorkspaceError(f"unknown command {command!r}")
@@ -405,6 +423,9 @@ def main(argv: list[str] | None = None) -> int:
     for name in ("status", "graph", "review"):
         cmd = sub.add_parser(name)
         cmd.add_argument("project")
+    search = sub.add_parser("search", help="Read-only substring search across project records and retained docs")
+    search.add_argument("project")
+    search.add_argument("query")
     view = sub.add_parser("view")
     view.add_argument("project")
     view.add_argument("--output", required=True, type=Path)
@@ -433,7 +454,7 @@ def main(argv: list[str] | None = None) -> int:
             payload = export_view(args.root, _view_project(project), graph, selected, args.output,
                                   projects=project_data, graphs=graphs, reviews=reviews)
         else:
-            payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None))
+            payload = run(args.root, args.command, getattr(args, "project", None), getattr(args, "id", None), getattr(args, "query", None))
     except (WorkspaceError, OSError, ValueError) as exc:
         print(json.dumps({"error": str(exc), "read_tier": getattr(exc, "read_tier", "absent")}, ensure_ascii=False))
         return 1

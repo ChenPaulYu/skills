@@ -16,9 +16,10 @@ priorities; its current state is read from those tasks, not copied into a second
 
 Use an explicit workspace/project path from the user or repository instructions. A
 home repo holds `workspace/<project>/project.md` as the sole entry and work in typed
-folders: `ideas/`, `thoughts/`, `tasks/`, `mockups/`, and `probes/`. An idea asks
-whether to do something; a thought holds how to see something (a position that may
-still be a draft, and acts as a decision once adopted). The `plans/` type is retired:
+folders: `ideas/`, `thoughts/`, `docs/`, `tasks/`, `mockups/`, and `probes/`. An idea asks
+whether to do something; a thought is a working exploration eligible for checked
+retirement. A doc retains project knowledge, decisions and operative reasons.
+The `plans/` type is retired:
 read a leftover plan as legacy evidence and fold its live content into the owning task.
 Do not assume the code checkout contains its records. Resolve code repositories from
 the project's explicit mappings; report missing/unavailable mappings, never substitute
@@ -72,6 +73,36 @@ task. Folding is separately scoped work: verify unique content, inbound links an
 recovery before moving or retiring anything.
 Without a connected workspace, follow the project's existing planning convention.
 
+## Retained project documents and working thoughts
+
+`docs/<topic>.md` is the long-term project knowledge owner inside the selected Home.
+Use `type: doc` and the normal stable ID, title, dates and links. Status is `draft`,
+`current` or `superseded`; preserve uncertainty and provenance in the body. Current
+means currently applicable, not newly verified. All docs are retained, including
+draft, unverified and superseded material. Ordinary completion/cleanup never selects
+docs for deletion; an explicitly requested document consolidation still checks unique
+content, references and recovery. Task progress stays in its original task.
+
+New `thoughts/<topic>.md` records are working drafts with `type: thought`,
+`retention: working` and status `draft` or `closed`. Record an exit condition: useful
+knowledge goes to an existing/new doc, task-only context stays in its task, unresolved
+work stays with its idea/task, and the thought can retire after coverage and reference
+checks. Use the consolidation procedure in `references/record-interface.md`.
+Working means eligible for checked cleanup, not permission to delete incomplete work.
+
+Legacy thoughts without `retention: working` retain their existing meaning and IDs.
+Their old adopted/shelved/superseded states remain readable. `check` lists them as
+non-blocking migrations; inspect and obtain migration scope before moving or deleting
+them. Never infer that an old thought is disposable from a newly changed convention.
+
+Save only when requested or when authorized work needs durable continuation. A small
+task needs no additional thought or doc. Reuse an existing owner and link it from
+`project.md` when it is an important entry. Public contributor-facing product docs
+remain in the mapped code repo; private project documents use this Home. An explicit
+destination or Home policy still governs, without copying the same canonical text
+into both repositories. Knowledge useful beyond this project can use the selected
+Home's existing knowledge convention instead.
+
 ## First-time connection
 
 Explicit project-workspace registration belongs to `shape-tend`. It resolves the
@@ -124,7 +155,7 @@ revisions. Read updated work records afterward. Read-only status requests do not
 pull or create configuration. Registration, migration and publication remain separate.
 
 Each independently reusable item has YAML frontmatter. Store simple records as
-`ideas/<topic>.md`, `thoughts/<topic>.md`, or `tasks/<topic>.md`. A task that keeps
+`ideas/<topic>.md`, `thoughts/<topic>.md`, `docs/<topic>.md`, or `tasks/<topic>.md`. A task that keeps
 evidence or artifacts puts them in a sibling folder `tasks/<topic>/` and links them
 from the task.
 A mockup decision lives in `mockups/<topic>/mockup.md` beside its HTML variants;
@@ -136,8 +167,9 @@ at their original location and be linked directly.
 
 The former flat `records/*.md` layout remains a readable legacy shape; a reader
 may consume both layouts during an authorized transition, reporting conflicting
-IDs or folder/type mismatches instead of silently normalizing them. A physical
-move preserves IDs, status and substantive dates and repairs relative links.
+IDs or folder/type mismatches instead of silently normalizing them. A location-only
+move preserves IDs, status and substantive dates and repairs relative links. A selected
+thought-to-doc conversion uses the document status convention without inventing acceptance.
 
 Example frontmatter:
 
@@ -150,7 +182,7 @@ status: paused
 repo: app
 links:
   - relation: implements
-    target: example-thought
+    target: example-doc
 ---
 ```
 
@@ -164,7 +196,8 @@ Search body text as well as titles before creating another record.
 | Type | Pilot statuses | Body carries |
 |---|---|---|
 | idea | saved, exploring, closed | Whether to do something: original spark, why saved, conditions for revisiting |
-| thought | draft, adopted, shelved, superseded | How to see something: position or question, reasons, alternatives |
+| thought | draft, closed (legacy adopted/shelved/superseded readable) | Working exploration; new records declare retention: working |
+| doc | draft, current, superseded | Retained project knowledge, explanation, decision and rationale |
 | mockup | draft, selected, shelved, superseded | What was compared, pick/reason, artifact locator |
 | probe | planned, active, concluded | Claim, method, evidence, verdict including inconclusive |
 | task | planned, active, paused, blocked, done, cancelled | Goal, scope, deliverables paired with acceptance checks, progress, verification, blockers/reasons, next action |
@@ -186,7 +219,7 @@ Keep multiple debugging symptoms in the original task's `## Observations` sectio
 Separate what was observed, a cause hypothesis, evidence, and the next check in prose;
 an observation is not a verified cause. Consolidate symptoms when evidence supports
 one cause. Split a task only when ownership, next action or completion needs to be
-independent; a deferred possibility can remain an idea. No additional record kind or
+independent; a deferred possibility can remain an idea. No additional observation record or
 mandatory observation schema is required.
 
 ## Records in a retired shape
@@ -195,6 +228,8 @@ When the reader's `check` lists `migrations`, or a rule change leaves existing r
 in an old shape, list the affected records and what migrating each would do, then ask
 the user whether to migrate now. Migrate only on a yes, in the same round, and re-run
 `check`; otherwise report what remains. Never migrate as a side effect of a read or save.
+Respect a recorded migration choice instead of repeating the question on every check.
+Pending classification does not block unrelated reads or already-authorized work.
 
 ## Updating and closing
 
@@ -211,7 +246,7 @@ checks separately from the human verdict.
 When a check fails or has not run, name the concrete product problem it shows or the
 agreed acceptance or release gate it affects. If the connection is unclear, record
 the engineering uncertainty without reopening the accepted issue or making the user
-repeat acceptance. Closing work does not expire an adopted thought.
+repeat acceptance. Closing work does not expire retained docs or reclassify legacy thoughts.
 A concluded probe may remain inconclusive and authorize no task. A saved idea does
 not imply approved work. Keep deferred and rejected distinct. Superseded decisions
 link their successors; preserve useful rejected alternatives and evidence locators.
@@ -222,8 +257,8 @@ When a task closes, inspect its outgoing links and backlinks to relevant
 mockup/probe/plan records. For each affected record, state whether it remains live,
 meets its own completion criteria, is superseded by an identified successor, or is
 a retirement candidate, and why. Apply only status/relation updates supported by
-evidence and the authorized scope; do not mark every neighbor complete. An adopted
-decision may remain live and an inconclusive probe remains inconclusive. If intent
+evidence and the authorized scope; do not mark every neighbor complete. Retained docs
+and unmigrated legacy decisions remain available, and an inconclusive probe remains inconclusive. If intent
 cannot be established, retain the item and ask the user. Completion is a review
 signal, not an automatic delete: preserve pending choices, reasons and recovery
 before a separately authorized tidy. Do not require another skill invocation to
@@ -244,6 +279,7 @@ package, independent of the working directory. It requires `uv`, Python 3.12 and
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" projects
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" status <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" show <project> <record-id>
+sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" search <project> "<terms>"
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" graph <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" review <project>
 sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" check
@@ -251,6 +287,10 @@ sh "<loaded-skill>/scripts/workspace" --root "<home-repo>" view <project> --outp
 ```
 
 The helper returns JSON records, relations/backlinks, diagnostics and mapped Git context.
+`status` includes retained docs separately from tasks and active work. `search` performs
+a read-only case-insensitive substring search of IDs, titles, paths and bodies across
+project records including docs. `review` excludes docs from ordinary cleanup candidates
+regardless of their status or links; its flags remain advisory, never deletion authority.
 It does not write records, choose priorities or establish semantic completion. Only
 explicit view export writes a new offline interactive HTML snapshot outside the home
 repo. It refuses existing output paths; serve private views on localhost. Export includes

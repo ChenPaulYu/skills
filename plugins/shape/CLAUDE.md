@@ -14,7 +14,10 @@ existing evidence within the user's scope; no literal automatic skill invocation
 
 references/workspace-records.md owns location/lifecycle and record-interface.md owns
 record metadata. Retention is selective: prefer updating the task, keep independent
-ideas/thoughts only with authority and value, and leave disposable artifacts in scratch.
+ideas/working thoughts/docs only with authority and value, and leave disposable artifacts in scratch.
+Docs retain project knowledge; new thoughts are explicitly working drafts. Apply the
+shared consolidation procedure before authorized thought retirement, and preserve legacy
+thought owners until selected migration. Routine cleanup excludes docs.
 saving.md owns concise record retention; development-artifacts.md owns artifact selection
 and preservation, bundled into consumers. The selected home owns allowed formats and
 storage constraints rather than a duplicate selection procedure. Tend's connection reference

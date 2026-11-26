@@ -8,7 +8,7 @@ Apply `references/saving.md` before creating a record. The detailed convention b
 applies only after there is a reason to save. Keep existing records readable in place.
 
 
-Use the same reading interface for idea, thought, mockup, probe and task; read a
+Use the same reading interface for idea, thought, doc, mockup, probe and task; read a
 leftover retired plan the same way.
 Keep the record's established location, type/status vocabulary, and language.
 This is a writing convention, not permission to retrofit a legacy project.
@@ -19,13 +19,16 @@ for its typed locations and colocated artifacts; otherwise use the existing proj
 
 Apply this check on the first write and every substantive update, not only during tidy.
 Decide what the record must help the next reader understand or do, then reuse the owner
-for that purpose. A reusable settled conclusion belongs in its decision thought; link
-it from the idea/mockup rather than burying it in an accumulated exploration log. Save
+for that purpose. Retained project knowledge and reusable settled conclusions belong
+in an existing/new doc; a thought holds the working exploration. Link the durable owner
+from the idea/mockup rather than burying it in an accumulated exploration log. Save
 within the user's existing scope; a conclusion creates no automatic task or document.
 
-Keep a thought focused on its current decision/question, operative reasons and alternatives
-that still explain the choice. An artifact-by-artifact retirement catalog is cleanup history,
-not a reason to enlarge a live thought. Keep operative principles in their decision owner
+Keep a working thought focused on its question, alternatives, evidence and exit condition.
+Keep a doc focused on its retained explanation, operative reasons, limitations and sources;
+it owns knowledge rather than a task's progress or acceptance checklist.
+An artifact-by-artifact retirement catalog is cleanup history,
+not a reason to enlarge a doc. Keep operative principles in their durable owner
 and deferred work in an appropriate existing idea/task or retained comparison; do not turn
 a deferral into a rejection or an implementation commitment.
 
@@ -47,7 +50,7 @@ still follows the preservation checks below; this writing check is not deletion 
    disclose reasons, candidates, implementation detail, artifact links, and evidence
    only as needed for this record type. Omit empty ceremonial sections.
 
-When a linked thought already owns the accepted decision, the mockup card points
+When a linked doc (or an unmigrated legacy thought) owns the accepted decision, the mockup card points
 to that decision instead of maintaining a parallel canonical explanation. It still
 owns comparison-specific candidates, open choices and artifact locators.
 
@@ -74,8 +77,9 @@ pursue it. A mockup's retirement depends on its role:
 
 Apply `references/development-artifacts.md` and the user's retention choices to
 the actual artifacts. A probe can conclude when the agreed check yields a recorded
-verdict, including an inconclusive one. An adopted thought stays live until a later
-decision or verified change displaces its rationale.
+verdict, including an inconclusive one. A doc stays retained when its task completes
+or its status changes; update or supersede its content when knowledge changes.
+Legacy adopted thoughts keep their existing protection until explicitly migrated.
 Use prose in the existing format. Keep older cards readable when this condition is
 absent; during cleanup, establish their disposition from evidence and preserve
 reasons, links, and recovery.
@@ -86,6 +90,30 @@ URLs do not produce an open action. Keep the original artifact locator and prese
 information in the card. A localhost preview is a disposable session locator, not a
 permanent media backup or a change to the Mockup’s lifecycle status.
 
+## Consolidate a working thought into retained knowledge
+
+During authorized completion/tidy, inspect the original thought and its incoming and
+outgoing links. Account for each useful conclusion, operative reason, rejected
+alternative that still matters, evidence locator, uncertainty and open action.
+Reuse/update the matching doc for independently useful knowledge; keep task-only
+context and progress in the owning task. Reading a doc or saving a conclusion does
+not authorize implementation or turn a source claim into a verified fact.
+
+For a whole-record move into docs, preserve its ID and source dates, change type/status
+to the document convention without inventing acceptance, and repair relative links.
+For consolidation into an existing doc, repair inbound frontmatter targets, visible
+Relations, Markdown links and project entry links to that owner. Keep a useful source
+locator in the destination. Check `show`/backlinks, graph and `check`, and re-read the
+destination to verify actual content coverage; a clean graph alone proves no semantic
+coverage. Reopen supporting artifacts when their original state is required.
+
+Retire the thought only when the selected content and unresolved work have named
+owners, incoming references resolve and recovery is verified, within existing deletion
+authority. Leave anything not yet covered in place and report the gap. Draft/closed
+status, elapsed time or task completion alone never authorizes removal. Ordinary
+cleanup excludes docs; deleting/consolidating a doc requires explicit scope for it.
+Legacy thoughts require separately selected migration scope before applying this flow.
+
 ## Carry a decision into the next step
 
 Choose the next step from what the current result establishes:
@@ -95,7 +123,7 @@ Choose the next step from what the current result establishes:
   for an empirical question, or Dogfood to inspect friction in a built feature.
   Keep inconclusive results with their evidence and continue only if another
   useful check is warranted. A saved idea can wait for its revisit condition.
-- **Decided.** Put a durable decision or rationale in its Thought, or a decided
+- **Decided.** Put independently retained knowledge or rationale in its Doc, or a decided
   change with observable completion in its Task. Reuse the existing owner; keep
   rationale that serves only one task in that task. Send authorized execution to
   Nav with the agreed outcome and acceptance checks.
@@ -168,7 +196,7 @@ updated: 2026-11-18
 repo: app
 links:
   - relation: implements
-    target: example-thought
+    target: example-doc
 ---
 # Copy a saved excerpt
 
@@ -179,7 +207,7 @@ links:
 <!-- relations: derived from frontmatter.links -->
 | Relation | Record |
 |---|---|
-| implements | `example-thought` — resolve its actual title/path |
+| implements | `example-doc` — resolve its actual title/path |
 <!-- /relations -->
 
 ## Goal and scope

@@ -47,6 +47,12 @@ before proposing changes. Old dates, absent links and advisory `review` flags ar
 leads, never completion or deletion verdicts. Retain adopted reasons even after their
 implementation ships. Preserve required human acceptance.
 
+Use the thought-to-doc consolidation procedure in `references/record-interface.md`.
+New working thoughts can retire after their retained content, references and recovery
+are verified. Ordinary cleanup excludes `docs/` regardless of status or links. Old
+thoughts without `retention: working` keep their protection until migration is selected;
+list the affected IDs/paths before that choice. A task ending alone authorizes no deletion.
+
 Show the bounded edits, then apply the authorized status corrections or consolidation.
 Keep priorities unless reprioritization was requested. A proposed removal needs its
 useful reasons transferred to a named owner, repaired inbound links and a verified

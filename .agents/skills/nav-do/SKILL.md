@@ -21,8 +21,9 @@ Ground the request in the existing code and match verification to the agreed sco
 Before an implementation or authorized update, apply **Development startup** in
 `references/workspace-records.md`: resolve the local Home registry, sync its work
 records, and check the code remote plus relevant GitHub PR/CI revisions.
-For a connected project, open its `project.md` and search existing tasks
-and live legacy work for the requested outcome, even for a small fix. Use the
+For a connected project, open its `project.md`, read relevant retained docs for
+current constraints and operative reasons, and search existing tasks and live legacy
+work for the requested outcome, even for a small fix. Use the
 user's explicit task or project pointer, or the **Locate before reading or
 writing** section of `references/workspace-records.md` if the mapping is unclear.
 The bundled `scripts/workspace --root <home> status <project>` can help.
@@ -118,6 +119,11 @@ Write the behavior-changing code, placed per the inject pass. Keep structural pr
    durable tracking, follow `references/workspace-records.md`. Mark only verified work complete, then continue the next authorized
    ready item. Record blockers and proceed with independent items in scope. Keep
    progress in its owning record, including when a compatibility board is present.
+   Update relevant existing docs when implementation changes their explanation or
+   contract. Retain independently useful knowledge there within the authorized save
+   scope; task-only details stay in the task, and small fixes require no new document.
+   Use the thought-to-doc consolidation procedure in `references/record-interface.md`
+   for linked working drafts; routine completion does not delete docs or legacy thoughts.
    When a legacy board still owns the work, update only the matching item in the
    same change with verified progress or completion and an evidence pointer.
    Use **Carry a decision into the next step** in `references/record-interface.md`

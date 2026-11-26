@@ -89,15 +89,15 @@
           "add": [
             "",
             {
-              "en": "Capture an idea, define pending work, or update the original record with progress. Use for add this, save this or wrap this round; viewing progress belongs to shape-view and execution to nav-do.",
-              "zh": "記下想法、建立待做工作，或把進度存回原紀錄。查看進度用 shape-view，實作交給 nav-do。"
+              "en": "Save ideas, working thoughts or retained project docs, define pending work, or update its original record. Use for add this, save this or wrap this round; viewing belongs to shape-view and execution to nav-do.",
+              "zh": "保存想法、推演草稿與專案文件，建立待做工作，或把進度存回原紀錄。查看用 shape-view，實作交給 nav-do。"
             }
           ],
           "view": [
             "",
             {
-              "en": "Read current project work, priorities, blockers and next actions without changing records. Use for status or catch me up; continuing implementation belongs to shape-next.",
-              "zh": "唯讀查看目前工作、優先順序、卡點與下一步。要接著實作用 shape-next。"
+              "en": "Read retained project knowledge, current work, priorities, blockers and next actions without changing records. Use for project context, status or catch me up; continuing implementation belongs to shape-next.",
+              "zh": "唯讀查看保留的專案知識、目前工作、優先順序、卡點與下一步。要接著實作用 shape-next。"
             }
           ]
         },

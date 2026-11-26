@@ -73,6 +73,70 @@ class WorkspaceRecordsTest(unittest.TestCase):
         self.assertIn("plan-a", {record["id"] for record in result["active_records"]})
         self.assertEqual(before, {path: path.read_bytes() for path in (task, legacy)})
 
+    def test_retained_docs_are_searchable_and_separate_from_active_work(self):
+        doc = self.write("workspace/demo/docs/architecture.md", self.record("doc-a", "doc", "current", "Café architecture: keep the original input immutable."))
+        before = doc.read_bytes()
+        result = run(self.root, "status", "demo")
+        self.assertEqual([d["id"] for d in result["docs"]], ["doc-a"])
+        self.assertNotIn("doc-a", {r["id"] for r in result["active_records"]})
+        self.assertNotIn("doc-a", {r["id"] for r in result["tasks"]})
+        found = run(self.root, "search", "demo", query="CAFÉ")
+        self.assertEqual([r["id"] for r in found["matches"]], ["doc-a"])
+        self.assertIn("immutable", found["matches"][0]["body"])
+        self.assertEqual(doc.read_bytes(), before)
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = main(["--root", str(self.root), "search", "demo", "immutable"])
+        self.assertEqual(code, 0)
+        self.assertEqual(json.loads(output.getvalue())["matches"][0]["id"], "doc-a")
+        with self.assertRaises(WorkspaceError):
+            run(self.root, "search", "demo", query=" ")
+
+    def test_docs_never_become_ordinary_cleanup_candidates(self):
+        for status in ("draft", "current", "superseded", "unverified"):
+            self.write(f"workspace/demo/docs/{status}.md", self.record(f"doc-{status}", "doc", status, "Retain this explanation regardless of links or completion."))
+        self.write("workspace/demo/thoughts/draft.md", self.record("working-a", "thought", "closed", "Knowledge has a retained owner.").replace("type: thought\n", "type: thought\nretention: working\n"))
+        result = run(self.root, "review", "demo")
+        self.assertTrue(all(r["type"] != "doc" for r in result["candidates"]))
+        candidate = next(r for r in result["candidates"] if r["id"] == "working-a")
+        self.assertIn("working_draft", candidate["flags"])
+        self.assertEqual(len(run(self.root, "status", "demo")["docs"]), 4)
+
+    def test_misclassified_document_is_diagnosed_but_never_a_cleanup_candidate(self):
+        self.write("workspace/demo/docs/legacy.md", self.record("legacy-doc", "thought", "superseded", "Retained file with old metadata."))
+        result = run(self.root, "check", "demo")
+        self.assertIn("folder-type-mismatch", {d["code"] for d in result["diagnostics"]})
+        self.assertNotIn("legacy-doc", {r["id"] for r in run(self.root, "review", "demo")["candidates"]})
+
+    def test_whole_thought_move_preserves_rationale_id_and_task_references(self):
+        identifier = "choice-a"
+        rationale = "Use immutable inputs because later comparisons require their original state.\n\nRejected: overwrite the baseline. This loses reproducibility.\n\nSource claim remains unverified.\n"
+        source = self.write("workspace/demo/thoughts/choice.md", self.record(identifier, "thought", "closed", rationale).replace("type: thought\n", "type: thought\nretention: working\n"))
+        original_body = run(self.root, "show", "demo", identifier)["record"]["body"]
+        task = self.write("workspace/demo/tasks/linked.md", self.record("linked-task", "task", "done", "[Design](../thoughts/choice.md)", "links:\n  - relation: implements\n    target: choice-a\n"))
+        destination = self.write("workspace/demo/docs/choice.md", source.read_text().replace("type: thought\nretention: working", "type: doc").replace("status: closed", "status: current"))
+        task.write_text(task.read_text().replace("../thoughts/choice.md", "../docs/choice.md"))
+        source.unlink()  # Simulated authorized consolidation, outside the read-only helper.
+        shown = run(self.root, "show", "demo", identifier)
+        self.assertEqual(shown["record"]["body"], original_body)
+        self.assertEqual(shown["record"]["path"], "workspace/demo/docs/choice.md")
+        self.assertIn({"source": "linked-task", "relation": "implements"}, shown["backlinks"])
+        self.assertTrue((task.parent / "../docs/choice.md").resolve().is_file())
+        self.assertEqual(run(self.root, "check", "demo")["status"], "ok")
+        self.assertIn(identifier, {r["id"] for r in run(self.root, "graph", "demo")["nodes"]})
+        self.assertEqual(destination.read_text().count(rationale), 1)
+
+    def test_legacy_thoughts_are_readable_nonblocking_migrations(self):
+        legacy = self.root / "workspace/demo/records/thought.md"
+        before = legacy.read_bytes()
+        self.write("workspace/demo/thoughts/new.md", self.record("new-thought", "thought", "draft", "Temporary exploration.").replace("type: thought\n", "type: thought\nretention: working\n"))
+        result = run(self.root, "check", "demo")
+        self.assertEqual(result["status"], "ok")
+        paths = {m["path"] for m in result["migrations"]}
+        self.assertIn("workspace/demo/records/thought.md", paths)
+        self.assertNotIn("workspace/demo/thoughts/new.md", paths)
+        self.assertEqual(legacy.read_bytes(), before)
+
     def test_projects_status_and_git_are_read_only_and_include_active_bodies(self) -> None:
         before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
         result = run(self.root, "status", "demo")

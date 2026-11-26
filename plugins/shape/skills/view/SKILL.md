@@ -1,13 +1,15 @@
 ---
 name: view
-description: "Read current project work, priorities, blockers and next actions without changing records. Use for status or catch me up; continuing implementation belongs to shape-next."
+description: "Read retained project knowledge, current work, priorities, blockers and next actions without changing records. Use for project context, status or catch me up; continuing implementation belongs to shape-next."
 ---
 
 # View — catch up without changing the work
 
 Resolve the selected home, project and mapped code using
 `references/workspace-records.md`. Read the original tasks, relevant ideas and
-linked decisions/evidence. Check fresh Git HEAD, working changes and actual
+retained docs and linked decisions/evidence, including unmigrated legacy thoughts.
+Docs supply applicable knowledge and constraints, not new tasks or cleanup candidates.
+Check fresh Git HEAD, working changes and actual
 verification instead of repeating a stale next-action note.
 
 Lead with the current result, next action and decisions that need the user. Keep

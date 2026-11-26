@@ -1,6 +1,6 @@
 ---
 name: add
-description: "Capture an idea, define pending work, or update the original record with progress. Use for add this, save this or wrap this round; viewing progress belongs to shape-view and execution to nav-do."
+description: "Save ideas, working thoughts or retained project docs, define pending work, or update its original record. Use for add this, save this or wrap this round; viewing belongs to shape-view and execution to nav-do."
 ---
 
 # Add — keep an idea or work worth resuming
@@ -29,6 +29,14 @@ Choose from the user's intent:
   Unstarted work is `planned`; unresolved choices remain visible. A priority or a
   saved task alone does not grant execution authority. An engineering plan can live
   in that task when needed; do not create a parallel plan or index.
+- **Working thought.** Save requested temporary exploration in `thoughts/<topic>.md`
+  with `retention: working`, the question/evidence and an exit condition. It can retire
+  after useful content has a durable owner and references/recovery are checked.
+- **Retained document.** Save requested long-term project knowledge, reference material
+  and independently reusable rationale in an existing/new `docs/<topic>.md` with
+  `type: doc`. Keep it in the selected Home when private; product contributor docs
+  remain in their code repository. Keep uncertainty and sources explicit. Read the
+  retained-doc contract in `references/workspace-records.md` before either write.
 - **Progress or session save.** Inspect the mapped code, Git HEAD, working diff and
   actual checks before updating the original task. Keep verified results, limits,
   operative reasons, next action and owner-owned gates. Stopping a session does not
@@ -41,8 +49,9 @@ An idea becomes a task only when the user decides to pursue it; preserve useful
 context without duplicating the same progress into both records.
 
 Keep task-specific evidence in an optional sibling `tasks/<topic>/` folder only when
-its original state is needed later. Independent reusable decisions may have their
-own owner; ordinary work needs no separate thought, mockup or probe record.
+its original state is needed later. Independent reusable knowledge may have a doc
+owner; ordinary work needs no separate thought, doc, mockup or probe record. Legacy
+thoughts remain in place until their migration is explicitly selected.
 
 Read `references/session-handoff.md` and `references/legacy-blueprints.md` only when
 an existing legacy record owns the work. Save in place; do not migrate it as a side

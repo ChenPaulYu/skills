@@ -25,7 +25,9 @@ pending-work list is not authority to implement its tasks.
   next action and human acceptance. Preserve source claims as claims; mark unverified
   imports accordingly rather than declaring them done from old checkboxes.
 - Keep undecided ideas as ideas. Put a reason in its task unless it has independent
-  reuse or an explicit thought owner. Retain adopted decisions after implementation.
+  reuse or an explicit retained destination. Retain reusable project knowledge and
+  rationale in docs. Unmigrated legacy thoughts keep their existing protection;
+  select their migration before treating them as working drafts.
 - Keep code, tests, runtime fixtures and product README/docs in the code repo. Preserve
   their content; update only affected storage/skill pointers through their real owner.
 - Move requested or still-needed authored artifacts with their owner, preserving bytes,

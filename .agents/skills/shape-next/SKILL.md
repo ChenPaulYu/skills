@@ -10,6 +10,8 @@ description: "Choose and advance the next ready, already-authorized task or expl
 Before advancing implementation, apply **Development startup** in
 `references/workspace-records.md`; status-only reads stay read-only.
 Ground the queue in the selected project's original records and mapped code.
+Read relevant retained docs for its applicable knowledge and constraints; a doc's
+presence or draft status adds no queued work. Legacy thoughts remain readable.
 Inspect priorities, scope, permissions, dependencies,
 acceptance, fresh Git changes and the last verification. A queued task, saved idea or
 priority alone grants no implementation authority.
